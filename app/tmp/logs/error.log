@@ -1,0 +1,80 @@
+2012-09-23 15:43:44 Error: Fatal Error (4): syntax error, unexpected '}' in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 306]
+2012-09-23 15:43:44 Error: [FatalErrorException] syntax error, unexpected '}'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 306)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 306, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 306, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-09-23 16:52:45 Error: [MissingControllerException] Controller class TemplatedController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-09-23 17:11:01 Error: Fatal Error (4): syntax error, unexpected '=', expecting ')' in [/home/charlie/sites/adaptcms/app/View/Templates/admin_index.ctp, line 184]
+2012-09-23 17:11:01 Error: [FatalErrorException] syntax error, unexpected '=', expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 184)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 184, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 184, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-09-23 17:18:13 Error: Fatal Error (4): syntax error, unexpected T_VARIABLE in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 307]
+2012-09-23 17:18:13 Error: [FatalErrorException] syntax error, unexpected T_VARIABLE
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 307)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 307, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 307, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-09-23 17:20:06 Error: Fatal Error (4): syntax error, unexpected T_PUBLIC in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 335]
+2012-09-23 17:20:06 Error: [FatalErrorException] syntax error, unexpected T_PUBLIC
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 335)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 335, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 335, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
+Trace:
+strlen - [internal], line ??
+CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
+CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
+Trace:
+strlen - [internal], line ??
+CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
+CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
+Trace:
+strlen - [internal], line ??
+CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
+CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
+Trace:
+strlen - [internal], line ??
+CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
+CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:31:01 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 332]
+2012-09-23 17:31:01 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 332)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 332, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 332, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-09-23 22:26:13 Error: [MissingActionException] Action ThemesController::admin_index() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}

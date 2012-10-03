@@ -1,0 +1,486 @@
+2012-09-23 16:29:57 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:29:58 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:29:59 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:29:59 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:01 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:01 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:02 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:03 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:09 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:15 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:15 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:16 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:16 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:16 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:16 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:16 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:17 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:18 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:19 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:26 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:26 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:26 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:26 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:27 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:27 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:33 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:33 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:34 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:34 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:36 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:30:36 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 323]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 323
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:41:27 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:41:27 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:41:27 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:41:28 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:41:29 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 16:41:29 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:08 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:08 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:08 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:08 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:09 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:09 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:30 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:54 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:56 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:01:56 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 326]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 326
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:14:49 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 327]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 327
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:14:50 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 327]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 327
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:14:50 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 327]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 327
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:14:50 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 327]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 327
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:14:51 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 327]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 327
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:14:51 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 327]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 327
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2012-09-23 17:14:52 Notice: Notice (8): Undefined variable: data in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 327]
+Trace:
+TemplatesController::ajax_quick_search() - APP/Controller/TemplatesController.php, line 327
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+

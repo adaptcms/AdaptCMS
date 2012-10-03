@@ -1,0 +1,1 @@
+<?= $this->request->data['Page']['content'] ?>

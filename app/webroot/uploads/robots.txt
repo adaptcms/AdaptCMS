@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: 
+Disallow: http://www.solitudeisbliss.com/admin.php
+Disallow: http://www.solitudeisbliss.com/forums/adm
+
+Sitemap: http://www.solitudeisbliss.com/sitemap.xml
+
+sup

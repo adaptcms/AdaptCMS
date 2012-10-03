@@ -1,0 +1,5 @@
+<?php
+
+class ComponentModel extends AppModel {
+	public $name = "Component";
+}
