@@ -107,11 +107,11 @@ while ($res = fread($google_ping,8192)){
 }
 fclose($google_ping);
 
-$ask = "http://submissions.ask.com/ping?sitemap=".$ping_url;
-$ask_ping = fopen($ask,'r');
-while ($res = fread($ask_ping,8192)){	
-}
-fclose($ask_ping);
+// $ask = "http://submissions.ask.com/ping?sitemap=".$ping_url;
+// $ask_ping = fopen($ask,'r');
+// while ($res = fread($ask_ping,8192)){	
+// }
+// fclose($ask_ping);
 
 if ($setting["sitemap_yahoo_key"]) {
 $yahoo = "http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=".$setting["sitemap_yahoo_key"]."&url=".$ping_url;

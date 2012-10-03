@@ -9,7 +9,8 @@
 
 	$sitedir = str_replace($apage, "", $_SERVER['PHP_SELF']);
 	$pageurl = substr($siteurl,0,-1).str_replace($sitedir,"/",$_SERVER['REQUEST_URI']);
-	if ((strpos($_SERVER['HTTP_HOST'],'www.')===false)) { header("Location: http://www.".str_replace("http://","",$pageurl)); exit(); }
+	if (strpos($_SERVER['HTTP_HOST'],'www.')===false && $_SERVER['HTTP_HOST'] != "localhost" && $_SERVER['HTTP_HOST'] != "127.0.0.1" && strpos($_SERVER['HTTP_HOST'],'.local')===false) { 
+		header("Location: http://www.".str_replace("http://","",$pageurl)); exit(); }
 
     include ($sitepath."inc/dbinfo.php");
 	if ($dbhost == "cms_dbhost" && !$install) {
@@ -35,7 +36,7 @@
 	$_GET['view'] = htmlentities(check($_GET['view']));
 	$pageurl = addslashes(htmlentities(check($pageurl)));
 
-	$version = "2.0.2";
+	$version = "2.0.3";
 
 	$domain = check_domain($siteurl);
 	if (!$install) {
@@ -216,7 +217,7 @@
 	}
 
 	require_once('inc/detector.php');
-	$pc = &new Detector($_SERVER["REMOTE_ADDR"], $_SERVER["HTTP_USER_AGENT"]);
+	$pc = new Detector($_SERVER["REMOTE_ADDR"], $_SERVER["HTTP_USER_AGENT"]);
 	$referer_keyword = get_search_phrase($_SERVER['HTTP_REFERER']);
 
 	// Daily stats work

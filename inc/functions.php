@@ -404,25 +404,21 @@ $smarty->assign("acp_bar", "<link rel='stylesheet' type='text/css' href='".$site
 
 </p>
 <br style='clear: left' />
-<img src='{$siteurl}images/cancel.png' class='closepanel'> <b class='closepanel'>Close</b>
+<b class='closepanel'>Close</b> <img src='{$siteurl}images/cancel.png' class='closepanel'>
 </div>
 <div id='mypaneltab' class='ddpaneltab'>
 <a href='#'><span>Toggle</span></a>
 </div>
 
 </div>");
-
-//} else {
-//$smarty->assign("acp_bar", "");
-//}
 }
 
 function valid_email($email) {
-  $result = TRUE;
-  if(!eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email)) {
-    $result = FALSE;
+  if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    return false;
   }
-  return $result;
+
+  return true;
 }
 
 function perm($name, $type) {
@@ -454,7 +450,7 @@ global $setting;
     
     foreach ($badwords AS $badword)
     {
-          $str = eregi_replace($badword, str_repeat('*', strlen($badword)), $str);
+          $str = mb_eregi_replace($badword, str_repeat('*', strlen($badword)), $str);
     }  
     
     return $str;
@@ -609,10 +605,10 @@ return "<script type='text/javascript' src='".$siteurl."inc/js/tiny_mce/tiny_mce
 		mode : 'textareas',
 		theme : 'advanced',
 		elements : 'abshosturls',
-		plugins : 'spellchecker,preview,searchreplace,emotions,media,contextmenu,wordcount,autosave,pagebreak,tinyautosave',
+		plugins : 'spellchecker,preview,searchreplace,emotions,media,contextmenu,wordcount,pagebreak,tinyautosave',
 
 		theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontsizeselect,formatselect',
-		theme_advanced_buttons2 : 'bullist,numlist,|,undo,redo,|,link,unlink,image,cleanup,code,preview,replace,spellchecker,emotions,media,pagebreak,autosave,tinyautosave',
+		theme_advanced_buttons2 : 'bullist,numlist,|,undo,redo,|,link,unlink,image,cleanup,code,preview,replace,spellchecker,emotions,media,pagebreak,tinyautosave',
 		theme_advanced_buttons3 : '',
 		theme_advanced_toolbar_location : 'top',
 		theme_advanced_toolbar_align : 'left',
@@ -738,7 +734,7 @@ $other_list = array("html", "zip", "rar", "file", "txt", "word", "tor", "pdf", "
 
 
 foreach($image_list as $r) {
-if(ereg($r, $file)) {
+if(strstr($file, $r)) {
 $found = 1;
 $file_type = "image";
 if ($show_type == "image") {
@@ -759,7 +755,7 @@ $img = $siteurl."images/file_types/photo.png";
 
 if (!$found) {
 foreach($video_list as $r) {
-if(ereg($r, $file)) {
+if(strstr($file, $r)) {
 $found = 1;
 $file_type = "video";
 if ($show_type == "image") {
@@ -781,7 +777,7 @@ $img = $siteurl."images/file_types/movie.png";
 
 if (!$found) {
 foreach($music_list as $r) {
-if(ereg($r, $file)) {
+if(strstr($file, $r)) {
 $found = 1;
 $file_type = "music";
 if ($show_type == "image") {
@@ -797,7 +793,7 @@ $img = $siteurl."images/file_types/music.png";
 
 if (!$found) {
 foreach($other_list as $r) {
-if(ereg($r, $file)) {
+if(strstr($file, $r)) {
 $found = 1;
 $file_type = "other";
 if ($show_type == "image") {
@@ -1692,8 +1688,13 @@ $smarty->assign($r[section]."_link", "<a href='".url("content", $r[id], $r[name]
 $smarty->assign("link", "<a href='".url("content", $r[id], $r[name], $r[section])."'>".stripslashes($r[name])."</a>");
 $smarty->assign($r[section]."_link", "<a href='".url("content", $r[id], $r[name], $r[section])."'>".stripslashes($r[name])."</a>");
 }
-$smarty->assign("date", timef($r[date]));
-$smarty->assign($r[section]."_date", timef($r[date]));
+if ($r[last_edit] > 0) {
+    $smarty->assign("date", timef($r[last_edit]));
+    $smarty->assign($r[section]."_date", timef($r[last_edit]));
+} else {
+    $smarty->assign("date", timef($r[date]));
+    $smarty->assign($r[section]."_date", timef($r[date]));
+}
 if ($p[1] && $_GET['id'] != $r[id] or $r[user_id] == $useridn && $_GET['id'] != $r[id]) {
 $smarty->assign("story", "".parse_text($data));
 $smarty->assign($r[section]."_story", "".parse_text($data));
@@ -2021,7 +2022,7 @@ $smarty->assign($sec."_date", timef($q[5]));
 if ($p[1] && $_GET['id'] != $i or $q[2] == $useridn && $_GET['id'] != $i) {
 $smarty->assign($sec."_story", parse_text($data));
 } else {
-$smarty->assign($sec."_story", stripslashes(html_entity_decode(stripslashes($data))));
+$smarty->assign($sec."_story", $data);
 }
 $smarty->assign($sec."_comments_link", "<a href='".url("content", $i, $q[3], $q[0])."#comments'>Comments</a>");
 $smarty->assign($sec."_comments_num", $comments_num);
@@ -2185,7 +2186,7 @@ function detect_bot() {
 global $botlist;
 
 foreach($botlist as $bot) {
-if(ereg($bot, $_SERVER['HTTP_USER_AGENT'])) {
+if(strstr($_SERVER['HTTP_USER_AGENT'], $bot)) {
 
 if($bot == "Googlebot") {
 if (substr(gethostbyaddr($_SERVER['REMOTE_ADDR']), 0, 11) == "216.239.46.") {
