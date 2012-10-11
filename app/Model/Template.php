@@ -2,6 +2,7 @@
 
 class Template extends AppModel{
 	public $name = 'Template';
+
     public $validate = array(
     	'location' => array(
 			array(
@@ -16,7 +17,10 @@ class Template extends AppModel{
 			'className' => 'Theme',
 			'foreignKey' => 'theme_id'
 			)
-		);
+	);
+	
+	public $hasMany = array('Module');
+
 	public $recursive = -1;
 
 	public function folderList()

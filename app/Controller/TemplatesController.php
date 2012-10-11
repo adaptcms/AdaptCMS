@@ -79,12 +79,19 @@ class TemplatesController extends AppController{
         );
 
 		$this->set(compact('themes'));
-        $this->set('theme_id', $this->params->pass[0]);
 
-	    if ($this->params->pass[0] == 1) {
+		if (empty($this->params->pass[0])) {
+			$theme_id = 1;
+		} else {
+			$theme_id = $this->params->pass[0];
+		}
+	    
+	    $this->set(compact('theme_id'));
+
+	    if ($theme_id == 1) {
 			$this->set('locations', $this->Template->folderFullList());
 		} else {
-			$this->set('locations', $this->Template->folderFullList($themes[$this->params->pass[0]]));
+			$this->set('locations', $this->Template->folderFullList($themes[$theme_id]));
 		}
 
         if ($this->request->is('post')) {
@@ -103,7 +110,8 @@ class TemplatesController extends AppController{
 			if ($theme['Theme']['title'] == 'Default') {
 				$pre = null;
 			} else {
-				$pre = 'Themed/'.$theme['Theme']['title'].'/';
+				// $pre = 'Themed/'.$theme['Theme']['title'].'/';
+				$pre = null;
 			}
 
         	$this->request->data['Template']['location'] = $pre.$this->request->data['Template']['location'].'/'.$file.'.ctp';
@@ -342,13 +350,16 @@ class TemplatesController extends AppController{
 
             $results = $this->Template->find('all', $conditions);
 
-            foreach($results as $result) {            
-                $data[] = array(
-                	'id' =>$result['Template']['id'],
-                	'title' => $result['Template']['title'],
-                	'location' => 
-                		'('.$result['Template']['location'].') - <i>'.$result['Theme']['title'].' Theme</i>'
-                );
+            foreach($results as $result) {
+            	if (!empty($this->request->data['element']) && 
+            		strstr($result['Template']['location'], "Elements/")) {
+	                $data[] = array(
+	                	'id' =>$result['Template']['id'],
+	                	'title' => $result['Template']['title'],
+	                	'location' => 
+	                		'('.$result['Template']['location'].') - <i>'.$result['Theme']['title'].' Theme</i>'
+	                );
+	        	}
             }
 
             return json_encode($data);

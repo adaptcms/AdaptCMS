@@ -23,4 +23,35 @@ class Article extends AppModel {
         )
     );
     public $recursive = -1;
+
+    public function getRelatedArticles($id, $related)
+    {
+        $find = $this->find('all', array(
+            'conditions' => array(
+                'OR' => array(
+                    'Article.id' => json_decode($related),
+                    'Article.related_articles LIKE' => '%"'.$id.'"%'
+                )
+            ),
+            'contain' => array(
+                'Category'
+            )
+        ));
+
+        return $find;
+    }
+
+    public function getAllRelatedArticles($data)
+    {
+        foreach($data as $key => $row) {
+            if (!empty($row['Article']['related_articles'])) {
+                $data[$key]['RelatedArticles'] = $this->getRelatedArticles(
+                    $row['Article']['id'], 
+                    $row['Article']['related_articles']
+                );
+            }
+        }
+
+        return $data;
+    }
 }

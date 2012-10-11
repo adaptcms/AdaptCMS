@@ -7,7 +7,13 @@ category: <?= $this->request->data['Category']['title'] ?>
 <p>
 	<ul>
 	<?php foreach($this->request->data['ArticleValue'] as $data): ?>
-		<li><?= $data['Field']['title'] ?>: <?= json_decode($data['data']) ?></li>
+		<li><?= $data['Field']['title'] ?>: 
+			<?php if (is_array(json_decode($data['data']))): ?>
+				<?= implode(", ", json_decode($data['data'])) ?>
+			<?php else: ?>
+				<?= $data['data'] ?>
+			<?php endif ?>
+		</li>
 	<?php endforeach; ?>
 	</ul>
 </p>

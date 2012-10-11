@@ -16,7 +16,7 @@ class ThemesController extends AppController{
             mkdir(WWW_ROOT.'themes/'.$this->request->data['Theme']['title']);
             mkdir(WWW_ROOT.'themes/'.$this->request->data['Theme']['title'].'/css');
             mkdir(WWW_ROOT.'themes/'.$this->request->data['Theme']['title'].'/js');
-            mkdir(WWW_ROOT.'themes/'.$this->request->data['Theme']['title'].'/images');
+            mkdir(WWW_ROOT.'themes/'.$this->request->data['Theme']['title'].'/img');
     		// chmod(VIEW_PATH.'Themed/'.$this->request->data['Theme']['title'], 0777);
     		
     		foreach($this->Template->folderList() as $folder) {
@@ -34,6 +34,11 @@ class ThemesController extends AppController{
 
 	public function admin_edit($id = null)
 	{
+        if (!is_numeric($id)) {
+            $findId = $this->Theme->findByTitle($id);
+            $id = $findId['Theme']['id'];
+        }
+
         $this->Theme->id = $id;
         
 	    if ($this->request->is('get')) {

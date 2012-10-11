@@ -1,60 +1,8 @@
 <?php
-/**
- * Static content controller.
- *
- * This file will render views from views/pages/
- *
- * PHP 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
 
-App::uses('AppController', 'Controller');
-
-/**
- * Static content controller
- *
- * Override this controller by placing a copy in controllers directory of an application
- *
- * @package       app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers/pages-controller.html
- */
-class PagesController extends AppController {
-
-/**
- * Controller name
- *
- * @var string
- */
+class PagesController extends AppController 
+{
 	public $name = 'Pages';
-/**
- * This controller does not use a model
- *
- * @var array
- */
-	// public $uses = array();
-
-/*	public function beforeFilter()
-	{
-		$this->Auth->allow();
-	}*/
-
-/**
- * Displays a view
- *
- * @param mixed What page to display
- * @return void
- */
 
 	public function admin_index()
 	{
@@ -100,7 +48,7 @@ class PagesController extends AppController {
 	public function admin_edit($id = null)
 	{
 
-      $this->Page->id = $id;
+      	$this->Page->id = $id;
 
 	    if ($this->request->is('get')) {
 	        $this->request->data = $this->Page->read();
@@ -179,6 +127,26 @@ class PagesController extends AppController {
 			$setting1 = $this->SettingValue->findByTitle('Number of Articles on Homepage');
 			$setting2 = $this->SettingValue->findByTitle('Categories of Articles to show on homepage');
 
+			if (empty($setting1)) {
+				$setting1['SettingValue']['data'] = 5;
+			}
+
+			if (!empty($setting2)) {
+				$categories = array_map('strtolower',
+					array_map('trim', 
+						explode(
+							",",
+							$setting2['SettingValue']['data']
+						)
+					)
+				);
+			} else {
+				$this->loadModel('Category');
+
+				$category = $this->Category->find('first');
+				$categories = $category['Category']['slug'];
+			}
+
 			$this->paginate = array(
 				'contain' => array(
 					'Category',
@@ -191,12 +159,14 @@ class PagesController extends AppController {
 				'conditions' => array(
 					'Article.status' => 1,
 					'Article.deleted_time' => '0000-00-00 00:00:00',
-					'Category.slug' => $setting2['SettingValue']['data']
+					'Category.slug' => $categories
 				),
 				'order' => 'Article.created DESC'
 			);
-        
-			$this->request->data = $this->paginate('Article');
+
+	        $this->request->data = $this->Article->getAllRelatedArticles(
+	        	$this->paginate('Article')
+	        );
 		}
 
 		if ($path[0] == 'home' or $path[0] == 'denied') {

@@ -8,6 +8,7 @@ $(document).ready(function() {
 			} else {
 				$("#file_contents").show();
 				$("#file_upload").hide();
+				$("#frame_FileContent").css("height", "325px");
 			}
 			$("#extra").show();
 		} else {
@@ -34,33 +35,44 @@ $(document).ready(function() {
 
 <div id="file_upload" style="display: none">
 	<?= $this->Form->input('filename', array('type' => 'file', 'class' => 'required')) ?>
-    <?= $this->Form->hidden('dir') ?>
+    <?= $this->Form->hidden('dir', array('value' => 'uploads/')) ?>
     <?= $this->Form->hidden('mimetype') ?>
     <?= $this->Form->hidden('filesize') ?>
 </div>
-<div id="file_contents" style="display: none">
+<div id="file_contents" style="display:none">
     <?php $this->EditArea->editor('FileContent') ?>
 
     <?= $this->Form->input('content', array(
         'label' => 'File Contents',
-        'rows' => 25, 
+        'rows' => 20, 
         'style' => 'width: 90%'
     )) ?>
+
+	<?= $this->Form->input('file_extension', array(
+    	'class' => 'required',
+		'empty' => '- choose -',
+		'options' => $file_types
+	)) ?>
+
+	<?= $this->Form->input('file_name', array(
+    	'class' => 'required'
+	)) ?>
 </div>
 
 <div id="extra" style="display: none">
-	<?php if (empty($this->params['pass'][0])): ?>
+	<?php if (empty($theme)): ?>
 	    <?= $this->Form->input('caption') ?>
 	<?php else: ?>
-		<?= $this->Form->hidden('theme_id', array('value' => $this->params['pass'][0])) ?>
+		<?= $this->Form->hidden('theme', array('value' => $theme)) ?>
 	    <?= $this->Form->input('folder', array(
+	    	'class' => 'required',
 			'empty' => '- choose -',
 			'label' => 'Folder Location',
 			'options' => array(
-				'Css',
-				'Js',
-				'Images',
-				'Other'
+				'css' => 'Css',
+				'js' => 'Js',
+				'img' => 'Images',
+				'other' => 'Other'
 			)
 		)) ?>
 	<?php endif ?>

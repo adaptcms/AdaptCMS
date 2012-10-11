@@ -5,7 +5,6 @@ class PermissionValuesController extends AppController {
 
 	public function admin_add()
 	{
-		// die(debug($this->request->data));
 		if ($this->PermissionValue->save($this->request->data)) {
             $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Permissions have been saved.', 'default', array('class' => 'alert alert-success'));
             $this->redirect(array(
@@ -20,5 +19,4 @@ class PermissionValuesController extends AppController {
             	$this->request->data['PermissionValue']['role_id']));
         }
 	}
-
 }

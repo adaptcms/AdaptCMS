@@ -19,7 +19,7 @@ $(".btn-danger").live('click', function() {
 });
 </script>
 
-<?php echo $this->Html->link('Upload File', array('action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')); ?>
+<?php echo $this->Html->link('Add New File', array('action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')); ?>
 <table class="table table-bordered">
     <tr>
         <th><?= $this->Paginator->sort('filename', 'File Name') ?></th>

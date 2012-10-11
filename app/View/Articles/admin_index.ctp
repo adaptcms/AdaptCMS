@@ -1,3 +1,8 @@
+<?php 
+    // $this->LastFM->key = '452d325ac8204b59da9d71468994b6b8';
+    // $this->LastFM->album_getInfo(array('artist' => 'The Beatles', 'album' => 'Revolver'));
+?>
+
 <div class="left">
     <h1>Articles<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>

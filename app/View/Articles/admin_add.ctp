@@ -9,9 +9,48 @@
 
 <?= $this->Html->css("datepicker.css") ?>
 <?= $this->Html->script('bootstrap-datepicker.js') ?>
+<?= $this->Html->script('bootstrap-typeahead.js') ?>
 
 <script>
  $(document).ready(function(){
+    $('#related-search').typeahead({
+        source: function(typeahead, query) {
+                $.ajax({
+                    url: "<?= $this->webroot ?>admin/articles/ajax_related_search",
+                    dataType: "json",
+                    type: "POST",
+                    data: {search: query, category: $("#category").val(), id: $("#ArticleId").val()},
+                    success: function(data) {
+                        if (data) {
+                            var return_list = [], i = data.length;
+                            while (i--) {
+                                return_list[i] = {
+                                    id: data[i].id, 
+                                    value: data[i].title + data[i].category
+                                };
+                            }
+                            typeahead.process(return_list);
+                        }
+                    }
+                });
+            },
+            onselect: function(obj) {
+                if (obj.id) {
+                	if ($(".related[value='" + obj.id + "']").length == 0) {
+                		$(".related-error").html("").hide();
+
+	                	var html = '<div id="data-' + obj.id + '"><span class="label label-info">' + obj.value + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="RelatedData[]" class="related" name="RelatedData[]" value="' + obj.id + '"></div>';
+
+	                	$("#related-articles").prepend(html);
+	                } else {
+	                	$(".related-error").html("<strong>Error</strong> Article already linked").show();
+	                }
+
+                	$("#related-search").val("").focus();
+                }
+        }
+    });
+
     <?php if (!$radio_fields): ?>
     	$("#ArticleAdminAddForm").validate();
     <?php else: ?>
@@ -273,19 +312,48 @@ endif;
 <?= $this->Form->hidden('created', array('value' => $time)) ?>
 <?= $this->Form->hidden('status', array('value' => 0)) ?>
 
-<br />
-<?= $this->Form->button('Publish Now', array(
-	'type' => 'submit',
-	'class' => 'btn'
+<label>Relate Articles</label>
+
+<div class="pull-left">
+
+<?= $this->Form->input('category', array(
+		'id' => 'category',
+        'div' => false,
+        'label' => false,
+        'empty' => '- Category -',
+        'options' => $categories,
+        'style' => 'width: 150px;margin-right: 10px'
 )) ?>
-<?= $this->Form->button('Save Draft', array(
-	'type' => 'submit',
-	'style' => 'margin-left:5px;margin-right:5px',
-	'class' => 'btn'
+<?= $this->Form->input('related-search', array(
+		'id' => 'related-search',
+        'div' => false,
+        'label' => false,
+        'data-provide' => 'typeahead', 
+        'data-source' => '[]', 
+        'autocomplete'=>'off'
 )) ?>
-<?= $this->Form->button('Publish Later', array(
-	'type' => 'button',
-	'class' => 'btn'
-)) ?>
+
+<span class="related-error alert alert-error" style="margin-left:15px;display:none"></span>
+
+<div id="related-articles" style="width: 100%"></div>
+</div>
+
+<div class="clearfix"></div>
+
+<div style="margin-top:20px">
+	<?= $this->Form->button('Publish Now', array(
+		'type' => 'submit',
+		'class' => 'btn'
+	)) ?>
+	<?= $this->Form->button('Save Draft', array(
+		'type' => 'submit',
+		'style' => 'margin-left:5px;margin-right:5px',
+		'class' => 'btn'
+	)) ?>
+	<?= $this->Form->button('Publish Later', array(
+		'type' => 'button',
+		'class' => 'btn'
+	)) ?>
+</div>
 
 <?= $this->Form->end(); ?>

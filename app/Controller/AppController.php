@@ -36,7 +36,7 @@ class AppController extends Controller {
 	public $components = array(
 		'DebugKit.Toolbar' => array(
 			'debug' => 2
-			),
+		),
 		'RequestHandler',
 		'Auth' => array(
 		        'loginAction' => array(
@@ -44,9 +44,19 @@ class AppController extends Controller {
 	            'action' => 'login',
 	            'admin' => false,
 	            'plugin' => false
-	            ),        
-	        'loginRedirect' => array('plugin' => false, 'controller' => 'pages', 'action' => 'display', 'home'),
-	        'logoutRedirect' => array('plugin' => false, 'controller' => 'pages', 'action' => 'display', 'home')
+            ),        
+	        'loginRedirect' => array(
+	        	'plugin' => false, 
+	        	'controller' => 'pages', 
+	        	'action' => 'display', 
+	        	'home'
+	        ),
+	        'logoutRedirect' => array(
+	        	'plugin' => false, 
+	        	'controller' => 'pages', 
+	        	'action' => 'display', 
+	        	'home'
+	        )
         ),
 		'Session',
 		'Security' => array(
@@ -54,7 +64,7 @@ class AppController extends Controller {
 		)
 	);
 
-	public $helpers = array('Html', 'Form', 'Time', 'Cache');
+	public $helpers = array('Html', 'Form', 'Time', 'Cache', 'LastFM');
 	public $uses = array('PermissionValue', 'Log');
 
 	public function beforeFilter()
@@ -75,13 +85,13 @@ class AppController extends Controller {
         $this->layout();
 		$this->accessCheck();
 
-		$this->theme = 'Movie';
+		$this->theme = 'Default';
 
 		if ($this->Auth->user('id')) {
 			$this->logAction();
 		}
 
-		if ($this->RequestHandler->isAjax()) {
+		if ($this->RequestHandler->isAjax() || $this->RequestHandler->isRss()) {
 			Configure::write('debug',0);
 		}
 
@@ -110,6 +120,8 @@ class AppController extends Controller {
 				!empty($this->params->pass) && $this->params->pass[0] == "admin") {
 				$this->layout = "admin";
 				$this->set('prefix', 'admin');
+			} elseif (!empty($this->params->prefix) && $this->params->prefix == "rss") {
+				$this->layout = "rss/default";
 			} else {
 				$this->layout = "default";
 			}
@@ -132,10 +144,12 @@ class AppController extends Controller {
 		if (strstr($this->params->action, "login") or strstr($this->params->action, "activate") or strstr($this->params->action, "logout") 
 			or strstr($this->params->action, "register") or strstr($this->params->action, "_password")
 			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "denied")
-			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home") or strstr($this->params->action, "ajax")) {
+			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home") or strstr($this->params->action, "ajax")
+			|| !empty($this->params->prefix) && $this->params->prefix == "rss") {
 				$this->Auth->allow($this->params->action);
-		} elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id') or 
-			!empty($this->params->pass) && $this->params->pass[0] == "admin" && !$this->Auth->User('id')) {
+		} elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id')
+			|| !empty($this->params->pass) && $this->params->pass[0] == "admin" && !$this->Auth->User('id')
+			) {
 				$this->Auth->deny($this->params->action);
 		} elseif ($role_id) {
 			if (empty($this->params->plugin)) {

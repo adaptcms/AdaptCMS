@@ -90,8 +90,21 @@ class ModulesController extends AppController
 			$this->redirect(array('action' => 'add'));
 		}
 
-		$this->loadModel('Template');
-		$this->set('templates', $this->Template->find('list'));
+		$this->loadModel('Theme');
+
+		$this->set('themes', $this->Theme->find('list', array(
+                'order' => 'Theme.id ASC',
+                'conditions' => array(
+                	'Theme.deleted_time' => '0000-00-00 00:00:00'
+                	)
+                )
+        ));
+
+        for ($i = 0; $i <= 100; $i++) {
+        	$limit[] = $i;
+        }
+
+        $this->set(compact('limit'));
 	}
 
 	public function admin_step_three()

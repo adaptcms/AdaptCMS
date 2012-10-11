@@ -17,7 +17,12 @@
 	echo $this->Form->hidden('old_title', array('value' => $this->request->data['Theme']['title']));
 	echo $this->Form->hidden('modified', array('type' => 'hidden'));
     echo $this->Form->input('id', array('type' => 'hidden'));
-    echo $this->Form->end('Submit');
+
+    if ($this->request->data['Theme']['id'] == 1) {
+    	echo $this->Form->end();
+    } else {
+    	echo $this->Form->end('Submit');
+    }
 ?>
 
 <div class="pull-left">
@@ -28,7 +33,7 @@
 	<?= $this->Html->link('Add New File', array(
 			'controller' => 'files', 
 			'action' => 'add', 
-			$this->request->data['Theme']['id']
+			$this->request->data['Theme']['title']
 		), array(
 			'class' => 'btn'
 	)) ?>
@@ -48,9 +53,9 @@
 					<tr>
 						<td>
 							<?= $this->Html->link($key.'/'.$data, array(
-									'controller' => 'themes', 
-									'action' => 'edit_file', 
-									$this->request->data['Theme']['id'], urlencode($key.'/'.$data)
+									'controller' => 'files', 
+									'action' => 'edit', 
+									'theme-'.$this->request->data['Theme']['title'], urlencode($key.'___'.$data)
 							)) ?>
 	                        <?= $this->Html->link(
 	                            '<i class="icon-pencil icon-globe"></i>', 
@@ -65,20 +70,20 @@
                             <?= $this->Html->link(
                                 '<i class="icon-pencil icon-white"></i> Edit', 
                                 array(
-                                	'controller' => 'themes', 
-                                	'action' => 'edit_file', 
-                                	$this->request->data['Theme']['id'], 
-                                	urlencode($key.'/'.$data
+                                	'controller' => 'files', 
+                                	'action' => 'edit', 
+                                	'theme-'.$this->request->data['Theme']['title'], 
+                                	urlencode($key.'___'.$data
                                 )),
                                 array('class' => 'btn btn-primary', 'escape' => false));
                             ?>
                             <?= $this->Html->link(
                                 '<i class="icon-trash icon-white"></i> Delete',
                                 array(
-                                	'controller' => 'themes',
-                                	'action' => 'delete_file', 
-                                	$this->request->data['Theme']['id'], 
-                                	urlencode($key.'/'.$data
+                                	'controller' => 'files',
+                                	'action' => 'delete', 
+                                	'theme-'.$this->request->data['Theme']['title'], 
+                                	urlencode($key.'___'.$data
                                 )),
                                 array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file? This will be permanent.')"));
                             ?>
@@ -89,9 +94,9 @@
 				<tr>
 					<td>
 						<?= $this->Html->link($row, array(
-								'controller' => 'themes', 
-								'action' => 'edit_file', 
-								$this->request->data['Theme']['id'], urlencode($row)
+								'controller' => 'files', 
+								'action' => 'edit', 
+								'theme-'.$this->request->data['Theme']['title'], urlencode($row)
 						)) ?>
                         <?= $this->Html->link(
                             '<i class="icon-pencil icon-globe"></i>', 
@@ -106,9 +111,9 @@
                         <?= $this->Html->link(
                             '<i class="icon-pencil icon-white"></i> Edit', 
                             array(
-                            	'controller' => 'themes', 
-                            	'action' => 'edit_file',
-                            	 $this->request->data['Theme']['id'], 
+                            	'controller' => 'files', 
+                            	'action' => 'edit',
+                            	 'theme-'.$this->request->data['Theme']['title'], 
                             	 urlencode($row)
                             ),
                             array('class' => 'btn btn-primary', 'escape' => false));
@@ -116,9 +121,9 @@
                         <?= $this->Html->link(
                             '<i class="icon-trash icon-white"></i> Delete',
                             array(
-                            	'controller' => 'themes', 
-                            	'action' => 'delete_file', 
-                            	$this->request->data['Theme']['id'], 
+                            	'controller' => 'files', 
+                            	'action' => 'delete', 
+                            	'theme-'.$this->request->data['Theme']['title'], 
                             	urlencode($row)
                             ),
                             array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file? This will be permanent.')"));

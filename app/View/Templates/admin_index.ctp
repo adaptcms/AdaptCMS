@@ -1,4 +1,4 @@
-<script type="text/javascript" src="<?= $this->webroot ?>js/bootstrap-typeahead.js"></script>
+<?= $this->Html->script('bootstrap-typeahead.js') ?>
 <script type="text/javascript">
  $(document).ready(function(){
     $("#theme-update").live('click', function() {
@@ -48,7 +48,6 @@
 
     $('#search').typeahead({
         source: function(typeahead, query) {
-            console.log($("#theme").val());
                 $.ajax({
                     url: "<?= $this->webroot ?>ajax/templates/quick_search/",
                     dataType: "json",

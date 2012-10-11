@@ -111,11 +111,12 @@ class CategoriesController extends AppController {
 			$limit = 10;
 		}
 
-
 		$this->paginate = array(
 			'order' => 'Article.created DESC',
 			'conditions' => array(
-				'Category.slug' => $slug
+				'Category.slug' => $slug,
+				'Article.status' => 1,
+				'Article.deleted_time' => '0000-00-00 00:00:00'
 			),
 			'contain' => array(
 				'Category',
@@ -127,7 +128,16 @@ class CategoriesController extends AppController {
 			'limit' => $limit
 		);
 
-		$this->request->data = $this->paginate('Article');
+		$this->request->data = $this->Category->Article->getAllRelatedArticles(
+			$this->paginate('Article')
+		);
+
 		$this->set('title_for_layout', ucfirst($slug));
+
+		if ($this->theme != "Default" && 
+			file_exists(VIEW_PATH.'Themed/'.$this->theme.'/Categories/'.$slug.'.ctp') ||\
+			file_exists(VIEW_PATH.'Categories/'.$slug.'.ctp')) {
+			$this->render(implode('/', array($slug)));
+		}
 	}
 }

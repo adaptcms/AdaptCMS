@@ -14,9 +14,73 @@
 
 <?= $this->Html->css("datepicker.css") ?>
 <?= $this->Html->script('bootstrap-datepicker.js') ?>
+<?= $this->Html->script('bootstrap-typeahead.js') ?>
 
 <script>
  $(document).ready(function(){
+    $('#related-search').typeahead({
+        source: function(typeahead, query) {
+                $.ajax({
+                    url: "<?= $this->webroot ?>admin/articles/ajax_related_search",
+                    dataType: "json",
+                    type: "POST",
+                    data: {search: query, category: $("#category").val(), id: $("#ArticleId").val()},
+                    success: function(data) {
+                        if (data) {
+                            var return_list = [], i = data.length;
+                            while (i--) {
+                                return_list[i] = {
+                                    id: data[i].id, 
+                                    value: data[i].title + data[i].category
+                                };
+                            }
+                            typeahead.process(return_list);
+                        }
+                    }
+                });
+            },
+            onselect: function(obj) {
+                if (obj.id) {
+                	if ($(".related[value='" + obj.id + "']").length == 0) {
+                		$(".related-error").html("").hide();
+
+	                	var html = '<div id="data-' + obj.id + '"><span class="label label-info">' + obj.value + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="RelatedData[]" class="related" name="RelatedData[]" value="' + obj.id + '"></div>';
+
+	                	$("#related-articles").prepend(html);
+	                } else {
+	                	$(".related-error").html("<strong>Error</strong> Article already linked").show();
+	                }
+
+                	$("#related-search").val("").focus();
+                }
+        }
+    });
+
+	$("#related-submit").live('click', function(e) {
+		e.preventDefault();
+
+		if ($(".related").length > 0) {
+			var values = $(".related").map(function(){
+				return $(this).val();
+			}).get();
+
+            $.post("<?= $this->webroot ?>admin/articles/ajax_related_add/", 
+                {
+                    data:{
+                        Article:{
+                            id: $("#ArticleId").val(),
+                            ids: values
+                        }
+                    }
+                }, function(data) {
+                if (data) {
+                	$("#flashMessageRelated").replaceWith(data);
+                	$("#flashMessageRelated").fadeOut(3000);
+                }
+            });
+		}
+	});
+
  	<?php if (!$radio_fields): ?>
     	$("#ArticleEditForm").validate();
     <?php else: ?>
@@ -325,6 +389,26 @@ endif;
 
 <div class="clear"></div>
 
+<br />
+<label>Current Status</label>
+
+<?php if ($this->request->data['Article']['status'] == 1): ?>
+	<div class="alert alert-success" style="width:36%;padding:20px;text-align:center">
+		Article is Live
+	</div>
+<?php elseif ($this->request->data['Article']['status'] == 0 &&
+			  $this->request->data['Article']['publish_time'] == "0000-00-00 00:00:00"): ?>
+	<div class="alert alert-block" style="width:36%;padding:20px;text-align:center">
+		Article is Saved as a Draft, NOT live
+	</div>
+<?php else: ?>
+	<div class="alert alert-info" style="width:36%;padding:20px;text-align:center">
+		Article will go Live - 
+		<?= date("F d, Y h:i a", strtotime($this->request->data['Article']['publish_time'])) ?>
+	</div>
+<?php endif ?>
+<br />
+
 <div class="input text publish_time" style="display: none;margin-top:9px">
 	<?= $this->Form->input('publishing_date', array(
 			'type' => 'text',
@@ -347,7 +431,7 @@ endif;
 		'type' => 'submit',
 		'class' => 'btn'
 	)) ?>
-</div><br />
+</div>
 
 <?= $this->Form->input('id', array('type' => 'hidden')) ?>
 
@@ -368,3 +452,55 @@ endif;
 )) ?>
 
 <?= $this->Form->end(); ?>
+
+<div class="clearfix"></div>
+
+<h1>Relate Articles</h1>
+
+<?= $this->Form->create('RelatedArticle', array('action' => 'ajax_add', 'class' => 'well')) ?>
+
+<div class="pull-left">
+
+<?= $this->Form->input('category', array(
+		'id' => 'category',
+        'div' => false,
+        'label' => false,
+        'empty' => '- Category -',
+        'options' => $categories,
+        'style' => 'width: 150px;margin-right: 10px'
+)) ?>
+<?= $this->Form->input('related-search', array(
+		'id' => 'related-search',
+        'div' => false,
+        'label' => false,
+        'data-provide' => 'typeahead', 
+        'data-source' => '[]', 
+        'autocomplete'=>'off',
+        'style' => 'margin-bottom: 9px'
+)) ?>
+
+<span class="related-error alert alert-error" style="margin-left:15px;display:none"></span>
+
+<div id="related-articles" style="width: 100%">
+	<?php if (!empty($related_articles)): ?>
+		<?php foreach($related_articles as $row): ?>
+			<div id="data-<?= $row['Article']['id'] ?>"><span class="label label-info"><?= $row['Article']['title'] ?> (<?= $row['Category']['title'] ?>) <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="RelatedData[]" class="related" name="RelatedData[]" value="<?= $row['Article']['id'] ?>"></div>
+		<?php endforeach ?>
+	<?php endif ?>
+</div>
+
+</div>
+
+<p>&nbsp;</p>
+<div class="clearfix"></div>
+
+<?= $this->Form->button('Submit', array(
+	'type' => 'submit',
+	'class' => 'btn',
+	'style' => 'margin-top: 20px;margin-bottom: 10px',
+	'id' => 'related-submit'
+)) ?>
+
+<div id="flashMessageRelated" class="alert alert-success" style="display:none"></div>
+
+<?= $this->Form->end() ?>

@@ -35,6 +35,44 @@ class UploadBehavior extends ModelBehavior{
 		}
 	}
 
+	public function themeFile(&$model, $data)
+	{
+		if (!empty($data['theme'])) {
+			if ($data['folder'] == "other") {
+				$data['folder'] = "";
+			} else {
+				$data['folder'] = $data['folder'].'/';
+			}
+
+			if ($data['type'] == "upload") {
+				$ext = explode(".", $data['filename']['name']);
+				$tmpName = $data['filename']['tmp_name'];
+
+				$fileData['name'] = Inflector::slug($ext[0]).'.'.$ext[1];
+
+				if ($data['theme'] == "Default") {
+					$path = WWW_ROOT.$data['folder'].$fileData['name'];
+				} else {
+					$path = WWW_ROOT.'themes/'.$data['theme'].'/'.$data['folder'].$fileData['name'];
+				}
+
+				$result = move_uploaded_file($tmpName, $path);
+			} else {
+				if ($data['theme'] == "Default") {
+					$path = WWW_ROOT.$data['folder'].$data['file_name'].'.'.$data['file_extension'];
+				} else {
+					$path = WWW_ROOT.'themes/'.$data['theme'].'/'.$data['folder'].$data['file_name'].'.'.$data['file_extension'];
+				}
+
+	        	$fh = fopen($path, 'w') or die("can't open file");
+				fwrite($fh, $data['content']);
+				fclose($fh);
+			}
+
+			return true;
+		}
+	}
+
 	public function beforeSave(&$model)
 	{
 		$data = $model->data[$model->name];
@@ -43,7 +81,7 @@ class UploadBehavior extends ModelBehavior{
 		if (!empty($data)) {
 			foreach($data as $key => $file) {
 				
-				if (is_array($file)) {
+				if (is_array($file) && $file['error'] != 4) {
 					if (empty($file['name'])) {
 						$model->data[$model->name]['filename'] = $model->data[$model->name]['old_filename'];
 

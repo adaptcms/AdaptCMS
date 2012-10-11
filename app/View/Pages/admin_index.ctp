@@ -13,7 +13,7 @@
 </div>
 <div class="clear"></div>
 
-<?php echo $this->Html->link('Add Page', array('action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')); ?>
+<?= $this->Html->link('Add Page', array('action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')) ?>
 <table class="table table-bordered">
     <tr>
         <th><?= $this->Paginator->sort('title') ?></th>
@@ -24,31 +24,31 @@
     <?php foreach ($this->request->data as $data): ?>
     <tr>
         <td>
-            <?php echo $this->Html->link($data['Page']['title'], array('admin' => false, 'action' => 'view', $data['Page']['slug'])); ?>
+            <?= $this->Html->link($data['Page']['title'], $this->webroot.'pages/'.$data['Page']['slug']) ?>
         </td>
-        <td><?php echo $this->Time->format('F jS, Y h:i A', $data['Page']['created']); ?></td>
+        <td><?= $this->Time->format('F jS, Y h:i A', $data['Page']['created']) ?></td>
         <td>
             <?php if (empty($this->params->named['trash'])): ?>
                 <?= $this->Html->link(
                     '<i class="icon-pencil icon-white"></i> Edit', 
                     array('action' => 'edit', $data['Page']['id']),
-                    array('class' => 'btn btn-primary', 'escape' => false));
+                    array('class' => 'btn btn-primary', 'escape' => false))
                 ?>
                 <?= $this->Html->link(
                     '<i class="icon-trash icon-white"></i> Delete',
                     array('action' => 'delete', $data['Page']['id'], $data['Page']['title']),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this page?')"));
+                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this page?')"))
                 ?>
             <?php else: ?>
                 <?= $this->Html->link(
                     '<i class="icon-share-alt icon-white"></i> Restore', 
                     array('action' => 'restore', $data['Page']['id'], $data['Page']['title']),
-                    array('class' => 'btn btn-success', 'escape' => false));
+                    array('class' => 'btn btn-success', 'escape' => false))
                 ?>    
                 <?= $this->Html->link(
                     '<i class="icon-trash icon-white"></i> Delete Forever',
                     array('action' => 'delete', $data['Page']['id'], $data['Page']['title'], 1),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this page? This is permanent.')"));
+                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this page? This is permanent.')"))
                 ?>      
             <?php endif ?>
         </td>
@@ -57,7 +57,7 @@
 </table>
 
 <?php
-    $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'));
+    $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'))
 ?>
 
 <?php if (!empty($numbers)): ?>

@@ -29,9 +29,6 @@ class SettingValuesController extends AppController {
 
     public function admin_edit($id)
     {
-        $pass = 0;
-        $total = 0;
-
         foreach ($this->request->data['SettingValue'] as $key => $data) {
             $set_data[] = $data;
         }
@@ -50,5 +47,4 @@ class SettingValuesController extends AppController {
                 $id));
         }
     }
-
 }

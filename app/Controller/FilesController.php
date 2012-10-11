@@ -36,102 +36,242 @@ class FilesController extends AppController {
         $this->request->data = $this->paginate('File');
 	}
 
-	public function admin_add()
+	public function admin_add($theme = null)
 	{
-		$this->set('file_types', $this->file_types_editable);
+		foreach ($this->file_types_editable as $ext) {
+			$file_types[$ext] = $ext;
+		}
+
+		$this->set(compact('file_types'));
+		
+		if (!empty($theme)) {
+			$this->set(compact('theme'));
+		}
 		
         if ($this->request->is('post')) {
-            if ($this->File->save($this->request->data)) {
+            if (!empty($this->request->data['File']['theme'])) {
+            	$save = $this->File->themeFile($this->request->data['File']);
+            	$redirect = array(
+            		'controller' => 'themes', 
+            		'action' => 'edit', 
+            		$this->request->data['File']['theme']
+            	);
+            } else {
+		    	if (!empty($this->request->data['File']['content'])) {
+		    		$file = $this->slug($this->request->data['File']['file_name']).'.'.$this->request->data['File']['file_extension'];
+		    		$path = WWW_ROOT.$this->request->data['File']['dir'].$file;
+
+		        	$fh = fopen($path, 'w') or die("can't open file");
+					fwrite($fh, $this->request->data['File']['content']);
+					fclose($fh);
+
+					$this->request->data['File']['filename'] = $file;
+					$this->request->data['File']['mimetype'] = $this->File->mime_type($file);
+					$this->request->data['File']['filesize'] = filesize($path);
+
+				}
+
+            	$save = $this->File->save($this->request->data);
+            	$redirect = array('action' => 'index');
+            }
+
+            if ($save) {
                 $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your file has been upload.', 'default', array('class' => 'alert alert-success'));
-                $this->redirect(array('action' => 'index'));
+                $this->redirect($redirect);
             } else {
                 $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to upload your file.', 'default', array('class' => 'alert alert-error'));
             }
-        } 
+        }
 	}
 
-	public function admin_edit($id = null)
+	public function admin_edit($id = null, $filename = null)
 	{
 
       $this->File->id = $id;
 
-	    if ($this->request->is('get')) {
-	        $this->request->data = $this->File->read();
+		if (is_numeric($id)) {
+	        $data = $this->File->read();
 
 	        $file = WWW_ROOT.
-	        		$this->request->data['File']['dir'].
-	        		$this->request->data['File']['filename'];
+	        		$data['File']['dir'].
+	        		$data['File']['filename'];
+	    } elseif (!empty($filename)) {
+	    	$ex = explode("-", $id);
+	    	$ex2 = explode("___", $filename);
 
-    		if (is_readable($file)) {
-		        $ext = pathinfo(
-		        		$file, 
-		        		PATHINFO_EXTENSION
-		        );
+	    	if (!empty($ex[1])) {
+	    		if (!empty($ex2[1])) {
+	    			$file_location = $ex2[0].'/'.$ex2[1];
+				} else {
+					$file_location = $filename;
+				}
 
-		        if (in_array($ext, $this->file_types_editable)) {
-			 		$handle = fopen($file, "r");
+	    		if ($ex[1] == "Default") {
+	    			$path = WWW_ROOT.$file_location;
+	    		} else {
+	    			$path = WWW_ROOT.'themes/'.$ex[1].'/'.$file_location;
+	    		}
 
-			 		if (filesize($file) > 0) {
-						$this->set('file_contents', fread($handle, filesize($file)));
-		    		}
-		        }
-	        }
-	    } else {
-	    	if (!empty($this->request->data['File']['content'])) {
-	        	$fh = fopen(WWW_ROOT.$this->request->data['File']['dir'].$this->request->data['File']['old_filename'], 'w') or die("can't open file");
-				fwrite($fh, $this->request->data['File']['content']);
-				fclose($fh);
+	    		if (file_exists($path)) {
+	    			$file = $path;
+	    		}
 			}
 
-	        if ($this->File->save($this->request->data)) {
+			if ($this->request->is('get')) {
+				$data['File']['filename'] = basename($path);
+			} else {
+				$data = null;
+			}
+
+			$this->set('location', $path);
+			$this->set('theme', $ex[1]);
+	    }
+
+	    $this->set('data', $data);
+
+		if (!empty($file) && is_readable($file)) {
+	        $ext = pathinfo(
+	        		$file, 
+	        		PATHINFO_EXTENSION
+	        );
+
+	        if (in_array($ext, $this->file_types_editable)) {
+		 		$handle = fopen($file, "r");
+
+		 		if (filesize($file) > 0) {
+					$this->set('file_contents', fread($handle, filesize($file)));
+	    		}
+	        }
+	    }
+
+	    if (!$this->request->is('get')) {
+	    	if (!empty($this->request->data['File']['theme'])) {
+	    		if ($this->request->data['File']['old_filename'] != $this->request->data['File']['filename']) {
+	    			$path = str_replace(
+	    				$this->request->data['File']['old_filename'],
+	    				$this->request->data['File']['filename'],
+	    				$this->request->data['File']['location']
+	    			);
+
+	    			rename($this->request->data['File']['location'], $path);
+	    		} else {
+	    			$path = $this->request->data['File']['location'];
+	    		}
+	    	
+	    		if (!empty($this->request->data['File']['content'])) {
+		        	$fh = fopen($path, 'w') or die("can't open file");
+					fwrite($fh, $this->request->data['File']['content']);
+					fclose($fh);
+				}
+
+				$save = true;
+	    		$redirect = array(
+	    			'controller' => 'themes', 
+	    			'action' => 'edit', 
+	    			$this->request->data['File']['theme']
+	    		);
+	    	} else {
+	    		if ($this->request->data['File']['old_filename'] != $this->request->data['File']['filename']) {
+	    			$path = WWW_ROOT.$this->request->data['File']['dir'];
+
+	    			rename(
+	    				$path.$this->request->data['File']['old_filename'],
+	    				$path.$this->request->data['File']['filename']
+	    			);
+
+	    			if (file_exists($path."thumb/".$this->request->data['File']['old_filename'])) {
+	    				rename(
+	    					$path."thumb/".$this->request->data['File']['old_filename'],
+	    					$path."thumb/".$this->request->data['File']['filename']
+	    				);
+	    			}
+	    		}
+
+		    	if (!empty($this->request->data['File']['content'])) {
+		        	$fh = fopen(WWW_ROOT.$this->request->data['File']['dir'].$this->request->data['File']['filename'], 'w') or die("can't open file");
+					fwrite($fh, $this->request->data['File']['content']);
+					fclose($fh);
+				}
+				
+				$save = $this->File->save($this->request->data);
+				$redirect = array('action' => 'index');
+			}
+
+	        if ($save) {
 	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your file has been updated.', 'default', array('class' => 'alert alert-success'));
-	            $this->redirect(array('action' => 'index'));
+	            $this->redirect($redirect);
 	        } else {
 	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your file.', 'default', array('class' => 'alert alert-error'));
 	        }
 	    }
-
 	}
 
-	public function admin_delete($id = null, $permanent)
+	public function admin_delete($id = null, $permanent = null)
 	{
 		if ($this->request->is('post')) {
 	        throw new MethodNotAllowedException();
 	    }
 
-	    $file = $this->File->find('first', array(
-	    	'conditions' => array(
-	    		'File.id' => $id
-	    		),
-	    	'fields' => array(
-	    		'filename'
-	    		)
-	    	)
-	    );
+	    if (is_numeric($id)) {
+		    $file = $this->File->find('first', array(
+		    	'conditions' => array(
+		    		'File.id' => $id
+		    		),
+		    	'fields' => array(
+		    		'filename'
+		    		)
+		    	)
+		    );
 
-	    $this->File->id = $id;
+		    $this->File->id = $id;
 
-        if (!empty($permanent)) {
-            $delete = $this->File->delete($id);
-		    if (file_exists(WWW_ROOT.'uploads/'.$file['File']['filename']) && 
-		    	is_file(WWW_ROOT.'uploads/'.$file['File']['filename'])) {
-		    		unlink(WWW_ROOT.'uploads/'.$file['File']['filename']);
+	        if (!empty($permanent)) {
+	            $delete = $this->File->delete($id);
+			    if (file_exists(WWW_ROOT.'uploads/'.$file['File']['filename']) && 
+			    	is_file(WWW_ROOT.'uploads/'.$file['File']['filename'])) {
+			    		unlink(WWW_ROOT.'uploads/'.$file['File']['filename']);
 
-		    	if (file_exists(WWW_ROOT.'uploads/thumb/'.$file['File']['filename']) && 
-		    		is_file(WWW_ROOT.'uploads/thumb/'.$file['File']['filename'])) {
-		    			unlink(WWW_ROOT.'uploads/thumb/'.$file['File']['filename']);
-		    	}
-		    }
-        } else {
-            $delete = $this->File->saveField('deleted_time', $this->File->dateTime());
-        }
+			    	if (file_exists(WWW_ROOT.'uploads/thumb/'.$file['File']['filename']) && 
+			    		is_file(WWW_ROOT.'uploads/thumb/'.$file['File']['filename'])) {
+			    			unlink(WWW_ROOT.'uploads/thumb/'.$file['File']['filename']);
+			    	}
+			    }
+	        } else {
+	            $delete = $this->File->saveField('deleted_time', $this->File->dateTime());
+	        }
+	    $redirect = array('action' => 'index');
+	    } else {
+	    	$ex = explode("-", $id);
+	    	$ex2 = explode("___", $permanent);
+
+	    	if (!empty($ex[1])) {
+	    		if (!empty($ex2[1])) {
+	    			$file_location = $ex2[0].'/'.$ex2[1];
+				} else {
+					$file_location = $permanent;
+				}
+
+	    		if ($ex[1] == "Default") {
+	    			$path = WWW_ROOT.$file_location;
+	    		} else {
+	    			$path = WWW_ROOT.'themes/'.$ex[1].'/'.$file_location;
+	    		}
+
+	    		if (file_exists($path)) {
+	    			$delete = unlink($path);
+	    		}
+			}
+
+			$file['File']['filename'] = $file_location;
+			$redirect = array('controller' => 'themes', 'action' => 'edit', $ex[1]);
+	    }
 
 	    if ($delete) {
 	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The file `'.$file['File']['filename'].'` has been deleted.', 'default', array('class' => 'alert alert-success'));
-	        $this->redirect(array('action' => 'index'));
+	        $this->redirect($redirect);
 	    } else {
 	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The file `'.$file['File']['filename'].'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
-	        $this->redirect(array('action' => 'index'));
+	        $this->redirect($redirect);
 	    }
 	}
 

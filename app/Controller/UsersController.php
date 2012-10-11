@@ -455,4 +455,9 @@ class UsersController extends AppController {
 	    	}
 	    }
     }
+
+    public function profile($username = null)
+    {
+    	
+    }
 }

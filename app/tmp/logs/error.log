@@ -1,80 +1,576 @@
-2012-09-23 15:43:44 Error: Fatal Error (4): syntax error, unexpected '}' in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 306]
-2012-09-23 15:43:44 Error: [FatalErrorException] syntax error, unexpected '}'
-#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 306)
-#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 306, Array)
-#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 306, Array)
+2012-10-03 20:09:35 Error: [MissingActionException] Action ArticlesController::rss_movies() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-03 20:09:52 Error: [MissingActionException] Action ArticlesController::rss_movies() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-03 21:38:09 Error: [MissingHelperException] Helper class AuthHelper could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/HelperCollection.php(62): HelperCollection->load('Auth')
+#1 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(812): HelperCollection->__isset('Auth')
+#2 /home/charlie/sites/adaptcms/app/View/Layouts/default.ctp(59): View->__get('Auth')
+#3 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(920): include('/home/charlie/s...')
+#4 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(883): View->_evaluate('/home/charlie/s...', Array)
+#5 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(43): View->_render('/home/charlie/s...', Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(539): DebugView->_render('/home/charlie/s...')
+#7 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(483): View->renderLayout('', 'default')
+#8 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('home', NULL)
+#9 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('home', NULL)
+#10 /home/charlie/sites/adaptcms/app/Controller/PagesController.php(167): Controller->render('home')
+#11 [internal function]: PagesController->display('home')
+#12 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(PagesController), Array)
+#13 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#14 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(PagesController), Object(CakeRequest), Object(CakeResponse))
+#15 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#16 {main}
+2012-10-03 21:38:43 Error: [MissingHelperException] Helper class AuthHelper could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/HelperCollection.php(62): HelperCollection->load('Auth')
+#1 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(812): HelperCollection->__isset('Auth')
+#2 /home/charlie/sites/adaptcms/app/View/Layouts/default.ctp(59): View->__get('Auth')
+#3 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(920): include('/home/charlie/s...')
+#4 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(883): View->_evaluate('/home/charlie/s...', Array)
+#5 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(43): View->_render('/home/charlie/s...', Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(539): DebugView->_render('/home/charlie/s...')
+#7 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(483): View->renderLayout('', 'default')
+#8 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('home', NULL)
+#9 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('home', NULL)
+#10 /home/charlie/sites/adaptcms/app/Controller/PagesController.php(167): Controller->render('home')
+#11 [internal function]: PagesController->display('home')
+#12 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(PagesController), Array)
+#13 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#14 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(PagesController), Object(CakeRequest), Object(CakeResponse))
+#15 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#16 {main}
+2012-10-03 21:38:55 Error: [MissingHelperException] Helper class AuthHelper could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/HelperCollection.php(62): HelperCollection->load('Auth')
+#1 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(812): HelperCollection->__isset('Auth')
+#2 /home/charlie/sites/adaptcms/app/View/Layouts/default.ctp(59): View->__get('Auth')
+#3 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(920): include('/home/charlie/s...')
+#4 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(883): View->_evaluate('/home/charlie/s...', Array)
+#5 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(43): View->_render('/home/charlie/s...', Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(539): DebugView->_render('/home/charlie/s...')
+#7 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(483): View->renderLayout('', 'default')
+#8 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('home', NULL)
+#9 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('home', NULL)
+#10 /home/charlie/sites/adaptcms/app/Controller/PagesController.php(167): Controller->render('home')
+#11 [internal function]: PagesController->display('home')
+#12 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(PagesController), Array)
+#13 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#14 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(PagesController), Object(CakeRequest), Object(CakeResponse))
+#15 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#16 {main}
+2012-10-03 21:42:40 Error: Fatal Error (4): syntax error, unexpected ')', expecting ',' or ';' in [/home/charlie/sites/adaptcms/app/View/Layouts/default.ctp, line 72]
+2012-10-03 21:42:40 Error: [FatalErrorException] syntax error, unexpected ')', expecting ',' or ';'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 72)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 72, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 72, Array)
 #3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
 #4 [internal function]: App::shutdown()
 #5 {main}
-2012-09-23 16:52:45 Error: [MissingControllerException] Controller class TemplatedController could not be found.
-#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
-#1 {main}
-2012-09-23 17:11:01 Error: Fatal Error (4): syntax error, unexpected '=', expecting ')' in [/home/charlie/sites/adaptcms/app/View/Templates/admin_index.ctp, line 184]
-2012-09-23 17:11:01 Error: [FatalErrorException] syntax error, unexpected '=', expecting ')'
-#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 184)
-#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 184, Array)
-#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 184, Array)
+2012-10-03 21:43:44 Error: [MissingActionException] Action UsersController::view() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-03 21:44:30 Error: [MissingActionException] Action UsersController::view() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-03 21:44:41 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Users/profile.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName(NULL)
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render(NULL, NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render(NULL, NULL)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(193): Controller->render()
+#4 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest), Object(CakeResponse))
+#5 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2012-10-03 21:49:44 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Users/profile.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName(NULL)
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render(NULL, NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render(NULL, NULL)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(193): Controller->render()
+#4 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest), Object(CakeResponse))
+#5 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2012-10-03 21:50:58 Error: Fatal Error (4): syntax error, unexpected ')' in [/home/charlie/sites/adaptcms/app/Controller/AppController.php, line 142]
+2012-10-03 21:50:58 Error: [FatalErrorException] syntax error, unexpected ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 142)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 142, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 142, Array)
 #3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
 #4 [internal function]: App::shutdown()
 #5 {main}
-2012-09-23 17:18:13 Error: Fatal Error (4): syntax error, unexpected T_VARIABLE in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 307]
-2012-09-23 17:18:13 Error: [FatalErrorException] syntax error, unexpected T_VARIABLE
-#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 307)
-#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 307, Array)
-#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 307, Array)
+2012-10-03 21:51:16 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Users/profile.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName(NULL)
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render(NULL, NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render(NULL, NULL)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(193): Controller->render()
+#4 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest), Object(CakeResponse))
+#5 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2012-10-03 21:51:20 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Users/profile.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName(NULL)
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render(NULL, NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render(NULL, NULL)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(193): Controller->render()
+#4 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(UsersController), Object(CakeRequest), Object(CakeResponse))
+#5 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2012-10-03 21:51:42 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Pages/view/contact-us.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName('view/contact-us')
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('view/contact-us', NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('view/contact-us', NULL)
+#3 /home/charlie/sites/adaptcms/app/Controller/PagesController.php(175): Controller->render('view/contact-us')
+#4 [internal function]: PagesController->display('view', 'contact-us')
+#5 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(PagesController), Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(PagesController), Object(CakeRequest), Object(CakeResponse))
+#8 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#9 {main}
+2012-10-03 21:52:35 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Pages/contact-us.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName('contact-us')
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('contact-us', NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('contact-us', NULL)
+#3 /home/charlie/sites/adaptcms/app/Controller/PagesController.php(175): Controller->render('contact-us')
+#4 [internal function]: PagesController->display('contact-us')
+#5 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(PagesController), Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(PagesController), Object(CakeRequest), Object(CakeResponse))
+#8 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#9 {main}
+2012-10-03 21:59:31 Error: Fatal Error (4): syntax error, unexpected T_LIST, expecting T_STRING in [/home/charlie/sites/adaptcms/app/View/Helper/CategoryHelper.php, line 6]
+2012-10-03 21:59:31 Error: [FatalErrorException] syntax error, unexpected T_LIST, expecting T_STRING
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 6)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 6, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 6, Array)
 #3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
 #4 [internal function]: App::shutdown()
 #5 {main}
-2012-09-23 17:20:06 Error: Fatal Error (4): syntax error, unexpected T_PUBLIC in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 335]
-2012-09-23 17:20:06 Error: [FatalErrorException] syntax error, unexpected T_PUBLIC
-#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 335)
-#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 335, Array)
-#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 335, Array)
+2012-10-03 21:59:44 Error: Fatal Error (4): syntax error, unexpected T_LIST, expecting T_STRING in [/home/charlie/sites/adaptcms/app/View/Helper/CategoryHelper.php, line 6]
+2012-10-03 21:59:44 Error: [FatalErrorException] syntax error, unexpected T_LIST, expecting T_STRING
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 6)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 6, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 6, Array)
 #3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
 #4 [internal function]: App::shutdown()
 #5 {main}
-2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
-Trace:
-strlen - [internal], line ??
-CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
-CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
-Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
-[main] - APP/webroot/index.php, line 92
-
-2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
-Trace:
-strlen - [internal], line ??
-CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
-CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
-Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
-[main] - APP/webroot/index.php, line 92
-
-2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
-Trace:
-strlen - [internal], line ??
-CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
-CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
-Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
-[main] - APP/webroot/index.php, line 92
-
-2012-09-23 17:23:37 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 444]
-Trace:
-strlen - [internal], line ??
-CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 444
-CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 375
-Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
-[main] - APP/webroot/index.php, line 92
-
-2012-09-23 17:31:01 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 332]
-2012-09-23 17:31:01 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
-#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 332)
-#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 332, Array)
-#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 332, Array)
+2012-10-03 22:00:25 Error: Fatal Error (4): syntax error, unexpected T_LIST, expecting T_STRING in [/home/charlie/sites/adaptcms/app/View/Helper/CategoryHelper.php, line 7]
+2012-10-03 22:00:25 Error: [FatalErrorException] syntax error, unexpected T_LIST, expecting T_STRING
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 7)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 7, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 7, Array)
 #3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
 #4 [internal function]: App::shutdown()
 #5 {main}
-2012-09-23 22:26:13 Error: [MissingActionException] Action ThemesController::admin_index() could not be found.
+2012-10-03 22:01:31 Error: Fatal Error (4): syntax error, unexpected T_LIST, expecting T_STRING in [/home/charlie/sites/adaptcms/app/View/Helper/CategoryHelper.php, line 6]
+2012-10-03 22:01:31 Error: [FatalErrorException] syntax error, unexpected T_LIST, expecting T_STRING
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 6)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 6, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 6, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-03 22:14:03 Error: Fatal Error (4): syntax error, unexpected ':' in [/home/charlie/sites/adaptcms/app/View/Articles/view.ctp, line 11]
+2012-10-03 22:14:03 Error: [FatalErrorException] syntax error, unexpected ':'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 11)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 11, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 11, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-03 22:27:14 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Pages/what_about_this.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName('what_about_this')
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('what_about_this', NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('what_about_this', NULL)
+#3 /home/charlie/sites/adaptcms/app/Controller/PagesController.php(175): Controller->render('what_about_this')
+#4 [internal function]: PagesController->display('what_about_this')
+#5 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(PagesController), Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(PagesController), Object(CakeRequest), Object(CakeResponse))
+#8 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#9 {main}
+2012-10-03 23:07:20 Error: Fatal Error (1): Call to a member function header() on a non-object in [/home/charlie/sites/adaptcms/app/View/Layouts/rss/default.ctp, line 4]
+2012-10-03 23:07:20 Error: [FatalErrorException] Call to a member function header() on a non-object
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 4)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 4, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 4, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-03 23:08:57 Error: Fatal Error (1): Call to a member function url() on a non-object in [/home/charlie/sites/adaptcms/app/View/Layouts/rss/default.ctp, line 23]
+2012-10-03 23:08:57 Error: [FatalErrorException] Call to a member function url() on a non-object
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 23)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 23, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 23, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-03 23:09:09 Error: Fatal Error (1): Call to a member function url() on a non-object in [/home/charlie/sites/adaptcms/app/View/Layouts/rss/default.ctp, line 23]
+2012-10-03 23:09:09 Error: [FatalErrorException] Call to a member function url() on a non-object
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 23)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 23, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 23, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-03 23:21:31 Error: Fatal Error (4): syntax error, unexpected '}', expecting ',' or ';' in [/home/charlie/sites/adaptcms/app/Controller/ArticlesController.php, line 409]
+2012-10-03 23:21:31 Error: [FatalErrorException] syntax error, unexpected '}', expecting ',' or ';'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 409)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 409, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 409, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-03 23:21:39 Error: Fatal Error (4): syntax error, unexpected '}' in [/home/charlie/sites/adaptcms/app/Controller/ArticlesController.php, line 409]
+2012-10-03 23:21:39 Error: [FatalErrorException] syntax error, unexpected '}'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 409)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 409, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 409, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 14:34:45 Error: [MissingActionException] Action ThemesController::admin_edit_file() could not be found.
 #0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
 #1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
 #2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
 #3 {main}
+2012-10-06 16:29:19 Error: Fatal Error (1): Call to undefined method UploadBehavior::loadModel() in [/home/charlie/sites/adaptcms/app/Model/Behavior/UploadBehavior.php, line 68]
+2012-10-06 16:29:19 Error: [FatalErrorException] Call to undefined method UploadBehavior::loadModel()
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to undefin...', '/home/charlie/s...', 68)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to undefin...', '/home/charlie/s...', 68, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to undefin...', '/home/charlie/s...', 68, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 16:57:08 Error: [MissingActionException] Action ThemesController::admin_edit_file() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 16:57:27 Error: [MissingActionException] Action ThemesController::admin_edit_file() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 16:57:52 Error: [MissingActionException] Action ThemesController::admin_edit_file() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 17:01:37 Error: [MissingActionException] Action ThemesController::admin_edit_file() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 17:01:39 Error: [MissingActionException] Action ThemesController::admin_edit_file() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 17:01:58 Error: [MissingActionException] Action ThemesController::admin_edit_file() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(ThemesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 17:23:47 Error: Fatal Error (1): Cannot use string offset as an array in [/home/charlie/sites/adaptcms/app/Controller/FilesController.php, line 182]
+2012-10-06 17:23:47 Error: [FatalErrorException] Cannot use string offset as an array
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Cannot use stri...', '/home/charlie/s...', 182)
+#1 [internal function]: ErrorHandler::handleError(1, 'Cannot use stri...', '/home/charlie/s...', 182, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Cannot use stri...', '/home/charlie/s...', 182, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 17:24:27 Error: Fatal Error (1): Cannot use string offset as an array in [/home/charlie/sites/adaptcms/app/Controller/FilesController.php, line 178]
+2012-10-06 17:24:27 Error: [FatalErrorException] Cannot use string offset as an array
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Cannot use stri...', '/home/charlie/s...', 178)
+#1 [internal function]: ErrorHandler::handleError(1, 'Cannot use stri...', '/home/charlie/s...', 178, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Cannot use stri...', '/home/charlie/s...', 178, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 18:23:56 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(461): PDOStatement->execute(Array)
+#1 /home/charlie/sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(427): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1009): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/sites/adaptcms/lib/Cake/Model/Model.php(1730): DboSource->create(Object(File), Array, Array)
+#4 /home/charlie/sites/adaptcms/app/Controller/FilesController.php(66): Model->save(Array)
+#5 [internal function]: FilesController->admin_add()
+#6 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(FilesController), Array)
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#8 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(FilesController), Object(CakeRequest), Object(CakeResponse))
+#9 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#10 {main}
+2012-10-06 18:35:02 Error: [MissingControllerException] Controller class UploadsController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 18:35:21 Error: [MissingControllerException] Controller class UploadsController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 18:35:57 Error: [MissingControllerException] Controller class UploadsController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 18:36:06 Error: [MissingControllerException] Controller class UploadsController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 18:36:16 Error: [MissingControllerException] Controller class UploadsController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 22:26:22 Error: [MissingControllerException] Controller class AjaxController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 22:26:27 Error: [MissingControllerException] Controller class RelateArticlesController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 22:27:07 Error: [MissingControllerException] Controller class RelatedArticlesController could not be found.
+#0 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-10-06 22:27:22 Error: [MissingActionException] Action RelateArticlesController::ajax_search() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(RelatedArticlesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 22:27:56 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/RelateArticles/ajax_search.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName(NULL)
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render(NULL, NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render(NULL, NULL)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(193): Controller->render()
+#4 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(RelatedArticlesController), Object(CakeRequest), Object(CakeResponse))
+#5 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2012-10-06 22:29:49 Error: Fatal Error (1): Call to a member function find() on a non-object in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 12]
+2012-10-06 22:29:49 Error: [FatalErrorException] Call to a member function find() on a non-object
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 12)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 12, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 12, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 22:30:38 Error: Fatal Error (1): Call to a member function find() on a non-object in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 17]
+2012-10-06 22:30:38 Error: [FatalErrorException] Call to a member function find() on a non-object
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 17)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 17, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 17, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 22:37:19 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 23]
+2012-10-06 22:37:19 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 23)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 22:37:19 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 23]
+2012-10-06 22:37:19 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 23)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 22:37:20 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 23]
+2012-10-06 22:37:20 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 23)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 22:37:20 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 23]
+2012-10-06 22:37:20 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 23)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 22:38:51 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 23]
+2012-10-06 22:38:51 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 23)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 23, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-06 23:42:23 Error: [MissingActionException] Action RelatedArticlesController::admin_ajax_add() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(RelatedArticlesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 23:43:01 Error: [MissingActionException] Action RelatedArticlesController::admin_ajax_add() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(RelatedArticlesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 23:43:29 Error: [MissingActionException] Action RelatedArticlesController::admin_ajax_add() could not be found.
+#0 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(RelatedArticlesController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2012-10-06 23:43:37 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/RelatedArticles/admin_ajax_add.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName(NULL)
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render(NULL, NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render(NULL, NULL)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(193): Controller->render()
+#4 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(RelatedArticlesController), Object(CakeRequest), Object(CakeResponse))
+#5 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2012-10-06 23:57:52 Warning: Warning (2): strlen() expects parameter 1 to be string, array given in [/home/charlie/sites/adaptcms/lib/Cake/Network/CakeResponse.php, line 447]
+Trace:
+strlen - [internal], line ??
+CakeResponse::_setContentLength() - CORE/Cake/Network/CakeResponse.php, line 447
+CakeResponse::send() - CORE/Cake/Network/CakeResponse.php, line 378
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 168
+[main] - APP/webroot/index.php, line 92
+
+2012-10-07 00:08:10 Error: Fatal Error (1): Call to a member function find() on a non-object in [/home/charlie/sites/adaptcms/app/Controller/RelatedArticlesController.php, line 72]
+2012-10-07 00:08:10 Error: [InternalErrorException] Internal Server Error
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 72)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 72, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 72, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 19:59:35 Error: Fatal Error (4): syntax error, unexpected ';', expecting ')' in [/home/charlie/sites/adaptcms/app/Controller/ArticlesController.php, line 178]
+2012-10-07 19:59:35 Error: [FatalErrorException] syntax error, unexpected ';', expecting ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 178)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 178, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 178, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 20:23:52 Error: Fatal Error (1): Call to a member function find() on a non-object in [/home/charlie/sites/adaptcms/app/Model/Article.php, line 29]
+2012-10-07 20:23:52 Error: [FatalErrorException] Call to a member function find() on a non-object
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 29)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 29, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 29, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 20:24:34 Error: Fatal Error (1): Call to a member function find() on a non-object in [/home/charlie/sites/adaptcms/app/Model/Article.php, line 29]
+2012-10-07 20:24:34 Error: [FatalErrorException] Call to a member function find() on a non-object
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(1, 'Call to a membe...', '/home/charlie/s...', 29)
+#1 [internal function]: ErrorHandler::handleError(1, 'Call to a membe...', '/home/charlie/s...', 29, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 1, 'Call to a membe...', '/home/charlie/s...', 29, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 20:53:15 Error: [PDOException] SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'getRelatedArticlesFull' at line 1
+#0 /home/charlie/sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(461): PDOStatement->execute(Array)
+#1 /home/charlie/sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(427): DboSource->_execute('getRelatedArtic...', Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(671): DboSource->execute('getRelatedArtic...', Array, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(613): DboSource->fetchAll('getRelatedArtic...', Array, Array)
+#4 /home/charlie/sites/adaptcms/lib/Cake/Model/Model.php(784): DboSource->query('getRelatedArtic...', Array, Object(Article))
+#5 /home/charlie/sites/adaptcms/app/Controller/CategoriesController.php(135): Model->__call('getRelatedArtic...', Array)
+#6 /home/charlie/sites/adaptcms/app/Controller/CategoriesController.php(135): Article->getRelatedArticlesFull(Array)
+#7 [internal function]: CategoriesController->view('movies')
+#8 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(CategoriesController), Array)
+#9 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(CategoriesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2012-10-07 21:13:24 Error: Fatal Error (4): syntax error, unexpected ')' in [/home/charlie/sites/adaptcms/app/Model/Article.php, line 51]
+2012-10-07 21:13:24 Error: [FatalErrorException] syntax error, unexpected ')'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 51)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 51, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 51, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 22:29:02 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Default/Categories/news.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName('news')
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('news', NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('news', NULL)
+#3 /home/charlie/sites/adaptcms/app/Controller/CategoriesController.php(137): Controller->render('news')
+#4 [internal function]: CategoriesController->view('news')
+#5 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(CategoriesController), Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(CategoriesController), Object(CakeRequest), Object(CakeResponse))
+#8 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#9 {main}
+2012-10-07 22:29:32 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Movie/Categories/news.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName('news')
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('news', NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('news', NULL)
+#3 /home/charlie/sites/adaptcms/app/Controller/CategoriesController.php(137): Controller->render('news')
+#4 [internal function]: CategoriesController->view('news')
+#5 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(CategoriesController), Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(CategoriesController), Object(CakeRequest), Object(CakeResponse))
+#8 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#9 {main}
+2012-10-07 22:42:17 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Movie/Categories/movies.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName('movies')
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('movies', NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('movies', NULL)
+#3 /home/charlie/sites/adaptcms/app/Controller/CategoriesController.php(137): Controller->render('movies')
+#4 [internal function]: CategoriesController->view('movies')
+#5 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(CategoriesController), Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(CategoriesController), Object(CakeRequest), Object(CakeResponse))
+#8 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#9 {main}
+2012-10-07 22:45:08 Error: [MissingViewException] View file "/home/charlie/sites/adaptcms/app/View/Themed/Movie/Categories/movies.ctp" is missing.
+#0 /home/charlie/sites/adaptcms/lib/Cake/View/View.php(472): View->_getViewFileName('movies')
+#1 /home/charlie/sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render('movies', NULL)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(957): DebugView->render('movies', NULL)
+#3 /home/charlie/sites/adaptcms/app/Controller/CategoriesController.php(138): Controller->render('movies')
+#4 [internal function]: CategoriesController->view('movies')
+#5 /home/charlie/sites/adaptcms/lib/Cake/Controller/Controller.php(485): ReflectionMethod->invokeArgs(Object(CategoriesController), Array)
+#6 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(186): Controller->invokeAction(Object(CakeRequest))
+#7 /home/charlie/sites/adaptcms/lib/Cake/Routing/Dispatcher.php(161): Dispatcher->_invoke(Object(CategoriesController), Object(CakeRequest), Object(CakeResponse))
+#8 /home/charlie/sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#9 {main}
+2012-10-07 22:47:42 Error: Fatal Error (4): syntax error, unexpected $end, expecting T_FUNCTION in [/home/charlie/sites/adaptcms/app/Controller/CategoriesController.php, line 142]
+2012-10-07 22:47:42 Error: [FatalErrorException] syntax error, unexpected $end, expecting T_FUNCTION
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 142)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 142, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 142, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 23:19:10 Error: Fatal Error (4): syntax error, unexpected ')', expecting ',' or ';' in [/home/charlie/sites/adaptcms/app/View/Modules/admin_step_two.ctp, line 34]
+2012-10-07 23:19:10 Error: [FatalErrorException] syntax error, unexpected ')', expecting ',' or ';'
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 34)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 34, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 34, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 23:38:12 Error: Fatal Error (4): syntax error, unexpected T_PUBLIC in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 362]
+2012-10-07 23:38:12 Error: [FatalErrorException] syntax error, unexpected T_PUBLIC
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 362)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 23:38:14 Error: Fatal Error (4): syntax error, unexpected T_PUBLIC in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 362]
+2012-10-07 23:38:14 Error: [FatalErrorException] syntax error, unexpected T_PUBLIC
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 362)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 23:38:14 Error: Fatal Error (4): syntax error, unexpected T_PUBLIC in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 362]
+2012-10-07 23:38:14 Error: [FatalErrorException] syntax error, unexpected T_PUBLIC
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 362)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2012-10-07 23:38:15 Error: Fatal Error (4): syntax error, unexpected T_PUBLIC in [/home/charlie/sites/adaptcms/app/Controller/TemplatesController.php, line 362]
+2012-10-07 23:38:15 Error: [FatalErrorException] syntax error, unexpected T_PUBLIC
+#0 /home/charlie/sites/adaptcms/lib/Cake/Error/ErrorHandler.php(162): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/s...', 362)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#2 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(926): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/s...', 362, Array)
+#3 /home/charlie/sites/adaptcms/lib/Cake/Core/App.php(899): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
