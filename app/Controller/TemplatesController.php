@@ -357,7 +357,7 @@ class TemplatesController extends AppController{
 	                	'id' =>$result['Template']['id'],
 	                	'title' => $result['Template']['title'],
 	                	'location' => 
-	                		'('.$result['Template']['location'].') - <i>'.$result['Theme']['title'].' Theme</i>'
+	                		' ('.$result['Template']['location'].') - <i>'.$result['Theme']['title'].' Theme</i>'
 	                );
 	        	}
             }

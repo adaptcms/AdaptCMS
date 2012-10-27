@@ -54,4 +54,20 @@ class Article extends AppModel {
 
         return $data;
     }
+
+    public function getModuleData($data)
+    {
+        return $this->find('all', array(
+            'conditions' => array(
+                'Article.deleted_time' => '0000-00-00 00:00:00',
+                'Article.status !=' => 0,
+                'Article.publish_time <=' => date('Y-m-d H:i:s')
+            ),
+            'contain' => array(
+                'Category',
+                'User'
+            ),
+            'limit' => $data['limit']
+        ));
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
-class Poll extends AppModel {
+class Poll extends PollsAppModel
+{
 	public $name = 'PluginPoll';
 	public $belongsTo = array(
         'Article' => array(
@@ -13,4 +14,16 @@ class Poll extends AppModel {
 	);
 	public $recursive = -1;
 
+    public function getModuleData($data)
+    {
+        return $this->find('all', array(
+            'conditions' => array(
+                'Poll.deleted_time' => '0000-00-00 00:00:00'
+            ),
+            'limit' => $data['limit'],
+            'contain' => array(
+            	'PluginPollValue'
+            )
+        ));
+    }
 }

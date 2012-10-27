@@ -459,14 +459,18 @@ class ArticlesController extends AppController {
         }
 	}
 
-	public function view_by_tag($tag = null)
+	public function tag($tag = null)
 	{
-		$slug = $this->slug($this->params->tag);
+		$slug = $this->slug($tag);
+
+		if (empty($limit)) {
+			$limit = 10;
+		}
 
 		$this->paginate = array(
 			'order' => 'Article.created DESC',
 			'conditions' => array(
-				'Article.tags LIKE' => '%"'.$this->params->tag.'"%',
+				'Article.tags LIKE' => '%"'.$slug.'"%',
 				'Article.status' => 1,
 				'Article.deleted_time' => '0000-00-00 00:00:00'
 			),

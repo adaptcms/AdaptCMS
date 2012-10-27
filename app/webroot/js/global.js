@@ -16,6 +16,17 @@ $(document).ready(function() {
 
 		$(".breadcrumb li").first().next().find("a").replaceWith(newLink);
 	}
+
+	/**
+	 * convience function, button class of 'btn btn-info reset-field ArticleTitle'
+	 * when clicked, will reset the field with the id of 'ArticleTitle'
+	 */
+	$(".reset-field").live('click', function() {
+		var reset_class = $(this).attr('class').split(' ').slice(-1);
+		
+		$("#" + reset_class).val('');
+	});
+
 });
 
 // Grab all required inputs on page, put in a * to note that it's a required field

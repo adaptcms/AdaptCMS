@@ -182,14 +182,6 @@
 	Configure::write('Security.level', 'low');
 
 /**
- * A random string used in security hashing methods.
- */	Configure::write('Security.salt', 'a668f877ee39dec0ac3c59a91970011538c20c30');
-
-/**
- * A random numeric string (digits only) used to encrypt/decrypt strings.
- */	Configure::write('Security.cipherSeed', '353137383463373366616438373331');
-
-/**
  * Apply timestamps with the last modified time to static assets (js, css, images).
  * Will append a querystring parameter containing the time the file was modified. This is
  * useful for invalidating browser caches.
@@ -278,4 +270,5 @@ Cache::config('_cake_model_', array(
 /**
  * Custom Defined global variables
  */
+
 define('VIEW_PATH', ROOT . '/app/View/');

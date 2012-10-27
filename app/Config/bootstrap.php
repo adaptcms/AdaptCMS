@@ -110,6 +110,9 @@ Cache::config('default', array('engine' => 'File'));
  * ));
  *
  */
+App::build(array(
+	'View' => array(WWW_ROOT.'installer'.DS)
+));
 
 /**
  * Custom Inflector rules, can be set to correctly pluralize or singularize table, model, controller names or whatever other
@@ -157,3 +160,5 @@ Configure::write('Dispatcher.filters', array(
 CakePlugin::loadAll();
 
 Configure::write('alert_btn', '<button class="close" data-dismiss="alert">×</button>');
+
+require_once("config.php");

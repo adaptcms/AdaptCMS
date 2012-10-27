@@ -1,6 +1,7 @@
 <?php
 
-class PluginPollValue extends AppModel {
+class PollValue extends PollsAppModel
+{
 	public $name = 'PluginPollValue';
 	public $belongsTo = array(
         'Poll' => array(

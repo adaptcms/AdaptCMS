@@ -17,4 +17,14 @@ class Category extends AppModel {
         )
     );
     public $recursive = -1;
+
+    public function getModuleData($data)
+    {
+        return $this->find('all', array(
+            'conditions' => array(
+                'Category.deleted_time' => '0000-00-00 00:00:00'
+            ),
+            'limit' => $data['limit']
+        ));
+    }
 }

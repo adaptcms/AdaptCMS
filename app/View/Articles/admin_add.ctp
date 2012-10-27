@@ -120,6 +120,9 @@ if (count($fields) > 0):
 			<?php if($field['Field']['field_type'] != "radio"): ?>
 				<script type="text/javascript">
 					$(document).ready(function(){
+						<?php if ($field['Field']['field_type'] == "date"): ?>
+							$("#ArticleValue<?= $field['Field']['id'] ?>Data").datepicker();
+						<?php endif ?>
 						<?php if ($field['Field']['field_type'] == "multi-dropdown"): ?>
 							$("#<?php echo 'ArticleFieldData'.$field['Field']['id'].'Data'; ?>").rules("add", {
 						<?php elseif ($field['Field']['field_type'] == "check"): ?>
@@ -260,7 +263,7 @@ elseif ($field['Field']['field_type'] == "email"):
 <?php
 elseif ($field['Field']['field_type'] == "date"):
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text')) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text', 'data-date-format' => 'yyyy-mm-dd', 'value' => date("Y-m-d"))) ?>
 <?php
 endif;
 	endforeach;

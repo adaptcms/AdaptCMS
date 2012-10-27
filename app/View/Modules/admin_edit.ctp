@@ -1,8 +1,7 @@
-<?php $time = date('Y-m-d H:i:s') ?>
 <?= $this->Html->script('bootstrap-typeahead.js') ?>
 <script>
 $(document).ready(function(){
-    $("#ModuleAdminAddForm").validate({
+    $("#ModuleEditForm").validate({
         focusInvalid: false,
         invalidHandler: function(form, validator) {
             $(this).find(":input.error:first:not(:checkbox):not(:radio)").focus();
@@ -105,7 +104,9 @@ $(document).ready(function(){
 
 	if ($("#ModuleLocationTypeView").is(':checked')) {
 		$("#location").show();
-	}
+        $("#ModuleLocationController,#ModuleLocationAction").removeClass('required').removeAttr('required');
+        get_data('controllers');
+    }
 
 	$("#ModuleLocationController").live('change', function() {
 		if ($("#ModuleLocationTypeView").is(':checked')) {
@@ -115,6 +116,7 @@ $(document).ready(function(){
 
 			$("#location_id").hide();
 		}
+        $("#ModuleLocationController,#ModuleLocationAction").addClass('required').attr('required');
 	});
 
 	$("#ModuleLocationAction").live('change', function() {
@@ -249,9 +251,9 @@ function get_model_data(type)
 </script>
 
 
-<h1>Add Module</h1>
+<h1>Edit Module</h1>
 <?php
-    echo $this->Form->create('Module', array('class' => 'well'));
+    echo $this->Form->create('Module', array('class' => 'well', 'action' => 'edit'));
     
     echo $this->Form->input('title', array(
     	'label' => 'Name of Module',
@@ -297,7 +299,19 @@ function get_model_data(type)
 				'type' => 'select',
 				'div' => array('id' => 'location_plugin', 'style' => 'display:none')
 		)) ?>
-		<div style="margin-left:35%" id="locations"></div>
+		<div style="margin-left:35%" id="locations">
+            <?php if ($this->request->data['Module']['location_type'] == "view"): ?>
+                <?php foreach(json_decode($this->request->data['Module']['location']) as $key => $row): ?>
+                    <?php $row = str_replace("|","/",$row) ?>
+                    <div id="data-<?= $key ?>">
+                        <span class="label label-info">
+                            <?= $row ?> <a href="#" class="icon-white icon-remove-sign"></a>
+                        </span>
+                        <input type="hidden" id="LocationData[]" name="LocationData[]" value="<?= $row ?>">
+                    </div>
+                <?php endforeach ?>
+            <?php endif ?>
+        </div>
     	<?= $this->Form->input('location_controller', array(
     			'required' => true,
     			'type' => 'select',
@@ -356,8 +370,12 @@ function get_model_data(type)
 	        'class' => 'required',
 	        'div' => false,
 	        'label' => false,
-	        'style' => 'margin-left:10px;width:100%'
+	        'style' => 'width:100%'
 	)) ?>
+    <?= $this->Form->button('Reset Template', array(
+            'class' => 'btn btn-info reset-field ModuleTemplate', 
+            'type' => 'button'
+    )) ?>
 	</div>
 
 	<div class="clearfix"></div>
@@ -367,9 +385,9 @@ function get_model_data(type)
 
 	<div class="btn-group" style="margin-top:10px">
 	    <?php
-	        // echo $this->Form->button('Back', array('id' => 'backButton', 'class' => 'btn'));
-	        echo $this->Form->submit('Continue', array('div' => false, 'class' => 'btn'));
-	        echo $this->Form->hidden('created', array('value' => $time));
+	        echo $this->Form->submit('Save', array('div' => false, 'class' => 'btn'));
+            echo $this->Form->hidden('modified', array('type' => 'hidden'));
+            echo $this->Form->input('id', array('type' => 'hidden'));
 	    ?>
 	</div>
 </div>

@@ -1,37 +1,7 @@
 <?php
-/**
- * Application level Controller
- *
- * This file is application-wide controller file. You can put all
- * application-wide controller-related methods here.
- *
- * PHP 5
- *
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.Controller
- * @since         CakePHP(tm) v 0.2.9
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
- */
-
 App::uses('Controller', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
 
-/**
- * Application Controller
- *
- * Add your application-wide methods in the class below, your controllers
- * will inherit them.
- *
- * @package       app.Controller
- * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
- */
 class AppController extends Controller {
 	public $components = array(
 		'DebugKit.Toolbar' => array(
@@ -69,6 +39,10 @@ class AppController extends Controller {
 
 	public function beforeFilter()
 	{
+		if (file_exists(WWW_ROOT.'installer') && $this->params->controller != "install") {
+			$this->redirect(array('controller' => 'install', 'admin' => false));
+		}
+
 		parent::beforeFilter();
 		$this->Security->blackHoleCallback = 'blackhole';
 		$this->Auth->allow();
@@ -84,6 +58,7 @@ class AppController extends Controller {
 
         $this->layout();
 		$this->accessCheck();
+		$this->moduleLookup();
 
 		$this->theme = 'Default';
 
@@ -145,7 +120,7 @@ class AppController extends Controller {
 			or strstr($this->params->action, "register") or strstr($this->params->action, "_password")
 			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "denied")
 			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home") or strstr($this->params->action, "ajax")
-			|| !empty($this->params->prefix) && $this->params->prefix == "rss") {
+			|| !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install') {
 				$this->Auth->allow($this->params->action);
 		} elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id')
 			|| !empty($this->params->pass) && $this->params->pass[0] == "admin" && !$this->Auth->User('id')
@@ -283,5 +258,69 @@ class AppController extends Controller {
 			'date' => date('Y-m-d H:i:s')
 		);
 		// $this->Log->save($log_insert);
+	}
+
+	public function moduleLookup()
+	{
+		if ($this->params->prefix != "admin") {
+			$this->loadModel('Module');
+
+			if (!empty($this->params['pass'][0])) {
+				$location = $this->params->controller.'|'.$this->params->action.'|'.$this->params['pass'][0];
+				$location2 = $this->params->controller.'|'.$this->params->action;
+
+				$module_cond = array(
+					'conditions' => array(
+						'OR' => array(
+							array('Module.location LIKE' => '%"*"%'),
+							array('Module.location LIKE' => '%"' . $location . '"%'),
+							array('Module.location LIKE' => '%"' . $location2 . '"%')
+						),
+						'Module.deleted_time' => '0000-00-00 00:00:00'
+					),
+					'contain' => array(
+						'ComponentModel'
+					)
+				);
+			} else {
+				$location = $this->params->controller.'|'.$this->params->action;
+				$module_cond = array(
+					'conditions' => array(
+						'OR' => array(
+							array('Module.location LIKE' => '%"*"%'),
+							array('Module.location LIKE' => '%"' . $location . '"%')
+						),
+						'Module.deleted_time' => '0000-00-00 00:00:00'
+					),
+					'contain' => array(
+						'ComponentModel'
+					)
+				);
+			}
+
+			$data = $this->Module->find('all', $module_cond);
+
+			if (!empty($data)) {
+				$module_data = array();
+				$models = array();
+
+				foreach($data as $row) {
+					if ($row['ComponentModel']['is_plugin'] == 1) {
+						$model = $row['ComponentModel']['model_title'];
+						$this->loadModel(
+							str_replace(' ','',$row['ComponentModel']['title']).'.'.$model
+						);
+					} else {
+						$model = $row['ComponentModel']['model_title'];
+						$this->loadModel($model);
+					}
+
+					$module_data
+						[$row['Module']['title']] = $this->$model->getModuleData($row['Module']);
+				}
+			}
+
+			$this->set(compact('module_data'));
+		}
 	}
 }

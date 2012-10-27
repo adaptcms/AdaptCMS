@@ -92,4 +92,14 @@ class File extends AppModel{
             return 'application/octet-stream';
         }
     }
+
+    public function getModuleData($data)
+    {
+        return $this->find('all', array(
+            'conditions' => array(
+                'File.deleted_time' => '0000-00-00 00:00:00'
+            ),
+            'limit' => $data['limit']
+        ));
+    }
 }

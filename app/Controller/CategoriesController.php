@@ -43,8 +43,7 @@ class CategoriesController extends AppController {
 
 	public function admin_edit($id = null)
 	{
-
-      $this->Category->id = $id;
+      	$this->Category->id = $id;
 
 	    if ($this->request->is('get')) {
 	        $this->request->data = $this->Category->read();
@@ -58,7 +57,6 @@ class CategoriesController extends AppController {
 	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your category.', 'default', array('class' => 'alert alert-error'));
 	        }
 	    }
-
 	}
 
 	public function admin_delete($id = null, $title = null, $permanent = null)

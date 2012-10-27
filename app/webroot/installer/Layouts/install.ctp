@@ -53,41 +53,6 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="<?= $this->webroot ?>">AdaptCMS Alpha</a>
-          <div class="nav-collapse collapse">
-            <p class="navbar-text pull-right">
-            	<?php if (!empty($username)): ?>
-            		Logged in as 
-            			<?= $this->Html->link($username, 
-            				array(
-            					'controller' => 'users', 
-            					'action' => 'profile', 
-            					$username
-            				),
-            				array('class' => 'navbar-link')
-            			) ?>
-            	<?php else: ?>
-            		Please
-            		<?= $this->Html->link('login', 
-            				array(
-            					'controller' => 'users', 
-            					'action' => 'login'
-            				),
-            				array('class' => 'navbar-link')
-            			) ?> or 
-        			<?= $this->Html->link('register', 
-        				array(
-        					'controller' => 'users', 
-        					'action' => 'register'
-        				),
-        				array('class' => 'navbar-link')
-        			) ?>
-            	<?php endif ?>
-            </p>
-            <ul class="nav">
-              <li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
-              <li><a href="<?= $this->webroot ?>admin">Admin</a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
@@ -96,47 +61,25 @@
       <div class="row-fluid">
         <div class="span3">
           <div class="well sidebar-nav">
-            <ul class="nav nav-list">
-              <li class="nav-header">Links</li>
-              <li>
-              	<?= $this->Html->link('RSS Feed', array(
-              			'rss' => true,
-              			'controller' => 'articles',
-              			'action' => 'index'
-              	)) ?>
+            <ul class="nav nav-pills nav-stacked">
+              <li class="nav-header">Install Progress</li>
+              <li<?= ($this->params->action == 'index' ? " class='active'" : "") ?>>
+                <?= $this->Html->link('1. Requirements', array('action' => 'index')) ?>
               </li>
-              <li>
-              	<?= $this->Html->link('Contact Us', array(
-              			'controller' => 'pages',
-              			'action' => 'display',
-              			'contact-us'
-              	)) ?>
-              </li>
-              <li class="nav-header">Categories</li>
-              <?php if (!empty($module_data['categories-list'])): ?>
-                <?php foreach($module_data['categories-list'] as $cat): ?>
-                  <li>
-                    <?= $this->Html->link($cat['Category']['title'], array(
-                        'controller' => 'categories',
-                        'action' => 'view',
-                        $cat['Category']['slug']
-                    )) ?>
-                  </li>
-                <?php endforeach ?>
+              <?php if (strstr($this->params->action, "upgrade")): ?>
+
               <?php else: ?>
-                <li>
-                  <?= $this->Html->link('Movies', array(
-                      'controller' => 'categories',
-                      'action' => 'view',
-                      'movies'
-                  )) ?>
+                <li<?= ($this->params->action == 'database' ? " class='active'" : "") ?>>
+                  <?= $this->Html->link('2. Database Configuration', array('action' => 'database')) ?>
                 </li>
-                <li>
-                  <?= $this->Html->link('News', array(
-                      'controller' => 'categories',
-                      'action' => 'view',
-                      'news'
-                  )) ?>
+                <li<?= ($this->params->action == 'sql' ? " class='active'" : "") ?>>
+                  <?= $this->Html->link('3. Setup SQL', array('action' => 'sql')) ?>
+                </li>
+                <li<?= ($this->params->action == 'account' ? " class='active'" : "") ?>>
+                  <?= $this->Html->link('4. Create Admin Account', array('action' => 'account')) ?>
+                </li>
+                <li<?= ($this->params->action == 'finish' ? " class='active'" : " class='disabled'") ?>>
+                  <?= $this->Html->link('5. Finish', array('action' => 'finish')) ?>
                 </li>
               <?php endif ?>
             </ul>
@@ -166,7 +109,5 @@
       </footer>
 
     </div><!--/.fluid-container-->
-
-    <?php echo $this->element('sql_dump'); ?>
   </body>
 </html>
