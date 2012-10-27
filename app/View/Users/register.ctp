@@ -72,6 +72,7 @@ $(document).ready(function() {
     echo $this->Form->input('password', array('type' => 'password', 'class' => 'required'));
     echo $this->Form->input('password_confirm', array('type' => 'password', 'class' => 'required'));
     echo $this->Form->input('email', array('class' => 'required'));
+    echo $this->Form->hidden('last_reset_time', array('value' => $time));
 ?>
 
 <?php if (!empty($this->request->data['SecurityQuestions']['SettingValue']['data'])): ?>

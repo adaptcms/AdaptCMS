@@ -35,10 +35,8 @@ function changeRequiredFields() {
 		var label = $(this).parent().find('label').first();
 
 		// For the article page, this function is called so want to make sure to not have more than one *
-		if ($(label).find('i').length == 0) {
-			var inside = $(label).html();
-
-			$(label).html(inside + ' <i>*</i>');
+		if ($(label).find('i:not(.icon)').length == 0) {
+			$(label).append(' <i>*</i>');
 		}
 	});
 }

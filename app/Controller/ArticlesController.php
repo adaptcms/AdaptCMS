@@ -520,9 +520,15 @@ class ArticlesController extends AppController {
 			'limit' => $limit,
 			'order' => 'Article.created DESC'
 		);
+
+		if ($this->RequestHandler->isRss() ) {
+			echo 1;
+		}
     
 		$this->request->data = $this->paginate('Article');
-
-		$this->RequestHandler->setContent('application/rss+xml');
+		Configure::write('debug', 0);
+		// $this->RequestHandler->setContent('application/rss+xml');
+		// $this->layout = 'rss';
+		// $this->response->header('Content-type', 'application/rss+xml');
 	}
 }

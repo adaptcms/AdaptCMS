@@ -22,6 +22,7 @@
 
 	echo $this->Form->hidden('status', array('value' => 1));
 	echo $this->Form->hidden('created', array('value' => $time));
+	echo $this->Form->hidden('last_reset_time', array('value' => $time));
 ?>
 <br />
 <?= $this->Form->end(array(

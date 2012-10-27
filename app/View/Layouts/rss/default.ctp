@@ -1,7 +1,4 @@
-<?php
-echo header('Content-type: application/rss+xml');
-?>
-<?= '<?xml version="1.0" encoding="UTF-8"?>' ?>
+<!-- <?= '<?xml version="1.0" encoding="UTF-8"?>' ?> -->
 
 <?php
 if (!isset($channel)) {
@@ -13,7 +10,7 @@ if (!isset($channel['title'])) {
 
 echo $this->Rss->document(
 	$this->Rss->channel(
-		array(), 
+		array('xmlns:atom' => 'http://www.w3.org/2005/Atom'), 
 		$channel, $this->fetch('content')
 	)
 );

@@ -1,19 +1,16 @@
 <?php
-App::uses('Sanitize', 'Utility');
-
 $this->set('channel', array(
-	'title' => 'testing',
-	'description' => 'desc',
-	'language' => 'en-us',
 	'atom:link' => array(
 		'attrib' => array(
 			'rel' => 'self',
 			'type' => 'application/rss+xml',
-			'href' => $this->html->url('/' .$this->here, true)
+			'href' => $this->Html->url('', true)
 		)
-	)
+	),
+	'title' => 'testing',
+	'description' => 'desc',
+	'language' => 'en-us'
 ));
-$this->set('test', 1);
 ?>
 
 <?php foreach($this->request->data as $data): ?>

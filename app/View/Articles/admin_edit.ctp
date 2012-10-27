@@ -56,6 +56,11 @@
         }
     });
 
+	$(".field-desc").popover({
+		trigger: 'hover',
+		placement: 'left'
+	});
+
 	$("#related-submit").live('click', function(e) {
 		e.preventDefault();
 
@@ -150,7 +155,11 @@
 
 <?= $this->Form->create('Article', array('type' => 'file', 'action' => 'edit', 'class' => 'well')) ?>
 
-<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
+<?= $this->Form->input('title', array(
+		'type' => 'text', 
+		'class' => 'required',
+		'label' => "<i class='icon icon-question-sign field-desc' data-content='This is the Title of your article, the name is also what its called.' data-title='Title'></i>&nbsp;Title"
+)) ?>
 <?= $this->Form->input('category_id', array('type' => 'hidden', 'value' => $category_id)) ?>
 
 <?php
@@ -269,23 +278,31 @@ $addClass = 0;
 <?php endif ?>
 
 <?php
+$desc_icon = null;
+
+	if (!empty($field['Field']['description'])) {
+		$desc_icon = "<i class='icon icon-question-sign field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;";
+	}
+?>
+
+<?php
 if ($field['Field']['field_type'] == "textarea"):
 	if (empty($value)) {
 		$value[0] = null;
 	}
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'rows' => 15, 'style' => 'width:500px', 'value' => $value[0])) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'rows' => 15, 'style' => 'width:500px', 'value' => $value[0])) ?>
 <?php
 elseif ($field['Field']['field_type'] == "text"):
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
 <?php
 elseif ($field['Field']['field_type'] == "dropdown"):
 	foreach (json_decode($field['Field']['field_options']) as $row) {
 		$opt[$row] = $row;
 	}
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'select', 'empty' => '- Choose -', 'options' => array($opt), 'value' => $value)) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'select', 'empty' => '- Choose -', 'options' => array($opt), 'value' => $value)) ?>
 <?php
 unset($opt);
 elseif ($field['Field']['field_type'] == "radio"):
@@ -304,7 +321,7 @@ elseif ($field['Field']['field_type'] == "multi-dropdown"):
 		$opt[$row] = $row;
 	}
 ?>
-	<?= $this->Form->input('ArticleFieldData.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'multiple' => true, 'options' => $opt, 'value' => $value)) ?>
+	<?= $this->Form->input('ArticleFieldData.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'multiple' => true, 'options' => $opt, 'value' => $value)) ?>
 
 <?php
 unset($opt);
@@ -314,7 +331,7 @@ elseif ($field['Field']['field_type'] == "check"):
 	}
 ?>
 	<div class="input checkbox <?= $required ?>">
-		<?= $this->Form->input('ArticleFieldData.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'multiple' => 'checkbox', 'options' => $opt, 'value' => $value)) ?>
+		<?= $this->Form->input('ArticleFieldData.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'multiple' => 'checkbox', 'options' => $opt, 'value' => $value)) ?>
 	</div>
 <?php
 unset($opt);
@@ -336,24 +353,24 @@ elseif ($field['Field']['field_type'] == "file"):
 <?php
 elseif ($field['Field']['field_type'] == "img"):
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
 <?php
 elseif ($field['Field']['field_type'] == "url"):
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text', 'placeholder' => 'http://', 'value' => $value)) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'placeholder' => 'http://', 'value' => $value)) ?>
 <?php
 elseif ($field['Field']['field_type'] == "num"):
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text', 'class' => 'input-mini', 'value' => $value)) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'class' => 'input-mini', 'value' => $value)) ?>
 <?php
 elseif ($field['Field']['field_type'] == "email"):
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
 <?php
 elseif ($field['Field']['field_type'] == "date"):
 ?>
 	<?php (empty($value) ? $value = date("Y-m-d") : "") ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $field['Field']['label'], 'type' => 'text', 'value' => $value, 'data-date-format' => 'yyyy-mm-dd')) ?>
+	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'value' => $value, 'data-date-format' => 'yyyy-mm-dd')) ?>
 <?php
 endif;
 	endforeach;
@@ -366,7 +383,7 @@ endif;
 			'div' => false, 
 			'style' => 'margin-bottom: 0',
 			'type' => 'text',
-			'label' => 'Tags'
+			'label' => "<i class='icon icon-question-sign field-desc' data-content='Tagging an article with a keyword, will let you see a list of those articles. So if you tag 3 articles with <strong>xbox</strong>, you can then go to site.com/tag/xbox and see all articles with the xbox tag.' data-title='Tags'></i>&nbsp;Tags"
 		)) ?>
 		<?= $this->Form->button('Add', array(
 			'class' => 'btn btn-info', 
@@ -459,7 +476,7 @@ endif;
 
 <div class="clearfix"></div>
 
-<h1>Relate Articles</h1>
+<h1>Relate Articles <i class='icon icon-question-sign field-desc' data-content='Linking another article to this one will allow you to show its data on this Articles page. Ex. Halo 5 Game linking to your Halo 5 preview, you can then show Halo 5 Game Details on the preview page.' data-title='Related Articles' data-placement="right"></i></h1>
 
 <?= $this->Form->create('RelatedArticle', array('action' => 'ajax_add', 'class' => 'well')) ?>
 

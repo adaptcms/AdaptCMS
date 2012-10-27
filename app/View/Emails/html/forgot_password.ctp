@@ -4,10 +4,10 @@ We have received a request to reset your password for the account <strong><?= $d
 <br /><br />
 <?= $this->Html->url(array(
 		'controller' => 'users',
-		'action' => 'forgot_password',
+		'action' => 'update_password',
+		'change' => 'forgot',
 		'username' => $data['username'],
-		'activate' => $activate_code,
-		'change' => 'forgot'
+		'activate' => $activate_code
 	),
 	true
 ) ?>
