@@ -154,10 +154,10 @@ class ArticlesController extends AppController {
 	        		array('ArticleValue.article_id' => 0)
 	        	);
 
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your article has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your article has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your article.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your article.', 'flash_error');
             }
         } 
 	}
@@ -293,10 +293,10 @@ class ArticlesController extends AppController {
 					}
 	        	}
 
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your article has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your article has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your article.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your article.', 'flash_error');
 	        }
 	    }
 
@@ -318,10 +318,10 @@ class ArticlesController extends AppController {
 	    }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The article `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The article `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The article `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The article `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -335,10 +335,10 @@ class ArticlesController extends AppController {
 	    $this->Article->id = $id;
 
 	    if ($this->Article->saveField('deleted_time', '0000-00-00 00:00:00')) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The article `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The article `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The article `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The article `'.$title.'` has NOT been restored.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -527,8 +527,35 @@ class ArticlesController extends AppController {
     
 		$this->request->data = $this->paginate('Article');
 		Configure::write('debug', 0);
-		// $this->RequestHandler->setContent('application/rss+xml');
-		// $this->layout = 'rss';
-		// $this->response->header('Content-type', 'application/rss+xml');
+		$this->layout = 'rss/default';
+		$this->RequestHandler->setContent('rss', 'application/rss+xml');
+	}
+
+	public function index()
+	{
+		$data = $this->Article->find('all', array(
+			'conditions' => array(
+				'Article.deleted_time' => '0000-00-00 00:00:00'
+			),
+			'contain' => array(
+				'User',
+				'Category'
+			),
+			'fields' => array(
+				'id', 'title', 'slug', 'tags', 'User.username', 'Category.title', 'status', 'publish_time', 'created'
+			)
+		));
+
+		foreach($data as $key => $row) {
+			$data[$key] = $row['Article'];
+			$data[$key]['category'] = $row['Category']['title'];
+			$data[$key]['user'] = $row['User']['username'];
+			unset($data[$key]['Category'], $data[$key]['User']);
+		}
+
+		$this->layout = '';
+		$this->autoRender = false;
+
+		echo json_encode($data);
 	}
 }

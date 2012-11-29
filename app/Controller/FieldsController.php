@@ -7,21 +7,27 @@ class FieldsController extends AppController {
 	{
         if (!isset($this->params->named['trash'])) {
             $this->paginate = array(
-                'group' => 'title',
                 'order' => 'Field.created DESC',
                 'limit' => $this->pageLimit,
                 'conditions' => array(
                     'Field.deleted_time' => '0000-00-00 00:00:00'
-                )
+                ),
+                'contain' => array(
+                    'Category'
+                ),
+                'fields' => 'Field.*, Category.*'
             );
         } else {
             $this->paginate = array(
-                'group' => 'title',
                 'order' => 'Field.created DESC',
                 'limit' => $this->pageLimit,
                 'conditions' => array(
                     'Field.deleted_time' => '0000-00-00 00:00:00'
-                )
+                ),
+                'contain' => array(
+                    'Category'
+                ),
+                'fields' => 'Field.*, Category.*'
             );
         }
         
@@ -122,10 +128,10 @@ class FieldsController extends AppController {
         	}
 
             if (isset($save)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your field has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your field has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your field.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your field.', 'flash_error');
             }
         } 
 	}
@@ -223,10 +229,10 @@ class FieldsController extends AppController {
         	}
 
 	        if (isset($save)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your field has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your field has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your field.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your field.', 'flash_error');
 	        }
 	    }
 
@@ -247,10 +253,10 @@ class FieldsController extends AppController {
         }
 
         if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The field `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The field `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The field `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The field `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -264,10 +270,10 @@ class FieldsController extends AppController {
         $this->Field->id = $id;
 
         if ($this->Field->saveField('deleted_time', '0000-00-00 00:00:00')) {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The field `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+            $this->Session->setFlash('The field `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The field `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+            $this->Session->setFlash('The field `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }

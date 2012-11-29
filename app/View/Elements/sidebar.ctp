@@ -8,3 +8,4 @@
 <li><?= $this->Html->link('Settings', array('admin' => true, 'plugin' => false, 'controller' => 'settings', 'action' => 'admin_index')) ?></li>
 <li><?= $this->Html->link('Appearance', array('admin' => true, 'plugin' => false, 'controller' => 'templates', 'action' => 'admin_index')) ?></li>
 <li><?= $this->Html->link('Modules', array('admin' => true, 'plugin' => false, 'controller' => 'modules', 'action' => 'admin_index')) ?></li>
+<li><?= $this->Html->link('Media Library', array('admin' => true, 'plugin' => false, 'controller' => 'media', 'action' => 'admin_index')) ?></li>

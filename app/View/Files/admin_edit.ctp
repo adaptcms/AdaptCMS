@@ -1,7 +1,22 @@
-<h1>Edit File</h1>
-<?php
-    echo $this->Form->create('File', array('type' => 'file', 'class' => 'well'));
-?>
+<h2 class="left">Edit File</h2>
+
+<div class="right">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Index',
+        array('action' => 'index'),
+        array('class' => 'btn', 'escape' => false
+    )) ?>
+    <?php if (empty($theme)): ?>
+        <?= $this->Html->link(
+            '<i class="icon-trash icon-white"></i> Delete',
+            array('action' => 'delete', $data['File']['id']),
+            array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file?')"));
+        ?>
+    <?php endif ?>
+</div>
+<div class="clearfix"></div>
+
+<?= $this->Form->create('File', array('action' => 'edit', 'type' => 'file', 'class' => 'well')) ?>
 
 <?php if (!empty($data['File']['filename']) &&
           !empty($data['File']['dir'])): ?>
@@ -53,6 +68,9 @@
         echo $this->Form->hidden('mimetype', array('value' => $data['File']['mimetype']));
         echo $this->Form->hidden('filesize', array('value' => $data['File']['filesize']));
     }
+
+    echo $this->Form->hidden('id');
+    echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
     
     echo $this->Form->end('Submit');
 ?>

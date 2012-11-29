@@ -20,7 +20,7 @@ class InstallController extends AppController
 	{	
 		$this->set('title_for_layout', 'Install AdaptCMS');
 
-		$this->Session->setFlash(Configure::read('alert_btn').'<strong>Notice</strong> If you have already installed AdaptCMS, please delete the folder located at: '.WWW_ROOT.'installer', 'default', array('class' => 'alert alert-info'));
+		$this->Session->setFlash('If you have already installed AdaptCMS, please delete the folder located at: '.WWW_ROOT.'installer', 'flash_notice');
 	}
 
 	public function database()
@@ -72,20 +72,13 @@ class InstallController extends AppController
 			try {
 				$db = ConnectionManager::getDataSource('default');
 				if ($db->isConnected()) {
-					$this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> You made a successfull connection to the database.', 'default', array('class' => 'alert alert-success'));
+					$this->Session->setFlash('You made a successfull connection to the database.', 'flash_success');
 					$this->redirect(array('action' => 'sql'));
 				}
 			} catch (Exception $e) {
-				/*
-				$replace_file = file_get_contents(APP.'Config/database.default.php');
-
-				$fh = fopen($file, 'w') or die("can't open file");
-	        	fwrite($fh, $replace_file);
-	        	fclose($fh);
-				*/
 				copy(APP.'Config/database.default.php', $file);
 
-				$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Cannot make connection with the database options you entered.', 'default', array('class' => 'alert alert-error'));
+				$this->Session->setFlash('Cannot make connection with the database options you entered.', 'flash_error');
 			}
 		}
 	}
@@ -129,10 +122,10 @@ class InstallController extends AppController
 			$this->request->data['User']['status'] = 1;
 
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your admin account was created.', 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('Your admin account was created.', 'flash_success');
 				$this->redirect(array('action' => 'finish'));
 			} else {
-				$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Your admin account could nto be created.', 'default', array('class' => 'alert alert-error'));
+				$this->Session->setFlash('Your admin account could nto be created.', 'flash_error');
 			}
 		}
 	}

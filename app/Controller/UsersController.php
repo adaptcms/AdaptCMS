@@ -40,10 +40,10 @@ class UsersController extends AppController {
         	$this->request->data['User']['username'] = $this->slug($this->request->data['User']['username']);
 
             if ($this->User->save($this->request->data)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your role has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your role has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your role.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your role.', 'flash_error');
             }
         } 
 	}
@@ -58,14 +58,25 @@ class UsersController extends AppController {
 	        	'conditions' => array(
 	        		'User.id' => $id
 	        	),
-	        	'fields' => array(
-	        		'User.username', 
-	        		'User.email',
-	        		'User.role_id',
-	        		'User.id'
+	        	'contain' => array(
+	        		'Article' => array(
+	        			'Category'
 	        		)
 	        	)
-	        );
+	        ));
+	        $this->request->data['User']['password'] = '';
+
+	        $this->loadModel('Setting');
+
+	        $this->set('settings', $this->Setting->SettingValue->find('all', array(
+	        	'conditions' => array(
+	        		'Setting.title' => 'Users'
+	        	),
+	        	'contain' => array(
+	        		'Setting'
+	        	)
+	        )));
+
 	        $this->set('roles', $this->User->Role->find('list'));
 	    } else {
 	    	unset($this->User->validate['password']);
@@ -76,10 +87,10 @@ class UsersController extends AppController {
 	    	}
 
 	        if ($this->User->save($this->request->data)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your user has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your user has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your user.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your user.', 'flash_error');
 	        }
 	    }
 
@@ -100,10 +111,10 @@ class UsersController extends AppController {
 	    }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The user `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The user `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The user `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The user `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -117,68 +128,97 @@ class UsersController extends AppController {
 	    $this->User->id = $id;
 
 	    if ($this->User->saveField('deleted_time', '0000-00-00 00:00:00')) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The user `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The user `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The user `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The user `'.$title.'` has NOT been restored.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
 
 	public function login() {
 		if (!empty($this->request->data)) {
-			$status = $this->User->findByUsername($this->request->data['User']['username']);
-			$this->loadModel('SettingValue');
+			if (!empty($this->request->data['User']['type']) && $this->request->data['User']['type'] == "openid") {
+				$realm = 'http://' . $_SERVER['HTTP_HOST'];
+		        $returnTo = $realm;
 
-			if (!empty($status) && $status['User']['status'] == 0) {
-				$user_status = $this->SettingValue->findByTitle('User Status');
+				if ($this->request->isPost() && !$this->Openid->isOpenIDResponse()) {
+		            try {
+		                $this->Openid->authenticate($this->data['OpenidUrl']['openid'], $returnTo, $realm);
+		            } catch (InvalidArgumentException $e) {
+		                $this->Session->write('msg', 'Invalid OpenID');
+		            } catch (Exception $e) {
+		                $this->Session->write('msg', $e->getMessage());
+		            }
+		            $this->Session->write('msg', 1);
+		        } elseif ($this->Openid->isOpenIDResponse()) {
+		            $response = $this->Openid->getResponse($returnTo);
 
-				if ($user_status['SettingValue']['data'] == "Email Activation") {
-					$custom_msg = ", please visit the link you received in your email in order to login.";
-				} elseif ($user_status['SettingValue']['data'] == "Staff Activation") {
-					$custom_msg = ", you must wait for an admin to activate your account.";
-				} else {
-					$custom_msg = null;
-				}
-
-				$this->Session->setFlash(
-					Configure::read('alert_btn').
-					'<strong>Error</strong> Your account is inactive'.$custom_msg,
-					 'default', 
-					 array(
-					 	'class' => 'alert alert-error'
-				));
-			    return $this->redirect($this->Auth->redirect());
+		            if ($response->status == Auth_OpenID_CANCEL) {
+		                $this->Session->write('msg', 'Verification cancelled');
+		            } elseif ($response->status == Auth_OpenID_FAILURE) {
+		                $this->Session->write('msg', 'OpenID verification failed: '.$response->message);
+		            } elseif ($response->status == Auth_OpenID_SUCCESS) {
+		            	$this->Session->write('msg','success');
+		            }
+		            $this->Session->write('msg', 2);
+		        }
 			} else {
-				$password_reset = $this->SettingValue->findByTitle('User Password Reset');
+				$status = $this->User->findByUsername($this->request->data['User']['username']);
+				$this->loadModel('SettingValue');
 
-				if (!empty($password_reset) && $password_reset['SettingValue']['data'] > 0) {
-					$user = $this->User->findByUsername($this->request->data['User']['username']);
-					if (!empty($user)) {
-						$diff = strtotime($user['User']['last_reset_time']);
-						$math = round((time() - $diff) / (60 * 60 * 24), 0, PHP_ROUND_HALF_DOWN);
+				if (!empty($status) && $status['User']['status'] == 0) {
+					$user_status = $this->SettingValue->findByTitle('User Status');
 
-						if ($user['User']['last_reset_time'] == '0000-00-00 00:00:00' ||
-							$math > $password_reset['SettingValue']['data']) {
-							$this->redirect(array('action' => 'update_password', 'change' => 'reset'));
-						}  
+					if ($user_status['SettingValue']['data'] == "Email Activation") {
+						$custom_msg = ", please visit the link you received in your email in order to login.";
+					} elseif ($user_status['SettingValue']['data'] == "Staff Activation") {
+						$custom_msg = ", you must wait for an admin to activate your account.";
+					} else {
+						$custom_msg = null;
 					}
-				} 
 
-				if ($this->Auth->login()) {
-					$this->User->id = $this->Auth->user('id');
-					$this->User->saveField('login_time', $this->User->dateTime());
-
-					$this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Welcome back '.$this->Auth->User('username').'!', 'default', array('class' => 'alert alert-success'));
+					$this->Session->setFlash(
+						Configure::read('alert_btn').
+						'<strong>Error</strong> Your account is inactive'.$custom_msg,
+						 'default', 
+						 array(
+						 	'class' => 'alert alert-error'
+					));
 				    return $this->redirect($this->Auth->redirect());
 				} else {
-				    $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Username or password is incorrect', 'default', array('class' => 'alert alert-error'));
+					$password_reset = $this->SettingValue->findByTitle('User Password Reset');
+
+					if (!empty($password_reset) && $password_reset['SettingValue']['data'] > 0) {
+						$user = $this->User->findByUsername($this->request->data['User']['username']);
+						if (!empty($user)) {
+							$diff = strtotime($user['User']['last_reset_time']);
+							$math = round((time() - $diff) / (60 * 60 * 24), 0, PHP_ROUND_HALF_DOWN);
+
+							if ($user['User']['last_reset_time'] == '0000-00-00 00:00:00' ||
+								$math > $password_reset['SettingValue']['data']) {
+								$this->redirect(array('action' => 'update_password', 'change' => 'reset'));
+							}  
+						}
+					} 
+
+					if ($this->Auth->login()) {
+						$this->User->id = $this->Auth->user('id');
+						$this->User->saveField('login_time', $this->User->dateTime());
+
+						$this->Session->setFlash('Welcome back '.$this->Auth->User('username').'!', 'flash_success');
+					    return $this->redirect($this->Auth->redirect());
+					} else {
+					    $this->Session->setFlash('Username or password is incorrect', 'flash_error');
+					}
 				}
 			}
 		}
 	}
 
     public function logout() {
+    	$this->Session->destroy();
+        $this->redirect($this->Auth->logout());
     	$this->Session->setFlash(
     		Configure::read('alert_btn').
     		'<strong>Success</strong> You have successfully logged out', 
@@ -186,7 +226,6 @@ class UsersController extends AppController {
     		array(
     			'class' => 'alert alert-success'
     	));
-        $this->redirect($this->Auth->logout());
     }
 
 	public function register()
@@ -214,7 +253,6 @@ class UsersController extends AppController {
 		}
 
 		$this->set(compact('security_options'));
-		$this->set('time', $this->User->dateTime());
 
         if ($this->request->is('post')) {
         	$this->request->data['User']['security_answers'] = json_encode($this->request->data['Security']);
@@ -276,7 +314,7 @@ class UsersController extends AppController {
 					$this->User->id = $this->Auth->user('id');
 					$this->User->saveField('login_time', $this->User->dateTime());
                 	$this->Session->setFlash(
-                		Configure::read('alert_btn').'<strong>Success</strong> Account Created', 
+                		'Account Created', 
                 		'default', 
                 		array(
                 			'class' => 'alert alert-success'
@@ -288,7 +326,7 @@ class UsersController extends AppController {
                     'action' => 'display', 'home'
                 ));
             } else {
-            	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Account could not be created', 'default', array('class' => 'alert alert-error'));
+            	$this->Session->setFlash('Account could not be created', 'flash_error');
             }
         }
      }
@@ -371,7 +409,7 @@ class UsersController extends AppController {
     			$this->User->save($data);
 
 				$this->Session->setFlash(
-                		Configure::read('alert_btn').'<strong>Success</strong> Account Activated. You may now login', 
+                		'Account Activated. You may now login', 
                 		'default', 
                 		array(
                 			'class' => 'alert alert-success'
@@ -380,7 +418,7 @@ class UsersController extends AppController {
                 return $this->redirect(array('action' => 'login'));
     		} else {
 				$this->Session->setFlash(
-                		Configure::read('alert_btn').'<strong>Error</strong> Incorrect Code Entered', 
+                		'Incorrect Code Entered', 
                 		'default', 
                 		array(
                 			'class' => 'alert alert-error'
@@ -428,7 +466,7 @@ class UsersController extends AppController {
 				
 				if (!$user) {
 					$this->Session->setFlash(
-	                		Configure::read('alert_btn').'<strong>Error</strong> No user exists with this email', 
+	                		'No user exists with this email', 
 	                		'default', 
 	                		array(
 	                			'class' => 'alert alert-error'
@@ -443,7 +481,7 @@ class UsersController extends AppController {
 						
 						if (!$find) {
 							$this->Session->setFlash(
-			                		Configure::read('alert_btn').'<strong>Error</strong> Activate Code/Username No Match', 
+			                		'Activate Code/Username No Match', 
 			                		'default', 
 			                		array(
 			                			'class' => 'alert alert-error'
@@ -460,7 +498,7 @@ class UsersController extends AppController {
 
 							if ($this->User->save($this->request->data)) {
 								$this->Session->setFlash(
-				                		Configure::read('alert_btn').'<strong>Success</strong> Your password has been updated.', 
+				                		'Your password has been updated.', 
 				                		'default', 
 				                		array(
 				                			'class' => 'alert alert-success'
@@ -515,7 +553,7 @@ class UsersController extends AppController {
 							$this->set('activate', true);
 
 							$this->Session->setFlash(
-			                		Configure::read('alert_btn').'<strong>Success</strong> An email has been dispatched to continue.', 
+			                		'An email has been dispatched to continue.', 
 			                		'default', 
 			                		array(
 			                			'class' => 'alert alert-success'
@@ -529,7 +567,7 @@ class UsersController extends AppController {
 	    		$user = $this->User->findByUsername($this->request->data['User']['username']);
 	    		if (!$user) {
 					$this->Session->setFlash(
-	                		Configure::read('alert_btn').'<strong>Error</strong> That username does not exist', 
+	                		'That username does not exist', 
 	                		'default', 
 	                		array(
 	                			'class' => 'alert alert-error'
@@ -538,7 +576,7 @@ class UsersController extends AppController {
 	    			if (AuthComponent::password($this->request->data['User']['password_current']) != 
 	    				$user['User']['password']) {
 						$this->Session->setFlash(
-		                		Configure::read('alert_btn').'<strong>Error</strong> Current Password is Incorrect', 
+		                		'Current Password is Incorrect', 
 		                		'default', 
 		                		array(
 		                			'class' => 'alert alert-error'
@@ -552,7 +590,7 @@ class UsersController extends AppController {
 	    					$this->Auth->login();
 
 							$this->Session->setFlash(
-			                		Configure::read('alert_btn').'<strong>Success</strong> Your password has been updated and you have been logged in', 
+			                		'Your password has been updated and you have been logged in', 
 			                		'default', 
 			                		array(
 			                			'class' => 'alert alert-success'

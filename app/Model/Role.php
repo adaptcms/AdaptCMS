@@ -19,5 +19,4 @@ class Role extends AppModel {
 		'User',
 		'Permission'
 	);
-	public $recursive = -1;
 }

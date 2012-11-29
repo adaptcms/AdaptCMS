@@ -1,6 +1,5 @@
 <?php
 	$this->TinyMce->editor();
-	$time = date('Y-m-d H:i:s');
 ?>
 
 <script>
@@ -19,10 +18,14 @@ $(document).ready(function(){
 <h1>Add Field</h1>
 
 <?php
-	echo $this->Form->create('Field', array('type' => 'file', 'class' => 'well'));
+	echo $this->Form->create('Field', array('class' => 'well'));
 	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
 	echo $this->Form->input('label', array('type' => 'text'));
-	echo $this->Form->input('category_id', array('multiple' => true, 'class' => 'required'));
+	echo $this->Form->input('category_id', array(
+		'class' => 'required',
+		'empty' => '- Choose Category -',
+		'value' => (!empty($this->params['pass'][0]) ? $this->params['pass'][0] : "")
+	));
 	echo $this->Form->input('field_type', array(
 		'options' => array(
 			'text' => 'Text Input', 
@@ -65,6 +68,8 @@ $(document).ready(function(){
 	echo $this->Form->input('field_limit_max', array('value' => 0, 'label' => 'Field Limit Maximum'));
 	echo $this->Form->input('field_order', array('value' => 0));
 	echo $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?'));
-	echo $this->Form->hidden('created', array('value' => $time));
+
+	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
+	
 	echo $this->Form->end('Submit');
 ?>

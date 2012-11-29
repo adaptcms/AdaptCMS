@@ -119,16 +119,4 @@ $(document).ready(function(){
     <?php endforeach; ?>
 </table>
 
-<?php
-    $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'));
-?>
-
-<?php if (!empty($numbers)): ?>
-    <div class="pagination">
-        <ul>
-            <?= $this->Paginator->prev('«', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-            <?= $numbers ?>
-            <?= $this->Paginator->next('»', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-        </ul>
-    </div>
-<?php endif ?>
+<?= $this->element('admin_pagination') ?>

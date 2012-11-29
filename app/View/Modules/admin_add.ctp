@@ -1,4 +1,3 @@
-<?php $time = date('Y-m-d H:i:s') ?>
 <?= $this->Html->script('bootstrap-typeahead.js') ?>
 <script>
 $(document).ready(function(){
@@ -16,21 +15,10 @@ $(document).ready(function(){
         }
     });
 
-	$("#backButton").live('click', function(e) {
-		e.preventDefault();
-		
-		window.location = "<?= $this->Html->url(array(
-            'controller' => 'modules',
-            'action' => 'add',
-            'admin' => true
-            )) ?>";
-		return false;
-	});
-
     $('#ModuleSearch').typeahead({
         source: function(typeahead, query) {
                 $.ajax({
-                    url: "<?= $this->webroot ?>ajax/templates/quick_search/",
+                    url: "<?= $this->webroot ?>admin/templates/ajax_quick_search/",
                     dataType: "json",
                     type: "POST",
                     data: {search: query, element: 1, theme: $("#ModuleTheme").val()},
@@ -59,7 +47,7 @@ $(document).ready(function(){
         }
     });
 
-    $("#ModuleLimit").live('change', function() {
+    $("#ModuleLimit").on('change', function() {
         if ($(this).val() == 1) {
             $("#data").show();
         } else {
@@ -68,7 +56,7 @@ $(document).ready(function(){
         }
     });
 
-    $("input[name='data[Module][location_type]']").live('change', function() {
+    $("input[name='data[Module][location_type]']").on('change', function() {
         if ($(this).val() == "view") {
             if ($("#ModuleLocationController option").length == 1) {
             	get_data('controllers');
@@ -81,7 +69,7 @@ $(document).ready(function(){
         }
     });
 
-    $("#ModuleModel").live('change', function() {
+    $("#ModuleModel").on('change', function() {
     	if (!$(this).val()) {
     		$("#next-step").hide();
     		$("#ModuleAdminAddForm").reset();
@@ -107,7 +95,7 @@ $(document).ready(function(){
 		$("#location").show();
 	}
 
-	$("#ModuleLocationController").live('change', function() {
+	$("#ModuleLocationController").on('change', function() {
 		if ($("#ModuleLocationTypeView").is(':checked')) {
 			if ($(this).val()) {
 				get_data("actions");
@@ -117,7 +105,7 @@ $(document).ready(function(){
 		}
 	});
 
-	$("#ModuleLocationAction").live('change', function() {
+	$("#ModuleLocationAction").on('change', function() {
 		if ($("#ModuleLocationTypeView").is(':checked')) {
 			if ($(this).val() == 'view' || $(this).val() == 'display') {
 				get_model_data("action");
@@ -206,7 +194,17 @@ function get_model_data(type)
 	    		$("#ModuleData option").remove();
 	    		$("#ModuleData").append(data_list).prepend(empty);
 
-	    		$("label[for='ModuleData']").html(text.substring(0, text.length-1) + ' <i>*</i>');
+                var length = Number(text.length) - 1;
+
+                if (text.substr(-3) == 'ies') {
+                    var new_text = text.substr(0, text.length-3) + 'y';
+                } else if (text[length] == 's') {
+                    var new_text = text.substring(0, text.length-1);
+                } else {
+                    var new_text = text;
+                }
+
+	    		$("label[for='ModuleData']").html(new_text + ' <i>*</i>');
 	    		$("label[for='ModuleLimit'] strong").html(text);
 
 	    		$("#next-step").show();
@@ -219,7 +217,7 @@ function get_model_data(type)
 	    	}
     });
 
-    $("#location_add").live('click', function() {
+    $("#location_add").on('click', function() {
 		var controller = $("#ModuleLocationController :selected").val();
 		var action = $("#ModuleLocationAction :selected").val();
 
@@ -242,7 +240,7 @@ function get_model_data(type)
 
 			$("#ModuleLocationController,#ModuleLocationAction").removeClass('required').removeAttr('required');
 			$("#ModuleLocationController").val("option:first").trigger('change');
-			$("#ModuleLocationAction").hide();
+			$("#location_action").hide();
 		}
     });
 }
@@ -367,9 +365,8 @@ function get_model_data(type)
 
 	<div class="btn-group" style="margin-top:10px">
 	    <?php
-	        // echo $this->Form->button('Back', array('id' => 'backButton', 'class' => 'btn'));
 	        echo $this->Form->submit('Continue', array('div' => false, 'class' => 'btn'));
-	        echo $this->Form->hidden('created', array('value' => $time));
+	        echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 	    ?>
 	</div>
 </div>

@@ -22,7 +22,6 @@ class Article extends AppModel {
             'rule' => array('notEmpty')
         )
     );
-    public $recursive = -1;
 
     public function getRelatedArticles($id, $related)
     {
@@ -55,9 +54,9 @@ class Article extends AppModel {
         return $data;
     }
 
-    public function getModuleData($data)
+    public function getModuleData($data, $user_id)
     {
-        return $this->find('all', array(
+        $cond = array(
             'conditions' => array(
                 'Article.deleted_time' => '0000-00-00 00:00:00',
                 'Article.status !=' => 0,
@@ -68,6 +67,20 @@ class Article extends AppModel {
                 'User'
             ),
             'limit' => $data['limit']
-        ));
+        );
+
+        if (!empty($data['order_by'])) {
+            if ($data['order_by'] == "rand") {
+                $data['order_by'] = 'RAND()';
+            }
+
+            $cond['order'] = 'Article.'.$data['order_by'].' '.$data['order_dir'];
+        }
+
+        if (!empty($data['data'])) {
+            $cond['conditions']['Article.id'] = $data['data'];
+        }
+
+        return $this->find('all', $cond);
     }
 }

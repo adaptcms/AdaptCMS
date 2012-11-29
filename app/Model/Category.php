@@ -3,7 +3,10 @@
 class Category extends AppModel {
 	
 	public $name = 'Category';
-	public $hasMany = array('Field', 'Article');
+	public $hasMany = array(
+        'Field', 
+        'Article'
+    );
     public $validate = array(
     	'title' => array(
 			array(
@@ -16,15 +19,28 @@ class Category extends AppModel {
 			)
         )
     );
-    public $recursive = -1;
 
-    public function getModuleData($data)
+    public function getModuleData($data, $user_id)
     {
-        return $this->find('all', array(
+        $cond = array(
             'conditions' => array(
                 'Category.deleted_time' => '0000-00-00 00:00:00'
             ),
             'limit' => $data['limit']
-        ));
+        );
+
+        if (!empty($data['order_by'])) {
+            if ($data['order_by'] == "rand") {
+                $data['order_by'] = 'RAND()';
+            }
+
+            $cond['order'] = 'Category.'.$data['order_by'].' '.$data['order_dir'];
+        }
+
+        if (!empty($data['data'])) {
+            $cond['conditions']['Category.id'] = $data['data'];
+        }
+
+        return $this->find('all', $cond);
     }
 }

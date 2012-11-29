@@ -1,6 +1,5 @@
 <?php
 	$this->EditArea->editor('TemplateTemplate');
-	$time = date('Y-m-d H:i:s');
 ?>
 
 <script>
@@ -49,10 +48,10 @@ $(document).ready(function(){
 		'class' => 'required'
 	));
 
-	echo $this->Form->hidden('created', array('value' => $time));
+	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 ?>
 <br />
 <?= $this->Form->end(array(
 		'label' => 'Submit',
 		'class' => 'btn'
-		)); ?>
+)) ?>

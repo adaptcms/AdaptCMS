@@ -26,5 +26,4 @@ class Field extends AppModel {
             'rule' => array('notEmpty')
         )
     );
-    public $recursive = -1;
 }

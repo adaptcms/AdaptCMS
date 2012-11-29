@@ -24,7 +24,7 @@ label.error {
     	var count = Number($(".option").length);
     	var number = count + 1;
 
-    	$("#options").append('<div id="option'+number+'"><div class="input text"><label for="PluginPollValue'+number+'Title">Option '+number+'</label><input name="data[PluginPollValue]['+number+'][title]" class="required option" type="text" id="PluginPollValue'+number+'Title"> <a class="btn btn-danger poll-option-remove" id="'+number+'"><i class="icon-trash icon-white poll-delete"></i> Delete</a></div></div>')
+    	$("#options").append('<div id="option'+number+'"><div class="input text"><label for="PollValue'+number+'Title">Option '+number+'</label><input name="data[PollValue]['+number+'][title]" class="required option" type="text" id="PollValue'+number+'Title"> <a class="btn btn-danger poll-option-remove" id="'+number+'"><i class="icon-trash icon-white poll-delete"></i> Delete</a></div></div>')
     });
 
     $(".poll-option-remove").live('click', function() {
@@ -48,7 +48,7 @@ label.error {
 ?>
 <div id="options">
 <?= 
-	$this->Form->input('PluginPollValue.1.title', array(
+	$this->Form->input('PollValue.1.title', array(
 		'label' => 'Option 1', 
 		'class' => 'required option'
 	))

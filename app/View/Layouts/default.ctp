@@ -1,14 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+  <?php if (!empty($this->Facebook)): ?>
+    <?= $this->Facebook->html() ?>
+  <?php else: ?>
+    <html lang="en">
+  <?php endif ?>
   <head>
-    <?php echo $this->Html->charset(); ?>
+    <?= $this->Html->charset() ?>
     <title>
-      <?php echo $title_for_layout; ?>
+      <?= $title_for_layout ?>
     </title>
     <?php
       echo $this->Html->meta('icon');
 
-      echo $this->Html->css('cake.generic');
+      // echo $this->Html->css('cake.generic');
 
       echo $this->fetch('meta');
       echo $this->fetch('css');
@@ -16,6 +20,7 @@
     ?>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
     <?= $this->Html->script('//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js') ?>
+    <?= $this->Html->script('global.js') ?>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -55,9 +60,9 @@
           <a class="brand" href="<?= $this->webroot ?>">AdaptCMS Alpha</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-            	<?php if (!empty($username)): ?>
+            	<?php if ($this->Session->check('Auth.User.username')): ?>
             		Logged in as 
-            			<?= $this->Html->link($username, 
+            			<?= $this->Html->link($this->Session->read('Auth.User.username'), 
             				array(
             					'controller' => 'users', 
             					'action' => 'profile', 
@@ -65,6 +70,21 @@
             				),
             				array('class' => 'navbar-link')
             			) ?>
+                <?php if ($this->Session->check('Auth.User.login_type') && $this->Session->read('Auth.User.login_type') == "facebook"): ?>
+                  <?= $this->Facebook->logout(array(
+                        'redirect' => array(
+                          'action' => 'logout', 
+                          'controller' => 'users'
+                        ), 'img' => 'facebook-logout.png'
+                  )) ?>
+                <?php else: ?>
+                  <?= $this->Html->link(' (logout)', 
+                    array(
+                      'controller' => 'users', 
+                      'action' => 'logout'
+                    )
+                  ) ?>
+                <?php endif ?>
             	<?php else: ?>
             		Please
             		<?= $this->Html->link('login', 
@@ -139,13 +159,16 @@
                   )) ?>
                 </li>
               <?php endif ?>
+              <li class="nav-header">Poll</li>
+
+              <?= $this->element('show_poll', array('data' => $module_data['show-poll'])) ?>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span9">
-          <?php echo $this->Session->flash(); ?>
+          <?= $this->Session->flash() ?>
 
-          <?php echo $this->fetch('content'); ?>
+          <?= $this->fetch('content') ?>
         </div><!--/span-->
       </div><!--/row-->
 
@@ -153,7 +176,7 @@
 
       <footer>
         <p>
-          <?php echo $this->Html->link(
+          <?= $this->Html->link(
               $this->Html->image('cake.power.gif', array('style' => 'float: left', 'border' => '0')),
               'http://www.cakephp.org/',
               array('target' => '_blank', 'escape' => false)
@@ -167,6 +190,9 @@
 
     </div><!--/.fluid-container-->
 
-    <?php echo $this->element('sql_dump'); ?>
+    <?= $this->element('sql_dump') ?>
   </body>
+  <?php if (!empty($this->Facebook)): ?>
+    <?= $this->Facebook->init() ?>
+  <?php endif ?>
 </html>

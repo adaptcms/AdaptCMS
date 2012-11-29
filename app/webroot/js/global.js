@@ -1,13 +1,5 @@
 $(document).ready(function() {
-	// Fixes cake pagination with bootstrap, otherwise current page just shows number and breaks bootstrap paginator
-	if ($(".active.paginator").length > 0) {
-		var li_active_paginator_html = $(".active.paginator").html();
-		var li_active_paginator = $(".active.paginator").clone().wrap('<p>').parent().html().
-			replace(li_active_paginator_html, '<a>' + li_active_paginator_html + '</a>');
-
-		$("li.active.paginator").replaceWith(li_active_paginator);
-	}
-
+	fixPagination();
 	changeRequiredFields();
 
 	if ($(".breadcrumb li").first().next().find("a").text() == 'Themes') {
@@ -21,16 +13,16 @@ $(document).ready(function() {
 	 * convience function, button class of 'btn btn-info reset-field ArticleTitle'
 	 * when clicked, will reset the field with the id of 'ArticleTitle'
 	 */
-	$(".reset-field").live('click', function() {
+	$(".reset-field").on('click', function() {
 		var reset_class = $(this).attr('class').split(' ').slice(-1);
 		
 		$("#" + reset_class).val('');
 	});
-
 });
 
 // Grab all required inputs on page, put in a * to note that it's a required field
-function changeRequiredFields() {
+function changeRequiredFields() 
+{
 	$.each($(".required:input"), function(i, val) {
 		var label = $(this).parent().find('label').first();
 
@@ -41,7 +33,8 @@ function changeRequiredFields() {
 	});
 }
 
-function fieldTypeToggle(val) {
+function fieldTypeToggle(val) 
+{
 	if (val == "date") {
 		fieldLimitToggle('hide');
 	} else if(val == "file") {
@@ -59,7 +52,8 @@ function fieldTypeToggle(val) {
 	}
 }
 
-function fieldLimitToggle(type) {
+function fieldLimitToggle(type) 
+{
 	if (type == "show") {
 		$("#FieldFieldLimitMin").val('0').show();
 		$("#FieldFieldLimitMin").prev().show();
@@ -72,5 +66,29 @@ function fieldLimitToggle(type) {
 
 		$("#FieldFieldLimitMax").val('0').hide();
 		$("#FieldFieldLimitMax").prev().hide();
+	}
+}
+
+/*
+ * Fixes cake pagination with bootstrap, otherwise current page just shows number and breaks bootstrap paginator
+ */
+function fixPagination()
+{
+	if ($(".active.paginator").length > 0) {
+		var li_active_paginator_html = $(".active.paginator").html();
+		var li_active_paginator = $(".active.paginator").clone().wrap('<p>').parent().html().
+			replace(li_active_paginator_html, '<a>' + li_active_paginator_html + '</a>');
+
+		$("li.active.paginator").replaceWith(li_active_paginator);
+	}
+
+	if ($(".pagination ul li a").length > 0) {
+		$(".pagination ul li a").each(function() {
+			if (!$(this).attr('href') && $(this).text()) {
+				$(this).css('cursor', 'default');
+			} else if(!$(this).text()) {
+				$(this).remove();
+			}
+		});
 	}
 }

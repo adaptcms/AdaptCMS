@@ -106,11 +106,19 @@ CREATE TABLE IF NOT EXISTS `{prefix}logs` (
 CREATE TABLE IF NOT EXISTS `{prefix}media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
+  `slug` varchar(255) DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}media_files` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_id` int(11) NOT NULL,
+  `media_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -188,6 +196,19 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugins` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `link_title` varchar(255) DEFAULT NULL,
+  `link_target` varchar(255) DEFAULT NULL,
+  `views` int(11) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) DEFAULT '0',
@@ -203,6 +224,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `plugin_poll_id` int(11) NOT NULL,
+  `votes` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `poll_id` (`plugin_poll_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
@@ -210,7 +232,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_values` (
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plugin_poll_id` int(11) DEFAULT '0',
-  `option_id` int(11) DEFAULT '0',
+  `plugin_poll_value_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `user_ip` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
@@ -312,5 +334,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}users` (
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_reset_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `facebook_id` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

@@ -1,6 +1,5 @@
 <?php
 	$this->TinyMce->editor();
-	$time = date('Y-m-d H:i:s');
 	$time_part = explode(" - ", date('Y-m-d - g:i A'));
 ?>
 
@@ -83,10 +82,8 @@
 
     $("button").live('click', function(){
     	var btn = $(this).html();
-    	if (btn == "Publish Later") {
-    		$(".publish_time").show();
-    		$("#ArticleStatus").val(1);
-    	} else if(btn == "Publish Now") {
+
+    	if (btn == "Publish Now") {
     		$(".publish_time").hide();
     		$("#ArticlePublishingDate").val('<?= $time_part[0] ?>');
     		$("#ArticlePublishingTime").val('<?= $time_part[1] ?>');
@@ -96,13 +93,16 @@
     		$("#ArticlePublishingDate").val('<?= $time_part[0] ?>');
     		$("#ArticlePublishingTime").val('<?= $time_part[1] ?>');
     		$("#ArticleStatus").val(0);
+    	} else {
+    		$(".publish_time").toggle();
+    		$("#ArticleStatus").val(1);
     	}
     });
     $('#ArticlePublishingDate').datepicker();
  });
  </script>
 
-<h1>Add Article</h1>
+<h2>Add Article</h2>
 
 <?= $this->Form->create('Article', array('type' => 'file', 'class' => 'well')) ?>
 
@@ -305,31 +305,7 @@ endif;
 
 <div class="clear"></div>
 
-<div class="input text publish_time" style="display: none">
-	<?= $this->Form->input('publishing_date', array(
-			'type' => 'text',
-			'label' => 'Publish Time',
-			'div' => false,
-			'style' => 'width:70px',
-			'value' => $time_part[0],
-			'data-date-format' => 'yyyy-mm-dd'
-	)) ?>
-
-	<?= $this->Form->input('publishing_time', array(
-			'type' => 'text',
-			'label' => false,
-			'div' => false,
-			'style' => 'width:60px',
-			'value' => $time_part[1]
-	)) ?>
-
-	<?= $this->Form->button('Submit', array(
-		'type' => 'submit',
-		'class' => 'btn'
-	)) ?>
-</div>
-
-<?= $this->Form->hidden('created', array('value' => $time)) ?>
+<?= $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time()))) ?>
 <?= $this->Form->hidden('status', array('value' => 0)) ?>
 
 <label><i class='icon icon-question-sign field-desc' data-content='Linking another article to this one will allow you to show its data on this Articles page. Ex. Halo 5 Game linking to your Halo 5 preview, you can then show Halo 5 Game Details on the preview page.' data-title='Related Articles'></i>&nbsp;Relate Articles</label>
@@ -360,6 +336,30 @@ endif;
 
 <div class="clearfix"></div>
 
+<div class="input text publish_time" style="display: none">
+	<?= $this->Form->input('publishing_date', array(
+			'type' => 'text',
+			'label' => 'Publish Time',
+			'div' => false,
+			'style' => 'width:70px',
+			'value' => $time_part[0],
+			'data-date-format' => 'yyyy-mm-dd'
+	)) ?>
+
+	<?= $this->Form->input('publishing_time', array(
+			'type' => 'text',
+			'label' => false,
+			'div' => false,
+			'style' => 'width:60px',
+			'value' => $time_part[1]
+	)) ?>
+
+	<?= $this->Form->button('Submit', array(
+		'type' => 'submit',
+		'class' => 'btn'
+	)) ?>
+</div>
+
 <div style="margin-top:20px">
 	<?= $this->Form->button('Publish Now', array(
 		'type' => 'submit',
@@ -370,9 +370,10 @@ endif;
 		'style' => 'margin-left:5px;margin-right:5px',
 		'class' => 'btn'
 	)) ?>
-	<?= $this->Form->button('Publish Later', array(
+	<?= $this->Form->button('<i class="icon-calendar"></i> Publish Later', array(
 		'type' => 'button',
-		'class' => 'btn'
+		'class' => 'btn',
+		'escape' => false
 	)) ?>
 </div>
 

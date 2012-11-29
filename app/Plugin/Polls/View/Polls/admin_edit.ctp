@@ -24,7 +24,7 @@ label.error {
     	var count = Number($(".option").length);
     	var number = count + 1;
 
-    	$("#options").append('<div id="option'+number+'"><div class="input text"><label for="PluginPollValue'+number+'Title">Option '+number+'</label><input name="data[PluginPollValue]['+number+'][title]" class="required option" type="text" id="PluginPollValue'+number+'Title"> <a class="btn btn-danger poll-option-remove remove" id="'+number+'"><i class="icon-trash icon-white poll-delete"></i> Delete</a></div></div>');
+    	$("#options").append('<div id="option'+number+'"><div class="input text"><label for="PollValue'+number+'Title">Option '+number+'</label><input name="data[PollValue]['+number+'][title]" class="required option" type="text" id="PollValue'+number+'Title"> <a class="btn btn-danger poll-option-remove remove" id="'+number+'"><i class="icon-trash icon-white poll-delete"></i> Delete</a></div></div>');
     });
 
     $(".poll-option-remove").live('click', function() {
@@ -53,7 +53,21 @@ label.error {
  });
  </script>
 
-<h1>Edit Poll</h1>
+<h2 class="left">Edit Poll</h2>
+
+<div class="right">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Index',
+        array('action' => 'index'),
+        array('class' => 'btn', 'escape' => false
+    )) ?>
+    <?= $this->Html->link(
+        '<i class="icon-trash icon-white"></i> Delete',
+        array('action' => 'delete', $this->request->data['Poll']['id'], $this->request->data['Poll']['title']),
+        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this poll?')"));
+    ?>
+</div>
+<div class="clearfix"></div>
 
 <?php
 	echo $this->Form->create('Poll', array('class' => 'well'));
@@ -69,13 +83,13 @@ label.error {
 <div id="options">
 <?php 
 $key = 0;
-foreach($this->request->data['PluginPollValue'] as $data): 
+foreach($this->request->data['PollValue'] as $data): 
 $key++;
 ?>
 
 <div id='option<?= $key ?>'>
 	<div class='input text'>
-	<?= $this->Form->input('PluginPollValue.'.$data['id'].'.title', array(
+	<?= $this->Form->input('PollValue.'.$data['id'].'.title', array(
 		'label' => 'Option '.$key,
 		'value' => $data['title'],
 		'class' => 'required option title'.$key,
@@ -83,8 +97,8 @@ $key++;
 	)) ?>
 	<a class="btn btn-danger poll-option-remove2 remove" id="<?= $key ?>"><i class="icon-trash icon-white poll-delete"></i> Delete</a></div>
 
-<?= $this->Form->input('PluginPollValue.'.$data['id'].'.id', array('value' => $data['id'])) ?>
-<?= $this->Form->hidden('PluginPollValue.'.$data['id'].'.delete', array('value' => 0, 'class' => 'delete'.$key)) ?>
+<?= $this->Form->input('PollValue.'.$data['id'].'.id', array('value' => $data['id'])) ?>
+<?= $this->Form->hidden('PollValue.'.$data['id'].'.delete', array('value' => 0, 'class' => 'delete'.$key)) ?>
 </div>
 
 <?php endforeach; ?>

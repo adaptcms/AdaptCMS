@@ -18,6 +18,7 @@
     <tr>
         <th><?= $this->Paginator->sort('title') ?></th>
         <th><?= $this->Paginator->sort('field_type', 'Type') ?></th>
+        <th><?= $this->Paginator->sort('Category.title', 'Category') ?></th>
         <th><?= $this->Paginator->sort('created') ?></th>
         <th>Options</th>
     </tr>
@@ -29,6 +30,13 @@
         </td>
         <td>
             <?= ucfirst($data['Field']['field_type']) ?>
+        </td>
+        <td>
+            <?= $this->Html->link($data['Category']['title'], array(
+                    'controller' => 'categories',
+                    'action' => 'admin_edit',
+                    $data['Category']['id']
+            )) ?>
         </td>
         <td><?php echo $this->Time->format('F jS, Y h:i A', $data['Field']['created']); ?></td>
         <td>
@@ -60,16 +68,4 @@
     <?php endforeach; ?>
 </table>
 
-<?php
-    $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'));
-?>
-
-<?php if (!empty($numbers)): ?>
-    <div class="pagination">
-        <ul>
-            <?= $this->Paginator->prev('«', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-            <?= $numbers ?>
-            <?= $this->Paginator->next('»', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-        </ul>
-    </div>
-<?php endif ?>
+<?= $this->element('admin_pagination') ?>

@@ -20,10 +20,10 @@ class SettingsController extends AppController {
 	{
         if ($this->request->is('post')) {
             if ($this->Setting->save($this->request->data)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your setting has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your setting has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your setting.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your setting.', 'flash_error');
             }
         } 
 	}
@@ -51,10 +51,10 @@ class SettingsController extends AppController {
 	    } else {
 
 	        if ($this->Setting->save($this->request->data)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your setting has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your setting has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your setting.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your setting.', 'flash_error');
 	        }
 	    }
 
@@ -78,10 +78,10 @@ class SettingsController extends AppController {
 	    		)
 	    	);
 
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The setting `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The setting `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The setting `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The setting `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}

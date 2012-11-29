@@ -121,10 +121,10 @@ class TemplatesController extends AppController{
 			fclose($fh);
 
             if ($this->Template->save($this->request->data)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your template has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your template has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your template.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your template.', 'flash_error');
             }
         } 
 	}
@@ -209,10 +209,10 @@ class TemplatesController extends AppController{
 			}
 
 	        if ($this->Template->save($this->request->data)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your template has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your template has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your template.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your template.', 'flash_error');
 	        }
 	    }
 
@@ -251,10 +251,10 @@ class TemplatesController extends AppController{
         }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The template `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The template `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The template `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The template `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -268,10 +268,10 @@ class TemplatesController extends AppController{
         $this->Template->id = $id;
 
         if ($this->Template->saveField('deleted_time', '0000-00-00 00:00:00')) {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The template `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+            $this->Session->setFlash('The template `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The template `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+            $this->Session->setFlash('The template `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }
@@ -307,7 +307,7 @@ class TemplatesController extends AppController{
     	}
 	}
 
-	public function ajax_quick_search()
+	public function admin_ajax_quick_search()
 	{
     	$this->layout = 'ajax';
     	$this->autoRender = false;
@@ -352,7 +352,7 @@ class TemplatesController extends AppController{
 
             foreach($results as $result) {
             	if (!empty($this->request->data['element']) && 
-            		strstr($result['Template']['location'], "Elements/")) {
+            		strstr($result['Template']['location'], "Elements/") || empty($this->request->data['element'])) {
 	                $data[] = array(
 	                	'id' =>$result['Template']['id'],
 	                	'title' => $result['Template']['title'],

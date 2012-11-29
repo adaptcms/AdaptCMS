@@ -8,9 +8,7 @@
 					'action' => 'view',
 					$data['Article']['slug']
 			)) ?> @ 
-			<?= date("F d, Y", strtotime(
-					$data['Article']['created']
-			)) ?>
+			<?= $this->Time->format("F d, Y", $data['Article']['created']) ?>
 		</li>
 	<?php endforeach ?>
 </ul>

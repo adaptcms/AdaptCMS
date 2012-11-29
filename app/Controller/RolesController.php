@@ -43,10 +43,10 @@ class RolesController extends AppController {
 					$this->Role->Permission->save($newPermission);
         		}
 
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your role has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your role has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your role.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your role.', 'flash_error');
             }
         } 
 	}
@@ -72,10 +72,10 @@ class RolesController extends AppController {
 	        if ($this->Role->saveAll($this->request->data, array(
 	        	'deep' => true
 	        	))) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your role has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your role has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your role.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your role.', 'flash_error');
 	        }
 	    }
 
@@ -93,10 +93,10 @@ class RolesController extends AppController {
 	    	// $this->Role->Permission->deleteAll(array('Permission.role_id' => $id));
 	    	// $this->Role->Permission->PermissionValue->deleteAll(array('PermissionValue.role_id' => $id));
 
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The role `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The role `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The role `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The role `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}

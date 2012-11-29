@@ -76,15 +76,15 @@ class FilesController extends AppController {
             }
 
             if ($save) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your file has been upload.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your file has been upload.', 'flash_success');
                 $this->redirect($redirect);
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to upload your file.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to upload your file.', 'flash_error');
             }
         }
 	}
 
-	public function admin_edit($id = null, $filename = null)
+	public function admin_edit($id = null, $filename = null, $file_ext = null)
 	{
 
       $this->File->id = $id;
@@ -98,12 +98,13 @@ class FilesController extends AppController {
 	    } elseif (!empty($filename)) {
 	    	$ex = explode("-", $id);
 	    	$ex2 = explode("___", $filename);
+	    	$file_ext = str_replace("_",".", $file_ext);
 
 	    	if (!empty($ex[1])) {
 	    		if (!empty($ex2[1])) {
-	    			$file_location = $ex2[0].'/'.$ex2[1];
+	    			$file_location = $ex2[0].'/'.$ex2[1].'.'.$file_ext;
 				} else {
-					$file_location = $filename;
+					$file_location = $filename.'.'.$file_ext;
 				}
 
 	    		if ($ex[1] == "Default") {
@@ -127,6 +128,10 @@ class FilesController extends AppController {
 			$this->set('theme', $ex[1]);
 	    }
 
+	    if (empty($data)) {
+	    	$data = array();
+	    }
+
 	    $this->set('data', $data);
 
 		if (!empty($file) && is_readable($file)) {
@@ -144,7 +149,7 @@ class FilesController extends AppController {
 	        }
 	    }
 
-	    if (!$this->request->is('get')) {
+	    if ($this->request->is('post')) {
 	    	if (!empty($this->request->data['File']['theme'])) {
 	    		if ($this->request->data['File']['old_filename'] != $this->request->data['File']['filename']) {
 	    			$path = str_replace(
@@ -198,10 +203,10 @@ class FilesController extends AppController {
 			}
 
 	        if ($save) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your file has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your file has been updated.', 'flash_success');
 	            $this->redirect($redirect);
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your file.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your file.', 'flash_error');
 	        }
 	    }
 	}
@@ -267,10 +272,10 @@ class FilesController extends AppController {
 	    }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The file `'.$file['File']['filename'].'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The file `'.$file['File']['filename'].'` has been deleted.', 'flash_success');
 	        $this->redirect($redirect);
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The file `'.$file['File']['filename'].'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The file `'.$file['File']['filename'].'` has NOT been deleted.', 'flash_error');
 	        $this->redirect($redirect);
 	    }
 	}
@@ -284,10 +289,10 @@ class FilesController extends AppController {
         $this->File->id = $id;
 
         if ($this->File->saveField('deleted_time', '0000-00-00 00:00:00')) {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The file `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+            $this->Session->setFlash('The file `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The file `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+            $this->Session->setFlash('The file `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }

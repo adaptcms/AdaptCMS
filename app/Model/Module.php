@@ -68,7 +68,19 @@ class Module extends AppModel
         }
 
         if (!empty($data['Module']['data'])) {
-            $data['Module']['settings'] = json_encode($data['Module']['data']);
+            $data['Module']['settings']['data'] = $data['Module']['data'];
+        }
+
+        if (!empty($data['Module']['order_by'])) {
+            $data['Module']['settings']['order_by'] = $data['Module']['order_by'];
+        }
+
+        if (!empty($data['Module']['order_dir'])) {
+            $data['Module']['settings']['order_dir'] = $data['Module']['order_dir'];
+        }
+
+        if (!empty($data['Module']['settings'])) {
+            $data['Module']['settings'] = json_encode($data['Module']['settings']);
         }
 
         if (strstr($data['Module']['model'], '.')) {
@@ -109,6 +121,14 @@ class Module extends AppModel
         
         $data['Module']['template'] = 
             $data['Template']['title'].' ('. $data['Template']['location'] . ')';
+
+        if (!empty($data['Module']['settings'])) {
+            $settings = json_decode($data['Module']['settings']);
+
+            foreach($settings as $key => $row) {
+                $data['Module'][$key] = $row;
+            }
+        }
 
         return $data;
     }

@@ -1,7 +1,3 @@
-<?php
-	$time = date('Y-m-d H:i:s');
-?>
-
 <script>
  $(document).ready(function(){
     $("#RoleAdminAddForm").validate();
@@ -11,7 +7,8 @@
 <h1>Add Role</h1>
 
 <?php
-	echo $this->Form->create('Role', array('type' => 'file', 'class' => 'well'));
+	echo $this->Form->create('Role', array('class' => 'well'));
+	
 	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
 	echo $this->Form->input('defaults', array('options' => array(
 			'default-member' => 'Default Member', 
@@ -21,7 +18,7 @@
 		'empty' => '- choose -'
 	));
 	
-	echo $this->Form->hidden('created', array('value' => $time));
+	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 ?>
 
 <br />

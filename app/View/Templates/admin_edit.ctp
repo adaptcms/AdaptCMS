@@ -29,7 +29,21 @@ $(document).ready(function(){
 });
 </script>
 
-<h1>Edit Template</h1>
+<h2 class="left">Edit Template</h2>
+
+<div class="right">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Index',
+        array('action' => 'index'),
+        array('class' => 'btn', 'escape' => false
+    )) ?>
+    <?= $this->Html->link(
+        '<i class="icon-trash icon-white"></i> Delete',
+        array('action' => 'delete', $this->request->data['Template']['id'], $this->request->data['Template']['title']),
+        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this template?')"));
+    ?>
+</div>
+<div class="clearfix"></div>
 
 <?php
 	echo $this->Form->create('Template', array('class' => 'well'));
@@ -64,11 +78,11 @@ $(document).ready(function(){
 		'value' => $this->request->data['Template']['title']
 		)
 	);
-	echo $this->Form->hidden('modified');
+	echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 	echo $this->Form->hidden('id');
 ?>
 <br />
 <?= $this->Form->end(array(
 		'label' => 'Submit',
 		'class' => 'btn'
-		)); ?>
+)); ?>

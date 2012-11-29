@@ -43,8 +43,6 @@ class User extends AppModel {
       )
     );
 
-    public $recursive = -1;
-
     public function passCompare() {
         return ($this->data[$this->alias]['password'] === $this->data[$this->alias]['password_confirm']);
     }

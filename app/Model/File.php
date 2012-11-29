@@ -2,7 +2,17 @@
 
 class File extends AppModel{
 	public $name = 'File';
-	public $hasMany = array('ArticleValue');
+
+	public $hasMany = array(
+        'ArticleValue'
+    );
+    public $hasAndBelongsToMany = array(
+        'Media' => array(
+            'className' => 'Media',
+            'joinTable' => 'media_files',
+            'unique' => 'keepExisting'
+        )
+    );
 	public $actsAs = array(
 		'Upload'
     );
@@ -15,8 +25,6 @@ class File extends AppModel{
     //     )
     // );
     
-    public $recursive = -1;
-
     /**
      * @author svogal
      * @source http://www.php.net/manual/de/function.mime-content-type.php#87856
@@ -93,13 +101,27 @@ class File extends AppModel{
         }
     }
 
-    public function getModuleData($data)
+    public function getModuleData($data, $user_id)
     {
-        return $this->find('all', array(
+        $cond = array(
             'conditions' => array(
                 'File.deleted_time' => '0000-00-00 00:00:00'
             ),
             'limit' => $data['limit']
-        ));
+        );
+
+        if (!empty($data['order_by'])) {
+            if ($data['order_by'] == "rand") {
+                $data['order_by'] = 'RAND()';
+            }
+
+            $cond['order'] = 'File.'.$data['order_by'].' '.$data['order_dir'];
+        }
+
+        if (!empty($data['data'])) {
+            $cond['conditions']['File.id'] = $data['data'];
+        }
+
+        return $this->find('all', $cond);
     }
 }

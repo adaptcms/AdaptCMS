@@ -35,8 +35,8 @@ class ModulesController extends AppController
 	            )
 	        ));
 
-	        for ($i = 0; $i <= 100; $i++) {
-	        	$limit[] = $i;
+	        for ($i = 1; $i <= 50; $i++) {
+	        	$limit[$i] = $i;
 	        }
 
 	        $this->set(compact('limit'));
@@ -78,10 +78,10 @@ class ModulesController extends AppController
         	$this->Module->create();
 
             if ($this->Module->save($this->Module->filterdata($this->request->data))) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your module has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your module has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add module.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add module.', 'flash_error');
             }
         }
 	}
@@ -102,10 +102,10 @@ class ModulesController extends AppController
 	        )));
 	    } else {
 	        if ($this->Module->save($this->Module->filterdata($this->request->data))) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your Module has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your Module has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your Module.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your Module.', 'flash_error');
 	        }
 	    }
 	}
@@ -125,10 +125,10 @@ class ModulesController extends AppController
         }
 
         if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The module `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The module `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The module `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The module `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -142,10 +142,10 @@ class ModulesController extends AppController
         $this->Module->id = $id;
 
         if ($this->Module->saveField('deleted_time', '0000-00-00 00:00:00')) {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The module `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+            $this->Session->setFlash('The module `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The module `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+            $this->Session->setFlash('The module `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }
@@ -177,8 +177,10 @@ class ModulesController extends AppController
 
     		if (strstr($model, '.')) {
     			$ex = explode('.', $model);
+    			$model_name = $ex[1];
     			$data = $this->$ex[1]->find('all');
 			} else {
+				$model_name = $model;
 				$data = $this->$model->find('all');
 			}
     	}
@@ -186,10 +188,10 @@ class ModulesController extends AppController
     	$list_data = array();
 
     	foreach($data as $row) {
-    		if (!empty($row[$model]['slug'])) {
-    			$list_data[$row[$model]['slug']] = $row[$model]['title'];
+    		if (!empty($row[$model_name]['slug'])) {
+    			$list_data[$row[$model_name]['slug']] = $row[$model_name]['title'];
 			} else {
-				$list_data[$row[$model]['id']] = $row[$model]['title'];
+				$list_data[$row[$model_name]['id']] = $row[$model_name]['title'];
 			}
     	}
 

@@ -29,7 +29,7 @@ $(document).ready(function(){
     $('#ModuleSearch').typeahead({
         source: function(typeahead, query) {
                 $.ajax({
-                    url: "<?= $this->webroot ?>ajax/templates/quick_search/",
+                    url: "<?= $this->webroot ?>admin/templates/ajax_quick_search/",
                     dataType: "json",
                     type: "POST",
                     data: {search: query, element: 1, theme: $("#ModuleTheme").val()},
@@ -89,6 +89,12 @@ $(document).ready(function(){
     		get_model_data("model_field");
     	}
     });
+
+    get_model_data("model_field");
+
+    if ($("#ModuleLimit").val() == 1) {
+        $("#data").show();
+    }
 
 	if ($("#ModuleModel").val()) {
 		$("#next-step").show();
@@ -208,7 +214,17 @@ function get_model_data(type)
 	    		$("#ModuleData option").remove();
 	    		$("#ModuleData").append(data_list).prepend(empty);
 
-	    		$("label[for='ModuleData']").html(text.substring(0, text.length-1) + ' <i>*</i>');
+                var length = Number(text.length) - 1;
+
+                if (text.substr(-3) == 'ies') {
+                    var new_text = text.substr(0, text.length-3) + 'y';
+                } else if (text[length] == 's') {
+                    var new_text = text.substring(0, text.length-1);
+                } else {
+                    var new_text = text;
+                }
+
+	    		$("label[for='ModuleData']").html(new_text + ' <i>*</i>');
 	    		$("label[for='ModuleLimit'] strong").html(text);
 
 	    		$("#next-step").show();
@@ -219,6 +235,13 @@ function get_model_data(type)
 
 	    		$("#location_id").show();
 	    	}
+
+            if ($("#ModuleDataHidden").length == 1) {
+                var val = $("#ModuleDataHidden").text();
+                $("#ModuleData option[value='" + val + "']").attr('selected', 'selected');
+
+                $("#ModuleDataHidden").remove();
+            }
     });
 
     $("#location_add").live('click', function() {
@@ -244,14 +267,29 @@ function get_model_data(type)
 
 			$("#ModuleLocationController,#ModuleLocationAction").removeClass('required').removeAttr('required');
 			$("#ModuleLocationController").val("option:first").trigger('change');
-			$("#ModuleLocationAction").hide();
+			$("#location_action").hide();
 		}
     });
 }
 </script>
 
 
-<h1>Edit Module</h1>
+<h2 class="left">Edit Module</h2>
+
+<div class="right">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Index',
+        array('action' => 'index'),
+        array('class' => 'btn', 'escape' => false
+    )) ?>
+    <?= $this->Html->link(
+        '<i class="icon-trash icon-white"></i> Delete',
+        array('action' => 'delete', $this->request->data['Module']['id'], $this->request->data['Module']['title']),
+        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this module?')"));
+    ?>
+</div>
+<div class="clearfix"></div>
+
 <?php
     echo $this->Form->create('Module', array('class' => 'well', 'action' => 'edit'));
     
@@ -267,6 +305,10 @@ function get_model_data(type)
     	'options' => $models
     ));
 ?>
+
+<?php if (!empty($this->request->data['Module']['data'])): ?>
+    <span id="ModuleDataHidden" class="invisible"><?= $this->request->data['Module']['data'] ?></span>
+<?php endif ?>
 
 <div id="next-step" style="display:none">
 	<?= $this->Form->input('limit', array(
@@ -386,8 +428,8 @@ function get_model_data(type)
 	<div class="btn-group" style="margin-top:10px">
 	    <?php
 	        echo $this->Form->submit('Save', array('div' => false, 'class' => 'btn'));
-            echo $this->Form->hidden('modified', array('type' => 'hidden'));
-            echo $this->Form->input('id', array('type' => 'hidden'));
+            echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
+            echo $this->Form->hidden('id');
 	    ?>
 	</div>
 </div>

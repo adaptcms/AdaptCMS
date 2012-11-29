@@ -49,11 +49,12 @@
     $('#search').typeahead({
         source: function(typeahead, query) {
                 $.ajax({
-                    url: "<?= $this->webroot ?>ajax/templates/quick_search/",
+                    url: "<?= $this->webroot ?>admin/templates/ajax_quick_search/",
                     dataType: "json",
                     type: "POST",
                     data: {search: query, theme: $("#theme").val()},
                     success: function(data) {
+                        console.log(data);
                         if (data) {
                             var return_list = [], i = data.length;
                             while (i--) {
@@ -268,16 +269,4 @@ Search
     <?php endif; ?>
 </table>
 
-<?php
-    $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'));
-?>
-
-<?php if (!empty($numbers)): ?>
-    <div class="pagination">
-        <ul>
-            <?= $this->Paginator->prev('«', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-            <?= $numbers ?>
-            <?= $this->Paginator->next('»', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-        </ul>
-    </div>
-<?php endif ?>
+<?= $this->element('admin_pagination') ?>

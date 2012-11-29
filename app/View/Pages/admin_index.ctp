@@ -24,7 +24,7 @@
     <?php foreach ($this->request->data as $data): ?>
     <tr>
         <td>
-            <?= $this->Html->link($data['Page']['title'], $this->webroot.'pages/'.$data['Page']['slug']) ?>
+            <?= $this->Html->link($data['Page']['title'], array('admin' => false, 'action' => 'display', $data['Page']['slug'])) ?>
         </td>
         <td><?= $this->Time->format('F jS, Y h:i A', $data['Page']['created']) ?></td>
         <td>
@@ -56,16 +56,4 @@
     <?php endforeach; ?>
 </table>
 
-<?php
-    $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'))
-?>
-
-<?php if (!empty($numbers)): ?>
-    <div class="pagination">
-        <ul>
-            <?= $this->Paginator->prev('«', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-            <?= $numbers ?>
-            <?= $this->Paginator->next('»', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
-        </ul>
-    </div>
-<?php endif ?>
+<?= $this->element('admin_pagination') ?>

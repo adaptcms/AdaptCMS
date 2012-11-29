@@ -3,7 +3,6 @@
 class Theme extends AppModel{
 	public $name = 'Theme';
 	public $hasMany = array('Template');
-	public $recursive = -1;
 
 	public $validate = array(
       'title' => array(

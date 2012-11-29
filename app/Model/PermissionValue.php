@@ -12,5 +12,4 @@ class PermissionValue extends AppModel {
             'foreignKey'   => 'role_id'
         )
     );
-    // public $recursive = -1;
 }

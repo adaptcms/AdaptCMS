@@ -15,6 +15,7 @@ class Setting extends AppModel {
         )
     );
 
-    public $hasMany = array('SettingValue');
-    public $recursive = -1;
+    public $hasMany = array(
+    	'SettingValue'
+    );
 }

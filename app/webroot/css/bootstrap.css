@@ -3342,7 +3342,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .nav-tabs {
-  border-bottom: 1px solid #ddd;
+  /*border-bottom: 1px solid #ddd;*/
 }
 
 .nav-tabs > li {
@@ -4209,8 +4209,10 @@ input[type="submit"].btn.btn-mini {
   top: 50%;
   left: 50%;
   z-index: 1050;
-  width: 560px;
-  margin: -250px 0 0 -280px;
+  /*width: 560px;*/
+  width: 75%;
+  /*margin: -250px 0 0 -280px;*/
+  margin: -35% 0 0 -37%;
   overflow: auto;
   background-color: #ffffff;
   border: 1px solid #999;
@@ -5018,4 +5020,28 @@ a.badge:hover {
 
 .invisible {
   visibility: hidden;
+}
+
+/*
+ * Start of CSS for Media Library
+ */
+
+.file_info {
+  margin-left: 0;
+  text-align: center;
+  min-height: 230px;
+}
+
+#selected-images {
+  margin-left: 0;
+  min-height: 0;
+  margin-bottom: 10px;
+}
+
+/*
+ * end
+*/
+
+.tab-pane h2 {
+  padding-bottom: 20px;
 }

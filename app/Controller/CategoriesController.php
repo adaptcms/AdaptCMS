@@ -29,14 +29,13 @@ class CategoriesController extends AppController {
 
 	public function admin_add()
 	{
-
         if ($this->request->is('post')) {
         		$this->request->data['Category']['slug'] = $this->slug($this->request->data['Category']['title']);
             if ($this->Category->save($this->request->data)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your category has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your category has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your category.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your category.', 'flash_error');
             }
         } 
 	}
@@ -45,16 +44,38 @@ class CategoriesController extends AppController {
 	{
       	$this->Category->id = $id;
 
+      	$this->paginate = array(
+      		'conditions' => array(
+      			'Article.deleted_time' => '0000-00-00 00:00:00',
+      			'Article.category_id' => $id
+      		),
+      		'contain' => array(
+      			'User'
+      		),
+      		'limit' => 7
+      	);
+
+      	$this->set('articles', $this->paginate('Article'));
+
+      	$fields = $this->Category->Field->find('all', array(
+      		'conditions' => array(
+      			'Field.deleted_time' => '0000-00-00 00:00:00',
+      			'Field.category_id' => $id
+      		)
+      	));
+
+      	$this->set(compact('fields'));
+
 	    if ($this->request->is('get')) {
 	        $this->request->data = $this->Category->read();
 	    } else {
 	    	$this->request->data['Category']['slug'] = $this->slug($this->request->data['Category']['title']);
 
 	        if ($this->Category->save($this->request->data)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your category has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your category has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your category.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your category.', 'flash_error');
 	        }
 	    }
 	}
@@ -74,10 +95,10 @@ class CategoriesController extends AppController {
 	    }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The category `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The category `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The category `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The category `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -91,10 +112,10 @@ class CategoriesController extends AppController {
 	    $this->Category->id = $id;
 
 	    if ($this->Category->saveField('deleted_time', '0000-00-00 00:00:00')) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The category `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The category `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The category `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The category `'.$title.'` has NOT been restored.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -137,5 +158,22 @@ class CategoriesController extends AppController {
 			file_exists(VIEW_PATH.'Categories/'.$slug.'.ctp')) {
 			$this->render(implode('/', array($slug)));
 		}
+	}
+
+	public function index()
+	{
+		$data = $this->Category->find('all', array(
+			'conditions' => array(
+				'Category.deleted_time' => '0000-00-00 00:00:00'
+			),
+			'fields' => array(
+				'id', 'title', 'slug', 'created'
+			)
+		));
+
+		$this->layout = '';
+		$this->autoRender = false;
+
+		echo json_encode($data);
 	}
 }

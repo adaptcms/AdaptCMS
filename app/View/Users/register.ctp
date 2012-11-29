@@ -62,46 +62,57 @@ $(document).ready(function() {
 });
 </script>
 
-<h1>New User</h1>
-<?php
-    echo $this->Form->create();
-    echo $this->Form->input('username', array('class' => 'required'));
-?>
-<span id="username_ajax_result"></span>
-<?php
-    echo $this->Form->input('password', array('type' => 'password', 'class' => 'required'));
-    echo $this->Form->input('password_confirm', array('type' => 'password', 'class' => 'required'));
-    echo $this->Form->input('email', array('class' => 'required'));
-    echo $this->Form->hidden('last_reset_time', array('value' => $time));
-?>
+<div class="pull-left">
+    <h1>New User</h1>
 
-<?php if (!empty($this->request->data['SecurityQuestions']['SettingValue']['data'])): ?>
-    <?php if (!empty($security_options)): ?>
-        <?= $this->Form->input('security_question_hidden', array(
-                'options' => $security_options,
-                'label' => false,
-                'div' => false,
-                'style' => 'display:none'
-        )) ?>
-        <?php for($i = 1; $i <= $this->request->data['SecurityQuestions']['SettingValue']['data']; $i++): ?>
-            <?= $this->Form->input('Security.'.$i.'.question', array(
-                    'empty' => '- choose -', 
-                    'class' => 'required security-question', 
+    <?php
+        echo $this->Form->create();
+        echo $this->Form->input('username', array('class' => 'required'));
+    ?>
+    <span id="username_ajax_result"></span>
+    <?php
+        echo $this->Form->input('password', array('type' => 'password', 'class' => 'required'));
+        echo $this->Form->input('password_confirm', array('type' => 'password', 'class' => 'required'));
+        echo $this->Form->input('email', array('class' => 'required'));
+        
+        echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
+        echo $this->Form->hidden('last_reset_time', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
+    ?>
+
+    <?php if (!empty($this->request->data['SecurityQuestions']['SettingValue']['data'])): ?>
+        <?php if (!empty($security_options)): ?>
+            <?= $this->Form->input('security_question_hidden', array(
                     'options' => $security_options,
-                    'label' => 'Security Question '.$i
+                    'label' => false,
+                    'div' => false,
+                    'style' => 'display:none'
             )) ?>
-            <div id="Security<?= $i ?>Question" style="display: none">
-                <?= $this->Form->input('Security.'.$i.'.answer', array(
-                        'class' => 'required',
-                        'label' => 'Security Answer '.$i
+            <?php for($i = 1; $i <= $this->request->data['SecurityQuestions']['SettingValue']['data']; $i++): ?>
+                <?= $this->Form->input('Security.'.$i.'.question', array(
+                        'empty' => '- choose -', 
+                        'class' => 'required security-question', 
+                        'options' => $security_options,
+                        'label' => 'Security Question '.$i
                 )) ?>
-            </div>
-        <?php endfor ?>
+                <div id="Security<?= $i ?>Question" style="display: none">
+                    <?= $this->Form->input('Security.'.$i.'.answer', array(
+                            'class' => 'required',
+                            'label' => 'Security Answer '.$i
+                    )) ?>
+                </div>
+            <?php endfor ?>
+        <?php endif ?>
     <?php endif ?>
-<?php endif ?>
 
-<?= $this->Form->end(array(
-    'label' => 'Submit',
-    'class' => 'btn',
-    'id' => 'submit'
+    <?= $this->Form->end(array(
+        'label' => 'Submit',
+        'class' => 'btn',
+        'id' => 'submit'
     )); ?>
+</div>
+<div class="pull-right">
+    <h1>3rd Party Signup</h1>
+
+    <?= $this->Facebook->registration() ?>
+</div>
+<div class="clearfix"></div>

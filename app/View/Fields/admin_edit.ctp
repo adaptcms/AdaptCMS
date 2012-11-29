@@ -1,5 +1,5 @@
 <?php
-$this->TinyMce->editor();
+	$this->TinyMce->editor();
 ?>
 
 <script>
@@ -17,14 +17,31 @@ $this->TinyMce->editor();
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
 
-<h1>Edit Field</h1>
+<h2 class="left">Edit Field</h2>
+
+<div class="right">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Index',
+        array('action' => 'index'),
+        array('class' => 'btn', 'escape' => false
+    )) ?>
+    <?= $this->Html->link(
+        '<i class="icon-trash icon-white"></i> Delete',
+        array('action' => 'delete', $this->request->data['Field']['id'], $this->request->data['Field']['title']),
+        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this field?')"));
+    ?>
+</div>
+<div class="clearfix"></div>
 
 <?php
-    echo $this->Form->create('Field', array('type' => 'file', 'action' => 'edit', 'class' => 'well'));
+    echo $this->Form->create('Field', array('action' => 'edit', 'class' => 'well'));
 
     echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
     echo $this->Form->input('label', array('type' => 'text'));
-	echo $this->Form->input('category_id', array('multiple' => true, 'class' => 'required'));
+	echo $this->Form->input('category_id', array(
+		'empty' => '- Choose Category -',
+		'class' => 'required'
+	));
 	echo $this->Form->input('field_type', array(
 		'options' => array(
 			'text' => 'Text Input', 
@@ -85,6 +102,8 @@ $this->TinyMce->editor();
 	echo $this->Form->input('field_limit_max', array('label' => 'Field Limit Maximum'));
 	echo $this->Form->input('field_order');
 	echo $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?'));
-    echo $this->Form->input('id', array('type' => 'hidden'));
+
+    echo $this->Form->hidden('id');
+    echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
     echo $this->Form->end('Submit');
  ?>

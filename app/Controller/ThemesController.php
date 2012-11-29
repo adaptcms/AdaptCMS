@@ -24,10 +24,10 @@ class ThemesController extends AppController{
     		}
 
             if ($this->Theme->save($this->request->data)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your theme has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your theme has been added.', 'flash_success');
                 $this->redirect(array('controller' => 'templates', 'action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your theme.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your theme.', 'flash_error');
             }
         }
 	}
@@ -69,16 +69,16 @@ class ThemesController extends AppController{
                         WWW_ROOT.'themes/'.$this->request->data['Theme']['title']
                     );
     			} else {
-					$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your theme.', 'default', array('class' => 'alert alert-error'));	
+					$this->Session->setFlash('Unable to update your theme.', 'flash_error');	
     				$fail = 1;
     			}
     		}
 
 	        if ($this->Theme->save($this->request->data) && !isset($fail)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your theme has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your theme has been updated.', 'flash_success');
 	            $this->redirect(array('controller' => 'templates', 'action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your theme.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your theme.', 'flash_error');
 	        }
 	    }
 
@@ -108,10 +108,10 @@ class ThemesController extends AppController{
         }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The theme `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The theme `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('controller' => 'templates', 'action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The theme `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The theme `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('controller' => 'templates', 'action' => 'index'));
 	    }
 	}
@@ -130,12 +130,17 @@ class ThemesController extends AppController{
 		);
 
         if ($this->Theme->saveField('deleted_time', '0000-00-00 00:00:00')) {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The theme `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+            $this->Session->setFlash('The theme `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('controller' => 'templates', 'action' => 'index'));
         } else {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The theme `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+            $this->Session->setFlash('The theme `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('controller' => 'templates', 'action' => 'index'));
         }
+    }
+
+    public function admin_index()
+    {
+        $this->redirect(array('controller' => 'templates', 'action' => 'index'));
     }
 
 	public function rrmdir($dir) {

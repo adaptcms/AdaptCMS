@@ -37,10 +37,10 @@ class PagesController extends AppController
 				fclose($fh);
 
             if ($this->Page->save($this->request->data)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your page has been added.', 'default', array('class' => 'alert alert-success'));
+                $this->Session->setFlash('Your page has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your page.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your page.', 'flash_error');
             }
         } 
 	}
@@ -64,10 +64,10 @@ class PagesController extends AppController
 			}
 
 	        if ($this->Page->save($this->request->data)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your page has been updated.', 'default', array('class' => 'alert alert-success'));
+	            $this->Session->setFlash('Your page has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your page.', 'default', array('class' => 'alert alert-error'));
+	            $this->Session->setFlash('Unable to update your page.', 'flash_error');
 	        }
 	    }
 
@@ -92,10 +92,10 @@ class PagesController extends AppController
         }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The page `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
+	        $this->Session->setFlash('The page `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The page `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
+	    	$this->Session->setFlash('The page `'.$title.'` has NOT been deleted.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -109,10 +109,10 @@ class PagesController extends AppController
         $this->Page->id = $id;
 
         if ($this->Page->saveField('deleted_time', '0000-00-00 00:00:00')) {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The page `'.$title.'` has been restored.', 'default', array('class' => 'alert alert-success'));
+            $this->Session->setFlash('The page `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The page `'.$title.'` has NOT been restored.', 'default', array('class' => 'alert alert-error'));
+            $this->Session->setFlash('The page `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app>
   <head>
     <meta charset="utf-8">
     <title>Alpha</title>
@@ -51,6 +51,8 @@
     <?php else: ?>
     <?= $this->Html->script('//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js') ?>
     <?php endif; ?>
+
+    <?= $this->Html->script('//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js') ?>
 
     <?= $this->Html->script('global.js') ?>
   </head>
