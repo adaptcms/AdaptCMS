@@ -606,6 +606,90 @@ class UsersController extends AppController {
 
     public function profile($username = null)
     {
-    	
+    	if (empty($username) && $this->Auth->user('id')) {
+    		$username = $this->Auth->user('username');
+    	} elseif (empty($username)) {
+			$this->Session->setFlash(
+        		'No username supplied', 
+        		'default', 
+        		array(
+        			'class' => 'alert alert-error'
+        		)
+        	);
+        	$this->redirect(array(
+        		'controller' => 'pages',
+        		'action' => 'display',
+        		'home'
+        	));
+    	}
+
+    	$this->request->data = $this->User->find('first', array(
+    		'conditions' => array(
+    			'User.username' => $username
+    		),
+    		'contain' => array(
+    			'Article' => array(
+    				'Category',
+    				'limit' => 10
+    			),
+    			'Role',
+    			'Comment' => array(
+    				'Article',
+    				'limit' => 10,
+    				'order' => 'created DESC'
+    			)
+    		)
+    	));
+    }
+
+    public function edit()
+    {
+    	if (!$this->Auth->user('id')) {
+    		$this->redirect($this->params->webroot);
+    	}
+
+		if (!empty($this->request->data)) {
+			$this->User->id = $this->Auth->user('id');
+			$this->request->data['User']['security_answers'] = json_encode($this->request->data['Security']);
+
+	    	unset($this->User->validate['password']);
+	    	unset($this->User->validate['username']);
+
+	    	if (empty($this->request->data['User']['password'])) {
+	    		unset($this->request->data['User']['password']);
+	    	}
+
+			if ($this->User->save($this->request->data)) {
+				$this->Session->setFlash(
+                		'Your account has been updated', 
+                		'default', 
+                		array(
+                			'class' => 'alert alert-success'
+                		)
+            	);
+			}
+		}
+
+    	$this->request->data = $this->User->findById($this->Auth->user('id'));
+
+		$this->loadModel('SettingValue');
+
+		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
+		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');
+		$user_status = $this->SettingValue->findByTitle('User Status');
+
+		if (!empty($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options'])) {
+			foreach (json_decode($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options']) as $row) {
+				$security_options[$row] = $row;
+			}
+		}
+
+		$this->loadModel('Theme');
+
+		$themes = $this->Theme->find('list');
+
+		$this->set(compact('security_options', 'themes'));
+
+		$this->request->data['Security'] = $this->User->getSecurityAnswers($this->request->data);
     }
 }

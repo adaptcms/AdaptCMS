@@ -16,7 +16,10 @@ class Article extends AppModel {
     public $actsAs = array(
         'Upload'
     );
-    public $hasMany = array("ArticleValue");
+    public $hasMany = array(
+        'ArticleValue',
+        'Comment'
+    );
     public $validate = array(
     'title' => array(
             'rule' => array('notEmpty')

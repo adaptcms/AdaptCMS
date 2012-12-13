@@ -66,8 +66,8 @@ $(document).ready(function(){
                     $data['User']['username'], array(
                         'admin' => false, 
                         'controller' => 'Users', 
-                        'action' => 'view', 
-                        $data['User']['id']
+                        'action' => 'profile', 
+                        $data['User']['username']
                     )
             ) ?>
         </td>

@@ -64,6 +64,14 @@ class ArticlesController extends AppController {
 
         
 		$this->request->data = $this->paginate('Article');
+		
+		foreach($this->request->data as $key => $row) {
+			$this->request->data[$key]['Comment']['count'] = $this->Article->Comment->find('count', array(
+				'conditions' => array(
+					'Comment.article_id' => $row['Article']['id']
+				)
+			));
+		}
 	}
 
 	public function admin_add($category_id = null)
@@ -193,8 +201,19 @@ class ArticlesController extends AppController {
 					)
 				)
 			);
+
+			$this->paginate = array(
+				'conditions' => array(
+					'Comment.article_id' => $id
+				),
+				'contain' => array(
+					'User'
+				)
+			);
+			$comments = $this->paginate('Comment');
+
 			$this->set('category_id', $this->request->data['Category']['id']);
-			$this->set(compact('fields'));
+			$this->set(compact('fields', 'comments'));
 			$this->set('radio_fields', $this->Article->searchArray($fields, "radio"));
 	    } else {
         	$this->request->data['Article']['slug'] = $this->slug($this->request->data['Article']['title']);
@@ -427,6 +446,18 @@ class ArticlesController extends AppController {
 				)
 			)
 		);
+
+		$this->Article->Comment->article_id = $this->request->data['Article']['id'];
+		$this->request->data['Comment'] = $this->Article->Comment->children();
+		$this->request->data['Comments'] = $this->Article->Comment->find('threaded', array(
+			'conditions' => array(
+				'Comment.article_id' => $this->request->data['Article']['id'],
+				'Comment.active' => 1
+			),
+			'contain' => array(
+				'User'
+			)
+		));
 
 		if (
 			empty($this->request->data['Article']['id']) ||

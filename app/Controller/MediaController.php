@@ -117,13 +117,44 @@ class MediaController extends AppController
 
 	public function index()
 	{
-		$this->request->data = $this->Media->find('all', array(
+		$this->paginate = array(
 			'conditions' => array(
 				'Media.deleted_time' => '0000-00-00 00:00:00'
 			),
 			'contain' => array(
-				'File'
+				'File' => array(
+					'conditions' => array(
+						'File.deleted_time' => '0000-00-00 00:00:00'
+					)
+				)
 			)
-		));
+		);
+
+		$this->request->data = $this->paginate('Media');
+	}
+
+	public function view($slug = null)
+	{
+
+		$joins = array(
+		    array(
+		        'table' => '(SELECT media.*, media_files.media_id,media_files.file_id
+		                 FROM media_files
+		                 JOIN media ON media_files.media_id = media.id)',
+		        'alias' => 'Media',
+		        'conditions' => array(
+		            'File.id = Media.file_id',
+		            "Media.slug = '".$slug."'"
+		        )
+		    )
+		);
+
+		$this->paginate = array(
+			'joins' => $joins
+		);
+
+		$this->request->data = $this->paginate('File');
+
+		$this->set('media', $this->Media->findBySlug($slug));
 	}
 }

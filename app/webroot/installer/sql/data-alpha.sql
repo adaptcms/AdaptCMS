@@ -78,7 +78,10 @@ INSERT INTO `{prefix}permissions` (`id`, `title`, `role_id`, `plugin`, `controll
 (43, 'Admin Files', 1, NULL, ''),
 (44, 'Templates', 1, NULL, ''),
 (45, 'Themes', 1, NULL, ''),
-(46, 'Modules', 1, NULL, '');
+(46, 'Modules', 1, NULL, ''),
+(47, 'Media Library', 1, NULL, ''),
+(48, 'Links Plugin', 1, NULL, ''),
+(49, 'Users', 1, NULL, '');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}permission_values` (`id`, `title`, `permission_id`, `role_id`, `action_id`, `plugin`, `controller`, `pageAction`, `action`, `type`) VALUES
 (1, 'admin', 8, 1, 0, '', 'users', 'admin_index', 1, 'default'),
@@ -145,7 +148,19 @@ INSERT INTO `{prefix}permission_values` (`id`, `title`, `permission_id`, `role_i
 (66, 'view', 37, 4, 0, '', 'categories', 'view', 1, 'default'),
 (69, 'edit', 47, 1, 0, '', 'media', 'admin_edit', 1, 'default'),
 (68, 'add', 47, 1, 0, '', 'media', 'admin_add', 1, 'default'),
-(67, 'admin index', 47, 1, 0, '', 'media', 'admin_index', 1, 'default');
+(67, 'admin index', 47, 1, 0, '', 'media', 'admin_index', 1, 'default'),
+(70, 'delete', 47, 1, 0, '', 'media', 'admin_delete', 1, 'default'),
+(71, 'index', 47, 1, 0, '', 'media', 'index', 1, 'default'),
+(72, 'vote', 42, 1, 0, 'polls', 'polls', 'vote', 1, 'default'),
+(73, 'admin index', 48, 1, 0, 'links', 'links', 'admin_index', 1, 'default'),
+(74, 'admin add', 48, 1, 0, 'links', 'links', 'admin_add', 1, 'default'),
+(75, 'admin edit', 48, 1, 0, 'links', 'links', 'admin_edit', 1, 'default'),
+(76, 'admin delete', 48, 1, 0, 'links', 'links', 'admin_delete', 1, 'default'),
+(77, 'view', 47, 1, 0, '', 'media', 'view', 1, 'default'),
+(78, 'view', 43, 1, 0, '', 'files', 'view', 1, 'default'),
+(79, 'index', 43, 1, 0, '', 'files', 'index', 1, 'default'),
+(80, 'edit', 49, 1, 0, '', 'users', 'edit', 1, 'default'),
+(81, 'profile', 49, 1, 0, '', 'users', 'profile', 1, 'default');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}roles` (`id`, `title`, `defaults`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'admin', NULL, '0000-00-00 00:00:00', '2012-06-24 22:50:05', '0000-00-00 00:00:00'),
@@ -157,7 +172,8 @@ INSERT INTO `{prefix}settings` (`id`, `title`, `created`, `deleted_time`) VALUES
 (2, 'Appearance', '2012-07-15 18:03:05', '0000-00-00 00:00:00'),
 (3, 'Users', '2012-08-15 14:06:03', '0000-00-00 00:00:00'),
 (4, 'Articles', '2012-08-17 17:04:58', '0000-00-00 00:00:00'),
-(5, 'Admin', '2012-09-22 22:41:45', '0000-00-00 00:00:00');
+(5, 'Admin', '2012-09-22 22:41:45', '0000-00-00 00:00:00'),
+(6, 'Comments', '2012-12-09 22:41:45', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `data_options`, `setting_type`, `setting_id`, `model`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'sitename', '<p>What do you think? A site...name</p>', 'Alpha', NULL, 'text', 1, NULL, '2012-06-27 22:55:11', '2012-06-27 23:30:01', '0000-00-00 00:00:00'),
@@ -171,7 +187,12 @@ INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `dat
 (12, 'User Status', '<p>Choosing email activation, user must activate their account via an email link sent to them. Staff activation requires one with access to manually activate a user account.</p>', 'Staff Activation', '["Email Activation","Staff Activation"]', 'dropdown', 3, NULL, '2012-08-19 19:14:53', '2012-08-19 23:02:13', '0000-00-00 00:00:00'),
 (21, 'User Register Email Subject', '', 'New Account Created', NULL, 'text', 3, NULL, '2012-08-19 21:03:07', '2012-08-19 23:02:13', '0000-00-00 00:00:00'),
 (22, 'Number of Articles to list on Category Page', '', '3', NULL, 'text', 4, NULL, '2012-09-22 22:21:23', '2012-10-07 21:45:12', '0000-00-00 00:00:00'),
-(23, 'Number of Items Per Page', '', '9', NULL, 'text', 5, NULL, '2012-09-22 22:41:52', '2012-09-22 23:03:56', '0000-00-00 00:00:00');
+(23, 'Number of Items Per Page', '', '9', NULL, 'text', 5, NULL, '2012-09-22 22:41:52', '2012-09-22 23:03:56', '0000-00-00 00:00:00'),
+(28, 'Comment Post WYSIWYG Editor', '<p>Will the wysiwyg editor be enabled when posting a comment?</p>', 'Yes', '["Yes","No"]', 'dropdown', 6, NULL, '2012-12-09 20:38:23', '2012-12-09 21:47:50', '0000-00-00 00:00:00'),
+(27, 'Comment Post Flood Limit', '<p>x amount of seconds before a user can post another comment. 30 by default.</p>', '30', NULL, 'text', 6, NULL, '2012-12-09 20:37:44', '2012-12-09 21:47:50', '0000-00-00 00:00:00'),
+(26, 'Comment Post Captcha Non-Logged In', '<p>Does a non-logged in user have to enter in a captcha code, to have their comment posted?</p>\r\n<p>*note* The guest group must have permission to view an article/to post a comment, in order for this to have effect.</p>', 'Yes', '["Yes","No"]', 'dropdown', 6, NULL, '2012-12-09 20:36:04', '2012-12-09 21:47:50', '0000-00-00 00:00:00'),
+(25, 'Registration Captcha', '<p>When signing up, will a re-captcha be shown? (and is required - we recommend to keep this enabled)</p>', 'Yes', '["Yes","No"]', 'radio', 3, NULL, '2012-12-09 20:34:11', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(24, 'User Password Reset', '<p>Set this to 0 to disable, if more than 0 then x is the amount of days that can pass before a new password is required. This is mandated upon login.</p>', '0', NULL, 'text', 3, NULL, '2012-10-27 12:47:54', '2012-11-16 23:40:22', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}templates` (`id`, `title`, `location`, `theme_id`, `template`, `created`, `modified`, `deleted_time`) VALUES
 (15, 'Admin Add Articles', 'Articles/admin_add.ctp', 1, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),

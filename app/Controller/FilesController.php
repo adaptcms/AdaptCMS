@@ -197,7 +197,7 @@ class FilesController extends AppController {
 					fwrite($fh, $this->request->data['File']['content']);
 					fclose($fh);
 				}
-				
+
 				$save = $this->File->save($this->request->data);
 				$redirect = array('action' => 'index');
 			}

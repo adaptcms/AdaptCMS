@@ -4751,7 +4751,8 @@ input[type="submit"].btn.btn-mini {
 }
 
 .pagination ul > li > a,
-.pagination ul > li > span {
+.pagination ul > li > span,
+.pagination ul > span > li a {
   float: left;
   padding: 0 14px;
   line-height: 38px;
@@ -4794,6 +4795,17 @@ input[type="submit"].btn.btn-mini {
   -webkit-border-radius: 0 3px 3px 0;
      -moz-border-radius: 0 3px 3px 0;
           border-radius: 0 3px 3px 0;
+}
+
+.pagination li {
+  display: inline;
+}
+
+.pagination ul > li:first-child > a, .pagination ul > span:first-child > li > a {
+  border-left-width: 1px;
+  -webkit-border-radius: 3px 0 0 3px;
+     -moz-border-radius: 3px 0 0 3px;
+          border-radius: 3px 0 0 3px;
 }
 
 .pagination-centered {

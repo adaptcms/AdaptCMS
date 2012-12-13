@@ -3,8 +3,13 @@ App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
 
 	public $name = 'User';
-	public $hasMany = array('Article');
-	public $belongsTo = array('Role');
+	public $hasMany = array(
+    'Article',
+    'Comment'
+  );
+	public $belongsTo = array(
+    'Role'
+  );
 
 	public $validate = array(
       'username' => array(
@@ -33,11 +38,16 @@ class User extends AppModel {
             'message' => 'Password cannot be empty'
           ),
           array(
-            'rule' => array('minLength', 4),
+            'rule' => array(
+              'minLength', 
+              4
+            ),
             'message' => 'Must be at least 4 characters'
           ),
           array(
-            'rule' => array('passCompare'),
+            'rule' => array(
+              'passCompare'
+            ),
             'message' => 'The passwords do not match'
           )
       )
@@ -55,5 +65,20 @@ class User extends AppModel {
         }
         return true;
     }
-	
+
+    public function getSecurityAnswers($data)
+    {
+      if (!empty($data['User']['security_answers'])) {
+        $results = array();
+
+        foreach(json_decode($data['User']['security_answers']) as $key => $row) {
+          if (!empty($row->question) && !empty($row->answer)) {
+            $results[$key]['question'] = str_replace("'","",$row->question);
+            $results[$key]['answer'] = $row->answer;
+          }
+        }
+
+        return $results;
+      }
+    }
 }

@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}comments` (
   `author_email` varchar(255) DEFAULT NULL,
   `author_website` varchar(255) DEFAULT NULL,
   `author_ip` varchar(255) DEFAULT NULL,
-  `status` int(3) DEFAULT '0',
+  `active` int(1) DEFAULT '0',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

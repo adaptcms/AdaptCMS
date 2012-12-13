@@ -6,10 +6,13 @@ class Comment extends AppModel {
 		'Article' => array(
 			'className' => 'Article',
 			'foreignKey' => 'article_id'
-			),
+		),
 		'User' => array(
 			'className' => 'User',
 			'foreignKey' => 'user_id'
-			)
-		);
+		)
+	);
+	public $actsAs = array(
+		'Tree'
+	);
 }

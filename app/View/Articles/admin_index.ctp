@@ -42,7 +42,20 @@
     <?php foreach ($this->request->data as $data): ?>
     <tr>
         <td>
-            <?= $this->Html->link($data['Article']['title'], array('admin' => false, 'controller' => 'Articles', 'action' => 'view', $data['Article']['slug'])); ?>
+            <?= $this->Html->link($data['Article']['title'], array('admin' => false, 'controller' => 'Articles', 'action' => 'view', $data['Article']['slug'])) ?>
+
+            <span class="pull-right">
+                <?php if ($data['Comment']['count'] > 0): ?> 
+                    <?= $this->Html->link('<i class="icon icon-comment" title="# of Comments"></i> '.$data['Comment']['count'], array(
+                        'action' => 'edit', 
+                        $data['Article']['id'], 
+                        'comments'
+                        ), array('escape' => false)
+                    ) ?>
+                <?php else: ?>
+                    <i class="icon icon-comment" title="# of Comments"></i> <?= $data['Comment']['count'] ?>
+                <?php endif ?>
+            </span>
         </td>
         <td><?= $data['User']['username'] ?></td>
         <td><?= $data['Category']['title'] ?></td>

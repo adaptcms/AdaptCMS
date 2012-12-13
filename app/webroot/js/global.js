@@ -18,6 +18,21 @@ $(document).ready(function() {
 		
 		$("#" + reset_class).val('');
 	});
+
+	/*
+	 *
+	*/
+	$("input[type='checkbox'].check-all").on('change', function(e) {
+		e.preventDefault();
+
+		if (!$(this).attr('checked')) {
+			$(this).next().text('Check All');
+			$(this).parent().parent().find(':checkbox:not(.check-all)').attr('checked', false);
+		} else {
+			$(this).next().text('Un-Check All');
+			$(this).parent().parent().find(':checkbox:not(.check-all)').attr('checked', true);
+		}
+	});
 });
 
 // Grab all required inputs on page, put in a * to note that it's a required field

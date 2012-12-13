@@ -58,12 +58,14 @@ $(document).ready(function(){
         }
     });
 
-    $("#ModuleLimit").live('change', function() {
+    $("#ModuleLimit").on('change', function() {
         if ($(this).val() == 1) {
             $("#data").show();
+            $("#next-step div").first().hide();
         } else {
             $("#data").hide();
             $("#ModuleData").val('');
+            $("#next-step div").first().show();
         }
     });
 
@@ -90,10 +92,24 @@ $(document).ready(function(){
     	}
     });
 
+    $("#ModuleOrderBy").on('change', function() {
+        if (!$(this).val() || $(this).val() == 'rand') {
+            $("#next-step div").first().next().hide();
+        } else {
+            $("#next-step div").first().next().show();
+        }
+    });
+
     get_model_data("model_field");
 
     if ($("#ModuleLimit").val() == 1) {
         $("#data").show();
+    } else {
+        $("#next-step div").first().show();
+
+        if ($("#ModuleOrderBy").val() && $("#ModuleOrderBy").val() != "rand") {
+            $("#next-step div").first().next().show();
+        }
     }
 
 	if ($("#ModuleModel").val()) {
@@ -311,6 +327,30 @@ function get_model_data(type)
 <?php endif ?>
 
 <div id="next-step" style="display:none">
+    <?= $this->Form->input('order_by', array(
+            'empty' => '- Choose -',
+            'options' => array(
+                'id' => 'ID',
+                'title' => 'Title',
+                'created' => 'Created',
+                'modified' => 'Modified',
+                'rand' => 'Random'
+            ),
+            'div' => array(
+                'style' => 'display: none'
+            )
+    )) ?>
+
+    <?= $this->Form->input('order_dir', array(
+            'options' => array(
+                'asc' => 'Ascending',
+                'desc' => 'Descending'
+            ),
+            'div' => array(
+                'style' => 'display: none'
+            )
+    )) ?>
+
 	<?= $this->Form->input('limit', array(
 	        'label' => "How many <strong></strong> to display?",
 	        'class' => 'required',

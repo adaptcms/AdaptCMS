@@ -12,15 +12,17 @@
     <?php
       echo $this->Html->meta('icon');
 
-      // echo $this->Html->css('cake.generic');
-
       echo $this->fetch('meta');
       echo $this->fetch('css');
       echo $this->fetch('script');
     ?>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
-    <?= $this->Html->script('//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js') ?>
+    <?= $this->Html->script('jquery.min.js') ?>
+    <?= $this->Html->script('jquery.validate.min.js') ?>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>-->
+    <!-- <?= $this->Html->script('//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js') ?> -->
     <?= $this->Html->script('global.js') ?>
+    <?= $this->AutoLoadJS->getJs() ?>
+    <?= $this->AutoLoadJS->getCss() ?>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
@@ -162,6 +164,10 @@
               <li class="nav-header">Poll</li>
 
               <?= $this->element('show_poll', array('data' => $module_data['show-poll'])) ?>
+
+              <li class="nav-header">Links</li>
+
+              <?= $this->element('links_list', array('data' => $module_data['latest-links'])) ?>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->

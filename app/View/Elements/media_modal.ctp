@@ -22,7 +22,8 @@ $(document).ready(function() {
 	*/
 
 	$("#media-modal .file_info img, #selected-images .file_info img").live('click', function() {
-		$(this).parent().find('input:checkbox').trigger('click');
+		$(this).parent().find('input:checkbox').trigger('change');
+		$(this).popover('hide');
 	});
 
 	$("#media-modal .file_info img, #selected-images .file_info img").popover({
@@ -96,14 +97,58 @@ $(document).ready(function() {
 
 	 /*
 	  */
+
+	/*
+	 * Limit for other components, currently only used with Links Plugin
+	 * Call this element with a limit option
+	 */
+
+	<?php if (!empty($limit)): ?>
+		var count = $('#media-modal .modal-body .file_info.span4 input:checked').length;
+
+		if (count == <?= $limit ?>) {
+			disabledImages('disable');
+		}
+
+		$("#media-modal").on('change', '.modal-body .file_info.span4 input:checkbox', function() {
+			var id = $(this).attr('id');
+			var checked = $(this).attr('checked');
+			var count = $('#media-modal .modal-body .file_info.span4 input:checked').length;
+
+			if (count == <?= $limit ?>) {
+				if (checked) {
+					disabledImages('not-checked');
+				}
+			} else if (!checked) {
+				disabledImages('enable');
+			}
+		});
+
+		$("#selected-images .file_info img, #selected-images .file_info input:checkbox").on('click', function() {
+			disabledImages('disable');
+		});
+	<?php endif ?>
 });
+
+function disabledImages(type)
+{
+	if (type == 'disable') {
+		$('#media-modal').find('input:disabled').parent().parent().css('opacity', '1.0');
+		$('#media-modal').find('input:disabled').attr('disabled', false);
+	} else if (type == 'enable') {
+		$('#media-modal').find('input:disabled').parent().parent().css('opacity', '1.0');
+		$('#media-modal').find('input:disabled').attr('disabled', false);
+	} else if (type == 'not-checked') {
+		$('#media-modal').find('input:checkbox:not(:checked)').attr('disabled', true);
+		$('#media-modal').find('input:checkbox:not(:checked)').parent().parent().css('opacity', '0.4');
+	}
+}
 
 function getImages()
 {
 	$("#media-modal .file:checked").each(function(i, val) {
 		if (!$(this).attr('disabled')) {
 			var id = $(this).parent().parent().attr('id');
-			console.log(id);
 
 			if ($("#selected-images #" + id).length == 0) {
 				var html = $(this).parent().parent().clone();
@@ -151,17 +196,25 @@ function loadAjax(href)
 					<div class="clearfix"></div><br />
 				<?php endif ?>
 
-				<?= $this->element('media_modal_image', array('image' => $row['File'], 'key' => $key)) ?>
+				<?= $this->element('media_modal_image', array(
+						'image' => $row['File'], 
+						'key' => $key,
+						'limit' => (!empty($limit) ? $limit : '')
+				)) ?>
 			<?php endforeach ?>
-		<?php endif ?>
 
-		<div class="clearfix"></div>
-		<?= $this->element('admin_pagination') ?>
+			<div class="clearfix"></div>
+			<?= $this->element('admin_pagination') ?>
+		<?php else: ?>
+			No Images to Select
+		<?php endif ?>
 	</div>
 	<div class="modal-footer">
 		<div class="pull-left form-inline">
-			<?= $this->Form->input('select_all', array('type' => 'checkbox', 'div' => false)) ?>
-			<?= $this->Form->input('select_none', array('type' => 'checkbox', 'div' => false)) ?>
+			<?php if (empty($limit)): ?>
+				<?= $this->Form->input('select_all', array('type' => 'checkbox', 'div' => false)) ?>
+				<?= $this->Form->input('select_none', array('type' => 'checkbox', 'div' => false)) ?>
+			<?php endif ?>
 
 			<?= $this->Form->input('sort_by', array(
 				'empty' => '- Sort Images -',

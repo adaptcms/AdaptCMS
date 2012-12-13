@@ -107,7 +107,7 @@ class AppController extends Controller {
 			}
 		} else {
 			if (!empty($this->params->prefix) && $this->params->prefix == "admin" or 
-				!empty($this->params->pass) && $this->params->pass[0] == "admin") {
+				!empty($this->params->pass) && $this->params->pass[0] == "admin" && strtolower($this->params->controller) != "users") {
 				$this->layout = "admin";
 				$this->set('prefix', 'admin');
 			} elseif (!empty($this->params->prefix) && $this->params->prefix == "rss") {
@@ -142,6 +142,7 @@ class AppController extends Controller {
 				$this->Auth->allow($this->params->action);
 		} elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id')
 			|| !empty($this->params->pass) && $this->params->pass[0] == "admin" && !$this->Auth->User('id')
+			&& strtolower($this->params->controller) != "users"
 			) {
 				$this->Auth->deny($this->params->action);
 		} elseif ($role_id) {

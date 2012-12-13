@@ -69,7 +69,7 @@
         echo $this->Form->hidden('filesize', array('value' => $data['File']['filesize']));
     }
 
-    echo $this->Form->hidden('id');
+    echo $this->Form->hidden('id', array('value' => $data['File']['id']));
     echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
     
     echo $this->Form->end('Submit');

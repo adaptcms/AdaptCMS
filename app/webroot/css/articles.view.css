@@ -1,0 +1,25 @@
+#comments .comment.level_1 {
+	margin-left: 0!important;
+}
+
+#comments .comment.level_2 {
+	margin-left: 25px!important;
+}
+
+#comments .comment.level_3 {
+	margin-left: 50px!important;
+}
+
+.new_comment {
+	background-color: orange;
+	opacity: 0.7;
+}
+
+.PostComment.span11 {
+	display: block;
+	clear: both;
+}
+
+.PostComment button[type='cancel'] {
+	margin-left: 5px;
+}

@@ -31,12 +31,9 @@
   <?php
     echo $this->Html->meta('icon');
 
-    // echo $this->Html->css('cake.generic');
-
     echo $this->fetch('meta');
     echo $this->fetch('css');
     echo $this->fetch('script');
-    // echo $scripts_for_layout;
   ?>
     <?php if (1 == 1): ?>
     <?= $this->Html->script('jquery.min.js') ?>
@@ -55,6 +52,9 @@
     <?= $this->Html->script('//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js') ?>
 
     <?= $this->Html->script('global.js') ?>
+
+    <?= $this->AutoLoadJS->getJs() ?>
+    <?= $this->AutoLoadJS->getCss() ?>
   </head>
 
   <body>
