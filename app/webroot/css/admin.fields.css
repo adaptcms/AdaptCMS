@@ -1,0 +1,9 @@
+ul#sort-list li {
+	padding: 10px;
+	min-width: 250px;
+	text-align: left;
+	margin-bottom: 7px;
+}
+ul#sort-list li i {
+	margin-right: 7px;
+}

@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<?= $this->webroot ?>css/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="<?= $this->webroot ?>js/jquery.fancybox.js"></script>
+<?= $this->Html->script('jquery.fancybox.js') ?>
+<?= $this->Html->css('fancybox/jquery.fancybox') ?>
 
 <script>
 $(document).ready(function() {
@@ -28,12 +28,12 @@ $(document).ready(function() {
 
 		<?= $this->Html->link(
 				$this->Html->image(
-					$this->webroot.$row['File']['dir'].'thumb/'.$row['File']['filename'],
+					'/'.$row['File']['dir'].'thumb/'.$row['File']['filename'],
 					array(
 						'style' => 'border: 1px solid #000'
 					)
 				),
-				$this->webroot.$row['File']['dir'].$row['File']['filename'],
+				'/'.$row['File']['dir'].$row['File']['filename'],
 				array(
 					'class' => 'fancybox',
 					'rel' => $media['Media']['title'],

@@ -74,7 +74,16 @@
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="#">Profile</a></li>
+              <li>
+                <?= $this->Html->link('Profile', 
+                  array(
+                    'admin' => false,
+                    'controller' => 'users', 
+                    'action' => 'profile', 
+                    $username
+                  )
+                ) ?>
+              </li>
               <li class="divider"></li>
               <li><?= $this->Html->link("Sign Out", array(
                   'controller' => 'Users', 

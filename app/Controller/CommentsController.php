@@ -1,4 +1,7 @@
 <?php
+App::import('Vendor', 'ayah');
+App::import('Vendor', 'ayah_config');
+App::import('Vendor', 'securimage');
 
 class CommentsController extends AppController
 {
@@ -31,16 +34,21 @@ class CommentsController extends AppController
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-        if (!$this->Auth->user('id')) {
-            $message = 'Guests cannot post comments';
-        }
-
     	$this->request->data['Comment']['author_ip'] = $_SERVER['REMOTE_ADDR'];
     	$this->request->data['Comment']['active'] = 1;
     	$this->request->data['Comment']['created'] = date('Y-m-d H:i:s');
 
     	$this->loadModel('SettingValue');
     	$flood = $this->SettingValue->findByTitle('Comment Post Flood Limit');
+        $captcha = $this->SettingValue->findByTitle('Comment Post Captcha Non-Logged In');
+
+        $securimage = new Securimage();
+
+        if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes' && 
+            !$this->Auth->user('id') && 
+            !$securimage->check($this->request->data['Comment']['captcha'])) {
+            $message = 'Invalid Captcha Answer. Please try again.';
+        }
 
     	if (!empty($flood['SettingValue']['data']) && $flood['SettingValue']['data'] != 0) {
 	    	$check = $this->Comment->find('first', array(
@@ -66,7 +74,6 @@ class CommentsController extends AppController
     	$this->Comment->create();
 
     	if (empty($message) && $this->Comment->save($this->request->data)) {
-    	// if (1 == 1 && empty($message)) {
     		return json_encode(array(
     			'status' => true,
     			'message' => '

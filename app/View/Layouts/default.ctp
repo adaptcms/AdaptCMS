@@ -18,6 +18,7 @@
     ?>
     <?= $this->Html->script('jquery.min.js') ?>
     <?= $this->Html->script('jquery.validate.min.js') ?>
+    <?= $this->Html->script('bootstrap.min.js') ?>
     <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>-->
     <!-- <?= $this->Html->script('//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js') ?> -->
     <?= $this->Html->script('global.js') ?>

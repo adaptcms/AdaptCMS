@@ -18,7 +18,7 @@ class MediaController extends AppController
 					'File.deleted_time' => '0000-00-00 00:00:00',
 					'File.mimetype LIKE' => '%image%'
 				),
-				'limit' => 3
+				'limit' => 9
 			);
 
 			$images = $this->paginate('File');
@@ -135,18 +135,22 @@ class MediaController extends AppController
 
 	public function view($slug = null)
 	{
-
 		$joins = array(
-		    array(
-		        'table' => '(SELECT media.*, media_files.media_id,media_files.file_id
-		                 FROM media_files
-		                 JOIN media ON media_files.media_id = media.id)',
+			array(
+		        'table' => 'media_files',
+		        'alias' => 'MediaFile',
+		        'conditions' => array(
+		            'File.id = MediaFile.file_id',
+		        )
+			),
+			array(
+		        'table' => 'media',
 		        'alias' => 'Media',
 		        'conditions' => array(
-		            'File.id = Media.file_id',
+		            'Media.id = MediaFile.media_id',
 		            "Media.slug = '".$slug."'"
 		        )
-		    )
+			)
 		);
 
 		$this->paginate = array(
@@ -155,6 +159,13 @@ class MediaController extends AppController
 
 		$this->request->data = $this->paginate('File');
 
-		$this->set('media', $this->Media->findBySlug($slug));
+		$media = $this->Media->findBySlug($slug);
+
+		if (empty($media)) {
+			$this->Session->setFlash('No Library with the slug `' . $slug . '`');
+			$this->redirect('/');
+		}
+
+		$this->set(compact('media'));
 	}
 }

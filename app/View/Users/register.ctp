@@ -104,6 +104,10 @@ $(document).ready(function() {
         <?php endif ?>
     <?php endif ?>
 
+    <?php if (!empty($captcha_setting)): ?>
+        <?= $this->Captcha->form() ?>
+    <?php endif ?>
+
     <?= $this->Form->end(array(
         'label' => 'Submit',
         'class' => 'btn',
@@ -113,6 +117,8 @@ $(document).ready(function() {
 <div class="pull-right">
     <h1>3rd Party Signup</h1>
 
-    <?= $this->Facebook->registration() ?>
+    <?php if (!empty($this->Facebook)): ?>
+        <?= $this->Facebook->registration() ?>
+    <?php endif ?>
 </div>
 <div class="clearfix"></div>

@@ -12,6 +12,12 @@
 		)) ?>
 	<?php endif ?>
 
+	<?php if (!empty($captcha_setting)): ?>
+		<div id="captcha">
+			<?= $this->Captcha->form() ?>
+		</div>
+	<?php endif ?>
+
 	<?= $this->Form->button('Post Comment', array(
 		'type' => 'submit',
 		'class' => 'btn'

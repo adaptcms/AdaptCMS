@@ -1,9 +1,11 @@
 <?php
+App::import('Vendor', 'ayah');
+App::import('Vendor', 'ayah_config');
 
 class ArticlesController extends AppController {
 	public $name = 'Articles';
 	public $paginate = array();
-
+	
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
@@ -79,12 +81,11 @@ class ArticlesController extends AppController {
 		$fields = $this->Article->Category->Field->find('all', array(
 			'conditions' => array(
 				'Field.category_id' => $category_id
-				),
+			),
 			'order' => array(
 				'Field.field_order ASC'
-				)
 			)
-		);
+		));
 		$this->set('category_id', $category_id);
 		$this->set(compact('fields'));
 		$this->set('radio_fields', $this->Article->searchArray($fields, "radio"));
@@ -183,9 +184,8 @@ class ArticlesController extends AppController {
 	        	'contain' => array(
         			'ArticleValue',
         			'Category'
-        			)
 	        	)
-	        );
+	        ));
 
 	        $this->set('related_articles', $this->Article->getRelatedArticles(
 	        	$id, 
@@ -195,12 +195,11 @@ class ArticlesController extends AppController {
 			$fields = $this->Article->Category->Field->find('all', array(
 				'conditions' => array(
 					'Field.category_id' => $this->request->data['Category']['id']
-					),
+				),
 				'order' => array(
 					'Field.field_order ASC'
-					)
 				)
-			);
+			));
 
 			$this->paginate = array(
 				'conditions' => array(
@@ -218,6 +217,7 @@ class ArticlesController extends AppController {
 	    } else {
         	$this->request->data['Article']['slug'] = $this->slug($this->request->data['Article']['title']);
         	$this->request->data['Article']['user_id'] = $this->Auth->user('id');
+	        
 	        if (!empty($this->request->data['FieldData'])) {
 	        	foreach($this->request->data['FieldData'] as $key => $row) {
 	        		$this->request->data['FieldData'][$key] = $this->slug($row);
@@ -267,11 +267,14 @@ class ArticlesController extends AppController {
 	        				$this->File->save($fileUpload['File']);
 	        			}
 
+	        			unset($this->request->data['ArticleValue'][$key]);
+
         			} elseif (!empty($row['delete']) && $row['delete'] == 1) {
         				$this->Article->ArticleValue->delete($row['id']);
+        				unset($this->request->data['ArticleValue'][$key]);
+        			} elseif (empty($row['id']) && empty($row['data'])) {
+        				unset($this->request->data['ArticleValue'][$key]);
         			}
-
-        			unset($this->request->data['ArticleValue'][$key]);
 	        	}
         	}
 
@@ -447,8 +450,6 @@ class ArticlesController extends AppController {
 			)
 		);
 
-		$this->Article->Comment->article_id = $this->request->data['Article']['id'];
-		$this->request->data['Comment'] = $this->Article->Comment->children();
 		$this->request->data['Comments'] = $this->Article->Comment->find('threaded', array(
 			'conditions' => array(
 				'Comment.article_id' => $this->request->data['Article']['id'],
@@ -458,6 +459,15 @@ class ArticlesController extends AppController {
 				'User'
 			)
 		));
+
+		if (!$this->Auth->user('id')) {
+			$this->loadModel('SettingValue');
+    		$captcha = $this->SettingValue->findByTitle('Comment Post Captcha Non-Logged In');
+
+    		if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes') {
+    			$this->set('captcha_setting', true);
+    		}
+    	}
 
 		if (
 			empty($this->request->data['Article']['id']) ||

@@ -1,6 +1,7 @@
 <?php
 App::uses('Controller', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
+App::import('Model', 'ConnectionManager');
 
 class AppController extends Controller {
 	public $components = array(
@@ -44,6 +45,7 @@ class AppController extends Controller {
 		'Cache', 
 		'LastFM', 
 		'AutoLoadJS',
+		'Captcha',
 		// 'Facebook.Facebook'
 	);
 	public $uses = array(
@@ -53,8 +55,12 @@ class AppController extends Controller {
 
 	public function beforeFilter()
 	{
-		if (file_exists(WWW_ROOT.'installer') && $this->params->controller != "install") {
-			$this->redirect(array('controller' => 'install', 'admin' => false));
+		if ($this->params->controller != "install") {
+			try {
+				$db = ConnectionManager::getDataSource('default');
+			} catch (Exception $e) {
+				$this->redirect(array('controller' => 'install', 'admin' => false));
+			}
 		}
 
 		parent::beforeFilter();

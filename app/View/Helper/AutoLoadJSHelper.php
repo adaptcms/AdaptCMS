@@ -9,6 +9,13 @@ class AutoLoadJSHelper extends AppHelper
 		'Html'
 	);
 
+	public function afterRenderFile($viewFile, $content)
+	{
+		$var = '<div id="webroot" style="display:none">'. $this->params->webroot . '</div></body>';
+
+		return str_replace('</body>', $var, $content);
+	}
+
 	public function getFiles($ext)
 	{
 		$controller = strtolower($this->params->controller);
@@ -25,17 +32,23 @@ class AutoLoadJSHelper extends AppHelper
 		$files = array(
 			'controller' => array(
 				'path' => WWW_ROOT.$ext.DS.$controller.'.'.$ext,
-				'file' => $controller.'.'.$ext
+				'file' => $controller.'.'.$ext,
+				'ext' => $ext
 			),
 			'action' => array(
 				'path' => WWW_ROOT.$ext.DS.$controller.'.'.$action.'.'.$ext,
-				'file' => $controller.'.'.$action.'.'.$ext
+				'file' => $controller.'.'.$action.'.'.$ext,
+				'ext' => $ext
 			)
 		);
 
 		foreach($files as $file) {
 			if (file_exists($file['path'])) {
-				echo $this->Html->script($file['file']);
+				if ($ext == 'js') {
+					echo $this->Html->script($file['file']);
+				} elseif ($ext == 'css') {
+					echo $this->Html->css($file['file']);
+				}
 			}
 		}
 

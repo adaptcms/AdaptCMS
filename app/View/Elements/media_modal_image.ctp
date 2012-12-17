@@ -1,6 +1,6 @@
 <div id="file-<?= $image['id'] ?>" class="file_info span4">
 	<?php if (file_exists($image_path.$image['dir'].$image['filename'])): ?>
-		<?= $this->Html->image($this->params->webroot.$image['dir'].'thumb/'.$image['filename'], array('style' => 'cursor: pointer')) ?>
+		<?= $this->Html->image('/'.$image['dir'].'thumb/'.$image['filename'], array('style' => 'cursor: pointer')) ?>
 	<?php else: ?>
 		<?= $this->Html->image('http://placehold.it/150x150', array('style' => 'cursor: pointer')) ?>
 	<?php endif ?>

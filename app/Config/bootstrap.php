@@ -155,10 +155,20 @@ Configure::write('Dispatcher.filters', array(
 	'CacheDispatcher'
 ));
 
-// CakePlugin::load('DebugKit');
-// CakePlugin::load('SupportTicket');
 CakePlugin::loadAll();
 
-Configure::write('alert_btn', '<button class="close" data-dismiss="alert">×</button>');
-
 require_once("config.php");
+
+App::uses('CakeLog', 'Log');
+CakeLog::config('debug', array(
+	'engine' => 'FileLog',
+	'types' => array('notice', 'info', 'debug'),
+	'file' => 'debug',
+));
+CakeLog::config('error', array(
+	'engine' => 'FileLog',
+	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
+	'file' => 'error',
+));
+
+define('Auth_OpenID_RAND_SOURCE', null);

@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="<?= $this->webroot ?>css/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-<script type="text/javascript" src="<?= $this->webroot ?>js/jquery.fancybox.js"></script>
+<?= $this->Html->script('jquery.fancybox.js') ?>
+<?= $this->Html->css('fancybox/jquery.fancybox') ?>
 
 <script>
 $(document).ready(function() {
@@ -18,7 +18,7 @@ $(document).ready(function() {
 		<?php if (!empty($row['File'][0]['id'])): ?>
 			<?= $this->Html->link(
 					$this->Html->image(
-						$this->webroot.$row['File'][0]['dir'].'thumb/'.$row['File'][0]['filename'],
+						'/'.$row['File'][0]['dir'].'thumb/'.$row['File'][0]['filename'],
 						array(
 							'style' => 'border: 1px solid #000'
 						)

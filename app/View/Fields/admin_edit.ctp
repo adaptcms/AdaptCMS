@@ -11,13 +11,23 @@
 	$("#FieldFieldType").live('change', function() {
 		fieldTypeToggle($(this).val());
 	});
- });
- </script>
+});
+</script>
 
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
+<?= $this->Html->script('jquery-ui-1.9.2.custom.min.js') ?>
 
-<h2 class="left">Edit Field</h2>
+<ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
+	<li class="active">
+		<a href="#main" data-toggle="tab">Edit Field</a>
+	</li>
+	<?php if (!empty($fields)): ?>
+		<li>
+			<a href="#order" data-toggle="tab">Field Order</a>
+		</li>
+	<?php endif ?>
+</ul>
 
 <div class="right">
     <?= $this->Html->link(
@@ -33,77 +43,121 @@
 </div>
 <div class="clearfix"></div>
 
-<?php
-    echo $this->Form->create('Field', array('action' => 'edit', 'class' => 'well'));
+<div id="myTabContent" class="tab-content">
+	<div class="tab-pane fade active in" id="main">
+		<?= $this->Form->create('Field', array('action' => 'edit', 'class' => 'well')) ?>
 
-    echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-    echo $this->Form->input('label', array('type' => 'text'));
-	echo $this->Form->input('category_id', array(
-		'empty' => '- Choose Category -',
-		'class' => 'required'
-	));
-	echo $this->Form->input('field_type', array(
-		'options' => array(
-			'text' => 'Text Input', 
-			'textarea' => 'Text Box', 
-			'dropdown' => 'Dropdown Selector', 
-			'multi-dropdown' => 'Dropdown Selector Multiple', 
-			'radio' => 'Radio', 
-			'check' => 'Checkbox', 
-			'file' => 'File', 
-			'img' => 'Image', 
-			'url' => 'Website URL', 
-			'num' => 'Number', 
-			'email' => 'Email', 
-			'date' => 'Date'
-			), 
-		'empty' => '- Choose -', 'class' => 'required'
-	));
-	?>
-	<div class="field_options" style="margin-bottom: 9px">
-		<?= $this->Form->input('field_options', array(
-			'div' => false, 
-			'style' => 'margin-bottom: 0',
-			'type' => 'text',
-			'value' => ''
-		)) ?>
-		<?= $this->Form->button('Add', array(
-			'class' => 'btn btn-info', 
-			'type' => 'button',
-			'id' => 'add-data'
-		)) ?>
-	</div>
-	<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
-	<div id="field_existing_data" style="display:none">
-		<?php
-			$field_options = json_decode($this->request->data['Field']['field_options']);
-			if (count($field_options) == 0) {
-				$field_style = "padding-top: 0px";
-			} else {
-				$field_style = "padding-top: 9px";
-			}
-		?>
-		<?php if (count($field_options) > 0): ?>
-			<?php foreach($field_options as $row): ?>
-				<span><?= $row ?></span>
-			<?php endforeach ?>
-		<?php endif ?>
-	</div>
-	<?php
-	echo $this->Form->input('description', array(
-		'rows' => 15, 
-		'style' => 'width: 45%',
-		'div' => array(
-			'class' => 'input text clear',
-			'style' => $field_style
-			)
-	));
-	echo $this->Form->input('field_limit_min', array('label' => 'Field Limit Minimum'));
-	echo $this->Form->input('field_limit_max', array('label' => 'Field Limit Maximum'));
-	echo $this->Form->input('field_order');
-	echo $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?'));
+			<h2>Edit Field</h2>
 
-    echo $this->Form->hidden('id');
-    echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-    echo $this->Form->end('Submit');
- ?>
+			<?php
+			    echo $this->Form->input('title', array(
+			    	'type' => 'text', 
+			    	'class' => 'required'
+			    ));
+			    echo $this->Form->input('label', array('type' => 'text'));
+				echo $this->Form->input('category_id', array(
+					'empty' => '- Choose Category -',
+					'class' => 'required'
+				));
+				echo $this->Form->input('field_type', array(
+					'options' => array(
+						'text' => 'Text Input', 
+						'textarea' => 'Text Box', 
+						'dropdown' => 'Dropdown Selector', 
+						'multi-dropdown' => 'Dropdown Selector Multiple', 
+						'radio' => 'Radio', 
+						'check' => 'Checkbox', 
+						'file' => 'File', 
+						'img' => 'Image', 
+						'url' => 'Website URL', 
+						'num' => 'Number', 
+						'email' => 'Email', 
+						'date' => 'Date'
+						), 
+					'empty' => '- Choose -', 'class' => 'required'
+				));
+				?>
+				<div class="field_options" style="margin-bottom: 9px">
+					<?= $this->Form->input('field_options', array(
+						'div' => false, 
+						'style' => 'margin-bottom: 0',
+						'type' => 'text',
+						'value' => ''
+					)) ?>
+					<?= $this->Form->button('Add', array(
+						'class' => 'btn btn-info', 
+						'type' => 'button',
+						'id' => 'add-data'
+					)) ?>
+				</div>
+				<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
+				<div id="field_existing_data" style="display:none">
+					<?php
+						$field_options = json_decode($this->request->data['Field']['field_options']);
+						if (count($field_options) == 0) {
+							$field_style = "padding-top: 0px";
+						} else {
+							$field_style = "padding-top: 9px";
+						}
+					?>
+					<?php if (count($field_options) > 0): ?>
+						<?php foreach($field_options as $row): ?>
+							<span><?= $row ?></span>
+						<?php endforeach ?>
+					<?php endif ?>
+				</div>
+				<?php
+				echo $this->Form->input('description', array(
+					'rows' => 15, 
+					'style' => 'width: 45%',
+					'div' => array(
+						'class' => 'input text clear',
+						'style' => $field_style
+					)
+				));
+				echo $this->Form->input('field_limit_min', array('label' => 'Field Limit Minimum'));
+				echo $this->Form->input('field_limit_max', array('label' => 'Field Limit Maximum'));
+				echo $this->Form->hidden('field_order');
+				echo $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?'));
+
+			    echo $this->Form->hidden('id');
+			    echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
+			?>
+
+		<?= $this->Form->end('Submit') ?>
+	</div>
+
+	<div class="tab-pane" id="order">
+		<div class="well">
+			<h2>Field Order</h2>
+
+			<ul id="sort-list" class="unstyled span6">
+				<?php if (!empty($fields)): ?>
+					<?php foreach($fields as $field): ?>
+						<li class="btn" id="<?= $field['Field']['id'] ?>">
+							<i class="icon icon-move"></i> 
+							<?php if ($this->request->data['Field']['id'] == $field['Field']['id']): ?>
+								<span>
+									<?= $this->request->data['Field']['title'] ?>
+								</span> 
+								<i class="icon icon-question-sign" data-content="<?= $this->request->data['Field']['description'] ?>" data-title="<?= $this->request->data['Field']['title'] ?>"></i> 
+								<span class="label label-info pull-right">
+									Current Field
+								</span>
+							<?php else: ?>
+								<span>
+									<?= $field['Field']['label'] ?>
+								</span> 
+								<i class="icon icon-question-sign" data-content="<?= $field['Field']['description'] ?>" data-title="<?= $field['Field']['label'] ?>"></i>
+							<?php endif ?>
+
+							<div class="clearfix"></div>
+						</li>
+					<?php endforeach ?>
+				<?php endif ?>
+			</ul>
+
+			<div class="clearfix"></div>
+		</div>
+	</div>
+</div>

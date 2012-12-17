@@ -24,10 +24,12 @@
     <h1>3rd Party Login</h1>
 
     <p>
-        <?= $this->Facebook->login() ?>
-        <?php if ($this->Session->check('Auth.User.login_type') && $this->Session->read('Auth.User.login_type') == "facebook"): ?>
-            <br /><br />
-            <?= $this->Facebook->logout(array('redirect' => array('action' => 'logout', 'controller' => 'users'), 'img' => 'facebook-logout.png')) ?>
+        <?php if (!empty($this->Facebook)): ?>
+            <?= $this->Facebook->login() ?>
+            <?php if ($this->Session->check('Auth.User.login_type') && $this->Session->read('Auth.User.login_type') == "facebook"): ?>
+                <br /><br />
+                <?= $this->Facebook->logout(array('redirect' => array('action' => 'logout', 'controller' => 'users'), 'img' => 'facebook-logout.png')) ?>
+            <?php endif ?>
         <?php endif ?>
     </p>
 

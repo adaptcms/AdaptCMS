@@ -259,3 +259,19 @@ INSERT INTO `{prefix}templates` (`id`, `title`, `location`, `theme_id`, `templat
 -- --------------------------------------------------------
 INSERT INTO `{prefix}themes` (`id`, `title`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Default', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}modules` (`id`, `title`, `component_id`, `template_id`, `location`, `limit`, `settings`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'show-poll', 8, 78, '["*"]', 1, '{"data":"1"}', '2012-10-13 23:19:41', '2012-11-17 18:01:28', '0000-00-00 00:00:00'),
+(2, 'latest-links', 17, 23, '["*"]', 3, '{"order_dir":"asc"}', '2012-11-25 23:02:45', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `created`, `modified`, `deleted_time`) VALUES
+(1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, '2012-11-25 23:09:37', '2012-11-25 23:10:38', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_polls` (`id`, `article_id`, `title`, `poll_type`, `created`, `modified`, `deleted_time`) VALUES
+(1, NULL, 'Your favorite sport?', NULL, '2012-07-07 21:51:38', '2012-08-08 09:34:16', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_poll_values` (`id`, `title`, `plugin_poll_id`, `votes`) VALUES
+(1, 'NBA', 1, 0),
+(2, 'NHL', 1, 0),
+(3, 'Soccer', 1, 0),
+(4, 'NFL', 1, 0);

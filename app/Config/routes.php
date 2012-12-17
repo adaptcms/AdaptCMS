@@ -1,5 +1,7 @@
 <?php
-	Router::parseExtensions('rss');
+	Router::mapResources(array('categories', 'articles'));
+	Router::parseExtensions();
+	// Router::parseExtensions('rss');
 	
 	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 /**

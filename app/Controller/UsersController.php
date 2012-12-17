@@ -252,14 +252,28 @@ class UsersController extends AppController {
 			}
 		}
 
+		$captcha = $this->SettingValue->findByTitle('Registration Captcha');
+
+		if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes') {
+			$this->set('captcha_setting', true);
+		}
+
 		$this->set(compact('security_options'));
 
         if ($this->request->is('post')) {
+        	App::import('Vendor', 'securimage');
+        	$securimage = new Securimage();
+
+	        if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes' && 
+	            !$securimage->check($this->request->data['captcha'])) {
+	            $message = 'Invalid Captcha Answer. Please try again.';
+	        }
+
         	$this->request->data['User']['security_answers'] = json_encode($this->request->data['Security']);
         	$role = $this->User->Role->findByDefaults('default-member');
         	$this->request->data['User']['role_id'] = $role['Role']['id'];
 
-            if ($this->User->save($this->request->data)) {
+            if (empty($message) && $this->User->save($this->request->data)) {
             	$this->request->data['User'] = array_merge($this->request->data['User'], array('id' => $this->User->id));
             	
 	        	if ($user_status['SettingValue']['data'] == "Email Activation") {
@@ -326,7 +340,11 @@ class UsersController extends AppController {
                     'action' => 'display', 'home'
                 ));
             } else {
-            	$this->Session->setFlash('Account could not be created', 'flash_error');
+            	if (empty($message)) {
+            		$message = 'Account could not be created';
+            	}
+
+            	$this->Session->setFlash($message, 'flash_error');
             }
         }
      }
