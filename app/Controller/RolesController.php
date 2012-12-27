@@ -5,15 +5,25 @@ class RolesController extends AppController {
 
 	public function admin_index()
 	{
-        $this->paginate = array(
-            'order' => 'Role.created DESC',
-            'limit' => $this->pageLimit,
-            'conditions' => array(
-            	'Role.deleted_time' => '0000-00-00 00:00:00'
-            )
-        );
+		if (!isset($this->params->named['trash'])) {
+			$this->paginate = array(
+	            'order' => 'Role.created DESC',
+	            'limit' => $this->pageLimit,
+	            'conditions' => array(
+	            	'Role.deleted_time' => '0000-00-00 00:00:00'
+	            )
+	        );
+		} else {
+			$this->paginate = array(
+	            'order' => 'Role.created DESC',
+	            'limit' => $this->pageLimit,
+	            'conditions' => array(
+	            	'Role.deleted_time !=' => '0000-00-00 00:00:00'
+	            )
+	        );
+        }
         
-        $this->request->data = $this->paginate('Role');
+		$this->request->data = $this->paginate('Role');
 	}
 
 	public function admin_add()
@@ -81,7 +91,7 @@ class RolesController extends AppController {
 
 	}
 
-	public function admin_delete($id = null, $title = null)
+	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
 
 		if ($this->request->is('post')) {
@@ -89,16 +99,43 @@ class RolesController extends AppController {
 	    }
 
 	    $this->Role->id = $id;
-	    if ($this->Role->saveField('deleted_time', $this->Role->dateTime())) {
+
+		if (!empty($permanent)) {
+	    	$delete = $this->Role->delete($id);
+	    } else {
+	    	$delete = $this->Role->saveField('deleted_time', $this->Role->dateTime());
+	    }
+
+	    if ($delete) {
 	    	// $this->Role->Permission->deleteAll(array('Permission.role_id' => $id));
 	    	// $this->Role->Permission->PermissionValue->deleteAll(array('PermissionValue.role_id' => $id));
 
 	        $this->Session->setFlash('The role `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The role `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
+	    }
+
+	    if (!empty($permanent)) {
+	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    } else {
+	    	$this->redirect(array('action' => 'index'));
 	    }
 	}
 
+	public function admin_restore($id = null, $title = null)
+	{
+		if ($this->request->is('post')) {
+	        throw new MethodNotAllowedException();
+	    }
+
+	    $this->Role->id = $id;
+
+	    if ($this->Role->saveField('deleted_time', '0000-00-00 00:00:00')) {
+	        $this->Session->setFlash('The role `'.$title.'` has been restored.', 'flash_success');
+	        $this->redirect(array('action' => 'index'));
+	    } else {
+	    	$this->Session->setFlash('The role `'.$title.'` has NOT been restored.', 'flash_error');
+	        $this->redirect(array('action' => 'index'));
+	    }
+	}
 }

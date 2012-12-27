@@ -10,7 +10,7 @@
 			'div' => false,
 			'class' => 'pull-left'
 	)) ?>
-	<?= $this->Html->link('View Results', '#', array('id' => 'results', 'class' => 'pull-right')) ?>
+	<?= $this->Html->link('View Results', '#', array('class' => 'pull-right results')) ?>
 	<?= $this->Form->hidden('id', array('value' => $data['Poll']['id'])) ?>
 
 	<div class="clearfix"></div>

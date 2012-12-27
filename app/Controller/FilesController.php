@@ -2,7 +2,9 @@
 
 class FilesController extends AppController {
 	public $name = 'Files';
-	public $helpers = array('Number');
+	public $helpers = array(
+		'Number'
+	);
 	public $file_types_editable = array(
 		'txt',
 		'php',

@@ -40,7 +40,7 @@ $(document).ready(function() {
     <?= $this->Form->hidden('filesize') ?>
 </div>
 <div id="file_contents" style="display:none">
-    <?php $this->EditArea->editor('FileContent') ?>
+    <?php $this->CodeMirror->editor('FileContent') ?>
 
     <?= $this->Form->input('content', array(
         'label' => 'File Contents',

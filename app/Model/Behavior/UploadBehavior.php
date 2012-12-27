@@ -81,7 +81,7 @@ class UploadBehavior extends ModelBehavior{
 		if (!empty($data)) {
 			foreach($data as $key => $file) {
 				
-				if (is_array($file) && $file['error'] != 4) {
+				if (is_array($file) && !empty($file['error']) && $file['error'] != 4) {
 					if (empty($file['name'])) {
 						$model->data[$model->name]['filename'] = $model->data[$model->name]['old_filename'];
 

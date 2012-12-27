@@ -1,5 +1,5 @@
 <?php
-	$this->EditArea->editor('PageContent');
+	$this->CodeMirror->editor('PageContent');
 ?>
 
 <script>

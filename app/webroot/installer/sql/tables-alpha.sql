@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}articles` (
   `category_id` int(11) DEFAULT '0',
   `status` int(3) DEFAULT '0',
   `publish_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `settings` longtext,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -18,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}article_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) DEFAULT '0',
   `field_id` int(11) DEFAULT '0',
+  `file_id` int(11) DEFAULT '0',
   `data` text,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
@@ -56,6 +58,19 @@ CREATE TABLE IF NOT EXISTS `{prefix}components` (
   `is_plugin` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}cron` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `component_id` int(11) NOT NULL,
+  `function` varchar(255) NOT NULL,
+  `run_time` datetime NOT NULL,
+  `period_amount` int(11) NOT NULL,
+  `period_type` varchar(255) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -137,9 +152,9 @@ CREATE TABLE IF NOT EXISTS `{prefix}modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `component_id` int(11) NOT NULL,
-  `template_id` int(11) NOT NULL,
+  `template_id` int(11),
   `location` longtext NOT NULL,
-  `limit` int(11) NOT NULL,
+  `limit` int(11),
   `settings` longtext NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

@@ -183,21 +183,22 @@
 
       <footer>
         <p>
-          <?= $this->Html->link(
-              $this->Html->image('cake.power.gif', array('style' => 'float: left', 'border' => '0')),
-              'http://www.cakephp.org/',
-              array('target' => '_blank', 'escape' => false)
-            );
-          ?>
-          <span style="float: right">
-          	&copy; 2006-12 <?= $this->Html->link('AdaptCMS Alpha', 'http://www.adaptcms.com') ?>
+          <span class="pull-left">
+            <?= $this->Html->link(
+                $this->Html->image('cake.power.gif', array('border' => '0')),
+                'http://www.cakephp.org/',
+                array('target' => '_blank', 'escape' => false)
+              );
+            ?>
+          </span>
+          <span class="pull-right">
+          	&copy; 2006-13 <?= $this->Html->link('AdaptCMS', 'http://www.adaptcms.com') ?>
           </span>
         </p>
       </footer>
 
     </div><!--/.fluid-container-->
 
-    <?= $this->element('sql_dump') ?>
   </body>
   <?php if (!empty($this->Facebook)): ?>
     <?= $this->Facebook->init() ?>

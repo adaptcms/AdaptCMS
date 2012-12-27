@@ -272,3 +272,4 @@ Cache::config('_cake_model_', array(
  */
 
 define('VIEW_PATH', ROOT . '/app/View/');
+define('ADAPTCMS_VERSION', 'Beta');

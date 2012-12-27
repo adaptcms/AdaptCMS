@@ -2,8 +2,8 @@
 
 class Article extends AppModel {
 
-	public $name = 'Article';
-	public $belongsTo = array(
+    public $name = 'Article';
+    public $belongsTo = array(
         'User' => array(
             'className'    => 'User',
             'foreignKey'   => 'user_id'
@@ -52,6 +52,12 @@ class Article extends AppModel {
                     $row['Article']['related_articles']
                 );
             }
+
+            $data[$key]['Comments'] = $this->Comment->find('count', array(
+                'conditions' => array(
+                    'Comment.article_id' => $row['Article']['id']
+                )
+            ));
         }
 
         return $data;
@@ -68,9 +74,12 @@ class Article extends AppModel {
             'contain' => array(
                 'Category',
                 'User'
-            ),
-            'limit' => $data['limit']
+            )
         );
+
+        if (!empty($data['limit'])) {
+            $cond['limit'] = $data['limit'];
+        }
 
         if (!empty($data['order_by'])) {
             if ($data['order_by'] == "rand") {

@@ -18,6 +18,31 @@ class ArticlesController extends AppController {
 	            )
 	        )));
 	    }
+
+	    if ($this->params->action == "admin_add" || $this->params->action == "admin_edit") {
+			$this->loadModel('File');
+			if ($this->params->action == "admin_edit") {
+				$images = $this->File->find('all', array(
+					'conditions' => array(
+						'File.deleted_time' => '0000-00-00 00:00:00',
+						'File.mimetype LIKE' => '%image%'
+					)
+				));
+			} else {
+				$this->paginate = array(
+					'conditions' => array(
+						'File.deleted_time' => '0000-00-00 00:00:00',
+						'File.mimetype LIKE' => '%image%'
+					),
+					'limit' => 9
+				);
+
+				$images = $this->paginate('File');
+			}
+			$image_path = WWW_ROOT;
+
+			$this->set(compact('images', 'image_path'));
+		}
 	}
 
 	public function admin_index()
@@ -108,6 +133,10 @@ class ArticlesController extends AppController {
 	            unset($this->request->data['FieldData']);
 	        }
 
+	        if (!empty($this->request->data['Article']['settings'])) {
+	        	$this->request->data['Article']['settings'] = json_encode($this->request->data['Article']['settings']);
+	    	}
+
 	        $this->request->data['Article']['publish_time'] = 
 	        	date("Y-m-d H:i:s", strtotime(
 	        		$this->request->data['Article']['publishing_date'] . ' ' .
@@ -182,10 +211,14 @@ class ArticlesController extends AppController {
 	        		'Article.id' => $id
 	        	),
 	        	'contain' => array(
-        			'ArticleValue',
+        			'ArticleValue' => array(
+        				'File'
+        			),
         			'Category'
 	        	)
 	        ));
+
+	        $this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
 
 	        $this->set('related_articles', $this->Article->getRelatedArticles(
 	        	$id, 
@@ -227,6 +260,11 @@ class ArticlesController extends AppController {
 	                str_replace("'","",json_encode($this->request->data['FieldData']));
 	            unset($this->request->data['FieldData']);
 	        }
+
+	        if (!empty($this->request->data['Article']['settings'])) {
+	        	$this->request->data['Article']['settings'] = json_encode($this->request->data['Article']['settings']);
+	    	}
+
 	        $this->request->data['Article']['publish_time'] = 
 	        	date("Y-m-d H:i:s", strtotime(
 	        		$this->request->data['Article']['publishing_date'] . ' ' .
@@ -341,10 +379,14 @@ class ArticlesController extends AppController {
 
 	    if ($delete) {
 	        $this->Session->setFlash('The article `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The article `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
+	    }
+
+	    if (!empty($permanent)) {
+	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    } else {
+	    	$this->redirect(array('action' => 'index'));
 	    }
 	}
 
@@ -444,11 +486,13 @@ class ArticlesController extends AppController {
 				'Category',
 				'User',
 				'ArticleValue' => array(
-					'Field'
-					)
+					'Field',
+					'File'
 				)
 			)
-		);
+		));
+
+		$this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
 
 		$this->request->data['Comments'] = $this->Article->Comment->find('threaded', array(
 			'conditions' => array(
@@ -517,7 +561,8 @@ class ArticlesController extends AppController {
 			),
 			'contain' => array(
 				'ArticleValue' => array(
-					'Field'
+					'Field',
+					'File'
 				),
 				'Category',
 				'User'

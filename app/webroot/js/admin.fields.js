@@ -109,6 +109,57 @@ $(document).ready(function() {
                 });
             }
         });
+
+        $("#FieldFieldType").on('change', function() {
+            fieldTypeToggle($(this).val());
+        });
+
+        $("#FieldImport").live('change', function() {
+            var id = $(this).val();
+
+            if (id) {
+                $.post($("#webroot").text() + "admin/fields/ajax_import/", 
+                {
+                    data:{
+                        Field:{
+                            id: id
+                        }
+                    }
+                }, function(new_data) {
+                    var data_parse = $.parseJSON(new_data);
+                    var data = data_parse.data;
+                    var field_options = $.parseJSON(data.Field.field_options);
+                    
+                    if (data.Field.id) {
+                        $("#field_data").html('');
+                        
+                        $("#FieldCategoryId").val(data.Field.category_id).trigger('change');
+                        $("#FieldFieldType").val(data.Field.field_type).trigger('change');
+                        $("#FieldFieldLimitMin").val(data.Field.field_limit_min);
+                        $("#FieldFieldLimitMax").val(data.Field.field_limit_max);
+                        
+                        if (data.Field.required == 1) {
+                            $("#FieldRequired").attr('checked', 'checked');
+                        } else {
+                            $("#FieldRequired").attr('checked', false);
+                        }
+
+                        if (field_options) {
+                            $.each(field_options, function(i, val) {
+                                $("#FieldFieldOptions").val(val);
+                                $("#add-data").trigger('click');
+                            });
+                        }
+                    }
+                });
+            } else {
+                $("#FieldCategoryId").val('').trigger('change');
+                $("#FieldFieldType").val('').trigger('change');
+                $("#FieldFieldLimitMin").val(0);
+                $("#FieldFieldLimitMax").val(0);
+                $("#FieldRequired").attr('checked', false);
+            }
+        });
     }
 });
 

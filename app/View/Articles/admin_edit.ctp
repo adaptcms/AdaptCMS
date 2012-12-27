@@ -203,7 +203,13 @@
 							$dataId[] = $data['id'];
 
 							if (json_decode($data['data'])) {
-								$value = json_decode($data['data']);
+								
+								if (!empty($data['File']['id'])) {
+									$value[] = json_decode($data['data']);
+									$value['File'] = $data['File'];
+								} else {
+									$value = json_decode($data['data']);
+								}
 							} else {
 								$value[] = $data['data'];
 							}
@@ -380,8 +386,30 @@
 				<?php endif; ?>
 			<?php
 			elseif ($field['Field']['field_type'] == "img"):
+				if (empty($value[0])) {
+					$value[0] = "";
+				}
 			?>
-				<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
+				<div>
+					<?= $this->Form->hidden('ArticleValue.'.$field['Field']['id'].'.data', array('value' => $value[0])) ?>
+					<?= $this->Form->hidden('ArticleValue.'.$field['Field']['id'].'.file_id', array('value' => $value[0])) ?>
+					<?= $this->Form->label($desc_icon.$field['Field']['label']) ?>
+
+					<?= $this->Html->link('Attach Image <i class="icon icon-white icon-upload"></i>', '#media-modal'.$field['Field']['id'], array('class' => 'btn btn-primary media-modal', 'escape' => false, 'data-toggle' => 'modal')) ?>
+
+					<p>&nbsp;</p>
+					<div class="selected-images span12 row">
+						<?php if (!empty($value['File'])): ?>
+							<?= $this->element('media_modal_image', array(
+								'image' => $value['File'], 
+								'key' => 0, 
+								'check' => true
+							)) ?>
+						<?php endif ?>
+					</div>
+				</div>
+
+				<?= $this->element('media_modal', array('limit' => 1, 'ids' => 'ArticleValue.'.$field['Field']['id'].'.data', 'id' => $field['Field']['id'])) ?>
 			<?php
 			elseif ($field['Field']['field_type'] == "url"):
 			?>
@@ -437,6 +465,14 @@
 			</div>
 
 			<div class="clear"></div>
+
+			<?= $this->Form->input('Article.settings.comments_status', array(
+				'options' => array(
+					'open' => 'Open',
+					'closed' => 'Closed'
+				),
+				'value' => $this->request->data['Article']['settings']->comments_status
+			)) ?>
 
 			<br />
 			<label>Current Status</label>

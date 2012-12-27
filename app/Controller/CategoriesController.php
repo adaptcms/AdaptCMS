@@ -2,7 +2,9 @@
 
 class CategoriesController extends AppController {
 	public $name = 'Categories';
-	public $uses = array('Category');
+	public $uses = array(
+		'Category'
+	);
 
 	public function admin_index()
 	{
@@ -32,6 +34,14 @@ class CategoriesController extends AppController {
         if ($this->request->is('post')) {
         		$this->request->data['Category']['slug'] = $this->slug($this->request->data['Category']['title']);
             if ($this->Category->save($this->request->data)) {
+        		$old_article_file = VIEW_PATH . 'Articles' . DS . 'view.ctp';
+            	$new_article_file = VIEW_PATH . 'Articles' . DS . $this->request->data['Category']['slug'] . '.ctp';
+            	copy($old_article_file, $new_article_file);
+
+        		$old_category_file = VIEW_PATH . 'Categories' . DS . 'view.ctp';
+            	$new_category_file = VIEW_PATH . 'Categories' . DS . $this->request->data['Category']['slug'] . '.ctp';
+            	copy($old_category_file, $new_category_file);
+
                 $this->Session->setFlash('Your category has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -72,6 +82,18 @@ class CategoriesController extends AppController {
 	    	$this->request->data['Category']['slug'] = $this->slug($this->request->data['Category']['title']);
 
 	        if ($this->Category->save($this->request->data)) {
+	        	if ($this->request->data['Category']['title'] != $this->request->data['Category']['old_title']) {
+	        		$old_slug = $this->slug($this->request->data['Category']['old_title']);
+
+	        		$old_article_file = VIEW_PATH . 'Articles' . DS . $old_slug . '.ctp';
+	            	$new_article_file = VIEW_PATH . 'Articles' . DS . $this->request->data['Category']['slug'] . '.ctp';
+	            	rename($old_article_file, $new_article_file);
+
+	        		$old_category_file = VIEW_PATH . 'Categories' . DS . $old_slug . '.ctp';
+	            	$new_category_file = VIEW_PATH . 'Categories' . DS . $this->request->data['Category']['slug'] . '.ctp';
+	            	rename($old_category_file, $new_category_file);
+	            }
+
 	            $this->Session->setFlash('Your category has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
@@ -90,16 +112,31 @@ class CategoriesController extends AppController {
 
 	    if (!empty($permanent)) {
 	    	$delete = $this->Category->delete($id);
+
+	    	$article_path = VIEW_PATH . 'Articles' . DS . $this->slug($title) . '.ctp';
+	    	$categories_path = VIEW_PATH . 'Categories' . DS . $this->slug($title) . '.ctp';
+
+	    	if (file_exists($article_path)) {
+	    		unlink($article_path);
+	    	}
+
+	    	if (file_exists($categories_path)) {
+	    		unlink($categories_path);
+	    	}
 	    } else {
 	    	$delete = $this->Category->saveField('deleted_time', $this->Category->dateTime());
 	    }
 
 	    if ($delete) {
 	        $this->Session->setFlash('The category `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The category `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
+	    }
+
+	    if (!empty($permanent)) {
+	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    } else {
+	    	$this->redirect(array('action' => 'index'));
 	    }
 	}
 
@@ -140,7 +177,8 @@ class CategoriesController extends AppController {
 			'contain' => array(
 				'Category',
 				'ArticleValue' => array(
-					'Field'
+					'Field',
+					'File'
 				)
 				
 			),

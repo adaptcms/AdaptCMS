@@ -1,3 +1,9 @@
+INSERT INTO `{prefix}articles` (`id`, `title`, `slug`, `tags`, `related_articles`, `user_id`, `category_id`, `status`, `publish_time`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'Welcome to AdaptCMS Alpha 2!', 'welcome-to-adaptcms-alpha-2', NULL, '', 1, 2, 1, '2012-12-19 22:27:00', '2012-12-19 22:27:53', '2012-12-19 22:30:36', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}article_values` (`id`, `article_id`, `field_id`, `file_id`, `data`) VALUES
+(1, 1, 1, 0, '<p>Hope you enjoy this very early release of AdaptCMS. Poke around, do as you wish and any bugs reported or feedback is greatly appreciated.</p>\r\n<p>Thank you,<br />AdaptCMS Team</p>');
+-- --------------------------------------------------------
 INSERT INTO `{prefix}categories` (`id`, `title`, `slug`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Reviews', 'reviews', '2012-06-03 22:18:57', '2012-06-05 23:41:40', '0000-00-00 00:00:00'),
 (2, 'News', 'news', '2012-06-03 22:19:02', '2012-06-05 23:41:47', '0000-00-00 00:00:00'),
@@ -23,28 +29,14 @@ INSERT INTO `{prefix}components` (`id`, `title`, `model_title`, `module_active`,
 (17, 'Links', 'Link', 1, 1);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}fields` (`id`, `title`, `label`, `field_order`, `category_id`, `field_type`, `description`, `field_options`, `field_limit_min`, `field_limit_max`, `required`, `rules`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'summary', 'summary', 0, 2, 'textarea', 'You ought to enter a short summary of the news article.', '', 0, 0, 1, NULL, '2012-06-03 23:24:24', '2012-06-10 16:14:47', '0000-00-00 00:00:00'),
-(12, 'basd', 'basd', 0, 3, 'dropdown', '', '["this","that","there"]', 0, 0, 0, '["required: false,"]', '2012-06-09 21:36:18', '2012-08-12 22:52:30', '0000-00-00 00:00:00'),
-(11, 'test', 'test', 0, 3, 'text', '', '', 2, 10, 1, '["required: true,","minlength: 2,","maxlength: 10,"]', '2012-06-09 21:35:49', '2012-07-01 15:09:26', '0000-00-00 00:00:00'),
-(13, 'radio_guy', 'radio_guy', 0, 3, 'radio', '', '["Yes","No"]', 0, 0, 1, '["required: true,"]', '2012-06-09 21:36:32', '2012-09-01 22:09:05', '0000-00-00 00:00:00'),
-(14, 'gender', 'gender', 0, 3, 'dropdown', '', '["Male","Female"]', 0, 0, 0, '["required: false,"]', '2012-06-09 21:37:02', '2012-08-12 21:04:33', '0000-00-00 00:00:00'),
-(15, 'here_s_a_file', 'here_s_a_file', 0, 3, 'file', '', '', 0, 0, 0, NULL, '2012-06-09 21:37:41', '2012-06-10 16:14:56', '0000-00-00 00:00:00'),
-(16, 'image', 'image', 0, 3, 'img', '', '', 0, 0, 0, NULL, '2012-06-09 21:38:31', '2012-06-10 16:15:06', '0000-00-00 00:00:00'),
-(17, 'link', 'link', 0, 3, 'url', '', '', 0, 0, 0, 'required: false,url: true,', '2012-06-09 21:39:16', '2012-06-10 17:45:51', '0000-00-00 00:00:00'),
-(18, 'year', 'year', 0, 3, 'num', '', '', 0, 0, 0, 'required: false,number: true,', '2012-06-09 21:39:24', '2012-06-10 17:46:07', '0000-00-00 00:00:00'),
-(19, 'email', 'Email', 0, 3, 'email', '', '', 0, 0, 0, 'required: false,email: true,', '2012-06-09 21:39:34', '2012-06-10 17:45:59', '0000-00-00 00:00:00'),
-(20, 'date_selector', 'date_selector', 0, 3, 'date', '', '', 0, 0, 0, NULL, '2012-06-09 21:39:44', '2012-06-10 16:14:38', '0000-00-00 00:00:00'),
-(21, 'this_is_a_new_field', 'This is a field', 0, 3, 'textarea', '', '', 0, 0, 0, '["required: false,"]', '2012-06-10 16:10:14', '2012-07-01 14:45:16', '0000-00-00 00:00:00'),
-(22, 'system', 'system', 0, 7, 'dropdown', '', '["PC","360","Wii","Playstation 3"]', 0, 0, 1, '["required: true,"]', '2012-06-30 23:34:32', '2012-08-12 21:43:00', '0000-00-00 00:00:00'),
-(23, 'release-year', 'Release Year', 0, 6, 'num', '', '', 4, 4, 1, '["required: true,","minlength: 4,","maxlength: 4,","number: true,"]', '2012-07-15 14:15:19', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(24, 'genres', 'Genres', 0, 6, 'multi-dropdown', '', '["Drama","Action","Comedy","Sci-Fi"]', 0, 0, 1, '["required: true,"]', '2012-08-05 22:36:49', '2012-09-02 09:08:42', '0000-00-00 00:00:00'),
-(25, 'boxart', 'Boxart', 0, 6, 'file', '', '', 0, 0, 0, '["required: false,"]', '2012-08-07 14:28:37', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(26, 'test_checkbox', 'test checkbox', 0, 3, 'check', '', '["yes","no","maybe so"]', 0, 0, 1, '["required: true,"]', '2012-09-01 21:56:17', '2012-09-01 22:08:57', '0000-00-00 00:00:00'),
-(27, 'emailaddy', 'emailaddy', 0, 3, 'email', '', '', 0, 0, 0, '["required: false,","email: true,"]', '2012-10-20 21:54:47', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(28, 'dateasd', 'dateasd', 0, 3, 'date', '', '', 0, 0, 0, '["required: false,"]', '2012-10-20 21:57:23', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 'summary', 'summary', 0, 2, 'textarea', 'You ought to enter a short summary of the news article.', '', 0, 0, 1, NULL, '2012-06-03 23:24:24', '2012-06-10 16:14:47', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}modules` (`id`, `title`, `component_id`, `template_id`, `location`, `limit`, `settings`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'show-poll', 8, 78, '["*"]', 1, '{"data":"1"}', '2012-10-13 23:19:41', '2012-11-17 18:01:28', '0000-00-00 00:00:00'),
+(2, 'latest-links', 17, 23, '["*"]', 3, '{"order_dir":"asc"}', '2012-11-25 23:02:45', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}pages` (`id`, `title`, `slug`, `content`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'Contact Us', 'contact-us', '<p>hey send me an email yo</p>', '2012-07-12 22:36:28', '2012-10-03 21:52:42', '0000-00-00 00:00:00');
+(1, 'Contact Us', 'contact-us', '<p>Here is a blank contact page!</p>', '2012-07-12 22:36:28', '2012-10-03 21:52:42', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}permissions` (`id`, `title`, `role_id`, `plugin`, `controller`) VALUES
 (6, 'Admin Roles', 1, NULL, 'roles'),
@@ -81,7 +73,8 @@ INSERT INTO `{prefix}permissions` (`id`, `title`, `role_id`, `plugin`, `controll
 (46, 'Modules', 1, NULL, ''),
 (47, 'Media Library', 1, NULL, ''),
 (48, 'Links Plugin', 1, NULL, ''),
-(49, 'Users', 1, NULL, '');
+(49, 'Users', 1, NULL, ''),
+(50, 'Comments', 1, NULL, '');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}permission_values` (`id`, `title`, `permission_id`, `role_id`, `action_id`, `plugin`, `controller`, `pageAction`, `action`, `type`) VALUES
 (1, 'admin', 8, 1, 0, '', 'users', 'admin_index', 1, 'default'),
@@ -160,7 +153,21 @@ INSERT INTO `{prefix}permission_values` (`id`, `title`, `permission_id`, `role_i
 (78, 'view', 43, 1, 0, '', 'files', 'view', 1, 'default'),
 (79, 'index', 43, 1, 0, '', 'files', 'index', 1, 'default'),
 (80, 'edit', 49, 1, 0, '', 'users', 'edit', 1, 'default'),
-(81, 'profile', 49, 1, 0, '', 'users', 'profile', 1, 'default');
+(81, 'profile', 49, 1, 0, '', 'users', 'profile', 1, 'default'),
+(82, 'admin edit', 50, 1, 0, '', 'comments', 'admin_edit', 1, 'default'),
+(83, 'delete', 20, 1, 0, '', 'fields', 'admin_delete', 1, 'default');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `created`, `modified`, `deleted_time`) VALUES
+(1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, '2012-11-25 23:09:37', '2012-11-25 23:10:38', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_poll_values` (`id`, `title`, `plugin_poll_id`, `votes`) VALUES
+(1, 'NBA', 1, 0),
+(2, 'NHL', 1, 0),
+(3, 'Soccer', 1, 0),
+(4, 'NFL', 1, 0);
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_polls` (`id`, `article_id`, `title`, `poll_type`, `created`, `modified`, `deleted_time`) VALUES
+(1, NULL, 'Your favorite sport?', NULL, '2012-07-07 21:51:38', '2012-08-08 09:34:16', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}roles` (`id`, `title`, `defaults`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'admin', NULL, '0000-00-00 00:00:00', '2012-06-24 22:50:05', '0000-00-00 00:00:00'),
@@ -192,7 +199,9 @@ INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `dat
 (27, 'Comment Post Flood Limit', '<p>x amount of seconds before a user can post another comment. 30 by default.</p>', '30', NULL, 'text', 6, NULL, '2012-12-09 20:37:44', '2012-12-09 21:47:50', '0000-00-00 00:00:00'),
 (26, 'Comment Post Captcha Non-Logged In', '<p>Does a non-logged in user have to enter in a captcha code, to have their comment posted?</p>\r\n<p>*note* The guest group must have permission to view an article/to post a comment, in order for this to have effect.</p>', 'Yes', '["Yes","No"]', 'dropdown', 6, NULL, '2012-12-09 20:36:04', '2012-12-09 21:47:50', '0000-00-00 00:00:00'),
 (25, 'Registration Captcha', '<p>When signing up, will a re-captcha be shown? (and is required - we recommend to keep this enabled)</p>', 'Yes', '["Yes","No"]', 'radio', 3, NULL, '2012-12-09 20:34:11', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(24, 'User Password Reset', '<p>Set this to 0 to disable, if more than 0 then x is the amount of days that can pass before a new password is required. This is mandated upon login.</p>', '0', NULL, 'text', 3, NULL, '2012-10-27 12:47:54', '2012-11-16 23:40:22', '0000-00-00 00:00:00');
+(24, 'User Password Reset', '<p>Set this to 0 to disable, if more than 0 then x is the amount of days that can pass before a new password is required. This is mandated upon login.</p>', '0', NULL, 'text', 3, NULL, '2012-10-27 12:47:54', '2012-11-16 23:40:22', '0000-00-00 00:00:00'),
+(29, 'Is Registration Open?', '<p>If set to "No", then users cannot register.</p>', 'Yes', '["Yes","No"]', 'dropdown', 3, NULL, '2012-12-26 15:07:25', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(30, 'Closed Registration Message', '', '<p>You cannot register at the moment.</p>', NULL, 'textarea', 3, NULL, '2012-12-26 15:08:44', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}templates` (`id`, `title`, `location`, `theme_id`, `template`, `created`, `modified`, `deleted_time`) VALUES
 (15, 'Admin Add Articles', 'Articles/admin_add.ctp', 1, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -259,19 +268,3 @@ INSERT INTO `{prefix}templates` (`id`, `title`, `location`, `theme_id`, `templat
 -- --------------------------------------------------------
 INSERT INTO `{prefix}themes` (`id`, `title`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Default', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
--- --------------------------------------------------------
-INSERT INTO `{prefix}modules` (`id`, `title`, `component_id`, `template_id`, `location`, `limit`, `settings`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'show-poll', 8, 78, '["*"]', 1, '{"data":"1"}', '2012-10-13 23:19:41', '2012-11-17 18:01:28', '0000-00-00 00:00:00'),
-(2, 'latest-links', 17, 23, '["*"]', 3, '{"order_dir":"asc"}', '2012-11-25 23:02:45', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
--- --------------------------------------------------------
-INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `created`, `modified`, `deleted_time`) VALUES
-(1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, '2012-11-25 23:09:37', '2012-11-25 23:10:38', '0000-00-00 00:00:00');
--- --------------------------------------------------------
-INSERT INTO `{prefix}plugin_polls` (`id`, `article_id`, `title`, `poll_type`, `created`, `modified`, `deleted_time`) VALUES
-(1, NULL, 'Your favorite sport?', NULL, '2012-07-07 21:51:38', '2012-08-08 09:34:16', '0000-00-00 00:00:00');
--- --------------------------------------------------------
-INSERT INTO `{prefix}plugin_poll_values` (`id`, `title`, `plugin_poll_id`, `votes`) VALUES
-(1, 'NBA', 1, 0),
-(2, 'NHL', 1, 0),
-(3, 'Soccer', 1, 0),
-(4, 'NFL', 1, 0);

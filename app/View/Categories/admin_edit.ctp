@@ -47,6 +47,9 @@ $(document).ready(function(){
 				'ng-model' => 'CategoryTitle', 
 				'ng-init' => 'CategoryTitle="'.$this->request->data['Category']['title'].'"'
 			));
+			echo $this->Form->hidden('old_title', array(
+				'value' => $this->request->data['Category']['title']
+			));
 			echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 		    echo $this->Form->hidden('id');
 		    echo $this->Form->end('Submit');

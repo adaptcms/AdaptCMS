@@ -112,10 +112,14 @@ class UsersController extends AppController {
 
 	    if ($delete) {
 	        $this->Session->setFlash('The user `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The user `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
+	    }
+
+	    if (!empty($permanent)) {
+	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    } else {
+	    	$this->redirect(array('action' => 'index'));
 	    }
 	}
 
@@ -241,6 +245,22 @@ class UsersController extends AppController {
 		}
 
 		$this->loadModel('SettingValue');
+		
+		$reg_closed = $this->SettingValue->findByTitle('Is Registration Open?');
+
+		if (!empty($reg_closed) && $reg_closed['SettingValue']['data'] == 'No') {
+			$closed_msg = $this->SettingValue->findByTitle('Closed Registration Message');
+
+			if (!empty($closed_msg)) {
+				$msg = $closed_msg['SettingValue']['data'];
+			} else {
+				$msg = 'Registration is closed at this time.';
+			}
+
+			$this->Session->setFlash($msg, 'flash_error');
+
+			$this->redirect('/');
+		}
 
 		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
 		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');

@@ -1,5 +1,5 @@
 <?php
-	$this->EditArea->editor('TemplateTemplate');
+	$this->CodeMirror->editor('TemplateTemplate');
 ?>
 
 <script>

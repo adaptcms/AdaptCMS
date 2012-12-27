@@ -13,6 +13,7 @@ label.error {
 }
 
 footer {
+  width: 100%;
   float: right;
 }
 
@@ -5027,13 +5028,13 @@ a.badge:hover {
  */
 
 .file_info {
-  margin-left: 0;
+  margin-left: 0!important;
   text-align: center;
   min-height: 230px;
 }
 
-#selected-images {
-  margin-left: 0;
+.selected-images {
+  margin-left: 0!important;
   min-height: 0;
   margin-bottom: 10px;
 }

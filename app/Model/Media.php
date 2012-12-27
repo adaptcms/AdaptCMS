@@ -27,9 +27,12 @@ class Media extends AppModel
             ),
             'contain' => array(
                 'File'
-            ),
-            'limit' => $data['limit']
+            )
         );
+
+        if (!empty($data['limit'])) {
+            $cond['limit'] = $data['limit'];
+        }
 
         if (!empty($data['order_by'])) {
             if ($data['order_by'] == "rand") {

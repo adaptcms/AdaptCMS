@@ -36,11 +36,23 @@ class FieldsController extends AppController {
 
 	public function admin_add()
 	{
-		$this->set('categories', $this->Field->Category->find('list', array(
+		$categories = $this->Field->Category->find('list', array(
             'conditions' => array(
                 'Category.deleted_time' => '0000-00-00 00:00:00'
             )
-        )));
+        ));
+
+        /*
+        $fields = $this->Field->find('all');
+
+        $import = array();
+        foreach($fields as $key => $field) {
+            $import[$field['Field']['id']] = $field['Field']['id'];
+        }
+        */
+        $import = $this->Field->find('list');
+
+        $this->set(compact('import', 'categories'));
 
         if ($this->request->is('post')) {
             if ($this->request->data['Field']['required'] == 1) {
@@ -164,11 +176,15 @@ class FieldsController extends AppController {
 
         if ($delete) {
 	        $this->Session->setFlash('The field `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The field `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
 	    }
+
+        if (!empty($permanent)) {
+            $this->redirect(array('action' => 'index', 'trash' => 1));
+        } else {
+            $this->redirect(array('action' => 'index'));
+        }
 	}
 
     public function admin_restore($id = null, $title = null)
@@ -273,6 +289,20 @@ class FieldsController extends AppController {
 
         return json_encode(array(
             'status' => true,
+            'data' => $data
+        ));
+    }
+
+    public function admin_ajax_import()
+    {
+        $this->layout = 'ajax';
+        $this->autoRender = false;
+
+        $data = $this->Field->findById(
+            $this->request->data['Field']['id']
+        );
+
+        return json_encode(array(
             'data' => $data
         ));
     }

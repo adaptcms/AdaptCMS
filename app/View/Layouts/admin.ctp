@@ -49,7 +49,11 @@
     <?= $this->Html->script('//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js') ?>
     <?php endif; ?>
 
-    <?= $this->Html->script('//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js') ?>
+    <?php if (1 == 1): ?>
+      <?= $this->Html->script('angular.min.js') ?>
+    <?php else: ?>
+      <?= $this->Html->script('//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js') ?>
+    <?php endif ?>
 
     <?= $this->Html->script('global.js') ?>
 
@@ -139,20 +143,21 @@
       <hr>
 
       <footer>
-        <p style="float:right">&copy; <a href="http://www.insanevisions.com" target="_blank">InsaneVisions</a> 2007-2012  <?php echo $this->Html->link(
+        <p class="pull-left">
+          <?= $this->Api->version_check() ?>
+          <span id="version-check"></span>
+        </p>
+        <p class="pull-right">&copy; <a href="http://www.insanevisions.com" target="_blank">InsaneVisions</a> 2007-2013  <?php echo $this->Html->link(
           $this->Html->image('cake.power.gif', array('border' => '0')),
           'http://www.cakephp.org/',
           array('target' => '_blank', 'escape' => false)
-        );
-      ?></p><div style="clear:both"></div>
-      <p><?php echo $this->element('sql_dump'); ?></p>
+          );
+        ?>
+        </p>
+        <div class="clearfix"></div>
       </footer>
 
     </div><!--/.fluid-container-->
 
-    <!-- Le javascript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    
   </body>
 </html>

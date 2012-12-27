@@ -9,18 +9,18 @@ class ModulesController extends AppController
 		parent::beforeFilter();
 
 		if ($this->params->action == 'admin_edit' || $this->params->action == 'admin_add') {
-			$model_list = $this->Module->ComponentModel->find('all', array(
+			$model_list = $this->Module->Components->find('all', array(
 				'conditions' => array(
-					'ComponentModel.module_active' => 1
+					'Components.module_active' => 1
 					)
 				)
 			);
 
 			foreach ($model_list as $row) {
-				if ($row['ComponentModel']['is_plugin'] == 1) {
-					$models[$row['ComponentModel']['title'].'.'.$row['ComponentModel']['model_title']] = "Plugin - ".$row['ComponentModel']['title'];
+				if ($row['Components']['is_plugin'] == 1) {
+					$models[$row['Components']['title'].'.'.$row['Components']['model_title']] = "Plugin - ".$row['Components']['title'];
 				} else {
-					$models[$row['ComponentModel']['model_title']] = $row['ComponentModel']['title'];
+					$models[$row['Components']['model_title']] = $row['Components']['title'];
 				}
 			}
 
@@ -96,7 +96,7 @@ class ModulesController extends AppController
 	        		'Module.id' => $id
 	        	),
 	        	'contain' => array(
-	        		'ComponentModel',
+	        		'Components',
 	        		'Template'
 	        	)
 	        )));
@@ -126,10 +126,14 @@ class ModulesController extends AppController
 
         if ($delete) {
 	        $this->Session->setFlash('The module `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The module `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
+	    }
+
+	    if (!empty($permanent)) {
+	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    } else {
+	    	$this->redirect(array('action' => 'index'));
 	    }
 	}
 
@@ -156,17 +160,17 @@ class ModulesController extends AppController
     	$this->autoRender = false;
 
     	if ($this->request->data['Module']['type'] == "action") {
-    		$this->loadModel('ComponentModel');
-    		$find = $this->ComponentModel->findByTitle($this->request->data['Module']['component_id']);
-    		$model = $find['ComponentModel']['model_title'];
+    		$this->loadModel('Components');
+    		$find = $this->Components->findByTitle($this->request->data['Module']['component_id']);
+    		$model = $find['Components']['model_title'];
 
-	        if ($find['ComponentModel']['is_plugin'] == 1) {
-	            $model = $find['ComponentModel']['model_title'];
+	        if ($find['Components']['is_plugin'] == 1) {
+	            $model = $find['Components']['model_title'];
 	            $this->loadModel(
-	                str_replace(' ','',$find['ComponentModel']['title']).'.'.$model
+	                str_replace(' ','',$find['Components']['title']).'.'.$model
 	            );
 	        } else {
-	            $model = $find['ComponentModel']['model_title'];
+	            $model = $find['Components']['model_title'];
 	            $this->loadModel($model);
 	        }
 

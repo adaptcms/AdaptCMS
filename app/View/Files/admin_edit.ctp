@@ -41,7 +41,7 @@
 
 <?php if (!empty($file_contents)): ?>
     <?= $this->Form->input('filename', array('value' => $data['File']['filename'], 'label' => 'File Name')) ?>
-    <?php $this->EditArea->editor('FileContent') ?>
+    <?php $this->CodeMirror->editor('FileContent') ?>
 
     <?= $this->Form->input('content', array(
         'label' => 'Edit File',
@@ -69,7 +69,10 @@
         echo $this->Form->hidden('filesize', array('value' => $data['File']['filesize']));
     }
 
-    echo $this->Form->hidden('id', array('value' => $data['File']['id']));
+    if (!empty($data['File']['id'])) {
+        echo $this->Form->hidden('id', array('value' => $data['File']['id']));
+    }
+    
     echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
     
     echo $this->Form->end('Submit');

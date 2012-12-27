@@ -301,7 +301,6 @@ function get_model_data(type)
 
 	<?= $this->Form->input('limit', array(
 	        'label' => "How many <strong></strong> to display?",
-	        'class' => 'required',
 	        'empty' => '- Choose -',
 	        'options' => $limit
 	)) ?>
@@ -309,7 +308,6 @@ function get_model_data(type)
 	<div id="data" style="display: none">
 	    <?= $this->Form->input('data', array(
 	            'type' => 'select', 
-	            'class' => 'required',
 	            'empty' => '- Choose -'
 	    )) ?>
 	</div>
@@ -385,7 +383,6 @@ function get_model_data(type)
 			), array('target' => '_blank')
 	) ?>
 	<?= $this->Form->input('template', array(
-	        'class' => 'required',
 	        'div' => false,
 	        'label' => false,
 	        'style' => 'margin-left:10px;width:100%'
@@ -399,9 +396,9 @@ function get_model_data(type)
 
 	<div class="btn-group" style="margin-top:10px">
 	    <?php
-	        echo $this->Form->submit('Continue', array('div' => false, 'class' => 'btn'));
 	        echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-	    ?>
+            echo $this->Form->submit('Continue', array('div' => false, 'class' => 'btn'));
+        ?>
 	</div>
 </div>
 

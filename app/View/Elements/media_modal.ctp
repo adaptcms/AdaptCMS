@@ -1,12 +1,22 @@
+<?php
+if (empty($id)) {
+	$id = "media-modal";
+} else {
+	$id = "media-modal".$id;
+}
+?>
+
+<?= $this->Html->script('media') ?>
+
 <script>
 $(document).ready(function() {
 	$("#select_all").live('change', function() {
-		$("#media-modal .file").attr('checked', true);
+		$("#<?= $id ?> .file").attr('checked', true);
 		$("#select_none").attr('checked', false);
 	});
 
 	$("#select_none").live('change', function() {
-		$("#media-modal .file:not(:disabled), #select_all").attr('checked', false);
+		$("#<?= $id ?> .file:not(:disabled), #select_all").attr('checked', false);
 	});
 
 	$(".btn.btn-danger").live('click', function(e) {
@@ -14,19 +24,19 @@ $(document).ready(function() {
 
 		$("#sort_by").val('').trigger('change');
 
-		loadAjax('<?= $this->params->here ?>');
+		loadAjax('<?= $this->params->here ?>', '<?= $id ?>');
 	});
 
 	/*
 	* Image functions, clicking same as clicking checkbox and hover pops up message regarding this
 	*/
 
-	$("#media-modal .file_info img, #selected-images .file_info img").live('click', function() {
+	$("#<?= $id ?> .file_info img, .selected-images .file_info img").live('click', function() {
 		$(this).parent().find('input:checkbox').trigger('change');
 		$(this).popover('hide');
 	});
 
-	$("#media-modal .file_info img, #selected-images .file_info img").popover({
+	$("#<?= $id ?> .file_info img, .selected-images .file_info img").popover({
 		trigger: 'hover',
 		placement: 'left',
 		content: 'Click an image to add/remove it to the media library',
@@ -56,12 +66,13 @@ $(document).ready(function() {
 			var text = $("#sort_by option:selected").text();
 			var href = $("#sort_by option:selected").val() + $(this).val();
 
-	 		loadAjax(href);
+	 		loadAjax(href, '<?= $id ?>');
 		}
 	});
 
-	$("#media-modal .modal-footer .pull-right .btn-primary").live('click', function() {
-		getImages();
+	$("#<?= $id ?> .modal-footer .pull-right .btn-primary").live('click', function(e) {
+		e.preventDefault();
+		getImages('<?= $id ?>');
 
 		$(this).prev().trigger('click');
 	});
@@ -69,19 +80,8 @@ $(document).ready(function() {
 	/*
 	 */
 
-	$("#selected-images .span4.file_info input:checkbox").live('change', function() {
-		var id = $(this).parent().parent().attr('id');
-
-		$('#media-modal #' + id).find('input:checkbox').attr('checked', false).attr('disabled', false);
-		$('#media-modal #' + id).css('opacity', '1.0');
-
-		$(this).parent().parent().fadeOut(400, function() {
-			$(this).remove();
-		});
-	});
-
-	getImages();
-	getImagesDefault();
+	getImages('<?= $id ?>');
+	getImagesDefault('<?= $id ?>');
 
 	/*
 	 * AJAX Pagination
@@ -91,7 +91,7 @@ $(document).ready(function() {
 	 	e.preventDefault();
 
 	 	if ($(this).attr('href')) {
-	 		loadAjax($(this).attr('href'));
+	 		loadAjax($(this).attr('href'), '<?= $id ?>');
 	 	}
 	 });
 
@@ -104,58 +104,66 @@ $(document).ready(function() {
 	 */
 
 	<?php if (!empty($limit)): ?>
-		var count = $('#media-modal .modal-body .file_info.span4 input:checked').length;
+		$("#<?= $id ?>").find('#media-modal-current-limit').val(<?= $limit ?>);
+		var count = $('#<?= $id ?> .modal-body .file_info.span4 input:checked').length;
 
 		if (count == <?= $limit ?>) {
-			disabledImages('disable');
+			disabledImages('not-checked', '<?= $id ?>');
 		}
 
-		$("#media-modal").on('change', '.modal-body .file_info.span4 input:checkbox', function() {
+		$("#<?= $id ?>").on('change', '.modal-body .file_info.span4 input:checkbox', function() {
 			var id = $(this).attr('id');
 			var checked = $(this).attr('checked');
-			var count = $('#media-modal .modal-body .file_info.span4 input:checked').length;
+			var count = $('#<?= $id ?> .modal-body .file_info.span4 input:checked').length;
 
 			if (count == <?= $limit ?>) {
 				if (checked) {
-					disabledImages('not-checked');
+					disabledImages('not-checked', '<?= $id ?>');
 				}
 			} else if (!checked) {
-				disabledImages('enable');
+				disabledImages('enable', '<?= $id ?>');
 			}
-		});
-
-		$("#selected-images .file_info img, #selected-images .file_info input:checkbox").on('click', function() {
-			disabledImages('disable');
 		});
 	<?php endif ?>
 });
 
-function disabledImages(type)
+function disabledImages(type, id)
 {
+	// console.log(type);
 	if (type == 'disable') {
-		$('#media-modal').find('input:disabled').parent().parent().css('opacity', '1.0');
-		$('#media-modal').find('input:disabled').attr('disabled', false);
+		$('#' + id).find('input:disabled').parent().parent().css('opacity', '1.0');
+		$('#' + id).find('input:disabled').attr('disabled', false);
 	} else if (type == 'enable') {
-		$('#media-modal').find('input:disabled').parent().parent().css('opacity', '1.0');
-		$('#media-modal').find('input:disabled').attr('disabled', false);
+		$('#' + id).find('input:disabled').parent().parent().css('opacity', '1.0');
+		$('#' + id).find('input:disabled').attr('disabled', false);
 	} else if (type == 'not-checked') {
-		$('#media-modal').find('input:checkbox:not(:checked)').attr('disabled', true);
-		$('#media-modal').find('input:checkbox:not(:checked)').parent().parent().css('opacity', '0.4');
+		$('#' + id).find('input:checkbox:not(:checked)').attr('disabled', true);
+		$('#' + id).find('input:checkbox:not(:checked)').parent().parent().css('opacity', '0.4');
 	}
 }
 
-function getImages()
+function getImages(modal_id)
 {
-	$("#media-modal .file:checked").each(function(i, val) {
+	$("#" + modal_id + " .file:checked").each(function(i, val) {
 		if (!$(this).attr('disabled')) {
 			var id = $(this).parent().parent().attr('id');
 
-			if ($("#selected-images #" + id).length == 0) {
+			if ($(".selected-images #" + modal_id).length == 0) {
 				var html = $(this).parent().parent().clone();
-				var length = $("#selected-images .file_info").length;
+				var length = $(".selected-images .file_info").length;
+				var modal = $("#" + modal_id).find("#media-modal-current-id");
 
-				$("#selected-images").append(html);
-				$('#' + id).attr('checked', true);
+				if (modal.length == 0 || !modal.val()) {
+					$(".selected-images").append(html);
+				} else {
+					var current_id = modal.val();
+					var file_id = id.split('-');
+
+					$("#" + current_id).parent().find('.selected-images').append(html);
+					$("#" + current_id).val(file_id[1]);
+					$("#" + current_id).next().val(file_id[1]);
+				}
+				$('#' + modal_id).attr('checked', true);
 				$(this).attr('disabled', true);
 				$(this).parent().parent().css('opacity', '0.4');
 			}
@@ -163,28 +171,30 @@ function getImages()
 	});
 }
 
-function getImagesDefault()
+function getImagesDefault(modal_id)
 {
-	if ($("#selected-images .span4.file_info input:checkbox").length > 0) {
-		$("#selected-images .span4.file_info input:checkbox").each(function() {
-			var id = $(this).parent().parent().attr('id');
+	$("a[href='#" + modal_id + "']").parent().find('.selected-images').each(function() {
+		if ($(this).find(".span4.file_info input:checkbox").length > 0) {
+			$(this).find(".span4.file_info input:checkbox").each(function() {
+				var id = $(this).parent().parent().attr('id');
 
-			$('#media-modal #' + id).find('input:checkbox').attr('checked', true).attr('disabled', true);
-			$('#media-modal #' + id).css('opacity', '0.4');
-		});
-	}
+				$('#' + modal_id + ' #' + id).find('input:checkbox').attr('checked', true).attr('disabled', true);
+				$('#' + modal_id + ' #' + id).css('opacity', '0.4');
+			});
+		}
+	});
 }
 
-function loadAjax(href)
+function loadAjax(href, id)
 {
-	$(".modal-body").load(href + ' .modal-body', function() {
+	$("#" + id).find(".modal-body").load(href + ' .modal-body', function() {
 		fixPagination();
-		getImagesDefault();
+		getImagesDefault(id);
 	});
 }
 </script>
 
-<div id="media-modal" class="modal hide fade">
+<div id="<?= $id ?>" class="modal hide fade">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 	    <h3 id="myModalLabel">Add Images to Library - {{title}}</h3>
@@ -214,6 +224,9 @@ function loadAjax(href)
 			<?php if (empty($limit)): ?>
 				<?= $this->Form->input('select_all', array('type' => 'checkbox', 'div' => false)) ?>
 				<?= $this->Form->input('select_none', array('type' => 'checkbox', 'div' => false)) ?>
+			<?php else: ?>
+				<?= $this->Form->hidden('current_id', array('id' => 'media-modal-current-id')) ?>
+				<?= $this->Form->hidden('current_limit', array('id' => 'media-modal-current-limit')) ?>
 			<?php endif ?>
 
 			<?= $this->Form->input('sort_by', array(

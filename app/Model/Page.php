@@ -14,7 +14,9 @@ class Page extends AppModel {
 			)
         ),
     	'content' => array(
-            'rule' => array('notEmpty')
+            'rule' => array(
+            	'notEmpty'
+            )
         )
     );
 }

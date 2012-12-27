@@ -37,7 +37,7 @@ class Theme extends AppModel{
         }
 
         $exclude = array(".", "themes", ".htaccess", "index.php", "uploads");
-        $exclude2 = array("..", "edit_area", "jquery-ui", "tiny_mce");
+        $exclude2 = array("..", "fancybox", "tiny_mce");
 
         if ($dh = opendir($path)) {
             while (($file = readdir($dh)) !== false) {

@@ -16,7 +16,7 @@ $(document).ready(function(){
 	echo $this->Html->link('Attach Images <i class="icon icon-white icon-upload"></i>', '#media-modal', array('class' => 'btn btn-primary', 'escape' => false, 'data-toggle' => 'modal'));
 ?>
 	<p>&nbsp;</p>
-	<div id="selected-images" class="span12 row"></div>
+	<div class="selected-images span12 row"></div>
 
 	<div class="clearfix"></div>
 <?php

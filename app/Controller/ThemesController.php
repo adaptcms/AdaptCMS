@@ -109,11 +109,15 @@ class ThemesController extends AppController{
 
 	    if ($delete) {
 	        $this->Session->setFlash('The theme `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('controller' => 'templates', 'action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The theme `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('controller' => 'templates', 'action' => 'index'));
 	    }
+
+        if (!empty($permanent)) {
+            $this->redirect(array('action' => 'index', 'trash' => 1));
+        } else {
+            $this->redirect(array('action' => 'index'));
+        }
 	}
 
     public function admin_restore($id = null, $title = null)

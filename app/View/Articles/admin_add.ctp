@@ -264,7 +264,18 @@ elseif ($field['Field']['field_type'] == "file"):
 <?php
 elseif ($field['Field']['field_type'] == "img"):
 ?>
-	<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text')) ?>
+	<div>
+		<?= $this->Form->hidden('ArticleValue.'.$field['Field']['id'].'.data') ?>
+		<?= $this->Form->hidden('ArticleValue.'.$field['Field']['id'].'.file_id') ?>
+		<?= $this->Form->label($desc_icon.$field['Field']['label']) ?>
+
+		<?= $this->Html->link('Attach Image <i class="icon icon-white icon-upload"></i>', '#media-modal'.$field['Field']['id'], array('class' => 'btn btn-primary media-modal', 'escape' => false, 'data-toggle' => 'modal')) ?>
+
+		<p>&nbsp;</p>
+		<div class="selected-images span12 row"></div>
+	</div>
+
+	<?= $this->element('media_modal', array('limit' => 1, 'ids' => 'ArticleValue.'.$field['Field']['id'].'.data', 'id' => $field['Field']['id'])) ?>
 <?php
 elseif ($field['Field']['field_type'] == "url"):
 ?>
@@ -286,6 +297,10 @@ endif;
 	endforeach;
 endif;
 ?>
+
+<?php if (!empty($image_ids)): ?>
+	
+<?php endif ?>
 
 <div id="text"></div>
 <div class="field_options" style="margin-bottom: 9px">
@@ -335,6 +350,13 @@ endif;
 </div>
 
 <div class="clearfix"></div>
+
+<?= $this->Form->input('Article.settings.comments_status', array(
+	'options' => array(
+		'open' => 'Open',
+		'closed' => 'Closed'
+	)
+)) ?>
 
 <div class="input text publish_time" style="display: none">
 	<?= $this->Form->input('publishing_date', array(

@@ -79,6 +79,7 @@ class AppController extends Controller {
 
         $this->layout();
 		$this->accessCheck();
+		$this->runCron();
 		$this->moduleLookup();
 
 		$this->theme = 'Default';
@@ -309,7 +310,7 @@ class AppController extends Controller {
 						'Module.deleted_time' => '0000-00-00 00:00:00'
 					),
 					'contain' => array(
-						'ComponentModel'
+						'Components'
 					)
 				);
 			} else {
@@ -323,7 +324,7 @@ class AppController extends Controller {
 						'Module.deleted_time' => '0000-00-00 00:00:00'
 					),
 					'contain' => array(
-						'ComponentModel'
+						'Components'
 					)
 				);
 			}
@@ -335,13 +336,13 @@ class AppController extends Controller {
 				$models = array();
 
 				foreach($data as $row) {
-					if ($row['ComponentModel']['is_plugin'] == 1) {
-						$model = $row['ComponentModel']['model_title'];
+					if ($row['Components']['is_plugin'] == 1) {
+						$model = $row['Components']['model_title'];
 						$this->loadModel(
-							str_replace(' ','',$row['ComponentModel']['title']).'.'.$model
+							str_replace(' ','',$row['Components']['title']).'.'.$model
 						);
 					} else {
-						$model = $row['ComponentModel']['model_title'];
+						$model = $row['Components']['model_title'];
 						$this->loadModel($model);
 					}
 
@@ -364,6 +365,49 @@ class AppController extends Controller {
 			}
 
 			$this->set(compact('module_data'));
+		}
+	}
+
+	public function runCron()
+	{
+		$this->loadModel('Cron');
+
+		$find = $this->Cron->find('first', array(
+			'conditions' => array(
+				'Cron.run_time <=' => date('Y-m-d H:i:s'),
+				'Cron.deleted_time' => '0000-00-00 00:00:00'
+			),
+			'contain' => array(
+				'Components'
+			),
+			'order' => 'run_time ASC'
+		));
+
+		if (!empty($find)) {
+			$function = $find['Cron']['function'];
+
+			if ($find['Components']['is_plugin'] == 1) {
+				$model = $find['Components']['model_title'];
+				$this->loadModel(
+					str_replace(' ','',$find['Components']['title']).'.'.$model
+				);
+			} else {
+				$model = $find['Components']['model_title'];
+				$this->loadModel($model);
+			}
+
+			try {
+				$this->$model->$function();
+			} catch (Exception $e) {
+
+			}
+
+			$amount = $find['Cron']['period_amount'];
+        	$type = $find['Cron']['period_type'];
+        	$run_time = date('Y-m-d H:i:s', strtotime('+' . $amount . ' '.$type));
+
+        	$this->Cron->id = $find['Cron']['id'];
+        	$this->Cron->saveField('run_time', $run_time);
 		}
 	}
 

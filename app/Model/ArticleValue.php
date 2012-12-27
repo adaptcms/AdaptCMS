@@ -11,6 +11,10 @@ class ArticleValue extends AppModel {
         'Field' => array(
             'className' => 'Field',
             'foreignKey' => 'field_id'
+        ),
+        'File' => array(
+            'className' => 'File',
+            'foreignKey' => 'file_id'
         )
     );
 }

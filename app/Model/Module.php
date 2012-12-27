@@ -9,8 +9,8 @@ class Module extends AppModel
 			'className' => 'Template',
 			'foreignKey' => 'template_id'
 		),
-		'ComponentModel' => array(
-			'className' => 'ComponentModel',
+		'Components' => array(
+			'className' => 'Components',
 			'foreignKey' => 'component_id'
 		)
 	);
@@ -32,22 +32,10 @@ class Module extends AppModel
         		'message' => 'Please select a Model'
         	)
         ),
-        'template_id' => array(
-        	array(
-        		'rule' => 'notEmpty',
-        		'message' => 'Please select a template'
-        	)
-        ),
         'location' => array(
         	array(
         		'rule' => 'notEmpty',
         		'message' => 'Please select a location for this module'
-        	)
-        ),
-        'limit' => array(
-        	array(
-        		'rule' => 'notEmpty',
-        		'message' => 'Please enter in how many items to show'
         	)
         )
     );
@@ -86,29 +74,29 @@ class Module extends AppModel
         if (strstr($data['Module']['model'], '.')) {
             $ex = explode('.', $data['Module']['model']);
 
-            $get = $this->ComponentModel->find('first', array(
+            $get = $this->Components->find('first', array(
                 'conditions' => array(
-                    'ComponentModel.is_plugin' => 1,
-                    'ComponentModel.title' => $ex[0],
-                    'ComponentModel.model_title' => $ex[1]
+                    'Component.is_plugin' => 1,
+                    'Component.title' => $ex[0],
+                    'Component.model_title' => $ex[1]
                 )
             ));
         } else {
-            $get = $this->ComponentModel->findByModelTitle($data['Module']['model']);
+            $get = $this->Components->findByModelTitle($data['Module']['model']);
         }
 
-        $data['Module']['component_id'] = $get['ComponentModel']['id'];
+        $data['Module']['component_id'] = $get['Components']['id'];
 
         return $data;
     }
 
     public function preFilterdata($data)
     {
-        if ($data['ComponentModel']['is_plugin'] == 1) {
+        if ($data['Components']['is_plugin'] == 1) {
             $data['Module']['model'] = 
-                $data['ComponentModel']['title'] . '.' . $data['ComponentModel']['model_title'];
+                $data['Components']['title'] . '.' . $data['Components']['model_title'];
         } else {
-            $data['Module']['model'] = $data['ComponentModel']['model_title'];
+            $data['Module']['model'] = $data['Components']['model_title'];
         }
 
         $type = json_decode($data['Module']['location']);

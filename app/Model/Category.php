@@ -25,9 +25,12 @@ class Category extends AppModel {
         $cond = array(
             'conditions' => array(
                 'Category.deleted_time' => '0000-00-00 00:00:00'
-            ),
-            'limit' => $data['limit']
+            )
         );
+
+        if (!empty($data['limit'])) {
+            $cond['limit'] = $data['limit'];
+        }
 
         if (!empty($data['order_by'])) {
             if ($data['order_by'] == "rand") {
