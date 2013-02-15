@@ -10,7 +10,7 @@
 
 <h2 class="left">Edit Page</h2>
 
-<div class="right">
+<div class="right admin-edit-options">
     <?= $this->Html->link(
         '<i class="icon-chevron-left"></i> Return to Index',
         array('action' => 'index'),
@@ -36,6 +36,6 @@
 
 <br />
 <?= $this->Form->end(array(
-		'label' => 'Submit',
-		'class' => 'btn'
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
 )) ?>

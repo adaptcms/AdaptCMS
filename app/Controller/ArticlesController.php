@@ -5,6 +5,11 @@ App::import('Vendor', 'ayah_config');
 class ArticlesController extends AppController {
 	public $name = 'Articles';
 	public $paginate = array();
+	private $permissions;
+	public $helpers = array(
+		'Captcha',
+		'Field'
+	);
 	
 	public function beforeFilter()
 	{
@@ -43,6 +48,8 @@ class ArticlesController extends AppController {
 
 			$this->set(compact('images', 'image_path'));
 		}
+
+		$this->permissions = $this->getPermissions();
 	}
 
 	public function admin_index()
@@ -89,6 +96,15 @@ class ArticlesController extends AppController {
 	        );	
 	    }
 
+	    if (!empty($this->params->named['category_id']))
+	    {
+	    	$this->paginate['conditions']['Category.id'] = $this->params->named['category_id'];
+	    }
+
+	    if ($this->permissions['any'] == 0)
+	    {
+	    	$this->paginate['conditions']['User.id'] = $this->Auth->user('id');
+	    }
         
 		$this->request->data = $this->paginate('Article');
 		
@@ -214,12 +230,22 @@ class ArticlesController extends AppController {
         			'ArticleValue' => array(
         				'File'
         			),
-        			'Category'
+        			'Category',
+        			'User'
 	        	)
 	        ));
 
-	        $this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
+	        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+	        {
+                $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+                $this->redirect(array('action' => 'index'));	        	
+	        }
 
+	        if (!empty($this->request->data['Article']['settings']))
+	        {
+	        	$this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
+	        }
+	        
 	        $this->set('related_articles', $this->Article->getRelatedArticles(
 	        	$id, 
 	        	$this->request->data['Article']['related_articles']
@@ -370,6 +396,20 @@ class ArticlesController extends AppController {
 
 	    $this->Article->id = $id;
 
+        $data = $this->Article->find('first', array(
+        	'conditions' => array(
+        		'Article.id' => $id
+        	),
+        	'contain' => array(
+    			'User'
+        	)
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
+
 	    if (!empty($permanent)) {
 	    	$this->Article->ArticleValue->deleteAll(array('ArticleValue.article_id' => $id));
 	    	$delete = $this->Article->delete($id);
@@ -397,6 +437,20 @@ class ArticlesController extends AppController {
 	    }
 
 	    $this->Article->id = $id;
+
+        $data = $this->Article->find('first', array(
+        	'conditions' => array(
+        		'Article.id' => $id
+        	),
+        	'contain' => array(
+    			'User'
+        	)
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 
 	    if ($this->Article->saveField('deleted_time', '0000-00-00 00:00:00')) {
 	        $this->Session->setFlash('The article `'.$title.'` has been restored.', 'flash_success');
@@ -443,6 +497,11 @@ class ArticlesController extends AppController {
 			);
     	}
 
+	    if ($this->permissions['any'] == 0)
+	    {
+	    	$conditions['conditions']['Article.user_id'] = $this->Auth->user('id');
+	    }
+
 		$results = $this->Article->find("all", $conditions);
 
         foreach($results as $result) {            
@@ -475,13 +534,13 @@ class ArticlesController extends AppController {
     	}
 	}
 
-	public function view($slug = null)
+	public function view($slug)
 	{
 		$this->request->data = $this->Article->find('first', array(
 			'conditions' => array(
 				'Article.slug' => $slug,
 				'Article.deleted_time' => '0000-00-00 00:00:00'
-				),
+			),
 			'contain' => array(
 				'Category',
 				'User',
@@ -492,7 +551,18 @@ class ArticlesController extends AppController {
 			)
 		));
 
-		$this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
+        if ($this->Auth->user('id') && 
+        	$this->request->data['User']['id'] != $this->Auth->user('id') && 
+        	$this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
+
+        if (!empty($this->request->data['Article']['settings']))
+	    {
+			$this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
+		}
 
 		$this->request->data['Comments'] = $this->Article->Comment->find('threaded', array(
 			'conditions' => array(
@@ -533,6 +603,8 @@ class ArticlesController extends AppController {
         	$this->request->data['Article']['related_articles']
         ));
 
+        $this->set('article', $this->request->data);
+
         if (!empty($this->request->data['Category']['slug'])) {
         	$slug = $this->request->data['Category']['slug'];
 
@@ -544,7 +616,7 @@ class ArticlesController extends AppController {
         }
 	}
 
-	public function tag($tag = null)
+	public function tag($tag)
 	{
 		$slug = $this->slug($tag);
 
@@ -552,13 +624,20 @@ class ArticlesController extends AppController {
 			$limit = 10;
 		}
 
+		$conditions = array(
+			'Article.tags LIKE' => '%"'.$slug.'"%',
+			'Article.status' => 1,
+			'Article.deleted_time' => '0000-00-00 00:00:00'
+		);
+
+	    if ($this->permissions['any'] == 0)
+	    {
+	    	$conditions['User.id'] = $this->Auth->user('id');
+	    }
+
 		$this->paginate = array(
 			'order' => 'Article.created DESC',
-			'conditions' => array(
-				'Article.tags LIKE' => '%"'.$slug.'"%',
-				'Article.status' => 1,
-				'Article.deleted_time' => '0000-00-00 00:00:00'
-			),
+			'conditions' => $conditions,
 			'contain' => array(
 				'ArticleValue' => array(
 					'Field',
@@ -573,6 +652,8 @@ class ArticlesController extends AppController {
         $this->request->data = $this->Article->getAllRelatedArticles(
         	$this->paginate('Article')
         );
+
+        $this->set('article', $this->request->data);
 	}
 
 	public function rss_index($category = null, $limit = null)

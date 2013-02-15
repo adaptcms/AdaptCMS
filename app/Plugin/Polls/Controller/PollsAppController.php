@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class PollsAppController extends AppController {
+class PollsAppController extends AppController
+{
 }

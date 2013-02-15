@@ -27,20 +27,20 @@
 			<a href="#order" data-toggle="tab">Field Order</a>
 		</li>
 	<?php endif ?>
+	<div class="pull-right">
+	    <?= $this->Html->link(
+	        '<i class="icon-chevron-left"></i> Return to Index',
+	        array('action' => 'index'),
+	        array('class' => 'btn', 'escape' => false
+	    )) ?>
+	    <?= $this->Html->link(
+	        '<i class="icon-trash icon-white"></i> Delete',
+	        array('action' => 'delete', $this->request->data['Field']['id'], $this->request->data['Field']['title']),
+	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this field?')"));
+	    ?>
+	</div>
 </ul>
 
-<div class="right">
-    <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
-        array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
-    )) ?>
-    <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
-        array('action' => 'delete', $this->request->data['Field']['id'], $this->request->data['Field']['title']),
-        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this field?')"));
-    ?>
-</div>
 <div class="clearfix"></div>
 
 <div id="myTabContent" class="tab-content">
@@ -60,21 +60,9 @@
 					'class' => 'required'
 				));
 				echo $this->Form->input('field_type', array(
-					'options' => array(
-						'text' => 'Text Input', 
-						'textarea' => 'Text Box', 
-						'dropdown' => 'Dropdown Selector', 
-						'multi-dropdown' => 'Dropdown Selector Multiple', 
-						'radio' => 'Radio', 
-						'check' => 'Checkbox', 
-						'file' => 'File', 
-						'img' => 'Image', 
-						'url' => 'Website URL', 
-						'num' => 'Number', 
-						'email' => 'Email', 
-						'date' => 'Date'
-						), 
-					'empty' => '- Choose -', 'class' => 'required'
+					'options' => $field_types, 
+					'empty' => '- Choose -', 
+					'class' => 'required'
 				));
 				?>
 				<div class="field_options" style="margin-bottom: 9px">
@@ -92,27 +80,19 @@
 				</div>
 				<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
 				<div id="field_existing_data" style="display:none">
-					<?php
-						$field_options = json_decode($this->request->data['Field']['field_options']);
-						if (count($field_options) == 0) {
-							$field_style = "padding-top: 0px";
-						} else {
-							$field_style = "padding-top: 9px";
-						}
-					?>
-					<?php if (count($field_options) > 0): ?>
-						<?php foreach($field_options as $row): ?>
+					<?php if (!empty($this->request->data['Field']['field_options'])): ?>
+						<?php foreach($this->request->data['Field']['field_options'] as $row): ?>
 							<span><?= $row ?></span>
 						<?php endforeach ?>
 					<?php endif ?>
 				</div>
+				<div class="clearfix"></div>
 				<?php
 				echo $this->Form->input('description', array(
 					'rows' => 15, 
 					'style' => 'width: 45%',
 					'div' => array(
-						'class' => 'input text clear',
-						'style' => $field_style
+						'class' => 'input text clear'
 					)
 				));
 				echo $this->Form->input('field_limit_min', array('label' => 'Field Limit Minimum'));
@@ -124,7 +104,10 @@
 			    echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 			?>
 
-		<?= $this->Form->end('Submit') ?>
+		<?= $this->Form->end(array(
+			'label' => 'Submit',
+			'class' => 'btn btn-primary'
+		)) ?>
 	</div>
 
 	<div class="tab-pane" id="order">

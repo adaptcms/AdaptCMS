@@ -38,20 +38,20 @@ $(document).ready(function(){
 	<li>
 		<a href="#assets" data-toggle="tab">Theme Assets</a>
 	</li>
+	<div class="right">
+	    <?= $this->Html->link(
+	        '<i class="icon-chevron-left"></i> Return to Index',
+	        array('action' => 'index', 'controller' => 'templates'),
+	        array('class' => 'btn', 'escape' => false
+	    )) ?>
+	    <?= $this->Html->link(
+	        '<i class="icon-trash icon-white"></i> Delete',
+	        array('action' => 'delete', $this->request->data['Theme']['id'], $this->request->data['Theme']['title']),
+	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this theme?')"));
+	    ?>
+	</div>
 </ul>
 
-<div class="right">
-    <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
-        array('action' => 'index', 'controller' => 'templates'),
-        array('class' => 'btn', 'escape' => false
-    )) ?>
-    <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
-        array('action' => 'delete', $this->request->data['Theme']['id'], $this->request->data['Theme']['title']),
-        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this theme?')"));
-    ?>
-</div>
 <div class="clearfix"></div>
 
 <div id="myTabContent" class="tab-content">
@@ -59,7 +59,7 @@ $(document).ready(function(){
 		<?= $this->Form->create('Theme', array('class' => 'well')) ?>
 			<h2>Edit Theme</h2>
 		    
-		    <?php if ($this->request->data['Theme']['id'] == 1): ?>
+		    <?php if ($this->request->data['Theme']['id'] == 1 || !empty($config['api_id'])): ?>
 		    	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required', 'disabled')) ?>
 		    <?php else: ?>
 				<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
@@ -72,7 +72,10 @@ $(document).ready(function(){
 		<?php if ($this->request->data['Theme']['id'] == 1): ?>
 			<?= $this->Form->end() ?>
 		<?php else: ?>
-			<?= $this->Form->end('Submit') ?>
+			<?= $this->Form->end(array(
+				'label' => 'Submit',
+				'class' => 'btn btn-primary'
+			)) ?>
 		<?php endif ?>
 	</div>
 

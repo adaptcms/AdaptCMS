@@ -20,6 +20,6 @@
 ?>
 <br />
 <?= $this->Form->end(array(
-		'label' => 'Submit',
-		'class' => 'btn'
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
 )) ?>

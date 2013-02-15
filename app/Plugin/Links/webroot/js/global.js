@@ -10,7 +10,7 @@ $(document).ready(function() {
 		}
 
 		if (href && id && !clicked) {
-			$.post("/links/links/track", 
+			$.post($("#webroot").text() + "links/links/track", 
                 {
                     data:{
                         'Link':{

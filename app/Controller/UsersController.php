@@ -2,10 +2,54 @@
 
 class UsersController extends AppController {
 	public $name = 'Users';
+	private $permissions;
+	public $helpers = array('Captcha');
+
+	public function beforeFilter()
+	{
+		$this->allowedActions = array(
+			'quick_search',
+			'active',
+			'update_password'
+		);
+
+		parent::beforeFilter();
+
+		$actions = array(
+			'admin_index',
+			'admin_add',
+			'admin_edit'
+		);
+
+		if (in_array($this->params->action, $actions))
+		{
+			$this->set('roles', $this->User->Role->find('list'));
+		}
+
+		$this->permissions = $this->getPermissions();
+	}
 
 	public function admin_index()
 	{
+		$conditions = array();
+
+	    if (!empty($this->params->named['role_id']))
+	    {
+	    	$conditions['Role.id'] = $this->params->named['role_id'];
+	    }
+
+	    if (isset($this->params->named['status']))
+	    {
+	    	$conditions['User.status'] = $this->params->named['status'];
+	    }
+
+	    if ($this->permissions['any'] == 0)
+	    {
+	    	$conditions['User.id'] = $this->Auth->user('id');
+	    }
+
 		if (!isset($this->params->named['trash'])) {
+			$conditions['User.deleted_time'] = '0000-00-00 00:00:00';
 	        $this->paginate = array(
 	            'order' => 'User.created DESC',
 	            'limit' => $this->pageLimit,
@@ -13,10 +57,11 @@ class UsersController extends AppController {
 	            	'Role'
 	            ),
 	            'conditions' => array(
-	            	'User.deleted_time' => '0000-00-00 00:00:00'
+	            	$conditions
 	            )
 	        );
 	    } else {
+	    	$conditions['User.deleted_time !='] = '0000-00-00 00:00:00';
 	        $this->paginate = array(
 	            'order' => 'User.created DESC',
 	            'limit' => $this->pageLimit,
@@ -24,7 +69,7 @@ class UsersController extends AppController {
 	            	'Role'
 	            ),
 	            'conditions' => array(
-	            	'User.deleted_time !=' => '0000-00-00 00:00:00'
+	            	$conditions
 	            )
 	        );
 	    }
@@ -34,9 +79,8 @@ class UsersController extends AppController {
 
 	public function admin_add()
 	{
-		$this->set('roles', $this->User->Role->find('list'));
-
-        if ($this->request->is('post')) {
+        if (!empty($this->request->data))
+		{
         	$this->request->data['User']['username'] = $this->slug($this->request->data['User']['username']);
 
             if ($this->User->save($this->request->data)) {
@@ -45,46 +89,39 @@ class UsersController extends AppController {
             } else {
                 $this->Session->setFlash('Unable to add your role.', 'flash_error');
             }
-        } 
+        }
+
+		$this->loadModel('SettingValue');
+
+		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
+		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');
+		$user_status = $this->SettingValue->findByTitle('User Status');
+
+		if (!empty($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options'])) {
+			foreach (json_decode($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options']) as $row) {
+				$security_options[$row] = $row;
+			}
+		}
+
+		$this->loadModel('Theme');
+
+		$themes = $this->Theme->find('list');
+		$timezones = $this->getTimeZones();
+
+		$this->set(compact('security_options', 'themes', 'timezones'));
 	}
 
 	public function admin_edit($id = null)
 	{
 
-      $this->User->id = $id;
+		$this->User->id = $id;
 
-	    if ($this->request->is('get')) {
-	        $this->request->data = $this->User->find('first', array(
-	        	'conditions' => array(
-	        		'User.id' => $id
-	        	),
-	        	'contain' => array(
-	        		'Article' => array(
-	        			'Category'
-	        		)
-	        	)
-	        ));
-	        $this->request->data['User']['password'] = '';
-
-	        $this->loadModel('Setting');
-
-	        $this->set('settings', $this->Setting->SettingValue->find('all', array(
-	        	'conditions' => array(
-	        		'Setting.title' => 'Users'
-	        	),
-	        	'contain' => array(
-	        		'Setting'
-	        	)
-	        )));
-
-	        $this->set('roles', $this->User->Role->find('list'));
-	    } else {
+	    if (!empty($this->request->data))
+	    {
 	    	unset($this->User->validate['password']);
 	    	unset($this->User->validate['username']);
+
 	    	$this->request->data['User']['username'] = $this->slug($this->request->data['User']['username']);
-	    	if (empty($this->request->data['User']['password'])) {
-	    		unset($this->request->data['User']['password']);
-	    	}
 
 	        if ($this->User->save($this->request->data)) {
 	            $this->Session->setFlash('Your user has been updated.', 'flash_success');
@@ -94,6 +131,61 @@ class UsersController extends AppController {
 	        }
 	    }
 
+        $this->request->data = $this->User->find('first', array(
+        	'conditions' => array(
+        		'User.id' => $id
+        	),
+        	'contain' => array(
+        		'Article' => array(
+        			'Category'
+        		)
+        	)
+        ));
+
+        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
+
+        $this->request->data['User']['password'] = '';
+
+        $this->loadModel('Setting');
+
+        $this->set('settings', $this->Setting->SettingValue->find('all', array(
+        	'conditions' => array(
+        		'Setting.title' => 'Users'
+        	),
+        	'contain' => array(
+        		'Setting'
+        	)
+        )));
+
+    	$this->request->data['User']['settings'] = json_decode(
+    		$this->request->data['User']['settings'],
+    		true
+    	);
+
+		$this->loadModel('SettingValue');
+
+		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
+		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');
+		$user_status = $this->SettingValue->findByTitle('User Status');
+
+		if (!empty($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options'])) {
+			foreach (json_decode($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options']) as $row) {
+				$security_options[$row] = $row;
+			}
+		}
+
+		$this->loadModel('Theme');
+
+		$themes = $this->Theme->find('list');
+		$timezones = $this->getTimeZones();
+
+		$this->set(compact('security_options', 'themes', 'timezones'));
+
+		$this->request->data['Security'] = $this->User->getSecurityAnswers($this->request->data);
 	}
 
 	public function admin_delete($id = null, $title = null, $permanent = null)
@@ -103,6 +195,17 @@ class UsersController extends AppController {
 	    }
 
 	    $this->User->id = $id;
+
+        $data = $this->User->find('first', array(
+        	'conditions' => array(
+        		'User.id' => $id
+        	)
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 
 	    if (!empty($permanent)) {
 	    	$delete = $this->User->delete($id);
@@ -130,6 +233,17 @@ class UsersController extends AppController {
 	    }
 
 	    $this->User->id = $id;
+
+        $data = $this->User->find('first', array(
+        	'conditions' => array(
+        		'User.id' => $id
+        	)
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 
 	    if ($this->User->saveField('deleted_time', '0000-00-00 00:00:00')) {
 	        $this->Session->setFlash('The user `'.$title.'` has been restored.', 'flash_success');
@@ -221,15 +335,10 @@ class UsersController extends AppController {
 	}
 
     public function logout() {
+    	$this->Session->setFlash('You have successfully logged out.', 'flash_success');
+
     	$this->Session->destroy();
         $this->redirect($this->Auth->logout());
-    	$this->Session->setFlash(
-    		Configure::read('alert_btn').
-    		'<strong>Success</strong> You have successfully logged out', 
-    		'default', 
-    		array(
-    			'class' => 'alert alert-success'
-    	));
     }
 
 	public function register()
@@ -644,6 +753,11 @@ class UsersController extends AppController {
 
     public function profile($username = null)
     {
+    	if (!empty($this->request->params['username']))
+    	{
+    		$username = $this->request->params['username'];
+    	}
+
     	if (empty($username) && $this->Auth->user('id')) {
     		$username = $this->Auth->user('username');
     	} elseif (empty($username)) {
@@ -660,6 +774,12 @@ class UsersController extends AppController {
         		'home'
         	));
     	}
+
+        if ($username != $this->Auth->user('username') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 
     	$this->request->data = $this->User->find('first', array(
     		'conditions' => array(
@@ -688,14 +808,9 @@ class UsersController extends AppController {
 
 		if (!empty($this->request->data)) {
 			$this->User->id = $this->Auth->user('id');
-			$this->request->data['User']['security_answers'] = json_encode($this->request->data['Security']);
 
 	    	unset($this->User->validate['password']);
 	    	unset($this->User->validate['username']);
-
-	    	if (empty($this->request->data['User']['password'])) {
-	    		unset($this->request->data['User']['password']);
-	    	}
 
 			if ($this->User->save($this->request->data)) {
 				$this->Session->setFlash(
@@ -709,6 +824,10 @@ class UsersController extends AppController {
 		}
 
     	$this->request->data = $this->User->findById($this->Auth->user('id'));
+    	$this->request->data['User']['settings'] = json_decode(
+    		$this->request->data['User']['settings'],
+    		true
+    	);
 
 		$this->loadModel('SettingValue');
 
@@ -725,9 +844,37 @@ class UsersController extends AppController {
 		$this->loadModel('Theme');
 
 		$themes = $this->Theme->find('list');
+		$timezones = $this->getTimeZones();
 
-		$this->set(compact('security_options', 'themes'));
+		$this->set(compact('security_options', 'themes', 'timezones'));
 
 		$this->request->data['Security'] = $this->User->getSecurityAnswers($this->request->data);
+    }
+
+    public function quick_search()
+    {
+    	$this->layout = 'ajax';
+    	$this->autoRender = false;
+
+    	if ($this->RequestHandler->isAjax() && !empty($this->request->data['User']['username'])) {
+    		$data = array();
+    		$find = $this->User->find('all', array(
+    			'conditions' => array(
+    				'User.username LIKE' => '%' . $this->request->data['User']['username'] . '%'
+    			)
+    		));
+
+    		foreach($find as $row)
+    		{
+                $data[] = array(
+                	'id' =>$row['User']['id'],
+                	'username' => $row['User']['username']
+                );
+    		}
+
+    		return json_encode(
+    			$data
+    		);
+    	}
     }
 }

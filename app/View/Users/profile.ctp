@@ -16,6 +16,19 @@
 			<a href="#comments" data-toggle="tab">Posted Comments</a>
 		</li>
 	<?php endif ?>
+	<li>
+		<?= $this->Html->link('Messages', array(
+			'controller' => 'messages',
+			'action' => 'index'
+		)) ?>
+	</li>
+	<?php if ($this->Admin->isLoggedIn()): ?>
+		<li class="pull-right">
+			<?= $this->Html->link('Edit Your Profile', array(
+				'action' => 'edit'
+			)) ?>
+		</li>
+	<?php endif ?>
 </ul>
 
 <div id="myTabContent" class="tab-content well">
@@ -50,14 +63,14 @@
 				Signed Up
 			</dt>
 			<dd>
-				<?= $this->Time->format('F jS, Y h:i A', $this->request->data['User']['created']) ?>
+				<?= $this->Admin->time($this->request->data['User']['created']) ?>
 			</dd>
 
 			<dt>
 				Last Login
 			</dt>
 			<dd>
-				<?= $this->Time->format('F jS, Y h:i A', $this->request->data['User']['login_time']) ?>
+				<?= $this->Admin->time($this->request->data['User']['login_time']) ?>
 			</dd>
 
 			<dt>
@@ -96,7 +109,7 @@
 		<ul class="unstyled">
 			<?php foreach($this->request->data['Comment'] as $comment): ?>
 				<li>
-					@ <?= $this->Time->timeAgoInWords($comment['created']) ?> - 
+					@ <?= $this->Admin->time($comment['created'], 'words') ?> - 
 					<?= $this->Html->link('view comment', array(
 							'controller' => 'articles',
 							'action' => 'view',

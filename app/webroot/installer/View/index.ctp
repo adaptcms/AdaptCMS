@@ -5,8 +5,8 @@ $(document).ready(function() {
 		window.location.href = "<?= $this->Html->url(array('action' => 'database')) ?>";
 	});
 
-	$("#upgrade").live('click', function() {
-		window.location.href = "<?= $this->Html->url(array('action' => 'upgrade')) ?>";
+	$(".upgrade").live('click', function() {
+		window.location.href = $("#webroot").text() + "install/upgrade/" + $(this).attr('id');
 	});
 });
 </script>
@@ -63,14 +63,14 @@ $(document).ready(function() {
 		<?php endif ?>
 	</p>
 	<p>
-		<?php if (is_writable(WWW_ROOT.'uploads')): ?>
+		<?php if (is_writable(WWW_ROOT)): ?>
 			<span class="notice success">
-				Your uploads directory is writable.
+				Your webroot directory is writable.
 			</span>
 		<?php else: ?>
 			<?php $error = 1 ?>
 			<span class="notice">
-				Your uploads directory is NOT writable.<br />Please chmod 777 - <?= WWW_ROOT.'uploads/' ?>
+				Your webroot directory is NOT writable.<br />Please chmod 777 - <?= WWW_ROOT ?>
 			</span>
 		<?php endif ?>
 	</p>
@@ -86,13 +86,40 @@ $(document).ready(function() {
 			</span>
 		<?php endif ?>
 	</p>
+	<p>
+		<?php if (is_writable(APP . DS . 'Plugin')): ?>
+			<span class="notice success">
+				Your Plugin directory is writable.
+			</span>
+		<?php else: ?>
+			<?php $error = 1 ?>
+			<span class="notice">
+				Your Plugin directory is NOT writable.<br />Please chmod 777 - <?= APP . DS . 'Plugin' ?>
+			</span>
+		<?php endif ?>
+	</p>
+	<p>
+		<?php if (is_writable(APP . DS . 'Old_Plugins')): ?>
+			<span class="notice success">
+				Your Inactive Plugins directory is writable.
+			</span>
+		<?php else: ?>
+			<?php $error = 1 ?>
+			<span class="notice">
+				Your Inactive Plugins directory is NOT writable.<br />Please chmod 777 - <?= APP . DS . 'Old_Plugins' ?>
+			</span>
+		<?php endif ?>
+	</p>
 
 	<?php if ($error != 1): ?>
 		<div class="btn-group">
-		  <button id="install" class="btn">Install</button>
-		  <?php if (1 == 2): ?>
-		  	<button id="upgrade" class="btn">Upgrade</button>
+		  <?php if (!empty($upgrade_versions)): ?>
+		  	<?php foreach($upgrade_versions as $version => $info): ?>
+		  		<button id="<?= $version ?>" class="btn upgrade">Upgrade from <?= ucfirst($version) ?></button>
+		  	<?php endforeach ?>
 		  <?php endif ?>
+
+		  <button id="install" class="btn">Install</button>
 		</div>
 	<?php endif ?>
 </div>

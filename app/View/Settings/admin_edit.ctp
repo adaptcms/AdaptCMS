@@ -59,20 +59,20 @@
 	<li>
 		<a href="#add-setting" data-toggle="tab">Add Setting</a>
 	</li>
+	<div class="right">
+	    <?= $this->Html->link(
+	        '<i class="icon-chevron-left"></i> Return to Index',
+	        array('action' => 'index'),
+	        array('class' => 'btn', 'escape' => false
+	    )) ?>
+	    <?= $this->Html->link(
+	        '<i class="icon-trash icon-white"></i> Delete Category',
+	        array('action' => 'delete', $this->request->data['Setting']['id'], $this->request->data['Setting']['title']),
+	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this settings category?')"));
+	    ?>
+	</div>
 </ul>
 
-<div class="right">
-    <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
-        array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
-    )) ?>
-    <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete Category',
-        array('action' => 'delete', $this->request->data['Setting']['id'], $this->request->data['Setting']['title']),
-        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this settings category?')"));
-    ?>
-</div>
 <div class="clearfix"></div>
 
 <div id="myTabContent" class="tab-content">
@@ -86,10 +86,10 @@
 		    <?= $this->Form->hidden('id') ?>
 
 			<br />
-		<?= $this->Form->end(array(
+			<?= $this->Form->end(array(
 				'label' => 'Submit',
-				'class' => 'btn'
-		)) ?>
+				'class' => 'btn btn-primary'
+			)) ?>
 	</div>
 
 	<?php if (!empty($this->request->data['SettingValue'])): ?>

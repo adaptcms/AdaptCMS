@@ -8,6 +8,16 @@ class ApiHelper extends AppHelper
 		'Session'
 	);
 
+	public function url()
+	{
+		return 'http://api.adaptcoding.com/';
+	}
+
+	public function siteUrl()
+	{
+		return 'http://adaptcms.charliepage88.com/';
+	}
+
 	public function slug($str)
 	{
 		return strtolower(Inflector::slug($str, '-'));
@@ -17,7 +27,7 @@ class ApiHelper extends AppHelper
 	{
 		return "<script type='text/javascript'>
 					$(document).ready(function() {
-					  	$.getJSON('http://api.adaptcoding.com/get/" . $action . "?callback=?', " . json_encode( $data ) . ", function(data) {
+					  	$.getJSON('" . $this->url() . "get/" . $action . "?callback=?', " . json_encode( $data ) . ", function(data) {
 					  	console.log(data);
 					    " . $return . "
 					  });
@@ -38,6 +48,8 @@ class ApiHelper extends AppHelper
 				}
 
 				$this->args .= $key."=".urlencode($arg);
+
+				$i++;
 			}
 
 			return $this->args;
@@ -53,7 +65,13 @@ class ApiHelper extends AppHelper
 
 	public function construct_curl($action, $data)
 	{
-		$url = "http://api.adaptcoding.com/get/" . $action.$this->getArgs($data);
+		if (Configure::read('api_key') != '{api_key}')
+		{
+			$data['api_key'] = Configure::read('api_key');
+			$data['api_secret'] = Configure::read('api_secret');
+		}
+
+		$url = $this->url() . "get/" . $action.$this->getArgs($data);
 
 		$ch = curl_init();
 	    curl_setopt($ch, CURLOPT_URL, $url);
@@ -80,6 +98,39 @@ class ApiHelper extends AppHelper
 
 		// 604800 = 1 week
 		if (empty($new_cache_calc) || !empty($new_cache_calc) && $new_cache_calc > 604800) {
+			if (Configure::read('api_key') == '{api_key}' && !strstr(Router::url('/', true), 'localhost') && !strstr(Router::url('/', true), '127.0.0.1'))
+			{
+				$get_key = $this->construct_curl(
+					'key',
+					array(
+						'version' => ADAPTCMS_VERSION,
+						'url' => Router::url('/', true)
+					)
+				);
+				$key = json_decode($get_key, true);
+				
+				if (!empty($key['data']['api_key']) && !empty($key['data']['api_secret']))
+				{
+					$file = APP.'Config/config.php';
+					$config_file = file_get_contents($file);
+
+					$matches = array(
+						'{api_key}',
+						'{api_secret}'
+					);
+					$replace = array(
+						$key['data']['api_key'],
+						$key['data']['api_secret']
+					);
+
+					$contents = str_replace($matches, $replace, $config_file);
+
+			    	$fh = fopen($file, 'w') or die("can't open file");
+			    	fwrite($fh, $contents);
+			    	fclose($fh);
+				}
+			}
+
 			$data = $this->construct_curl(
 				'version-check',
 				array(

@@ -1,0 +1,19 @@
+{
+    "title": "Support Tickets",
+    "current_version": "0.5",
+    "api_id": 3,
+    "install": {
+    	"block_active": 0,
+    	"model_title": "Ticket",
+    	"text": "install_text.md",
+    	"sql": [
+    		"install_data.sql"
+    	]
+    },
+    "uninstall": {
+    	"text": "uninstall_text.md",
+    	"sql": [
+    		"uninstall_data.sql"
+    	]
+    }
+}

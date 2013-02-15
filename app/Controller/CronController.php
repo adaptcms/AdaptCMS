@@ -11,17 +11,17 @@ class CronController extends AppController
 	{
 		parent::beforeFilter();
 
-		$components_list = $this->Cron->Components->find('all', array(
+		$modules_list = $this->Cron->Module->find('all', array(
 			'order' => 'is_plugin ASC, title ASC'
 		));
 
-		foreach($components_list as $key => $component) {
-			$id = $component['Components']['id'];
+		foreach($modules_list as $key => $module) {
+			$id = $module['Module']['id'];
 
-			if ($component['Components']['is_plugin'] == 1) {
-				$components[$id] = 'Plugin - ' . $component['Components']['title'];
+			if ($module['Module']['is_plugin'] == 1) {
+				$modules[$id] = 'Plugin - ' . $module['Module']['title'];
 			} else {
-				$components[$id] = $component['Components']['title'];
+				$modules[$id] = $module['Module']['title'];
 			}
 		}
 
@@ -30,7 +30,7 @@ class CronController extends AppController
 			$period_amount[$i] = $i;
 		}
 
-		$this->set(compact('components', 'period_amount'));
+		$this->set(compact('modules', 'period_amount'));
 	}
 
 	public function admin_index()

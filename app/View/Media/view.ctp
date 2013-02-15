@@ -12,37 +12,42 @@ $(document).ready(function() {
 </h1>
 
 <?= $this->Html->link(
-		'<i class="icon-arrow-left"></i> Library List', 
+		'<i class="icon-arrow-left icon-white"></i> Library List', 
 		array('action' => 'index'), 
-		array('class' => 'btn pull-right', 'escape' => false)
+		array(
+			'class' => 'btn btn-primary pull-right', 
+			'escape' => false,
+			'style' => 'margin-bottom: 10px'
+		)
 ) ?>
 
 <div class="clearfix"></div>
-<p>&nbsp;</p>
 
-<?php foreach($this->request->data as $row): ?>
-	<div class="span3">
-		<?php
-		$url = array('controller' => 'files', 'action' => 'view', $row['File']['id']);
-		?>
+<ul class="thumbnails">
+	<?php foreach($this->request->data as $key => $row): ?>
+		<li class="span4<?= ($key % 3 === 0 ? ' no-marg-left' : '') ?>">
+			<?php
+			$url = array('controller' => 'files', 'action' => 'view', $row['File']['id']);
+			?>
 
-		<?= $this->Html->link(
-				$this->Html->image(
-					'/'.$row['File']['dir'].'thumb/'.$row['File']['filename'],
+			<?= $this->Html->link(
+					$this->Html->image(
+						'/'.$row['File']['dir'].$row['File']['filename'],
+						array(
+							'style' => 'width: 300px;height: 200px'
+						)
+					),
+					'/'.$row['File']['dir'].$row['File']['filename'],
 					array(
-						'style' => 'border: 1px solid #000'
+						'class' => 'fancybox thumbnail',
+						'rel' => $media['Media']['title'],
+						'title' => $row['File']['filename'] . ' ' . $row['File']['caption'],
+						'escape' => false
 					)
-				),
-				'/'.$row['File']['dir'].$row['File']['filename'],
-				array(
-					'class' => 'fancybox',
-					'rel' => $media['Media']['title'],
-					'title' => $row['File']['caption'],
-					'escape' => false
-				)
-		) ?>
-	</div>
-<?php endforeach ?>
+			) ?>
+		</li>
+	<?php endforeach ?>
+</ul>
 
 <div class="clearfix"></div>
 

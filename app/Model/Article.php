@@ -21,7 +21,7 @@ class Article extends AppModel {
         'Comment'
     );
     public $validate = array(
-    'title' => array(
+        'title' => array(
             'rule' => array('notEmpty')
         )
     );
@@ -63,7 +63,7 @@ class Article extends AppModel {
         return $data;
     }
 
-    public function getModuleData($data, $user_id)
+    public function getBlockData($data, $user_id)
     {
         $cond = array(
             'conditions' => array(
@@ -93,6 +93,124 @@ class Article extends AppModel {
             $cond['conditions']['Article.id'] = $data['data'];
         }
 
-        return $this->find('all', $cond);
+        if (!empty($data['category_id'])) {
+            $cond['conditions']['Category.id'] = $data['category_id'];
+        }
+
+        return $this->getAllRelatedArticles($this->find('all', $cond));
+    }
+
+    public function getBlockCustomOptions($data)
+    {
+        if (!empty($data)) {
+            $id = $data['category_id'];
+        }
+
+        $categories = $this->Category->find('list');
+
+        $data = '
+        <div class="input select">
+            <label for="BlockSettingsCategoryId">Filter Articles by Category</label>
+            <select name="data[Block][settings][category_id]">
+                <option value="">- choose -</option>';
+
+        if (!empty($categories)) {
+            foreach($categories as $key => $category) {
+                $data .= '<option value="' . $key . '"';
+                if (!empty($id) && $id == $key) {
+                    $data .= ' selected';
+                }
+
+                $data .= '>' . $category . '</option>';
+            }
+        }
+
+        $data .= '</select></div>';
+
+        return $data;
+    }
+
+    public function getSearchParams( $q )
+    {
+        return array(
+            'conditions' => array(
+                'OR' => array(
+                    'Article.title LIKE' => '%' . $q . '%',
+                    'ArticleValue.data LIKE' => '%' . $q . '%'
+                )
+            ),
+            'contain' => array(
+                'ArticleValue' => array(
+                    'File',
+                    'Field'
+                ),
+                'Category',
+                'User'
+            ),
+            'joins' => array(
+                array(
+                    'table' => 'article_values',
+                    'alias' => 'ArticleValue',
+                    'type' => 'inner',
+                    'conditions' => array(
+                        'Article.id = ArticleValue.article_id'
+                    )
+                )
+            ),
+            'permissions' => array(
+                'controller' => 'articles',
+                'action' => 'view'
+            )
+        );
+    }
+
+    public function beforeSave()
+    {
+        if (!empty($this->data['File']) && !empty($this->data['Files']))
+        {
+            $this->data['File'] = array_merge($this->data['File'], $this->data['Files']);
+        } elseif (!empty($this->data['Files']))
+        {
+            $this->data['File'] = $this->data['Files'];
+        }
+
+        return true;
+    }
+
+    public function afterFind($results)
+    {
+        if (empty($results))
+        {
+            return;
+        }
+
+        foreach($results as $key => $result)
+        {
+            // $results[$key] = $results['Article'];
+
+            if (!empty($result['ArticleValue']))
+            {
+                foreach($result['ArticleValue'] as $value)
+                {
+                    $json = json_decode($value['data'], true);
+
+                    if (empty($json))
+                    {
+                        $results[$key]['Data'][$value['Field']['title']] = $value['data'];
+                    } else {
+                        $results[$key]['Data'][$value['Field']['title']]['data'] = $json;
+                        $results[$key]['Data'][$value['Field']['title']]['list'] = implode(', ', $json);
+                    }
+                }
+            }
+
+            if (!empty($result['Article']['tags']))
+            {
+                $results[$key]['Article']['tags'] = json_decode($result['Article']['tags'], true);
+                $results[$key]['Article']['tags_list'] = implode(', ', $results[$key]['Article']['tags']);
+            }
+        }
+
+        return $results;
     }
 }

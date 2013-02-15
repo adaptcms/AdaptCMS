@@ -3,73 +3,145 @@
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
-    View
+    View <i class="icon-picture"></i>
     <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" style="min-width: 0px">
-    <li><?= $this->Html->link('Active', array('admin' => true, 'action' => 'index')) ?></li>
-    <li><?= $this->Html->link('Trash', array('admin' => true, 'action' => 'index', 'trash' => 1)) ?></li>
+  <ul class="dropdown-menu view">
+    <li>
+        <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
+            'admin' => true, 
+            'action' => 'index'
+        ), array('escape' => false)) ?>
+    </li>
+    <li>
+        <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
+            'admin' => true, 
+            'action' => 'index', 
+            'trash' => 1
+        ), array('escape' => false)) ?>
+    </li>
   </ul>
 </div>
-<div class="clear"></div>
+<div class="clearfix"></div>
 
-<script>
-$(".btn-danger").live('click', function() {
-    $("#FileDeleteForm").submit();
-});
-</script>
+<?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_add'])): ?>
+    <div class="btn-group pull-right" style="margin-bottom:10px">
+        <?= $this->Html->link('Upload Multiple <i class="icon icon-list icon-white"></i>', array(
+                'action' => 'add', 
+                'multiple' => true
+            ), array(
+                'class' => 'btn btn-info', 
+                'escape' => false
+        )) ?>
+        <?= $this->Html->link('Add New File <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
+            'class' => 'btn btn-info', 
+            'escape' => false
+        )) ?>
+    </div>
+<?php endif ?>
 
-<?php echo $this->Html->link('Add New File', array('action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')); ?>
-<table class="table table-bordered">
-    <tr>
-        <th><?= $this->Paginator->sort('filename', 'File Name') ?></th>
-        <th><?= $this->Paginator->sort('mimetype', 'Type') ?></th>
-        <th>Preview</th>
-        <th><?= $this->Paginator->sort('filesize', 'Size') ?></th>
-        <th><?= $this->Paginator->sort('created') ?></th>
-        <th>Options</th>
-    </tr>
+<?php if (empty($this->request->data)): ?>
+    <div class="clearfix"></div>
+    <div class="well">
+        No Items Found
+    </div>
+<?php else: ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><?= $this->Paginator->sort('filename', 'File Name') ?></th>
+                <th><?= $this->Paginator->sort('mimetype', 'Type') ?></th>
+                <th>Preview</th>
+                <th><?= $this->Paginator->sort('filesize', 'Size') ?></th>
+                <th><?= $this->Paginator->sort('created') ?></th>
+                <th>Options</th>
+            </tr>
+        </thead>
 
-    <?php foreach ($this->request->data as $data): ?>
-    <tr>
-        <td>
-            <?php echo $this->Html->link($data['File']['filename'], $this->params->webroot.$data['File']['dir'].$data['File']['filename'], array('target' => '_new')); ?>
-        </td>
-        <td><?= $data['File']['mimetype'] ?></td>
-        <td style="text-align: center">
-            <?php if (strstr($data['File']['mimetype'], "image")):?>
-                <?= $this->Html->image("/".$data['File']['dir']."thumb/".$data['File']['filename']) ?>
-            <?php endif; ?>
-        </td>
-        <td><?= $this->Number->toReadableSize($data['File']['filesize']) ?></td>
-        <td><?php echo $this->Time->format('F jS, Y h:i A', $data['File']['created']); ?></td>
-        <td>
-            <?php if (empty($this->params->named['trash'])): ?>
-                <?= $this->Html->link(
-                    '<i class="icon-pencil icon-white"></i> Edit', 
-                    array('action' => 'edit', $data['File']['id']),
-                    array('class' => 'btn btn-primary', 'escape' => false));
-                ?>
-                <?= $this->Html->link(
-                    '<i class="icon-trash icon-white"></i> Delete',
-                    array('action' => 'delete', $data['File']['id']),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file?')"));
-                ?>
-            <?php else: ?>
-                <?= $this->Html->link(
-                    '<i class="icon-share-alt icon-white"></i> Restore', 
-                    array('action' => 'restore', $data['File']['id'], $data['File']['filename']),
-                    array('class' => 'btn btn-success', 'escape' => false));
-                ?>    
-                <?= $this->Html->link(
-                    '<i class="icon-trash icon-white"></i> Delete Forever',
-                    array('action' => 'delete', $data['File']['id'], 1),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file? This is permanent.')"));
-                ?>      
-            <?php endif ?>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-</table>
+        <?php foreach ($this->request->data as $data): ?>
+            <tbody>
+                <tr>
+                    <td>
+                        <?php if ($this->Admin->hasPermission($permissions['related']['files']['view'], $data['User']['id'])): ?>
+                            <?= $this->Html->link(
+                                $data['File']['filename'], 
+                                '/' . $data['File']['dir'] . $data['File']['filename'], 
+                                array('target' => '_blank')
+                            ) ?>
+                        <?php else: ?>
+                            <?= $data['File']['filename'] ?>
+                        <?php endif ?>
+                    </td>
+                    <td><?= $data['File']['mimetype'] ?></td>
+                    <td style="text-align: center">
+                        <?php if (strstr($data['File']['mimetype'], "image")):?>
+                            <?= $this->Html->image("/".$data['File']['dir']."thumb/".$data['File']['filename']) ?>
+                        <?php endif; ?>
+                    </td>
+                    <td><?= $this->Number->toReadableSize($data['File']['filesize']) ?></td>
+                    <td>
+                        <?= $this->Admin->time($data['File']['created']) ?>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <?php if ($this->Admin->hasPermission($permissions['related']['files']['view'], $data['User']['id'])): ?>
+                                    <li>
+                                        <?= $this->Html->link(
+                                            '<i class="icon-picture"></i> View', 
+                                            '/' . $data['File']['dir'] . $data['File']['filename'], 
+                                            array('target' => '_blank', 'escape' => false)
+                                        ) ?>
+                                    </li>
+                                <?php endif ?>
+
+                                <?php if (empty($this->params->named['trash'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_edit'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->edit(
+                                                $data['File']['id']
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_delete'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->delete(
+                                                $data['File']['id'],
+                                                $data['File']['filename'],
+                                                'file'
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                <?php else: ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_restore'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->restore(
+                                                $data['File']['id'],
+                                                $data['File']['filename']
+                                            ) ?>
+                                        </li>  
+                                    <?php endif ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_delete'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->delete_perm(
+                                                $data['File']['id'],
+                                                $data['File']['filename'],
+                                                'file'
+                                            ) ?>
+                                        </li> 
+                                    <?php endif ?>    
+                                <?php endif ?>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        <?php endforeach; ?>
+    </table>
+<?php endif ?>
 
 <?= $this->element('admin_pagination') ?>

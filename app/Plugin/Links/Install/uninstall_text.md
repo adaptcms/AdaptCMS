@@ -1,0 +1,1 @@
+Thank you for using the Links Plugin! You can re-install any time in the main Plugins area.

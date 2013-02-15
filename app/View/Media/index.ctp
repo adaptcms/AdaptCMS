@@ -9,33 +9,45 @@ $(document).ready(function() {
 
 <h1>Media Libraries</h1>
 
-<?php foreach($this->request->data as $row): ?>
-	<div class="span3">
-		<?php
-		$url = array('action' => 'view', $row['Media']['slug']);
-		?>
+<ul class="thumbnails">
+	<?php foreach($this->request->data as $key => $row): ?>
+		<li class="span4<?= ($key % 3 === 0 ? ' no-marg-left' : '') ?>">
+			<div class="thumbnail">
+				<?php
+				$url = array('action' => 'view', $row['Media']['slug']);
+				?>
 
-		<?php if (!empty($row['File'][0]['id'])): ?>
-			<?= $this->Html->link(
-					$this->Html->image(
-						'/'.$row['File'][0]['dir'].'thumb/'.$row['File'][0]['filename'],
-						array(
-							'style' => 'border: 1px solid #000'
-						)
-					),
-					$url,
-					array(
-						'escape' => false
-					)
-			) ?>
-			<br />
+				<?php if (!empty($row['File'][0]['id'])): ?>
+					<?= $this->Html->link(
+							$this->Html->image(
+								'/'.$row['File'][0]['dir'].$row['File'][0]['filename'],
+								array(
+									'style' => 'width: 300px;height: 200px'
+								)
+							),
+							$url,
+							array(
+								'escape' => false
+							)
+					) ?>
+				<?php endif ?>
+				<div class="caption">
+					<h3>
+						<?= $this->Html->link($row['Media']['title'], $url) ?>
+						<small>
+							<?= count($row['File']) ?> Images
+						</small>
+					</h3>
 
-			<?= $this->Html->link($row['Media']['title'], $url, array('class' => 'center')) ?>
-		<?php else: ?>
-			<?= $this->Html->link($row['Media']['title'], $url, array('class' => 'center')) ?>
-		<?php endif ?>
-	</div>
-<?php endforeach ?>
+					<em>
+						Posted @ 
+						<?= $this->Admin->time($row['Media']['created'], 'words') ?>
+					</em>
+				</div>
+			</div>
+		</li>
+	<?php endforeach ?>
+</ul>
 
 <div class="clearfix"></div>
 

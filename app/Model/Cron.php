@@ -6,9 +6,9 @@ class Cron extends AppModel
 	public $useTable = 'cron';
 
 	public $belongsTo = array(
-        'Components' => array(
-            'className'    => 'Components',
-            'foreignKey'   => 'component_id'
+        'Module' => array(
+            'className'    => 'Module',
+            'foreignKey'   => 'module_id'
         )
     );
 }

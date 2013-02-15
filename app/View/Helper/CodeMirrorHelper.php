@@ -31,7 +31,6 @@ class CodeMirrorHelper extends AppHelper{
 		    return !/^\s*\(\s*function\b/.test(code) && /^\s*[;\(]/.test(code);
 		  }
 		  function update() {
-		  	console.log(editor.getValue());
 		    editor.setOption('mode', looksLikeScheme(editor.getValue()) ? 'scheme' : 'javascript');
 		  }
 		  update();

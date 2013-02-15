@@ -1,0 +1,26 @@
+h4.image-filters {
+	padding-top: 15px;
+	padding-bottom: 10px;
+}
+
+.upload-file .remove {
+	margin-left: -20px;
+	margin-right: 20px;
+}
+
+.media_libraries {
+	width: 30%;
+	margin-bottom: 12px;
+}
+
+.media-libraries {
+	margin-bottom: 9px;
+}
+
+.clearfix.media {
+	margin-bottom: 15px;
+}
+
+.upload-file:nth-child(3n) {
+	clear: both;
+}

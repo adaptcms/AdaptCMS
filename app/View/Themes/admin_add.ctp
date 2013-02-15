@@ -10,5 +10,8 @@
 	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
 	
 	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-	echo $this->Form->end('Submit');
+	echo $this->Form->end(array(
+		'label' => 'Submit',
+		'class' => 'btn btn-primary'
+	));
 ?>

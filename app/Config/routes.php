@@ -12,14 +12,26 @@
 /**
  * Alpha Routes
  */
-	Router::connect('/admin', array('controller' => 'pages', 'action' => 'display', 'admin'));
+	Router::connect('/admin', array(
+		'controller' => 'pages', 
+		'action' => 'admin'
+	));
 	
-	Router::connect('/category/*', array('controller' => 'categories', 'action' => 'view'));
-	Router::connect('/article/*', array('controller' => 'articles', 'action' => 'view'));
-	Router::connect('/tag/:tag', array(
+	Router::connect('/category/', array(
+		'controller' => 'categories', 
+		'action' => 'view'
+	));
+	Router::connect('/article/', array(
 		'controller' => 'articles', 
-		'action' => 'view_by_tag',
-		'pass' => array('tag')
+		'action' => 'view'
+	));
+	Router::connect('/tag/', array(
+		'controller' => 'articles', 
+		'action' => 'tag'
+	));
+	Router::connect('/users/profile/', array(
+		'controller' => 'users', 
+		'action' => 'profile'
 	));
 
 	Router::connect('/register', array('controller' => 'users', 'action' => 'register'));

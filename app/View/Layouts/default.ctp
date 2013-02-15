@@ -19,9 +19,9 @@
     <?= $this->Html->script('jquery.min.js') ?>
     <?= $this->Html->script('jquery.validate.min.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
-    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>-->
-    <!-- <?= $this->Html->script('//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js') ?> -->
+
     <?= $this->Html->script('global.js') ?>
+    
     <?= $this->AutoLoadJS->getJs() ?>
     <?= $this->AutoLoadJS->getCss() ?>
 
@@ -30,7 +30,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
-    <link href="<?= $this->webroot ?>css/bootstraps.css" rel="stylesheet">
+    <?= $this->Html->css("bootstrap-default.min") ?>
     <style type="text/css">
       body {
         padding-top: 60px;
@@ -40,11 +40,11 @@
         padding: 9px 0;
       }
     </style>
-    <link href="<?= $this->webroot ?>css/bootstrap-responsive.css" rel="stylesheet">
+    <?= $this->Html->css("bootstrap-responsive.min") ?>
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <?= $this->Html->script('html5.min.js') ?>
     <![endif]-->
 
     <link rel="shortcut icon" href="<?= $this->webroot ?>img/favicon.ico">
@@ -110,6 +110,7 @@
               <li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
               <li><a href="<?= $this->webroot ?>admin">Admin</a></li>
             </ul>
+            <?= $this->Element('Search/search_basic') ?>
           </div><!--/.nav-collapse -->
         </div>
       </div>
@@ -121,6 +122,12 @@
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               <li class="nav-header">Links</li>
+              <li>
+                <?= $this->Html->link('Media', array(
+                  'controller' => 'media',
+                  'action' => 'index'
+                )) ?>
+              </li>
               <li>
               	<?= $this->Html->link('RSS Feed', array(
               			'rss' => true,
@@ -136,8 +143,8 @@
               	)) ?>
               </li>
               <li class="nav-header">Categories</li>
-              <?php if (!empty($module_data['categories-list'])): ?>
-                <?php foreach($module_data['categories-list'] as $cat): ?>
+              <?php if (!empty($block_data['categories-list'])): ?>
+                <?php foreach($block_data['categories-list'] as $cat): ?>
                   <li>
                     <?= $this->Html->link($cat['Category']['title'], array(
                         'controller' => 'categories',
@@ -164,11 +171,11 @@
               <?php endif ?>
               <li class="nav-header">Poll</li>
 
-              <?= $this->element('show_poll', array('data' => $module_data['show-poll'])) ?>
+              <?= $this->element('show_poll', array('data' => $block_data['show-poll'])) ?>
 
               <li class="nav-header">Links</li>
 
-              <?= $this->element('links_list', array('data' => $module_data['latest-links'])) ?>
+              <?= $this->element('links_list', array('data' => $block_data['latest-links'])) ?>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
@@ -188,11 +195,12 @@
                 $this->Html->image('cake.power.gif', array('border' => '0')),
                 'http://www.cakephp.org/',
                 array('target' => '_blank', 'escape' => false)
-              );
+              )
             ?>
           </span>
           <span class="pull-right">
-          	&copy; 2006-13 <?= $this->Html->link('AdaptCMS', 'http://www.adaptcms.com') ?>
+          	&copy; 2006-13 <?= $this->Html->link('AdaptCMS', 'http://www.adaptcms.com', array('target' => '_blank')) ?><br />
+            Cosmo theme by <?= $this->Html->link('Bootswatch', 'http://bootswatch.com/cosmo/', array('target' => '_blank')) ?>
           </span>
         </p>
       </footer>

@@ -5,9 +5,9 @@
 <?php if (!empty($numbers)): ?>
     <div class="pagination">
         <ul>
-            <?= $this->Paginator->prev('«', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
+            <?= $this->Paginator->prev('«', array('tag' => 'li'), '<a>«</a>', array('escape' => false, 'class' => 'disabled')) ?>
             <?= $numbers ?>
-            <?= $this->Paginator->next('»', array('tag' => 'li'), '<li><a>«</a></li>', array('escape' => false)) ?>
+            <?= $this->Paginator->next('»', array('tag' => 'li'), '<a>«</a>', array('escape' => false, 'class' => 'next disabled')) ?>
         </ul>
     </div>
 

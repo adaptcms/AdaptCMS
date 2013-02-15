@@ -1,9 +1,9 @@
 <?php
 
 class File extends AppModel{
-	public $name = 'File';
+    public $name = 'File';
 
-	public $hasMany = array(
+    public $hasMany = array(
         'ArticleValue'
     );
     public $hasAndBelongsToMany = array(
@@ -13,17 +13,15 @@ class File extends AppModel{
             'unique' => 'keepExisting'
         )
     );
-	public $actsAs = array(
-		'Upload'
+    public $belongsTo = array(
+        'User' => array(
+            'className' => 'User',
+            'foreignKey' => 'user_id'
+        )
     );
-
-    // public $validate = array(
-    // 'filename' => array(
-    //         'rule' => array(
-    //         	'isUnique',
-    //         )
-    //     )
-    // );
+    public $actsAs = array(
+        'Upload'
+    );
     
     /**
      * @author svogal
@@ -101,7 +99,7 @@ class File extends AppModel{
         }
     }
 
-    public function getModuleData($data, $user_id)
+    public function getBlockData($data, $user_id)
     {
         $cond = array(
             'conditions' => array(

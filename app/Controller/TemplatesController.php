@@ -2,30 +2,42 @@
 
 class TemplatesController extends AppController{
 	public $name = 'Templates';
+	public $components = array(
+		'Api'
+	);
 
 	public function admin_index()
 	{
+        $conditions = array();
+
+        if (!empty($this->params->named['theme_id']))
+        {
+            $conditions['Theme.id'] = $this->params->named['theme_id'];
+        }
+
 		$this->loadModel('Theme');
 
 		if (!isset($this->params->named['trash_temp'])) {
+			$conditions['Template.deleted_time'] = '0000-00-00 00:00:00';
 			$this->paginate = array(
 	            'order' => 'Template.created DESC',
 	            'contain' => array(
 	            	'Theme'
 	            ),
 	            'conditions' => array(
-	            	'Template.deleted_time' => '0000-00-00 00:00:00'
+	            	$conditions
 	            ),
 	            'limit' => $this->pageLimit
 	        );
 		} else {
+			$conditions['Template.deleted_time !='] = '0000-00-00 00:00:00';
 			$this->paginate = array(
 	            'order' => 'Template.created DESC',
 	            'contain' => array(
 	            	'Theme'
 	            ),
 	            'conditions' => array(
-	            	'Template.deleted_time !=' => '0000-00-00 00:00:00'
+	            	$conditions
 	            ),
 	            'limit' => $this->pageLimit
 	        );
@@ -64,6 +76,36 @@ class TemplatesController extends AppController{
 
 		$this->set('current_theme', $current_theme['SettingValue']);
 		$this->set(compact('themes'));
+
+		$active_path = VIEW_PATH . 'Themed';
+		$active_themes = $this->getThemes($active_path);
+
+		$inactive_path = VIEW_PATH . 'Old_Themed';
+		$inactive_themes = $this->getThemes($inactive_path);
+
+		$themes = array_merge($inactive_themes['themes'], $active_themes['themes']);
+		$api_lookup = array_merge($inactive_themes['api_lookup'], $active_themes['api_lookup']);
+
+		if (!empty($api_lookup)){
+			if ($data = $this->Api->themesLookup($api_lookup)) {
+				foreach($themes as $key => $theme) {
+					if (!empty($theme['api_id']) && !empty($data['data'][$theme['api_id']])) {
+						$themes[$key]['data'] = $data['data'][$theme['api_id']];
+					}
+				}
+			}
+		}
+
+		$this->request->data['ThemesData'] = $themes;
+
+		$theme_names = Set::extract('{n}.Theme.title', $this->request->data['Themes']);
+		foreach($this->request->data['ThemesData'] as $key => $theme)
+		{
+			if (!in_array($key, $theme_names))
+			{
+				$this->request->data['Themes'][]['Theme'] = $theme;
+			}
+		}
 	}
 
 	public function admin_add()
@@ -398,24 +440,23 @@ class TemplatesController extends AppController{
 	    					<button class="close" data-dismiss="alert">×</button>
 	    					<strong>Success</strong> The theme has been refreshed.<br />';
 
+	    		$key = 0;
+	    		$templates = array();
+
+	    		$this->Template->create();
+
 				foreach($files as $file) {
 					if (!$this->Template->searchArray($data, $file)) {
-						$this->Template->create();
+						$templates[$key]['Template']['title'] = str_replace('.ctp','', Inflector::humanize(str_replace("/"," ", $file)));
+						$templates[$key]['Template']['location'] = $file;
+						$templates[$key]['Template']['theme_id'] = $this->request->data['Theme']['id'];
+						$templates[$key]['Template']['created'] = $this->Template->dateTime();
 
-						$title = $this->Theme->camelCase(
-									str_replace(".ctp","",basename($file)),1
-								);
-						$title2 = explode("/", str_replace(basename($file),"",$file));
-						end($title2);
-
-						$template['Template']['title'] = $title.' '.prev($title2);
-						$template['Template']['location'] = $file;
-						$template['Template']['theme_id'] = $this->request->data['Theme']['id'];
-						$template['Template']['created'] = date('Y-m-d H:i:s');
-
-						$this->Template->save($template);
+						$key++;
 					}
 				}
+
+				$this->Template->saveAll($templates);
 				echo "</div>";
 			} else {
     				return '
@@ -446,5 +487,53 @@ class TemplatesController extends AppController{
 
     		return $list;
     	}
+	}
+
+	private function getThemes($path)
+	{
+		$themes = array();
+		$api_lookup = array();
+		$exclude = array();
+
+		if ($dh = opendir($path)) {
+			while (($file = readdir($dh)) !== false) {
+                if (!in_array($file, $exclude) && $file != ".." && $file != ".") {
+                	$json = $path . DS . $file . DS . 'theme.json';
+
+					if (file_exists($json) && is_readable($json)) {
+		 				$handle = fopen($json, "r");
+		 				$json_file = fread($handle, filesize($json));
+
+		 				$themes[$file] = json_decode($json_file, true);
+
+		 				if (!empty($themes[$file]['api_id'])) {
+		 					$api_lookup[] = $themes[$file]['api_id'];
+						}
+		 			} else {
+		 				$themes[$file]['title'] = $file;
+		 			}
+
+		 			$upgrade = $path . DS . $file . DS . 'Install' . DS . 'upgrade.json';
+
+		 			if (file_exists($upgrade) && is_readable($upgrade))
+		 			{
+		 				$themes[$file]['upgrade_status'] = 1;
+		 			} else {
+		 				$themes[$file]['upgrade_status'] = 0;
+		 			}
+
+		 			if (strstr($path, 'Old')) {
+		 				$themes[$file]['status'] = 0;
+		 			} else {
+		 				$themes[$file]['status'] = 1;
+		 			}
+                }
+            }
+		}
+
+		return array(
+			'themes' => $themes,
+			'api_lookup' => $api_lookup
+		);
 	}
 }

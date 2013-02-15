@@ -1,56 +1,64 @@
 <?php
 App::uses('AuthComponent', 'Controller/Component');
-class User extends AppModel {
 
-	public $name = 'User';
-	public $hasMany = array(
-    'Article',
-    'Comment'
-  );
-	public $belongsTo = array(
-    'Role'
-  );
+class User extends AppModel
+{
+    public $name = 'User';
+    public $hasMany = array(
+        'Article',
+        'Comment',
+        'Message',
+        'Block',
+        'Category',
+        'Field',
+        'Page',
+        'File',
+        'Media'
+    );
+    public $belongsTo = array(
+        'Role'
+    );
 
-	public $validate = array(
-      'username' => array(
-          array(
-            'rule' => 'notEmpty',
-            'message' => 'Username cannot be empty'
-          ),
-          array(
-            'rule' => 'isUnique',
-            'message' => 'This username is already taken'
-          )
-      ),
-      'email' => array(
-        array(
-          'rule' => 'notEmpty',
-          'message' => 'Email cannot be empty'
+    public $validate = array(
+        'username' => array(
+            array(
+                'rule' => 'notEmpty',
+                'message' => 'Username cannot be empty'
+            ),
+            array(
+                'rule' => 'isUnique',
+                'message' => 'This username is already taken'
+            )
         ),
-        array(
-          'rule' => 'isUnique',
-          'message' => 'This email is already taken'
+        'email' => array(
+            array(
+                'rule' => 'notEmpty',
+                'message' => 'Email cannot be empty'
+            ),
+            array(
+                'rule' => 'isUnique',
+                'message' => 'This email is already taken'
+            )
+        ),
+        'password' => array(
+            array(
+                'rule' => 'notEmpty',
+                'message' => 'Password cannot be empty'
+            ),
+            array(
+                'rule' => array(
+                    'minLength', 
+                    4
+                ),
+                'message' => 'Must be at least 4 characters'
+            ),
+            array(
+                'rule' => array(
+                    'passCompare'
+                ),
+                'message' => 'The passwords do not match'
+            )
         )
-      ),
-      'password' => array(
-          array(
-            'rule' => 'notEmpty',
-            'message' => 'Password cannot be empty'
-          ),
-          array(
-            'rule' => array(
-              'minLength', 
-              4
-            ),
-            'message' => 'Must be at least 4 characters'
-          ),
-          array(
-            'rule' => array(
-              'passCompare'
-            ),
-            'message' => 'The passwords do not match'
-          )
-      )
     );
 
     public function passCompare() {
@@ -58,11 +66,62 @@ class User extends AppModel {
     }
  
     public function beforeSave() {
+        $path = WWW_ROOT . 'uploads' . DS . 'avatars' . DS;
+
+        if (!empty($this->data['User']['settings']['avatar']) && 
+            is_array($this->data['User']['settings']['avatar']))
+        {
+            if (!empty($this->data['User']['id']))
+            {
+                $id = $this->data['User']['id'];
+            } else {
+                $id = time();
+            }
+
+            $filename = $id . '_' . $this->data['User']['settings']['avatar']['name'];
+
+            if (move_uploaded_file(
+                    $this->data['User']['settings']['avatar']['tmp_name'], 
+                    $path . $filename
+                ))
+            {
+                $this->data['User']['settings']['avatar'] = $filename;
+            }
+            else
+            {
+                unset($this->data['User']['settings']['avatar']);
+            }
+        }
+
+        if (!empty($this->data['User']['settings']['old_avatar']))
+        {
+            $file = $this->data['User']['settings']['old_avatar'];
+
+            if (file_exists($path . $file))
+            {
+                unlink($path . $file);
+            }
+        }
+
+        $this->data['User']['security_answers'] = json_encode($this->data['Security']);
+
+        if (!empty($this->data['User']['settings']))
+        {
+            $this->data['User']['settings'] = json_encode(
+                $this->data['User']['settings']
+            );
+        }
+
         if (!empty($this->data['User']['password'])) {
           $this->data['User']['password'] = AuthComponent::password(
             $this->data['User']['password']
           );
         }
+        else
+        {
+            unset($this->data['User']['password']);
+        }
+        // die(debug($this->data));
         return true;
     }
 
@@ -80,5 +139,37 @@ class User extends AppModel {
 
         return $results;
       }
+    }
+
+    public function getBlockData($data, $user_id)
+    {
+        $cond = array(
+            'conditions' => array(
+                'User.deleted_time' => '0000-00-00 00:00:00',
+                'User.status !=' => 0
+            ),
+            'contain' => array(
+                'Role',
+                'Article'
+            )
+        );
+
+        if (!empty($data['limit'])) {
+            $cond['limit'] = $data['limit'];
+        }
+
+        if (!empty($data['order_by'])) {
+            if ($data['order_by'] == "rand") {
+                $data['order_by'] = 'RAND()';
+            }
+
+            $cond['order'] = 'User.'.$data['order_by'].' '.$data['order_dir'];
+        }
+
+        if (!empty($data['data'])) {
+            $cond['conditions']['User.id'] = $data['data'];
+        }
+
+        return $this->find('all', $cond);
     }
 }

@@ -1,6 +1,6 @@
 <script>
  $(document).ready(function(){
-    $("#RoleEditForm").validate();
+    $("#RoleAdminForm").validate();
  });
  </script>
 
@@ -9,30 +9,27 @@
 		<a href="#main" data-toggle="tab">Edit Role</a>
 	</li>
 	<li>
-		<a href="#permission-type" data-toggle="tab">Add Permission Type</a>
+		<a href="#permission" data-toggle="tab">Add Permission</a>
 	</li>
-	<li>
-		<a href="#permission-value" data-toggle="tab">Add Permission Value</a>
-	</li>
+	<div class="right">
+	    <?= $this->Html->link(
+	        '<i class="icon-chevron-left"></i> Return to Index',
+	        array('action' => 'index'),
+	        array('class' => 'btn', 'escape' => false
+	    )) ?>
+	    <?= $this->Html->link(
+	        '<i class="icon-trash icon-white"></i> Delete',
+	        array('action' => 'delete', $this->request->data['Role']['id'], $this->request->data['Role']['title']),
+	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this role?')"));
+	    ?>
+	</div>
 </ul>
 
-<div class="right">
-    <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
-        array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
-    )) ?>
-    <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
-        array('action' => 'delete', $this->request->data['Role']['id'], $this->request->data['Role']['title']),
-        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this role?')"));
-    ?>
-</div>
 <div class="clearfix"></div>
 
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane active fade in" id="main">
-		<?= $this->Form->create('Role', array('class' => 'well')) ?>
+		<?= $this->Form->create('Role', array('class' => 'well', 'id' => 'RoleAdminForm')) ?>
 			<h2>Edit Role</h2>
 
 			<?= $this->Form->input('title', array('class' => 'required')) ?>
@@ -44,79 +41,107 @@
 				'empty' => '- choose -'
 			))
 			?>
-			<?php
-				$category = 0;
-				$i = 0;
-			?>
 
-			<?php foreach($this->request->data['Permission'] as $row): $i++; $perm[$row['id']] = $row['title']; ?>
-				<?= $this->Form->hidden('Permission.'.$row['id'].'.id', array('value' => $row['id'])) ?>
+			<?php foreach($this->request->data['Permission'] as $key => $permission): ?>
+				<div class="span10 no-marg-left">
+					<h4>
+						<?= Inflector::humanize($key) ?>
+					</h4>
+					<table class="table">
+						<thead>
+							<tr>
+								<td>
+								</td>
+								<td>Access</td>
+								<td></td>
+								<td></td>
+							</tr>
+						</thead>
+						<tbody>
+							<?php foreach($permission as $row): ?>
+								<tr>
+									<td>
+										<?= Inflector::humanize($row['action']) ?>
+									</td>
+									<td>
+										<?= $this->Form->hidden('Permission.' . $row['id'] . '.id', array('value' => $row['id'])) ?>
+										<?= $this->Form->input('Permission.' . $row['id'] . '.status', array(
+											'type' => 'checkbox', 
+											'label' => false,
+											'default' => $row['status'],
+											'value' => 1
+										)) ?>
+									</td>
+									<td>
+										<?php if ($row['own'] != 2): ?>
+											<?= $this->Form->input('Permission.' . $row['id'] . '.own', array(
+												'type' => 'checkbox', 
+												'default' => $row['own'],
+												'value' => 1,
+												'class' => 'own'
+											)) ?>
+										<?php endif ?>
+									</td>
+									<td>
+										<?php if ($row['any'] != 2): ?>
+											<?= $this->Form->input('Permission.' . $row['id'] . '.any', array(
+												'type' => 'checkbox', 
+												'default' => $row['any'],
+												'value' => 1,
+												'class' => 'any'
+											)) ?>
+										<?php endif ?>
+									</td>
+								</tr>
+							<?php endforeach ?>
+						</tbody>
+					</table>
+				</div>
+			<?php endforeach ?>
 
-				<?php if ($i % 3 == 0): ?><div style="clear:both"></div><div style="float:left"><?php elseif($i == 1): ?><div style="float:left"><?php else: ?><div style="float:left;margin-left:50px"><?php endif; ?>
-				
-				<?php if ($category == 1) {
-					echo "</ul>";
-				}
-				$category = 1;
-				?>
-				
-				<b><?= $row['title'] ?></b>
-				<ul>
-				<?php foreach($row['PermissionValue'] as $data): ?>
-					<?= $this->Form->hidden('Permission.'.$row['id'].'.PermissionValue.'.$data['id'].'.permission_id', array('value' => $row['id'])) ?>
-					<?= $this->Form->hidden('Permission.'.$row['id'].'.PermissionValue.'.$data['id'].'.id', array('value' => $data['id'])) ?>
-					<li><?= $data['title'] ?> <?= $this->Form->checkbox('Permission.'.$row['id'].'.PermissionValue.'.$data['id'].'.action', array(
-						'default' => $data['action'],
-						'value' => 1
-					)) ?></li>
-				<?php endforeach; ?>
-			</div>
-			<?php endforeach; ?>
-			<div style="clear:both"></div>
+			<div class="clearfix"></div>
 
-			<?php if ($category == 1): ?>
-				</ul>
-			<?php endif ?>
+			<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
+			<?= $this->Form->hidden('old_defaults', array('value' => $this->request->data['Role']['defaults'])) ?>
+			<?= $this->Form->hidden('id') ?>
 
-		<?= $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time()))) ?>
-		<?= $this->Form->hidden('id') ?>
-
-		<br />
 		<?= $this->Form->end(array(
-				'label' => 'Submit',
-				'class' => 'btn'
+			'label' => 'Submit',
+			'class' => 'btn btn-primary'
 		)) ?>
 	</div>
-	
-	<div class="tab-pane" id="permission-type">
-		<?= $this->Form->create('Permission', array('action' => 'add', 'class' => 'well')); ?>
+
+	<div class="tab-pane" id="permission">
+		<?= $this->Form->create('Permission', array('action' => 'add', 'class' => 'well')) ?>
 			<h2>Add Permission</h2>
 
-			<?= $this->Form->input('title') ?>
-			<?= $this->Form->hidden('role_id', array('value' => $this->request->data['Role']['id'])) ?>
-
-		<br />
-		<?= $this->Form->end(array(
-				'label' => 'Submit',
-				'class' => 'btn'
-		)) ?>
-	</div>
-
-	<div class="tab-pane" id="permission-value">
-		<?= $this->Form->create('PermissionValue', array('action' => 'add', 'class' => 'well')) ?>
-			<h2>Add Permission Values</h2>
-
-			<?= $this->Form->input('title') ?>
-			<?= $this->Form->input('permission_id', array('empty' => '- choose -', 'options' => $perm)) ?>
 			<?= $this->Form->input('plugin') ?>
 			<?= $this->Form->input('controller') ?>
-			<?= $this->Form->input('pageAction') ?>
-			<?= $this->Form->input('action', array('options' => array(0, 1))) ?>
+			<?= $this->Form->input('action') ?>
+			<?= $this->Form->input('status', array(
+				'value' => 1,
+				'type' => 'checkbox'
+			)) ?>
 
+			<?= $this->Form->input('own', array(
+				'value' => 1,
+				'type' => 'checkbox'
+			)) ?>
+			<?= $this->Form->input('any', array(
+				'value' => 1,
+				'type' => 'checkbox'
+			)) ?>
+
+			<?= $this->Form->input('related', array(
+				'type' => 'textarea'
+			)) ?>
+
+			<?= $this->Form->input('module_id', array(
+				'empty' => '- choose -',
+				'options' => $this->request->data['Modules']
+			)) ?>
 			<?= $this->Form->hidden('role_id', array('value' => $this->request->data['Role']['id'])) ?>
-			<?= $this->Form->hidden('type', array('value' => 'default')) ?>
 
-		<br />
 		<?= $this->Form->end(array(
 				'label' => 'Submit',
 				'class' => 'btn'

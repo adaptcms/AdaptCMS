@@ -93,7 +93,6 @@ function fixPagination()
 		var li_active_paginator_html = $(".active.paginator").html();
 		var li_active_paginator = $(".active.paginator").clone().wrap('<p>').parent().html().
 			replace(li_active_paginator_html, '<a>' + li_active_paginator_html + '</a>');
-
 		$("li.active.paginator").replaceWith(li_active_paginator);
 	}
 
@@ -105,5 +104,19 @@ function fixPagination()
 				$(this).remove();
 			}
 		});
+	}
+
+	if ($(".pagination ul span a").length > 0)
+	{
+		orig = $(".pagination ul span").wrap('<li class="' + $(".pagination ul span").attr('class') + '">');
+
+		val = orig.find('a');
+
+		if (orig.hasClass('next') && val.html('«'))
+		{
+			val.html('»');
+		}
+
+		orig.replaceWith(val);
 	}
 }

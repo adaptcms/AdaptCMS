@@ -39,6 +39,11 @@ class Theme extends AppModel{
         $exclude = array(".", "themes", ".htaccess", "index.php", "uploads");
         $exclude2 = array("..", "fancybox", "tiny_mce");
 
+        if (!file_exists($path))
+        {
+            return array();
+        }
+
         if ($dh = opendir($path)) {
             while (($file = readdir($dh)) !== false) {
                 if (!in_array($file, $exclude) && $file != ".." && $file != ".") {

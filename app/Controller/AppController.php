@@ -3,7 +3,8 @@ App::uses('Controller', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
 App::import('Model', 'ConnectionManager');
 
-class AppController extends Controller {
+class AppController extends Controller
+{
 	public $components = array(
 		'DebugKit.Toolbar' => array(
 			'debug' => 2
@@ -32,9 +33,6 @@ class AppController extends Controller {
 		'Session',
 		'Security' => array(
 			'csrfExpires' => '+3 hour'
-		),
-		'Facebook.Connect' => array(
-			'model' => 'User'
 		)
 	);
 
@@ -43,18 +41,57 @@ class AppController extends Controller {
 		'Form', 
 		'Time', 
 		'Cache', 
-		'LastFM', 
 		'AutoLoadJS',
-		'Captcha',
-		// 'Facebook.Facebook'
+		'Admin'
 	);
-	public $uses = array(
-		'PermissionValue', 
-		'Log'
-	);
+
+	private $permissions;
 
 	public function beforeFilter()
 	{
+		$system_path = realpath(CACHE . '/../system/');
+
+		/*
+		* Loads Up Components from JSON file
+		*/
+		if (file_exists($system_path . '/components.json'))
+		{
+			$components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
+
+			foreach($components_array as $key => $component)
+			{
+				if (is_numeric($key))
+				{
+					$this->$component = $this->Components->load($component);
+				} elseif (strstr($key, '.')) {
+					$componentName = explode('.', $key);
+					$name = $componentName[1];
+
+					$this->$componentName[1] = $this->Components->load($key, $component);
+				} else {
+					$this->$key = $this->Components->load($key, $component);
+				}
+			}
+		}
+
+		/*
+		* Loads Up Helpers from JSON file
+		*/
+		if (file_exists($system_path . '/helpers.json'))
+		{
+			$helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
+
+			foreach($helpers_array as $key => $helper)
+			{
+				if (is_numeric($key))
+				{
+					$this->helpers[] = $helper;
+				} else {
+					$this->helpers[] = $key;
+				}
+			}
+		}
+
 		if ($this->params->controller != "install") {
 			try {
 				$db = ConnectionManager::getDataSource('default');
@@ -80,12 +117,12 @@ class AppController extends Controller {
         $this->layout();
 		$this->accessCheck();
 		$this->runCron();
-		$this->moduleLookup();
+		$this->blocksLookup();
 
 		$this->theme = 'Default';
 
 		if ($this->Auth->user('id')) {
-			$this->logAction();
+			// $this->logAction();
 		}
 
 		if ($this->RequestHandler->isAjax() || $this->RequestHandler->isRss()) {
@@ -95,6 +132,7 @@ class AppController extends Controller {
 		// Number of Items Per Page
 		if ($this->params->action == "admin_index") {
 			$this->loadModel('SettingValue');
+
 			if ($limit = $this->SettingValue->findByTitle('Number of Items Per Page')) {
 				$this->pageLimit = $limit['SettingValue']['data'];
 			} else {
@@ -114,7 +152,7 @@ class AppController extends Controller {
 			}
 		} else {
 			if (!empty($this->params->prefix) && $this->params->prefix == "admin" or 
-				!empty($this->params->pass) && $this->params->pass[0] == "admin" && strtolower($this->params->controller) != "users") {
+				$this->params->action == "admin" && strtolower($this->params->controller) != "users") {
 				$this->layout = "admin";
 				$this->set('prefix', 'admin');
 			} elseif (!empty($this->params->prefix) && $this->params->prefix == "rss") {
@@ -127,106 +165,220 @@ class AppController extends Controller {
 
 	public function accessCheck()
 	{
-		if ($this->Auth->user('role_id')) {
-			$role_id = $this->Auth->user('role_id');
-		} else {
-			$this->loadModel('Role');
-			if ($role = $this->Role->findByDefaults('default-guest')) {
-				$role_id = $role['Role']['id'];
-			} else {
-				$role_id = null;
-			}
-		}
+		$this->loadModel('Permission');
 
 		if (!empty($this->allowedActions) && in_array($this->params->action, $this->allowedActions)) {
 			$allowed = 1;
 		} elseif (strstr($this->params->action, "login") or strstr($this->params->action, "activate") or strstr($this->params->action, "logout") 
 			or strstr($this->params->action, "register") or strstr($this->params->action, "_password")
 			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "denied")
-			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home") or strstr($this->params->action, "ajax")
-			|| !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install' ||
-			!empty($this->params->ext) && $this->params->ext == "json") {
+			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home")
+			|| !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install' && !strstr($this->params->action, 'plugin') ||
+			!empty($this->params->ext) && $this->params->ext == "json" || $this->params->ext == "css" || $this->params->ext == "js" || $this->params->ext == "less") {
 				$this->Auth->allow($this->params->action);
 		} elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id')
-			|| !empty($this->params->pass) && $this->params->pass[0] == "admin" && !$this->Auth->User('id')
+			|| $this->params->action == "admin" && !$this->Auth->User('id')
 			&& strtolower($this->params->controller) != "users"
 			) {
 				$this->Auth->deny($this->params->action);
-		} elseif ($role_id) {
+		} elseif ($this->getRole()) {
 			if (empty($this->params->plugin)) {
 				$this->params->plugin = '';
 			}
 
-			if (!empty($this->params->pass[0]) && $this->params->pass[0] == "admin" && 
-				$this->params->controller == "pages" && $this->params->action == "display") {
+			if ($this->params->action == "admin" && $this->params->controller == "pages") {
 
-				$permission1 = $this->PermissionValue->find('first', array(
+				$permission = $this->Permission->find('first', array(
 					'conditions' => array(
-						'PermissionValue.role_id' => $role_id,
-						'PermissionValue.action' => 1,
-						'PermissionValue.pageAction LIKE' => '%admin%'
-					),
-					'fields' => array(
-						'PermissionValue.action'
+						'Permission.role_id' => $this->getRole(),
+						'Permission.status' => 1,
+						'Permission.action LIKE' => '%admin%'
 					)
 				));
-				$permission[0] = $permission1;
 			} else {
 				if (!empty($this->params->pass[0]) && is_numeric($this->params->pass[0])) {
-					$permission1 = $this->PermissionValue->find('first', array(
+					$permission = $this->Permission->find('first', array(
 						'conditions' => array(
-							'PermissionValue.role_id' => $role_id,
-							'PermissionValue.pageAction' => $this->params->action,
-							'PermissionValue.controller' => $this->params->controller,
-							'PermissionValue.plugin' => $this->params->plugin,
-							'PermissionValue.type' => 'individual',
-							'PermissionValue.action_id' => $this->params->pass[0]
-						),
-						'fields' => array(
-							'PermissionValue.action'
+							'Permission.role_id' => $this->getRole(),
+							'Permission.action' => $this->params->action,
+							'Permission.controller' => $this->params->controller,
+							'Permission.plugin' => $this->params->plugin,
+							'Permission.action_id' => $this->params->pass[0]
 						)
 					));
 
-					if (empty($permission1)) {
-						$permission1 = $this->PermissionValue->find('first', array(
+					if (empty($permission)) {
+						$permission = $this->Permission->find('first', array(
 							'conditions' => array(
-								'PermissionValue.role_id' => $role_id,
-								'PermissionValue.pageAction' => $this->params->action,
-								'PermissionValue.controller' => $this->params->controller,
-								'PermissionValue.plugin' => $this->params->plugin,
-								'PermissionValue.type' => 'default',
+								'Permission.role_id' => $this->getRole(),
+								'Permission.action' => $this->params->action,
+								'Permission.controller' => $this->params->controller,
+								'Permission.plugin' => $this->params->plugin,
 							),
-							'fields' => array(
-								'PermissionValue.action'
-							)
 						));
 					}
 
 				} else {
-					$permission1 = $this->PermissionValue->find('first', array(
+					$permission = $this->Permission->find('first', array(
 						'conditions' => array(
-							'PermissionValue.role_id' => $role_id,
-							'PermissionValue.pageAction' => $this->params->action,
-							'PermissionValue.controller' => $this->params->controller,
-						),
-						'fields' => array(
-							'PermissionValue.action'
+							'Permission.role_id' => $this->getRole(),
+							'Permission.action' => $this->params->action,
+							'Permission.controller' => $this->params->controller,
 						)
 					));
 				}
-
-				$permission[0] = $permission1;
 			}
 
-			if (!empty($permission[0]['PermissionValue']['action']) && $permission[0]['PermissionValue']['action'] == 0) {
+			$this->permissions = $this->getRelatedPermissions($permission);
+			$this->set('permissions', $this->permissions);
+
+			if (!empty($permission['Permission']['status']) && $permission['Permission']['status'] == 0) {
 				$this->denyRedirect();
 				$this->Auth->deny($this->params->action);
-			} elseif (empty($permission[0]['PermissionValue']['action'])) {
+			} elseif (empty($permission['Permission']['status'])) {
 				$this->denyRedirect();
 				$this->Auth->deny($this->params->action);
-			} elseif ($permission[0]['PermissionValue']['action'] == 1) {
+			} elseif ($permission['Permission']['status'] == 1) {
 				$this->Auth->allow($this->params->action);
 			}
+		}
+	}
+
+	public function getPermissions()
+	{
+		return $this->permissions;
+	}
+
+	public function getRole()
+	{
+		if ($this->Auth->user('role_id')) {
+			return $this->Auth->user('role_id');
+		} else {
+			$this->loadModel('Role');
+			if ($role = $this->Role->findByDefaults('default-guest')) {
+				return $role['Role']['id'];
+			} else {
+				return null;
+			}
+		}
+	}
+
+	public function permissionLookup( $params = array() )
+	{
+		$this->loadModel('Permission');
+
+		if (!empty($params[0]))
+		{
+			$params = $params[0];
+		}
+		
+		if ( empty($params['action']) )
+		{
+			$params['action'] = $this->params->action;
+		}
+
+		if ( empty($params['controller']) )
+		{
+			$params['controller'] = $this->params->controller;
+		}
+
+		if ( empty($params['plugin']) )
+		{
+			if ( !empty($this->params->plugin) )
+			{
+				$params['plugin'] = $this->params->plugin;
+			} else {
+				$params['plugin'] = '';
+			}
+		}
+
+		$permission = $this->Permission->find('first', array(
+			'conditions' => array(
+				'Permission.role_id' => $this->getRole(),
+				'Permission.action' => $params['action'],
+				'Permission.controller' => $params['controller'],
+				'Permission.plugin' => $params['plugin'],
+			)
+		));
+
+		if (!empty($params['show']))
+		{
+			return $permission;
+		}
+
+		if (empty($permission) ||
+			empty($permission['Permission']['status']))
+		{
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	public function getRelatedPermissions($permission, $controller = null)
+	{
+		if (!empty($permission))
+		{
+			$permissions = array();
+
+			if (!empty($permission['Permission']['controller']))
+			{
+				$controller = $permission['Permission']['controller'];
+			} elseif (empty($controller))
+			{
+				$controller = $this->params->controller;
+			}
+
+			if (is_array($permission) && empty($permission['Permission']))
+			{
+				foreach($permission as $row)
+				{
+					$data[] = $this->getRelatedPermissions($row);
+				}
+
+				return $data;
+			}
+
+			if (!empty($permission['Permission']['related']))
+			{
+				$related_values = json_decode($permission['Permission']['related'], true);
+
+				$values = array();
+				foreach($related_values as $key => $val)
+				{
+					$values['OR'][$key]['AND'] = array(
+						'Permission.action' => $val['action'][0],
+						'Permission.controller' => (!empty($val['controller'][0]) ? $val['controller'][0] : $controller),
+						'Permission.status' => 1
+					);
+				}
+
+				$related['related'] = $this->Permission->find('all', array(
+					'conditions' => array(
+						'Permission.role_id' => $this->getRole(),
+						$values
+					)
+				));
+
+				foreach($related['related'] as $key => $row)
+				{
+					$related['related']
+						[$row['Permission']['controller']]
+						[$row['Permission']['action']] = $row['Permission'];
+					unset($related['related'][$key]);
+				}
+
+				$permissions = array_merge(
+					$permission['Permission'], 
+					$related
+				);
+			} else {
+				$permissions = $permission['Permission'];
+			}
+
+			return $permissions;
+		} else {
+			return false;
 		}
 	}
 
@@ -246,6 +398,7 @@ class AppController extends Controller {
     		)));
     	} else {
 	    	die(debug($this->params));
+
 	    	$this->redirect(array(
 	    		'plugin' => false,
 	    		'admin' => false, 
@@ -272,6 +425,8 @@ class AppController extends Controller {
 
 	public function logAction()
 	{
+		$this->loadModel('Log');
+
 		if (!empty($this->params['pass'][0])) {
 			$action_id = $this->params['pass'][0];
 		} else {
@@ -291,80 +446,111 @@ class AppController extends Controller {
 		// $this->Log->save($log_insert);
 	}
 
-	public function moduleLookup()
+	public function blocksLookup()
 	{
 		if ($this->params->prefix != "admin") {
-			$this->loadModel('Module');
+			$this->loadModel('Block');
 
 			if (!empty($this->params['pass'][0])) {
 				$location = $this->params->controller.'|'.$this->params->action.'|'.$this->params['pass'][0];
 				$location2 = $this->params->controller.'|'.$this->params->action;
 
-				$module_cond = array(
+				$block_cond = array(
 					'conditions' => array(
 						'OR' => array(
-							array('Module.location LIKE' => '%"*"%'),
-							array('Module.location LIKE' => '%"' . $location . '"%'),
-							array('Module.location LIKE' => '%"' . $location2 . '"%')
+							array('Block.location LIKE' => '%"*"%'),
+							array('Block.location LIKE' => '%"' . $location . '"%'),
+							array('Block.location LIKE' => '%"' . $location2 . '"%')
 						),
-						'Module.deleted_time' => '0000-00-00 00:00:00'
+						'Block.deleted_time' => '0000-00-00 00:00:00'
 					),
 					'contain' => array(
-						'Components'
+						'Module'
 					)
 				);
 			} else {
 				$location = $this->params->controller.'|'.$this->params->action;
-				$module_cond = array(
+				$block_cond = array(
 					'conditions' => array(
 						'OR' => array(
-							array('Module.location LIKE' => '%"*"%'),
-							array('Module.location LIKE' => '%"' . $location . '"%')
+							array('Block.location LIKE' => '%"*"%'),
+							array('Block.location LIKE' => '%"' . $location . '"%')
 						),
-						'Module.deleted_time' => '0000-00-00 00:00:00'
+						'Block.deleted_time' => '0000-00-00 00:00:00'
 					),
 					'contain' => array(
-						'Components'
+						'Module'
 					)
 				);
 			}
 
-			$data = $this->Module->find('all', $module_cond);
+			$data = $this->Block->find('all', $block_cond);
 
-			if (!empty($data)) {
-				$module_data = array();
+			if (!empty($data))
+			{
+				$block_data = array();
+				$block_permissions = array();
 				$models = array();
 
-				foreach($data as $row) {
-					if ($row['Components']['is_plugin'] == 1) {
-						$model = $row['Components']['model_title'];
-						$this->loadModel(
-							str_replace(' ','',$row['Components']['title']).'.'.$model
-						);
-					} else {
-						$model = $row['Components']['model_title'];
-						$this->loadModel($model);
-					}
+				foreach($data as $row)
+				{
+			        if (!empty($row['Block']['settings']))
+			        {
+			            $settings = json_decode($row['Block']['settings']);
 
-			        if (!empty($row['Module']['settings'])) {
-			            $settings = json_decode($row['Module']['settings']);
-
-			            foreach($settings as $key => $val) {
-			                $row['Module'][$key] = $val;
+			            foreach($settings as $key => $val)
+			            {
+			                $row['Block'][$key] = $val;
 			            }
 
-			            unset($row['Module']['settings']);
+			            unset($row['Block']['settings']);
 			        }
 
-					$module_data
-						[$row['Module']['title']] = $this->$model->getModuleData(
-							$row['Module'], 
-							$this->Auth->user('id')
-					);
+			        if ($row['Block']['type'] == "dynamic")
+			        {
+						if ($row['Module']['is_plugin'] == 1)
+						{
+							$model = $row['Module']['model_title'];
+							$this->loadModel(
+								str_replace(' ','',$row['Module']['title']).'.'.$model
+							);
+						} else {
+							$model = $row['Module']['model_title'];
+							$this->loadModel($model);
+						}
+
+						$permissions = $this->Block->Module->Permission->find('first', array(
+							'conditions' => array(
+								'Permission.module_id' => $row['Module']['id'],
+								'Permission.action NOT LIKE' => '%admin%',
+								'Permission.role_id' => $this->Auth->user('id')
+							),
+							'order' => 'Permission.related DESC',
+							'limit' => 1
+						));
+
+						if (!empty($permissions))
+						{
+							$block_permissions
+								[$row['Block']['title']] = 
+									$this->getRelatedPermissions($permissions);
+						}
+
+				        if (method_exists($this->$model, 'getBlockData'))
+				        {
+							$block_data
+								[$row['Block']['title']] = $this->$model->getBlockData(
+									$row['Block'], 
+									$this->Auth->user('id')
+							);
+						}
+					} else {
+						$block_data[$row['Block']['title']] = $row['Block']['data'];
+					}
 				}
 			}
 
-			$this->set(compact('module_data'));
+			$this->set(compact('block_data', 'block_permissions'));
 		}
 	}
 
@@ -378,7 +564,7 @@ class AppController extends Controller {
 				'Cron.deleted_time' => '0000-00-00 00:00:00'
 			),
 			'contain' => array(
-				'Components'
+				'Module'
 			),
 			'order' => 'run_time ASC'
 		));
@@ -386,13 +572,13 @@ class AppController extends Controller {
 		if (!empty($find)) {
 			$function = $find['Cron']['function'];
 
-			if ($find['Components']['is_plugin'] == 1) {
-				$model = $find['Components']['model_title'];
+			if ($find['Module']['is_plugin'] == 1) {
+				$model = $find['Module']['model_title'];
 				$this->loadModel(
-					str_replace(' ','',$find['Components']['title']).'.'.$model
+					str_replace(' ','',$find['Module']['title']).'.'.$model
 				);
 			} else {
-				$model = $find['Components']['model_title'];
+				$model = $find['Module']['model_title'];
 				$this->loadModel($model);
 			}
 
@@ -469,5 +655,44 @@ class AppController extends Controller {
     	$this->Session->write('login_type', 'facebook');
     	$this->Session->setFlash('Welcome back '.$this->Auth->User('username').'!', 'flash_success');
         return $this->redirect('/');
+    }
+
+    public function getTimeZones()
+    {
+    	return array(
+    		'-12' => '(GMT -12:00) Eniwetok, Kwajalein',
+			'-11' => '(GMT -11:00) Midway Island, Samoa',
+			'-10' => '(GMT -10:00) Hawaii',
+			'-9' => '(GMT -9:00) Alaska',
+			'-8' => '(GMT -8:00) Pacific Time (US & Canada)',
+			'-7' => '(GMT -7:00) Mountain Time (US & Canada)',
+			'-6' => '(GMT -6:00) Central Time (US & Canada), Mexico City',
+			'-5' => '(GMT -5:00) Eastern Time (US & Canada), Bogota, Lima',
+			'-4.5' => '(GMT -4:30) Caracas',
+			'-4' => '(GMT -4:00) Atlantic Time (Canada), La Paz, Santiago',
+			'-3.5' => '(GMT -3:30) Newfoundland',
+			'-3' => '(GMT -3:00) Brazil, Buenos Aires, Georgetown',
+			'-2' => '(GMT -2:00) Mid-Atlantic',
+			'-1' => '(GMT -1:00 hour) Azores, Cape Verde Islands',
+			'0' => '(GMT) Western Europe Time, London, Lisbon, Casablanca',
+			'1' => '(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris',
+			'2' => '(GMT +2:00) Kaliningrad, South Africa',
+			'3' => '(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg',
+			'3.5' => '(GMT +3:30) Tehran',
+			'4' => '(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi',
+			'4.5' => '(GMT +4:30) Kabul',
+			'5' => '(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent',
+			'5.5' => '(GMT +5:30) Mumbai, Kolkata, Chennai, New Delhi',
+			'5.75' => '(GMT +5:45) Kathmandu',
+			'6' => '(GMT +6:00) Almaty, Dhaka, Colombo',
+			'6.5' => '(GMT +6:30) Yangon, Cocos Islands',
+			'7' => '(GMT +7:00) Bangkok, Hanoi, Jakarta',
+			'8' => '(GMT +8:00) Beijing, Perth, Singapore, Hong Kong',
+			'9' => '(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk',
+			'9.5' => '(GMT +9:30) Adelaide, Darwin',
+			'10' => '(GMT +10:00) Eastern Australia, Guam, Vladivostok',
+			'11' => '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
+			'12' => '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka'
+		);
     }
 }

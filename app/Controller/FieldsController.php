@@ -2,46 +2,77 @@
 
 class FieldsController extends AppController {
 	public $name = 'Fields';
+    private $permissions;
+
+    public function beforeFilter()
+    {
+        parent::beforeFilter();
+
+        $actions = array(
+            'admin_index',
+            'admin_add',
+            'admin_edit'
+        );
+
+        if (in_array($this->params->action, $actions))
+        {
+            $categories = $this->Field->Category->find('list', array(
+                'conditions' => array(
+                    'Category.deleted_time' => '0000-00-00 00:00:00'
+                )
+            ));
+
+            $field_types = $this->Field->field_types;
+
+            $this->set(compact('categories', 'field_types'));
+        }
+
+        $this->permissions = $this->getPermissions();
+    }
 
 	public function admin_index()
 	{
-        if (!isset($this->params->named['trash'])) {
-            $this->paginate = array(
-                'order' => 'Field.created DESC',
-                'limit' => $this->pageLimit,
-                'conditions' => array(
-                    'Field.deleted_time' => '0000-00-00 00:00:00'
-                ),
-                'contain' => array(
-                    'Category'
-                ),
-                'fields' => 'Field.*, Category.*'
-            );
-        } else {
-            $this->paginate = array(
-                'order' => 'Field.created DESC',
-                'limit' => $this->pageLimit,
-                'conditions' => array(
-                    'Field.deleted_time' => '0000-00-00 00:00:00'
-                ),
-                'contain' => array(
-                    'Category'
-                ),
-                'fields' => 'Field.*, Category.*'
-            );
+        $conditions = array();
+
+        if (!empty($this->params->named['category_id']))
+        {
+            $conditions['Category.id'] = $this->params->named['category_id'];
         }
+
+        if (isset($this->params->named['field_type']))
+        {
+            $conditions['Field.field_type'] = $this->params->named['field_type'];
+        }
+
+        if ($this->permissions['any'] == 0)
+        {
+            $conditions['User.id'] = $this->Auth->user('id');
+        }
+
+        if (!isset($this->params->named['trash'])) {
+            $conditions['Field.deleted_time'] = '0000-00-00 00:00:00';
+        } else {
+            $conditions['Field.deleted_time !='] = '0000-00-00 00:00:00';
+        }
+
+        $this->paginate = array(
+            'order' => 'Field.created DESC',
+            'limit' => $this->pageLimit,
+            'conditions' => array(
+                $conditions
+            ),
+            'contain' => array(
+                'Category',
+                'User'
+            ),
+            'fields' => 'Field.*, Category.*, User.*'
+        );
         
         $this->request->data = $this->paginate('Field');
 	}
 
 	public function admin_add()
 	{
-		$categories = $this->Field->Category->find('list', array(
-            'conditions' => array(
-                'Category.deleted_time' => '0000-00-00 00:00:00'
-            )
-        ));
-
         /*
         $fields = $this->Field->find('all');
 
@@ -52,7 +83,7 @@ class FieldsController extends AppController {
         */
         $import = $this->Field->find('list');
 
-        $this->set(compact('import', 'categories'));
+        $this->set(compact('import'));
 
         if ($this->request->is('post')) {
             if ($this->request->data['Field']['required'] == 1) {
@@ -84,6 +115,8 @@ class FieldsController extends AppController {
             }
 
     		$this->request->data['Field']['title'] = $this->slug($this->request->data['Field']['title']);
+            $this->request->data['Field']['user_id'] = $this->Auth->user('id');
+
             if (!empty($this->request->data['FieldData'])) {
                 $this->request->data['Field']['field_options'] = 
                     json_encode($this->request->data['FieldData']);
@@ -129,6 +162,8 @@ class FieldsController extends AppController {
                     $this->request->data['Field']['label'] = $this->request->data['Field']['title'];
             }
     		$this->request->data['Field']['title'] = $this->slug($this->request->data['Field']['title']);
+            $this->request->data['Field']['user_id'] = $this->Auth->user('id');
+
             if (!empty($this->request->data['FieldData'])) {
                 $this->request->data['Field']['field_options'] = 
                     json_encode($this->request->data['FieldData']);
@@ -142,13 +177,20 @@ class FieldsController extends AppController {
 	        }
 	    }
 
-        $this->request->data = $this->Field->findById($id);
-
-        $categories = $this->Field->Category->find('list', array(
+        $this->request->data = $this->Field->find('first', array(
             'conditions' => array(
-                'Category.deleted_time' => '0000-00-00 00:00:00'
+                'Field.id' => $id
+            ),
+            'contain' => array(
+                'User'
             )
         ));
+
+        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));                
+        }
 
         $fields = $this->Field->find('all', array(
             'conditions' => array(
@@ -157,7 +199,7 @@ class FieldsController extends AppController {
             'order' => 'Field.field_order ASC'
         ));
 
-        $this->set(compact('categories', 'fields'));
+        $this->set(compact('fields'));
 	}
 
 	public function admin_delete($id = null, $title = null, $permanent = null)
@@ -167,6 +209,20 @@ class FieldsController extends AppController {
         }
 
         $this->Field->id = $id;
+
+        $data = $this->Field->find('first', array(
+            'conditions' => array(
+                'Field.id' => $id
+            ),
+            'contain' => array(
+                'User'
+            )
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));                
+        }
 
         if (!empty($permanent)) {
             $delete = $this->Field->delete($id);
@@ -194,6 +250,20 @@ class FieldsController extends AppController {
         }
 
         $this->Field->id = $id;
+
+        $data = $this->Field->find('first', array(
+            'conditions' => array(
+                'Field.id' => $id
+            ),
+            'contain' => array(
+                'User'
+            )
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));                
+        }
 
         if ($this->Field->saveField('deleted_time', '0000-00-00 00:00:00')) {
             $this->Session->setFlash('The field `'.$title.'` has been restored.', 'flash_success');

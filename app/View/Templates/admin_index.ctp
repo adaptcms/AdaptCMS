@@ -74,8 +74,13 @@
                 }
         }
     });
- });
- </script>
+
+    $(".info").popover({
+        trigger: 'hover',
+        placement: 'left'
+    });
+});
+</script>
 
 <h1>Appearance Settings</h1>
 
@@ -97,25 +102,48 @@
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
-    View
+    View <i class="icon-picture"></i>
     <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" style="min-width: 0px">
-    <li><?= $this->Html->link('Active', array('admin' => true, 'action' => 'index')) ?></li>
-    <li><?= $this->Html->link('Trash', array('admin' => true, 'action' => 'index', 'trash_theme' => 1)) ?></li>
+  <ul class="dropdown-menu view">
+    <li>
+        <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
+            'admin' => true, 
+            'action' => 'index'
+        ), array('escape' => false)) ?>
+    </li>
+    <li>
+        <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
+            'admin' => true, 
+            'action' => 'index', 
+            'trash_theme' => 1
+        ), array('escape' => false)) ?>
+    </li>
   </ul>
 </div>
 <div class="clear"></div>
 
-<?= $this->Html->link('Add Theme', array('controller' => 'themes', 'action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')); ?>
-<table class="table table-bordered">
-    <tr>
-        <th>Title</th>
-        <th>Created</th>
-        <th>Options</th>
-    </tr>
+<?= $this->Html->link('Add Theme <i class="icon icon-plus icon-white"></i>', array(
+        'controller' => 'themes', 
+        'action' => 'add'
+    ), array(
+        'class' => 'btn btn-info pull-right', 
+        'style' => 'margin-bottom:10px',
+        'escape' => false
+    )
+) ?>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 50%">Title</th>
+            <th>Created</th>
+            <th>Theme Version</th>
+            <th></th>
+        </tr>
+    </thead>
     
-    <?php if (!empty($this->request->data['Themes'])): ?>
+    <tbody>
         <?php foreach ($this->request->data['Themes'] as $data): ?>
             <?php if ($data['Theme']['title'] == 'Default'): ?>
                 <tr>
@@ -126,65 +154,202 @@
                         </a>
                     </td>
                     <td></td>
+                    <td></td>
                     <td>
-                        <?= $this->Html->link(
-                            '<i class="icon-pencil icon-white"></i> Edit', 
-                            array('controller' => 'themes', 'action' => 'edit', 1),
-                            array('class' => 'btn btn-primary', 'escape' => false));
-                        ?>
+                        <div class="btn-group">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <?= $this->Admin->edit(1, 'themes') ?>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             <?php else: ?>  
                 <tr>
                     <td>
-                        <?= $this->Html->link($data['Theme']['title'], array('admin' => false, 'controller' => 'templates', 'action' => 'view', $data['Theme']['id'])); ?> <a class="btn btn-small btn-info" id="<?= $data['Theme']['id'] ?>" href="#<?= $data['Theme']['title'] ?>" style="float:right"><i class="icon-refresh icon-white"></i></a>
-                    </td>
-                    <td><?= $this->Time->format('F jS, Y h:i A', $data['Theme']['created']); ?></td>
-                    <td>
-                        <?php if (empty($this->params->named['trash_theme'])): ?>
-                            <?= $this->Html->link(
-                                '<i class="icon-pencil icon-white"></i> Edit', 
-                                array('controller' => 'themes', 'action' => 'edit', $data['Theme']['id']),
-                                array('class' => 'btn btn-primary', 'escape' => false));
-                            ?>
-                            <?= $this->Html->link(
-                                '<i class="icon-trash icon-white"></i> Delete',
-                                array('controller' => 'themes', 'action' => 'delete', $data['Theme']['id'], $data['Theme']['title']),
-                                array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this theme?')"));
-                            ?>
-                        <?php else: ?>
-                            <?= $this->Html->link(
-                                '<i class="icon-share-alt icon-white"></i> Restore', 
-                                array('controller' => 'themes', 'action' => 'restore', $data['Theme']['id'], $data['Theme']['title']),
-                                array('class' => 'btn btn-success', 'escape' => false));
-                            ?>    
-                            <?= $this->Html->link(
-                                '<i class="icon-trash icon-white"></i> Delete Forever',
-                                array('controller' => 'themes', 'action' => 'delete', $data['Theme']['id'], $data['Theme']['title'], 1),
-                                array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this theme? This is permanent.')"));
-                            ?>      
+                        <?= $data['Theme']['title'] ?> 
+                        <?php if (!empty($data['Theme']['id'])): ?>
+                            <a class="btn btn-small btn-info" id="<?= $data['Theme']['id'] ?>" href="#<?= $data['Theme']['title'] ?>" style="float:right"><i class="icon-refresh icon-white"></i></a>
+                        <?php endif ?>
+
+                        <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                            <br />
+                            <p class="span10 no-marg-left">
+                                <?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['short_description'] ?>
+                            </p>
+
+                            <div class="clearfix"></div>
+                            <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data']['author_url'])): ?>
+                                <?= $this->Html->link(
+                                    $this->request->data['ThemesData'][$data['Theme']['title']]['data']['author_name'], 
+                                    $this->request->data['ThemesData'][$data['Theme']['title']]['data']['author_url'], 
+                                    array('target' => '_blank')) ?> | 
+                            <?php endif ?>
+                            
+                            <?= $this->Html->link('Theme Page',
+                                $this->Api->url() . 'theme/' . $this->request->data['ThemesData'][$data['Theme']['title']]['data']['slug'],
+                                array('target' => '_blank')
+                            ) ?>
                         <?php endif ?>
                     </td>
-                </tr>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</table>
+                    <td>
+                        <?php if (!empty($data['Theme']['id'])): ?>
+                            <?= $this->Admin->time($data['Theme']['created']) ?>
+                        <?php endif ?>
+                    </td>
+                    <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                        <?php if ($this->request->data['ThemesData'][$data['Theme']['title']]['data']['current_version'] == 
+                            $this->request->data['ThemesData'][$data['Theme']['title']]['current_version']): ?>
+                            <td class="info" data-title="<?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['title'] ?>" data-content="Theme is up to date">
+                                <?= $this->request->data['ThemesData'][$data['Theme']['title']]['current_version'] ?> 
+                                <i class="icon icon-ok info"></i>
+                            </td>
+                        <?php else: ?>
+                            <td class="info" data-title="<?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['title'] ?>" data-content="Theme is out of date, newest version is <?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['current_version'] ?>">
+                                <?= $this->request->data['ThemesData'][$data['Theme']['title']]['current_version'] ?> 
+                                <i class="icon icon-ban-circle"></i>
+                                <div class="clearfix"></div>
 
-<div class="left">
+                                <?= $this->Html->link('Download Latest Version <i class="icon icon-white icon-download-alt"></i>', 
+                                    $this->Api->url() . 'theme/' . $this->request->data['ThemesData'][$data['Theme']['title']]['data']['slug'],
+                                    array('target' => '_blank', 'class' => 'btn btn-primary pull-right', 'escape' => false)
+                                ) ?>
+                            </td>
+                        <?php endif ?>
+                    <?php else: ?>
+                        N/A
+                    <?php endif ?>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                                    <?php if ($this->request->data['ThemesData'][$data['Theme']['title']]['status'] == 0): ?>
+                                        <li>
+                                            <?= $this->Html->link(
+                                                '<i class="icon-plus"></i> Install',
+                                                array(
+                                                    'admin' => false,
+                                                    'controller' => 'install',
+                                                    'action' => 'install_theme', 
+                                                    $data['Theme']['title']
+                                                ),
+                                                array(
+                                                    
+                                                    'escape' => false
+                                                ))
+                                            ?>
+                                        </li>
+                                    <?php else: ?>
+                                        <li>
+                                            <?= $this->Html->link(
+                                                '<i class="icon-trash"></i> Uninstall',
+                                                array(
+                                                    'admin' => false,
+                                                    'controller' => 'install',
+                                                    'action' => 'uninstall_theme', 
+                                                    $data['Theme']['title']
+                                                ),
+                                                array(
+                                                    'escape' => false
+                                                ))
+                                            ?>
+                                        </li>
+                                    <?php endif ?>
+                                    <?php if ($this->request->data['ThemesData'][$data['Theme']['title']]['upgrade_status'] == 1): ?>
+                                        <?= $this->Html->link(
+                                            '<i class="icon-upload"></i> Upgrade',
+                                            array(
+                                                'admin' => false,
+                                                'controller' => 'install',
+                                                'action' => 'upgrade_theme', 
+                                                $data['Theme']['title']
+                                            ),
+                                            array(
+                                                'escape' => false
+                                            ));
+                                        ?>
+                                    <?php endif ?>
+                                <?php endif ?>
+                                <?php if (empty($this->params->named['trash'])): ?>
+                                    <?php if (!empty($data['Theme']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->edit(
+                                                $data['Theme']['id'],
+                                                'themes'
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                    <?php if (empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                                        <li>
+                                            <?= $this->Admin->delete(
+                                                $data['Theme']['id'],
+                                                $data['Theme']['title'],
+                                                'theme',
+                                                'themes'
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                <?php elseif (empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                                    <li>
+                                        <?= $this->Admin->restore(
+                                            $data['Theme']['id'],
+                                            $data['Theme']['title'],
+                                            'themes'
+                                        ) ?>
+                                    </li>  
+                                    <li>
+                                        <?= $this->Admin->delete_perm(
+                                            $data['Theme']['id'],
+                                            $data['Theme']['title'],
+                                            'theme',
+                                            'themes'
+                                        ) ?>
+                                    </li>     
+                                <?php endif ?>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            <?php endif ?>
+        <?php endforeach ?>
+    </tbody>
+</table>
+<div class="clearfix"></div>
+
+<div class="pull-left">
     <h1>Templates<?php if (!empty($this->params->named['trash_temp'])): ?> - Trash<?php endif ?></h1>
 </div>
-<div class="btn-group" style="float:right;margin-bottom:10px">
+<div class="btn-group pull-right" style="margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
-    View
+    View <i class="icon-picture"></i>
     <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" style="min-width: 0px">
-    <li><?= $this->Html->link('Active', array('admin' => true, 'action' => 'index')) ?></li>
-    <li><?= $this->Html->link('Trash', array('admin' => true, 'action' => 'index', 'trash_temp' => 1)) ?></li>
+  <ul class="dropdown-menu view">
+    <li>
+        <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
+            'admin' => true, 
+            'action' => 'index'
+        ), array('escape' => false)) ?>
+    </li>
+    <li>
+        <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
+            'admin' => true, 
+            'action' => 'index', 
+            'trash_temp' => 1
+        ), array('escape' => false)) ?>
+    </li>
   </ul>
 </div>
-<div class="clear"></div>
+<div class="clearfix"></div>
 
 <div class="pull-left">
 Search
@@ -203,70 +368,111 @@ Search
         'autocomplete'=>'off'
 )) ?>
 </div>
-<div class="btn-group" style="float:right;margin-bottom:10px">
-    <a class="btn dropdown-toggle" data-toggle="dropdown">
-        Add Template
-    <span class="caret"></span>
-    </a>
-    <ul class="dropdown-menu">
-        <?php foreach ($this->request->data['Themes'] as $theme): ?>
-        <li><?= $this->Html->link($theme['Theme']['title'], array('controller' => 'templates', 'action' => 'add', $theme['Theme']['id'])) ?></li>
-        <?php endforeach; ?>
-    </ul>
+<div class="btn-toolbar pull-right" style="margin-bottom:10px">
+    <div class="btn-group">
+        <a class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+            Add Template
+        <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <?php foreach ($this->request->data['Themes'] as $theme): ?>
+            <li><?= $this->Html->link($theme['Theme']['title'], array('controller' => 'templates', 'action' => 'add', $theme['Theme']['id'])) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown">
+            Filter by Theme
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <?php foreach ($themes as $theme_id => $theme): ?>
+                <li>
+                    <?= $this->Html->link($theme, array(
+                        'theme_id' => $theme_id
+                    )) ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
 
-<table class="table table-bordered">
-    <tr>
-        <th><?= $this->Paginator->sort('title') ?></th>
-        <th><?= $this->Paginator->sort('Theme.title', 'Theme') ?></th>
-        <th><?= $this->Paginator->sort('location', 'Folder') ?></th>
-        <th><?= $this->Paginator->sort('created') ?></th>
-        <th>Options</th>
-    </tr>
+<?php if (empty($this->request->data)): ?>
+    <div class="clearfix"></div>
+    <div class="well">
+        No Items Found
+    </div>
+<?php else: ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><?= $this->Paginator->sort('title') ?></th>
+                <th><?= $this->Paginator->sort('Theme.title', 'Theme') ?></th>
+                <th><?= $this->Paginator->sort('location', 'Folder') ?></th>
+                <th><?= $this->Paginator->sort('created') ?></th>
+                <th></th>
+            </tr>
+        </thead>
 
-    <?php if (!empty($this->request->data['Template'])): ?>
-        <?php foreach ($this->request->data['Template'] as $data): ?>
-        <tr>
-            <td>
-                <?= $this->Html->link($data['Template']['title'], array('admin' => false, 'controller' => 'templates', 'action' => 'view', $data['Template']['id'])); ?>
-            </td>
-            <td>
-                <?php if ($data['Template']['theme_id'] > 0): ?>
-                    <?= $data['Theme']['title'] ?>
-                <?php endif; ?>
-            </td>
-            <td>
-                /<?= str_replace(basename($data['Template']['location']), "",$data['Template']['location']) ?>
-            </td>
-            <td><?= $this->Time->format('F jS, Y h:i A', $data['Template']['created']); ?></td>
-            <td>
-                <?php if (empty($this->params->named['trash_temp'])): ?>
-                    <?= $this->Html->link(
-                        '<i class="icon-pencil icon-white"></i> Edit', 
-                        array('action' => 'edit', $data['Template']['id']),
-                        array('class' => 'btn btn-primary', 'escape' => false));
-                    ?>
-                    <?= $this->Html->link(
-                        '<i class="icon-trash icon-white"></i> Delete',
-                        array('action' => 'delete', $data['Template']['id'], $data['Template']['title']),
-                        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this template?')"));
-                    ?>
-                <?php else: ?>
-                    <?= $this->Html->link(
-                        '<i class="icon-share-alt icon-white"></i> Restore', 
-                        array('action' => 'restore', $data['Template']['id'], $data['Template']['title']),
-                        array('class' => 'btn btn-success', 'escape' => false));
-                    ?>    
-                    <?= $this->Html->link(
-                        '<i class="icon-trash icon-white"></i> Delete Forever',
-                        array('action' => 'delete', $data['Template']['id'], $data['Template']['title'], 1),
-                        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this template? This is permanent.')"));
-                    ?>      
-                <?php endif ?>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</table>
+        <tbody>
+            <?php foreach ($this->request->data['Template'] as $data): ?>
+            <tr>
+                <td>
+                    <?= $this->Html->link($data['Template']['title'], array('admin' => false, 'controller' => 'templates', 'action' => 'view', $data['Template']['id'])); ?>
+                </td>
+                <td>
+                    <?php if ($data['Template']['theme_id'] > 0): ?>
+                        <?= $data['Theme']['title'] ?>
+                    <?php endif; ?>
+                </td>
+                <td>
+                    /<?= str_replace(basename($data['Template']['location']), "",$data['Template']['location']) ?>
+                </td>
+                <td>
+                    <?= $this->Admin->time($data['Template']['created']) ?>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                            Actions
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php if (empty($this->params->named['trash'])): ?>
+                                <li>
+                                    <?= $this->Admin->edit(
+                                        $data['Template']['id']
+                                    ) ?>
+                                </li>
+                                <li>
+                                    <?= $this->Admin->delete(
+                                        $data['Template']['id'],
+                                        $data['Template']['title'],
+                                        'template'
+                                    ) ?>
+                                </li>
+                            <?php else: ?>
+                                <li>
+                                    <?= $this->Admin->restore(
+                                        $data['Template']['id'],
+                                        $data['Template']['title']
+                                    ) ?>
+                                </li>  
+                                <li>
+                                    <?= $this->Admin->delete_perm(
+                                        $data['Template']['id'],
+                                        $data['Template']['title'],
+                                        'template'
+                                    ) ?>
+                                </li>     
+                            <?php endif ?>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <?php endforeach ?>
+        </tbody>
+    </table>
+<?php endif ?>
 
 <?= $this->element('admin_pagination') ?>

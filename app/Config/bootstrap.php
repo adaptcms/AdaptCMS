@@ -110,9 +110,14 @@ Cache::config('default', array('engine' => 'File'));
  * ));
  *
  */
-App::build(array(
-	'View' => array(WWW_ROOT.'installer'.DS)
-));
+App::build(
+	array(
+		'View' => array(WWW_ROOT.'installer'.DS)
+	),
+	array(
+		'View' => array(ROOT.'View'.DS)
+	)
+);
 
 /**
  * Custom Inflector rules, can be set to correctly pluralize or singularize table, model, controller names or whatever other

@@ -7,6 +7,10 @@ class Poll extends PollsAppModel
         'Article' => array(
             'className'    => 'Article',
             'foreignKey'   => 'article_id'
+        ),
+        'User' => array(
+            'className' => 'User',
+            'foreignKey' => 'user_id'
         )
 	);
 	public $hasMany = array(
@@ -19,7 +23,7 @@ class Poll extends PollsAppModel
 	);
 	public $recursive = -1;
 
-    public function getModuleData($data, $user_id)
+    public function getBlockData($data, $user_id)
     {
         $cond = array(
             'conditions' => array(
@@ -27,9 +31,12 @@ class Poll extends PollsAppModel
             ),
             'contain' => array(
                 'PollValue'
-            ),
-            'limit' => $data['limit']
+            )
         );
+
+        if (!empty($data['limit'])) {
+            $cond['limit'] = $data['limit'];
+        }
 
         if (!empty($data['order_by'])) {
             if ($data['order_by'] == "rand") {
@@ -49,36 +56,14 @@ class Poll extends PollsAppModel
 
         foreach($find as $key => $row) {
             $results[$key] = $row;
+            $results[$key]['Block'] = $data;
 
-            $count = $this->find('first', array(
-                'conditions' => array(
-                    'Poll.id' => $row['Poll']['id']
-                ),
-                'contain' => array(
-                    'PollVotingValue' => array(
-                        'conditions' => array(
-                            'OR' => array(
-                                'PollVotingValue.user_id' => $user_id,
-                                'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
-                            )
-                        )
-                    )
-                )
-            ));
-            
-            if (count($count['PollVotingValue']) == 0) {
-                $results[$key]['Poll']['can_vote'] = true;
-            } else {
-                $results[$key]['Poll']['can_vote'] = false;
-            }
+            $results[$key]['Poll']['can_vote'] = $this->canVote($row, $user_id);
+            $results[$key] = $this->totalVotes($results[$key]);
 
-            $votes = 0;
             foreach($row['PollValue'] as $option) {
-                $votes = $votes + $option['votes'];
                 $results[$key]['options'][$option['id']] = $option['title'];
             }
-
-            $results[$key]['Poll']['total_votes'] = $votes;
         }
 
         if (!empty($results) && count($results) == 1) {
@@ -87,5 +72,40 @@ class Poll extends PollsAppModel
         }
 
         return $results;
+    }
+
+    public function totalVotes($data)
+    {
+        $data['Poll']['total_votes'] = 0;
+        foreach($data['PollValue'] as $key => $row) {
+            $data['Poll']['total_votes'] = $data['Poll']['total_votes'] + $row['votes'];
+        }
+
+        return $data;
+    }
+
+    public function canVote($row, $user_id)
+    {
+        $count = $this->find('first', array(
+            'conditions' => array(
+                'Poll.id' => $row['Poll']['id']
+            ),
+            'contain' => array(
+                'PollVotingValue' => array(
+                    'conditions' => array(
+                        'OR' => array(
+                            'PollVotingValue.user_id' => $user_id,
+                            'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
+                        )
+                    )
+                )
+            )
+        ));
+        
+        if (count($count['PollVotingValue']) == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

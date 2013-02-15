@@ -12,8 +12,8 @@ $(document).ready(function() {
 		$(modal_id + ' #' + id).css('opacity', '1.0');
 
 		var limit = $(modal_id).find('#media-modal-current-limit').val();
-		var count = $(modal_id + ' .modal-body .file_info.span4 input:checked').length;
-		var checked = $(modal_id + ' .modal-body .file_info.span4 input:checkbox').attr('checked');
+		var count = $(modal_id + ' .modal-body .thumbnails .file_info.span4 input:checked').length;
+		var checked = $(modal_id + ' .modal-body .thumbnails .file_info.span4 input:checkbox').attr('checked');
 
 		if (limit && count == limit) {
 			if (checked) {

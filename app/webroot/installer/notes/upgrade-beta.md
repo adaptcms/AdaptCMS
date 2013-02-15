@@ -1,0 +1,1 @@
+Upgrading is a painless process, simply click the button below and we'll take care of the rest!

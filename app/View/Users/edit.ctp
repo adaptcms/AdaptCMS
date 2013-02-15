@@ -55,7 +55,7 @@ $(document).ready(function(){
 
 <h1>Edit Account</h1>
 
-<?= $this->Form->create('User', array('class' => 'well')) ?>
+<?= $this->Form->create('User', array('class' => 'well', 'type' => 'file')) ?>
 
 <?php    
 	echo $this->Form->input('username', array(
@@ -105,9 +105,36 @@ $(document).ready(function(){
     <?php endif ?>
 <?php endif ?>
 
-<?= $this->Form->input('theme_id', array('label' => 'Theme', 'empty' => '- Choose Theme -')) ?>
+<?= $this->Form->input('theme_id', array(
+    'label' => 'Theme', 
+    'empty' => '- Choose Theme -'
+)) ?>
+
+<?= $this->Form->input('User.settings.time_zone', array(
+    'label' => 'Timezone',
+    'empty' => '- Choose -',
+    'options' => $timezones
+)) ?>
+
+<?php if (!empty($this->request->data['User']['settings']['avatar'])): ?>
+    <h4>Current Avatar</h4>
+
+    <?= $this->Html->image(
+        '/uploads/avatars/' . $this->request->data['User']['settings']['avatar'],
+        array('class' => 'thumbnail span2')
+    ) ?>
+    <?= $this->Form->hidden('User.settings.old_avatar', array(
+        'value' => $this->request->data['User']['settings']['avatar']
+    )) ?>
+    <div class="clearfix"></div>
+<?php endif ?>
+
+<?= $this->Form->input('User.settings.avatar', array(
+    'label' => 'Avatar',
+    'type' => 'file'
+)) ?>
 
 <?= $this->Form->end(array(
-		'label' => 'Submit',
-		'class' => 'btn'
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
 )) ?>

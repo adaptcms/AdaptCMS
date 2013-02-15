@@ -2,6 +2,8 @@
 
 class FilesController extends AppController {
 	public $name = 'Files';
+	private $permissions;
+
 	public $helpers = array(
 		'Number'
 	);
@@ -15,25 +17,36 @@ class FilesController extends AppController {
 		'htm'
 	);
 
+	public function beforeFilter()
+	{
+		parent::beforeFilter();
+
+		$this->permissions = $this->getPermissions();
+	}
+
 	public function admin_index()
 	{
+		$conditions = array();
+
 		if (!isset($this->params->named['trash'])) {
-	        $this->paginate = array(
-	            'order' => 'File.created DESC',
-	            'limit' => $this->pageLimit,
-	            'conditions' => array(
-	            	'File.deleted_time' => '0000-00-00 00:00:00'
-	            )
-	        );
+	        $conditions['File.deleted_time'] = '0000-00-00 00:00:00';
 	    } else {
-	        $this->paginate = array(
-	            'order' => 'File.created DESC',
-	            'limit' => $this->pageLimit,
-	            'conditions' => array(
-	            	'File.deleted_time !=' => '0000-00-00 00:00:00'
-	            )
-	        );
+	        $conditions['File.deleted_time !='] = '0000-00-00 00:00:00';
         }
+
+	    if ($this->permissions['any'] == 0)
+	    {
+	    	$conditions['User.id'] = $this->Auth->user('id');
+	    }
+
+        $this->paginate = array(
+            'order' => 'File.created DESC',
+            'limit' => $this->pageLimit,
+            'conditions' => $conditions,
+            'contain' => array(
+            	'User'
+            )
+        );
         
         $this->request->data = $this->paginate('File');
 	}
@@ -44,13 +57,17 @@ class FilesController extends AppController {
 			$file_types[$ext] = $ext;
 		}
 
-		$this->set(compact('file_types'));
+		$media_list = $this->File->Media->find('list');
+
+		$this->set(compact('file_types', 'media_list'));
 		
 		if (!empty($theme)) {
 			$this->set(compact('theme'));
 		}
 		
         if ($this->request->is('post')) {
+        	$this->request->data['File']['user_id'] = $this->Auth->user('id');
+
             if (!empty($this->request->data['File']['theme'])) {
             	$save = $this->File->themeFile($this->request->data['File']);
             	$redirect = array(
@@ -73,7 +90,17 @@ class FilesController extends AppController {
 
 				}
 
-            	$save = $this->File->save($this->request->data);
+				unset($this->request->data['File'], $this->request->data['_Token']);
+
+				foreach($this->request->data as $i => $row) {
+					if (!strstr($row['File']['filename']['type'], 'image') && !empty($row['File']['library'])) {
+						unset($this->request->data[$i]['Media']);
+					}
+				}
+
+				// die(debug($this->request->data));
+
+            	$save = $this->File->saveMany($this->request->data);
             	$redirect = array('action' => 'index');
             }
 
@@ -89,14 +116,30 @@ class FilesController extends AppController {
 	public function admin_edit($id = null, $filename = null, $file_ext = null)
 	{
 
-      $this->File->id = $id;
+		$this->File->id = $id;
 
 		if (is_numeric($id)) {
-	        $data = $this->File->read();
+	        $data = $this->File->find('first', array(
+	        	'conditions' => array(
+	        		'File.id' => $id
+	        	),
+	        	'contain' => array(
+	        		'Media',
+	        		'User'
+	        	)
+	        ));
+
+	        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+	        {
+                $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+                $this->redirect(array('action' => 'index'));	        	
+	        }
 
 	        $file = WWW_ROOT.
 	        		$data['File']['dir'].
 	        		$data['File']['filename'];
+	        $data['info'] = getimagesize($file);
+	        $data['media-list'] = $this->File->Media->find('list');
 	    } elseif (!empty($filename)) {
 	    	$ex = explode("-", $id);
 	    	$ex2 = explode("___", $filename);
@@ -152,6 +195,8 @@ class FilesController extends AppController {
 	    }
 
 	    if ($this->request->is('post')) {
+	    	$this->request->data['File']['user_id'] = $this->Auth->user('id');
+
 	    	if (!empty($this->request->data['File']['theme'])) {
 	    		if ($this->request->data['File']['old_filename'] != $this->request->data['File']['filename']) {
 	    			$path = str_replace(
@@ -178,29 +223,13 @@ class FilesController extends AppController {
 	    			$this->request->data['File']['theme']
 	    		);
 	    	} else {
-	    		if ($this->request->data['File']['old_filename'] != $this->request->data['File']['filename']) {
-	    			$path = WWW_ROOT.$this->request->data['File']['dir'];
-
-	    			rename(
-	    				$path.$this->request->data['File']['old_filename'],
-	    				$path.$this->request->data['File']['filename']
-	    			);
-
-	    			if (file_exists($path."thumb/".$this->request->data['File']['old_filename'])) {
-	    				rename(
-	    					$path."thumb/".$this->request->data['File']['old_filename'],
-	    					$path."thumb/".$this->request->data['File']['filename']
-	    				);
-	    			}
-	    		}
-
 		    	if (!empty($this->request->data['File']['content'])) {
 		        	$fh = fopen(WWW_ROOT.$this->request->data['File']['dir'].$this->request->data['File']['filename'], 'w') or die("can't open file");
 					fwrite($fh, $this->request->data['File']['content']);
 					fclose($fh);
 				}
 
-				$save = $this->File->save($this->request->data);
+				$save = $this->File->saveAll($this->request->data);
 				$redirect = array('action' => 'index');
 			}
 
@@ -223,14 +252,19 @@ class FilesController extends AppController {
 		    $file = $this->File->find('first', array(
 		    	'conditions' => array(
 		    		'File.id' => $id
-		    		),
+	    		),
 		    	'fields' => array(
-		    		'filename'
-		    		)
+		    		'filename,user_id'
 		    	)
-		    );
+		    ));
 
 		    $this->File->id = $id;
+
+	        if ($data['File']['user_id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+	        {
+	            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+	            $this->redirect(array('action' => 'index'));	        	
+	        }
 
 	        if (!empty($permanent)) {
 	            $delete = $this->File->delete($id);
@@ -289,6 +323,20 @@ class FilesController extends AppController {
         }
 
         $this->File->id = $id;
+
+        $data = $this->File->find('first', array(
+        	'conditions' => array(
+        		'File.id' => $id
+        	),
+        	'contain' => array(
+    			'User'
+        	)
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 
         if ($this->File->saveField('deleted_time', '0000-00-00 00:00:00')) {
             $this->Session->setFlash('The file `'.$title.'` has been restored.', 'flash_success');

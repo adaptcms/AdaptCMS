@@ -1,28 +1,28 @@
 <script>
  $(document).ready(function(){
-    $("#RoleAdminAddForm").validate();
+    $("#RoleAdminForm").validate();
  });
  </script>
 
-<h1>Add Role</h1>
-
-<?php
-	echo $this->Form->create('Role', array('class' => 'well'));
+<?= $this->Form->create('Role', array('class' => 'well', 'id' => 'RoleAdminForm')) ?>
+	<h2>Add Role</h2>
 	
-	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-	echo $this->Form->input('defaults', array('options' => array(
+	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
+	<?= $this->Form->input('defaults', array('options' => array(
 			'default-member' => 'Default Member', 
 			'default-guest' => 'Default Guest'
 			),
 		'label' => 'Default Settings',
 		'empty' => '- choose -'
-	));
+	)) ?>
+	<?= $this->Form->input('role_id', array(
+		'label' => 'Default Permissions from Role',
+		'class' => 'required'
+	)) ?>
 	
-	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-?>
+	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 
-<br />
 <?= $this->Form->end(array(
-		'label' => 'Submit',
-		'class' => 'btn'
-		)); ?>
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
+)) ?>

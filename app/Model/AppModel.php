@@ -30,24 +30,55 @@ App::uses('Model', 'Model');
  *
  * @package       app.Model
  */
-class AppModel extends Model {
-	public $actsAs = array('Containable');
-	public $recursive = -1;
+class AppModel extends Model
+{
+    public $actsAs = array('Containable');
+    public $recursive = -1;
 
-	/*
-	 * Source: Snipplr
-	 * http://snipplr.com/view/51108/nested-array-search-by-value-or-key/
-	*/
-	function searchArray(array $array, $search, $mode = 'value') {
-	    foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($array)) as $key => $value) {
-	        if ($search === ${${"mode"}})
-	            return true;
-	    }
-	    return false;
-	}
+    /*
+     * Source: Snipplr
+     * http://snipplr.com/view/51108/nested-array-search-by-value-or-key/
+    */
+    function searchArray(array $array, $search, $mode = 'value') {
+        foreach (new RecursiveIteratorIterator(new RecursiveArrayIterator($array)) as $key => $value) {
+            if ($search === ${${"mode"}})
+                return true;
+        }
+        return false;
+    }
 
-	public function dateTime()
-	{
-		return date('Y-m-d H:i:s');
-	}
+    public function dateTime()
+    {
+        return date('Y-m-d H:i:s');
+    }
+
+    public function loadModelName($data, $array = false)
+    {
+        if ( empty($data) )
+        {
+            return false;
+        }
+
+        if ( $data['Module']['is_plugin'] == 1 )
+        {
+            $model = str_replace( ' ', '', $data['Module']['title'] ) . '.' . $data['Module']['model_title'];
+        } else {
+            $model = $data['Module']['model_title'];
+        }
+
+        if ( !$array )
+        {
+            return $model;
+        } else {
+            return array(
+                'load' => $model,
+                'name' => $data['Module']['model_title']
+            );
+        }
+    }
+
+    public function slug($title)
+    {
+        return strtolower(Inflector::slug($title, '-'));
+    }
 }

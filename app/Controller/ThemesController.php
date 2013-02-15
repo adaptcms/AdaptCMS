@@ -49,9 +49,13 @@ class ThemesController extends AppController{
                 $this->set('assets_list_path', WWW_ROOT);
                 $this->set('webroot_path', $this->webroot);
             } else {
+                $config_new = $this->getConfig($this->request->data['Theme']['title']);
+                $config_old = $this->getConfig($this->request->data['Theme']['title'], 'Old_Themed');
+
                 $this->set('assets_list', $this->Theme->assetsList($id, $this->request->data['Theme']['title']));
                 $this->set('assets_list_path', WWW_ROOT.'themes/'.$this->request->data['Theme']['title'].'/');
                 $this->set('webroot_path', $this->webroot.'themes/'.$this->request->data['Theme']['title'].'/');
+                $this->set('config', array_merge($config_new, $config_old));
             }
 	    } else {
         	$this->loadModel('Template');	
@@ -163,4 +167,18 @@ class ThemesController extends AppController{
 	     rmdir($dir);
 	   }
 	 }
+
+    public function getConfig($name, $folder = 'Themed')
+    {
+        $json = VIEW_PATH . DS . $folder . DS . $name . DS . 'theme.json';
+
+        if (file_exists($json) && is_readable($json)) {
+            $handle = fopen($json, "r");
+            $json_file = fread($handle, filesize($json));
+
+            return json_decode($json_file, true);
+        }
+
+        return array();
+    }
 }

@@ -47,28 +47,25 @@ class TinyMceHelper extends AppHelper {
  * @return void
  */
 	public function editor($options = array()) {
-		if (is_string($options)) {
-			if (isset($this->configs[$options])) {
-				$options = $this->configs[$options];
-			} else {
-				throw new OutOfBoundsException(sprintf(__('Invalid TinyMCE configuration preset %s', true), $options));
-			}
+		if (!empty($options['mode'])) {
+			$mode = $options['mode'];
+		} else {
+			$mode = 'textareas';
 		}
-		$options = array_merge($this->_defaults, $options);
-		$lines = '';
-		
-		foreach ($options as $option => $value) {
-			$lines .= Inflector::underscore($option) . ' : "' . $value . '",' . "\n";
+
+		if (!empty($options['elements'])) {
+			$elements = $options['elements'];
+		} else {
+			$elements = 'abshosturls';
 		}
+
 		// remove last comma from lines to avoid the editor breaking in Internet Explorer
-		$lines = rtrim($lines);
-		$lines = rtrim($lines, ',');
 		echo "<script type='text/javascript'>
 		tinyMCE.init({
 			// General options
-			mode : 'textareas',
+			mode : '" . $mode . "',
 			theme : 'advanced',
-			elements : 'abshosturls',
+			elements : '" . $elements . "',
 			plugins : 'spellchecker,preview,searchreplace,emotions,media,contextmenu,wordcount,pagebreak,tinyautosave',
 
 			theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontsizeselect,formatselect',
@@ -87,8 +84,6 @@ class TinyMceHelper extends AppHelper {
 		});
 	</script>";
 	$this->Html->script('/js/tiny_mce/tiny_mce.js', false);
-		// $this->Html->scriptBlock('tinyMCE.init({' . "\n" . $lines . "\n" . '});' . "\n", array(
-			// 'inline' => false));
 	}
 
 /**

@@ -58,13 +58,13 @@ label.error {
 <?= $this->Form->hidden('created', array('value' => $time)) ?>
 <br />
 <?= $this->Form->button('Add Option', array(
-		'type' => 'button',
-		'id' => 'poll-option-add',
-		'class' => 'btn'
-		)); ?>
-<?= $this->Form->submit('Submit',array(
-		'class' => 'btn',
-		'style' => 'margin-left:5px'
-		)) ?>
+	'type' => 'button',
+	'id' => 'poll-option-add',
+	'class' => 'btn btn-warning'
+)) ?>
+<?= $this->Form->submit('Submit', array(
+	'class' => 'btn btn-primary',
+	'style' => 'margin-left:5px'
+)) ?>
 <br />
-<?= $this->Form->end(); ?>
+<?= $this->Form->end() ?>

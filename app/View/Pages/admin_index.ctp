@@ -3,57 +3,135 @@
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
-    View
+    View <i class="icon-picture"></i>
     <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" style="min-width: 0px">
-    <li><?= $this->Html->link('Active', array('admin' => true, 'action' => 'index')) ?></li>
-    <li><?= $this->Html->link('Trash', array('admin' => true, 'action' => 'index', 'trash' => 1)) ?></li>
+  <ul class="dropdown-menu view">
+    <li>
+        <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
+            'admin' => true, 
+            'action' => 'index'
+        ), array('escape' => false)) ?>
+    </li>
+    <li>
+        <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
+            'admin' => true, 
+            'action' => 'index', 
+            'trash' => 1
+        ), array('escape' => false)) ?>
+    </li>
   </ul>
 </div>
 <div class="clear"></div>
 
-<?= $this->Html->link('Add Page', array('action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')) ?>
-<table class="table table-bordered">
-    <tr>
-        <th><?= $this->Paginator->sort('title') ?></th>
-        <th><?= $this->Paginator->sort('created') ?></th>
-        <th>Options</th>
-    </tr>
+<?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_add'])): ?>
+    <?= $this->Html->link('Add Page <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
+        'class' => 'btn btn-info pull-right', 
+        'style' => 'margin-bottom:10px',
+        'escape' => false
+    )) ?>
+<?php endif ?>
 
-    <?php foreach ($this->request->data as $data): ?>
-    <tr>
-        <td>
-            <?= $this->Html->link($data['Page']['title'], array('admin' => false, 'action' => 'display', $data['Page']['slug'])) ?>
-        </td>
-        <td><?= $this->Time->format('F jS, Y h:i A', $data['Page']['created']) ?></td>
-        <td>
-            <?php if (empty($this->params->named['trash'])): ?>
-                <?= $this->Html->link(
-                    '<i class="icon-pencil icon-white"></i> Edit', 
-                    array('action' => 'edit', $data['Page']['id']),
-                    array('class' => 'btn btn-primary', 'escape' => false))
-                ?>
-                <?= $this->Html->link(
-                    '<i class="icon-trash icon-white"></i> Delete',
-                    array('action' => 'delete', $data['Page']['id'], $data['Page']['title']),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this page?')"))
-                ?>
-            <?php else: ?>
-                <?= $this->Html->link(
-                    '<i class="icon-share-alt icon-white"></i> Restore', 
-                    array('action' => 'restore', $data['Page']['id'], $data['Page']['title']),
-                    array('class' => 'btn btn-success', 'escape' => false))
-                ?>    
-                <?= $this->Html->link(
-                    '<i class="icon-trash icon-white"></i> Delete Forever',
-                    array('action' => 'delete', $data['Page']['id'], $data['Page']['title'], 1),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this page? This is permanent.')"))
-                ?>      
-            <?php endif ?>
-        </td>
-    </tr>
-    <?php endforeach; ?>
-</table>
+<?php if (empty($this->request->data)): ?>
+    <div class="clearfix"></div>
+    <div class="well">
+        No Items Found
+    </div>
+<?php else: ?>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><?= $this->Paginator->sort('title') ?></th>
+                <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
+                <th><?= $this->Paginator->sort('created') ?></th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <?php foreach ($this->request->data as $data): ?>
+            <tbody>
+                <tr>
+                    <td>
+                        <?php if ($this->Admin->hasPermission($permissions['related']['pages']['display'], $data['User']['id'])): ?>
+                            <?= $this->Html->link($data['Page']['title'], array(
+                                'admin' => false, 
+                                'action' => 'display', 
+                                $data['Page']['slug']
+                            )) ?>
+                        <?php else: ?>
+                            <?= $data['Page']['title'] ?>
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
+                            <?= $this->Html->link($data['User']['username'], array(
+                                'controller' => 'users',
+                                'action' => 'profile',
+                                $data['User']['username']
+                            )) ?>
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <?= $this->Admin->time($data['Page']['created']) ?>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                                Actions
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <?php if ($this->Admin->hasPermission($permissions['related']['pages']['display'], $data['User']['id'])): ?>
+                                    <li>
+                                        <?= $this->Admin->view(
+                                            $data['Page']['slug']
+                                        ) ?>
+                                    </li>
+                                <?php endif ?>
+                                
+                                <?php if (empty($this->params->named['trash'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_edit'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->edit(
+                                                $data['Page']['id']
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_delete'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->delete(
+                                                $data['Page']['id'],
+                                                $data['Page']['title'],
+                                                'page'
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                <?php else: ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_restore'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->restore(
+                                                $data['Page']['id'],
+                                                $data['Page']['title']
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_delete'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->delete_perm(
+                                                $data['Page']['id'],
+                                                $data['Page']['title'],
+                                                'page'
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                <?php endif ?>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        <?php endforeach ?>
+    </table>
+<?php endif ?>
 
 <?= $this->element('admin_pagination') ?>

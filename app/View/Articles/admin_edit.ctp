@@ -161,20 +161,19 @@
 			<a href="#comments" data-toggle="tab">Comments</a>
 		</li>
 	<?php endif ?>
+	<div class="pull-right">
+	    <?= $this->Html->link(
+	        '<i class="icon-chevron-left"></i> Return to Index',
+	        array('action' => 'index'),
+	        array('class' => 'btn', 'escape' => false
+	    )) ?>
+	    <?= $this->Html->link(
+	        '<i class="icon-trash icon-white"></i> Delete',
+	        array('action' => 'delete', $this->request->data['Article']['id'], $this->request->data['Article']['title']),
+	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this article?')"));
+	    ?>
+	</div>
 </ul>
-
-<div class="right">
-    <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
-        array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
-    )) ?>
-    <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
-        array('action' => 'delete', $this->request->data['Article']['id'], $this->request->data['Article']['title']),
-        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this article?')"));
-    ?>
-</div>
 <div class="clearfix"></div>
 
 <div id="myTabContent" class="tab-content">
@@ -332,7 +331,7 @@
 				<?= $this->Form->input('ArticleValue.'.$field['Field']['id'].'.data', array('label' => $desc_icon.$field['Field']['label'], 'type' => 'text', 'value' => $value)) ?>
 			<?php
 			elseif ($field['Field']['field_type'] == "dropdown"):
-				foreach (json_decode($field['Field']['field_options']) as $row) {
+				foreach ($field['Field']['field_options'] as $row) {
 					$opt[$row] = $row;
 				}
 			?>
@@ -340,7 +339,7 @@
 			<?php
 			unset($opt);
 			elseif ($field['Field']['field_type'] == "radio"):
-				foreach (json_decode($field['Field']['field_options']) as $row) {
+				foreach ($field['Field']['field_options'] as $row) {
 					$opt[$row] = $row;
 				}
 			?>
@@ -351,7 +350,7 @@
 			<?php
 			unset($opt);
 			elseif ($field['Field']['field_type'] == "multi-dropdown"):
-				foreach (json_decode($field['Field']['field_options']) as $row) {
+				foreach ($field['Field']['field_options'] as $row) {
 					$opt[$row] = $row;
 				}
 			?>
@@ -360,7 +359,7 @@
 			<?php
 			unset($opt);
 			elseif ($field['Field']['field_type'] == "check"):
-				foreach (json_decode($field['Field']['field_options']) as $row) {
+				foreach ($field['Field']['field_options'] as $row) {
 					$opt[$row] = $row;
 				}
 			?>
@@ -398,7 +397,7 @@
 					<?= $this->Html->link('Attach Image <i class="icon icon-white icon-upload"></i>', '#media-modal'.$field['Field']['id'], array('class' => 'btn btn-primary media-modal', 'escape' => false, 'data-toggle' => 'modal')) ?>
 
 					<p>&nbsp;</p>
-					<div class="selected-images span12 row">
+					<ul class="selected-images span12 thumbnails">
 						<?php if (!empty($value['File'])): ?>
 							<?= $this->element('media_modal_image', array(
 								'image' => $value['File'], 
@@ -406,7 +405,7 @@
 								'check' => true
 							)) ?>
 						<?php endif ?>
-					</div>
+					</ul>
 				</div>
 
 				<?= $this->element('media_modal', array('limit' => 1, 'ids' => 'ArticleValue.'.$field['Field']['id'].'.data', 'id' => $field['Field']['id'])) ?>
@@ -464,14 +463,14 @@
 				<?php endif ?>
 			</div>
 
-			<div class="clear"></div>
+			<div class="clearfix"></div>
 
 			<?= $this->Form->input('Article.settings.comments_status', array(
 				'options' => array(
 					'open' => 'Open',
 					'closed' => 'Closed'
 				),
-				'value' => $this->request->data['Article']['settings']->comments_status
+				'value' => (!empty($this->request->data['Article']['settings']->comments_status) ? $this->request->data['Article']['settings']->comments_status : '')
 			)) ?>
 
 			<br />
@@ -514,7 +513,7 @@
 
 				<?= $this->Form->button('Submit', array(
 					'type' => 'submit',
-					'class' => 'btn'
+					'class' => 'btn btn-primary'
 				)) ?>
 			</div>
 
@@ -525,16 +524,16 @@
 
 			<?= $this->Form->button('Publish Now', array(
 				'type' => 'submit',
-				'class' => 'btn'
+				'class' => 'btn btn-primary'
 			)) ?>
 			<?= $this->Form->button($draft.'Draft', array(
 				'type' => 'submit',
 				'style' => 'margin-left:5px;margin-right:5px',
-				'class' => 'btn'
+				'class' => 'btn btn-danger'
 			)) ?>
 			<?= $this->Form->button('<i class="icon-calendar"></i> Publish Later', array(
 				'type' => 'button',
-				'class' => 'btn',
+				'class' => 'btn btn-success',
 				'escape' => false
 			)) ?>
 

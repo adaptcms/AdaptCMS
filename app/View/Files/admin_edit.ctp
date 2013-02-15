@@ -1,6 +1,29 @@
+<?= $this->Html->css("data-tagging.css") ?>
+<?= $this->Html->script('data-tagging.js') ?>
+
+<script>
+$(document).ready(function() {
+    $(".field_options").show();
+
+    $("#add-media").on('click', function() {
+        var val = $("#FileLibrary :selected");
+
+        if (val.val()) {
+            var random = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+
+            if ($(".media_libraries input[value='" + val.val() + "']").length == 0) {
+                $(".media_libraries").prepend('<div id="data-' + random + '"><span class="label label-info">' + val.text() + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="Media[]" name="Media[]" value="' + val.val() + '"></div>');
+            }
+        }
+    });
+
+    $("#FileEditForm").validate();
+});
+</script>
+
 <h2 class="left">Edit File</h2>
 
-<div class="right">
+<div class="pull-ight admin-edit-options">
     <?= $this->Html->link(
         '<i class="icon-chevron-left"></i> Return to Index',
         array('action' => 'index'),
@@ -32,7 +55,11 @@
                 $data['File']['filename']
         ) ?>
         <?= $var ?>
-        View Full Size</a></p>
+        View Full Size
+        <?php if (!empty($data['info'])): ?>
+            - <?= $data['info'][0] ?> x <?= $data['info'][1] ?>
+        <?php endif ?>
+        </a></p>
     <?php else: ?>
         <?= $var ?>
         View File</a></p>
@@ -41,6 +68,7 @@
 
 <?php if (!empty($file_contents)): ?>
     <?= $this->Form->input('filename', array('value' => $data['File']['filename'], 'label' => 'File Name')) ?>
+
     <?php $this->CodeMirror->editor('FileContent') ?>
 
     <?= $this->Form->input('content', array(
@@ -74,6 +102,47 @@
     }
     
     echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-    
-    echo $this->Form->end('Submit');
 ?>
+
+<?php if (empty($theme) && strstr($data['File']['mimetype'], "image")): ?>
+    <h4 class="image-filters">Image Filters</h4>
+
+    <?php if (empty($data['File']['watermark'])): ?>
+        <?= $this->Form->input('watermark', array('type' => 'checkbox')) ?>
+    <?php endif ?>
+    
+    <?= $this->Form->input('resize_width', array('class' => 'span1 pull-left')) ?>
+    <?= $this->Form->input('resize_height', array('class' => 'span1 pull-right')) ?>
+    <?= $this->Form->input('random_filename', array('type' => 'checkbox')) ?>
+
+    <h4 class="image-filters">Media Libraries</h4>
+
+    <div class="media-libraries" style="margin-bottom: 9px">
+        <?= $this->Form->input('library', array(
+            'div' => false, 
+            'style' => 'margin-bottom: 0',
+            'empty' => '- add library -',
+            'options' => $data['media-list']
+        )) ?>
+        <?= $this->Form->button('Add', array(
+            'class' => 'btn btn-info', 
+            'type' => 'button',
+            'id' => 'add-media'
+        )) ?>
+    </div>
+    <div class="media_libraries">
+        <?php if (!empty($data['Media'])): ?>
+            <?php foreach($data['Media'] as $key => $media): ?>
+                <div id="data-<?= $key ?>">
+                    <span class="label label-info">
+                        <?= $media['title'] ?> <a href="#" class="icon-white icon-remove-sign"></a>
+                    </span>
+                    <input type="hidden" id="Media[]" name="Media[]" value="<?= $media['id'] ?>">
+                </div>
+            <?php endforeach ?>
+        <?php endif ?>
+    </div>
+    <div class="clearfix media"></div>
+<?php endif ?>
+
+<?= $this->Form->end('Submit') ?>

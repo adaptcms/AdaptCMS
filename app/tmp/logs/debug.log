@@ -1,0 +1,1338 @@
+2013-01-12 11:37:14 Notice: Notice (8): Undefined offset: 0 in [/home/charlie/Sites/adaptcms/app/Controller/AppController.php, line 243]
+Trace:
+AppController::permissionLookup() - APP/Controller/AppController.php, line 243
+SearchController::search() - APP/Controller/SearchController.php, line 79
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:37:26 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2666]
+Trace:
+Model::buildQuery() - CORE/Cake/Model/Model.php, line 2666
+Model::find() - CORE/Cake/Model/Model.php, line 2625
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 87
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:37:26 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2642]
+Trace:
+Model::find() - CORE/Cake/Model/Model.php, line 2642
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 87
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:38:52 Notice: Notice (8): Undefined offset: 0 in [/home/charlie/Sites/adaptcms/app/Controller/AppController.php, line 243]
+Trace:
+AppController::permissionLookup() - APP/Controller/AppController.php, line 243
+SearchController::search() - APP/Controller/SearchController.php, line 82
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:27 Notice: Notice (8): Undefined offset: 0 in [/home/charlie/Sites/adaptcms/app/Controller/AppController.php, line 243]
+Trace:
+AppController::permissionLookup() - APP/Controller/AppController.php, line 243
+SearchController::search() - APP/Controller/SearchController.php, line 84
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined offset: 0 in [/home/charlie/Sites/adaptcms/app/Controller/AppController.php, line 243]
+Trace:
+AppController::permissionLookup() - APP/Controller/AppController.php, line 243
+SearchController::search() - APP/Controller/SearchController.php, line 84
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined variable: module_id in [/home/charlie/Sites/adaptcms/app/View/Search/search.ctp, line 2]
+Trace:
+include - APP/View/Search/search.ctp, line 2
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined variable: q in [/home/charlie/Sites/adaptcms/app/View/Search/search.ctp, line 6]
+Trace:
+include - APP/View/Search/search.ctp, line 6
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined variable: module_name in [/home/charlie/Sites/adaptcms/app/View/Search/search.ctp, line 8]
+Trace:
+include - APP/View/Search/search.ctp, line 8
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 590]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 590
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: limit in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 593]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 593
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 594]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 594
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 595]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 595
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: page in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 611]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 611
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: current in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 613]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 613
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 614]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 614
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:39 Notice: Notice (8): Undefined index: pageCount in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 674]
+Trace:
+PaginatorHelper::numbers() - CORE/Cake/View/Helper/PaginatorHelper.php, line 674
+include - APP/View/Elements/admin_pagination.ctp, line 2
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::element() - CORE/Cake/View/View.php, line 424
+DebugView::element() - APP/Plugin/DebugKit/View/DebugView.php, line 63
+include - APP/View/Search/search.ctp, line 31
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined offset: 0 in [/home/charlie/Sites/adaptcms/app/Controller/AppController.php, line 243]
+Trace:
+AppController::permissionLookup() - APP/Controller/AppController.php, line 243
+SearchController::search() - APP/Controller/SearchController.php, line 84
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined variable: module_id in [/home/charlie/Sites/adaptcms/app/View/Search/search.ctp, line 2]
+Trace:
+include - APP/View/Search/search.ctp, line 2
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined variable: q in [/home/charlie/Sites/adaptcms/app/View/Search/search.ctp, line 6]
+Trace:
+include - APP/View/Search/search.ctp, line 6
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined variable: module_name in [/home/charlie/Sites/adaptcms/app/View/Search/search.ctp, line 8]
+Trace:
+include - APP/View/Search/search.ctp, line 8
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 590]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 590
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: limit in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 593]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 593
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 594]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 594
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 595]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 595
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: page in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 611]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 611
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: current in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 613]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 613
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: count in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 614]
+Trace:
+PaginatorHelper::counter() - CORE/Cake/View/Helper/PaginatorHelper.php, line 614
+include - APP/View/Search/search.ctp, line 12
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:39:56 Notice: Notice (8): Undefined index: pageCount in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/PaginatorHelper.php, line 674]
+Trace:
+PaginatorHelper::numbers() - CORE/Cake/View/Helper/PaginatorHelper.php, line 674
+include - APP/View/Elements/admin_pagination.ctp, line 2
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::element() - CORE/Cake/View/View.php, line 424
+DebugView::element() - APP/Plugin/DebugKit/View/DebugView.php, line 63
+include - APP/View/Search/search.ctp, line 31
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 193
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 11:40:25 Notice: Notice (8): Undefined offset: 0 in [/home/charlie/Sites/adaptcms/app/Controller/AppController.php, line 243]
+Trace:
+AppController::permissionLookup() - APP/Controller/AppController.php, line 243
+SearchController::search() - APP/Controller/SearchController.php, line 84
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:38:00 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2666]
+Trace:
+Model::buildQuery() - CORE/Cake/Model/Model.php, line 2666
+Model::find() - CORE/Cake/Model/Model.php, line 2625
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:38:00 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2642]
+Trace:
+Model::find() - CORE/Cake/Model/Model.php, line 2642
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:38:05 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2666]
+Trace:
+Model::buildQuery() - CORE/Cake/Model/Model.php, line 2666
+Model::find() - CORE/Cake/Model/Model.php, line 2625
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:38:05 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2642]
+Trace:
+Model::find() - CORE/Cake/Model/Model.php, line 2642
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:38:12 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2666]
+Trace:
+Model::buildQuery() - CORE/Cake/Model/Model.php, line 2666
+Model::find() - CORE/Cake/Model/Model.php, line 2625
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:38:12 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2642]
+Trace:
+Model::find() - CORE/Cake/Model/Model.php, line 2642
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:40:28 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2666]
+Trace:
+Model::buildQuery() - CORE/Cake/Model/Model.php, line 2666
+Model::find() - CORE/Cake/Model/Model.php, line 2625
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-12 12:40:28 Notice: Notice (8): Undefined offset: 1 in [/home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php, line 2642]
+Trace:
+Model::find() - CORE/Cake/Model/Model.php, line 2642
+PaginatorComponent::paginate() - CORE/Cake/Controller/Component/PaginatorComponent.php, line 173
+Controller::paginate() - CORE/Cake/Controller/Controller.php, line 1082
+SearchController::search() - APP/Controller/SearchController.php, line 97
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-18 21:02:14 Notice: Notice (8): Undefined index: custom in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 202]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 202
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-18 21:03:10 Notice: Notice (8): Undefined index: custom in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 202]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 202
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-18 21:04:32 Notice: Notice (8): Undefined index: custom in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 202]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 202
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 11:07:42 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 512]
+Trace:
+ArticlesController::admin_ajax_related_search() - APP/Controller/ArticlesController.php, line 512
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 11:07:42 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 512]
+Trace:
+ArticlesController::admin_ajax_related_search() - APP/Controller/ArticlesController.php, line 512
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 11:07:43 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 512]
+Trace:
+ArticlesController::admin_ajax_related_search() - APP/Controller/ArticlesController.php, line 512
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 11:07:44 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 512]
+Trace:
+ArticlesController::admin_ajax_related_search() - APP/Controller/ArticlesController.php, line 512
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 11:07:44 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 512]
+Trace:
+ArticlesController::admin_ajax_related_search() - APP/Controller/ArticlesController.php, line 512
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:10:26 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Controller/PollsController.php, line 296]
+Trace:
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 296
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:10:26 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Model/Poll.php, line 79]
+Trace:
+Poll::totalVotes() - APP/Plugin/Polls/Model/Poll.php, line 79
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 300
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:10:26 Notice: Notice (8): Undefined index: options in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 4]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 4
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 303
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:10:26 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 6]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 6
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 303
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:10:26 Notice: Notice (8): Undefined variable: radioOptions in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/FormHelper.php, line 1103]
+Trace:
+FormHelper::input() - CORE/Cake/View/Helper/FormHelper.php, line 1103
+include - APP/View/Elements/poll_vote.ctp, line 7
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 303
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:10:26 Notice: Notice (8): Undefined index: id in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 14]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 14
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 303
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:37:56 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Controller/PollsController.php, line 304]
+Trace:
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:37:56 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Model/Poll.php, line 79]
+Trace:
+Poll::totalVotes() - APP/Plugin/Polls/Model/Poll.php, line 79
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 310
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:37:56 Notice: Notice (8): Undefined index: options in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 4]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 4
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 313
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:37:56 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 6]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 6
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 313
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:37:56 Notice: Notice (8): Undefined variable: radioOptions in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/FormHelper.php, line 1103]
+Trace:
+FormHelper::input() - CORE/Cake/View/Helper/FormHelper.php, line 1103
+include - APP/View/Elements/poll_vote.ctp, line 7
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 313
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:37:56 Notice: Notice (8): Undefined index: id in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 14]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 14
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 313
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:12 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Controller/PollsController.php, line 304]
+Trace:
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:12 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Model/Poll.php, line 79]
+Trace:
+Poll::totalVotes() - APP/Plugin/Polls/Model/Poll.php, line 79
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 308
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:12 Notice: Notice (8): Undefined index: options in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 4]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 4
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:12 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 6]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 6
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:12 Notice: Notice (8): Undefined variable: radioOptions in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/FormHelper.php, line 1103]
+Trace:
+FormHelper::input() - CORE/Cake/View/Helper/FormHelper.php, line 1103
+include - APP/View/Elements/poll_vote.ctp, line 7
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:12 Notice: Notice (8): Undefined index: id in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 14]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 14
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:46 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Controller/PollsController.php, line 304]
+Trace:
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:46 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Model/Poll.php, line 79]
+Trace:
+Poll::totalVotes() - APP/Plugin/Polls/Model/Poll.php, line 79
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 308
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:46 Notice: Notice (8): Undefined index: options in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 5]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 5
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:46 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 7]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 7
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:46 Notice: Notice (8): Undefined variable: radioOptions in [/home/charlie/Sites/adaptcms/lib/Cake/View/Helper/FormHelper.php, line 1103]
+Trace:
+FormHelper::input() - CORE/Cake/View/Helper/FormHelper.php, line 1103
+include - APP/View/Elements/poll_vote.ctp, line 8
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:46 Notice: Notice (8): Undefined index: id in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote.ctp, line 15]
+Trace:
+include - APP/View/Elements/poll_vote.ctp, line 15
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 311
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:56 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Controller/PollsController.php, line 304]
+Trace:
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 16:38:56 Notice: Notice (8): Undefined index: PollValue in [/home/charlie/Sites/adaptcms/app/Plugin/Polls/Model/Poll.php, line 79]
+Trace:
+Poll::totalVotes() - APP/Plugin/Polls/Model/Poll.php, line 79
+PollsController::ajax_view_poll() - APP/Plugin/Polls/Controller/PollsController.php, line 308
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-01-20 19:45:56 Notice: Notice (8): Undefined index: can_vote in [/home/charlie/Sites/adaptcms/app/View/Elements/poll_vote_results.ctp, line 25]
+Trace:
+include - APP/View/Elements/poll_vote_results.ctp, line 25
+View::_evaluate() - CORE/Cake/View/View.php, line 920
+View::_render() - CORE/Cake/View/View.php, line 883
+DebugView::_render() - APP/Plugin/DebugKit/View/DebugView.php, line 43
+View::render() - CORE/Cake/View/View.php, line 475
+DebugView::render() - APP/Plugin/DebugKit/View/DebugView.php, line 82
+Controller::render() - CORE/Cake/Controller/Controller.php, line 957
+PollsController::ajax_results() - APP/Plugin/Polls/Controller/PollsController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-02 19:33:06 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 512]
+Trace:
+ArticlesController::admin_ajax_related_search() - APP/Controller/ArticlesController.php, line 512
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-02 19:33:07 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 512]
+Trace:
+ArticlesController::admin_ajax_related_search() - APP/Controller/ArticlesController.php, line 512
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:17:51 Notice: Notice (8): Undefined index: custom in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 297]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 297
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:29:38 Notice: Notice (8): Undefined index: custom in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 297]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 297
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:32:00 Notice: Notice (8): Undefined index: custom in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 297]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 297
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:36:25 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:45:03 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:45:22 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:45:37 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:45:54 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:46:15 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:46:32 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:46:32 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 277
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 10:46:52 Notice: Notice (8): Undefined variable: model in [/home/charlie/Sites/adaptcms/app/Model/AppModel.php, line 69]
+Trace:
+AppModel::loadModelName() - APP/Model/AppModel.php, line 69
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 275
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:32:07 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:32:07 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:32:07 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:35:10 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:35:10 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:35:10 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:36:15 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:36:15 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:36:15 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:37:40 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:37:40 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-03 11:37:40 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:33:53 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:33:53 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:33:53 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:34:10 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:34:10 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:34:10 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:34:25 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:34:25 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-09 14:34:25 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 309]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 309
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 09:57:42 Notice: Notice (8): Undefined variable: data in [/home/charlie/Sites/adaptcms/app/Controller/FieldsController.php, line 336]
+Trace:
+FieldsController::admin_ajax_fields() - APP/Controller/FieldsController.php, line 336
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 09:57:42 Notice: Notice (8): Undefined index: id in [/home/charlie/Sites/adaptcms/app/Controller/FieldsController.php, line 338]
+Trace:
+FieldsController::admin_ajax_fields() - APP/Controller/FieldsController.php, line 338
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 16:24:36 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 304]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 16:24:36 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 304]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 16:24:36 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 304]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 16:26:19 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 304]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 16:26:19 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 304]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+
+2013-02-10 16:26:19 Notice: Notice (8): Undefined index: title in [/home/charlie/Sites/adaptcms/app/Controller/BlocksController.php, line 304]
+Trace:
+BlocksController::admin_ajax_get_model() - APP/Controller/BlocksController.php, line 304
+ReflectionMethod::invokeArgs() - [internal], line ??
+Controller::invokeAction() - CORE/Cake/Controller/Controller.php, line 485
+Dispatcher::_invoke() - CORE/Cake/Routing/Dispatcher.php, line 186
+Dispatcher::dispatch() - CORE/Cake/Routing/Dispatcher.php, line 161
+[main] - APP/webroot/index.php, line 92
+

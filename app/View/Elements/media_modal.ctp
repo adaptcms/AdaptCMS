@@ -32,7 +32,7 @@ $(document).ready(function() {
 	*/
 
 	$("#<?= $id ?> .file_info img, .selected-images .file_info img").live('click', function() {
-		$(this).parent().find('input:checkbox').trigger('change');
+		$(this).parent().find('input:checkbox').trigger('click');
 		$(this).popover('hide');
 	});
 
@@ -105,16 +105,16 @@ $(document).ready(function() {
 
 	<?php if (!empty($limit)): ?>
 		$("#<?= $id ?>").find('#media-modal-current-limit').val(<?= $limit ?>);
-		var count = $('#<?= $id ?> .modal-body .file_info.span4 input:checked').length;
+		var count = $('#<?= $id ?> .modal-body .thumbnails .file_info.span4 input:checked').length;
 
 		if (count == <?= $limit ?>) {
 			disabledImages('not-checked', '<?= $id ?>');
 		}
 
-		$("#<?= $id ?>").on('change', '.modal-body .file_info.span4 input:checkbox', function() {
+		$("#<?= $id ?>").on('change', '.modal-body .thumbnails .file_info.span4 input:checkbox', function() {
 			var id = $(this).attr('id');
 			var checked = $(this).attr('checked');
-			var count = $('#<?= $id ?> .modal-body .file_info.span4 input:checked').length;
+			var count = $('#<?= $id ?> .modal-body .thumbnails .file_info.span4 input:checked').length;
 
 			if (count == <?= $limit ?>) {
 				if (checked) {
@@ -154,6 +154,10 @@ function getImages(modal_id)
 				var modal = $("#" + modal_id).find("#media-modal-current-id");
 
 				if (modal.length == 0 || !modal.val()) {
+					if (i % 3 === 0 && i != 0)
+					{
+						// $(".selected-images").append('<div class="clearfix"></div>');
+					}
 					$(".selected-images").append(html);
 				} else {
 					var current_id = modal.val();
@@ -196,22 +200,25 @@ function loadAjax(href, id)
 
 <div id="<?= $id ?>" class="modal hide fade">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-	    <h3 id="myModalLabel">Add Images to Library - {{title}}</h3>
+		<i class="icon-remove icon-large close" data-dismiss="modal" aria-hidden="true"></i>
+	    <h3>Add Images to Library</h3>
 	</div>
 	<div class="modal-body">
 		<?php if (!empty($images)): ?>
-			<?php foreach($images as $key => $row): ?>
-				<?php if ($key % 3 === 0 && $key != 0): ?>
-					<div class="clearfix"></div><br />
-				<?php endif ?>
+			<ul class="thumbnails">
+				<?php foreach($images as $key => $row): ?>
+					<?php if ($key % 3 === 0 && $key != 0): ?>
+						<div class="clearfix"></div><br />
+					<?php endif ?>
 
-				<?= $this->element('media_modal_image', array(
-						'image' => $row['File'], 
-						'key' => $key,
-						'limit' => (!empty($limit) ? $limit : '')
-				)) ?>
-			<?php endforeach ?>
+					<?= $this->element('media_modal_image', array(
+							'image' => $row['File'], 
+							'key' => $key,
+							'limit' => (!empty($limit) ? $limit : ''),
+							'modal' => true
+					)) ?>
+				<?php endforeach ?>
+			</ul>
 
 			<div class="clearfix"></div>
 			<?= $this->element('admin_pagination') ?>
@@ -240,7 +247,8 @@ function loadAjax(href, id)
 				),
 				'div' => false,
 				'label' => false,
-				'style' => 'margin-left: 20px'
+				'style' => 'margin-left: 20px',
+				'class' => 'btn-warning btn'
 			)) ?>
 			<?= $this->Form->input('sort_direction', array(
 				'options' => array(
@@ -250,7 +258,8 @@ function loadAjax(href, id)
 				'empty' => '- sort direction -',
 				'div' => false,
 				'label' => false,
-				'style' => 'display: none'
+				'style' => 'display: none',
+				'class' => 'btn-warning btn'
 			)) ?>
 			<?= $this->Form->button('<i class="icon icon-white icon-remove"></i>', array(
 					'escape' => false, 
@@ -260,7 +269,7 @@ function loadAjax(href, id)
 			)) ?>
 		</div>
 		<div class="pull-right">
-			<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+			<button class="btn btn-danger" data-dismiss="modal" aria-hidden="true">Close</button>
 			<button class="btn btn-primary">Save Selected</button>
 		</div>
 		<div class="clearfix"></div>

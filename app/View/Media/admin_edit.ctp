@@ -6,7 +6,7 @@ $(document).ready(function(){
 
 <h2 class="left">Edit Media Library</h2>
 
-<div class="right">
+<div class="right admin-edit-options">
     <?= $this->Html->link(
         '<i class="icon-chevron-left"></i> Return to Index',
         array('action' => 'index'),
@@ -31,20 +31,24 @@ $(document).ready(function(){
 	echo $this->Html->link('Attach Images <i class="icon icon-white icon-upload"></i>', '#media-modal', array('class' => 'btn btn-primary', 'escape' => false, 'data-toggle' => 'modal'));
 ?>
 	<p>&nbsp;</p>
-	<div class="selected-images span12 row">
+	<ul class="selected-images span12 thubmnails">
 		<?php if (!empty($this->request->data['File'])): ?>
 			<?php foreach($this->request->data['File'] as $key => $file): ?>
 				<?= $this->element('media_modal_image', array('image' => $file, 'key' => $key, 'check' => true)) ?>
 			<?php endforeach ?>
 		<?php endif ?>
-	</div>
+	</ul>
 
 	<div class="clearfix"></div>
 <?php
 
 	echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
     echo $this->Form->hidden('id');
-	echo $this->Form->end('Submit');
 ?>
+
+<?= $this->Form->end(array(
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
+)) ?>
 
 <?= $this->element('media_modal') ?>

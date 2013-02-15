@@ -3,9 +3,12 @@
 class LinksController extends LinksAppController
 {
 	public $name = 'Links';
+	private $permissions;
 
 	public function beforeFilter()
 	{
+		$this->allowedActions = array('track');
+
 		parent::beforeFilter();
 
 		if ($this->params->action == "admin_add" || $this->params->action == "admin_edit") {
@@ -15,7 +18,7 @@ class LinksController extends LinksAppController
 					'File.deleted_time' => '0000-00-00 00:00:00',
 					'File.mimetype LIKE' => '%image%'
 				),
-				'limit' => 3
+				'limit' => 9
 			);
 
 			$images = $this->paginate('File');
@@ -35,27 +38,33 @@ class LinksController extends LinksAppController
 	        	}
 	        }
 		}
+
+		$this->permissions = $this->getPermissions();
 	}
 
 	public function admin_index()
 	{
+		$conditions = array();
+
 		if (!isset($this->params->named['trash'])) {
-	        $this->paginate = array(
-	            'order' => 'Link.created DESC',
-	            'limit' => $this->pageLimit,
-	            'conditions' => array(
-	            	'Link.deleted_time' => '0000-00-00 00:00:00'
-	            )
-	        );
+	        $conditions['Link.deleted_time'] = '0000-00-00 00:00:00';
 	    } else {
-	        $this->paginate = array(
-	            'order' => 'Link.created DESC',
-	            'limit' => $this->pageLimit,
-	            'conditions' => array(
-	            	'Link.deleted_time !=' => '0000-00-00 00:00:00'
-	            )
-	        );
+	        $conditions['Link.deleted_time !='] = '0000-00-00 00:00:00';
         }
+
+	    if ($this->permissions['any'] == 0)
+	    {
+	    	$conditions['User.id'] = $this->Auth->user('id');
+	    }
+
+        $this->paginate = array(
+            'order' => 'Link.created DESC',
+            'limit' => $this->pageLimit,
+            'conditions' => $conditions,
+            'contain' => array(
+            	'User'
+            )
+        );
 
         $this->request->data = $this->paginate('Link');
 	}
@@ -77,16 +86,10 @@ class LinksController extends LinksAppController
 
       	$this->Link->id = $id;
 
-	    if ($this->request->is('get')) {
-	        $this->request->data = $this->Link->find('first', array(
-	        	'conditions' => array(
-	        		'Link.id' => $id
-	        	),
-	        	'contain' => array(
-	        		'File'
-	        	)
-	        ));
-	    } else {
+	    if (!empty($this->request->data))
+	    {
+	    	$this->request->data['Link']['user_id'] = $this->Auth->user('id');
+
 	        if ($this->Link->save($this->request->data)) {
 	            $this->Session->setFlash('Your link has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
@@ -94,6 +97,22 @@ class LinksController extends LinksAppController
 	            $this->Session->setFlash('Unable to update your link.', 'flash_error');
 	        }
 	    }
+
+        $this->request->data = $this->Link->find('first', array(
+        	'conditions' => array(
+        		'Link.id' => $id
+        	),
+        	'contain' => array(
+        		'File',
+        		'User'
+        	)
+        ));
+
+        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 	}
 
 	public function admin_delete($id = null, $title = null, $permanent = null)
@@ -104,6 +123,20 @@ class LinksController extends LinksAppController
 	    }
 
 	    $this->Link->id = $id;
+
+        $data = $this->Link->find('first', array(
+        	'conditions' => array(
+        		'Link.id' => $id
+        	),
+        	'contain' => array(
+        		'User'
+        	)
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 
         if (!empty($permanent)) {
             $delete = $this->Link->delete($id);
@@ -127,6 +160,20 @@ class LinksController extends LinksAppController
         }
 
         $this->Link->id = $id;
+
+        $data = $this->Link->find('first', array(
+        	'conditions' => array(
+        		'Link.id' => $id
+        	),
+        	'contain' => array(
+        		'User'
+        	)
+        ));
+        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));	        	
+        }
 
         if ($this->Link->saveField('deleted_time', '0000-00-00 00:00:00')) {
             $this->Session->setFlash('The link `'.$title.'` has been restored.', 'flash_success');

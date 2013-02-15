@@ -42,20 +42,7 @@ $(document).ready(function(){
 					'value' => (!empty($this->params['pass'][0]) ? $this->params['pass'][0] : "")
 				));
 				echo $this->Form->input('field_type', array(
-					'options' => array(
-						'text' => 'Text Input', 
-						'textarea' => 'Text Box', 
-						'dropdown' => 'Dropdown Selector', 
-						'multi-dropdown' => 'Dropdown Selector Multiple', 
-						'radio' => 'Radio', 
-						'check' => 'Checkbox', 
-						'file' => 'File', 
-						'img' => 'Image', 
-						'url' => 'Website URL', 
-						'num' => 'Number', 
-						'email' => 'Email', 
-						'date' => 'Date'
-						), 
+					'options' => $field_types, 
 					'empty' => '- Choose -', 'class' => 'required'
 				));
 				?>
@@ -72,12 +59,12 @@ $(document).ready(function(){
 					)) ?>
 				</div>
 				<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
+				<div class="clearfix"></div>
 				<?php
 				echo $this->Form->input('description', array('rows' => 15, 'style' => 'width: 45%',
 					'div' => array(
-						'class' => 'input text clear',
-						'style' => 'margin-top: -9px'
-						)
+						'class' => 'input text'
+					)
 				));
 				echo $this->Form->input('field_limit_min', array('value' => 0, 'label' => 'Field Limit Minimum'));
 				echo $this->Form->input('field_limit_max', array('value' => 0, 'label' => 'Field Limit Maximum'));
@@ -87,7 +74,10 @@ $(document).ready(function(){
 				echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 			?>
 
-		<?= $this->Form->end('Submit') ?>
+		<?= $this->Form->end(array(
+			'label' => 'Submit',
+			'class' => 'btn btn-primary'
+		)) ?>
 	</div>
 
 	<div class="tab-pane" id="order">

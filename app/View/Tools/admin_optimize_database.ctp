@@ -1,0 +1,70 @@
+<div class="pull-left">
+	<h1>Optimize Database</h1>
+</div>
+<div class="pull-right">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Tools',
+        array('action' => 'index'),
+        array('class' => 'btn', 'escape' => false
+    )) ?>
+</div>
+<div class="clearfix"></div>
+
+<div class="well">
+	<?php if (!empty($messages)): ?>
+		<?php foreach($messages as $table => $message): ?>
+			<div class="span2 no-marg-left">
+				<h4>
+					<?= $table ?>
+				</h4>
+			</div>
+			<div class="clearfix"></div>
+
+			<?php if ($message['check'] == 1): ?>
+				<div class="span5 alert alert-success pull-left">
+					Table `<?= $table ?>` Checked - is Okay
+				</div>
+			<?php else: ?>
+				<div class="span5 alert alert-error">
+					Table `<?= $table ?>` Checked - NOT Okay<br />
+					<?= $message['check'] ?>
+				</div>
+
+				<?php if ($message['repair'] == 1): ?>
+					<div class="span5 alert alert-success">
+						Table `<?= $table ?>` Repaired Successfully
+					</div>
+				<?php else: ?>
+					<div class="span5 alert alert-error">
+						Table `<?= $table ?>` NOT Repaired<br />
+						<?= $message['repair'] ?>
+					</div>
+				<?php endif ?>
+			<?php endif ?>
+
+			<?php if ($message['analyze'] == 1): ?>
+				<div class="span5 alert alert-success pull-right">
+					Table `<?= $table ?>` Up to Date, already Optimized
+				</div>
+			<?php else: ?>
+				<div class="span5 alert alert-error">
+					Table `<?= $table ?>` NOT Optimized<br />
+					<?= $message['analyze'] ?>
+				</div>
+
+				<?php if ($message['optimize'] == 1): ?>
+					<div class="span5 alert alert-success">
+						Table `<?= $table ?>` Optimized Successfully
+					</div>
+				<?php else: ?>
+					<div class="span5 alert alert-error">
+						Table `<?= $table ?>` NOT Optimized<br />
+						<?= $message['optimize'] ?>
+					</div>
+				<?php endif ?>
+			<?php endif ?>			
+
+			<div class="clearfix"></div>
+		<?php endforeach ?>
+	<?php endif ?>
+</div>

@@ -4,56 +4,108 @@
 
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
-    View
+    View <i class="icon-picture"></i>
     <span class="caret"></span>
   </a>
-  <ul class="dropdown-menu" style="min-width: 0px">
-    <li><?= $this->Html->link('Active', array('admin' => true, 'action' => 'index')) ?></li>
-    <li><?= $this->Html->link('Trash', array('admin' => true, 'action' => 'index', 'trash' => 1)) ?></li>
+  <ul class="dropdown-menu view">
+    <li>
+        <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
+            'admin' => true, 
+            'action' => 'index'
+        ), array('escape' => false)) ?>
+    </li>
+    <li>
+        <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
+            'admin' => true, 
+            'action' => 'index', 
+            'trash' => 1
+        ), array('escape' => false)) ?>
+    </li>
   </ul>
 </div>
 <div class="clear"></div>
 
-<?php echo $this->Html->link('Add Role', array('controller' => 'Roles', 'action' => 'add'), array('class' => 'btn', 'style' => 'float:right;margin-bottom:10px')); ?>
-<table class="table table-bordered">
-    <tr>
-        <th><?= $this->Paginator->sort('title') ?></th>
-        <th><?= $this->Paginator->sort('created') ?></th>
-        <th>Options</th>
-    </tr>
+<?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_add'])): ?>
+    <?= $this->Html->link('Add Role <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
+        'class' => 'btn btn-info pull-right', 
+        'style' => 'margin-bottom:10px',
+        'escape' => false
+    )) ?>
+<?php endif ?>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th><?= $this->Paginator->sort('title') ?></th>
+            <th><?= $this->Paginator->sort('created') ?></th>
+            <th></th>
+        </tr>
+    </thead>
 
     <?php foreach ($this->request->data as $data): ?>
-    <tr>
-        <td>
-            <?php echo $this->Html->link($data['Role']['title'], array('admin' => false, 'controller' => 'Roles', 'action' => 'view', $data['Role']['id'])); ?>
-        </td>
-        <td><?php echo $this->Time->format('F jS, Y h:i A', $data['Role']['created']); ?></td>
-        <td>
-            <?php if (empty($this->params->named['trash'])): ?>
-                <?= $this->Html->link(
-                    '<i class="icon-pencil icon-white"></i> Edit', 
-                    array('action' => 'edit', $data['Role']['id']),
-                    array('class' => 'btn btn-primary', 'escape' => false));
-                ?>
-                <?= $this->Html->link(
-                    '<i class="icon-trash icon-white"></i> Delete',
-                    array('action' => 'delete', $data['Role']['id'], $data['Role']['title']),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this role?')"));
-                ?>
-            <?php else: ?>
-                <?= $this->Html->link(
-                    '<i class="icon-share-alt icon-white"></i> Restore', 
-                    array('action' => 'restore', $data['Role']['id'], $data['Role']['title']),
-                    array('class' => 'btn btn-success', 'escape' => false));
-                ?>    
-                <?= $this->Html->link(
-                    '<i class="icon-trash icon-white"></i> Delete Forever',
-                    array('action' => 'delete', $data['Role']['id'], $data['Role']['title'], 1),
-                    array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this role? This is permanent.')"));
-                ?>      
-            <?php endif ?>
-        </td>
-    </tr>
+        <tbody>
+            <tr>
+                <td>
+                    <?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_edit'])): ?>
+                        <?= $this->Html->link($data['Role']['title'], array(
+                            'action' => 'edit', 
+                            $data['Role']['id']
+                        )) ?>
+                    <?php else: ?>
+                        <?= $data['Role']['title'] ?>
+                    <?php endif ?>
+                </td>
+                <td>
+                    <?= $this->Admin->time($data['Role']['created']) ?>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+                            Actions
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_edit'])): ?>
+                                    <li>
+                                        <?= $this->Admin->edit(
+                                            $data['Role']['id']
+                                        ) ?>
+                                    </li>
+                                <?php endif ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_delete'])): ?>
+                                    <li>
+                                        <?= $this->Admin->delete(
+                                            $data['Role']['id'],
+                                            $data['Role']['title'],
+                                            'role'
+                                        ) ?>
+                                    </li>
+                                <?php endif ?>
+                            <?php else: ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_restore'])): ?>
+                                    <li>
+                                        <?= $this->Admin->restore(
+                                            $data['Role']['id'],
+                                            $data['Role']['title']
+                                        ) ?>
+                                    </li>  
+                                <?php endif ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_delete'])): ?>
+                                    <li>
+                                        <?= $this->Admin->delete_perm(
+                                            $data['Role']['id'],
+                                            $data['Role']['title'],
+                                            'role'
+                                        ) ?>
+                                    </li> 
+                                <?php endif ?>
+                            <?php endif ?>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
     <?php endforeach; ?>
 </table>
 

@@ -16,10 +16,8 @@ class Template extends AppModel{
 		'Theme' => array(
 			'className' => 'Theme',
 			'foreignKey' => 'theme_id'
-			)
+		)
 	);
-	
-	public $hasMany = array('Module');
 
 	public $recursive = -1;
 

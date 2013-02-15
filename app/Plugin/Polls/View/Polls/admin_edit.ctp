@@ -55,7 +55,7 @@ label.error {
 
 <h2 class="left">Edit Poll</h2>
 
-<div class="right">
+<div class="pull-right admin-edit-options">
     <?= $this->Html->link(
         '<i class="icon-chevron-left"></i> Return to Index',
         array('action' => 'index'),
@@ -108,13 +108,13 @@ $key++;
 <?= $this->Form->input('id', array('type' => 'hidden')) ?>
 <br />
 <?= $this->Form->button('Add Option', array(
-		'type' => 'button',
-		'id' => 'poll-option-add',
-		'class' => 'btn'
-		)); ?>
+	'type' => 'button',
+	'id' => 'poll-option-add',
+	'class' => 'btn btn-warning'
+)) ?>
 <?= $this->Form->submit('Submit',array(
-		'class' => 'btn',
-		'style' => 'margin-left:5px'
-		)) ?>
+	'class' => 'btn btn-primary',
+	'style' => 'margin-left:5px'
+)) ?>
 <br />
-<?= $this->Form->end(); ?>
+<?= $this->Form->end() ?>

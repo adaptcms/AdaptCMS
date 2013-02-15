@@ -16,12 +16,12 @@ $(document).ready(function(){
 	echo $this->Html->link('Attach Images <i class="icon icon-white icon-upload"></i>', '#media-modal', array('class' => 'btn btn-primary', 'escape' => false, 'data-toggle' => 'modal'));
 ?>
 	<p>&nbsp;</p>
-	<div class="selected-images span12 row"></div>
+	<ul class="selected-images span12 thumbnails"></ul>
 
 	<div class="clearfix"></div>
-<?php
-	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-	echo $this->Form->end('Submit');
-?>
-
+<?= $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time()))) ?>
+<?= $this->Form->end(array(
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
+)) ?>
 <?= $this->element('media_modal') ?>

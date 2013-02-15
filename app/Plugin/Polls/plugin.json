@@ -1,0 +1,25 @@
+{
+    "title": "Polls",
+    "current_version": "0.7",
+    "api_id": 1,
+    "install": {
+    	"block_active": 1,
+    	"model_title": "Poll",
+    	"text": "Install/install_text.md",
+    	"sql": [
+    		"Install/install_data.sql"
+    	]
+    },
+    "uninstall": {
+    	"text": "Install/uninstall_text.md",
+    	"sql": [
+    		"Install/uninstall_data.sql"
+    	]
+    },
+    "upgrade": {
+        "text": "Install/upgrade_text.md",
+        "sql": [
+            "Install/upgrade_data.sql"
+        ]
+    }
+}

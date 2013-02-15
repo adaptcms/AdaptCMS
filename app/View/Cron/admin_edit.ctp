@@ -9,7 +9,7 @@ $(document).ready(function(){
 <?php
 	echo $this->Form->create('Cron', array('class' => 'well'));
 	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-	echo $this->Form->input('component_id', array(
+	echo $this->Form->input('module_id', array(
 		'empty' => '- Choose Component -',
 		'class' => 'required'
 	));
@@ -34,6 +34,9 @@ $(document).ready(function(){
 
 	echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
 	echo $this->Form->hidden('id');
-
-	echo $this->Form->end('Submit');
 ?>
+
+<?= $this->Form->end(array(
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
+)) ?>

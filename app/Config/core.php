@@ -127,7 +127,7 @@
  * or in each action using $this->cacheAction = true.
  *
  */
-	//Configure::write('Cache.check', true);
+	Configure::write('Cache.check', true);
 
 /**
  * Defines the default error type when using the log() function. Used for
@@ -241,7 +241,7 @@ if (Configure::read('debug') >= 1) {
 }
 
 // Prefix each application on the same server with a different string, to avoid Memcache and APC conflicts.
-$prefix = 'myapp_';
+$prefix = 'adaptcms_';
 
 /**
  * Configure the cache used for general framework caching.  Path information,
@@ -265,6 +265,13 @@ Cache::config('_cake_model_', array(
 	'path' => CACHE . 'models' . DS,
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
+));
+
+Cache::config('week', array(
+    'engine' => 'File',
+    'duration' => '+1 week',
+    'path' => CACHE,
+    'prefix' => 'cake_week_'
 ));
 
 /**

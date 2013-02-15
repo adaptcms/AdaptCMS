@@ -13,7 +13,7 @@
 				Guest
 			<?php endif ?>
 			 @ 
-			<?= $this->Time->timeAgoInWords($data['Comment']['created']) ?>
+			<?= $this->Admin->time($data['Comment']['created'], 'words') ?>
 		</h5>
 	</div>
 

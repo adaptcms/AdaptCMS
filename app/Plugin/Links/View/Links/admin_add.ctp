@@ -22,13 +22,13 @@
     			$("#LinkImageUrl").val('');
     		} else {
     			$(".file_id").hide();
-    			$("#selected-images").html('');
+    			$(".selected-images").html('');
 
     			$(".image_url").show();
     		}
     	} else {
     		$(".image_url,.file_id").hide();
-    		$("#selected-images").html('');
+    		$(".selected-images").html('');
     		$("#LinkImageUrl").val('');
     	}
     });
@@ -75,7 +75,7 @@
 	<?= $this->Html->link('Attach Image <i class="icon icon-white icon-upload"></i>', '#media-modal', array('class' => 'btn btn-primary', 'escape' => false, 'data-toggle' => 'modal')) ?>
 
 	<p>&nbsp;</p>
-	<div id="selected-images" class="span12 row"></div>
+	<ul class="selected-images span12 thumbnails"></ul>
 </div>
 
 <div class="clearfix"></div>
@@ -83,8 +83,8 @@
 <?= $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time()))) ?>
 <br />
 <?= $this->Form->end(array(
-		'label' => 'Submit',
-		'class' => 'btn'
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
 )) ?>
 
 <?= $this->element('media_modal', array('limit' => 1)) ?>

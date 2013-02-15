@@ -19,7 +19,7 @@ class AutoLoadJSHelper extends AppHelper
 	public function getFiles($ext)
 	{
 		$controller = strtolower($this->params->controller);
-		$action = strtolower($this->params->action);
+		$action = str_replace("admin_", "", strtolower($this->params->action));
 
 		if (!empty($this->params->prefix)) {
 			$controller = $this->params->prefix.'.'.$controller;

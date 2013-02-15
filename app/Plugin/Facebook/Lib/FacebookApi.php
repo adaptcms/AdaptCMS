@@ -8,7 +8,7 @@
   * @license MIT
   */
 App::uses('Facebook.Facebook/src/facebook', 'Vendor');
-Configure::load('facebook');
+Configure::load('Facebook.config');
 class FacebookApi {
 
   /**
