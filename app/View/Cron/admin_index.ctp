@@ -1,3 +1,6 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Cron', null) ?>
+
 <div class="left">
     <h1>Cron Entries<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>

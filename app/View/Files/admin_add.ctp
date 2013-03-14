@@ -1,3 +1,7 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Files', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add File', null) ?>
+
 <script>
 $(document).ready(function() {
 	$("#FileType").live('change', function() {
@@ -62,8 +66,6 @@ $(document).ready(function() {
             }
         }
     });
-
-    $("#FileAdminAddForm").validate();
 });
 
 function toggleRemove()
@@ -83,7 +85,7 @@ function toggleRemove()
 <?php endif ?>
 
 <?php
-    echo $this->Form->create('File', array('type' => 'file', 'class' => 'well'));
+    echo $this->Form->create('File', array('type' => 'file', 'class' => 'well admin-validate'));
     echo $this->Form->input('type', array(
     	'label' => 'How would you like to add this file?',
     	'options' => array(

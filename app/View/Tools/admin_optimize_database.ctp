@@ -1,3 +1,7 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Tools', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Optimize Database', null) ?>
+
 <div class="pull-left">
 	<h1>Optimize Database</h1>
 </div>

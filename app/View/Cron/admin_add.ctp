@@ -1,27 +1,24 @@
-<h1>Add Cron Entry</h1>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Cron Entries', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Cron', null) ?>
 
-<script>
-$(document).ready(function(){
-	$("#CronAdminAddForm").validate();
-});
-</script>
+<?= $this->Form->create('Cron', array('class' => 'well admin-validate')) ?>
+	<h2>Add Cron Entry</h2>
 
-<?php
-	echo $this->Form->create('Cron', array('class' => 'well'));
-	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-	echo $this->Form->input('module_id', array(
+	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
+	<?= $this->Form->input('module_id', array(
 		'empty' => '- Choose Component -',
 		'class' => 'required'
-	));
-	echo $this->Form->input('function', array(
+	)) ?>
+	<?= $this->Form->input('function', array(
 		'class' => 'required'
-	));
-	echo $this->Form->input('period_amount', array(
+	)) ?>
+	<?= $this->Form->input('period_amount', array(
 		'class' => 'required',
 		'options' => $period_amount,
 		'empty' => '- choose -'
-	));
-	echo $this->Form->input('period_type', array(
+	)) ?>
+	<?= $this->Form->input('period_type', array(
 		'class' => 'required',
 		'options' => array(
 			'minute' => 'Minute(s)',
@@ -30,10 +27,9 @@ $(document).ready(function(){
 			'week' => 'Week(s)'
 		),
 		'empty' => '- choose -'
-	));
+	)) ?>
 
-	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-?>
+	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

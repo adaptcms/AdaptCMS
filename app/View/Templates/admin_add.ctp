@@ -1,11 +1,13 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Templates', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Template', null) ?>
+
 <?php
 	$this->CodeMirror->editor('TemplateTemplate');
 ?>
 
 <script>
 $(document).ready(function(){
-    $("#TemplateAdminAddForm").validate();
-
     $("#TemplateThemeId").live('change', function() {
         var theme = $("#TemplateThemeId option:selected");
         var empty = $("#TemplateLocation option[value='']");
@@ -33,7 +35,7 @@ $(document).ready(function(){
 <h1>Add Template</h1>
 
 <?php
-	echo $this->Form->create('Template', array('class' => 'well'));
+	echo $this->Form->create('Template', array('class' => 'well admin-validate'));
 	
 	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
 	echo $this->Form->input('template', array('rows' => 25, 'style' => 'width:90%', 'class' => 'required'));

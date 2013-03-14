@@ -1,6 +1,10 @@
 <?php
 
-class File extends AppModel{
+class File extends AppModel
+{
+    /**
+    * Name of our Model, table will look like 'adaptcms_files'
+    */
     public $name = 'File';
 
     public $hasMany = array(

@@ -1,3 +1,6 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Tools', null) ?>
+
 <h1>Tools</h1>
 
 <div class="well">
@@ -37,6 +40,25 @@
 		<p>
 			This nifty tool will run through all the database tables in the entered database and look for any in need of repair, attempt repair and optimize any that need it.
 		</p>
+	</div>
+	<div class="clearfix"></div>
+
+	<div class="span7 no-marg-left">
+		<h4>
+			Converters
+		</h4>
+
+		<p>
+			The below converters will convert data from those CMS's into your AdaptCMS install. Please note that the CMS you are converting from must be in the same database as AdaptCMS.
+		</p>
+
+		<ul>
+			<li>
+			<?= $this->Html->link('Wordpress 3.5', array(
+				'action' => 'convert_wordpress'
+			)) ?>
+			</li>
+		</ul>
 	</div>
 	<div class="clearfix"></div>
 

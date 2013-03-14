@@ -1,12 +1,8 @@
-<?php
-	$this->TinyMce->editor();
-?>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Fields', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Field', null) ?>
 
-<script>
-$(document).ready(function(){
-	$("#FieldAdminAddForm").validate();
-});
-</script>
+<?php $this->TinyMce->editor() ?>
 
 <?= $this->Html->script('data-tagging.js') ?>
 <?= $this->Html->script('jquery-ui-1.9.2.custom.min.js') ?>
@@ -25,7 +21,7 @@ $(document).ready(function(){
 
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane fade active in" id="main">
-		<?= $this->Form->create('Field', array('class' => 'well')) ?>
+		<?= $this->Form->create('Field', array('class' => 'well admin-validate')) ?>
 			<h2>Add Field</h2>
 
 			<?= $this->Form->input('import', array(
@@ -33,46 +29,44 @@ $(document).ready(function(){
 				'empty' => '- import field values -'
 			)) ?>
 
-			<?php
-				echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-				echo $this->Form->input('label', array('type' => 'text'));
-				echo $this->Form->input('category_id', array(
-					'class' => 'required',
-					'empty' => '- Choose Category -',
-					'value' => (!empty($this->params['pass'][0]) ? $this->params['pass'][0] : "")
-				));
-				echo $this->Form->input('field_type', array(
-					'options' => $field_types, 
-					'empty' => '- Choose -', 'class' => 'required'
-				));
-				?>
-				<div class="field_options" style="margin-bottom: 9px">
-					<?= $this->Form->input('field_options', array(
-						'div' => false, 
-						'style' => 'margin-bottom: 0',
-						'type' => 'text'
-					)) ?>
-					<?= $this->Form->button('Add', array(
-						'class' => 'btn btn-info', 
-						'type' => 'button',
-						'id' => 'add-data'
-					)) ?>
-				</div>
-				<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
-				<div class="clearfix"></div>
-				<?php
-				echo $this->Form->input('description', array('rows' => 15, 'style' => 'width: 45%',
-					'div' => array(
-						'class' => 'input text'
-					)
-				));
-				echo $this->Form->input('field_limit_min', array('value' => 0, 'label' => 'Field Limit Minimum'));
-				echo $this->Form->input('field_limit_max', array('value' => 0, 'label' => 'Field Limit Maximum'));
-				echo $this->Form->hidden('field_order', array('value' => 0));
-				echo $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?'));
+			<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
+			<?= $this->Form->input('label', array('type' => 'text')) ?>
+			<?= $this->Form->input('category_id', array(
+				'class' => 'required',
+				'empty' => '- Choose Category -',
+				'value' => (!empty($this->params['pass'][0]) ? $this->params['pass'][0] : "")
+			)) ?>
+			<?= $this->Form->input('field_type', array(
+				'options' => $field_types, 
+				'empty' => '- Choose -', 'class' => 'required'
+			)) ?>
 
-				echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-			?>
+			<div class="field_options" style="margin-bottom: 9px">
+				<?= $this->Form->input('field_options', array(
+					'div' => false, 
+					'style' => 'margin-bottom: 0',
+					'type' => 'text'
+				)) ?>
+				<?= $this->Form->button('Add', array(
+					'class' => 'btn btn-info', 
+					'type' => 'button',
+					'id' => 'add-data'
+				)) ?>
+			</div>
+			<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
+			<div class="clearfix"></div>
+			
+			<?= $this->Form->input('description', array('rows' => 15, 'style' => 'width: 45%',
+				'div' => array(
+					'class' => 'input text'
+				)
+			)) ?>
+			<?= $this->Form->input('field_limit_min', array('value' => 0, 'label' => 'Field Limit Minimum')) ?>
+			<?= $this->Form->input('field_limit_max', array('value' => 0, 'label' => 'Field Limit Maximum')) ?>
+			<?= $this->Form->hidden('field_order', array('value' => 0)) ?>
+			<?= $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?')) ?>
+
+			<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 
 		<?= $this->Form->end(array(
 			'label' => 'Submit',

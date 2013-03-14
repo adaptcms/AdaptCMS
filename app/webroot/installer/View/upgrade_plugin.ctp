@@ -42,15 +42,15 @@
 				</p>
 
 				Then you can <?= $this->Html->link('Click here', array(
-					'controller' => 'tools',
-					'action' => 'plugins',
+					'controller' => 'plugins',
+					'action' => 'index',
 					'admin' => true
 				)) ?> to return to the Plugins Page.
 			<?php elseif (empty($sql['sql']['error']) && empty($error)): ?>
 				<p>
 					The Plugin has been upgraded successfully! <?= $this->Html->link('Click here', array(
-						'controller' => 'tools',
-						'action' => 'plugins',
+						'controller' => 'plugins',
+						'action' => 'index',
 						'admin' => true
 					)) ?> to return to the Plugins Page.
 				</p>

@@ -216,7 +216,7 @@ class BlocksController extends AppController
     *
     * @param id ID of database entry, redirect if no permissions
     * @param title Title of this entry, used for flash message
-    * @return direct
+    * @return redirect
     */
     public function admin_restore($id = null, $title = null)
     {

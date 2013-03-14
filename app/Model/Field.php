@@ -1,36 +1,63 @@
 <?php
-class Field extends AppModel {
-
+class Field extends AppModel
+{
+    /**
+    * Name of our Model, table will look like 'adaptcms_fields'
+    */
     public $name = "Field";
+
+    /**
+    * Every field belongs to a category and a User
+    */
     public $belongsTo = array(
         'Category' => array(
             'className'    => 'Category',
             'foreignKey'   => 'category_id',
-            'fields' => 'slug'
+            'fields' => array(
+                'slug',
+                'title'
+            )
         ),
         'User' => array(
             'className' => 'User',
             'foreignKey' => 'user_id'
         )
     );
+
+    /**
+    * All article values are related to a field
+    */
     public $hasMany = array(
         'ArticleValue' => array(
             'className' => 'ArticleValue',
             'foreignKey' => 'field_id'
-            )
-    );
-    public $validate = array(
-        'title' => array(
-            'rule' => array('notEmpty')
-        ),
-        'field_type' => array(
-            'rule' => array('notEmpty')
-        ),
-        'field_order' => array(
-            'rule' => array('notEmpty')
         )
     );
 
+    /**
+    * Validation Rules
+    */
+    public $validate = array(
+        'title' => array(
+            'rule' => array(
+                'notEmpty'
+            )
+        ),
+        'field_type' => array(
+            'rule' => array(
+                'notEmpty'
+            )
+        ),
+        'field_order' => array(
+            'rule' => array(
+                'notEmpty'
+            )
+        )
+    );
+
+    /**
+    * Static field types, this will be a manageable customizable list in the future
+    */
     public $field_types = array(
         'text' => 'Text Input', 
         'textarea' => 'Text Box', 
@@ -46,6 +73,11 @@ class Field extends AppModel {
         'date' => 'Date'
     );
 
+    /**
+    * This afterFind will simply, automatically, decode the field options json field
+    *
+    * @return array of filtered field data
+    */
     public function afterFind($results)
     {
         if (empty($results))
@@ -62,5 +94,56 @@ class Field extends AppModel {
         }
 
         return $results;
+    }
+
+    public function beforeSave()
+    {
+        if (!empty($this->data['Field']['title']))
+        {
+            if ($this->data['Field']['required'] == 1)
+            {
+                $rules[] = "required: true,";
+            } else {
+                $rules[] = "required: false,";
+            }
+            if ($this->data['Field']['field_limit_min'] > 0)
+            {
+                $rules[] = "minlength: ".$this->data['Field']['field_limit_min'].",";
+            }
+            if ($this->data['Field']['field_limit_max'] > 0)
+            {
+                $rules[] = "maxlength: ".$this->data['Field']['field_limit_max'].",";
+            }
+            if ($this->data['Field']['field_type'] == "email")
+            {
+                $rules[] = "email: true,";
+            }
+            if ($this->data['Field']['field_type'] == "url")
+            {
+                $rules[] = "url: true,";
+            }
+            if ($this->data['Field']['field_type'] == "num")
+            {
+                $rules[] = "number: true,";
+            }
+
+            $this->data['Field']['rules'] = json_encode($rules);
+            unset($rules);
+
+            if (empty($this->data['Field']['label']))
+            {
+                $this->data['Field']['label'] = $this->data['Field']['title'];
+            }
+
+            $this->data['Field']['title'] = $this->slug($this->data['Field']['title']);
+
+            if (!empty($this->data['FieldData']))
+            {
+                $this->data['Field']['field_options'] = 
+                    json_encode($this->data['FieldData']);
+            }
+        }
+
+        return true;
     }
 }

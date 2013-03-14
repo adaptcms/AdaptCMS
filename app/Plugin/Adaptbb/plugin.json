@@ -1,0 +1,16 @@
+{
+    "title": "AdaptBB",
+    "current_version": "0.7",
+    "api_id": 6,
+    "install": {
+    	"model_title": "ForumPost",
+    	"sql": [
+    		"Install/install_data.sql"
+    	]
+    },
+    "uninstall": {
+    	"sql": [
+    		"Install/uninstall_data.sql"
+    	]
+    }
+}

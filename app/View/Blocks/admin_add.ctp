@@ -1,3 +1,7 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Blocks', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Block', null) ?>
+
 <?php
     $this->CodeMirror->editor('BlockCode');
     $this->TinyMce->editor(array(

@@ -1,7 +1,11 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Users', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add User', null) ?>
+
 <h1>Add User</h1>
 
 <?php
-	echo $this->Form->create('User', array('type' => 'file', 'class' => 'well', 'id' => 'UserForm'));
+	echo $this->Form->create('User', array('type' => 'file', 'class' => 'well admin-validate'));
 
 	echo $this->Form->input('username', array('type' => 'text', 'class' => 'required'));
 	echo $this->Form->input('password', array('type' => 'password', 'class' => 'required'));

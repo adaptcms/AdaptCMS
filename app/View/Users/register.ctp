@@ -62,6 +62,8 @@ $(document).ready(function() {
 });
 </script>
 
+<?php $this->Html->addCrumb('Register', null) ?>
+
 <div class="pull-left">
     <h1>New User</h1>
 

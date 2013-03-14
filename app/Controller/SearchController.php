@@ -2,8 +2,19 @@
 
 class SearchController extends AppController
 {
+    /**
+    * Name of the Controller, 'Search'
+    */
+	public $name = 'Search';
+
+	/**
+	* Search is not defined by a specific model. So no uses by default.
+	*/
 	public $uses = array();
 
+	/**
+	* Anyone can use the search feature
+	*/
 	public function beforeFilter()
 	{
 		$this->allowedActions = array(
@@ -12,21 +23,38 @@ class SearchController extends AppController
 		);
 
 		parent::beforeFilter();
-	}
 
-	public function index()
-	{
 		$this->loadModel('Module');
 
-		$options = $this->Module->find('list', array(
+		$modules = $this->Module->find('list', array(
 			'conditions' => array(
 				'Module.is_searchable' => 1
 			)
 		));
 
+		if ($this->params->action == 'search')
+		{
+			$modules = implode(',', array_keys($modules) );
+		}
+
 		$this->set(compact('options'));
 	}
 
+	/**
+	* Brings in the search element
+	*
+	* @return none
+	*/
+	public function index()
+	{
+	}
+
+	/**
+	* Hooks up to the 'getSearchParams' model function of a specified module 
+	* (or all that have the is_searchable flag set, this includes plugins)
+	*
+	* @return associative array of search data
+	*/
 	public function search()
 	{
 		if ( empty($this->request->data['Search']['q']) ||
@@ -36,8 +64,6 @@ class SearchController extends AppController
 		}
 
 		$q = $this->request->data['Search']['q'];
-
-		$this->loadModel('Module');
 
 		if ( !empty($this->request->data['Search']['module']) &&
 			is_numeric($this->request->data['Search']['module']) )
@@ -105,12 +131,7 @@ class SearchController extends AppController
 
 			$this->set( compact( 'data', 'q', 'module_name', 'module_id' ) );
 		} else {
-			$modules = implode(',', array_keys($this->Module->find('list', array(
-				'conditions' => array(
-					'Module.is_searchable' => 1
-				)
-			))));
-			$this->set( compact( 'modules', 'q' ) );
+			$this->set( compact( 'q' ) );
 		}
 	}
 }

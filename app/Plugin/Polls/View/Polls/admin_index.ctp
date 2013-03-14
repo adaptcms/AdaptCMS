@@ -1,3 +1,11 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Plugins', array(
+    'controller' => 'plugins', 
+    'action' => 'index',
+    'plugin' => false
+)) ?>
+<?php $this->Html->addCrumb('Polls', null) ?>
+
 <div class="pull-left">
     <h1>Polls<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>

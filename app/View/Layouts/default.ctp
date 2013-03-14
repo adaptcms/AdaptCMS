@@ -180,6 +180,13 @@
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span9">
+          <?= $this->Html->getCrumbList(array(
+            'separator' => '<span class="divider"> / </span>',
+            'class' => 'breadcrumb',
+            'escape' => false,
+            'lastClass' => 'active'
+          ), 'Home') ?>
+
           <?= $this->Session->flash() ?>
 
           <?= $this->fetch('content') ?>

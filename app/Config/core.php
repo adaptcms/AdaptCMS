@@ -173,7 +173,8 @@
  *
  */
 	Configure::write('Session', array(
-		'defaults' => 'php'
+		'defaults' => 'php',
+		'cookie' => 'adaptcms'
 	));
 
 /**
@@ -279,4 +280,4 @@ Cache::config('week', array(
  */
 
 define('VIEW_PATH', ROOT . '/app/View/');
-define('ADAPTCMS_VERSION', 'Beta');
+define('ADAPTCMS_VERSION', 'Beta 2');

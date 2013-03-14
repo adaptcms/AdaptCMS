@@ -1,8 +1,6 @@
-<script>
-$(document).ready(function(){
-	$("#CategoryEditForm").validate();
-});
-</script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Categories', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit Category', null) ?>
 
 <ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
 	<li<?= (!empty($this->params['named']) ? "" : " class='active'") ?>>
@@ -35,7 +33,7 @@ $(document).ready(function(){
 
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane <?= (!empty($this->params['named']) ? "" : "fade active in") ?>" id="main">
-		<?= $this->Form->create('Category', array('class' => 'well', 'id' => 'CategoryAdminForm')) ?>
+		<?= $this->Form->create('Category', array('class' => 'well admin-validate')) ?>
 			<h2>Edit Category</h2>
 
 			<?= $this->Form->input('title', array(

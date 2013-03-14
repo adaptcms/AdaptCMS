@@ -1,3 +1,5 @@
+<?php $this->Html->addCrumb('Login', null) ?>
+
 <div class="pull-left">
     <h1>Login</h1>
 

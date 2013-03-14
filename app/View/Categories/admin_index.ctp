@@ -1,4 +1,7 @@
-<div class="left">
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Categories', null) ?>
+
+<div class="pull-left">
     <h1>Categories<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
@@ -33,7 +36,6 @@
 <?php endif ?>
 
 <?php if (empty($this->request->data)): ?>
-    <div class="clearfix"></div>
     <div class="well">
         No Items Found
     </div>

@@ -1,3 +1,16 @@
+<?php $this->Html->addCrumb($this->request->data['Category']['title'], array(
+	'controller' => 'categories',
+	'action' => 'view',
+	$this->request->data['Category']['slug']
+)) ?>
+<?php $this->Html->addCrumb($this->request->data['Article']['title'], null) ?>
+
+<?php if (!empty($wysiwyg)): ?>
+	<?php $this->TinyMce->editor(array('simple' => true)) ?>
+<?php endif ?>
+
+<?= $this->Html->script('jquery.smooth-scroll.min.js') ?>
+
 <div class="span8 no-marg-left">
 	<h1><?= $this->request->data['Article']['title'] ?></h1>
 

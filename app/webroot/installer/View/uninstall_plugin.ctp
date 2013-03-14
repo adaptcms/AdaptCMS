@@ -37,8 +37,8 @@
 			<?php if (empty($sql['sql']['error'])): ?>
 				<p>
 					The Plugin has been removed successfully! <?= $this->Html->link('Click here', array(
-						'controller' => 'tools',
-						'action' => 'plugins',
+						'controller' => 'plugins',
+						'action' => 'index',
 						'admin' => true
 					)) ?> to return to the Plugins Page.
 				</p>

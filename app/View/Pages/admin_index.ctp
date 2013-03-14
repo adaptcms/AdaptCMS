@@ -1,3 +1,6 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Pages', null) ?>
+
 <div class="left">
     <h1>Pages<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>

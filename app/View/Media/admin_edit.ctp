@@ -1,8 +1,6 @@
-<script>
-$(document).ready(function(){
-	$("#MediaEditForm").validate();
-});
-</script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Media Libraries', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit Library', null) ?>
 
 <h2 class="left">Edit Media Library</h2>
 
@@ -21,7 +19,7 @@ $(document).ready(function(){
 <div class="clearfix"></div>
 
 <?php
-	echo $this->Form->create('Media', array('class' => 'well'));
+	echo $this->Form->create('Media', array('class' => 'well admin-validate'));
 	echo $this->Form->input('title', array(
 		'type' => 'text', 
 		'class' => 'required', 

@@ -2,11 +2,15 @@
 	<li>
 		<?php if (!empty($row['Link']['file_id'])): ?>
 			<?php
-				$title = $this->Html->image($this->webroot.$row['File']['dir'].$row['File']['filename']);
+				$title = $this->Html->image('/' . $row['File']['dir'].$row['File']['filename'], array(
+					'class' => 'span6'
+				));
 			?>
 		<?php elseif (!empty($row['Link']['image_url'])): ?>
 			<?php
-				$title = $this->Html->image($row['Link']['image_url']);
+				$title = $this->Html->image('/' . $row['Link']['image_url'], array(
+					'class' => 'span6'
+				));
 			?>
 		<?php else: ?>
 			<?php $title = $row['Link']['link_title'] ?>
@@ -20,3 +24,5 @@
 		)) ?>
 	</li>
 <?php endforeach ?>
+
+<div class="clearfix"></div>

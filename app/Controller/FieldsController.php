@@ -1,9 +1,21 @@
 <?php
 
-class FieldsController extends AppController {
+class FieldsController extends AppController
+{
+    /**
+    * Name of the Controller, 'Fields'
+    */
 	public $name = 'Fields';
+
+    /**
+    * array of permissions for this page
+    */
     private $permissions;
 
+    /**
+    * In this beforeFilter we will get the permissions to be used in the view files
+    * If this is an admin action, an array of categories and field types are passed to the view as well.
+    */
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -30,6 +42,11 @@ class FieldsController extends AppController {
         $this->permissions = $this->getPermissions();
     }
 
+    /**
+    * Returns a paginated index of Fields
+    *
+    * @return associative array of fields data
+    */
 	public function admin_index()
 	{
         $conditions = array();
@@ -71,58 +88,26 @@ class FieldsController extends AppController {
         $this->request->data = $this->paginate('Field');
 	}
 
+    /**
+    * Returns nothing before post
+    *
+    * On POST, returns error flash or success flash and redirect to index on success
+    * A list of fields is passed to the view for  
+    *
+    * @return mixed
+    */
 	public function admin_add()
 	{
-        /*
-        $fields = $this->Field->find('all');
-
-        $import = array();
-        foreach($fields as $key => $field) {
-            $import[$field['Field']['id']] = $field['Field']['id'];
-        }
-        */
         $import = $this->Field->find('list');
 
         $this->set(compact('import'));
 
-        if ($this->request->is('post')) {
-            if ($this->request->data['Field']['required'] == 1) {
-                    $rules[] = "required: true,";
-            } else {
-                    $rules[] = "required: false,";
-            }
-            if ($this->request->data['Field']['field_limit_min'] > 0) {
-                    $rules[] = "minlength: ".$this->request->data['Field']['field_limit_min'].",";
-            }
-            if ($this->request->data['Field']['field_limit_max'] > 0) {
-                    $rules[] = "maxlength: ".$this->request->data['Field']['field_limit_max'].",";
-            }
-            if ($this->request->data['Field']['field_type'] == "email") {
-                    $rules[] = "email: true,";
-            }
-            if ($this->request->data['Field']['field_type'] == "url") {
-                    $rules[] = "url: true,";
-            }
-            if ($this->request->data['Field']['field_type'] == "num") {
-                    $rules[] = "number: true,";
-            }
-
-            $this->request->data['Field']['rules'] = json_encode($rules);
-            unset($rules);
-
-            if (empty($this->request->data['Field']['label'])) {
-                    $this->request->data['Field']['label'] = $this->request->data['Field']['title'];
-            }
-
-    		$this->request->data['Field']['title'] = $this->slug($this->request->data['Field']['title']);
+        if (!empty($this->request->data))
+        {
             $this->request->data['Field']['user_id'] = $this->Auth->user('id');
 
-            if (!empty($this->request->data['FieldData'])) {
-                $this->request->data['Field']['field_options'] = 
-                    json_encode($this->request->data['FieldData']);
-            }
-
-            if ($this->Field->save($this->request->data)) {
+            if ($this->Field->save($this->request->data))
+            {
                 $this->Session->setFlash('Your field has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -131,45 +116,22 @@ class FieldsController extends AppController {
         } 
 	}
 
+    /**
+    * Before POST, sets request data to form
+    *
+    * After POST, flash error or flash success and redirect to index
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @return associative array of category data
+    */
 	public function admin_edit($id = null)
 	{
-	    if (!empty($this->request->data)) {
-            if ($this->request->data['Field']['required'] == 1) {
-                    $rules[] = "required: true,";
-            } else {
-                    $rules[] = "required: false,";
-            }
-            if ($this->request->data['Field']['field_limit_min'] > 0) {
-                    $rules[] = "minlength: ".$this->request->data['Field']['field_limit_min'].",";
-            }
-            if ($this->request->data['Field']['field_limit_max'] > 0) {
-                    $rules[] = "maxlength: ".$this->request->data['Field']['field_limit_max'].",";
-            }
-            if ($this->request->data['Field']['field_type'] == "email") {
-                    $rules[] = "email: true,";
-            }
-            if ($this->request->data['Field']['field_type'] == "url") {
-                    $rules[] = "url: true,";
-            }
-            if ($this->request->data['Field']['field_type'] == "num") {
-                    $rules[] = "number: true,";
-            }
-
-            $this->request->data['Field']['rules'] = json_encode($rules);
-            unset($rules);
-            
-            if (empty($this->request->data['Field']['label'])) {
-                    $this->request->data['Field']['label'] = $this->request->data['Field']['title'];
-            }
-    		$this->request->data['Field']['title'] = $this->slug($this->request->data['Field']['title']);
+	    if (!empty($this->request->data))
+        {
             $this->request->data['Field']['user_id'] = $this->Auth->user('id');
 
-            if (!empty($this->request->data['FieldData'])) {
-                $this->request->data['Field']['field_options'] = 
-                    json_encode($this->request->data['FieldData']);
-            }
-
-	        if ($this->Field->save($this->request->data)) {
+	        if ($this->Field->save($this->request->data))
+            {
 	            $this->Session->setFlash('Your field has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
@@ -202,12 +164,18 @@ class FieldsController extends AppController {
         $this->set(compact('fields'));
 	}
 
+    /**
+    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+    *
+    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @param title Title of this entry, used for flash message
+    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
+    * @return redirect
+    */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
-        if ($this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
         $this->Field->id = $id;
 
         $data = $this->Field->find('first', array(
@@ -224,31 +192,39 @@ class FieldsController extends AppController {
             $this->redirect(array('action' => 'index'));                
         }
 
-        if (!empty($permanent)) {
+        if (!empty($permanent))
+        {
             $delete = $this->Field->delete($id);
         } else {
             $delete = $this->Field->saveField('deleted_time', $this->Field->dateTime());
         }
 
-        if ($delete) {
+        if ($delete)
+        {
 	        $this->Session->setFlash('The field `'.$title.'` has been deleted.', 'flash_success');
 	    } else {
 	    	$this->Session->setFlash('The field `'.$title.'` has NOT been deleted.', 'flash_error');
 	    }
 
-        if (!empty($permanent)) {
+        if (!empty($permanent))
+        {
             $this->redirect(array('action' => 'index', 'trash' => 1));
         } else {
             $this->redirect(array('action' => 'index'));
         }
 	}
 
+    /**
+    * Restoring an item will take an item in the trash and reset the delete time
+    *
+    * This makes it live wherever applicable
+    *
+    * @param id ID of database entry, redirect if no permissions
+    * @param title Title of this entry, used for flash message
+    * @return redirect
+    */
     public function admin_restore($id = null, $title = null)
     {
-        if ($this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
         $this->Field->id = $id;
 
         $data = $this->Field->find('first', array(
@@ -274,6 +250,11 @@ class FieldsController extends AppController {
         }
     }
 
+    /**
+    * The second part of adjust field order, this is the function that saves the field order.
+    *
+    * @return json_encode array of status and flash message data
+    */
     public function admin_ajax_order()
     {
         $this->layout = 'ajax';
@@ -282,7 +263,8 @@ class FieldsController extends AppController {
         $data = array();
         $i = 0;
 
-        foreach($this->request->data['Field']['field_ids'] as $key => $field) {
+        foreach($this->request->data['Field']['field_ids'] as $key => $field)
+        {
             if (!empty($field) && $field > 0) {
                 $data[$i]['id'] = $field;
                 $data[$i]['field_order'] = $key;
@@ -291,7 +273,8 @@ class FieldsController extends AppController {
             }
         }
 
-        if ($this->Field->saveAll($data)) {
+        if ($this->Field->saveAll($data))
+        {
             return json_encode(array(
                 'status' => true,
                 'message' => '
@@ -312,6 +295,12 @@ class FieldsController extends AppController {
         }
     }
 
+    /**
+    * The AJAX Fields function returns a list of fields, 
+    * used when adding/editing a field to adjust field order. 
+    *
+    * @return json_encode array containg status of true and data
+    */
     public function admin_ajax_fields()
     {
         $this->layout = 'ajax';
@@ -332,10 +321,12 @@ class FieldsController extends AppController {
                 Current Field
             </span>";
 
-        foreach($fields as $key => $field) {
+        foreach($fields as $key => $field)
+        {
             $data .= "<li class='btn' id='".$field['Field']['id']."'><i class='icon icon-move'></i> ";
 
-            if ($field['Field']['id'] == $this->request->data['Field']['id']) {
+            if ($field['Field']['id'] == $this->request->data['Field']['id'])
+            {
                 $data .= $original;
                 $current = 1;
             } else {
@@ -347,9 +338,11 @@ class FieldsController extends AppController {
             ";
         }
 
-        if (empty($current)) {
+        if (empty($current))
+        {
             $key = count($data);
-            if (empty($this->request->data['Field']['id'])) {
+            if (empty($this->request->data['Field']['id']))
+            {
                 $this->request->data['Field']['id'] = 0;
             }
 
@@ -363,6 +356,11 @@ class FieldsController extends AppController {
         ));
     }
 
+    /**
+    * This small function is used for importing fields
+    *
+    * @return json_encode array of field tata
+    */
     public function admin_ajax_import()
     {
         $this->layout = 'ajax';

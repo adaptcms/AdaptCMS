@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    $("#UserForm").validate();
     $("#UserPasswordConfirm").rules("add", {
         required: false,
         equalTo: "#UserPassword",

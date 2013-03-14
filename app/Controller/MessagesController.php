@@ -2,7 +2,14 @@
 
 class MessagesController extends AppController
 {
+    /**
+    * Name of the Controller, 'Messages'
+    */
 	public $name = 'Messages';
+
+	/**
+	* List of box types, in the future this may be a database editable list
+	*/
 	private $boxes = array(
 		'inbox',
 		'outbox',
@@ -10,6 +17,12 @@ class MessagesController extends AppController
 		'archive'
 	);
 
+	/**
+	* This function returns a paginated list of messages based on which box the user is viewing.
+	*
+	* @param box_slug
+	* @return associative array of messages
+	*/
 	public function index($box_slug = null)
 	{
 		if (!empty($box_slug) && in_array($box_slug, $this->boxes) && $box_slug != 'inbox') {
@@ -65,9 +78,19 @@ class MessagesController extends AppController
         );
         
 		$this->request->data = $this->paginate('Message');
+
+		$this->set('messages', $this->request->data);
 		$this->set( 'box', $box_slug );
 	}
 
+	/**
+	* A thread view of messages sent between two users.
+	*
+	* @param id
+	* @return subject
+	* @return sender
+	* @return messages list of messages in this thread
+	*/
 	public function view($id = null)
 	{
 		$this->request->data = $this->Message->find('all', array(
@@ -83,13 +106,15 @@ class MessagesController extends AppController
 			)
 		));
 
-		if ($this->request->data[0]['Message']['sender_user_id'] != $this->Auth->user('id') &&
-			$this->request->data[0]['Message']['receiver_user_id'] != $this->Auth->user('id'))
+		$messages = $this->request->data;
+
+		if ($messages[0]['Message']['sender_user_id'] != $this->Auth->user('id') &&
+			$messages[0]['Message']['receiver_user_id'] != $this->Auth->user('id'))
 		{
 			$this->redirect(array('action' => 'index'));
 		}
 
-		foreach($this->request->data as $row)
+		foreach($messages as $row)
 		{
 			if ($row['Message']['is_read'] == 0 && $row['Receiver']['id'] == $this->Auth->user('id'))
 			{
@@ -98,10 +123,17 @@ class MessagesController extends AppController
 			}
 		}
 
-		$this->set('subject', $this->request->data[0]['Message']['title']);
-		$this->set('sender', $this->request->data[0]['Sender']['id']);
+		$this->set('subject', $messages[0]['Message']['title']);
+		$this->set('sender', $messages[0]['Sender']['id']);
+		$this->set(compact('messages'));
 	}
 
+	/**
+	* AJAX Functionality and non-ajax to create a new message or ajax replying to one.
+	*
+	* @param box_slug
+	* @return json_encode array if AJAX request, otherwise flash/redirect
+	*/
 	public function send()
 	{
 		if (!empty($this->request->data))
@@ -150,6 +182,13 @@ class MessagesController extends AppController
 		}
 	}
 
+	/**
+	* This function handles changing the current box of a message, marking it read and related functionality.
+	*
+	* @param action is either moving the message to archive, inbox or marking it read
+	* @param id of messages
+	* @return redirect and flash message
+	*/
 	public function move($action = null, $id = null)
 	{
 		$this->request->data = $this->Message->findById($id);

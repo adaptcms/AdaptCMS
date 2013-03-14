@@ -1,10 +1,8 @@
-<script>
- $(document).ready(function(){
-    $("#RoleAdminForm").validate();
- });
- </script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Roles', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Role', null) ?>
 
-<?= $this->Form->create('Role', array('class' => 'well', 'id' => 'RoleAdminForm')) ?>
+<?= $this->Form->create('Role', array('class' => 'well admin-validate')) ?>
 	<h2>Add Role</h2>
 	
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>

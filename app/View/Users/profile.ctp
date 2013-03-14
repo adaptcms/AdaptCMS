@@ -1,3 +1,5 @@
+<?php $this->Html->addCrumb('Profile', null) ?>
+
 <h1>
 	<?= $this->request->data['User']['username'] ?>'s Profile
 </h1>

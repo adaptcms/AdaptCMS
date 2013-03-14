@@ -18,5 +18,19 @@ class FieldHelper extends AppHelper
 			}
 		}
 	}
-	
+
+	public function getImage($data)
+	{
+		if (empty($data)) {
+			return false;
+		}
+
+		if (!empty($data['ArticleValue'])) {
+			foreach($data['ArticleValue'] as $value) {
+				if ($value['Field']['field_type'] == 'img') {
+					return $value['File']['filename'];
+				}
+			}
+		}
+	}
 }

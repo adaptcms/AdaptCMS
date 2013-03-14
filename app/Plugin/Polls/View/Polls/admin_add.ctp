@@ -1,3 +1,12 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Plugins', array(
+    'controller' => 'plugins', 
+    'action' => 'index',
+    'plugin' => false
+)) ?>
+<?php $this->Html->addCrumb('Polls', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Poll', null) ?>
+
 <?php
 	$time = date('Y-m-d H:i:s');
 ?>
@@ -18,8 +27,6 @@ label.error {
 
 <script>
  $(document).ready(function(){
-    $("#PollAdminAddForm").validate();
-
     $("button#poll-option-add").live('click', function() {
     	var count = Number($(".option").length);
     	var number = count + 1;
@@ -36,7 +43,7 @@ label.error {
 <h1>Add Poll</h1>
 
 <?php
-	echo $this->Form->create('Poll', array('class' => 'well'));
+	echo $this->Form->create('Poll', array('class' => 'well admin-validate'));
 	echo $this->Form->input('title', array(
 		'type' => 'text', 
 		'class' => 'required'

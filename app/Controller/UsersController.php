@@ -320,7 +320,8 @@ class UsersController extends AppController {
 						}
 					} 
 
-					if ($this->Auth->login()) {
+					if ($this->Auth->login())
+					{
 						$this->User->id = $this->Auth->user('id');
 						$this->User->saveField('login_time', $this->User->dateTime());
 
@@ -406,7 +407,7 @@ class UsersController extends AppController {
             	$this->request->data['User'] = array_merge($this->request->data['User'], array('id' => $this->User->id));
             	
 	        	if ($user_status['SettingValue']['data'] == "Email Activation") {
-	        		$sitename = $this->SettingValue->findByTitle('sitename');
+	        		$sitename = $this->SettingValue->findByTitle('Site Name');
 	        		$webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
 	        		$email_subject = $this->SettingValue->findByTitle('User Register Email Subject');
 
@@ -657,7 +658,7 @@ class UsersController extends AppController {
 							}
 						}
 					} else {
-		        		$sitename = $this->SettingValue->findByTitle('sitename');
+		        		$sitename = $this->SettingValue->findByTitle('Site Name');
 		        		$webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
 
 		        		$activate_code[0]['activate_code'] = md5(time());

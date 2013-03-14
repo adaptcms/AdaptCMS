@@ -1,4 +1,7 @@
-<div class="left">
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Blocks', null) ?>
+
+<div class="pull-left">
     <h1>Blocks<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-toolbar pull-right" style="margin-bottom:10px">

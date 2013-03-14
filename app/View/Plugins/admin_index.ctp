@@ -7,9 +7,14 @@ $(document).ready(function() {
 });
 </script>
 
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Plugins', null) ?>
+
 <h1>Plugins</h1>
 
-<?= $this->Html->link('Get More Plugins', $this->Api->url() . 'plugins', array('class' => 'btn btn-info', 'style' => 'float:right;margin-bottom:10px')) ?>
+<?= $this->Html->link('Get More Plugins', $this->Api->url() . 'plugins', array(
+    'class' => 'btn btn-info pull-right admin-edit-options'
+)) ?>
 
 <?php if (!empty($plugins)): ?>
     <table class="table table-striped">
@@ -122,7 +127,18 @@ $(document).ready(function() {
                                             ?>
                                         </li>
                                     <?php endif ?>
-                                    
+                                        <li>
+                                            <?= $this->Html->link(
+                                                '<i class="icon-picture"></i> Assets',
+                                                array(
+                                                    'action' => 'assets',
+                                                    $key
+                                                ),
+                                                array(
+                                                    'escape' => false
+                                                ));
+                                            ?>
+                                        </li>
                                     <li>
                                         <?= $this->Html->link(
                                             '<i class="icon-trash"></i> Un-Install',

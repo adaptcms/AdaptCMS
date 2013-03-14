@@ -102,30 +102,13 @@ class Article extends AppModel {
 
     public function getBlockCustomOptions($data)
     {
-        if (!empty($data)) {
-            $id = $data['category_id'];
-        }
-
+        $view = new View();
         $categories = $this->Category->find('list');
 
-        $data = '
-        <div class="input select">
-            <label for="BlockSettingsCategoryId">Filter Articles by Category</label>
-            <select name="data[Block][settings][category_id]">
-                <option value="">- choose -</option>';
-
-        if (!empty($categories)) {
-            foreach($categories as $key => $category) {
-                $data .= '<option value="' . $key . '"';
-                if (!empty($id) && $id == $key) {
-                    $data .= ' selected';
-                }
-
-                $data .= '>' . $category . '</option>';
-            }
-        }
-
-        $data .= '</select></div>';
+        $data = $view->element('article_custom_options', array(
+            'categories' => $categories, 
+            'id' => (!empty($data['category_id']) ? $data['category_id'] : '') 
+        ));
 
         return $data;
     }
@@ -160,7 +143,8 @@ class Article extends AppModel {
             'permissions' => array(
                 'controller' => 'articles',
                 'action' => 'view'
-            )
+            ),
+            'group' => 'Article.id'
         );
     }
 
@@ -174,6 +158,11 @@ class Article extends AppModel {
             $this->data['File'] = $this->data['Files'];
         }
 
+        if (!empty($this->data['Article']['title']))
+        {
+            $this->data['Article']['slug'] = $this->slug($this->data['Article']['title']);
+        }
+        
         return true;
     }
 
@@ -186,20 +175,21 @@ class Article extends AppModel {
 
         foreach($results as $key => $result)
         {
-            // $results[$key] = $results['Article'];
-
-            if (!empty($result['ArticleValue']))
+            if (!empty($result['ArticleValue']) && is_array($result['ArticleValue']))
             {
                 foreach($result['ArticleValue'] as $value)
                 {
-                    $json = json_decode($value['data'], true);
-
-                    if (empty($json))
+                    if (!empty($value['Field']))
                     {
-                        $results[$key]['Data'][$value['Field']['title']] = $value['data'];
-                    } else {
-                        $results[$key]['Data'][$value['Field']['title']]['data'] = $json;
-                        $results[$key]['Data'][$value['Field']['title']]['list'] = implode(', ', $json);
+                        $json = json_decode($value['data'], true);
+
+                        if (empty($json))
+                        {
+                            $results[$key]['Data'][$value['Field']['title']] = $value['data'];
+                        } else {
+                            $results[$key]['Data'][$value['Field']['title']]['data'] = $json;
+                            $results[$key]['Data'][$value['Field']['title']]['list'] = implode(', ', $json);
+                        }
                     }
                 }
             }

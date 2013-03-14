@@ -15,7 +15,7 @@
 	)) ?>
 	<?= $this->Form->input('module', array(
 		'empty' => 'All',
-		'options' => ( !empty($options) ? $options : array() ),
+		'options' => ( !empty($modules) ? $modules : array() ),
 		'label' => false,
 		'div' => false,
 		'class' => 'span2',

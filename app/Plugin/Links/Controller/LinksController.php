@@ -2,9 +2,23 @@
 
 class LinksController extends LinksAppController
 {
+    /**
+    * Name of the Controller, 'Links'
+    */
 	public $name = 'Links';
+
+    /**
+    * array of permissions for this page
+    */
 	private $permissions;
 
+
+    /**
+    * In this beforeFilter we will get the permissions to be used in the view files
+    * We add 'track' as an allowed function, as anyone viewing the link should be able to click on it.
+    *
+    * If the current action is add or edit, we pass a list of the latest 9 files for the media modal.
+    */
 	public function beforeFilter()
 	{
 		$this->allowedActions = array('track');
@@ -25,23 +39,16 @@ class LinksController extends LinksAppController
 			$image_path = WWW_ROOT;
 
 			$this->set(compact('images', 'image_path'));
-
-	        if (!$this->request->is('get')) {
-	        	if (!empty($this->request->data['File'])) {
-	        		foreach($this->request->data['File'] as $file) {
-	        			$this->request->data['Link']['file_id'] = $file;
-	        		}
-	        	}
-
-	        	if (empty($this->request->data['Link']['link_title'])) {
-	        		$this->request->data['Link']['link_title'] = $this->request->data['Link']['title'];
-	        	}
-	        }
 		}
 
 		$this->permissions = $this->getPermissions();
 	}
 
+    /**
+    * Returns a paginated index of Links
+    *
+    * @return associative array of links data
+    */
 	public function admin_index()
 	{
 		$conditions = array();
@@ -69,10 +76,23 @@ class LinksController extends LinksAppController
         $this->request->data = $this->paginate('Link');
 	}
 
+    /**
+    * Returns nothing before post
+    *
+    * On POST, returns error flash or success flash and redirect to index on success
+    *
+    * @return mixed
+    */
 	public function admin_add()
 	{
-        if ($this->request->is('post')) {
-            if ($this->Link->save($this->request->data)) {
+        if (!empty($this->request->data))
+        {
+            $this->Link->create();
+
+            $this->request->data['Link']['user_id'] = $this->Auth->user('id');
+
+            if ($this->Link->save($this->request->data))
+            {
                 $this->Session->setFlash('Your link has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -81,9 +101,16 @@ class LinksController extends LinksAppController
         } 
 	}
 
+    /**
+    * Before POST, sets request data to form
+    *
+    * After POST, flash error or flash success and redirect to index
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @return associative array of category data
+    */
 	public function admin_edit($id = null)
 	{
-
       	$this->Link->id = $id;
 
 	    if (!empty($this->request->data))
@@ -115,13 +142,18 @@ class LinksController extends LinksAppController
         }
 	}
 
+    /**
+    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+    *
+    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @param title Title of this entry, used for flash message
+    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
+    * @return redirect
+    */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
-
-		if ($this->request->is('post')) {
-	        throw new MethodNotAllowedException();
-	    }
-
 	    $this->Link->id = $id;
 
         $data = $this->Link->find('first', array(
@@ -138,13 +170,15 @@ class LinksController extends LinksAppController
             $this->redirect(array('action' => 'index'));	        	
         }
 
-        if (!empty($permanent)) {
+        if (!empty($permanent))
+        {
             $delete = $this->Link->delete($id);
         } else {
             $delete = $this->Link->saveField('deleted_time', $this->Link->dateTime());
         }
 
-	    if ($delete) {
+	    if ($delete)
+        {
 	        $this->Session->setFlash('The link `'.$title.'` has been deleted.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
@@ -153,12 +187,17 @@ class LinksController extends LinksAppController
 	    }
 	}
 
+    /**
+    * Restoring an item will take an item in the trash and reset the delete time
+    *
+    * This makes it live wherever applicable
+    *
+    * @param id ID of database entry, redirect if no permissions
+    * @param title Title of this entry, used for flash message
+    * @return redirect
+    */
     public function admin_restore($id = null, $title = null)
     {
-        if ($this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
         $this->Link->id = $id;
 
         $data = $this->Link->find('first', array(
@@ -175,7 +214,8 @@ class LinksController extends LinksAppController
             $this->redirect(array('action' => 'index'));	        	
         }
 
-        if ($this->Link->saveField('deleted_time', '0000-00-00 00:00:00')) {
+        if ($this->Link->saveField('deleted_time', '0000-00-00 00:00:00'))
+        {
             $this->Session->setFlash('The link `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
@@ -184,23 +224,33 @@ class LinksController extends LinksAppController
         }
     }
 
+    /**
+    * A simple ajax function that when a link is clicked, a request is made.
+    * If the ID is valid, a find is made to get the amount of views + 1 and saved.
+    *
+    * @return integer of link views or false with invalid ID
+    */
     public function track()
     {
     	$this->layout = 'ajax';
     	$this->autoRender = null;
 
-    	if (!empty($this->request->data['Link']['id'])) {
+    	if (!empty($this->request->data['Link']['id']))
+        {
     		$id = $this->request->data['Link']['id'];
     	}
 
-    	if (!empty($id)) {
+    	if (!empty($id))
+        {
     		$find = $this->Link->findById($id);
     		$views = $find['Link']['views'] + 1;
 
     		$this->Link->id = $id;
     		$this->Link->saveField('views', $views);
+
+            return $views;
     	}
 
-    	return $views;
+    	return;
     }
 }

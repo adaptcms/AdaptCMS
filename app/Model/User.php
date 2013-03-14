@@ -1,5 +1,6 @@
 <?php
 App::uses('AuthComponent', 'Controller/Component');
+App::uses('Sanitize', 'Utility');
 
 class User extends AppModel
 {
@@ -68,6 +69,10 @@ class User extends AppModel
     public function beforeSave() {
         $path = WWW_ROOT . 'uploads' . DS . 'avatars' . DS;
 
+        $this->data = Sanitize::clean($this->data, array(
+            'encode' => false
+        ));
+
         if (!empty($this->data['User']['settings']['avatar']) && 
             is_array($this->data['User']['settings']['avatar']))
         {
@@ -103,8 +108,11 @@ class User extends AppModel
             }
         }
 
-        $this->data['User']['security_answers'] = json_encode($this->data['Security']);
-
+        if (!empty($this->data['Security']))
+        {
+            $this->data['User']['security_answers'] = json_encode($this->data['Security']);
+        }
+        
         if (!empty($this->data['User']['settings']))
         {
             $this->data['User']['settings'] = json_encode(
@@ -121,7 +129,7 @@ class User extends AppModel
         {
             unset($this->data['User']['password']);
         }
-        // die(debug($this->data));
+
         return true;
     }
 

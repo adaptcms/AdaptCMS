@@ -40,3 +40,5 @@
 		<hr>
 	<?php endforeach ?>
 <?php endif ?>
+
+<?= $this->element('admin_pagination') ?>

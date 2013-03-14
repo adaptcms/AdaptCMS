@@ -1,11 +1,44 @@
 <?php
 
-class TemplatesController extends AppController{
+class TemplatesController extends AppController
+{
+    /**
+    * Name of the Controller, 'Templates'
+    */
 	public $name = 'Templates';
+
+	/**
+	* Need API Component
+	*/
 	public $components = array(
 		'Api'
 	);
 
+	/**
+	* Gets list of themes, passed to only add and edit views
+	*/
+	public function beforeFilter()
+	{
+		parent::beforeFilter();
+
+		if ($this->params->action == 'admin_add' || $this->params->action == 'admin_edit')
+		{
+			$themes = $this->Template->Theme->find('list', array(
+	            'order' => 'Theme.id ASC',
+	            'conditions' => array(
+	            	'Theme.deleted_time' => '0000-00-00 00:00:00'
+            	)
+	        ));
+
+			$this->set(compact('themes'));
+		}
+	}
+
+    /**
+    * Returns a paginated index of Templates
+    *
+    * @return associative array of template and theme data
+    */
 	public function admin_index()
 	{
         $conditions = array();
@@ -15,43 +48,34 @@ class TemplatesController extends AppController{
             $conditions['Theme.id'] = $this->params->named['theme_id'];
         }
 
-		$this->loadModel('Theme');
-
-		if (!isset($this->params->named['trash_temp'])) {
+		if (!isset($this->params->named['trash_temp']))
+		{
 			$conditions['Template.deleted_time'] = '0000-00-00 00:00:00';
-			$this->paginate = array(
-	            'order' => 'Template.created DESC',
-	            'contain' => array(
-	            	'Theme'
-	            ),
-	            'conditions' => array(
-	            	$conditions
-	            ),
-	            'limit' => $this->pageLimit
-	        );
 		} else {
 			$conditions['Template.deleted_time !='] = '0000-00-00 00:00:00';
-			$this->paginate = array(
-	            'order' => 'Template.created DESC',
-	            'contain' => array(
-	            	'Theme'
-	            ),
-	            'conditions' => array(
-	            	$conditions
-	            ),
-	            'limit' => $this->pageLimit
-	        );
 	    }
+
+		$this->paginate = array(
+            'order' => 'Template.created DESC',
+            'contain' => array(
+            	'Theme'
+            ),
+            'conditions' => array(
+            	$conditions
+            ),
+            'limit' => $this->pageLimit
+        );
         
 		$this->request->data['Template'] = $this->paginate('Template');
-
-		$this->request->data['Themes'] = $this->Theme->find('all', array(
+		$this->request->data['Themes'] = $this->Template->Theme->find('all', array(
                 'order' => 'Theme.id ASC'
             )
         );
 
-		foreach ($this->request->data['Themes'] as $key => $row) {
-			if ($row['Theme']['deleted_time'] == "0000-00-00 00:00:00") {
+		foreach ($this->request->data['Themes'] as $key => $row)
+		{
+			if ($row['Theme']['deleted_time'] == "0000-00-00 00:00:00")
+			{
 				$themes[$row['Theme']['id']] = $row['Theme']['title'];
 			}
 
@@ -86,10 +110,14 @@ class TemplatesController extends AppController{
 		$themes = array_merge($inactive_themes['themes'], $active_themes['themes']);
 		$api_lookup = array_merge($inactive_themes['api_lookup'], $active_themes['api_lookup']);
 
-		if (!empty($api_lookup)){
-			if ($data = $this->Api->themesLookup($api_lookup)) {
-				foreach($themes as $key => $theme) {
-					if (!empty($theme['api_id']) && !empty($data['data'][$theme['api_id']])) {
+		if (!empty($api_lookup))
+		{
+			if ($data = $this->Api->themesLookup($api_lookup))
+			{
+				foreach($themes as $key => $theme)
+				{
+					if (!empty($theme['api_id']) && !empty($data['data'][$theme['api_id']]))
+					{
 						$themes[$key]['data'] = $data['data'][$theme['api_id']];
 					}
 				}
@@ -99,30 +127,41 @@ class TemplatesController extends AppController{
 		$this->request->data['ThemesData'] = $themes;
 
 		$theme_names = Set::extract('{n}.Theme.title', $this->request->data['Themes']);
-		foreach($this->request->data['ThemesData'] as $key => $theme)
+
+		if (!empty($this->request->data['ThemesData']))
 		{
-			if (!in_array($key, $theme_names))
+			foreach($this->request->data['ThemesData'] as $key => $theme)
 			{
-				$this->request->data['Themes'][]['Theme'] = $theme;
+				if (!empty($theme_names) && !in_array($key, $theme_names))
+				{
+					$this->request->data['Themes'][]['Theme'] = $theme;
+				}
 			}
 		}
 	}
 
+    /**
+    * Returns nothing before post
+    *
+    * On POST, returns error flash or success flash and redirect to index on success
+    *
+    * @return mixed
+    */
 	public function admin_add()
 	{
-		$this->loadModel('Theme');
+        if (!empty($this->request->data))
+        {
+            if ($this->Template->save($this->request->data))
+            {
+                $this->Session->setFlash('Your template has been added.', 'flash_success');
+                $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash('Unable to add your template.', 'flash_error');
+            }
+        }
 
-		$themes = $this->Theme->find('list', array(
-                'order' => 'Theme.id ASC',
-                'conditions' => array(
-                	'Theme.deleted_time' => '0000-00-00 00:00:00'
-                	)
-                )
-        );
-
-		$this->set(compact('themes'));
-
-		if (empty($this->params->pass[0])) {
+		if (empty($this->params->pass[0]))
+		{
 			$theme_id = 1;
 		} else {
 			$theme_id = $this->params->pass[0];
@@ -130,126 +169,28 @@ class TemplatesController extends AppController{
 	    
 	    $this->set(compact('theme_id'));
 
-	    if ($theme_id == 1) {
+	    if ($theme_id == 1)
+	    {
 			$this->set('locations', $this->Template->folderFullList());
 		} else {
 			$this->set('locations', $this->Template->folderFullList($themes[$theme_id]));
 		}
-
-        if ($this->request->is('post')) {
-			$theme = $this->Theme->find('first', array(
-                'conditions' => array(
-                	'Theme.id' => $this->request->data['Template']['theme_id'],
-                	'Theme.deleted_time' => '0000-00-00 00:00:00'
-                ),
-                'fields' => array(
-                	'title'
-                )
-        	));
-
-			$file = $this->slug($this->request->data['Template']['title'], 1);
-
-			if ($theme['Theme']['title'] == 'Default') {
-				$pre = null;
-			} else {
-				// $pre = 'Themed/'.$theme['Theme']['title'].'/';
-				$pre = null;
-			}
-
-        	$this->request->data['Template']['location'] = $pre.$this->request->data['Template']['location'].'/'.$file.'.ctp';
-
-        	$fh = fopen(VIEW_PATH.$this->request->data['Template']['location'], 'w') or die("can't open file");
-			fwrite($fh, $this->request->data['Template']['template']);
-			fclose($fh);
-
-            if ($this->Template->save($this->request->data)) {
-                $this->Session->setFlash('Your template has been added.', 'flash_success');
-                $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash('Unable to add your template.', 'flash_error');
-            }
-        } 
 	}
 
+    /**
+    * Before POST, sets request data to form
+    *
+    * After POST, flash error or flash success and redirect to index
+    *
+    * @param id ID of the database entry
+    * @return associative array of block data
+    */
 	public function admin_edit($id = null)
 	{
-
       	$this->Template->id = $id;
-		$this->loadModel('Theme');
 
-		$themes = $this->Theme->find('list', array(
-                'order' => 'Theme.id ASC',
-                'conditions' => array(
-                	'Theme.deleted_time' => '0000-00-00 00:00:00'
-                	)
-                )
-        );
-
-		$this->set(compact('themes'));
-
-	    if ($this->request->is('get')) {
-	    	$this->request->data = $this->Template->read();
-
-	        if (is_readable(VIEW_PATH.$this->request->data['Template']['location'])) {
-		 		$handle = fopen(VIEW_PATH.$this->request->data['Template']['location'], "r");
-		 		if (filesize(VIEW_PATH.$this->request->data['Template']['location']) > 0) {
-					$template_contents = fread($handle, filesize(VIEW_PATH.$this->request->data['Template']['location']));
-	    		} else {
-	    			$template_contents = null;
-	    		}
-	    	} else {
-	    		$template_contents = null;
-	    	}
-
-	    	$this->set(compact('template_contents'));
-
-	    	$this->set('location', str_replace(
-	    		"/".basename(
-	    			$this->request->data['Template']['location']
-	    		), 
-	    		"",
-	    		$this->request->data['Template']['location']
-	    		)
-	    	);
-	    } else {
-			$theme = $this->Theme->find('first', array(
-                'conditions' => array(
-                	'Theme.id' => $this->request->data['Template']['theme_id'],
-                	'Theme.deleted_time' => '0000-00-00 00:00:00'
-                ),
-                'fields' => array(
-                	'title'
-                )
-        	));
-
-			$file = str_replace(
-				"_".strtolower(basename($this->request->data['Template']['location'])), 
-				"",
-				$this->slug($this->request->data['Template']['title'], 1
-			));
-
-			if ($theme['Theme']['title'] == 'Default') {
-				$pre = null;
-			} else {
-				// $pre = 'Themed/'.$theme['Theme']['title'].'/';
-				$pre = null;
-			}
-
-        	$this->request->data['Template']['location'] = 
-        		$pre.$this->request->data['Template']['location'].'/'.$file.'.ctp';
-
-        	$fh = fopen(VIEW_PATH.$this->request->data['Template']['location'], 'w') or die("can't open file");
-			fwrite($fh, $this->request->data['Template']['template']);
-			fclose($fh);
-
-			if ($this->request->data['Template']['location'] != $this->request->data['Template']['old_location']
-				or $this->request->data['Template']['title'] != $this->request->data['Template']['old_title']
-				or $this->request->data['Template']['theme_id'] != $this->request->data['Template']['old_theme']) {
-				if (is_readable(VIEW_PATH.$this->request->data['Template']['old_location'])) {
-					unlink(VIEW_PATH.$this->request->data['Template']['old_location']);
-				}
-			}
-
+	    if (!empty($this->request->data))
+	    {
 	        if ($this->Template->save($this->request->data)) {
 	            $this->Session->setFlash('Your template has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
@@ -258,20 +199,59 @@ class TemplatesController extends AppController{
 	        }
 	    }
 
-	    if ($this->request->data['Template']['theme_id'] == 1) {
+    	$this->request->data = $this->Template->read();
+
+	    if ($this->request->data['Template']['theme_id'] == 1)
+	    {
 			$this->set('locations', $this->Template->folderFullList());
 		} else {
 			$this->set('locations', $this->Template->folderFullList($themes[$this->request->data['Template']['theme_id']]));
 		}
+
+    	if (strstr($this->request->data['Template']['location'], 'Plugin/'))
+    	{
+    		$path = APP;
+    	} else {
+    		$path = VIEW_PATH;
+    	}
+
+        if (is_readable($path . $this->request->data['Template']['location']))
+        {
+	 		$handle = fopen($path . $this->request->data['Template']['location'], "r");
+	 		if (filesize($path . $this->request->data['Template']['location']) > 0)
+	 		{
+				$template_contents = fread($handle, filesize($path.$this->request->data['Template']['location']));
+    		} else {
+    			$template_contents = null;
+    		}
+    	} else {
+    		$template_contents = null;
+    	}
+
+    	$this->set(compact('template_contents'));
+
+    	$this->set('location', str_replace(
+    		"/".basename(
+    			$this->request->data['Template']['location']
+    		), 
+    		"",
+    		$this->request->data['Template']['location']
+    		)
+    	);
 	}
 
+    /**
+    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+    *
+    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @param title Title of this entry, used for flash message
+    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
+    * @return redirect
+    */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
-
-		if ($this->request->is('post')) {
-	        throw new MethodNotAllowedException();
-	    }
-
 	    $this->Template->id = $id;
 
 	    $location = $this->Template->find('first', array(
@@ -283,37 +263,54 @@ class TemplatesController extends AppController{
 	    	)
 	    ));
 
-        if (!empty($permanent)) {
+    	if (strstr($location['Template']['location'], 'Plugin'))
+    	{
+    		$path = APP;
+    	} else {
+    		$path = VIEW_PATH;
+    	}
+
+        if (!empty($permanent))
+        {
             $delete = $this->Template->delete($id);
-		    if (is_readable(VIEW_PATH.$location['Template']['location'])) {
-		    	unlink(VIEW_PATH.$location['Template']['location']);
+		    if (is_readable($path . $location['Template']['location']))
+		    {
+		    	unlink($path . $location['Template']['location']);
 		    }
         } else {
             $delete = $this->Template->saveField('deleted_time', $this->Template->dateTime());
         }
 
-	    if ($delete) {
+	    if ($delete)
+	    {
 	        $this->Session->setFlash('The template `'.$title.'` has been deleted.', 'flash_success');
 	    } else {
 	    	$this->Session->setFlash('The template `'.$title.'` has NOT been deleted.', 'flash_error');
 	    }
 
-	    if (!empty($permanent)) {
+	    if (!empty($permanent))
+	    {
 	    	$this->redirect(array('action' => 'index', 'trash' => 1));
 	    } else {
 	    	$this->redirect(array('action' => 'index'));
 	    }
 	}
 
+    /**
+    * Restoring an item will take an item in the trash and reset the delete time
+    *
+    * This makes it live wherever applicable
+    *
+    * @param id ID of database entry, redirect if no permissions
+    * @param title Title of this entry, used for flash message
+    * @return redirect
+    */
     public function admin_restore($id = null, $title = null)
     {
-        if ($this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
         $this->Template->id = $id;
 
-        if ($this->Template->saveField('deleted_time', '0000-00-00 00:00:00')) {
+        if ($this->Template->saveField('deleted_time', '0000-00-00 00:00:00'))
+        {
             $this->Session->setFlash('The template `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
@@ -353,13 +350,20 @@ class TemplatesController extends AppController{
     	}
 	}
 
+	/**
+	* AJAX Function used on the main templates admin page, allowing a user to get instant results
+	* of templates based on their search.
+	*
+	* @return json_encode array of templates
+	*/
 	public function admin_ajax_quick_search()
 	{
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
     	if ($this->request->is('ajax')) {
-    		if (!empty($this->request->data['theme'])) {
+    		if (!empty($this->request->data['theme']))
+    		{
     			$conditions = array(
                		'conditions' => array(
 	                	'OR' => array(
@@ -396,9 +400,11 @@ class TemplatesController extends AppController{
 
             $results = $this->Template->find('all', $conditions);
 
-            foreach($results as $result) {
+            foreach($results as $result)
+            {
             	if (!empty($this->request->data['element']) && 
-            		strstr($result['Template']['location'], "Elements/") || empty($this->request->data['element'])) {
+            		strstr($result['Template']['location'], "Elements/") || empty($this->request->data['element']))
+            	{
 	                $data[] = array(
 	                	'id' =>$result['Template']['id'],
 	                	'title' => $result['Template']['title'],
@@ -412,30 +418,36 @@ class TemplatesController extends AppController{
     	}
 	}
 
+	/**
+	* Function will go through all view files in specified theme and ensure
+	* that all are loaded up on the database. (in case of a new file being added via, say, FTP)
+	*
+	* @return flash message on success or failure
+	*/
 	public function ajax_theme_refresh()
 	{
 		$this->layout = 'ajax';
 		$this->autoRender = false;
 
-		if ($this->RequestHandler->isAJax()) {
-			$this->loadModel('Theme');
-
-			if (!empty($this->request->data['Theme']['name'])) {
+		if ($this->RequestHandler->isAJax())
+		{
+			if (!empty($this->request->data['Theme']['name']))
+			{
 				$files = $this->Template->folderAndFilesList($this->request->data['Theme']['name']);
 			} else {
 				$files = $this->Template->folderAndFilesList();
 			}
 
-			if (!empty($files)) {
+			if (!empty($files))
+			{
 				$data = $this->Template->find("all", array(
 					'conditions' => array(
 						'Template.theme_id' => $this->request->data['Theme']['id']
 					),
 					'fields' => array(
 						'Template.location'
-						)
 					)
-				);
+				));
 				echo '<div id="theme-update-div" class="alert alert-success">
 	    					<button class="close" data-dismiss="alert">×</button>
 	    					<strong>Success</strong> The theme has been refreshed.<br />';
@@ -445,9 +457,12 @@ class TemplatesController extends AppController{
 
 	    		$this->Template->create();
 
-				foreach($files as $file) {
-					if (!$this->Template->searchArray($data, $file)) {
-						$templates[$key]['Template']['title'] = str_replace('.ctp','', Inflector::humanize(str_replace("/"," ", $file)));
+				foreach($files as $file)
+				{
+					if (!$this->Template->searchArray($data, $file))
+					{
+						$templates[$key]['Template']['title'] = 
+							str_replace('Plugin View', 'Plugin', str_replace('.ctp','', Inflector::humanize(str_replace("/"," ", $file))));
 						$templates[$key]['Template']['location'] = $file;
 						$templates[$key]['Template']['theme_id'] = $this->request->data['Theme']['id'];
 						$templates[$key]['Template']['created'] = $this->Template->dateTime();
@@ -455,6 +470,8 @@ class TemplatesController extends AppController{
 						$key++;
 					}
 				}
+
+				// die(print_r($templates));
 
 				$this->Template->saveAll($templates);
 				echo "</div>";
@@ -468,20 +485,27 @@ class TemplatesController extends AppController{
 		}
 	}
 
+	/**
+	* Function that gets all folders and returns them as options for a select
+	*
+	* @return array of folders
+	*/
 	public function ajax_template_locations()
 	{
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-    	if ($this->RequestHandler->isAjax()) {
-    		if ($this->request->data['Theme']['id'] == 1) {
+    	if ($this->RequestHandler->isAjax())
+    	{
+    		if ($this->request->data['Theme']['id'] == 1)
+    		{
     			$folders = $this->Template->folderFullList();
     		} else {
     			$folders = $this->Template->folderFullList($this->request->data['Theme']['title']);
     		}
 
-    		foreach($folders as $key => $row) {
-    			// $data[$key] = $row;
+    		foreach($folders as $key => $row)
+    		{
     			$list .= "<option value='".$key."'>".$row."</option>";
     		}
 
@@ -489,6 +513,12 @@ class TemplatesController extends AppController{
     	}
 	}
 
+	/**
+	* The function gets parameters needed on the view such as status of the Theme
+	*
+	* @param path to themes
+	* @return array of theme data
+	*/
 	private function getThemes($path)
 	{
 		$themes = array();

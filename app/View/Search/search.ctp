@@ -1,3 +1,5 @@
+<?php $this->Html->addCrumb('Search', null) ?>
+
 <?php if (empty($modules)): ?>
 	<?php if (!empty($q)): ?>
 		<div class="search-results" id="module-<?= $module_id ?>">

@@ -176,4 +176,17 @@ CakeLog::config('error', array(
 	'file' => 'error',
 ));
 
-define('Auth_OpenID_RAND_SOURCE', null);
+$plugins_list = CakePlugin::loaded();
+asort($plugins_list);
+
+foreach($plugins_list as $key => $plugin)
+{
+	if ($plugin == 'DebugKit')
+	{
+		unset($plugins_list[$key]);
+	} else {
+		Configure::load($plugin . '.config');
+	}
+}
+
+Configure::write('Plugins.list', $plugins_list);

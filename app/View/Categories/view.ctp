@@ -1,3 +1,5 @@
+<?php $this->Html->addCrumb($category['title'], null) ?>
+
 <h1><?= $title_for_layout ?></h1>
 
 <ul>
@@ -12,3 +14,5 @@
 		</li>
 	<?php endforeach ?>
 </ul>
+
+<?= $this->element('admin_pagination') ?>

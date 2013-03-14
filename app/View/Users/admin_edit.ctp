@@ -1,14 +1,10 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Users', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit User', null) ?>
+
 <?php
 	$this->TinyMce->editor();
 ?>
-
-<script>
-$(document).ready(function(){
-    <?php if (!empty($settings)): ?>
-    	$("#SettingValueEditForm").validate();
-    <?php endif ?>
-});
-</script>
 
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
@@ -43,7 +39,7 @@ $(document).ready(function(){
 
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane active fade in" id="main">
-		<?= $this->Form->create('User', array('type' => 'file', 'class' => 'well', 'id' => 'UserForm')) ?>
+		<?= $this->Form->create('User', array('type' => 'file', 'class' => 'well admin-validate')) ?>
 			<h2>Edit User</h2>
 		
 		<?php    
@@ -174,8 +170,7 @@ $(document).ready(function(){
 			<?= $this->Form->create('SettingValue', array(
 					'controller' => 'settings', 
 					'action' => 'edit/'.$settings[0]['Setting']['id'].'/'.$this->request->data['User']['id'], 
-					'id' => 'SettingValueEditForm',
-					'class' => 'well'
+					'class' => 'well admin-validate'
 			)) ?>
 
 				<h2>User Settings</h2>

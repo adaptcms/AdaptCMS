@@ -2,15 +2,26 @@
 
 class PagesController extends AppController 
 {
+    /**
+    * Name of the Controller, 'Pages'
+    */
 	public $name = 'Pages';
+
+    /**
+    * array of permissions for this page
+    */
 	private $permissions;
-	public $components = array(
-		'Api'
-	);
+
+	/**
+	* The AdaptCMS Field Helper
+	*/
 	public $helpers = array(
 		'Field'
 	);
 
+    /**
+    * In this beforeFilter we will get the permissions to be used in the view files
+    */
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
@@ -18,6 +29,11 @@ class PagesController extends AppController
 		$this->permissions = $this->getPermissions();
 	}
 
+    /**
+    * Returns a paginated index of Pages
+    *
+    * @return associative array of pages data
+    */
 	public function admin_index()
 	{
 		$conditions = array();
@@ -45,17 +61,21 @@ class PagesController extends AppController
         $this->request->data = $this->paginate('Page');
 	}
 
+    /**
+    * Returns nothing before post
+    *
+    * On POST, returns error flash or success flash and redirect to index on success
+    *
+    * @return mixed
+    */
 	public function admin_add()
 	{
-        if ($this->request->is('post')) {
-    		$this->request->data['Page']['slug'] = $this->slug($this->request->data['Page']['title']);
+        if (!empty($this->request->data))
+        {
     		$this->request->data['Page']['user_id'] = $this->Auth->user('id');
 
-        	$fh = fopen(VIEW_PATH."Pages/".$this->request->data['Page']['slug'].".ctp", 'w') or die("can't open file");
-			fwrite($fh, $this->request->data['Page']['content']);
-			fclose($fh);
-
-            if ($this->Page->save($this->request->data)) {
+            if ($this->Page->save($this->request->data))
+            {
                 $this->Session->setFlash('Your page has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -64,25 +84,24 @@ class PagesController extends AppController
         } 
 	}
 
+    /**
+    * Before POST, sets request data to form
+    *
+    * After POST, flash error or flash success and redirect to index
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @return associative array of page data
+    */
 	public function admin_edit($id = null)
 	{
-
       	$this->Page->id = $id;
 
 	    if (!empty($this->request->data))
 	    {
-	    	$this->request->data['Page']['slug'] = $this->slug($this->request->data['Page']['title']);
 	    	$this->request->data['Page']['user_id'] = $this->Auth->user('id');
-        	
-        	$fh = fopen(VIEW_PATH."Pages/".$this->request->data['Page']['slug'].".ctp", 'w') or die("can't open file");
-			fwrite($fh, $this->request->data['Page']['content']);
-			fclose($fh);
 
-			if ($this->request->data['Page']['title'] != $this->request->data['Page']['old_title']) {
-				unlink(VIEW_PATH."Pages/".$this->slug($this->request->data['Page']['old_title']).".ctp");
-			}
-
-	        if ($this->Page->save($this->request->data)) {
+	        if ($this->Page->save($this->request->data))
+	        {
 	            $this->Session->setFlash('Your page has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
@@ -106,13 +125,18 @@ class PagesController extends AppController
         }
 	}
 
+    /**
+    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+    *
+    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @param title Title of this entry, used for flash message
+    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
+    * @return redirect
+    */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
-
-		if ($this->request->is('post')) {
-	        throw new MethodNotAllowedException();
-	    }
-
 	    $this->Page->id = $id;
 
         $data = $this->Page->find('first', array(
@@ -131,32 +155,41 @@ class PagesController extends AppController
 
         if (!empty($permanent)) {
             $delete = $this->Page->delete($id);
-		    if (is_readable(VIEW_PATH.'Pages/'.$this->slug($title).'.ctp')) {
-		    	unlink(VIEW_PATH.'Pages/'.$this->slug($title).'.ctp');
+
+		    if (is_readable(VIEW_PATH.'Pages/' . $this->slug($title) . '.ctp'))
+		    {
+		    	unlink(VIEW_PATH.'Pages/' . $this->slug($title) . '.ctp');
 		    }
         } else {
             $delete = $this->Page->saveField('deleted_time', $this->Page->dateTime());
         }
 
-	    if ($delete) {
+	    if ($delete)
+	    {
 	        $this->Session->setFlash('The page `'.$title.'` has been deleted.', 'flash_success');
 	    } else {
 	    	$this->Session->setFlash('The page `'.$title.'` has NOT been deleted.', 'flash_error');
 	    }
 
-	    if (!empty($permanent)) {
+	    if (!empty($permanent))
+	    {
 	    	$this->redirect(array('action' => 'index', 'trash' => 1));
 	    } else {
 	    	$this->redirect(array('action' => 'index'));
 	    }
 	}
 
+    /**
+    * Restoring an item will take an item in the trash and reset the delete time
+    *
+    * This makes it live wherever applicable
+    *
+    * @param id ID of database entry, redirect if no permissions
+    * @param title Title of this entry, used for flash message
+    * @return redirect
+    */
     public function admin_restore($id = null, $title = null)
     {
-        if ($this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
         $this->Page->id = $id;
 
         $data = $this->Page->find('first', array(
@@ -182,7 +215,15 @@ class PagesController extends AppController
         }
     }
 
-	public function display() {
+    /**
+    * If page is homepage, will get latest articles - otherwise will return page content.
+    *
+    * If requested page does not exist, redirect to homepage.
+    *
+    * @return associative array or redirect
+    */
+	public function display()
+	{
 		$path = func_get_args();
 
 		/*
@@ -248,7 +289,8 @@ class PagesController extends AppController
 					'Category',
 					'User',
 					'ArticleValue' => array(
-						'Field'
+						'Field',
+						'File'
 					)
 				),
 				'limit' => $setting1['SettingValue']['data'],
@@ -286,14 +328,31 @@ class PagesController extends AppController
 
 			if (!empty($this->request->data)) {
 				$this->set('title_for_layout', $this->request->data['Page']['title']);
+			} else {
+	            $this->Session->setFlash('This page doesnt exist.', 'flash_error');
+	            $this->redirect('/');
 			}
 
 			$this->render(implode('/', $path));
 		}
 	}
 
+    /**
+    * This is the main admin page located at yoursite.com/admin
+    *
+	* Currently API calls are made to get the latest AdaptCMS.com news/blog and newest plugin/theme.
+	*
+	* The default AdaptCMS install has two dynamic blocks setup, pulling in the newest 5 users and articles.
+    *
+    * @return associative array of news, blog, newest_plugin and newest_theme
+    */
 	public function admin()
 	{
+		/*
+		* API Component is used to connect to the adaptcms.com website
+		*/
+		$this->Api = $this->Components->load('Api');
+
 		$this->set('news', $this->Api->getSiteArticles(1, 'news'));
 		$this->set('blog', $this->Api->getSiteArticles(1, 'blog'));
 		$this->set('newest_plugin', $this->Api->getPlugins(1, 'created', 'desc'));

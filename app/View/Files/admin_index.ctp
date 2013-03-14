@@ -1,4 +1,7 @@
-<div class="left">
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Files', null) ?>
+
+<div class="pull-left">
     <h1>Files<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">

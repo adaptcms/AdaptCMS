@@ -1,3 +1,7 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Articles', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit Article', null) ?>
+
 <?php
 	$this->TinyMce->editor();
 

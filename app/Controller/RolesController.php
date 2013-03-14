@@ -88,7 +88,7 @@ class RolesController extends AppController
 	}
 
     /**
-    * Before POST, sets request data to form and related fields/articles
+    * Before POST, sets request data to form
     *
     * After POST, flash error or flash success and redirect to index
     *
@@ -179,7 +179,7 @@ class RolesController extends AppController
     *
     * @param id ID of database entry, redirect if no permissions
     * @param title Title of this entry, used for flash message
-    * @return direct
+    * @return redirect
     */
 	public function admin_restore($id = null, $title = null)
 	{

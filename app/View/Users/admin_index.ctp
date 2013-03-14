@@ -1,3 +1,6 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Users', null) ?>
+
 <?php if ($this->Admin->hasPermission($permissions['related']['users']['ajax_change_user'])): ?>
     <script type="text/javascript">
     $(document).ready(function(){

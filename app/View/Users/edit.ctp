@@ -53,6 +53,12 @@ $(document).ready(function(){
 });
 </script>
 
+<?php $this->Html->addCrumb('Profile', array(
+    'action' => 'profile',
+    $this->Session->read('Auth.User.username')
+)) ?>
+<?php $this->Html->addCrumb('Edit', null) ?>
+
 <h1>Edit Account</h1>
 
 <?= $this->Form->create('User', array('class' => 'well', 'type' => 'file')) ?>

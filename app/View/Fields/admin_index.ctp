@@ -1,3 +1,6 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Fields', null) ?>
+
 <div class="pull-left">
     <h1>Fields<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>

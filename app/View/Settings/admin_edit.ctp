@@ -1,13 +1,11 @@
-<?php
-	$this->TinyMce->editor();
-?>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Settings', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit Settings', null) ?>
+
+<?php $this->TinyMce->editor() ?>
 
 <script>
  $(document).ready(function(){
-    $("#SettingEditForm").validate();
-    $("#SettingValueAddForm").validate();
-    $("#SettingValueEditForm").validate();
-
     $("#SettingValueSettingType").live('change', function() {
     	if ($("#SettingValueSettingType :selected").val()) {
     		var id = 'SettingValueData';
@@ -41,6 +39,16 @@
     		$(".field_options").html("");
     	}
     });
+
+	$('.admin-validate .delete').on('change', function() {
+		if ($(this).attr('checked'))
+		{
+			if (!confirm('Are you sure you wish to delete this setting? This is permanent.'))
+			{
+				$(this).attr('checked', false);
+			}
+		}
+	});
  });
  </script>
 
@@ -77,32 +85,31 @@
 
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane active fade in" id="main">
-		<?= $this->Form->create('Setting', array('action' => 'edit', 'class' => 'well')) ?>
+		<?= $this->Form->create('Setting', array('action' => 'edit', 'class' => 'well admin-validate')) ?>
 			<h2>Edit Settings Category</h2>
 
 			<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 
-			<?= $this->Form->hidden('created', array('type' => 'hidden')) ?>
+			<?= $this->Form->hidden('modified', array('type' => 'hidden', 'value' => $this->Admin->datetime() )) ?>
 		    <?= $this->Form->hidden('id') ?>
 
-			<br />
-			<?= $this->Form->end(array(
-				'label' => 'Submit',
-				'class' => 'btn btn-primary'
-			)) ?>
+		<?= $this->Form->end(array(
+			'label' => 'Submit',
+			'class' => 'btn btn-primary'
+		)) ?>
 	</div>
 
 	<?php if (!empty($this->request->data['SettingValue'])): ?>
 		<div class="tab-pane" id="update-settings">
-			<?= $this->Form->create('SettingValue', array('action' => 'edit/'.$this->request->data['Setting']['id'], 'id' => 'SettingValueEditForm', 'class' => 'well')) ?>
+			<?= $this->Form->create('SettingValue', array('action' => 'edit/'.$this->request->data['Setting']['id'], 'class' => 'well admin-validate')) ?>
 				<h2>Update Settings</h2>
 
-				<?php foreach($this->request->data['SettingValue'] as $row): ?>
-					<?= $this->Form->input('SettingValue.'.$row['id'].'.title', array('value' => $row['title'], 'class' => 'required')) ?>
+				<?php foreach($this->request->data['SettingValue'] as $key => $row): ?>
+					<?= $this->Form->input($key . '.SettingValue.title', array('value' => $row['title'], 'class' => 'required')) ?>
 					<?php if ($row['setting_type'] == "textarea"): ?>
-							<?= $this->Form->input('SettingValue.'.$row['id'].'.data', array('value' => $row['data'], 'style' => 'width:500px', 'rows' => 15)) ?>
+						<?= $this->Form->input($key . '.SettingValue.data', array('value' => $row['data'], 'style' => 'width:500px', 'rows' => 15)) ?>
 					<?php elseif ($row['setting_type'] == "text"): ?>
-						<?= $this->Form->input('SettingValue.'.$row['id'].'.data', array('type' => 'text', 'value' => $row['data'])) ?>
+						<?= $this->Form->input($key . '.SettingValue.data', array('type' => 'text', 'value' => $row['data'])) ?>
 					<?php elseif ($row['setting_type'] == "dropdown"): ?>
 						<?php 
 							$data_options = null;
@@ -110,25 +117,34 @@
 								$data_options[$json] = $json;
 							}
 						?>
-						<?= $this->Form->input('SettingValue.'.$row['id'].'.data', array(
+						<?= $this->Form->input($key . '.SettingValue.data', array(
 							'value' => $row['data'], 
 							'options' => $data_options,
 							'empty' => '- Choose -'
 					)) ?>
 					<?php endif; ?>
-					<?= $this->Form->input('SettingValue.'.$row['id'].'.description', array(
+					<?= $this->Form->input($key . '.SettingValue.description', array(
 						'value' => $row['description'], 
 						'rows' => 15, 
 						'style' => 'width:500px',
 						'class' => 'required'
-					)) ?><br />
-
-					<?= $this->Form->hidden('SettingValue.'.$row['id'].'.id', array('value' => $row['id'])) ?>
-					<?= $this->Form->hidden('SettingValue.'.$row['id'].'.modified', array(
-							'value' => $this->Time->format('Y-m-d H:i:s', time())
 					)) ?>
+					<?= $this->Form->input($key . '.SettingValue.deleted', array(
+						'value' => 1,
+						'type' => 'checkbox',
+						'label' => 'Delete Setting?',
+						'class' => 'delete'
+					)) ?>
+
+					<?= $this->Form->hidden($key . '.SettingValue.id', array(
+						'value' => $row['id']
+					)) ?>
+					<?= $this->Form->hidden($key . '.SettingValue.modified', array(
+						'value' => $this->Admin->datetime()
+					)) ?>
+
+					<div class="clearfix"></div><br />
 			 	<?php endforeach; ?>
-				<br />
 				
 			<?= $this->Form->end(array(
 					'label' => 'Submit',
@@ -138,7 +154,7 @@
 	<?php endif ?>
 
 	<div class="tab-pane" id="add-setting">
-		<?= $this->Form->create('SettingValue', array('action' => 'add', 'class' => 'well')) ?>
+		<?= $this->Form->create('SettingValue', array('action' => 'add', 'class' => 'well admin-validate')) ?>
 			<h2>Add New Setting</h2>
 
 			<?= $this->Form->input('title', array('class' => 'required')) ?>
@@ -168,6 +184,7 @@
 					)) ?>
 			</div>
 			<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
+			<div class="clearfix"></div>
 
 			<?= $this->Form->input('description', array(
 				'rows' => 15, 'style' => 'width:500px', 'class' => 'required',
@@ -177,9 +194,8 @@
 						)
 			)) ?>
 			<?= $this->Form->hidden('setting_id', array('value' => $this->request->data['Setting']['id'])) ?>
-			<?= $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time()))) ?>
+			<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 
-			<br />
 		<?= $this->Form->end(array(
 				'label' => 'Submit',
 				'class' => 'btn'

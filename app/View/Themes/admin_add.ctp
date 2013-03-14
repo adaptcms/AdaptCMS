@@ -1,17 +1,23 @@
-<script>
- $(document).ready(function(){
-    $("#ThemeAdminAddForm").validate();
- });
- </script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Templates', array(
+	'action' => 'index',
+	'controller' => 'templates'
+)) ?>
+<?php $this->Html->addCrumb('Add Theme', null) ?>
 
-<h1>Add Theme</h1>
-<?php
-	echo $this->Form->create('Theme', array('class' => 'well'));
-	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
+<?= $this->Form->create('Theme', array('class' => 'well admin-validate')) ?>
+	<h2>Add Theme</h2>
+
+	<?= $this->Form->input('title', array(
+		'type' => 'text', 
+		'class' => 'required'
+	)) ?>
 	
-	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-	echo $this->Form->end(array(
-		'label' => 'Submit',
-		'class' => 'btn btn-primary'
-	));
-?>
+	<?= $this->Form->hidden('created', array(
+		'value' => $this->Admin->datetime()
+	)) ?>
+
+<?= $this->Form->end(array(
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
+)) ?>

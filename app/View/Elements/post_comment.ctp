@@ -2,7 +2,10 @@
 	<?= $this->Form->create('Comment', array('class' => 'PostComment')) ?>
 
 		<?= $this->Form->input('comment_text', array(
-			'class' => 'span5',
+			'class' => 'span6',
+			'div' => array(
+				'style' => 'margin-bottom: 10px'
+			),
 			'label' => false,
 			'placeholder' => 'Enter in your comment...'
 		)) ?>

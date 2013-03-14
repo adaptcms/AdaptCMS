@@ -1,8 +1,16 @@
 <?php
+App::uses('Sanitize', 'Utility');
 
 class Message extends AppModel
 {
+    /**
+    * Name of our Model, table will look like 'adaptcms_messages'
+    */
 	public $name = 'Message';
+
+    /**
+    * Every message has a sender and receiver, both having to be logged in users.
+    */
 	public $belongsTo = array(
 		'Sender' => array(
 			'className' => 'User',
@@ -13,6 +21,10 @@ class Message extends AppModel
 			'foreignKey' => 'receiver_user_id'
 		)
 	);
+
+    /**
+    * Validation rules, title and message cannot be empty.
+    */
     public $validate = array(
     	'title' => array(
         	'rule' => array(
@@ -25,4 +37,17 @@ class Message extends AppModel
             )
         )
     );
+
+    /**
+    * Cleans out user input
+    */
+    public function beforeSave()
+    {
+        $this->data = Sanitize::clean($this->data, array(
+            'encode' => false,
+            'remove_html' => false
+        ));
+
+        return true;
+    }
 }

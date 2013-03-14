@@ -1,3 +1,6 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Roles', null) ?>
+
 <div class="pull-left">
     <h1>Roles<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>

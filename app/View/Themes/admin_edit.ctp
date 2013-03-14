@@ -1,35 +1,9 @@
-<?php
-
-function formatUrl($data)
-{
-	$ext = explode(".", $data);
-	$url_data = $data;
-	$extension = "";
-
-	foreach($ext as $i => $row) {
-		if ($i == 1) {
-			$extension = $row;
-		} elseif ($i > 1) {
-			$extension .= "_".$row;
-		}
-
-		if ($i > 0) {
-			$url_data = str_replace(".".$row, "", $url_data);
-		}
-	}
-
-	return array(
-		'url_data' => $url_data,
-		'extension' => $extension
-	);
-}
-?>
-
-<script>
-$(document).ready(function(){
-	$("#ThemeAdminEditForm").validate();
-});
-</script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Templates', array(
+	'action' => 'index',
+	'controller' => 'templates'
+)) ?>
+<?php $this->Html->addCrumb('Edit Theme', null) ?>
 
 <ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
 	<li class="active">
@@ -56,7 +30,7 @@ $(document).ready(function(){
 
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane active fade in" id="main">
-		<?= $this->Form->create('Theme', array('class' => 'well')) ?>
+		<?= $this->Form->create('Theme', array('class' => 'well admin-validate')) ?>
 			<h2>Edit Theme</h2>
 		    
 		    <?php if ($this->request->data['Theme']['id'] == 1 || !empty($config['api_id'])): ?>
@@ -79,133 +53,100 @@ $(document).ready(function(){
 		<?php endif ?>
 	</div>
 
-	<div class="tab-pane well" id="assets">
-		<div class="pull-left">
-			<h2>Assets</h2>
-		</div>
+	<div class="tab-pane" id="assets">
+		<h2 class="pull-left">Assets</h2>
 
-		<div class="pull-right">
-			<?= $this->Html->link('Add New File', array(
-					'controller' => 'files', 
-					'action' => 'add', 
-					$this->request->data['Theme']['title']
-				), array(
-					'class' => 'btn'
-			)) ?>
-		</div>
+		<?= $this->Html->link('Add New File <i class="icon icon-plus icon-white"></i>', array(
+				'action' => 'admin_asset_add', 
+				$this->request->data['Theme']['title']
+			), array(
+				'class' => 'btn btn-info pull-right',
+				'escape' => false,
+				'style' => 'margin-top: 10px'
+		)) ?>
 		<div class="clearfix"></div>
 
-		<?php if (!empty($assets_list)): ?>
-			<table class="table table-bordered">
-				<tr>
-					<th>File</th>
-					<th>Type</th>
-					<th>Options</th>
-				</tr>
-				<?php foreach($assets_list as $key => $row): ?>
-					<?php if (is_array($row)): ?>
-						<?php foreach($row as $fol => $data): ?>
-							<?php $type = ucfirst(pathinfo($assets_list_path.$key.'/'.$data, PATHINFO_EXTENSION)) ?>
-							<?php $url = formatUrl($data) ?>
-
-							<?php if (!empty($type)): ?>
-								<tr>
-									<td>
-										<?= $this->Html->link($key.'/'.$data, array(
-												'controller' => 'files', 
-												'action' => 'edit', 
-												'theme-'.$this->request->data['Theme']['title'], 
-												urlencode($key.'___'.$url['url_data']),
-												$url['extension']
-										)) ?>
-				                        <?= $this->Html->link(
-				                            '<i class="icon-globe" title="View File"></i>', 
-				                            $webroot_path.$key.'/'.$data,
-				                            array('style' => 'float: right', 'target' => '_new', 'escape' => false));
-				                        ?>
-									</td>
-									<td>
-										<?= $type ?>
-									</td>
-									<td>
-			                            <?= $this->Html->link(
-			                                '<i class="icon-pencil icon-white"></i> Edit', 
-			                                array(
-			                                	'controller' => 'files', 
-			                                	'action' => 'edit', 
-			                                	'theme-'.$this->request->data['Theme']['title'], 
-			                                	urlencode($key.'___'.$url['url_data']),
-			                                	$url['extension']
-			                                ),
-			                                array('class' => 'btn btn-primary', 'escape' => false));
-			                            ?>
-			                            <?= $this->Html->link(
-			                                '<i class="icon-trash icon-white"></i> Delete',
-			                                array(
-			                                	'controller' => 'files',
-			                                	'action' => 'delete', 
-			                                	'theme-'.$this->request->data['Theme']['title'], 
-			                                	urlencode($key.'___'.$url['url_data']),
-			                                	$url['extension']
-			                                ),
-			                                array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file? This will be permanent.')"));
-			                            ?>
-									</td>
-								</tr>
-							<?php endif ?>
-						<?php endforeach ?>
-					<?php else: ?>
-						<?php $type = ucfirst(pathinfo($assets_list_path.$row, PATHINFO_EXTENSION)) ?>
-						<?php $url = formatUrl($row) ?>
-
-						<?php if (!empty($type)): ?>
-							<tr>
-								<td>
-									<?= $this->Html->link($row, array(
-											'controller' => 'files', 
-											'action' => 'edit', 
-											'theme-'.$this->request->data['Theme']['title'], 
-											urlencode($url['url_data']),
-											$url['extension']
-									)) ?>
-			                        <?= $this->Html->link(
-			                            '<i class="icon-globe" title="View File"></i>', 
-			                            $webroot_path.$row,
-			                            array('style' => 'float: right', 'target' => '_new', 'escape' => false));
-			                        ?>
-								</td>
-								<td>
-							        <?= $type ?>
-								</td>
-								<td>
-			                        <?= $this->Html->link(
-			                            '<i class="icon-pencil icon-white"></i> Edit', 
-			                            array(
-			                            	'controller' => 'files', 
-			                            	'action' => 'edit',
-			                            	 'theme-'.$this->request->data['Theme']['title'], 
-			                            	 urlencode($url['url_data']),
-			                            	 $url['extension']
-			                            ),
-			                            array('class' => 'btn btn-primary', 'escape' => false));
-			                        ?>
-			                        <?= $this->Html->link(
-			                            '<i class="icon-trash icon-white"></i> Delete',
-			                            array(
-			                            	'controller' => 'files', 
-			                            	'action' => 'delete', 
-			                            	'theme-'.$this->request->data['Theme']['title'], 
-			                            	urlencode($url['url_data']),
-			                            	$url['extension']
-			                            ),
-			                            array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file? This will be permanent.')"));
-			                        ?>
-								</td>
-							</tr>
-						<?php endif ?>
-					<?php endif ?>
-				<?php endforeach ?>
+		<?php if (empty($assets_list['assets'])): ?>
+			<div class="well">
+				There are no assets
+			</div>
+		<?php else: ?>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>File</th>
+						<th>Type</th>
+						<th>Size</th>
+						<th>Options</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($assets_list['assets'] as $key => $row): ?>
+						<tr>
+							<td>
+								<?= $this->Html->link($row, array(
+										'action' => 'admin_asset_edit',
+										$key,
+										$this->request->data['Theme']['title']
+								)) ?>
+		                        <?= $this->Html->link(
+		                            '<i class="icon-globe" title="View File"></i>', 
+		                            $assets_list['view_path'] . $row,
+		                            array('class' => 'pull-right', 'target' => '_blank', 'escape' => false));
+		                        ?>
+							</td>
+							<td>
+								<?= pathinfo($assets_list['path'] . DS . $key, PATHINFO_EXTENSION) ?>
+							</td>
+							<td>
+								<?= $this->Number->toReadableSize( filesize($assets_list['path'] . DS . str_replace('&', '.', str_replace('__', '/', $key)) ) ) ?>
+							</td>
+							<td>
+								<div class="btn-group">
+		                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+		                                Actions
+		                                <span class="caret"></span>
+		                            </a>
+		                            <ul class="dropdown-menu">
+                                        <li>
+                                            <?= $this->Admin->edit(
+                                                $key,
+                                                null,
+                                                null,
+                                                'admin_asset_edit',
+                                                $this->request->data['Theme']['title']
+                                            ) ?>
+                                        </li>
+                                        <li>
+                                            <?= $this->Admin->delete(
+                                                $key,
+                                                $this->request->data['Theme']['title'],
+                                                'asset',
+                                                'themes',
+                                                'admin_asset_delete'
+                                            ) ?>
+                                        </li>
+                                        <li>
+											<?= $this->Html->link('<i class="icon-picture"></i> View', 
+												$assets_list['view_path'] . $row,
+												array(
+													'escape' => false,
+													'target' => '_blank'
+												)
+											) ?>
+                                        </li>
+		                            </ul>
+		                        </div>
+							</td>
+						</tr>
+					<?php endforeach ?>
+				</tbody>
 			</table>
 		<?php endif ?>
+		<div class="clearfix"></div>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+		<p>&nbsp;</p>
+
 	</div>
 </div>

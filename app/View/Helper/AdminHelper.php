@@ -13,7 +13,7 @@ class AdminHelper extends AppHelper
 		return $this->Time->format('Y-m-d H:i:s', time());
 	}
 
-	public function edit($id, $controller = null, $title = null)
+	public function edit($id, $controller = null, $title = null, $action = null, $param = null)
 	{
 		if (empty($title))
 		{
@@ -21,9 +21,10 @@ class AdminHelper extends AppHelper
 		}
 		
 		return $this->Html->link($title, array(
-			'action' => 'edit', 
 			'controller' => (!empty($controller) ? $controller : $this->params->controller),
-			$id
+			'action' => (!empty($action) ? $action : 'edit'),
+			$id,
+			(!empty($param) ? $param : '')
 			),
             array(
             	'escape' => false
@@ -31,10 +32,10 @@ class AdminHelper extends AppHelper
         );
 	}
 
-	public function delete($id, $title, $text, $controller = null)
+	public function delete($id, $title, $text, $controller = null, $action = null)
 	{
 		return $this->Html->link('<i class="icon-trash"></i> Delete', array(
-			'action' => 'delete', 
+			'action' => (!empty($action) ? $action : 'delete'),
 			'controller' => (!empty($controller) ? $controller : $this->params->controller),
 			$id, 
 			$title

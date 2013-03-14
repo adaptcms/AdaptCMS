@@ -77,8 +77,11 @@ class AppModel extends Model
         }
     }
 
-    public function slug($title)
-    {
-        return strtolower(Inflector::slug($title, '-'));
+    public function slug($str, $orig = null) {
+        if (empty($orig)) {
+            return strtolower(Inflector::slug($str, "-"));
+        } else {
+            return strtolower(Inflector::slug($str));
+        }
     }
 }

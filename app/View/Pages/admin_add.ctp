@@ -1,24 +1,17 @@
-<?php
-	$this->CodeMirror->editor('PageContent');
-?>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Pages', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Page', null) ?>
 
-<script>
- $(document).ready(function(){
-    $("#PageAdminAddForm").validate();
- });
- </script>
+<?php $this->CodeMirror->editor('PageContent') ?>
 
-<h1>Add Page</h1>
+<?= $this->Form->create('Page', array('class' => 'well admin-validate')) ?>
+	<h2>Add Page</h2>
 
-<?php
-	echo $this->Form->create('Page', array('class' => 'well'));
+	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
+	<?= $this->Form->input('content', array('style' => 'width:80%;height: 300px', 'class' => 'required')) ?>
 
-	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-	echo $this->Form->input('content', array('style' => 'width:80%;height: 300px', 'class' => 'required'));
+	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 
-	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-?>
-<br />
 <?= $this->Form->end(array(
 	'label' => 'Submit',
 	'class' => 'btn btn-primary'

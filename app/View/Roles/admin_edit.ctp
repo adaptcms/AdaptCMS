@@ -1,8 +1,6 @@
-<script>
- $(document).ready(function(){
-    $("#RoleAdminForm").validate();
- });
- </script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Roles', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit Role', null) ?>
 
 <ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
 	<li class="active">
@@ -29,7 +27,7 @@
 
 <div id="myTabContent" class="tab-content">
 	<div class="tab-pane active fade in" id="main">
-		<?= $this->Form->create('Role', array('class' => 'well', 'id' => 'RoleAdminForm')) ?>
+		<?= $this->Form->create('Role', array('class' => 'well admin-validate')) ?>
 			<h2>Edit Role</h2>
 
 			<?= $this->Form->input('title', array('class' => 'required')) ?>

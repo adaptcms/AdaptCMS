@@ -1,3 +1,6 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Articles', null) ?>
+
 <div class="pull-left">
     <h1>
         Articles

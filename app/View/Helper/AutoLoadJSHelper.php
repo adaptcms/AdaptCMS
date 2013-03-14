@@ -22,37 +22,46 @@ class AutoLoadJSHelper extends AppHelper
 		$action = str_replace("admin_", "", strtolower($this->params->action));
 
 		if (!empty($this->params->prefix)) {
-			$controller = $this->params->prefix.'.'.$controller;
-		}
-
-		if (!empty($this->params['plugin'])) {
-			$controller = strtolower($this->params->plugin).'.'.$controller;
+			$controller = $this->params->prefix . '.' . $controller;
 		}
 
 		$files = array(
 			'controller' => array(
-				'path' => WWW_ROOT.$ext.DS.$controller.'.'.$ext,
-				'file' => $controller.'.'.$ext,
+				'path' => WWW_ROOT . $ext . DS,
+				'file' => $controller . '.' . $ext,
+				'web_file' => $controller . '.' . $ext,
 				'ext' => $ext
 			),
 			'action' => array(
-				'path' => WWW_ROOT.$ext.DS.$controller.'.'.$action.'.'.$ext,
-				'file' => $controller.'.'.$action.'.'.$ext,
+				'path' => WWW_ROOT . $ext . DS,
+				'file' => $controller . '.' . $action . '.' . $ext,
+				'web_file' => $controller . '.' . $action . '.' . $ext,
 				'ext' => $ext
 			)
 		);
 
+		if (!empty($this->params['plugin']))
+		{
+			$plugin = ucfirst($this->params['plugin']);
+
+			$files['controller']['path'] = APP . 'Plugin' . DS . $plugin . DS . 'webroot' . DS . $ext . DS;
+			$files['action']['path'] = $files['controller']['path'];
+
+			$files['controller']['web_file'] = DS . $plugin . DS . $ext . DS . $files['controller']['web_file'];
+			$files['action']['web_file'] = DS . $plugin . DS . $ext . DS . $files['action']['web_file'];
+		}
+
 		foreach($files as $file) {
-			if (file_exists($file['path'])) {
+			if (file_exists($file['path'] . $file['file'])) {
 				if ($ext == 'js') {
-					echo $this->Html->script($file['file']);
+					echo $this->Html->script($file['web_file']);
 				} elseif ($ext == 'css') {
-					echo $this->Html->css($file['file']);
+					echo $this->Html->css($file['web_file']);
 				}
 			}
 		}
 
-		$path = ROOT.DS.'app'.DS.'Plugin';
+		$path = APP . DS . 'Plugin';
 		$plugins = new Folder($path);
 		$plugin_list = $plugins->read(true);
 

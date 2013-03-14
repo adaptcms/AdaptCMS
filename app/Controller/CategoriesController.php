@@ -80,12 +80,12 @@ class CategoriesController extends AppController
 	}
 
     /**
-    * Before POST, sets request data to form and related fields/articles
+    * Before POST, sets request data to form
     *
     * After POST, flash error or flash success and redirect to index
     *
     * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of block data
+    * @return associative array of category data
     */
 	public function admin_edit($id = null)
 	{
@@ -212,7 +212,7 @@ class CategoriesController extends AppController
     *
     * @param id ID of database entry, redirect if no permissions
     * @param title Title of this entry, used for flash message
-    * @return direct
+    * @return redirect
     */
 	public function admin_restore($id = null, $title = null)
 	{
@@ -287,8 +287,10 @@ class CategoriesController extends AppController
 			'limit' => $limit
 		);
 
+		$articles = $this->paginate('Article');
+
 		$this->request->data = $this->Category->Article->getAllRelatedArticles(
-			$this->paginate('Article')
+			$articles
 		);
 
 		if ($this->theme != "Default" && 
@@ -298,6 +300,9 @@ class CategoriesController extends AppController
 			$this->render(implode('/', array($slug)));
 		}
 
+		$category = $this->Category->findBySlug($slug);
+
+		$this->set('category', $category['Category']);
 		$this->set('article', $this->request->data);
 		$this->set('title_for_layout', ucfirst($slug));
 	}

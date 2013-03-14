@@ -1,12 +1,11 @@
-<script>
-$(document).ready(function(){
-	$("#MediaAdminAddForm").validate();
-});
-</script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Media Libraries', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Library', null) ?>
 
 <h1>Add Media Library</h1>
+
 <?php
-	echo $this->Form->create('Media', array('class' => 'well'));
+	echo $this->Form->create('Media', array('class' => 'well admin-validate'));
 	echo $this->Form->input('title', array(
 		'type' => 'text', 
 		'class' => 'required',

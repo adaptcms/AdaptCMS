@@ -122,6 +122,14 @@ class AppController extends Controller
 		$this->theme = 'Default';
 
 		if ($this->Auth->user('id')) {
+			$current_user = $this->Auth->user();
+
+			if (!empty($current_user['settings']))
+			{
+				$current_user['data'] = json_decode($current_user['settings'], true);
+			}
+
+			$this->set(compact('current_user'));
 			// $this->logAction();
 		}
 
@@ -167,6 +175,14 @@ class AppController extends Controller
 	{
 		$this->loadModel('Permission');
 
+		$webroot_exts = array(
+			'json',
+			'css',
+			'js',
+			'less',
+			'xml'
+		);
+
 		if (!empty($this->allowedActions) && in_array($this->params->action, $this->allowedActions)) {
 			$allowed = 1;
 		} elseif (strstr($this->params->action, "login") or strstr($this->params->action, "activate") or strstr($this->params->action, "logout") 
@@ -174,7 +190,7 @@ class AppController extends Controller
 			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "denied")
 			or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home")
 			|| !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install' && !strstr($this->params->action, 'plugin') ||
-			!empty($this->params->ext) && $this->params->ext == "json" || $this->params->ext == "css" || $this->params->ext == "js" || $this->params->ext == "less") {
+			!empty($this->params->ext) && in_array($this->params->ext, $webroot_exts)) {
 				$this->Auth->allow($this->params->action);
 		} elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id')
 			|| $this->params->action == "admin" && !$this->Auth->User('id')
@@ -544,7 +560,7 @@ class AppController extends Controller
 									$this->Auth->user('id')
 							);
 						}
-					} else {
+					} elseif (!empty($row['Block']['data'])) {
 						$block_data[$row['Block']['title']] = $row['Block']['data'];
 					}
 				}

@@ -1,14 +1,14 @@
 INSERT INTO `{prefix}articles` (`id`, `title`, `slug`, `tags`, `related_articles`, `user_id`, `category_id`, `status`, `publish_time`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'Welcome to AdaptCMS Beta!', 'welcome-to-adaptcms-beta', NULL, '', 1, 2, 1, '2012-12-19 22:27:00', '2012-12-19 22:27:53', '2012-12-19 22:30:36', '0000-00-00 00:00:00');
+(1, 'Welcome to AdaptCMS Beta 2!', 'welcome-to-adaptcms-beta-2', NULL, '', 1, 2, 1, '2012-12-19 22:27:00', '2012-12-19 22:27:53', '2012-12-19 22:30:36', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}article_values` (`id`, `article_id`, `field_id`, `file_id`, `data`) VALUES
-(1, 1, 1, 0, '<p>Hope you enjoy this very early release of AdaptCMS. Poke around, do as you wish and any bugs reported or feedback is greatly appreciated.</p>\r\n<p>Thank you,<br />AdaptCMS Team</p>');
+(1, 1, 1, 0, '<p>Hope you enjoy this second beta release of AdaptCMS. Poke around, do as you wish and any bugs reported or feedback is greatly appreciated.</p>\r\n<p>Thank you,<br />AdaptCMS Team</p>');
 -- --------------------------------------------------------
-INSERT INTO `{prefix}blocks` (`id`, `title`, `type`, `module_id`, `template_id`, `user_id`, `location`, `limit`, `settings`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'show-poll', 'dynamic', 8, 78, 1, '["*"]', 1, '{"data":"1"}', '2012-10-13 23:19:41', '2012-11-17 18:01:28', '0000-00-00 00:00:00'),
-(2, 'latest-links', 'dynamic', 17, 23, 1, '["*"]', 3, '{"order_dir":"asc"}', '2012-11-25 23:02:45', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 'dynamic', 'admin-main-articles-newest', 1, NULL, 1, '["Pages|admin"]', 5, '{"category_id":"","order_by":"created","order_dir":"desc"}', '2013-02-03 10:23:26', '2013-02-03 11:30:34', '0000-00-00 00:00:00'),
-(4, 'dynamic', 'admin-main-users-newest', 9, NULL, 1, '["Pages|admin"]', 5, '{"order_by":"created","order_dir":"desc"}', '2013-02-03 11:37:35', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `{prefix}blocks` (`id`, `title`, `type`, `module_id`, `user_id`, `location`, `limit`, `settings`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'show-poll', 'dynamic', 8, 1, '["*"]', 1, '{"data":"1"}', '2012-10-13 23:19:41', '2012-11-17 18:01:28', '0000-00-00 00:00:00'),
+(2, 'latest-links', 'dynamic', 17, 1, '["*"]', 3, '{"order_dir":"asc"}', '2012-11-25 23:02:45', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 'dynamic', 'admin-main-articles-newest', 1, 1, '["Pages|admin"]', 5, '{"category_id":"","order_by":"created","order_dir":"desc"}', '2013-02-03 10:23:26', '2013-02-03 11:30:34', '0000-00-00 00:00:00'),
+(4, 'dynamic', 'admin-main-users-newest', 9, 1, '["Pages|admin"]', 5, '{"order_by":"created","order_dir":"desc"}', '2013-02-03 11:37:35', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}categories` (`id`, `title`, `slug`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Reviews', 'reviews', 1, '2012-06-03 22:18:57', '2012-06-05 23:41:40', '0000-00-00 00:00:00'),
@@ -91,7 +91,7 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (49, 6, 1, 0, '', 'templates', 'admin_edit', 1, NULL, 1, 1),
 (50, 6, 1, 0, '', 'templates', 'admin_delete', 1, NULL, 1, 1),
 (51, 7, 1, 0, '', 'themes', 'admin_add', 1, NULL, 0, 0),
-(52, 7, 1, 0, '', 'themes', 'admin_edit', 1, NULL, 1, 1),
+(52, 7, 1, 0, '', 'themes', 'admin_edit', 1, '[{"action":["admin_asset_add"]},{"action":["admin_asset_edit"]},{"action":["admin_asset_delete"]}]', 1, 1),
 (53, 7, 1, 0, '', 'themes', 'admin_delete', 1, NULL, 1, 1),
 (124, 7, 1, 0, '', 'themes', 'admin_restore', 1, '', 1, 1),
 (90, 2, 1, 0, '', 'blocks', 'admin_add', 1, NULL, 0, 0),
@@ -245,7 +245,7 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (258, 6, 4, 0, '', 'templates', 'admin_edit', 0, NULL, 0, 0),
 (259, 6, 4, 0, '', 'templates', 'admin_delete', 0, NULL, 0, 0),
 (260, 7, 4, 0, '', 'themes', 'admin_add', 0, NULL, 0, 0),
-(261, 7, 4, 0, '', 'themes', 'admin_edit', 0, NULL, 0, 0),
+(261, 7, 4, 0, '', 'themes', 'admin_edit', 0, '[{"action":["admin_asset_add"]},{"action":["admin_asset_edit"]},{"action":["admin_asset_delete"]}]', 0, 0),
 (262, 7, 4, 0, '', 'themes', 'admin_delete', 0, NULL, 0, 0),
 (263, 7, 4, 0, '', 'themes', 'admin_restore', 0, '', 0, 0),
 (264, 2, 4, 0, '', 'blocks', 'admin_add', 1, NULL, 0, 0),
@@ -315,8 +315,20 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (328, 8, 4, 0, 'polls', 'polls', 'ajax_results', 1, '[{"action":["vote"]}]', 1, 1),
 (329, 10, 1, 0, '', 'pages', 'admin', 1, NULL, 2, 2),
 (330, 10, 4, 0, '', 'pages', 'admin', 1, NULL, 2, 2),
-(331, 0, 4, 0, '', 'plugins', 'admin_settings', 1, NULL, 2, 2),
-(332, 0, 1, 0, '', 'plugins', 'admin_settings', 1, NULL, 2, 2);
+(331, 0, 4, 0, '', 'plugins', 'admin_settings', 0, NULL, 2, 2),
+(332, 0, 1, 0, '', 'plugins', 'admin_settings', 1, NULL, 2, 2),
+(333, 0, 1, 0, '', 'tools', 'admin_convert_wordpress', 1, '', 2, 2),
+(334, 0, 4, 0, '', 'tools', 'admin_convert_wordpress', 0, '', 2, 2),
+(335, 7, 1, 0, '', 'themes', 'admin_asset_delete', 1, '', 0, 1),
+(336, 7, 1, 0, '', 'themes', 'admin_asset_add', 1, '', 0, 1),
+(337, 7, 1, 0, '', 'themes', 'admin_asset_edit', 1, '', 0, 1),
+(338, 7, 4, 0, '', 'themes', 'admin_asset_delete', 0, '', 0, 0),
+(339, 7, 4, 0, '', 'themes', 'admin_asset_add', 0, '', 0, 0),
+(340, 7, 4, 0, '', 'themes', 'admin_asset_edit', 0, '', 0, 0),
+(341, 12, 4, 0, '', 'settings', 'admin_restore', 0, NULL, 0, 0),
+(342, 12, 1, 0, '', 'settings', 'admin_restore', 1, NULL, 1, 1),
+(343, NULL, 1, 0, '', 'plugins', 'admin_assets', 1, '', 0, 0),
+(344, NULL, 4, 0, '', 'plugins', 'admin_assets', 0, '', 0, 0);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, 1, '2012-11-25 23:09:37', '2012-11-25 23:10:38', '0000-00-00 00:00:00');
@@ -345,7 +357,7 @@ INSERT INTO `{prefix}settings` (`id`, `title`, `created`, `deleted_time`) VALUES
 (6, 'Comments', '2012-12-09 22:41:45', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `data_options`, `setting_type`, `setting_id`, `model`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'sitename', '<p>What do you think? A site...name</p>', 'Alpha', NULL, 'text', 1, NULL, '2012-06-27 22:55:11', '2012-06-27 23:30:01', '0000-00-00 00:00:00'),
+(1, 'Site Name', '<p>What do you think? A site...name</p>', 'Alpha', NULL, 'text', 1, NULL, '2012-06-27 22:55:11', '2012-06-27 23:30:01', '0000-00-00 00:00:00'),
 (2, 'Webmaster Email', '<p>email DUMMY - okay, sorry</p>', 'charliepage88@gmail.com', NULL, 'text', 1, NULL, '2012-06-27 23:07:12', '2012-06-27 23:30:01', '0000-00-00 00:00:00'),
 (5, 'default-theme', '', '1', NULL, 'text', 2, NULL, '2012-07-15 18:03:11', '2012-09-12 23:02:01', '0000-00-00 00:00:00'),
 (7, 'test', '', '', '["360","PS3"]', 'dropdown', 2, NULL, '2012-08-12 23:37:37', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
@@ -363,7 +375,8 @@ INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `dat
 (25, 'Registration Captcha', '<p>When signing up, will a re-captcha be shown? (and is required - we recommend to keep this enabled)</p>', 'Yes', '["Yes","No"]', 'radio', 3, NULL, '2012-12-09 20:34:11', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (24, 'User Password Reset', '<p>Set this to 0 to disable, if more than 0 then x is the amount of days that can pass before a new password is required. This is mandated upon login.</p>', '0', NULL, 'text', 3, NULL, '2012-10-27 12:47:54', '2012-11-16 23:40:22', '0000-00-00 00:00:00'),
 (29, 'Is Registration Open?', '<p>If set to "No", then users cannot register.</p>', 'Yes', '["Yes","No"]', 'dropdown', 3, NULL, '2012-12-26 15:07:25', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(30, 'Closed Registration Message', '', '<p>You cannot register at the moment.</p>', NULL, 'textarea', 3, NULL, '2012-12-26 15:08:44', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(30, 'Closed Registration Message', '', '<p>You cannot register at the moment.</p>', NULL, 'textarea', 3, NULL, '2012-12-26 15:08:44', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(31, 'Comment Allowed HTML', '<p>Allowed HTML tags when posting a comment. Entering in nothing will result in all HTML being stripped.</p>', '<strong>,<a>,<p>,<br>', NULL, 'text', 6, NULL, '2013-03-02 14:32:50', '2013-03-02 20:36:33', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}templates` (`id`, `title`, `location`, `theme_id`, `template`, `created`, `modified`, `deleted_time`) VALUES
 (15, 'Admin Add Articles', 'Articles/admin_add.ctp', 1, NULL, '2013-01-20 20:21:17', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),

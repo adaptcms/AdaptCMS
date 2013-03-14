@@ -33,6 +33,13 @@ $(document).ready(function() {
 			$(this).parent().parent().find(':checkbox:not(.check-all)').attr('checked', true);
 		}
 	});
+
+	if ($(".admin-validate").length > 0)
+	{
+		$.each($(".admin-validate"), function() {
+			$(this).validate();
+		});
+	}
 });
 
 // Grab all required inputs on page, put in a * to note that it's a required field

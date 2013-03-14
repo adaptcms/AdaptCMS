@@ -261,7 +261,9 @@ class InstallController extends Controller
 		if ( $type == 'install' && !empty( $settings['title'] ) && !empty( $settings['model_title'] ) ) {
 			$this->loadModel('Module');
 
-			if ( !$this->Module->findByTitle( $settings['title'] ) ) {
+			if ( $data = $this->Module->findByTitle( $settings['title'] ) ) {
+				$module_id = $data['Module']['id'];
+			} else {
 				$this->Module->create();
 
 				if ( !empty( $settings['block_active'] ) && $settings['block_active'] == 1 ) {
@@ -282,16 +284,25 @@ class InstallController extends Controller
 
 				if ( !$this->Module->save( $data ) ) {
 					$error = 1;
+				} else {
+					$module_id = $this->Module->id;
 				}
 			}
 		} elseif ( $type = 'uninstall' && !empty( $settings['title'] ) && !empty( $settings['model_title'] ) ) {
 			$this->loadModel('Module');
 
 			if ( $data = $this->Module->findByTitle( $settings['title'] ) ) {
+				$module_id = $data['Module']['id'];
+
 				if ( !$this->Module->delete( $data['Module']['id'] ) ) {
 					$error = 1;
 				}
 			}
+		}
+
+		if (empty($module_id))
+		{
+			$module_id = 0;
 		}
 
 		if ( !empty( $files ) && !$error ) {
@@ -306,7 +317,15 @@ class InstallController extends Controller
 
 						foreach( $queries as $query ) {
 							if ( !empty( $query ) ) {
-								$query = str_replace( '{prefix}', $prefix, $query );
+								$matches = array(
+									'{prefix}',
+									'{module_id}'
+								);
+								$replaces = array(
+									$prefix,
+									$module_id
+								);
+								$query = str_replace( $matches, $replaces, $query );
 
 								if ( $db->rawQuery( $query ) ) {
 									$success_count++;

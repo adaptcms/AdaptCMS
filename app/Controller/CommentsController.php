@@ -5,8 +5,17 @@ App::import('Vendor', 'securimage');
 
 class CommentsController extends AppController
 {
+    /**
+    * Name of the Controller, 'Comments'
+    */
 	public $name = 'Comments';
 
+    /**
+    * Flash error or flash success and redirect back to article
+    *
+    * @param id ID of the database entry
+    * @return mixed
+    */
     public function admin_edit($id = null)
     {
         if (!empty($this->request->data)) {
@@ -29,6 +38,11 @@ class CommentsController extends AppController
         }
     }
 
+    /**
+    * AJAX Method to post comment.
+    *
+    * @return json_encode array of message, status
+    */
 	public function ajax_post()
 	{
     	$this->layout = 'ajax';
@@ -38,19 +52,43 @@ class CommentsController extends AppController
     	$this->request->data['Comment']['active'] = 1;
     	$this->request->data['Comment']['created'] = date('Y-m-d H:i:s');
 
+        if ($this->Auth->user('id'))
+        {
+            $this->request->data['Comment']['user_id'] = $this->Auth->user('id');
+        }
+
     	$this->loadModel('SettingValue');
     	$flood = $this->SettingValue->findByTitle('Comment Post Flood Limit');
         $captcha = $this->SettingValue->findByTitle('Comment Post Captcha Non-Logged In');
+        $html_tags = $this->SettingValue->findByTitle('Comment Allowed HTML');
 
-        $securimage = new Securimage();
+        if (!empty($html_tags['SettingValue']['data']))
+        {
+            $this->request->data['Comment']['comment_text'] = strip_tags(
+                $this->request->data['Comment']['comment_text'],
+                $html_tags['SettingValue']['data']
+            );
+        } else {
+            $this->request->data['Comment']['comment_text'] = strip_tags(
+                $this->request->data['Comment']['comment_text']
+            );
+        }
+
+        if (!$this->Auth->user('id'))
+        {
+            $securimage = new Securimage();
+        }
 
         if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes' && 
             !$this->Auth->user('id') && 
-            !$securimage->check($this->request->data['Comment']['captcha'])) {
+            !empty($securimage) && 
+            !$securimage->check($this->request->data['Comment']['captcha']))
+        {
             $message = 'Invalid Captcha Answer. Please try again.';
         }
 
-    	if (!empty($flood['SettingValue']['data']) && $flood['SettingValue']['data'] != 0) {
+    	if (!empty($flood['SettingValue']['data']) && $flood['SettingValue']['data'] != 0)
+        {
 	    	$check = $this->Comment->find('first', array(
 	    		'conditions' => array(
 	    			'Comment.created >= DATE_SUB(NOW(), INTERVAL '.$flood['SettingValue']['data'].' SECOND)',
@@ -61,19 +99,17 @@ class CommentsController extends AppController
 	    		)
 	    	));
 
-	    	if ($check) {
+	    	if ($check)
+            {
 	    		$time_diff = $flood['SettingValue']['data'] - (time() - strtotime($check['Comment']['created']));
 	    		$message = 'You have reached the flood limit. Try again in another '.$time_diff.' seconds.';
 	    	}
 	    }
 
-    	if ($this->Auth->user('id')) {
-    		$this->request->data['Comment']['user_id'] = $this->Auth->user('id');
-    	}
-
     	$this->Comment->create();
 
-    	if (empty($message) && $this->Comment->save($this->request->data)) {
+    	if (empty($message) && $this->Comment->save($this->request->data))
+        {
     		return json_encode(array(
     			'status' => true,
     			'message' => '
@@ -83,7 +119,8 @@ class CommentsController extends AppController
     				</div>',
     			'id' => $this->Comment->id
     		));
-    	} elseif (empty($message)) {
+    	} elseif (empty($message))
+        {
     		$message = 'Your comment could not be posted at this time. Try again.';
     	}
 

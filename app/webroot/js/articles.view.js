@@ -2,7 +2,13 @@ $(document).ready(function() {
 	$("form.PostComment button[type='submit']").live('click', function(e) {
 		e.preventDefault();
 
-		var comments_text = $(this).parent().find('textarea').val();
+		if (typeof tinyMCE == 'undefined')
+		{
+			var comments_text = $(this).parent().find('textarea').val();
+		} else {
+			var comments_text = tinyMCE.activeEditor.getContent();
+		}
+
 		var article_id = $(this).parent().find('#CommentArticleId').val();
 		if ($(this).parent().find('#CommentParentId').length > 0) {
 			var parent_id = $(this).parent().find('#CommentParentId').val();
@@ -30,27 +36,33 @@ $(document).ready(function() {
 	            	}
 	            }, function(return_data) {
 	            var data = $.parseJSON(return_data);
-	            console.log(data);
 
         		if ($("#flashMessage").length > 0) {
         			$("#flashMessage").remove();
         		}
 
             	if (data.status) {
-	            	$(form).find('textarea').val('');
+					if (typeof tinyMCE == 'undefined')
+					{
+						var comments_text = $(form).find('textarea').val('');
+					} else {
+						var comments_text = tinyMCE.activeEditor.setContent('');
+					}
 
 	            	reloadComments(comment_count, data.id);
             	}
 
-            	$(form).prepend(data.message);
+            	$('.PostComment:first').prepend(data.message);
 
             	if (data.status) {
-            		$("#flashMessage").fadeOut(3000);
+            		$.smoothScroll({scrollTarget: $('#flashMessage').prev().prev()});
+            		$("#flashMessage").fadeOut(4000);
             	}
 
             	if (data.message.search('Captcha') != -1 || data.status) {
             		if ($(form).find('input.captcha').parent().length > 0) {
             			reloadCaptcha($(form).find('input.captcha').parent().attr('id'));
+            			$.smoothScroll({scrollTarget: $('#flashMessage').prev().prev()});
             		}
             	}
             });
@@ -80,7 +92,12 @@ $(document).ready(function() {
 				$(this).remove();
 			});
 
-			var form = $('.PostComment').first().clone().addClass('span11');
+			if (typeof tinyMCE != 'undefined')
+			{
+				tinyMCE.EditorManager.execCommand('mceRemoveControl', false, 'CommentCommentText');
+			}
+
+			var form = $('.PostComment:first').clone().addClass('span11');
 			var cancel_button = "<button type='cancel' class='btn'>Cancel</button>";
 
 			var parent_id = "<input type='hidden' id='CommentParentId' name='data[Comment][parent_id]' value='" + id[1] + "'>";
@@ -90,7 +107,14 @@ $(document).ready(function() {
 			}
 
 			$(cancel_button).insertAfter($(form).find('button'));
-			$(parent_id).insertAfter($(form).find('textarea'));
+
+			$(parent_id).insertAfter($(form).find('textarea').attr('id', 'CommentCommentText' + id[1]));
+
+			if (typeof tinyMCE != 'undefined')
+			{
+				tinyMCE.execCommand('mceAddControl', false, 'CommentCommentText');
+				tinyMCE.execCommand('mceAddControl', false, 'CommentCommentText' + id[1]);
+			}
 
 			if ($("#captcha").length > 0) {
 				$(form).find('#captcha').attr('id', 'captcha_' + id[1]);
@@ -100,6 +124,11 @@ $(document).ready(function() {
 			$(form).attr('id', 'CommentViewForm' + id[1]);
 
 			$(form).insertAfter($(this).parent().parent());
+
+			if (typeof tinyMCE != 'undefined')
+			{
+				tinyMCE.execCommand('mceAddControl', false, 'CommentCommentText' + id[1]);
+			}
 		} else {
 			// $(this).parent().parent().next().toggle();
 			$(this).parent().parent().next().fadeOut(500, function() {
@@ -117,7 +146,7 @@ function reloadCaptcha(id)
 		var div_id = 'captcha';
 	}
 
-	$('#' + div_id).find('#siimage').attr('src', '/libraries/captcha/securimage_show.php?sid=' + Math.random());
+	$('#' + div_id).find('#siimage').attr('src', $('#webroot').text() + 'libraries/captcha/securimage_show.php?sid=' + Math.random());
 	$('#' + div_id).find('.captcha').val('').focus();
 }
 

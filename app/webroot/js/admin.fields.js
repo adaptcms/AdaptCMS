@@ -80,13 +80,11 @@ $(document).ready(function() {
             }
         });
 
-        if (!$("#FieldId").val()) {
-            var form = $("#FieldAdminAddForm");
-        } else {
-            var form = $("#FieldEditForm");
-        }
+        var form = $('.admin-validate');
+
         $(form).on('submit', function(e) {
-            if ($("#pass_form").length == 0) {
+            if ($("#pass_form").length == 0)
+            {
                 e.preventDefault();
             }
 
@@ -109,6 +107,8 @@ $(document).ready(function() {
                 });
             }
         });
+
+        fieldTypeToggle($("#FieldFieldType").val());
 
         $("#FieldFieldType").on('change', function() {
             fieldTypeToggle($(this).val());

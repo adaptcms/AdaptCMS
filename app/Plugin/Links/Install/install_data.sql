@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (
   `file_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
   `link_title` varchar(255) DEFAULT NULL,
   `link_target` varchar(255) DEFAULT NULL,
   `views` int(11) NOT NULL DEFAULT '0',

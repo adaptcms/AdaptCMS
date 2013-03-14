@@ -1,3 +1,7 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Files', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit File', null) ?>
+
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
 
@@ -16,8 +20,6 @@ $(document).ready(function() {
             }
         }
     });
-
-    $("#FileEditForm").validate();
 });
 </script>
 
@@ -39,7 +41,7 @@ $(document).ready(function() {
 </div>
 <div class="clearfix"></div>
 
-<?= $this->Form->create('File', array('action' => 'edit', 'type' => 'file', 'class' => 'well')) ?>
+<?= $this->Form->create('File', array('action' => 'edit', 'type' => 'file', 'class' => 'well admin-validate')) ?>
 
 <?php if (!empty($data['File']['filename']) &&
           !empty($data['File']['dir'])): ?>

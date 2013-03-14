@@ -1,7 +1,15 @@
 <?php
 
-class Setting extends AppModel {
+class Setting extends AppModel
+{
+    /**
+    * Name of our Model, table will look like 'adaptcms_settings'
+    */
 	public $name = 'Setting';
+
+	/**
+	* Validation rules for Setting Categories, title must have a value and must be unique
+	*/
     public $validate = array(
     	'title' => array(
 			array(
@@ -15,6 +23,9 @@ class Setting extends AppModel {
         )
     );
 
+    /**
+    * One to Many relationship, setting categories have many values
+    */
     public $hasMany = array(
     	'SettingValue'
     );

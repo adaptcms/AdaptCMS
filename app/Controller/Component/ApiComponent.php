@@ -45,6 +45,11 @@ class ApiComponent extends Object
 
 	private function getArgs($args)
 	{
+		if (empty($args))
+		{
+			return;
+		}
+
 		if (is_array($args)) {
 			$i = 0;
 			foreach($args as $key => $arg) {
@@ -145,6 +150,8 @@ class ApiComponent extends Object
 			{
 				$data['api_key'] = Configure::read('api_key');
 				$data['api_secret'] = Configure::read('api_secret');
+			} else {
+				$data = array();
 			}
 
 			$data = $this->curlRequest(

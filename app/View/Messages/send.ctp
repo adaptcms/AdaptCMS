@@ -3,6 +3,7 @@
 ?>
 
 <?= $this->Html->script('bootstrap-typeahead.js') ?>
+
 <script type="text/javascript">
 $(document).ready(function() {
     $('#MessageRecipient').typeahead({
@@ -36,6 +37,13 @@ $(document).ready(function() {
 });
 </script>
 
+<?php $this->Html->addCrumb('Profile', array(
+    'action' => 'profile',
+    $this->Session->read('Auth.User.username')
+)) ?>
+<?php $this->Html->addCrumb('Messages', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Send Message', null) ?>
+
 <h1>Send Message</h1>
 
 <?= $this->Html->link('« Back to Messages', array('action' => 'index'), array(
@@ -43,7 +51,7 @@ $(document).ready(function() {
 	'style' => 'margin-bottom: 10px;margin-top: -10px'
 )) ?>
 
-<?= $this->Form->create('Message', array('class' => 'well span12 no-marg-left')) ?>
+<?= $this->Form->create('Message', array('class' => 'well span12 no-marg-left admin-validate')) ?>
 	
 	<?= $this->Form->input('recipient', array(
 	        'data-provide' => 'typeahead', 
@@ -60,7 +68,7 @@ $(document).ready(function() {
 	)) ?>
 
 	<?= $this->Form->hidden('created', array(
-		'value' => $this->Time->format( 'Y-m-d H:i:s', time() )
+		'value' => $this->Admin->datetime()
 	)) ?>
 	<?= $this->Form->hidden('parent_id', array('value' => 0)) ?>
 	<?= $this->Form->hidden('receiver_user_id') ?>

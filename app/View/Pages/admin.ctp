@@ -1,3 +1,5 @@
+<?php $this->Html->addCrumb('Admin', null) ?>
+
 <div class="span6 well no-margin-left">
 	<h2>Newest Articles</h2>
 
@@ -33,6 +35,7 @@
 		</ul>
 	<?php endif ?>
 </div>
+<div class="clearfix"></div>
 
 <div class="span6 well no-margin-left">
 	<h3>Newest Plugin from AdaptCMS.com</h3>
@@ -51,8 +54,29 @@
 	<?php endif ?>
 
 	<a href="<?= $this->Api->url() ?>plugins" class="btn btn-primary pull-right" target="_blank">View All Plugins »</a>
-	<div class="clearfix"></div>
+</div>
 
+<div class="span6 well">
+	<h3>Latest News from AdaptCMS.com</h3>
+
+	<?php if (!empty($news)): ?>
+		<?php foreach($news as $article): ?>
+			<a href="<?= $this->Api->siteUrl() ?>article/<?= $article['slug'] ?>" target="_blank">
+				<?= $article['title'] ?>
+			</a><br />
+			<em>@ <?= $this->Admin->time($article['created'], 'words') ?></em>
+
+			<p>
+				<?= $this->Text->truncate($article['data'], 150) ?>
+			</p>
+		<?php endforeach ?>
+	<?php endif ?>
+
+	<a href="<?= $this->Api->siteUrl() ?>category/news" class="btn btn-primary pull-right" target="_blank">View More News »</a>
+</div>
+<div class="clearfix"></div>
+
+<div class="span6 well no-margin-left">
 	<h3>Newest Theme from AdaptCMS.com</h3>
 
 	<?php if (!empty($newest_theme)): ?>
@@ -73,24 +97,6 @@
 </div>
 
 <div class="span6 well">
-	<h3>Latest News from AdaptCMS.com</h3>
-
-	<?php if (!empty($news)): ?>
-		<?php foreach($news as $article): ?>
-			<a href="<?= $this->Api->siteUrl() ?>article/<?= $article['slug'] ?>" target="_blank">
-				<?= $article['title'] ?>
-			</a><br />
-			<em>@ <?= $this->Admin->time($article['created'], 'words') ?></em>
-
-			<p>
-				<?= $this->Text->truncate($article['data'], 150) ?>
-			</p>
-		<?php endforeach ?>
-	<?php endif ?>
-
-	<a href="<?= $this->Api->siteUrl() ?>category/news" class="btn btn-primary pull-right" target="_blank">View More News »</a>
-	<div class="clearfix"></div>
-
 	<h3>Latest Blog from AdaptCMS.com</h3>
 
 	<?php if (!empty($blog)): ?>

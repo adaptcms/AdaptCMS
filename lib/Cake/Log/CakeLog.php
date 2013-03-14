@@ -7,12 +7,13 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Log
  * @since         CakePHP(tm) v 0.2.9
@@ -22,8 +23,8 @@
 App::uses('LogEngineCollection', 'Log');
 
 /**
- * Logs messages to configured Log adapters.  One or more adapters
- * can be configured using CakeLogs's methods.  If you don't
+ * Logs messages to configured Log adapters. One or more adapters
+ * can be configured using CakeLogs's methods. If you don't
  * configure any adapters, and write to the logs a default
  * FileLog will be autoconfigured for you.
  *
@@ -40,7 +41,7 @@ App::uses('LogEngineCollection', 'Log');
  *
  * ### Writing to the log
  *
- * You write to the logs using CakeLog::write().  See its documentation for more
+ * You write to the logs using CakeLog::write(). See its documentation for more
  * information.
  *
  * ### Logging Levels
@@ -60,12 +61,13 @@ App::uses('LogEngineCollection', 'Log');
  * ### Logging scopes
  *
  * When logging messages and configuring log adapters, you can specify
- * 'scopes' that the logger will handle.  You can think of scopes as subsystems
- * in your application that may require different logging setups.  For
+ * 'scopes' that the logger will handle. You can think of scopes as subsystems
+ * in your application that may require different logging setups. For
  * example in an e-commerce application you may want to handle logged errors
  * in the cart and ordering subsystems differently than the rest of the
- * application.  By using scopes you can control logging for each part
+ * application. By using scopes you can control logging for each part
  * of your application and still keep standard log levels.
+ *
  *
  * See CakeLog::config() and CakeLog::write() for more information
  * on scopes
@@ -138,7 +140,7 @@ class CakeLog {
  *
  * Will configure a FileLog instance to use the specified path.
  * All options that are not `engine` are passed onto the logging adapter,
- * and handled there.  Any class can be configured as a logging
+ * and handled there. Any class can be configured as a logging
  * adapter as long as it implements the methods in CakeLogInterface.
  *
  * ### Logging levels
@@ -160,8 +162,8 @@ class CakeLog {
  * ### Logging scopes
  *
  * When configuring loggers you can define the active scopes the logger
- * is for.  If defined only the listed scopes will be handled by the
- * logger.  If you don't define any scopes an adapter will catch
+ * is for. If defined only the listed scopes will be handled by the
+ * logger. If you don't define any scopes an adapter will catch
  * all scopes that match the handled levels.
  *
  * {{{
@@ -173,7 +175,10 @@ class CakeLog {
  *
  * The above logger will only capture log entries made in the
  * `payment` and `order` scopes. All other scopes including the
- * undefined scope will be ignored.
+ * undefined scope will be ignored. Its important to remember that
+ * when using scopes you must also define the `types` of log messages
+ * that a logger will handle. Failing to do so will result in the logger
+ * catching all log messages even if the scope is incorrect.
  *
  * @param string $key The keyname for this logger, used to remove the
  *    logger later.
@@ -204,7 +209,7 @@ class CakeLog {
 		if (empty(self::$_Collection)) {
 			self::_init();
 		}
-		return self::$_Collection->attached();
+		return self::$_Collection->loaded();
 	}
 
 /**
@@ -282,7 +287,7 @@ class CakeLog {
 	}
 
 /**
- * Removes a stream from the active streams.  Once a stream has been removed
+ * Removes a stream from the active streams. Once a stream has been removed
  * it will no longer have messages sent to it.
  *
  * @param string $streamName Key name of a configured stream to remove.
@@ -313,7 +318,7 @@ class CakeLog {
 	}
 
 /**
- * Enable stream.  Streams that were previously disabled
+ * Enable stream. Streams that were previously disabled
  * can be re-enabled with this method.
  *
  * @param string $streamName to enable
@@ -331,7 +336,7 @@ class CakeLog {
 	}
 
 /**
- * Disable stream.  Disabling a stream will
+ * Disable stream. Disabling a stream will
  * prevent that log stream from receiving any messages until
  * its re-enabled.
  *
@@ -354,7 +359,7 @@ class CakeLog {
  *
  * @see BaseLog
  * @param string $streamName Key name of a configured stream to get.
- * @return $mixed instance of BaseLog or false if not found
+ * @return mixed instance of BaseLog or false if not found
  */
 	public static function stream($streamName) {
 		if (empty(self::$_Collection)) {
@@ -422,24 +427,29 @@ class CakeLog {
 		$logged = false;
 		foreach (self::$_Collection->enabled() as $streamName) {
 			$logger = self::$_Collection->{$streamName};
-			$types = null;
-			$scopes = array();
-			if ($logger instanceof BaseLog) {
+			$types = $scopes = $config = array();
+			if (method_exists($logger, 'config')) {
 				$config = $logger->config();
-				if (isset($config['types'])) {
-					$types = $config['types'];
-				}
-				if (isset($config['scopes'])) {
-					$scopes = $config['scopes'];
-				}
 			}
-			if (is_string($scope)) {
-				$inScope = in_array($scope, $scopes);
-			} else {
-				$intersect = array_intersect($scope, $scopes);
-				$inScope = !empty($intersect);
+			if (isset($config['types'])) {
+				$types = $config['types'];
 			}
-			if (empty($types) || in_array($type, $types) || in_array($type, $scopes) && $inScope) {
+			if (isset($config['scopes'])) {
+				$scopes = $config['scopes'];
+			}
+			$inScope = (count(array_intersect((array)$scope, $scopes)) > 0);
+			$correctLevel = in_array($type, $types);
+
+			if (
+				// No config is a catch all (bc mode)
+				(empty($types) && empty($scopes)) ||
+				// BC layer for mixing scope & level
+				(in_array($type, $scopes)) ||
+				// no scopes, but has level
+				(empty($scopes) && $correctLevel) ||
+				// exact scope + level
+				($correctLevel && $inScope)
+			) {
 				$logger->write($type, $message);
 				$logged = true;
 			}

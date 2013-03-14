@@ -1,18 +1,20 @@
 <?php
 /**
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model.Behavior
  * @since         CakePHP(tm) v 1.2.0.4525
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
+App::uses('ModelBehavior', 'Model');
 App::uses('I18n', 'I18n');
 App::uses('I18nModel', 'Model');
 
@@ -128,7 +130,7 @@ class TranslateBehavior extends ModelBehavior {
 				'conditions' => array(
 					$Model->escapeField() => $db->identifier($RuntimeModel->escapeField('foreign_key')),
 					$RuntimeModel->escapeField('model') => $Model->name,
-					$RuntimeModel->escapeField('locale')  => $locale
+					$RuntimeModel->escapeField('locale') => $locale
 				)
 			);
 			$conditionFields = $this->_checkConditions($Model, $query);
@@ -139,15 +141,25 @@ class TranslateBehavior extends ModelBehavior {
 			return $query;
 		}
 
-		$fields = array_merge($this->settings[$Model->alias], $this->runtime[$Model->alias]['fields']);
+		$fields = array_merge(
+			$this->settings[$Model->alias],
+			$this->runtime[$Model->alias]['fields']
+		);
 		$addFields = array();
 		if (empty($query['fields'])) {
 			$addFields = $fields;
 		} elseif (is_array($query['fields'])) {
+			$isAllFields = (
+				in_array($Model->alias . '.' . '*', $query['fields']) ||
+				in_array($Model->escapeField('*'), $query['fields'])
+			);
 			foreach ($fields as $key => $value) {
 				$field = (is_numeric($key)) ? $value : $key;
-
-				if (in_array($Model->escapeField('*'), $query['fields']) || in_array($Model->alias . '.' . $field, $query['fields']) || in_array($field, $query['fields'])) {
+				if (
+					$isAllFields ||
+					in_array($Model->alias . '.' . $field, $query['fields']) ||
+					in_array($field, $query['fields'])
+				) {
 					$addFields[] = $field;
 				}
 			}
@@ -183,7 +195,7 @@ class TranslateBehavior extends ModelBehavior {
  */
 	protected function _checkConditions(Model $Model, $query) {
 		$conditionFields = array();
-		if (empty($query['conditions']) || (!empty($query['conditions']) && !is_array($query['conditions'])) ) {
+		if (empty($query['conditions']) || (!empty($query['conditions']) && !is_array($query['conditions']))) {
 			return $conditionFields;
 		}
 		foreach ($query['conditions'] as $col => $val) {
@@ -203,7 +215,6 @@ class TranslateBehavior extends ModelBehavior {
  * Appends a join for translated fields.
  *
  * @param Model $Model The model being worked on.
- * @param object $joinTable The jointable object.
  * @param array $query The query array to append a join to.
  * @param string $field The field name being joined.
  * @param string $aliasField The aliased field name being joined.
@@ -321,13 +332,13 @@ class TranslateBehavior extends ModelBehavior {
  * beforeSave callback.
  *
  * Copies data into the runtime property when `$options['validate']` is
- * disabled.  Or the runtime data hasn't been set yet.
+ * disabled. Or the runtime data hasn't been set yet.
  *
  * @param Model $Model Model save was called on.
  * @return boolean true.
  */
 	public function beforeSave(Model $Model, $options = array()) {
-		if (isset($options['validate']) && $options['validate'] == false) {
+		if (isset($options['validate']) && !$options['validate']) {
 			unset($this->runtime[$Model->alias]['beforeSave']);
 		}
 		if (isset($this->runtime[$Model->alias]['beforeSave'])) {
@@ -374,6 +385,21 @@ class TranslateBehavior extends ModelBehavior {
 	}
 
 /**
+ * Restores model data to the original data.
+ * This solves issues with saveAssociated and validate = first.
+ *
+ * @param Model $model
+ * @return void
+ */
+	public function afterValidate(Model $Model) {
+		$Model->data[$Model->alias] = array_merge(
+			$Model->data[$Model->alias],
+			$this->runtime[$Model->alias]['beforeSave']
+		);
+		return true;
+	}
+
+/**
  * afterSave Callback
  *
  * @param Model $Model Model the callback is called on
@@ -384,7 +410,6 @@ class TranslateBehavior extends ModelBehavior {
 		if (!isset($this->runtime[$Model->alias]['beforeValidate']) && !isset($this->runtime[$Model->alias]['beforeSave'])) {
 			return true;
 		}
-		$locale = $this->_getLocale($Model);
 		if (isset($this->runtime[$Model->alias]['beforeValidate'])) {
 			$tempData = $this->runtime[$Model->alias]['beforeValidate'];
 		} else {
@@ -395,18 +420,10 @@ class TranslateBehavior extends ModelBehavior {
 		$conditions = array('model' => $Model->alias, 'foreign_key' => $Model->id);
 		$RuntimeModel = $this->translateModel($Model);
 
-		$fields = array_merge($this->settings[$Model->alias], $this->runtime[$Model->alias]['fields']);
 		if ($created) {
-			// set each field value to an empty string
-			foreach ($fields as $key => $field) {
-				if (!is_numeric($key)) {
-					$field = $key;
-				}
-				if (!isset($tempData[$field])) {
-					$tempData[$field] = '';
-				}
-			}
+			$tempData = $this->_prepareTranslations($Model, $tempData);
 		}
+		$locale = $this->_getLocale($Model);
 
 		foreach ($tempData as $field => $value) {
 			unset($conditions['content']);
@@ -421,18 +438,60 @@ class TranslateBehavior extends ModelBehavior {
 					$value = array($locale => $value);
 				}
 			}
-			$translations = $RuntimeModel->find('list', array('conditions' => $conditions, 'fields' => array($RuntimeModel->alias . '.locale', $RuntimeModel->alias . '.id')));
+			$translations = $RuntimeModel->find('list', array(
+				'conditions' => $conditions,
+				'fields' => array(
+					$RuntimeModel->alias . '.locale',
+					$RuntimeModel->alias . '.id'
+				)
+			));
 			foreach ($value as $_locale => $_value) {
 				$RuntimeModel->create();
 				$conditions['locale'] = $_locale;
 				$conditions['content'] = $_value;
 				if (array_key_exists($_locale, $translations)) {
-					$RuntimeModel->save(array($RuntimeModel->alias => array_merge($conditions, array('id' => $translations[$_locale]))));
+					$RuntimeModel->save(array(
+						$RuntimeModel->alias => array_merge(
+							$conditions, array('id' => $translations[$_locale])
+						)
+					));
 				} else {
 					$RuntimeModel->save(array($RuntimeModel->alias => $conditions));
 				}
 			}
 		}
+	}
+
+/**
+ * Prepares the data to be saved for translated records.
+ * Add blank fields, and populates data for multi-locale saves.
+ *
+ * @param Model $Model Model instance
+ * @param array $data The sparse data that was provided.
+ * @return array The fully populated data to save.
+ */
+	protected function _prepareTranslations(Model $Model, $data) {
+		$fields = array_merge($this->settings[$Model->alias], $this->runtime[$Model->alias]['fields']);
+		$locales = array();
+		foreach ($data as $key => $value) {
+			if (is_array($value)) {
+				$locales = array_merge($locales, array_keys($value));
+			}
+		}
+		$locales = array_unique($locales);
+		$hasLocales = count($locales) > 0;
+
+		foreach ($fields as $key => $field) {
+			if (!is_numeric($key)) {
+				$field = $key;
+			}
+			if ($hasLocales && !isset($data[$field])) {
+				$data[$field] = array_fill_keys($locales, '');
+			} elseif (!isset($data[$field])) {
+				$data[$field] = '';
+			}
+		}
+		return $data;
 	}
 
 /**
@@ -467,7 +526,7 @@ class TranslateBehavior extends ModelBehavior {
  * Get instance of model for translations.
  *
  * If the model has a translateModel property set, this will be used as the class
- * name to find/use.  If no translateModel property is found 'I18nModel' will be used.
+ * name to find/use. If no translateModel property is found 'I18nModel' will be used.
  *
  * @param Model $Model Model to get a translatemodel for.
  * @return Model
@@ -502,7 +561,7 @@ class TranslateBehavior extends ModelBehavior {
  * @param boolean $reset Leave true to have the fields only modified for the next operation.
  *   if false the field will be added for all future queries.
  * @return boolean
- * @throws CakeException when attempting to bind a translating called name.  This is not allowed
+ * @throws CakeException when attempting to bind a translating called name. This is not allowed
  *   as it shadows Model::$name.
  */
 	public function bindTranslation(Model $Model, $fields, $reset = true) {
@@ -567,6 +626,7 @@ class TranslateBehavior extends ModelBehavior {
 /**
  * Update runtime setting for a given field.
  *
+ * @param Model $Model Model instance
  * @param string $field The field to update.
  */
 	protected function _removeField(Model $Model, $field) {
@@ -603,7 +663,6 @@ class TranslateBehavior extends ModelBehavior {
 		if (is_string($fields)) {
 			$fields = array($fields);
 		}
-		$RuntimeModel = $this->translateModel($Model);
 		$associations = array();
 
 		foreach ($fields as $key => $value) {

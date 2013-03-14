@@ -7,6 +7,8 @@ $(document).ready(function() {
 });
 </script>
 
+<?php $this->Html->addCrumb('Media Index', null) ?>
+
 <h1>Media Libraries</h1>
 
 <ul class="thumbnails">

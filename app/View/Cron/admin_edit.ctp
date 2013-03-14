@@ -1,27 +1,38 @@
-<h1>Edit Cron Entry</h1>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Cron Entries', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit Cron', null) ?>
 
-<script>
-$(document).ready(function(){
-	$("#CronEditForm").validate();
-});
-</script>
+<div class="pull-right admin-edit-options">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Index',
+        array('action' => 'index'),
+        array('class' => 'btn', 'escape' => false
+    )) ?>
+    <?= $this->Html->link(
+        '<i class="icon-trash icon-white"></i> Delete',
+        array('action' => 'delete', $this->request->data['Cron']['id'], $this->request->data['Cron']['title']),
+        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this cron entry?')"));
+    ?>
+</div>
+<div class="clearfix"></div>
 
-<?php
-	echo $this->Form->create('Cron', array('class' => 'well'));
-	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-	echo $this->Form->input('module_id', array(
+<?= $this->Form->create('Cron', array('class' => 'well admin-validate')) ?>
+	<h2>Edit Cron Entry</h2>
+
+	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
+	<?= $this->Form->input('module_id', array(
 		'empty' => '- Choose Component -',
 		'class' => 'required'
-	));
-	echo $this->Form->input('function', array(
+	)) ?>
+	<?= $this->Form->input('function', array(
 		'class' => 'required'
-	));
-	echo $this->Form->input('period_amount', array(
+	)) ?>
+	<?= $this->Form->input('period_amount', array(
 		'class' => 'required',
 		'options' => $period_amount,
 		'empty' => '- choose -'
-	));
-	echo $this->Form->input('period_type', array(
+	)) ?>
+	<?= $this->Form->input('period_type', array(
 		'class' => 'required',
 		'options' => array(
 			'minute' => 'Minute(s)',
@@ -30,11 +41,10 @@ $(document).ready(function(){
 			'week' => 'Week(s)'
 		),
 		'empty' => '- choose -'
-	));
+	)) ?>
 
-	echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-	echo $this->Form->hidden('id');
-?>
+	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
+	<?= $this->Form->hidden('id') ?>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

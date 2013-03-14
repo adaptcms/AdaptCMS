@@ -1,0 +1,15 @@
+http://localhost/adaptcms/
+http://localhost/adaptcms/articles/view/welcome-to-adaptcms-alpha-2
+http://localhost/adaptcms/articles/view/welcome-to-beta
+http://localhost/adaptcms/categories/view/reviews
+http://localhost/adaptcms/categories/view/news
+http://localhost/adaptcms/categories/view/games
+http://localhost/adaptcms/media
+http://localhost/adaptcms/media/view/pics
+http://localhost/adaptcms/media/view/more-pics
+http://localhost/adaptcms/media/view/grand-theft-auto-iv
+http://localhost/adaptcms/media/view/test-gallery-2
+http://localhost/adaptcms/pages/contact-us
+http://localhost/adaptcms/users/profile/admin
+http://localhost/adaptcms/users/profile/member
+http://localhost/adaptcms/users/profile/test-member

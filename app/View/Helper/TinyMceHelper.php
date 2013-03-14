@@ -59,6 +59,15 @@ class TinyMceHelper extends AppHelper {
 			$elements = 'abshosturls';
 		}
 
+		if (!empty($options['simple']))
+		{
+			$buttons1 = 'bold,italic,underline,|,formatselect,|,bullist,numlist,|,replace,spellchecker,preview,link,unlink,|,image,emotions,';
+			$buttons2 = '';
+		} else {
+			$buttons1 = 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontsizeselect,formatselect';
+			$buttons2 = 'bullist,numlist,|,undo,redo,|,link,unlink,image,cleanup,code,preview,replace,spellchecker,emotions,media,pagebreak,tinyautosave';
+		}
+
 		// remove last comma from lines to avoid the editor breaking in Internet Explorer
 		echo "<script type='text/javascript'>
 		tinyMCE.init({
@@ -68,8 +77,8 @@ class TinyMceHelper extends AppHelper {
 			elements : '" . $elements . "',
 			plugins : 'spellchecker,preview,searchreplace,emotions,media,contextmenu,wordcount,pagebreak,tinyautosave',
 
-			theme_advanced_buttons1 : 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontsizeselect,formatselect',
-			theme_advanced_buttons2 : 'bullist,numlist,|,undo,redo,|,link,unlink,image,cleanup,code,preview,replace,spellchecker,emotions,media,pagebreak,tinyautosave',
+			theme_advanced_buttons1 : '" . $buttons1 . "',
+			theme_advanced_buttons2 : '" . $buttons2 . "',
 			theme_advanced_buttons3 : '',
 			theme_advanced_toolbar_location : 'top',
 			theme_advanced_toolbar_align : 'left',

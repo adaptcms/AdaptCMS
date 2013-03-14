@@ -1,18 +1,14 @@
-<script>
- $(document).ready(function(){
-    $("#SettingAdminAddForm").validate();
- });
- </script>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Settings', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Add Setting Category', null) ?>
 
-<h1>Add Settings Category</h1>
+<?= $this->Form->create('Setting', array('class' => 'well admin-validate')) ?>
+	<h2>Add Settings Category</h2>
 
-<?php
-	echo $this->Form->create('Setting', array('class' => 'well'));
-	echo $this->Form->input('title', array('type' => 'text', 'class' => 'required'));
-	echo $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-?>
+	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 
-<br />
+	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
+
 <?= $this->Form->end(array(
 	'label' => 'Submit',
 	'class' => 'btn btn-primary'

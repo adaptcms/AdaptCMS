@@ -1,4 +1,5 @@
 <?= $this->Html->script('bootstrap-typeahead.js') ?>
+
 <script type="text/javascript">
  $(document).ready(function(){
     $("#theme-update").live('click', function() {
@@ -6,25 +7,25 @@
         var setting_id = $("#SettingThemeId").val();
         var theme_name = $("#SettingTheme option:selected").text();
 
-            $.post("<?= $this->webroot ?>ajax/templates/theme_update/", 
-                {
-                    data:{
-                        Setting:{
-                            data: theme,
-                            id: setting_id,
-                            title: theme_name
-                        }
+        $.post("<?= $this->webroot ?>ajax/templates/theme_update/", 
+            {
+                data:{
+                    Setting:{
+                        data: theme,
+                        id: setting_id,
+                        title: theme_name
                     }
-                }, function(data) {
-                if ($("#theme-update-div").length != 0) {
-                    $("#theme-update-div").replaceWith(data);
-                } else {
-                    $(data).insertBefore("#SettingAdminIndexForm");
                 }
-            });
+            }, function(data) {
+            if ($("#theme-update-div").length != 0) {
+                $("#theme-update-div").replaceWith(data);
+            } else {
+                $(data).insertBefore("#SettingAdminIndexForm");
+            }
+        });
     });
 
-    $(".btn-info").live('click', function(e) {
+    $(".refresh.btn-info").live('click', function(e) {
         var theme_id = $(this).attr('id');
         var theme_name = $(this).attr('href').replace("#","");
         e.preventDefault();
@@ -81,6 +82,9 @@
     });
 });
 </script>
+
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Templates', null) ?>
 
 <h1>Appearance Settings</h1>
 
@@ -149,7 +153,7 @@
                 <tr>
                     <td>
                         Default 
-                        <a class="btn btn-small btn-info" id="1" href="#" style="float:right">
+                        <a class="btn btn-small btn-info refresh" id="1" href="#" style="float:right">
                             <i class="icon-refresh icon-white"></i>
                         </a>
                     </td>
@@ -174,7 +178,9 @@
                     <td>
                         <?= $data['Theme']['title'] ?> 
                         <?php if (!empty($data['Theme']['id'])): ?>
-                            <a class="btn btn-small btn-info" id="<?= $data['Theme']['id'] ?>" href="#<?= $data['Theme']['title'] ?>" style="float:right"><i class="icon-refresh icon-white"></i></a>
+                            <a class="btn btn-small btn-info refresh" id="<?= $data['Theme']['id'] ?>" href="#<?= $data['Theme']['title'] ?>" style="float:right">
+                                <i class="icon-refresh icon-white"></i>
+                            </a>
                         <?php endif ?>
 
                         <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
@@ -438,7 +444,7 @@ Search
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <?php if (empty($this->params->named['trash'])): ?>
+                            <?php if (empty($this->params->named['trash_temp'])): ?>
                                 <li>
                                     <?= $this->Admin->edit(
                                         $data['Template']['id']

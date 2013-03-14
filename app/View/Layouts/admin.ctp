@@ -166,11 +166,17 @@
                     </a>
                   </h3>
                 </div>
-                <div id="plugins" class="accordion-body collapse<?= ($this->params->controller == 'plugins' ? ' in': '') ?>">
+                <div id="plugins" class="accordion-body collapse<?= ($this->params->controller == 'plugins' || !empty($this->params->plugin) ? ' in': '') ?>">
                   <ul class="nav nav-list">
                     <li><?= $this->Html->link('Manage Plugins', array('admin' => true, 'plugin' => false, 'controller' => 'plugins', 'action' => 'index')) ?></li>
-                    <li><?= $this->Html->link('Polls', array('plugin' => 'polls', 'controller' => 'polls', 'action' => 'index', 'admin' => true)) ?></li>
-                    <li><?= $this->Html->link('Links', array('plugin' => 'links', 'controller' => 'links', 'action' => 'index', 'admin' => true)) ?></li>
+                    <?php foreach(Configure::read('Plugins.list') as $plugin): ?>
+                      <?php if (Configure::read($plugin . '.admin_menu')): ?>
+                        <li><?= $this->Html->link(
+                            (Configure::read($plugin . '.admin_menu_label') ? Configure::read($plugin . '.admin_menu_label') : $plugin), 
+                            Configure::read($plugin . '.admin_menu')) ?>
+                        </li>
+                      <?php endif ?>
+                    <?php endforeach ?>
                   </ul>
                 </div>
               </div>
@@ -178,24 +184,16 @@
           </div><!--/.well -->
         </div><!--/span-->
         <div class="span9">
-          
-        <?php echo $this->Session->flash(); ?>
+        <?= $this->Html->getCrumbList(array(
+          'separator' => '<span class="divider"> / </span>',
+          'class' => 'breadcrumb',
+          'escape' => false,
+          'lastClass' => 'active'
+        ), 'Home') ?>
 
-        <?php if (!empty($prefix)): ?>
-          <ul class="breadcrumb">
-            <li>
-              <a href="<?= $this->webroot.$prefix ?>"><?= ucwords(str_replace("_", " ", $prefix)) ?></a> <span class="divider">/</span>
-            </li>
-            <?php if (isset($this->params->controller)): ?>
-            <li>
-              <a href="<?= $this->webroot.$prefix."/".$this->params->controller ?>"><?= ucwords($this->params->controller) ?></a> <span class="divider">/</span>
-            </li>
-            <?php endif; ?>
-            <li class="active"><?= ucwords(str_replace($prefix."_", "", $this->params->action)) ?></li>
-          </ul>
-        <?php endif ?>
+        <?= $this->Session->flash() ?>
 
-        <?php echo $this->fetch('content'); ?>
+        <?= $this->fetch('content') ?>
 
         </div><!--/span-->
       </div><!--/row-->

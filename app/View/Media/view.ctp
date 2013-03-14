@@ -7,6 +7,9 @@ $(document).ready(function() {
 });
 </script>
 
+<?php $this->Html->addCrumb('Media Index', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('View Media Library', null) ?>
+
 <h1 class="pull-left">
 	<?= $media['Media']['title'] ?>
 </h1>

@@ -218,7 +218,6 @@ class ArticlesController extends AppController {
 
 	public function admin_edit($id = null)
 	{
-
       	$this->Article->id = $id;
 
 	    if ($this->request->is('get')) {
@@ -235,10 +234,16 @@ class ArticlesController extends AppController {
 	        	)
 	        ));
 
+	        if (empty($this->request->data))
+	        {
+	        	$this->Session->setFlash('Article doesnt exist.', 'flash_error');
+	        	$this->redirect(array('action' => 'index'));
+	        }
+
 	        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
 	        {
                 $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-                $this->redirect(array('action' => 'index'));	        	
+                $this->redirect(array('action' => 'index'));
 	        }
 
 	        if (!empty($this->request->data['Article']['settings']))
@@ -574,15 +579,25 @@ class ArticlesController extends AppController {
 			)
 		));
 
-		if (!$this->Auth->user('id')) {
-			$this->loadModel('SettingValue');
+		$this->loadModel('SettingValue');
+
+		if (!$this->Auth->user('id'))
+		{
     		$captcha = $this->SettingValue->findByTitle('Comment Post Captcha Non-Logged In');
 
-    		if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes') {
+    		if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes')
+    		{
     			$this->set('captcha_setting', true);
     		}
     	}
 
+    	$wysiwyg = $this->SettingValue->findByTitle('Comment Post WYSIWYG Editor');
+
+    	if (!empty($wysiwyg['SettingValue']['data']) && $wysiwyg['SettingValue']['data'] == 'Yes')
+    	{
+    		$this->set(compact('wysiwyg'));
+    	}
+    	
 		if (
 			empty($this->request->data['Article']['id']) ||
 			$this->request->data['Article']['status'] == 0 ||
@@ -654,6 +669,7 @@ class ArticlesController extends AppController {
         );
 
         $this->set('article', $this->request->data);
+        $this->set('tag', $slug);
 	}
 
 	public function rss_index($category = null, $limit = null)
