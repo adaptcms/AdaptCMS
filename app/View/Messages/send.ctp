@@ -56,7 +56,8 @@ $(document).ready(function() {
 	<?= $this->Form->input('recipient', array(
 	        'data-provide' => 'typeahead', 
 	        'data-source' => '[]', 
-	        'autocomplete'=>'off'
+	        'autocomplete'=>'off',
+            'value' => !empty($this->params['pass'][0]) ? $this->params['pass'][0] : ''
 	)) ?>
 	<?= $this->Form->input('title', array(
 		'label' => 'Subject',

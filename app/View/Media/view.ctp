@@ -26,32 +26,38 @@ $(document).ready(function() {
 
 <div class="clearfix"></div>
 
-<ul class="thumbnails">
-	<?php foreach($this->request->data as $key => $row): ?>
-		<li class="span4<?= ($key % 3 === 0 ? ' no-marg-left' : '') ?>">
-			<?php
-			$url = array('controller' => 'files', 'action' => 'view', $row['File']['id']);
-			?>
+<?php if (empty($files)): ?>
+    <div class="well">
+        No Images found
+    </div>
+<?php else: ?>
+	<ul class="thumbnails">
+		<?php foreach($files as $key => $row): ?>
+			<li class="span4<?= ($key % 3 === 0 ? ' no-marg-left' : '') ?>">
+				<?php
+				$url = array('controller' => 'files', 'action' => 'view', $row['File']['id']);
+				?>
 
-			<?= $this->Html->link(
-					$this->Html->image(
-						'/'.$row['File']['dir'].$row['File']['filename'],
+				<?= $this->Html->link(
+						$this->Html->image(
+							DS . $row['File']['dir'] . $row['File']['filename'],
+							array(
+								'style' => 'width: 300px;height: 200px'
+							)
+						),
+						DS . $row['File']['dir'] . $row['File']['filename'],
 						array(
-							'style' => 'width: 300px;height: 200px'
+							'class' => 'fancybox thumbnail',
+							'rel' => $media['Media']['title'],
+							'title' => $row['File']['filename'] . ' ' . $row['File']['caption'],
+							'escape' => false
 						)
-					),
-					'/'.$row['File']['dir'].$row['File']['filename'],
-					array(
-						'class' => 'fancybox thumbnail',
-						'rel' => $media['Media']['title'],
-						'title' => $row['File']['filename'] . ' ' . $row['File']['caption'],
-						'escape' => false
-					)
-			) ?>
-		</li>
-	<?php endforeach ?>
-</ul>
+				) ?>
+			</li>
+		<?php endforeach ?>
+	</ul>
 
-<div class="clearfix"></div>
+	<div class="clearfix"></div>
 
-<?= $this->element('admin_pagination') ?>
+	<?= $this->element('admin_pagination') ?>
+<?php endif ?>

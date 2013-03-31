@@ -146,4 +146,39 @@ class Field extends AppModel
 
         return true;
     }
+
+    /**
+    * Small function that retrieves fields for a specified category
+    *
+    * @param category_id
+    * @param article_id
+    * @return array of fields
+    */
+    public function getFields($category_id, $article_id = null)
+    {
+        $conditions = array(
+            'conditions' => array(
+                'Field.category_id' => $category_id
+            ),
+            'order' => array(
+                'Field.field_order ASC'
+            )
+        );
+        
+        if (!empty($article_id))
+        {
+            $conditions['contain'] = array(
+              'ArticleValue' => array(
+                  'conditions' => array(
+                      'ArticleValue.article_id' => $article_id
+                  ),
+                  'File'
+              )
+            );
+        }
+        
+        $fields = $this->find('all', $conditions);
+
+        return $fields;
+    }
 }

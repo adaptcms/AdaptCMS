@@ -7,14 +7,13 @@ $(document).ready(function() {
 	$("#FileType").live('change', function() {
 		if ($(this).val()) {
 			if ($(this).val() == 'upload') {
-				$("#file_upload").show();
+				$("#file_upload,#extra").show();
 				$("#file_contents").hide();
 			} else {
 				$("#file_contents").show();
-				$("#file_upload").hide();
+				$("#file_upload,#extra").hide();
 				$("#frame_FileContent").css("height", "325px");
 			}
-			$("#extra").show();
 		} else {
 			$("#file_upload, #file_contents, #extra").hide();
 		}
@@ -31,7 +30,7 @@ $(document).ready(function() {
 
 			var length = Number($(".upload-file").length) + 1;
 			var h4 = length;
-			var file_divs = '<div class="upload-file span4 no-marg-left" id="file-1">' + file_div + '</div>';
+			var file_divs = '<div class="upload-file span3 no-marg-left" id="file-1">' + file_div + '</div>';
 			var contents = file_divs.replace(/1/g, length).replace('#1', '#' + h4);
 
 			$(contents).insertAfter($(".upload-file:last"));
@@ -84,9 +83,8 @@ function toggleRemove()
 	<h1>Add File</h1>
 <?php endif ?>
 
-<?php
-    echo $this->Form->create('File', array('type' => 'file', 'class' => 'well admin-validate'));
-    echo $this->Form->input('type', array(
+<?= $this->Form->create('File', array('type' => 'file', 'class' => 'well admin-validate')) ?>
+	<?= $this->Form->input('type', array(
     	'label' => 'How would you like to add this file?',
     	'options' => array(
     		'upload' => 'Upload File (such as images)',
@@ -97,118 +95,107 @@ function toggleRemove()
     	'div' => array(
     		'id' => 'file-type'
     	)
-    ));
-?>
+    )) ?>
 
-<?php if (empty($this->params->named['multiple'])): ?>
-	<div id="file_upload" style="display: none">
-		<?= $this->Form->input('1.File.filename', array('type' => 'file', 'class' => 'required')) ?>
-	    <?= $this->Form->hidden('1.File.dir', array('value' => 'uploads/')) ?>
-	    <?= $this->Form->hidden('1.File.mimetype') ?>
-	    <?= $this->Form->hidden('1.File.filesize') ?>
-	</div>
-	<div class="clearfix"></div>
+	<?php if (empty($this->params->named['multiple'])): ?>
+		<div id="file_upload" style="display: none">
+			<?= $this->Form->input('1.File.filename', array('type' => 'file', 'class' => 'required')) ?>
+		    <?= $this->Form->hidden('1.File.dir', array('value' => 'uploads/')) ?>
+		    <?= $this->Form->hidden('1.File.mimetype') ?>
+		    <?= $this->Form->hidden('1.File.filesize') ?>
+		</div>
+		<div class="clearfix"></div>
 
-	<div id="file_contents" style="display:none">
-	    <?php $this->CodeMirror->editor('FileContent') ?>
+		<div id="file_contents" style="display:none">
+		    <?php $this->CodeMirror->editor('FileContent') ?>
 
-	    <?= $this->Form->input('content', array(
-	        'label' => 'File Contents',
-	        'rows' => 20, 
-	        'style' => 'width: 90%'
-	    )) ?>
+		    <?= $this->Form->input('content', array(
+		        'label' => 'File Contents',
+		        'rows' => 20, 
+		        'style' => 'width: 90%'
+		    )) ?>
 
-		<?= $this->Form->input('file_extension', array(
-	    	'class' => 'required',
-			'empty' => '- choose -',
-			'options' => $file_types
-		)) ?>
+			<?= $this->Form->input('file_extension', array(
+		    	'class' => 'required',
+				'empty' => '- choose -',
+				'options' => $file_types
+			)) ?>
 
-		<?= $this->Form->input('file_name', array(
-	    	'class' => 'required'
-		)) ?>
-	</div>
+			<?= $this->Form->input('file_name', array(
+		    	'class' => 'required'
+			)) ?>
+		</div>
 
-	<div id="extra" style="display: none">
-		<?php if (empty($theme)): ?>
+		<div id="extra" style="display: none">
 		    <?= $this->Form->input('1.File.caption') ?>
 
 		    <h4 class="image-filters">Image Filters</h4>
 
 		    <?= $this->Form->input('1.File.watermark', array('type' => 'checkbox')) ?>
-		    <?= $this->Form->input('1.File.resize_width', array('class' => 'span2 pull-left')) ?>
-		    <?= $this->Form->input('1.File.resize_height', array('class' => 'span2 pull-right')) ?>
+
+	        <div class="span3 no-marg-left">
+	            <?= $this->Form->input('resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
+	            <?= $this->Form->input('resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
+	        </div>
+	        <div class="clearfix"></div>
+
 		    <?= $this->Form->input('1.File.random_filename', array('type' => 'checkbox')) ?>
-		<?php else: ?>
-			<?= $this->Form->hidden('theme', array('value' => $theme)) ?>
-		    <?= $this->Form->input('folder', array(
-		    	'class' => 'required',
-				'empty' => '- choose -',
-				'label' => 'Folder Location',
-				'options' => array(
-					'css' => 'Css',
-					'js' => 'Js',
-					'img' => 'Images',
-					'other' => 'Other'
-				)
-			)) ?>
-		<?php endif ?>
-	</div>
+		</div>
 
-	<?= $this->Form->end(array(
-		'label' => 'Submit',
-		'class' => 'btn btn-primary'
-	)) ?>
-<?php else: ?>
-	<div class="upload-file span4 no-marg-left" id="file-1">
-		<?= $this->Form->button('<i class="icon icon-remove icon-white"></i>', array(
-			'class' => 'btn btn-danger pull-right remove', 
-			'escape' => false
+		<?= $this->Form->end(array(
+			'label' => 'Submit',
+			'class' => 'btn btn-primary'
 		)) ?>
+	<?php else: ?>
+		<div class="upload-file span3 no-marg-left" id="file-1">
+			<?= $this->Form->button('<i class="icon icon-remove icon-white"></i>', array(
+				'class' => 'btn btn-danger pull-right remove', 
+				'escape' => false
+			)) ?>
 
-		<h2>File #1</h2>
+			<h2>File #1</h2>
 
-		<?= $this->Form->input('1.File.filename', array('type' => 'file', 'class' => 'required')) ?>
-	    <?= $this->Form->hidden('1.File.dir', array('value' => 'uploads/')) ?>
-	    <?= $this->Form->hidden('1.File.mimetype') ?>
-	    <?= $this->Form->hidden('1.File.filesize') ?>
+			<?= $this->Form->input('1.File.filename', array('type' => 'file', 'class' => 'required')) ?>
+		    <?= $this->Form->hidden('1.File.dir', array('value' => 'uploads/')) ?>
+		    <?= $this->Form->hidden('1.File.mimetype') ?>
+		    <?= $this->Form->hidden('1.File.filesize') ?>
 
-	    <?= $this->Form->input('1.File.caption') ?>
+		    <?= $this->Form->input('1.File.caption') ?>
 
-	    <h4 class="image-filters">Image Filters</h4>
+		    <h4 class="image-filters">Image Filters</h4>
 
-	    <?= $this->Form->input('1.File.watermark', array('type' => 'checkbox')) ?>
-	    <?= $this->Form->input('1.File.resize_width', array('div' => array('class' => 'span4 pull-left'))) ?>
-	    <?= $this->Form->input('1.File.resize_height', array('div' => array('class' => 'span4 pull-right'))) ?>
-	    <div class="clearfix"></div>
-	    <?= $this->Form->input('1.File.random_filename', array('type' => 'checkbox')) ?>
+		    <?= $this->Form->input('1.File.watermark', array('type' => 'checkbox')) ?>
+		    <?= $this->Form->input('1.File.resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
+		    <?= $this->Form->input('1.File.resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
+		    <div class="clearfix"></div>
+		    <?= $this->Form->input('1.File.random_filename', array('type' => 'checkbox')) ?>
 
-	    <h4 class="image-filters">Media Libraries</h4>
+		    <h4 class="image-filters">Media Libraries</h4>
 
-	    <div class="media-libraries">
-	        <?= $this->Form->input('1.File.library', array(
-	            'div' => false, 
-	            'style' => 'margin-bottom: 0',
-	            'empty' => '- add library -',
-	            'options' => $media_list
-	        )) ?>
-	        <?= $this->Form->button('Add', array(
-	            'class' => 'btn btn-info add-media', 
-	            'type' => 'button'
-	        )) ?>
-	    </div>
-	    <div class="media_libraries"></div>
-	    <div class="clearfix media"></div>
-	</div>
+		    <div class="media-libraries">
+		        <?= $this->Form->input('1.File.library', array(
+		            'div' => false, 
+		            'style' => 'margin-bottom: 0',
+		            'empty' => '- add library -',
+		            'options' => $media_list
+		        )) ?>
+		        <?= $this->Form->button('Add', array(
+		            'class' => 'btn btn-info add-media', 
+		            'type' => 'button'
+		        )) ?>
+		    </div>
+		    <div class="media_libraries"></div>
+		    <div class="clearfix media"></div>
+		</div>
 
-	<div class="clearfix"></div>
-	<div class="btn-group">
-		<?php if (!empty($this->params->named['multiple'])): ?>
-			<?= $this->Form->button('Upload Another File', array('class' => 'add-file btn btn-danger')) ?>
-		<?php endif ?>
+		<div class="clearfix"></div>
+		<div class="btn-group">
+			<?php if (!empty($this->params->named['multiple'])): ?>
+				<?= $this->Form->button('Upload Another File', array('class' => 'add-file btn btn-danger')) ?>
+			<?php endif ?>
 
-		<?= $this->Form->button('Submit', array('type' => 'submit', 'class' => 'btn btn-primary')) ?>
-	</div>
+			<?= $this->Form->button('Submit', array('type' => 'submit', 'class' => 'btn btn-primary')) ?>
+		</div>
 
 	<?= $this->Form->end() ?>
 <?php endif ?>

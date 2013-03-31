@@ -18,16 +18,32 @@ class Theme extends AppModel
     * Validation rules
     */
 	public $validate = array(
-    'title' => array(
-        array(
-            'rule' => 'notEmpty',
-            'message' => 'Please enter theme name'
-        ),
-        array(
-            'rule' => 'isUnique',
-            'message' => 'Theme name already in use'
+        'title' => array(
+            array(
+                'rule' => 'notEmpty',
+                'message' => 'Please enter theme name'
+            ),
+            array(
+                'rule' => 'isUnique',
+                'message' => 'Theme name already in use'
+            )
         )
-    )
+    );
+
+    /**
+    * Types of files that can be edited
+    */
+    public $file_types_editable = array(
+        'txt',
+        'php',
+        'html',
+        'css',
+        'js',
+        'phps',
+        'htm',
+        'less',
+        'sass',
+        'scss'
     );
 
     /**

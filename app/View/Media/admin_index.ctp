@@ -66,7 +66,7 @@
                         <?php endif ?>
                     </td>
                     <td>
-                        <?= (!empty($data['File']) ? count($data['File']) : 0) ?>
+                        <?= !empty($data['File']) ? count($data['File']) : 0 ?>
                     </td>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>

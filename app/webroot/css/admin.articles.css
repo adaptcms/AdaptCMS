@@ -1,0 +1,89 @@
+/* 
+    Document   : admin.articles
+    Created on : Mar 22, 2013, 6:19:07 PM
+    Author     : charlie
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.field_options
+{
+    margin-bottom: 9px;
+    margin-top: 10px;
+}
+
+#ArticleFieldOptions
+{
+    margin-bottom: 0px;
+}
+
+#field_data
+{
+    width: 30%;
+    margin-bottom: 12px;
+}
+
+#category
+{
+    margin-right: 10px;
+}
+
+#related-search
+{
+    margin-bottom: 9px;
+}
+
+.related-error
+{
+    margin-left: 15px;
+    display: none;
+}
+
+#related-articles
+{
+    width: 100%
+}
+
+#flashMessageRelated
+{
+    display: none!important;
+}
+
+.publish_time
+{
+    margin-bottom: 10px;
+}
+
+.publish_options
+{
+    margin-top: 20px;
+}
+
+.related-label
+{
+    margin-top: 10px;
+}
+
+#related-submit
+{
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.publish_options .draft
+{
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.current-status
+{
+    width: 36%;
+    padding: 20px;
+    text-align: center;
+}
+
+#field_existing_data
+{
+    display: none;
+}

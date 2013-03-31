@@ -5,6 +5,11 @@
     "install": {
     	"block_active": 1,
     	"model_title": "Link",
+        "permissions": {
+            "file": "Install/permissions.php",
+            "className": "PermissionsInstall",
+            "functionName": "generate"
+        },
     	"text": "Install/install_text.md",
     	"sql": [
     		"Install/install_data.sql"

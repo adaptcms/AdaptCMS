@@ -242,6 +242,7 @@ class Template extends AppModel
 	* Same as folderList(), but looks for theme folders and returns list of files
 	*
 	* @param folder
+        * @param plugin false, otherwise name of plugin for plugin assets 
 	* @return array of folders and files
 	*/
 	public function getFolderAndFilesList($dir, $plugin = false)

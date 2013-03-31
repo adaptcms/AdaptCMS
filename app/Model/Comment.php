@@ -96,4 +96,30 @@ class Comment extends AppModel
 
         return true;
     }
+
+    /**
+    * Takes an array and returns a comment count for array of articles
+    *
+    * @param data
+    * @return integer comment count
+    */
+    public function getCommentsCount($data)
+    {
+        if (!empty($data))
+        {
+            foreach($data as $key => $row)
+            {
+                if (!empty($row['Article']['id']))
+                {
+                    $data[$key]['Comment']['count'] = $this->find('count', array(
+                        'conditions' => array(
+                            'Comment.article_id' => $row['Article']['id']
+                        )
+                    ));
+                }
+            }
+        }
+
+        return $data;
+    }
 }

@@ -13,6 +13,9 @@
     <!--[if lt IE 9]>
       <?= $this->Html->script('html5.min.js') ?>
     <![endif]-->
+    <!--[if lt IE 8]>
+      <?= $this->Html->css("font-awesome-ie7.min.css") ?>
+    <![endif]-->
 
   <?php
     echo $this->Html->meta('icon');

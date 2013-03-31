@@ -23,7 +23,7 @@
 					<?= $file ?>
 				</h2>
 
-				<?php if ($count['total'] == $count['success']): ?>
+				<?php if ($count['total'] == $count['success'] && empty($sql['sql']['error'])): ?>
 					<span class="notice success">
 						SQL Data Inserted Successfully
 					</span>

@@ -117,6 +117,44 @@ class PluginsController extends AppController
 
 		$this->set(compact('plugin', 'params'));
 	}
+        
+        
+        /**
+         * A simple function that grabs all permissions (grouped by role) for a plugin for editing on page.
+         * Flash message on success/error.
+         * 
+         * @param type $plugin
+         */
+        public function admin_permissions($plugin)
+        {
+            $this->loadModel('Role');
+            
+            $roles = $this->Role->find('all', array(
+                'contain' => array(
+                    'Permission' => array(
+                        'conditions' => array(
+                            'Permission.plugin' => Inflector::underscore($plugin)
+                        ),
+                        'order' => 'Permission.controller ASC, Permission.action ASC'
+                    )
+                )
+            ));
+            
+            $this->set(compact('plugin', 'roles'));
+            
+            if (!empty($this->request->data))
+            {
+//                die(debug($this->request->data));
+                if ($this->Role->Permission->saveMany($this->request->data))
+                {
+                    $this->Session->setFlash('Plugin permissions have been updated.', 'flash_success');
+                }
+                else 
+                {
+                    $this->Session->setFlash('Unable to update plugin permissions.', 'flash_error');
+                }
+            }
+        }
 
 	/**
 	* Function hooks into Themes to manage web assets for plugins
@@ -126,13 +164,13 @@ class PluginsController extends AppController
 	*/
 	public function admin_assets($plugin)
 	{
-		$this->loadModel('Theme');
+            $this->loadModel('Theme');
 
-        $this->set('assets_list', $this->Theme->assetsList(null, $plugin));
-        $this->set('assets_list_path', APP);
-        $this->set('webroot_path', $this->webroot);
+            $this->set('assets_list', $this->Theme->assetsList(null, $plugin));
+            $this->set('assets_list_path', APP);
+            $this->set('webroot_path', $this->webroot);
 
-		$this->set(compact('plugin'));
+            $this->set(compact('plugin'));
 	}
 
 	/**

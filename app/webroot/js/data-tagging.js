@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	if ($("#FieldFieldType").val() == "dropdown" || $("#FieldFieldType").val() == "multi-dropdown" ||
-			$("#FieldFieldType").val() == "radio" || $("#FieldFieldType").val() == "check") {
+			$("#FieldFieldType").val() == "radio" || $("#FieldFieldType").val() == "check" || $('#ArticleFieldOptions').length) {
 		$(".field_options").show();
 	} else {
 		$(".field_options").hide();

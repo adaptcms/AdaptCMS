@@ -70,4 +70,57 @@ class ForumTopic extends AdaptbbAppModel
         
         return true;
     }
+
+    /**
+    * Function that json decodes user settings
+    *
+    * @param results of topic data
+    * @return results
+    */
+    public function afterFind($results)
+    {
+        foreach($results as $key => $result)
+        {
+            if (!empty($result['User']))
+            {
+                $results[$key]['User']['settings'] = json_decode(
+                    $result['User']['settings'], 
+                    true
+                );
+            }
+        }
+
+        return $results;
+    }
+
+    /**
+    * Adds in newest post for a topic
+    *
+    *
+    * @param data
+    * @return data new data
+    */
+    public function getStats($data)
+    {
+        foreach($data as $key => $row)
+        {
+            $find = $this->ForumPost->find('first', array(
+                'conditions' => array(
+                    'ForumPost.topic_id' => $row['ForumTopic']['id'],
+                    'ForumPost.deleted_time' => '0000-00-00 00:00:00'
+                ),
+                'contain' => array(
+                    'User'
+                ),
+                'order' => 'ForumPost.created DESC'
+            ));
+
+            if (!empty($find))
+            {
+                $data[$key]['NewestPost'] = $find;
+            }
+        }
+
+        return $data;
+    }
 }

@@ -8,22 +8,6 @@ class ThemesController extends AppController
 	public $name = 'Themes';
 
     /**
-    * Types of files that can be edited
-    */
-    public $file_types_editable = array(
-        'txt',
-        'php',
-        'html',
-        'css',
-        'js',
-        'phps',
-        'htm',
-        'less',
-        'sass',
-        'scss'
-    );
-
-    /**
     * Returns nothing before post
     *
     * On POST, returns error flash or success flash and redirect to index on success
@@ -188,7 +172,7 @@ class ThemesController extends AppController
             $this->set(compact('plugin'));
         }
 
-        $file_types = array_combine($this->file_types_editable, $this->file_types_editable);
+        $file_types = array_combine($this->Theme->file_types_editable, $this->Theme->file_types_editable);
 
         $this->set(compact('theme', 'path', 'file_types'));
 
@@ -273,7 +257,7 @@ class ThemesController extends AppController
                     $path . $file
             );
 
-            if (in_array($ext['extension'], $this->file_types_editable))
+            if (in_array($ext['extension'], $this->Theme->file_types_editable))
             {
                 $handle = fopen($path . $file, "r");
 

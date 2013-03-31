@@ -327,8 +327,10 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (340, 7, 4, 0, '', 'themes', 'admin_asset_edit', 0, '', 0, 0),
 (341, 12, 4, 0, '', 'settings', 'admin_restore', 0, NULL, 0, 0),
 (342, 12, 1, 0, '', 'settings', 'admin_restore', 1, NULL, 1, 1),
-(343, NULL, 1, 0, '', 'plugins', 'admin_assets', 1, '', 0, 0),
-(344, NULL, 4, 0, '', 'plugins', 'admin_assets', 0, '', 0, 0);
+(343, NULL, 1, 0, '', 'plugins', 'admin_assets', 1, '', 2, 2),
+(344, NULL, 4, 0, '', 'plugins', 'admin_assets', 0, '', 2, 2),
+(345, NULL, 1, 0, '', 'plugins', 'admin_permissions', 1, '', 2, 2),
+(346, NULL, 4, 0, '', 'plugins', 'admin_permissions', 0, '', 2, 2);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, 1, '2012-11-25 23:09:37', '2012-11-25 23:10:38', '0000-00-00 00:00:00');

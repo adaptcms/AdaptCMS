@@ -1,6 +1,7 @@
 h4.image-filters {
 	padding-top: 15px;
 	padding-bottom: 10px;
+	padding-left: 20px;
 }
 
 .upload-file .remove {
@@ -18,9 +19,14 @@ h4.image-filters {
 }
 
 .clearfix.media {
-	margin-bottom: 15px;
+	margin-bottom: 35px;
 }
 
-.upload-file:nth-child(3n) {
-	clear: both;
+.upload-file:nth-child(4n) {
+	/*clear: both;*/
+}
+
+.upload-file
+{
+	margin-right: 14px;
 }

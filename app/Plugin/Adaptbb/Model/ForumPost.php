@@ -39,4 +39,26 @@ class ForumPost extends AdaptbbAppModel
             )
         )
     );
+
+    /**
+    * Function that json decodes user settings
+    *
+    * @param results of post data
+    * @return results
+    */
+    public function afterFind($results)
+    {
+        foreach($results as $key => $result)
+        {
+            if (!empty($result['User']))
+            {
+                $results[$key]['User']['settings'] = json_decode(
+                    $result['User']['settings'], 
+                    true
+                );
+            }
+        }
+
+        return $results;
+    }
 }

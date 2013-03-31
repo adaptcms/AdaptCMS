@@ -2,8 +2,16 @@
 
 class Media extends AppModel
 {
+    /**
+    * Name of our Model, table will look like 'adaptcms_media'
+    */
     public $name = 'Media';
-    
+
+    /**
+    * Media libraries may have multiple files related to it. Setting unique to 'keepExisting' means that if
+    * file #1 belongs to media #1 and then is added to media #2, cake will keep the first record
+    * and not delete/re-add it.
+    */
     public $hasAndBelongsToMany = array(
         'File' => array(
             'className' => 'File',
@@ -11,12 +19,20 @@ class Media extends AppModel
             'unique' => 'keepExisting'
         )
     );
+
+    /**
+    * All files belong to a user
+    */
     public $belongsTo = array(
         'User' => array(
             'className' => 'User',
             'foreignKey' => 'user_id'
         )
     );
+
+    /**
+    * Validation rules, title must have a value
+    */
     public $validate = array(
         'title' => array(
             'rule' => array(
@@ -25,6 +41,12 @@ class Media extends AppModel
         )
     );
 
+    /**
+    * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
+    * created the block. This is customizable so you can do a contain of related data if you wish.
+    *
+    * @return associative array
+    */
     public function getBlockData($data, $user_id)
     {
         $cond = array(
@@ -55,6 +77,11 @@ class Media extends AppModel
         return $this->find('all', $cond);
     }
 
+    /**
+    * Formats data into correct format to save
+    *
+    * @return true
+    */
     public function beforeSave()
     {
         if (!empty($this->data['File']) && !empty($this->data['Files']))
@@ -65,6 +92,11 @@ class Media extends AppModel
             $this->data['File'] = $this->data['Files'];
         }
 
+        if (!empty($this->data['Media']['title']))
+        {
+            $this->data['Media']['slug'] = $this->slug($this->data['Media']['title']);
+        }
+        
         return true;
     }
 }

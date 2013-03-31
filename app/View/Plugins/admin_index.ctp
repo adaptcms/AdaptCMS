@@ -139,6 +139,18 @@ $(document).ready(function() {
                                                 ));
                                             ?>
                                         </li>
+                                        <li>
+                                            <?= $this->Html->link(
+                                                '<i class="icon-group"></i> Permissions',
+                                                array(
+                                                    'action' => 'permissions',
+                                                    $key
+                                                ),
+                                                array(
+                                                    'escape' => false
+                                                ));
+                                            ?>
+                                        </li>
                                     <li>
                                         <?= $this->Html->link(
                                             '<i class="icon-trash"></i> Un-Install',

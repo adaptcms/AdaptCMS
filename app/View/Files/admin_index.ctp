@@ -114,7 +114,7 @@
                                         <li>
                                             <?= $this->Admin->delete(
                                                 $data['File']['id'],
-                                                $data['File']['filename'],
+                                                null,
                                                 'file'
                                             ) ?>
                                         </li>
@@ -124,7 +124,7 @@
                                         <li>
                                             <?= $this->Admin->restore(
                                                 $data['File']['id'],
-                                                $data['File']['filename']
+                                                null
                                             ) ?>
                                         </li>  
                                     <?php endif ?>
@@ -132,7 +132,7 @@
                                         <li>
                                             <?= $this->Admin->delete_perm(
                                                 $data['File']['id'],
-                                                $data['File']['filename'],
+                                                null,
                                                 'file'
                                             ) ?>
                                         </li> 

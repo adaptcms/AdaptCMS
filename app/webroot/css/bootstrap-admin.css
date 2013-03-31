@@ -6837,6 +6837,11 @@ a.thumbnail:hover {
   margin-bottom: 10px;
 }
 
+.selected-images.span12.thumbnails
+{
+  margin-top: 25px;
+}
+
 /*
  * end
 */

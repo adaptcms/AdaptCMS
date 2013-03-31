@@ -43,7 +43,7 @@ class User extends AppModel
         ),
         'password' => array(
             array(
-                'rule' => 'notEmpty',
+                'rule' => 'requirePassword',
                 'message' => 'Password cannot be empty'
             ),
             array(
@@ -64,6 +64,16 @@ class User extends AppModel
 
     public function passCompare() {
         return ($this->data[$this->alias]['password'] === $this->data[$this->alias]['password_confirm']);
+    }
+
+    public function requirePassword()
+    {
+        if (empty($this->data[$this->alias]['id']) && empty($this->data[$this->alias]['password']))
+        {
+            return false;
+        }
+
+        return true;
     }
  
     public function beforeSave() {

@@ -1,0 +1,19 @@
+h4.user,h4.subject
+{
+	font-size: 20px;
+}
+
+#posts .post .post-info .actions
+{
+	margin-top: 20px;
+}
+
+#posts .post .post-info .actions .btn-group
+{
+	margin-top: 20px;
+}
+
+.alert-error,.alert-success,#AddPost
+{
+	display: none;
+}

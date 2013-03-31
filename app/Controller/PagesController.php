@@ -265,16 +265,15 @@ class PagesController extends AppController
 					)
 				);
 			} else {
-				$this->loadModel('Category');
-
-				$category = $this->Category->find('first');
+				$category = $this->Article->Category->find('first');
 				$categories = $category['Category']['slug'];
 			}
 
 			$conditions = array(
-				'Article.status' => 1,
-				'Article.deleted_time' => '0000-00-00 00:00:00',
-				'Category.slug' => $categories
+                            'Article.status' => 1,
+                            'Article.publish_time <=' => date('Y-m-d H:i:s'),
+                            'Article.deleted_time' => '0000-00-00 00:00:00',
+                            'Category.slug' => $categories
 			);
 
 			$permissions = $this->getRelatedPermissions($this->permissionLookup(array('show' => true)));

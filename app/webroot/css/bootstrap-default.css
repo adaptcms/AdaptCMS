@@ -747,12 +747,6 @@ blockquote {
   margin: 0 0 20px;
   border-left: 5px solid #eeeeee;
 }
-blockquote p {
-  margin-bottom: 0;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 25px;
-}
 blockquote small {
   display: block;
   line-height: 20px;

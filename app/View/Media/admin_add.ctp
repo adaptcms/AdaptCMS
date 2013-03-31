@@ -2,25 +2,28 @@
 <?php $this->Html->addCrumb('Media Libraries', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Add Library', null) ?>
 
-<h1>Add Media Library</h1>
+<?= $this->Form->create('Media', array('class' => 'well admin-validate')) ?>
+	<h2>Add Media Library</h2>
 
-<?php
-	echo $this->Form->create('Media', array('class' => 'well admin-validate'));
-	echo $this->Form->input('title', array(
+	<?= $this->Form->input('title', array(
 		'type' => 'text', 
-		'class' => 'required',
-		'ng-model' => 'title'
-	));
+		'class' => 'required'
+	)) ?>
 
-	echo $this->Html->link('Attach Images <i class="icon icon-white icon-upload"></i>', '#media-modal', array('class' => 'btn btn-primary', 'escape' => false, 'data-toggle' => 'modal'));
-?>
-	<p>&nbsp;</p>
+	<?= $this->Html->link('Attach Images <i class="icon icon-white icon-upload"></i>', '#media-modal', array(
+		'class' => 'btn btn-primary', 
+		'escape' => false, 
+		'data-toggle' => 'modal'
+	)) ?>
+
 	<ul class="selected-images span12 thumbnails"></ul>
-
 	<div class="clearfix"></div>
-<?= $this->Form->hidden('created', array('value' => $this->Time->format('Y-m-d H:i:s', time()))) ?>
+	
+	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
+
 <?= $this->Form->end(array(
 	'label' => 'Submit',
 	'class' => 'btn btn-primary'
 )) ?>
+
 <?= $this->element('media_modal') ?>

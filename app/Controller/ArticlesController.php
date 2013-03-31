@@ -1,22 +1,43 @@
 <?php
-App::import('Vendor', 'ayah');
-App::import('Vendor', 'ayah_config');
 
-class ArticlesController extends AppController {
+class ArticlesController extends AppController
+{
+    /**
+    * Name of the Controller, 'Articles'
+    */
 	public $name = 'Articles';
-	public $paginate = array();
+
+    /**
+    * array of permissions for this page
+    */
 	private $permissions;
+
+	/**
+	* Array of helpers, 'Captcha' used for article comments and Fields for convenience methods.
+	*/
 	public $helpers = array(
 		'Captcha',
 		'Field'
 	);
 	
+    /**
+    * In this beforeFilter we will get the permissions to be used in the view files
+    *
+    * Additionally, a list of categories is set to the view and for add/edit pages, a list of files
+    * for the image field type
+    */
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
 
-		if ($this->params->action == "admin_add" || $this->params->action == "admin_edit" ||
-			$this->params->action == "admin_index") {
+		$admin_match = array(
+			'admin_add',
+			'admin_edit',
+			'admin_index'
+		);
+
+		if (in_array($this->params->action, $admin_match))
+		{
 			$this->set('categories', $this->Article->Category->find('list', array(
 	            'conditions' => array(
 	                'Category.deleted_time' => '0000-00-00 00:00:00'
@@ -24,9 +45,11 @@ class ArticlesController extends AppController {
 	        )));
 	    }
 
-	    if ($this->params->action == "admin_add" || $this->params->action == "admin_edit") {
+	    if ($this->params->action == "admin_add" || $this->params->action == "admin_edit")
+	    {
 			$this->loadModel('File');
-			if ($this->params->action == "admin_edit") {
+			if ($this->params->action == "admin_edit")
+			{
 				$images = $this->File->find('all', array(
 					'conditions' => array(
 						'File.deleted_time' => '0000-00-00 00:00:00',
@@ -52,362 +75,174 @@ class ArticlesController extends AppController {
 		$this->permissions = $this->getPermissions();
 	}
 
+    /**
+    * Returns a paginated index of Articles
+    *
+    * @return associative array of data
+    */
 	public function admin_index()
 	{
-		if (!isset($this->params->named['trash'])) {
-			$this->paginate = array(
-	            'order' => 'Article.created DESC',
-	            'contain' => array(
-	            	'User' => array(
-			            'conditions' => array(
-	            			'User.deleted_time' => '0000-00-00 00:00:00'
-	        			)
-		            ),
-	            	'Category' => array(
-	        	        'conditions' => array(
-	            			'Category.deleted_time' => '0000-00-00 00:00:00'
-	            		)
-	        	    )
-	        	),
-	            'limit' => $this->pageLimit,
-	            'conditions' => array(
-	            	'Article.deleted_time' => '0000-00-00 00:00:00'
-	            )
-	        );
+		$conditions = array();
+
+		if (!isset($this->params->named['trash']))
+		{
+			$conditions['Article.deleted_time'] = '0000-00-00 00:00:00';
 	    } else {
-			$this->paginate = array(
-	            'order' => 'Article.created DESC',
-	            'contain' => array(
-	            	'User' => array(
-			            'conditions' => array(
-	            			'User.deleted_time' => '0000-00-00 00:00:00'
-	        			)
-		            ),
-	            	'Category' => array(
-	        	        'conditions' => array(
-	            			'Category.deleted_time' => '0000-00-00 00:00:00'
-	            		)
-	        	    )
-	        	),
-	            'limit' => $this->pageLimit,
-	            'conditions' => array(
-	            	'Article.deleted_time !=' => '0000-00-00 00:00:00'
-	            )
-	        );	
+			$conditions['Article.deleted_time !='] = '0000-00-00 00:00:00';	
 	    }
 
 	    if (!empty($this->params->named['category_id']))
 	    {
-	    	$this->paginate['conditions']['Category.id'] = $this->params->named['category_id'];
+	    	$conditions['Category.id'] = $this->params->named['category_id'];
 	    }
 
 	    if ($this->permissions['any'] == 0)
 	    {
-	    	$this->paginate['conditions']['User.id'] = $this->Auth->user('id');
+	    	$conditions['User.id'] = $this->Auth->user('id');
 	    }
+
+		$this->paginate = array(
+            'order' => 'Article.created DESC',
+            'contain' => array(
+            	'User' => array(
+		            'conditions' => array(
+            			'User.deleted_time' => '0000-00-00 00:00:00'
+        			)
+	            ),
+            	'Category' => array(
+        	        'conditions' => array(
+            			'Category.deleted_time' => '0000-00-00 00:00:00'
+            		)
+        	    )
+        	),
+            'limit' => $this->pageLimit,
+            'conditions' => $conditions
+        );
         
-		$this->request->data = $this->paginate('Article');
-		
-		foreach($this->request->data as $key => $row) {
-			$this->request->data[$key]['Comment']['count'] = $this->Article->Comment->find('count', array(
-				'conditions' => array(
-					'Comment.article_id' => $row['Article']['id']
-				)
-			));
-		}
+		$this->request->data = $this->Article->Comment->getCommentsCount(
+			$this->paginate('Article')
+		);
 	}
 
-	public function admin_add($category_id = null)
-	{
-		$fields = $this->Article->Category->Field->find('all', array(
-			'conditions' => array(
-				'Field.category_id' => $category_id
-			),
-			'order' => array(
-				'Field.field_order ASC'
-			)
-		));
-		$this->set('category_id', $category_id);
-		$this->set(compact('fields'));
-		$this->set('radio_fields', $this->Article->searchArray($fields, "radio"));
+    /**
+    * Returns nothing before post
+    *
+    * On POST, returns error flash or success flash and redirect to index on success
+    *
+    * @param category_id
+    * @return mixed
+    */
+    public function admin_add($category_id = null)
+    {
+        $fields = $this->Article->Category->Field->getFields($category_id);
 
-        if ($this->request->is('post')) {
-        	if (!empty($this->request->data['RelatedData'])) {
-        		$this->request->data['Article']['related_articles'] = json_encode($this->request->data['RelatedData']);
-        		unset($this->request->data['RelatedData']);
-        	}
+        $this->set(compact('fields', 'category_id'));
 
-        	$this->request->data['Article']['slug'] = $this->slug($this->request->data['Article']['title']);
-        	$this->request->data['Article']['user_id'] = $this->Auth->user('id');
-	        if (!empty($this->request->data['FieldData'])) {
-	        	foreach($this->request->data['FieldData'] as $key => $row) {
-	        		$this->request->data['FieldData'][$key] = $this->slug($row);
-	        	}
-	        	
-	            $this->request->data['Article']['tags'] = 
-	                str_replace("'","",json_encode($this->request->data['FieldData']));
-	            unset($this->request->data['FieldData']);
-	        }
+        if (!empty($this->request->data))
+        {
+            $this->request->data['Article']['user_id'] = $this->Auth->user('id');
 
-	        if (!empty($this->request->data['Article']['settings'])) {
-	        	$this->request->data['Article']['settings'] = json_encode($this->request->data['Article']['settings']);
-	    	}
-
-	        $this->request->data['Article']['publish_time'] = 
-	        	date("Y-m-d H:i:s", strtotime(
-	        		$this->request->data['Article']['publishing_date'] . ' ' .
-	        		$this->request->data['Article']['publishing_time']
-	        ));
-
-        	if (isset($this->request->data['ArticleValue'])) {
-	        	foreach ($this->request->data['ArticleValue'] as $key => $row) {
-	        		if (isset($row['data']) && is_array($row['data'])) {
-	        			if (isset($row['data']) && is_array($row['data'])) {
-	        				// file upload here
-	        				$this->loadModel('File');
-
-	        				$fileUpload = $this->Article->uploadFile(
-	        					$row['data'], 
-	        					$row['field_id'], 
-	        					0, 
-	        					"ArticleValue", 
-	        					"File"
-	        				);
-	        				$this->Article->ArticleValue->save($fileUpload['ArticleValue']);
-	        				$this->File->save($fileUpload['File']);
-
-	        				unset($this->request->data['ArticleValue'][$key]);
-	        			}
-	        		} elseif (empty($row['data'])) {
-	        			unset($this->request->data['ArticleValue'][$key]);
-	        		}
-	        	}
-        	}
-        	if (isset($this->request->data['ArticleFieldData'])) {
-        		$fieldData = $this->request->data['ArticleFieldData'];
-        		unset($this->request->data['ArticleFieldData']);
-        	}
-
-            if ($this->Article->saveAssociated($this->request->data)) {
-            	
-            	if (isset($fieldData)) {
-	        		foreach ($fieldData as $key => $row) {
-	        			$this->Article->ArticleValue->create();
-
-						$ArticleValue = array(
-							'field_id' => $key,
-							'data' => json_encode($row['data']),
-							'article_id' => $this->Article->id
-							);
-						$this->Article->ArticleValue->save($ArticleValue);
-					}
-	        	}
-
-	        	$this->Article->ArticleValue->updateAll(
-	        		array('ArticleValue.article_id' => $this->Article->id),
-	        		array('ArticleValue.article_id' => 0)
-	        	);
-
+            if ($this->Article->saveAssociated($this->request->data))
+            {
                 $this->Session->setFlash('Your article has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
+                debug($this->request->data);
                 $this->Session->setFlash('Unable to add your article.', 'flash_error');
             }
         } 
-	}
+    }
 
-	public function admin_edit($id = null)
-	{
-      	$this->Article->id = $id;
+   /**
+   * Before POST, sets request data to form
+   *
+   * After POST, flash error or flash success and redirect to index
+   *
+   * @param id ID of the database entry, redirect to index if no permissions
+   * @return associative array of category data
+   */
+   public function admin_edit($id = null)
+   {
+   	$this->Article->id = $id;
 
-	    if ($this->request->is('get')) {
-	        $this->request->data = $this->Article->find('first', array(
-	        	'conditions' => array(
-	        		'Article.id' => $id
-	        	),
-	        	'contain' => array(
-        			'ArticleValue' => array(
-        				'File'
-        			),
-        			'Category',
-        			'User'
-	        	)
-	        ));
+	   if (!empty($this->request->data))
+      {
+         $this->request->data['Article']['user_id'] = $this->Auth->user('id');
 
-	        if (empty($this->request->data))
-	        {
-	        	$this->Session->setFlash('Article doesnt exist.', 'flash_error');
-	        	$this->redirect(array('action' => 'index'));
-	        }
+         if ($this->Article->saveAssociated($this->Article->ArticleValue->checkOnEdit($this->request->data)) )
+         {
+            $this->Session->setFlash('Your article has been updated.', 'flash_success');
+            $this->redirect(array('action' => 'index'));
+         } else {
+            $this->Session->setFlash('Unable to update your article.', 'flash_error');
+         }
+      }
+            
+        $this->request->data = $this->Article->find('first', array(
+            'conditions' => array(
+                'Article.id' => $id
+            ),
+            'contain' => array(
+                'Category',
+                'User'
+            )
+        ));
 
-	        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-	        {
-                $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-                $this->redirect(array('action' => 'index'));
-	        }
+        if (empty($this->request->data))
+        {
+            $this->Session->setFlash('Article doesnt exist.', 'flash_error');
+            $this->redirect(array('action' => 'index'));
+        }
 
-	        if (!empty($this->request->data['Article']['settings']))
-	        {
-	        	$this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
-	        }
-	        
-	        $this->set('related_articles', $this->Article->getRelatedArticles(
-	        	$id, 
-	        	$this->request->data['Article']['related_articles']
-	        ));
+        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));
+        }
 
-			$fields = $this->Article->Category->Field->find('all', array(
-				'conditions' => array(
-					'Field.category_id' => $this->request->data['Category']['id']
-				),
-				'order' => array(
-					'Field.field_order ASC'
-				)
-			));
+        $category_id = $this->request->data['Category']['id'];
 
-			$this->paginate = array(
-				'conditions' => array(
-					'Comment.article_id' => $id
-				),
-				'contain' => array(
-					'User'
-				)
-			);
-			$comments = $this->paginate('Comment');
+        $this->set('related_articles', $this->Article->getRelatedArticles(
+            $id, 
+            $this->request->data['Article']['related_articles']
+        ));
 
-			$this->set('category_id', $this->request->data['Category']['id']);
-			$this->set(compact('fields', 'comments'));
-			$this->set('radio_fields', $this->Article->searchArray($fields, "radio"));
-	    } else {
-        	$this->request->data['Article']['slug'] = $this->slug($this->request->data['Article']['title']);
-        	$this->request->data['Article']['user_id'] = $this->Auth->user('id');
-	        
-	        if (!empty($this->request->data['FieldData'])) {
-	        	foreach($this->request->data['FieldData'] as $key => $row) {
-	        		$this->request->data['FieldData'][$key] = $this->slug($row);
-	        	}
+        $this->paginate = array(
+            'conditions' => array(
+                'Comment.article_id' => $id
+            ),
+            'contain' => array(
+                'User'
+            )
+        );
+        $comments = $this->paginate('Comment');
 
-	            $this->request->data['Article']['tags'] = 
-	                str_replace("'","",json_encode($this->request->data['FieldData']));
-	            unset($this->request->data['FieldData']);
-	        }
+        $fields = $this->Article->Category->Field->getFields($category_id, $id);
 
-	        if (!empty($this->request->data['Article']['settings'])) {
-	        	$this->request->data['Article']['settings'] = json_encode($this->request->data['Article']['settings']);
-	    	}
+        $this->set(compact('fields', 'category_id', 'comments'));
+    }
 
-	        $this->request->data['Article']['publish_time'] = 
-	        	date("Y-m-d H:i:s", strtotime(
-	        		$this->request->data['Article']['publishing_date'] . ' ' .
-	        		$this->request->data['Article']['publishing_time']
-	        ));
-
-	        if ($this->request->data['Article']['publish_time'] == date("Y-m-d H:i:")."00" || 
-	        	$this->request->data['Article']['publish_time'] <= date("Y-m-d H:i:")."00") {
-	        	$this->request->data['Article']['publish_time'] = "0000-00-00 00:00:00";
-	        }
-
-        	if (isset($this->request->data['ArticleValue'])) {
-	        	foreach ($this->request->data['ArticleValue'] as $key => $row) {
-        			if (isset($row['data']['size']) && $row['data']['size'] > 0 && is_array($row['data'])) {
-        				// file upload here
-        				$this->loadModel('File');
-
-						$fileUpload = $this->Article->uploadFile(
-        					$row['data'], 
-        					$row['field_id'], 
-        					$id, 
-        					"ArticleValue", 
-        					"File"
-        				);
-
-        				if (!empty($row['filename']) && $row['filename'] == $row['data']['name']) {
-        					$file_id = $this->File->findByFilename($row['filename']);
-        					$fileUpload['File']['File']['id'] = $file_id['File']['id'];
-
-        					$this->File->save($fileUpload['File']);
-        				} elseif (!empty($row['filename'])) {
-        					$fileUpload['ArticleValue']['ArticleValue']['id'] = $row['id'];
-
-	        				$this->Article->ArticleValue->save($fileUpload['ArticleValue']);
-	        				$this->File->save($fileUpload['File']);        					
-        				} else {
-	        				$this->Article->ArticleValue->save($fileUpload['ArticleValue']);
-	        				$this->File->save($fileUpload['File']);
-	        			}
-
-	        			unset($this->request->data['ArticleValue'][$key]);
-
-        			} elseif (!empty($row['delete']) && $row['delete'] == 1) {
-        				$this->Article->ArticleValue->delete($row['id']);
-        				unset($this->request->data['ArticleValue'][$key]);
-        			} elseif (empty($row['id']) && empty($row['data'])) {
-        				unset($this->request->data['ArticleValue'][$key]);
-        			}
-	        	}
-        	}
-
-        	if (isset($this->request->data['ArticleFieldData'])) {
-        		$fieldData = $this->request->data['ArticleFieldData'];
-        		unset($this->request->data['ArticleFieldData']);
-        	}
-        	
-            if ($this->Article->saveAssociated($this->request->data)) {
-            	if (isset($fieldData)) {
-	        		foreach ($fieldData as $key => $row) {
-	        			if (!empty($row['id']) && !empty($row['data'])) {
-    						$ArticleValue = array(
-	        					'ArticleValue' => array(
-		        					'id' => $row['id'],
-									'field_id' => $key,
-									'data' => json_encode($row['data']),
-									'article_id' => $this->Article->id
-									)
-								);
-
-							$this->Article->ArticleValue->save($ArticleValue);
-							unset($fieldData[$key]);
-						} elseif (!empty($row['data'])) {
-							$this->Article->ArticleValue->create();
-
-							$ArticleValue = array(
-								'field_id' => $key,
-								'data' => json_encode($row['data']),
-								'article_id' => $this->Article->id
-								);
-
-							$this->Article->ArticleValue->save($ArticleValue);
-							unset($fieldData[$key]);
-						} elseif(empty($row['data']) && !empty($row['id'])) {
-							$this->Article->ArticleValue->delete($row['id']);
-						}
-					}
-	        	}
-
-	            $this->Session->setFlash('Your article has been updated.', 'flash_success');
-	            $this->redirect(array('action' => 'index'));
-	        } else {
-	            $this->Session->setFlash('Unable to update your article.', 'flash_error');
-	        }
-	    }
-
-	}
-
-	public function admin_delete($id = null, $title = null, $permanent = null)
-	{
-		if ($this->request->is('post')) {
-	        throw new MethodNotAllowedException();
-	    }
-
-	    $this->Article->id = $id;
+    /**
+    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+    *
+    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @param title Title of this entry, used for flash message
+    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
+    * @return redirect
+    */
+    public function admin_delete($id = null, $title = null, $permanent = null)
+    {
+        $this->Article->id = $id;
 
         $data = $this->Article->find('first', array(
-        	'conditions' => array(
-        		'Article.id' => $id
-        	),
-        	'contain' => array(
-    			'User'
-        	)
+            'conditions' => array(
+                'Article.id' => $id
+            ),
+            'contain' => array(
+                'User'
+            )
         ));
         if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
@@ -415,32 +250,40 @@ class ArticlesController extends AppController {
             $this->redirect(array('action' => 'index'));	        	
         }
 
-	    if (!empty($permanent)) {
-	    	$this->Article->ArticleValue->deleteAll(array('ArticleValue.article_id' => $id));
-	    	$delete = $this->Article->delete($id);
-	    } else {
-	    	$delete = $this->Article->saveField('deleted_time', $this->Article->dateTime());
-	    }
+        if (!empty($permanent))
+        {
+            $this->Article->ArticleValue->deleteAll(array('ArticleValue.article_id' => $id));
+            $delete = $this->Article->delete($id);
+        } else {
+            $delete = $this->Article->saveField('deleted_time', $this->Article->dateTime() );
+        }
 
-	    if ($delete) {
-	        $this->Session->setFlash('The article `'.$title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash('The article `'.$title.'` has NOT been deleted.', 'flash_error');
-	    }
+        if ($delete)
+        {
+            $this->Session->setFlash('The article `'.$title.'` has been deleted.', 'flash_success');
+        } else {
+            $this->Session->setFlash('The article `'.$title.'` has NOT been deleted.', 'flash_error');
+        }
 
-	    if (!empty($permanent)) {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
-	    } else {
-	    	$this->redirect(array('action' => 'index'));
-	    }
-	}
+        if (!empty($permanent))
+        {
+            $this->redirect(array('action' => 'index', 'trash' => 1));
+        } else {
+            $this->redirect(array('action' => 'index'));
+        }
+    }
 
+    /**
+    * Restoring an item will take an item in the trash and reset the delete time
+    *
+    * This makes it live wherever applicable
+    *
+    * @param id ID of database entry, redirect if no permissions
+    * @param title Title of this entry, used for flash message
+    * @return redirect
+    */
 	public function admin_restore($id = null, $title = null)
 	{
-		if ($this->request->is('post')) {
-	        throw new MethodNotAllowedException();
-	    }
-
 	    $this->Article->id = $id;
 
         $data = $this->Article->find('first', array(
@@ -457,7 +300,8 @@ class ArticlesController extends AppController {
             $this->redirect(array('action' => 'index'));	        	
         }
 
-	    if ($this->Article->saveField('deleted_time', '0000-00-00 00:00:00')) {
+	    if ($this->Article->saveField('deleted_time', '0000-00-00 00:00:00'))
+	    {
 	        $this->Session->setFlash('The article `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
@@ -466,40 +310,36 @@ class ArticlesController extends AppController {
 	    }
 	}
 
+	/**
+	* AJAX Admin function that does a search based on a search parameter.
+	*
+	* If provided, it will also filter by a category and exclude an article.
+	*
+	* @return json_encode array of data
+	*/
 	public function admin_ajax_related_search()
 	{
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-    	if (!empty($this->request->data['id'])) {
-    		$id = $this->request->data['id'];
-    	} else {
-    		$id = '';
+		$conditions = array(
+       		'conditions' => array(
+            	'Article.title LIKE' => '%'.$this->request->data['search'].'%',
+            	'Article.deleted_time' => '0000-00-00 00:00:00'
+       		),
+			'contain' => array(
+				'Category'
+			)
+		);
+
+    	if (!empty($this->request->data['category']))
+    	{
+    		$conditions['conditions']['Article.category_id'] = $this->request->data['category'];
     	}
 
-    	if (!empty($this->request->data['category'])) {
-    		$conditions = array(
-	       		'conditions' => array(
-	            	'Article.title LIKE' => '%'.$this->request->data['search'].'%',
-	            	'Article.deleted_time' => '0000-00-00 00:00:00',
-	            	'Article.category_id' => $this->request->data['category'],
-	            	'Article.id !=' => $id
-	       		),
-				'contain' => array(
-					'Category'
-				)
-			);
-    	} else {
-    		$conditions = array(
-	       		'conditions' => array(
-	            	'Article.title LIKE' => '%'.$this->request->data['search'].'%',
-	            	'Article.deleted_time' => '0000-00-00 00:00:00',
-	            	'Article.id !=' => $id
-	       		),
-				'contain' => array(
-					'Category'
-				)
-			);
+    	if (!empty($this->request->data['id']))
+    	{
+    		$conditions['conditions']['Article.id !='] = $this->request->data['id'];
     	}
 
 	    if ($this->permissions['any'] == 0)
@@ -507,9 +347,10 @@ class ArticlesController extends AppController {
 	    	$conditions['conditions']['Article.user_id'] = $this->Auth->user('id');
 	    }
 
-		$results = $this->Article->find("all", $conditions);
+		$results = $this->Article->find('all', $conditions);
 
-        foreach($results as $result) {            
+        foreach($results as $result)
+        {            
             $data[] = array(
             	'id' =>$result['Article']['id'],
             	'title' => $result['Article']['title'],
@@ -521,14 +362,24 @@ class ArticlesController extends AppController {
         return json_encode($data);
 	}
 
+	/**
+	* TODO: Move html out, into an element or view
+	* AJAX Function that attempts to update the related articles in the admin.
+	* An array of ids are parsed to JSON and attempted to be saved.
+	*
+	* @return string html message on success or error
+	*/
 	public function admin_ajax_related_add()
 	{
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-	    $this->request->data['Article']['related_articles'] = json_encode($this->request->data['Article']['ids']);
+	    $this->request->data['Article']['related_articles'] = json_encode(
+	    	$this->request->data['Article']['ids']
+	    );
 
-	    if ($this->Article->save($this->request->data)) {
+	    if ($this->Article->save($this->request->data))
+	    {
 			return '<div id="flashMessageRelated" class="alert alert-success">
 					<strong>Success</strong> Related Articles updated.
     			</div>';
@@ -539,22 +390,44 @@ class ArticlesController extends AppController {
     	}
 	}
 
+	/**
+	* View action for an article. Permissions are checked, core article data is retrieved, threaded
+	* array of comments are retrieved and related comment settings.
+	*
+	* Related articles are also retrieved, a check is done to make sure the article data is not empty.
+	* One last check is to see if a custom template and exists and if so, use it.
+	*
+	* @param slug of article
+	* @return associative array
+	*/
 	public function view($slug)
 	{
-		$this->request->data = $this->Article->find('first', array(
-			'conditions' => array(
-				'Article.slug' => $slug,
-				'Article.deleted_time' => '0000-00-00 00:00:00'
-			),
-			'contain' => array(
-				'Category',
-				'User',
-				'ArticleValue' => array(
-					'Field',
-					'File'
-				)
-			)
-		));
+            $this->request->data = $this->Article->find('first', array(
+                    'conditions' => array(
+                            'Article.slug' => $slug,
+                            'Article.deleted_time' => '0000-00-00 00:00:00',
+                            'Article.publish_time <=' => date('Y-m-d H:i:s'),
+                            'Article.status' => 1
+                    ),
+                    'contain' => array(
+                            'Category',
+                            'User',
+                            'ArticleValue' => array(
+                                    'Field',
+                                    'File'
+                            )
+                    )
+            ));
+            
+        if (empty($this->request->data))
+        {
+            $this->Session->setFlash('Invalid Article', 'flash_error');
+            $this->redirect(array(
+                    'controller' => 'pages', 
+                    'action' => 'display', 
+                    'home'
+            ));
+        }
 
         if ($this->Auth->user('id') && 
         	$this->request->data['User']['id'] != $this->Auth->user('id') && 
@@ -598,19 +471,14 @@ class ArticlesController extends AppController {
     		$this->set(compact('wysiwyg'));
     	}
     	
-		if (
-			empty($this->request->data['Article']['id']) ||
-			$this->request->data['Article']['status'] == 0 ||
-			$this->request->data['Article']['publish_time'] > date('Y-m-d H:i:s')) {
-				$this->Session->setFlash(
-					Configure::read('alert_btn').'
-					<strong>Error</strong> Invalid Article', 
-					'default', 
-					array(
-						'class' => 'alert alert-error'
-					)
-				);
-				$this->redirect(array('controller' => 'pages', 'action' => 'display', 'home'));
+		if (empty($this->request->data['Article']['id']))
+		{
+			$this->Session->setFlash('Invalid Article', 'flash_error');
+			$this->redirect(array(
+				'controller' => 'pages', 
+				'action' => 'display', 
+				'home'
+			));
 		}
 
         $this->set('related_articles', $this->Article->getRelatedArticles(
@@ -624,24 +492,28 @@ class ArticlesController extends AppController {
         	$slug = $this->request->data['Category']['slug'];
 
 			if ($this->theme != "Default" && 
-				file_exists(VIEW_PATH.'Themed/'.$this->theme.'/Articles/'.$slug.'.ctp') ||\
+				file_exists(VIEW_PATH.'Themed/'.$this->theme.'/Articles/'.$slug.'.ctp') ||
 				file_exists(VIEW_PATH.'Articles/'.$slug.'.ctp')) {
 				$this->render(implode('/', array($slug)));
 			}
         }
 	}
 
-	public function tag($tag)
+	/**
+	* Listing of articles by tag
+	*
+	* @param tag name
+	* @param limit by default lists 10 per page
+	* @return associative array of articles
+	*/
+	public function tag($tag, $limit = 10)
 	{
 		$slug = $this->slug($tag);
-
-		if (empty($limit)) {
-			$limit = 10;
-		}
 
 		$conditions = array(
 			'Article.tags LIKE' => '%"'.$slug.'"%',
 			'Article.status' => 1,
+                        'Article.publish_time <=' => date('Y-m-d H:i:s'),
 			'Article.deleted_time' => '0000-00-00 00:00:00'
 		);
 
@@ -672,53 +544,61 @@ class ArticlesController extends AppController {
         $this->set('tag', $slug);
 	}
 
-	public function rss_index($category = null, $limit = null)
+	/**
+	* Not fully functional, renders rss file but headers are not proper XML.
+	*
+	* @param category filter by category, optional
+	* @param limit amount to list on rss, 10 by default
+	* @return associative array of articles
+	*/
+	public function rss_index($category = null, $limit = 10)
 	{
-		if (!empty($category)) {
-			$cond =  array(
-				'Article.status' => 1,
-				'Article.deleted_time' => '0000-00-00 00:00:00',
-				'Category.slug' => $category
-			);			
-		} else {
-			$cond =  array(
-				'Article.status' => 1,
-				'Article.deleted_time' => '0000-00-00 00:00:00'
-			);
-		}
+            $cond =  array(
+                    'Article.status' => 1,
+                    'Article.publish_time <=' => date('Y-m-d H:i:s'),
+                    'Article.deleted_time' => '0000-00-00 00:00:00'
+            );
+            
+            if (!empty($category)) 
+            {
+                $cond['Category.slug'] = $category;
+            }
 
-		if (empty($limit)) {
-			$limit = 10;
-		}
+            $this->paginate = array(
+                    'contain' => array(
+                            'Category',
+                            'User',
+                            'ArticleValue' => array(
+                                    'Field'
+                            )
+                    ),
+                    'conditions' => $cond,
+                    'limit' => $limit,
+                    'order' => 'Article.created DESC'
+            );
 
-		$this->paginate = array(
-			'contain' => array(
-				'Category',
-				'User',
-				'ArticleValue' => array(
-					'Field'
-				)
-			),
-			'conditions' => $cond,
-			'limit' => $limit,
-			'order' => 'Article.created DESC'
-		);
+            if ($this->RequestHandler->isRss() ) {
+                    // echo 1;
+            }
 
-		if ($this->RequestHandler->isRss() ) {
-			echo 1;
-		}
-    
-		$this->request->data = $this->paginate('Article');
-		Configure::write('debug', 0);
-		$this->layout = 'rss/default';
-		$this->RequestHandler->setContent('rss', 'application/rss+xml');
+            $this->request->data = $this->paginate('Article');
+            Configure::write('debug', 0);
+            $this->layout = 'rss/default';
+            $this->RequestHandler->setContent('rss', 'application/rss+xml');
 	}
 
+	/**
+	* Experimental function, useable for a REST interface
+	*
+	* @return json_encode array of article data
+	*/
 	public function index()
 	{
 		$data = $this->Article->find('all', array(
 			'conditions' => array(
-				'Article.deleted_time' => '0000-00-00 00:00:00'
+				'Article.deleted_time' => '0000-00-00 00:00:00',
+                                'Article.publish_time <=' => date('Y-m-d H:i:s'),
+                                'Article.status' => 1
 			),
 			'contain' => array(
 				'User',
@@ -729,7 +609,8 @@ class ArticlesController extends AppController {
 			)
 		));
 
-		foreach($data as $key => $row) {
+		foreach($data as $key => $row)
+		{
 			$data[$key] = $row['Article'];
 			$data[$key]['category'] = $row['Category']['title'];
 			$data[$key]['user'] = $row['User']['username'];

@@ -131,7 +131,6 @@ class MessagesController extends AppController
 	/**
 	* AJAX Functionality and non-ajax to create a new message or ajax replying to one.
 	*
-	* @param box_slug
 	* @return json_encode array if AJAX request, otherwise flash/redirect
 	*/
 	public function send()

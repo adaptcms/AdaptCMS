@@ -25,6 +25,8 @@
     <?= $this->AutoLoadJS->getJs() ?>
     <?= $this->AutoLoadJS->getCss() ?>
 
+    <?= $this->Html->css("font-awesome.min.css") ?>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -69,6 +71,7 @@
             				array(
             					'controller' => 'users', 
             					'action' => 'profile', 
+                      'plugin' => null,
             					$username
             				),
             				array('class' => 'navbar-link')
@@ -84,7 +87,8 @@
                   <?= $this->Html->link(' (logout)', 
                     array(
                       'controller' => 'users', 
-                      'action' => 'logout'
+                      'action' => 'logout',
+                      'plugin' => null
                     )
                   ) ?>
                 <?php endif ?>
@@ -92,6 +96,7 @@
             		Please
             		<?= $this->Html->link('login', 
             				array(
+                      'plugin' => null,
             					'controller' => 'users', 
             					'action' => 'login'
             				),
@@ -99,6 +104,7 @@
             			) ?> or 
         			<?= $this->Html->link('register', 
         				array(
+                  'plugin' => null,
         					'controller' => 'users', 
         					'action' => 'register'
         				),
@@ -124,12 +130,14 @@
               <li class="nav-header">Links</li>
               <li>
                 <?= $this->Html->link('Media', array(
+                  'plugin' => null,
                   'controller' => 'media',
                   'action' => 'index'
                 )) ?>
               </li>
               <li>
               	<?= $this->Html->link('RSS Feed', array(
+                    'plugin' => null,
               			'rss' => true,
               			'controller' => 'articles',
               			'action' => 'index'
@@ -137,6 +145,7 @@
               </li>
               <li>
               	<?= $this->Html->link('Contact Us', array(
+                    'plugin' => null,
               			'controller' => 'pages',
               			'action' => 'display',
               			'contact-us'
@@ -147,6 +156,7 @@
                 <?php foreach($block_data['categories-list'] as $cat): ?>
                   <li>
                     <?= $this->Html->link($cat['Category']['title'], array(
+                        'plugin' => null,
                         'controller' => 'categories',
                         'action' => 'view',
                         $cat['Category']['slug']
@@ -155,17 +165,19 @@
                 <?php endforeach ?>
               <?php else: ?>
                 <li>
-                  <?= $this->Html->link('Movies', array(
-                      'controller' => 'categories',
-                      'action' => 'view',
-                      'movies'
-                  )) ?>
-                </li>
-                <li>
                   <?= $this->Html->link('News', array(
+                      'plugin' => null,
                       'controller' => 'categories',
                       'action' => 'view',
                       'news'
+                  )) ?>
+                </li>
+                <li>
+                  <?= $this->Html->link('Reviews', array(
+                      'plugin' => null,
+                      'controller' => 'categories',
+                      'action' => 'view',
+                      'reviews'
                   )) ?>
                 </li>
               <?php endif ?>

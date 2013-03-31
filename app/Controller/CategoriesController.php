@@ -265,6 +265,7 @@ class CategoriesController extends AppController
 		$conditions = array(
 			'Category.slug' => $slug,
 			'Article.status' => 1,
+                        'Article.publish_time <=' => date('Y-m-d H:i:s'),
 			'Article.deleted_time' => '0000-00-00 00:00:00'
 		);
 
@@ -293,18 +294,28 @@ class CategoriesController extends AppController
 			$articles
 		);
 
+		$category = $this->Category->findBySlug($slug);
+
+		if (empty($category))
+		{
+			$this->Session->setFlash('Invalid Category', 'flash_error');
+			$this->redirect(array(
+				'controller' => 'pages', 
+				'action' => 'display', 
+				'home'
+			));
+		}
+
+		$this->set('category', $category['Category']);
+		$this->set('article', $this->request->data);
+		$this->set('title_for_layout', ucfirst($slug));
+
 		if ($this->theme != "Default" && 
 			file_exists(VIEW_PATH.'Themed/'.$this->theme.'/Categories/'.$slug.'.ctp') ||
 			file_exists(VIEW_PATH.'Categories/'.$slug.'.ctp'))
 		{
 			$this->render(implode('/', array($slug)));
 		}
-
-		$category = $this->Category->findBySlug($slug);
-
-		$this->set('category', $category['Category']);
-		$this->set('article', $this->request->data);
-		$this->set('title_for_layout', ucfirst($slug));
 	}
 
 	/**

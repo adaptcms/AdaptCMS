@@ -1,0 +1,27 @@
+#forum-index .category thead tr th h3
+{
+	padding-top: 0;
+	margin-bottom: -7px;
+	color: #fff;
+}
+
+#forum-index-stats-header h3
+{
+	color: #fff;
+	margin-left: 10px;
+}
+
+#forum-index-stats-header
+{
+	margin-bottom: -10px;
+}
+
+#forum-stats
+{
+	/*padding-bottom: 35px;*/
+}
+
+#forum-stats .pull-left
+{
+	margin-right: 50px;
+}

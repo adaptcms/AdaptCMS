@@ -340,16 +340,22 @@ class ForumsController extends AdaptbbAppController
             'order' => 'ForumCategory.ord ASC'
         ));
 
-        $this->set('categories', $this->request->data);
+        $this->set('categories', $this->Forum->getIndexStats($this->request->data));
     }
 
     /**
     * Returns a paginated list of topics along with forum data
     *
+    * @param slug of forum
     * @return associative array of topic data
     */
-    public function view($slug)
+    public function view($slug = null)
     {
+        if (empty($slug) && !empty($this->params['slug']))
+        {
+            $slug = $this->params['slug'];
+        }
+
         $forum = $this->Forum->findBySlug($slug);
 
         if (empty($forum['Forum']))
@@ -368,10 +374,11 @@ class ForumsController extends AdaptbbAppController
                 'Forum',
                 'User'
             ),
-            'order' => 'ForumTopic.created ASC'
+            'order' => 'ForumTopic.created ASC',
+            'limit' => Configure::read('Adaptbb.num_topics_per_page_forum')
         );
 
-        $this->set('topics', $this->paginate('ForumTopic'));
+        $this->set('topics', $this->Forum->ForumTopic->getStats($this->paginate('ForumTopic')) );
         $this->set('forum', $forum['Forum']);
     }
 }

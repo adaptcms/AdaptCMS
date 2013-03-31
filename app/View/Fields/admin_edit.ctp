@@ -53,7 +53,6 @@
 				'empty' => '- Choose -', 
 				'class' => 'required'
 			)) ?>
-			?>
 
 			<div class="field_options" style="margin-bottom: 9px">
 				<?= $this->Form->input('field_options', array(

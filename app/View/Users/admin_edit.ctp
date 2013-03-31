@@ -44,7 +44,7 @@
 		
 		<?php    
 			echo $this->Form->input('username', array('type' => 'text', 'class' => 'required'));
-			echo $this->Form->input('password', array('type' => 'password', 'label' => 'New Password?'));
+			echo $this->Form->input('password', array('type' => 'password', 'label' => 'New Password?', 'required' => false));
 			echo $this->Form->input('password_confirm', array('type' => 'password', 'label' => 'Confirm New Password'));
 			echo $this->Form->input('email', array('type' => 'text', 'class' => 'required'));
 			echo $this->Form->input('role_id', array('empty' => '- choose -', 'class' => 'required'));

@@ -6770,3 +6770,3807 @@ Request URL: /adaptcms/css/cake.generic.css
 Stack Trace:
 #0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
 #1 {main}
+2013-03-16 15:05:41 Error: Fatal Error (4): syntax error, unexpected ';' in [/home/charlie/Sites/adaptcms/app/View/Files/admin_add.ctp, line 99]
+2013-03-16 15:05:41 Error: [FatalErrorException] syntax error, unexpected ';'
+Request URL: /adaptcms/admin/files/add/multiple:1
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 99)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 99, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 99, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-16 15:18:41 Error: [PDOException] SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'beforeAdd' at line 1
+Request URL: /adaptcms/admin/files/add
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('beforeAdd', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(670): DboSource->execute('beforeAdd', Array, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(612): DboSource->fetchAll('beforeAdd', Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(800): DboSource->query('beforeAdd', Array, Object(File))
+#5 /home/charlie/Sites/adaptcms/app/Controller/FilesController.php(77): Model->__call('beforeAdd', Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/FilesController.php(77): File->beforeAdd(Array)
+#7 [internal function]: FilesController->admin_add()
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(FilesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(FilesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-16 16:45:42 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 16:59:45 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 16:59:52 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:03:18 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:05:00 Error: [MissingControllerException] Controller class ForumsController could not be found.
+Exception Attributes: array (
+  'class' => 'ForumsController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/forums
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:05:24 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/forums
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:05:57 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:06:04 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/pc-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:06:15 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forum_categories/view/halo-4
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:06:18 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/forums/forum_categories/view/halo-4
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:07:22 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/xbox-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:07:54 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/xbox-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:08:13 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:09:50 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:12:10 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:12:11 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/xbox-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:12:23 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:12:28 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/xbox-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:12:31 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:12:32 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:12:45 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:13:38 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forum_categories/view/halo-4
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:14:01 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forum_categories/view/halo-4
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:14:04 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:14:13 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:14:37 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forum_topics/view/dsa
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:18:04 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:18:28 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:19:22 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:19:32 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/pc-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:19:46 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/pc-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:20:05 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:20:10 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forum_topics/add/pc-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:20:55 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:21:52 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:22:01 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:22:04 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/adaptbb/forums/view/pc-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:22:19 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:22:39 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:33:43 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:33:47 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/admin/adaptbb/forums
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:33:55 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/admin/plugins
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:34:00 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/admin/users
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:35:22 Error: [MissingControllerException] Controller class Controller could not be found.
+Exception Attributes: array (
+  'class' => 'Controller',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/admin/users
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:35:43 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 17:36:59 Error: [MissingControllerException] Controller class ForumsController could not be found.
+Exception Attributes: array (
+  'class' => 'ForumsController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/forums/pc-version/new
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:20:53 Error: [MissingControllerException] Controller class ForumsController could not be found.
+Exception Attributes: array (
+  'class' => 'ForumsController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/forums/pc-version/new
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:24:04 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING in [/home/charlie/Sites/adaptcms/app/Config/routes.php, line 43]
+2013-03-16 18:24:04 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING
+Request URL: /adaptcms/admin/users
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 43)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 43, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 43, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-16 18:24:17 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING in [/home/charlie/Sites/adaptcms/app/Config/routes.php, line 43]
+2013-03-16 18:24:17 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING
+Request URL: /adaptcms/admin/users
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 43)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 43, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 43, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-16 18:24:33 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING in [/home/charlie/Sites/adaptcms/app/Config/routes.php, line 43]
+2013-03-16 18:24:33 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING
+Request URL: /adaptcms/admin/users
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 43)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 43, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 43, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-16 18:25:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:39:53 Error: Fatal Error (4): syntax error, unexpected '}' in [/home/charlie/Sites/adaptcms/app/Plugin/Adaptbb/Controller/ForumTopicsController.php, line 73]
+2013-03-16 18:39:53 Error: [FatalErrorException] syntax error, unexpected '}'
+Request URL: /adaptcms/forums/pc-version/dsa
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 73)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 73, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 73, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-16 18:39:53 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:39:59 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:40:49 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:41:14 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:41:27 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:41:39 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:42:10 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:43:28 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:44:08 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 18:44:49 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:09:18 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:09:32 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:14:19 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:15:21 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:15:37 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:15:56 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:18:27 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:18:40 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:19:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:20:32 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:21:17 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:21:49 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:22:41 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:24:56 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:25:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:25:54 Error: [MissingControllerException] Controller class UsersController could not be found.
+Exception Attributes: array (
+  'class' => 'UsersController',
+  'plugin' => 'Adaptbb',
+)
+Request URL: /adaptcms/adaptbb/users/profile/admin
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:27:00 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:27:54 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:28:29 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:28:55 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:29:05 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:29:30 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:29:40 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:29:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:43:09 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:43:23 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:50:24 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:50:42 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:51:07 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:51:14 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:51:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:51:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:52:26 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:54:05 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:55:02 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:55:26 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:56:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:56:15 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:56:31 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:57:52 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:58:08 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:59:00 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:59:02 Error: [MissingControllerException] Controller class MessagesController could not be found.
+Exception Attributes: array (
+  'class' => 'MessagesController',
+  'plugin' => 'Adaptbb',
+)
+Request URL: /adaptcms/adaptbb/messages/send/admin
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 19:59:14 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 20:01:08 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 20:08:04 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 21:44:03 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:02:46 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:18:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:19:52 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:20:10 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:26:23 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:29:48 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:30:14 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:44:01 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:45:08 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:51:17 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:51:27 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:51:35 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:51:47 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:53:30 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:53:50 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:54:56 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:55:49 Error: Fatal Error (4): syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')' in [/home/charlie/Sites/adaptcms/app/Plugin/Adaptbb/View/Elements/post_reply.ctp, line 5]
+2013-03-16 22:55:49 Error: [FatalErrorException] syntax error, unexpected T_CONSTANT_ENCAPSED_STRING, expecting ')'
+Request URL: /adaptcms/forums/pc-version/dsa
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 5)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 5, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 5, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-16 22:56:04 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:57:01 Error: [PrivateActionException] Private Action ForumPostsController::ajax_add() is not directly accessible.
+Exception Attributes: array (
+  'controller' => 'ForumPostsController',
+  'action' => 'ajax_add',
+)
+Request URL: /adaptcms/adaptbb/forum_posts/ajax_add
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ForumPostsController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2013-03-16 22:57:11 Error: [PrivateActionException] Private Action ForumPostsController::ajax_add() is not directly accessible.
+Exception Attributes: array (
+  'controller' => 'ForumPostsController',
+  'action' => 'ajax_add',
+)
+Request URL: /adaptcms/adaptbb/forum_posts/ajax_add
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ForumPostsController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2013-03-16 22:57:50 Error: [PrivateActionException] Private Action ForumPostsController::ajax_new() is not directly accessible.
+Exception Attributes: array (
+  'controller' => 'ForumPostsController',
+  'action' => 'ajax_new',
+)
+Request URL: /adaptcms/adaptbb/forum_posts/ajax_new
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ForumPostsController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2013-03-16 22:58:07 Error: [PrivateActionException] Private Action ForumPostsController::ajax_new() is not directly accessible.
+Exception Attributes: array (
+  'controller' => 'ForumPostsController',
+  'action' => 'ajax_new',
+)
+Request URL: /adaptcms/adaptbb/forum_posts/ajax_new
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ForumPostsController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2013-03-16 22:58:09 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:58:32 Error: [PrivateActionException] Private Action ForumPostsController::ajax_post() is not directly accessible.
+Exception Attributes: array (
+  'controller' => 'ForumPostsController',
+  'action' => 'ajax_post',
+)
+Request URL: /adaptcms/adaptbb/forum_posts/ajax_post
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ForumPostsController), Object(CakeRequest), Object(CakeResponse))
+#2 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#3 {main}
+2013-03-16 22:58:32 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:58:40 Error: [MissingControllerException] Controller class AjaxController could not be found.
+Exception Attributes: array (
+  'class' => 'AjaxController',
+  'plugin' => 'Adaptbb',
+)
+Request URL: /adaptcms/adaptbb/ajax/forum_posts/post
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:59:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:59:23 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:59:23 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 22:59:43 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:00:10 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:06:39 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:07:48 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:08:09 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:08:57 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:10:11 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:11:44 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:11:59 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:13:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:14:33 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:15:28 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:15:44 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:19:11 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:19:33 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:19:43 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:20:36 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:21:27 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:23:49 Error: [MissingControllerException] Controller class ForumsController could not be found.
+Exception Attributes: array (
+  'class' => 'ForumsController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/forums/pc-version/dsa/page:2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-16 23:25:10 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:04:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:05:04 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:06:32 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:08:19 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:11:08 Error: Fatal Error (4): syntax error, unexpected T_STRING in [/home/charlie/Sites/adaptcms/app/Plugin/Adaptbb/Config/routes.php, line 23]
+2013-03-17 10:11:08 Error: [FatalErrorException] syntax error, unexpected T_STRING
+Request URL: /adaptcms/forums/pc-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 23)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 23, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 23, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-17 10:11:46 Error: Fatal Error (4): syntax error, unexpected T_STRING in [/home/charlie/Sites/adaptcms/app/Plugin/Adaptbb/Config/routes.php, line 23]
+2013-03-17 10:11:46 Error: [FatalErrorException] syntax error, unexpected T_STRING
+Request URL: /adaptcms/forums/pc-version
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 23)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 23, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 23, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-17 10:11:52 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:12:42 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:13:11 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:13:39 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:13:40 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:13:44 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:15:56 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:16:25 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:16:49 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:17:31 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:24:59 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:25:34 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:26:01 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:26:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:27:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:28:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:29:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:29:59 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:30:39 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:31:04 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:31:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:31:24 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:31:36 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:32:30 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:39:16 Error: [PDOException] SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ForumPostfind' at line 1
+Request URL: /adaptcms/forums
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('ForumPostfind', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(670): DboSource->execute('ForumPostfind', Array, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(612): DboSource->fetchAll('ForumPostfind', Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(800): DboSource->query('ForumPostfind', Array, Object(ForumTopic))
+#5 /home/charlie/Sites/adaptcms/app/Plugin/Adaptbb/Model/Forum.php(78): Model->__call('ForumPostfind', Array)
+#6 /home/charlie/Sites/adaptcms/app/Plugin/Adaptbb/Model/Forum.php(78): ForumTopic->ForumPostfind('first', Array)
+#7 /home/charlie/Sites/adaptcms/app/Plugin/Adaptbb/Controller/ForumsController.php(343): Forum->getNewestPost(Array)
+#8 [internal function]: ForumsController->index()
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ForumsController), Array)
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#11 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ForumsController), Object(CakeRequest), Object(CakeResponse))
+#12 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#13 {main}
+2013-03-17 10:39:25 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:40:10 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:42:34 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:45:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:45:23 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:45:31 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:46:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:47:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:47:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:47:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:47:27 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:48:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:48:29 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:48:35 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:49:18 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:49:29 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:49:39 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:49:44 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:50:56 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:52:02 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:52:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:52:21 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:53:37 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:54:01 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:54:15 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:54:19 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:54:57 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:55:11 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:55:34 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:55:46 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:55:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:56:03 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:57:18 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 10:59:08 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:00:33 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:01:14 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:01:47 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:02:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:02:26 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:02:35 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:02:40 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:03:02 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:07:25 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:07:37 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:08:07 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:09:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:10:19 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:10:44 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:11:44 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:12:36 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:17:03 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:18:56 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:21:24 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:22:22 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:23:26 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:23:37 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:27:28 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:28:59 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:29:01 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:31:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:31:57 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:32:14 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:32:47 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:32:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:33:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:34:42 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:34:51 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:35:17 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:37:01 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:37:17 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:37:27 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:37:40 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:37:50 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:38:04 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:38:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:38:19 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:38:28 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:39:24 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:39:28 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:40:39 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:42:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:42:22 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:42:30 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:42:50 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:43:02 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:43:21 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:44:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:44:24 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:46:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:46:13 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:46:31 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:47:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:47:58 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:48:45 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:49:23 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:49:54 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:50:21 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:51:11 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:52:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 11:56:43 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:06:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:07:50 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:08:33 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:09:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:09:31 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:10:12 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:10:19 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-17 12:10:26 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-21 22:12:31 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-21 22:12:40 Error: Fatal Error (1): ReflectionClass::getProperties() [http://php.net/reflectionclass.getproperties]: Internal error: Failed to retrieve the reflection object in [/home/charlie/Sites/adaptcms/lib/Cake/Utility/Debugger.php, line 594]
+2013-03-21 22:12:40 Error: [FatalErrorException] ReflectionClass::getProperties() [http://php.net/reflectionclass.getproperties]: Internal error: Failed to retrieve the reflection object
+Request URL: /admin
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(1, 'ReflectionClass...', '/home/charlie/S...', 594)
+#1 [internal function]: ErrorHandler::handleError(1, 'ReflectionClass...', '/home/charlie/S...', 594, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 1, 'ReflectionClass...', '/home/charlie/S...', 594, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-21 22:14:06 Error: Fatal Error (4): syntax error, unexpected '{' in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 40]
+2013-03-21 22:14:06 Error: [FatalErrorException] syntax error, unexpected '{'
+Request URL: /admin/articles
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 40)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 40, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 40, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-21 22:14:14 Error: Fatal Error (4): syntax error, unexpected '{' in [/home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php, line 40]
+2013-03-21 22:14:14 Error: [FatalErrorException] syntax error, unexpected '{'
+Request URL: /admin/articles
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 40)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 40, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 40, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-21 22:50:47 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-21 22:54:02 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-21 22:54:50 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-21 22:55:01 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-21 22:55:50 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-21 22:56:57 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 10:22:51 Error: [InvalidArgumentException] Passed variable is not an array or object, using empty array instead
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/Model/AppModel.php(43): ArrayIterator->__construct(NULL)
+#1 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(72): AppModel->searchArray(NULL, 'radio')
+#2 [internal function]: ArticlesController->beforeFilter(Object(CakeEvent))
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Event/CakeEventManager.php(248): call_user_func(Array, Object(CakeEvent))
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(670): CakeEventManager->dispatch(Object(CakeEvent))
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(184): Controller->startupProcess()
+#6 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#7 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#8 {main}
+2013-03-22 10:59:27 Error: Fatal Error (1): Cannot use object of type stdClass as array in [/home/charlie/Sites/adaptcms/app/View/Articles/admin_edit.ctp, line 351]
+2013-03-22 10:59:27 Error: [FatalErrorException] Cannot use object of type stdClass as array
+Request URL: /admin/articles/edit/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(1, 'Cannot use obje...', '/home/charlie/S...', 351)
+#1 [internal function]: ErrorHandler::handleError(1, 'Cannot use obje...', '/home/charlie/S...', 351, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 1, 'Cannot use obje...', '/home/charlie/S...', 351, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-22 15:43:31 Error: Fatal Error (4): syntax error, unexpected T_ELSEIF in [/home/charlie/Sites/adaptcms/app/View/Articles/admin_add.ctp, line 116]
+2013-03-22 15:43:31 Error: [FatalErrorException] syntax error, unexpected T_ELSEIF
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 116)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 116, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 116, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-22 15:52:43 Error: Fatal Error (4): syntax error, unexpected $end in [/home/charlie/Sites/adaptcms/app/View/Articles/admin_add.ctp, line 213]
+2013-03-22 15:52:43 Error: [FatalErrorException] syntax error, unexpected $end
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 213)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 213, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 213, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-22 16:45:15 Error: Fatal Error (4): syntax error, unexpected '{' in [/home/charlie/Sites/adaptcms/app/Model/Article.php, line 285]
+2013-03-22 16:45:15 Error: [FatalErrorException] syntax error, unexpected '{'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 285)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 285, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 285, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-22 18:25:46 Error: [PDOException] SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'uploadFile' at line 1
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('uploadFile', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(670): DboSource->execute('uploadFile', Array, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(612): DboSource->fetchAll('uploadFile', Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(800): DboSource->query('uploadFile', Array, Object(ArticleValue))
+#5 /home/charlie/Sites/adaptcms/app/Model/ArticleValue.php(47): Model->__call('uploadFile', Array)
+#6 /home/charlie/Sites/adaptcms/app/Model/ArticleValue.php(47): ArticleValue->uploadFile(Array, '4', 0, 'ArticleValue', 'File')
+#7 [internal function]: ArticleValue->beforeSave(Array)
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Event/CakeEventManager.php(246): call_user_func_array(Array, Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1679): CakeEventManager->dispatch(Object(CakeEvent))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#11 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#12 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(148): Model->saveAssociated(Array)
+#13 [internal function]: ArticlesController->admin_add('2')
+#14 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#15 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#16 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#17 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#18 {main}
+2013-03-22 18:27:21 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(148): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 18:30:44 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:30:54 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/kOnMvP_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:30:57 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'File.filename,user_id' in 'field list'
+Request URL: /admin/files/delete/18/kOnMvP_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('SELECT `File`.`...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(670): DboSource->execute('SELECT `File`.`...', Array, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1081): DboSource->fetchAll('SELECT `File`.`...', false)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2688): DboSource->read(Object(File), Array)
+#5 /home/charlie/Sites/adaptcms/app/Controller/FilesController.php(158): Model->find('first', Array)
+#6 [internal function]: FilesController->admin_delete('18', 'kOnMvP_i4f0f')
+#7 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(FilesController), Array)
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(FilesController), Object(CakeRequest), Object(CakeResponse))
+#10 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#11 {main}
+2013-03-22 18:30:57 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:31:16 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'File.filename,user_id' in 'field list'
+Request URL: /admin/files/delete/18/kOnMvP_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('SELECT `File`.`...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(670): DboSource->execute('SELECT `File`.`...', Array, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1081): DboSource->fetchAll('SELECT `File`.`...', false)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2688): DboSource->read(Object(File), Array)
+#5 /home/charlie/Sites/adaptcms/app/Controller/FilesController.php(158): Model->find('first', Array)
+#6 [internal function]: FilesController->admin_delete('18', 'kOnMvP_i4f0f')
+#7 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(FilesController), Array)
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(FilesController), Object(CakeRequest), Object(CakeResponse))
+#10 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#11 {main}
+2013-03-22 18:31:17 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:32:51 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/kOnMvP_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:35:32 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(148): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 18:38:20 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/Td0F2r_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:45:30 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(148): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 18:46:28 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/R09S9L_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:46:34 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/R09S9L_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:47:00 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(148): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 18:49:27 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/u251IN_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 18:55:35 Error: Fatal Error (4): syntax error, unexpected T_BOOL_CAST, expecting '&' or T_VARIABLE in [/home/charlie/Sites/adaptcms/app/Model/Behavior/UploadBehavior.php, line 83]
+2013-03-22 18:55:35 Error: [FatalErrorException] syntax error, unexpected T_BOOL_CAST, expecting '&' or T_VARIABLE
+Request URL: /admin/files
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 83)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 83, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 83, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-22 18:55:56 Error: Fatal Error (4): syntax error, unexpected T_BOOL_CAST, expecting '&' or T_VARIABLE in [/home/charlie/Sites/adaptcms/app/Model/Behavior/UploadBehavior.php, line 83]
+2013-03-22 18:55:56 Error: [FatalErrorException] syntax error, unexpected T_BOOL_CAST, expecting '&' or T_VARIABLE
+Request URL: /admin/files
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Error/ErrorHandler.php(184): ErrorHandler::handleFatalError(4, 'syntax error, u...', '/home/charlie/S...', 83)
+#1 [internal function]: ErrorHandler::handleError(4, 'syntax error, u...', '/home/charlie/S...', 83, Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(927): call_user_func('ErrorHandler::h...', 4, 'syntax error, u...', '/home/charlie/S...', 83, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Core/App.php(900): App::_checkFatalError()
+#4 [internal function]: App::shutdown()
+#5 {main}
+2013-03-22 18:58:01 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(148): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 18:59:28 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(148): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 19:03:37 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(145): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 19:05:04 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(145): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 19:07:25 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/u251IN_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 19:07:25 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/R09S9L_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 19:08:51 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/R09S9L_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 19:08:51 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/u251IN_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 19:08:57 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/u251IN_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 19:10:05 Error: [MissingControllerException] Controller class UploadsController could not be found.
+Exception Attributes: array (
+  'class' => 'UploadsController',
+  'plugin' => NULL,
+)
+Request URL: /uploads/thumb/u251IN_i4f0f.jpg
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 20:13:12 Error: [PDOException] SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'validationErrors' at line 1
+Request URL: /admin/articles/add/2
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('validationError...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(670): DboSource->execute('validationError...', Array, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(612): DboSource->fetchAll('validationError...', Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(800): DboSource->query('validationError...', Array, Object(Article))
+#5 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(150): Model->__call('validationError...', Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(150): Article->validationErrors()
+#7 [internal function]: ArticlesController->admin_add('2')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 22:19:47 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/edit/2105
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(172): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_edit('2105')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 22:23:59 Error: [PDOException] SQLSTATE[42S22]: Column not found: 1054 Unknown column 'Array' in 'field list'
+Request URL: /admin/articles/edit/2105
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('INSERT INTO `al...', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(1008): DboSource->execute('INSERT INTO `al...')
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(1736): DboSource->create(Object(ArticleValue), Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2104): Model->save(Array, Array)
+#5 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(2285): Model->saveMany(Array, Array)
+#6 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(172): Model->saveAssociated(Array)
+#7 [internal function]: ArticlesController->admin_edit('2105')
+#8 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#11 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#12 {main}
+2013-03-22 22:41:03 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 22:44:21 Error: [PDOException] SQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'delte' at line 1
+Request URL: /admin/articles/edit/2105
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(460): PDOStatement->execute(Array)
+#1 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(426): DboSource->_execute('delte', Array)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(670): DboSource->execute('delte', Array, Array)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Model/Datasource/DboSource.php(612): DboSource->fetchAll('delte', Array, Array)
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Model/Model.php(800): DboSource->query('delte', Array, Object(ArticleValue))
+#5 /home/charlie/Sites/adaptcms/app/Model/ArticleValue.php(107): Model->__call('delte', Array)
+#6 /home/charlie/Sites/adaptcms/app/Model/ArticleValue.php(107): ArticleValue->delte('2170')
+#7 /home/charlie/Sites/adaptcms/app/Controller/ArticlesController.php(172): ArticleValue->checkOnEdit(Array)
+#8 [internal function]: ArticlesController->admin_edit('2105')
+#9 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(486): ReflectionMethod->invokeArgs(Object(ArticlesController), Array)
+#10 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(187): Controller->invokeAction(Object(CakeRequest))
+#11 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(ArticlesController), Object(CakeRequest), Object(CakeResponse))
+#12 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#13 {main}
+2013-03-22 22:57:35 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 22:59:21 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 23:01:39 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 23:02:17 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-22 23:03:58 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-23 22:36:58 Error: [MissingViewException] View file "/home/charlie/Sites/adaptcms/app/View/Themed/Default/Plugins/admin_permissions.ctp" is missing.
+Exception Attributes: array (
+  'file' => '/home/charlie/Sites/adaptcms/app/View/Themed/Default/Plugins/admin_permissions.ctp',
+)
+Request URL: /admin/plugins/permissions/Adaptbb
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/lib/Cake/View/View.php(468): View->_getViewFileName(NULL)
+#1 /home/charlie/Sites/adaptcms/app/Plugin/DebugKit/View/DebugView.php(82): View->render(NULL, NULL)
+#2 /home/charlie/Sites/adaptcms/lib/Cake/Controller/Controller.php(948): DebugView->render(NULL, NULL)
+#3 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(194): Controller->render()
+#4 /home/charlie/Sites/adaptcms/lib/Cake/Routing/Dispatcher.php(162): Dispatcher->_invoke(Object(PluginsController), Object(CakeRequest), Object(CakeResponse))
+#5 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2013-03-24 09:27:43 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:27:43 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:27:49 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:27:49 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:28:12 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:28:12 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:34:19 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:34:19 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:34:20 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:41:36 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:41:36 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:41:36 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:41:40 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:41:40 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:49:18 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:49:18 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:49:18 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:06 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:06 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:06 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:15 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:15 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:42 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:42 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:43 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:43 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:47 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 09:56:47 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:01:58 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:01:59 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:01:59 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:16 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:17 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:17 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:47 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:47 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:48 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:48 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:56 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:56 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:57 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 10:04:57 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:08 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:08 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:09 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:09 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:15 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:15 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:17 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/cake.generic.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 11:06:17 Error: [MissingControllerException] Controller class CssController could not be found.
+Exception Attributes: array (
+  'class' => 'CssController',
+  'plugin' => NULL,
+)
+Request URL: /css/bootstrap-responsive.css
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-24 15:18:57 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-03-29 22:53:50 Error: [MissingControllerException] Controller class ImgController could not be found.
+Exception Attributes: array (
+  'class' => 'ImgController',
+  'plugin' => NULL,
+)
+Request URL: /adaptcms/img/favicon.ico
+Stack Trace:
+#0 /home/charlie/Sites/adaptcms/app/webroot/index.php(92): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}

@@ -15,13 +15,12 @@ $this->set('channel', array(
 
 <?php foreach($this->request->data as $data): ?>
 	<?php $link = array('controller' => 'articles', 'action' => 'view', $data['Article']['slug']) ?>
-	<?php $description = "No Description" ?>
 	
 <?= $this->Rss->item(array(), array(
 		'title' => $data['Article']['title'],
 		'link' => $link,
 		'guid' => array('url' => $link, 'isPermaLink' => 'true'),
-		'description' => $description,
+		'description' => $this->Field->getTextAreaData($data),
 		'pubDate' => $data['Article']['created']
 	)) ?>
 

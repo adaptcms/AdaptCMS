@@ -38,6 +38,16 @@
 	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
 
+	foreach (Configure::read('Plugins.list') as $plugin)
+	{
+		$path = APP . DS . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'routes.php';
+
+		if (file_exists($path))
+		{
+			include_once($path);
+		}
+	}
+
 /**
  * Load all plugin routes.  See the CakePlugin documentation on 
  * how to customize the loading of plugin routes.

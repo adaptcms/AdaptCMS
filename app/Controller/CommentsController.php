@@ -1,6 +1,4 @@
 <?php
-App::import('Vendor', 'ayah');
-App::import('Vendor', 'ayah_config');
 App::import('Vendor', 'securimage');
 
 class CommentsController extends AppController

@@ -14,6 +14,8 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (null, 7, 4, 0, '', 'themes', 'admin_asset_delete', 0, '', 0, 0),
 (null, 7, 4, 0, '', 'themes', 'admin_asset_add', 0, '', 0, 0),
 (null, 7, 4, 0, '', 'themes', 'admin_asset_edit', 0, '', 0, 0),
-(null, NULL, 1, 0, '', 'plugins', 'admin_assets', 1, '', 0, 0),
-(null, NULL, 4, 0, '', 'plugins', 'admin_assets', 0, '', 0, 0);
+(null, NULL, 1, 0, '', 'plugins', 'admin_assets', 1, '', 2, 2),
+(null, NULL, 4, 0, '', 'plugins', 'admin_assets', 0, '', 2, 2),
+(null, NULL, 1, 0, '', 'plugins', 'admin_permissions', 1, '', 2, 2),
+(null, NULL, 4, 0, '', 'plugins', 'admin_permissions', 0, '', 2, 2);
 -- --------------------------------------------------------

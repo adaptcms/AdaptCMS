@@ -1,4 +1,4 @@
-<?php $this->TinyMce->editor() ?>
+<?php $this->TinyMce->editor(array('simple' => true)) ?>
 
 <script>
 $(document).ready(function(){
@@ -10,7 +10,7 @@ $(document).ready(function(){
 <?php $this->Html->addCrumb($forum['title'] . ' Forum', array(
 	'action' => 'view', 
 	'controller' => 'forums', 
-	$forum['slug']
+	'slug' => $forum['slug']
 )) ?>
 <?php $this->Html->addCrumb('New Topic', null) ?>
 
@@ -18,7 +18,7 @@ $(document).ready(function(){
 	<?= $forum['title'] ?> Forum - Add Topic
 </h2>
 
-<?= $this->Form->create('ForumTopic', array('class' => 'well', 'id' => 'ForumTopicAddForm')) ?>
+<?= $this->Form->create('ForumTopic', array('class' => 'well admin-validate')) ?>
 	
 	<?= $this->Form->input('subject', array(
 		'type' => 'text', 
@@ -35,4 +35,7 @@ $(document).ready(function(){
 
 	<div class="clearfix"></div>
 
-<?= $this->Form->end('Submit Topic', array('class' => 'btn btn-primary')) ?>
+<?= $this->Form->end(array(
+	'label' => 'Submit Topic',
+	'class' => 'btn btn-primary'
+)) ?>
