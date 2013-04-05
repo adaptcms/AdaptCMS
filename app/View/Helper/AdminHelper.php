@@ -222,7 +222,7 @@ class AdminHelper extends AppHelper
      * @param integer $user_id
      * @return boolean
      */
-    public function hasPermission($permission, $user_id = null)
+    public function hasPermission($permission = null, $user_id = null)
     {
         if (!empty($permission) && !empty($user_id) && $user_id == $this->Session->read('Auth.User.id') || 
             !empty($permission) && $permission['any'] > 0 ||

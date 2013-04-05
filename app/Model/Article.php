@@ -273,11 +273,6 @@ class Article extends AppModel
             }
         }
         
-        foreach($this->data['ArticleValue'] as $key => $row)
-        {
-            debug($row);
-        }
-        
         return true;
     }
 

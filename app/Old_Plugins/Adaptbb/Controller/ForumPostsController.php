@@ -92,4 +92,131 @@ class ForumPostsController extends AdaptbbAppController
             }
         }
     }
+
+    public function ajax_edit()
+    {
+        $this->layout = 'ajax';
+        $this->autoRender = false;
+
+        $return = array(
+            'status' => true,
+            'message' => 'The post has been updated.'
+        );
+
+        $id = $this->request->data['ForumPost']['id'];
+
+        $post = $this->ForumPost->find('first', array(
+            'conditions' => array(
+                'ForumPost.id' => $id
+            ),
+            'contain' => array(
+                'User',
+                'ForumTopic'
+            )
+        ));
+
+        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $return = array(
+                'status' => false,
+                'message' => 'You do not have access to edit other users posts.'
+            );
+        }
+
+        if (empty($post['ForumPost']))
+        {
+            $return = array(
+                'status' => false,
+                'message' => 'Invalid post specified.'
+            );
+        }
+
+        if (!empty($return['status']) && !empty($this->request->data))
+        {
+            $this->ForumPost->id = $id;
+
+            if ($html_tags = Configure::read('Adaptbb.html_tags_allowed'))
+            {
+                $this->request->data['ForumPost']['content'] = strip_tags(
+                    $this->request->data['ForumPost']['content'],
+                    $html_tags . ',<blockquote>,<small>'
+                );
+            }
+
+            if (!$this->ForumPost->save($this->request->data))
+            {
+                $return = array(
+                    'status' => false,
+                    'message' => 'Your post could not be updated.'
+                );
+            }
+        }
+
+        return json_encode($return);
+    }
+
+    public function delete($id)
+    {
+        $post = $this->ForumPost->find('first', array(
+            'conditions' => array(
+                'ForumPost.id' => $id
+            ),
+            'contain' => array(
+                'User',
+                'ForumTopic' => array(
+                    'Forum'
+                )
+            )
+        ));
+
+        if (empty($post['ForumPost']))
+        {
+            $this->Session->setFlash('Post could not be found.', 'flash_error');
+            $this->redirect(array(
+                'controller' => 'forum_topics',
+                'action' => 'view', 
+                $this->slug($post['ForumTopic']['subject']) 
+            ));
+        }
+
+        if ($post['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array(
+                'controller' => 'forum_topics',
+                'action' => 'view', 
+                $this->slug($post['ForumTopic']['subject']) 
+            ));               
+        }
+
+        $this->ForumPost->id = $id;
+
+        if ($this->ForumPost->saveField('deleted_time', $this->ForumPost->dateTime()) )
+        {
+            $this->ForumPost->ForumTopic->Forum->id = $post['ForumTopic']['Forum']['id'];
+
+            $data = array();
+            $data['Forum']['id'] = $post['ForumTopic']['Forum']['id'];
+            $data['Forum']['num_posts'] = $post['ForumTopic']['Forum']['num_posts'] - 1;
+
+            $this->ForumPost->ForumTopic->Forum->save($data);
+
+            $this->ForumPost->ForumTopic->id = $post['ForumTopic']['id'];
+
+            $data = array();
+            $data['ForumTopic']['id'] = $post['ForumTopic']['id'];
+            $data['ForumTopic']['num_posts'] = $post['ForumTopic']['num_posts'] - 1;
+
+            $this->ForumPost->ForumTopic->save($data);
+
+            $this->Session->setFlash('The post has been deleted.', 'flash_success');
+            $this->redirect(array(
+                'controller' => 'forum_topics',
+                'action' => 'view', 
+                $this->slug($post['ForumTopic']['subject']) 
+            )); 
+        } else {
+            $this->Session->setFlash('Unable to delete the post.', 'flash_error');
+        }
+    }
 }

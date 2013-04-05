@@ -27,7 +27,7 @@ class ApiHelper extends AppHelper
      */
     public function url()
     {
-        return 'http://api.adaptcoding.com/';
+        return Configure::read('Component.Api.api_url');
     }
     
     /**
@@ -37,7 +37,7 @@ class ApiHelper extends AppHelper
      */
     public function siteUrl()
     {
-        return 'http://adaptcms.charliepage88.com/';
+        return Configure::read('Component.Api.adaptcms_url');
     }
 
     /**
@@ -79,25 +79,29 @@ class ApiHelper extends AppHelper
      */
     private function getArgs($args)
     {
-        if (is_array($args))
+        if (!empty($args) && is_array($args))
         {
+            $url = '';
             $i = 0;
+
             foreach($args as $key => $arg)
             {
                 if ($i == 0)
                 {
-                    $this->args .= "?";
+                    $url .= "?";
                 } else {
-                    $this->args .= "&";
+                    $url .= "&";
                 }
 
-                $this->args .= $key."=".urlencode($arg);
+                $url .= $key."=".urlencode($arg);
 
                 $i++;
             }
 
-            return $this->args;
+            return $url;
         }
+
+        return;
     }
     
     /**

@@ -6,17 +6,20 @@ class PermissionsInstall
       array(
           'controller' => 'forums',
           'action' => 'index',
-          'status' => 1
+          'status' => 1,
+          'related' => '[{"action":["profile"],"controller":["users"],"plugin":null}]'
       ),
       array(
           'controller' => 'forums',
           'action' => 'view',
-          'status' => 1
+          'status' => 1,
+          'related' => '[{"action":["add"],"controller":["forum_topics"]},{"action":["view"],"controller":["forum_topics"]}]'
       ),
       array(
           'controller' => 'forum_topics',
           'action' => 'view',
-          'status' => 1
+          'status' => 1,
+          'related' => '[{"action":["change_status"]},{"action":["edit"]},{"action":["delete"]},{"action":["ajax_edit"],"controller":["forum_posts"]},{"action":["delete"],"controller":["forum_posts"]},{"action":["ajax_post"],"controller":["forum_posts"]}]'
       )  
     );
     
@@ -27,9 +30,38 @@ class PermissionsInstall
           'status' => 1
       ),
       array(
+          'controller' => 'forum_topics',
+          'action' => 'edit',
+          'status' => 1,
+          'related' => '[{"action":["change_status"]}]',
+          'any' => 0,
+          'own' => 1
+      ),
+      array(
+          'controller' => 'forum_topics',
+          'action' => 'delete',
+          'status' => 1,
+          'any' => 0,
+          'own' => 1
+      ),
+      array(
           'controller' => 'forum_posts',
           'action' => 'ajax_post',
           'status' => 1
+      ),
+      array(
+          'controller' => 'forum_posts',
+          'action' => 'ajax_edit',
+          'status' => 1,
+          'any' => 0,
+          'own' => 1
+      ),
+      array(
+          'controller' => 'forum_posts',
+          'action' => 'delete',
+          'status' => 1,
+          'any' => 0,
+          'own' => 1
       )
     );
     
@@ -37,7 +69,7 @@ class PermissionsInstall
       array(
           'controller' => 'forum_categories',
           'action' => 'admin_index',
-          'related' => '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["admin_index"],"controller":["forums"]}]'
+          'related' => '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["admin_index"],"controller":["forums"]},{"action":["profile"],"controller":["users"]}]'
       ),
       array(
           'controller' => 'forum_categories',
@@ -62,7 +94,7 @@ class PermissionsInstall
       array(
           'controller' => 'forums',
           'action' => 'admin_index',
-          'related' => '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["admin_index"],"controller":["forum_categories"]}]'
+          'related' => '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["admin_index"],{"controller":["forum_categories"],"action":["admin_edit"]},"controller":["forum_categories"]},{"action":["profile"],"controller":["users"]}]'
       ),
       array(
           'controller' => 'forums',
@@ -87,6 +119,10 @@ class PermissionsInstall
       array(
           'controller' => 'forums',
           'action' => 'admin_ajax_order'
+      ),
+      array(
+          'controller' => 'forum_topics',
+          'action' => 'change_status'
       )
     );
     
@@ -119,8 +155,8 @@ class PermissionsInstall
                             'action' => $permission['action'],
                             'status' => $permission['status'],
                             'related' => !empty($permission['related']) ? $permission['related'] : '',
-                            'own' => 2,
-                            'any' => 2
+                            'own' => !empty($permission['own']) ? $permission['own'] : 2,
+                            'any' => !empty($permission['any']) ? $permission['any'] : 2
                         );
                     }
                 }
@@ -138,8 +174,8 @@ class PermissionsInstall
                             'action' => $permission['action'],
                             'status' => $permission['status'],
                             'related' => !empty($permission['related']) ? $permission['related'] : '',
-                            'own' => 2,
-                            'any' => 2
+                            'own' => !empty($permission['own']) ? $permission['own'] : 2,
+                            'any' => !empty($permission['any']) ? $permission['any'] : 2
                         );
                     }
                 }
@@ -153,15 +189,15 @@ class PermissionsInstall
                         foreach($permissions as $permission)
                         {
                             $data[]['Permission'] = array(
-                                'module_id' => $module_id,
-                                'role_id' => $role_id,
-                                'plugin' => 'adaptbb',
-                                'controller' => $permission['controller'],
-                                'action' => $permission['action'],
-                                'status' => 1,
-                                'related' => !empty($permission['related']) ? $permission['related'] : '',
-                                'own' => 1,
-                                'any' => 1
+                              'module_id' => $module_id,
+                              'role_id' => $role_id,
+                              'plugin' => 'adaptbb',
+                              'controller' => $permission['controller'],
+                              'action' => $permission['action'],
+                              'status' => 1,
+                              'related' => !empty($permission['related']) ? $permission['related'] : '',
+                              'own' => !empty($permission['own']) ? $permission['own'] : 1,
+                              'any' => !empty($permission['any']) ? $permission['any'] : 1
                             );
                         }
                     }
@@ -170,15 +206,15 @@ class PermissionsInstall
                         foreach($permissions as $permission)
                         {
                             $data[]['Permission'] = array(
-                                'module_id' => $module_id,
-                                'role_id' => $role_id,
-                                'plugin' => 'adaptbb',
-                                'controller' => $permission['controller'],
-                                'action' => $permission['action'],
-                                'status' => strstr($permission['action'], 'admin') ? 0 : 1,
-                                'related' => !empty($permission['related']) ? $permission['related'] : '',
-                                'own' => 0,
-                                'any' => 0
+                              'module_id' => $module_id,
+                              'role_id' => $role_id,
+                              'plugin' => 'adaptbb',
+                              'controller' => $permission['controller'],
+                              'action' => $permission['action'],
+                              'status' => strstr($permission['action'], 'admin') ? 0 : 1,
+                              'related' => !empty($permission['related']) ? $permission['related'] : '',
+                              'own' => !empty($permission['own']) ? $permission['own'] : 0,
+                              'any' => !empty($permission['any']) ? $permission['any'] : 0
                             );
                         }
                     }

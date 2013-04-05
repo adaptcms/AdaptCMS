@@ -98,16 +98,19 @@ class ArticleValue extends AppModel
      */
     public function checkOnEdit($data)
     {
-        foreach($data['ArticleValue'] as $key => $row)
+        if (!empty($data['ArticleValue']))
         {
-            if (!empty($row['delete']) && !empty($row['id']))
+            foreach($data['ArticleValue'] as $key => $row)
             {
-                unset($data['ArticleValue'][$key]);
-                
-                $this->delete($row['id']);
+                if (!empty($row['delete']) && !empty($row['id']))
+                {
+                    unset($data['ArticleValue'][$key]);
+                    
+                    $this->delete($row['id']);
+                }
             }
         }
-        
+                
         return $data;
     }
 }

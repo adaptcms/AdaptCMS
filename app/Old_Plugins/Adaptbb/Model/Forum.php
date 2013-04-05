@@ -93,7 +93,8 @@ class Forum extends AdaptbbAppModel
                     $find = $this->ForumTopic->ForumPost->find('first', array(
                         'conditions' => array(
                             'ForumTopic.forum_id' => $forum['id'],
-                            'ForumTopic.status' => 1
+                            'ForumTopic.status' => 1,
+                            'ForumTopic.deleted_time' => '0000-00-00 00:00:00'
                         ),
                         'contain' => array(
                             'ForumTopic',

@@ -100,36 +100,6 @@ class Field extends AppModel
     {
         if (!empty($this->data['Field']['title']))
         {
-            if ($this->data['Field']['required'] == 1)
-            {
-                $rules[] = "required: true,";
-            } else {
-                $rules[] = "required: false,";
-            }
-            if ($this->data['Field']['field_limit_min'] > 0)
-            {
-                $rules[] = "minlength: ".$this->data['Field']['field_limit_min'].",";
-            }
-            if ($this->data['Field']['field_limit_max'] > 0)
-            {
-                $rules[] = "maxlength: ".$this->data['Field']['field_limit_max'].",";
-            }
-            if ($this->data['Field']['field_type'] == "email")
-            {
-                $rules[] = "email: true,";
-            }
-            if ($this->data['Field']['field_type'] == "url")
-            {
-                $rules[] = "url: true,";
-            }
-            if ($this->data['Field']['field_type'] == "num")
-            {
-                $rules[] = "number: true,";
-            }
-
-            $this->data['Field']['rules'] = json_encode($rules);
-            unset($rules);
-
             if (empty($this->data['Field']['label']))
             {
                 $this->data['Field']['label'] = $this->data['Field']['title'];

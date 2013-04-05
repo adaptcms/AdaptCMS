@@ -49,7 +49,7 @@ class ForumTopicsController extends AdaptbbAppController
         if (empty($topic))
         {
             $this->Session->setFlash('The Topic `' . $slug . '` could not be found.', 'flash_error');
-            $this->redirect(array('action' => 'index'));
+            $this->redirect(array('action' => 'index', 'controller' => 'forums'));
         }
 
         $this->ForumTopic->id = $topic['ForumTopic']['id'];
@@ -65,7 +65,8 @@ class ForumTopicsController extends AdaptbbAppController
         $this->paginate = array(
             'conditions' => array(
                 'ForumTopic.slug' => $slug,
-                'ForumTopic.deleted_time' => '0000-00-00 00:00:00'
+                'ForumTopic.deleted_time' => '0000-00-00 00:00:00',
+                'ForumPost.deleted_time' => '0000-00-00 00:00:00'
             ),
             'contain' => array(
                 'ForumTopic',
@@ -79,7 +80,16 @@ class ForumTopicsController extends AdaptbbAppController
 
         if (empty($this->params['named']['page']) || $this->params['named']['page'] == 1)
         {
-            $posts = array_merge(array(array('ForumPost' => $topic['ForumTopic'], 'User' => $topic['User'])), $posts);
+            $posts = array_merge(
+                array(
+                    array(
+                        'ForumPost' => $topic['ForumTopic'], 
+                        'User' => $topic['User'],
+                        'type' => 'topic'
+                    )
+                ),
+                $posts
+            );
         }
 
         $this->set('forum', $topic['Forum']);
@@ -88,10 +98,10 @@ class ForumTopicsController extends AdaptbbAppController
     }
 
     /**
-    * Returns a forum
+    * Adding a topic
     *
     * @param slug of Forum
-    * @return associative array of topic data
+    * @return redirect and flash message
     */
     public function add($slug = null)
     {
@@ -115,6 +125,7 @@ class ForumTopicsController extends AdaptbbAppController
             $this->ForumTopic->create();
 
             $this->request->data['ForumTopic']['user_id'] = $this->Auth->user('id');
+            $this->request->data['ForumTopic']['status'] = 1;
 
             if ($html_tags = Configure::read('Adaptbb.html_tags_allowed'))
             {
@@ -138,6 +149,147 @@ class ForumTopicsController extends AdaptbbAppController
             } else {
                 $this->Session->setFlash('Unable to add your topic.', 'flash_error');
             }
+        }
+    }
+
+    public function edit($id)
+    {
+        $topic = $this->ForumTopic->find('first', array(
+            'conditions' => array(
+                'ForumTopic.id' => $id
+            ),
+            'contain' => array(
+                'User',
+                'Forum'
+            )
+        ));
+
+        if (!empty($this->request->data))
+        {
+            $this->ForumTopic->id = $id;
+
+            if ($topic['User']['id'] != $this->Auth->user('id') && $this->permissions['related']['forum_topics']['change_status']['any'] == 0 ||
+                $this->permissions['related']['forum_topics']['change_status']['own'] == 0)
+            {
+                $this->request->data['ForumTopic']['status'] = $topic['ForumTopic']['status'];
+            }
+
+            if ($html_tags = Configure::read('Adaptbb.html_tags_allowed'))
+            {
+                $this->request->data['ForumTopic']['content'] = strip_tags(
+                    $this->request->data['ForumTopic']['content'],
+                    $html_tags . ',<blockquote>,<small>'
+                );
+            }
+
+            if ($this->ForumTopic->save($this->request->data))
+            {
+                $this->Session->setFlash('The topic has been updated.', 'flash_success');
+                $this->redirect(array('action' => 'view', $this->slug($this->request->data['ForumTopic']['subject']) ));
+            } else {
+                $this->Session->setFlash('Unable to update the topic.', 'flash_error');
+            }
+        }
+
+        $this->request->data = $topic;
+
+        $this->set('topic', $topic);
+
+        if (empty($topic['ForumTopic']))
+        {
+            $this->Session->setFlash('Topic could not be found.', 'flash_error');
+            $this->redirect(array('action' => 'index', 'controller' => 'forums'));
+        }
+
+        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'index'));                
+        }
+    }
+
+    public function delete($id)
+    {
+        $topic = $this->ForumTopic->find('first', array(
+            'conditions' => array(
+                'ForumTopic.id' => $id
+            ),
+            'contain' => array(
+                'User',
+                'Forum'
+            )
+        ));
+
+        if (empty($topic['ForumTopic']))
+        {
+            $this->Session->setFlash('Topic could not be found.', 'flash_error');
+            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));
+        }
+
+        if ($topic['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));                
+        }
+
+        $this->ForumTopic->id = $id;
+
+        if ($this->ForumTopic->saveField('deleted_time', $this->ForumTopic->dateTime()) )
+        {
+            $this->ForumTopic->Forum->id = $topic['Forum']['id'];
+
+            $data['Forum']['id'] = $topic['Forum']['id'];
+            $data['Forum']['num_topics'] = $topic['Forum']['num_topics'] - 1;
+            $data['Forum']['num_posts'] = $topic['Forum']['num_posts'] - $topic['ForumTopic']['num_posts'];
+
+            $this->ForumTopic->Forum->save($data);
+
+            $this->Session->setFlash('The topic has been deleted.', 'flash_success');
+            $this->redirect(array(
+                'controller' => 'forums', 
+                'action' => 'view', 
+                $this->slug($topic['Forum']['title']) 
+            ));
+        } else {
+            $this->Session->setFlash('Unable to delete the topic.', 'flash_error');
+        }
+    }
+
+    public function change_status($id)
+    {
+        $topic = $this->ForumTopic->find('first', array(
+            'conditions' => array(
+                'ForumTopic.id' => $id
+            ),
+            'contain' => array(
+                'User',
+                'Forum'
+            )
+        ));
+
+        if (empty($topic['ForumTopic']))
+        {
+            $this->Session->setFlash('Topic could not be found.', 'flash_error');
+            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));
+        }
+
+        if ($topic['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        {
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));                
+        }
+
+        $data = array();
+
+        $data['ForumTopic']['id'] = $id;
+        $data['ForumTopic']['status'] = ($topic['ForumTopic']['status'] == 0 ? 1 : 0);
+
+        if ($this->ForumTopic->save($data))
+        {
+            $this->Session->setFlash('The topic has been ' . ($data['ForumTopic']['status'] == 0 ? 'Closed' : 'Opened') . '.', 'flash_success');
+            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));
+        } else {
+            $this->Session->setFlash('Unable to update the topic.', 'flash_error');
         }
     }
 }

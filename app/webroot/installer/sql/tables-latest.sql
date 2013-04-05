@@ -94,7 +94,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `field_limit_min` int(11) NOT NULL DEFAULT '0',
   `field_limit_max` int(11) NOT NULL DEFAULT '0',
   `required` int(1) NOT NULL DEFAULT '0',
-  `rules` text,
   `user_id` int(11),
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

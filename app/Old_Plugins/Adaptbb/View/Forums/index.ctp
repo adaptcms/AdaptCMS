@@ -1,3 +1,5 @@
+<?php $this->set('title_for_layout', 'Forums') ?>
+
 <?php $this->Html->addCrumb('Forums', null) ?>
 
 <h1>Forum Index</h1>
@@ -91,12 +93,17 @@
 
 		<dt>Newest User</dt>
 		<dd>
-			<?= $this->Html->link($categories['Stats']['newest_user']['User']['username'], array(
-				'plugin' => null,
-				'controller' => 'users',
-				'action' => 'profile',
-				$categories['Stats']['newest_user']['User']['username']
-			)) ?> <br />
+			<?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'])): ?>
+				<?= $this->Html->link($categories['Stats']['newest_user']['User']['username'], array(
+					'plugin' => null,
+					'controller' => 'users',
+					'action' => 'profile',
+					$categories['Stats']['newest_user']['User']['username']
+				)) ?> 
+			<?php else: ?>
+				<?= $categories['Stats']['newest_user']['User']['username'] ?>
+			<?php endif ?>
+			<br />
 			<em><?= $this->Admin->Time($categories['Stats']['newest_user']['User']['created'], 'words') ?></em>
 		</dd>
 	</dl>

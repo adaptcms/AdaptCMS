@@ -61,7 +61,7 @@ class InstallController extends Controller
             $core_file = file_get_contents($file_core);
 
             /*
-                     * Security Salt / cipherSeed
+            * Security Salt / cipherSeed
             */
             $match = array(
                     'a668f877ee39dec0ac3c59a91970011538c20c30',

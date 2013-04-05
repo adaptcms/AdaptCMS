@@ -1,3 +1,5 @@
+<?php $this->set('title_for_layout', 'Forums - ' . $forum['title']) ?>
+
 <?php $this->Paginator->options(array('url' => array(
 	'controller' => 'forums',
 	'action' => 'view',
@@ -11,15 +13,17 @@
 	<?= $forum['title'] ?> Forum
 </h2>
 
-<?= $this->Html->link('New Topic <i class="icon-plus"></i>', array(
-	'controller' => 'forum_topics',
-	'action' => 'add',
-	'slug' => $forum['slug']
-), array('class' => 'btn btn-info pull-right', 'style' => 'margin-bottom: 10px', 'escape' => false)) ?>
+<?php if ($this->Admin->hasPermission($permissions['related']['forum_topics']['add'])): ?>
+	<?= $this->Html->link('New Topic <i class="icon-plus"></i>', array(
+		'controller' => 'forum_topics',
+		'action' => 'add',
+		'slug' => $forum['slug']
+	), array('class' => 'btn btn-info pull-right', 'style' => 'margin-bottom: 10px', 'escape' => false)) ?>
+<?php endif ?>
 
 <?php if (empty($topics)): ?>
 	<p>No Topics Found</p>
-<?php else: ?>
+<?php elseif ($this->Admin->hasPermission($permissions['related']['forum_topics']['view'])): ?>
 	<table class="table table-striped">
 		<thead>
 			<tr>

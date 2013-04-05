@@ -41,7 +41,7 @@ class ApiComponent extends Object
      */
     private function url()
     {
-        return 'http://api.adaptcoding.com/';
+        return Configure::read('Component.Api.api_url');
     }
 
     /**
@@ -69,27 +69,29 @@ class ApiComponent extends Object
      */
     private function getArgs($args)
     {
-        if (empty($args))
+        if (!empty($args) && is_array($args))
         {
-            return;
-        }
-
-        if (is_array($args)) {
+            $url = '';
             $i = 0;
-            foreach($args as $key => $arg) {
-                if ($i == 0) {
-                        $this->args .= "?";
+
+            foreach($args as $key => $arg)
+            {
+                if ($i == 0)
+                {
+                    $url .= "?";
                 } else {
-                        $this->args .= "&";
+                    $url .= "&";
                 }
 
-                $this->args .= $key."=".urlencode($arg);
+                $url .= $key."=".urlencode($arg);
 
                 $i++;
             }
 
-            return $this->args;
+            return $url;
         }
+
+        return;
     }
 
     /**

@@ -13,7 +13,7 @@ h4.user,h4.subject
 	margin-top: 20px;
 }
 
-.alert-error,.alert-success,#AddPost
+#AddPost,.EditPost
 {
 	display: none;
 }

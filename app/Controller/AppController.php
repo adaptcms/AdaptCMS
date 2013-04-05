@@ -404,27 +404,34 @@ class AppController extends Controller
 				$values = array();
 				foreach($related_values as $key => $val)
 				{
+                    $action = $val['action'][0];
+                    $controller = !empty($val['controller'][0]) ? $val['controller'][0] : $controller;
+
+                    $related['related'][$controller][$action] = array();
+
 					$values['OR'][$key]['AND'] = array(
-						'Permission.action' => $val['action'][0],
-						'Permission.controller' => (!empty($val['controller'][0]) ? $val['controller'][0] : $controller),
+						'Permission.action' => $action,
+						'Permission.controller' => $controller,
 						'Permission.status' => 1
 					);
 				}
 
-				$related['related'] = $this->Permission->find('all', array(
+				$new_related['related'] = $this->Permission->find('all', array(
 					'conditions' => array(
 						'Permission.role_id' => $this->getRole(),
 						$values
 					)
 				));
 
-				foreach($related['related'] as $key => $row)
+				foreach($new_related['related'] as $key => $row)
 				{
 					$related['related']
 						[$row['Permission']['controller']]
 						[$row['Permission']['action']] = $row['Permission'];
-					unset($related['related'][$key]);
+					unset($new_related['related'][$key]);
 				}
+
+                $related['related'] = array_merge($new_related['related'], $related['related']);
 
 				$permissions = array_merge(
 					$permission['Permission'], 

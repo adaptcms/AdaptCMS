@@ -437,11 +437,6 @@ class ArticlesController extends AppController
             $this->redirect(array('action' => 'index'));	        	
         }
 
-        if (!empty($this->request->data['Article']['settings']))
-	    {
-			$this->request->data['Article']['settings'] = json_decode($this->request->data['Article']['settings']);
-		}
-
 		$this->request->data['Comments'] = $this->Article->Comment->find('threaded', array(
 			'conditions' => array(
 				'Comment.article_id' => $this->request->data['Article']['id'],

@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forums` (
   `category_id` int(11) NOT NULL,
   `description` longtext,
   `status` int(11) NOT NULL,
+  `num_posts` int(11) NOT NULL,
+  `num_topics` int(11) NOT NULL,
   `ord` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `icon_url` varchar(250) DEFAULT NULL,
@@ -40,6 +42,9 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forum_posts` (
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forum_topics` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) NOT NULL,
+  `num_views` int(11) NOT NULL,
+  `num_posts` int(11) NOT NULL,
+  `status` int(1) NOT NULL,
   `slug` varchar(255) NOT NULL,
   `content` longtext NOT NULL,
   `user_id` int(11) NOT NULL,

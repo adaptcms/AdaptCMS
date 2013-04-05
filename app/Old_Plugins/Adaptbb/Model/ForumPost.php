@@ -57,6 +57,8 @@ class ForumPost extends AdaptbbAppModel
                     true
                 );
             }
+
+            $results[$key]['type'] = 'post';
         }
 
         return $results;

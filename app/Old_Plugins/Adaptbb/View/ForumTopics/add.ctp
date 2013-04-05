@@ -6,6 +6,8 @@ $(document).ready(function(){
 });
 </script>
 
+<?php $this->set('title_for_layout', 'Forums - ' . $forum['title'] . ' :: Add Topic') ?>
+
 <?php $this->Html->addCrumb('Forums', array('action' => 'index', 'controller' => 'forums')) ?>
 <?php $this->Html->addCrumb($forum['title'] . ' Forum', array(
 	'action' => 'view', 
