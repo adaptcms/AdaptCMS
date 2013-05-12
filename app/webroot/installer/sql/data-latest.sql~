@@ -333,7 +333,7 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (349, 0, 1, 0, '', 'tools', 'admin_convert_adaptbb', 1, '', 2, 2),
 (350, 0, 4, 0, '', 'tools', 'admin_convert_adaptbb', 0, '', 2, 2),
 (351, 12, 1, 0, '', 'settings', 'admin_restore', 0, NULL, 2, 2),
-(352, 12, 4, 0, '', 'settings', 'admin_restore', 0, NULL, 2, 2);
+(351, 12, 4, 0, '', 'settings', 'admin_restore', 0, NULL, 2, 2);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, 1, '{date}', '{date}', '0000-00-00 00:00:00');
