@@ -90,15 +90,19 @@ class ThemesController extends AppController
 
         if (!empty($permanent))
         {
-        	$this->Theme->Template->deleteAll(array('Template.theme_id' => $id));
+        	// $this->Theme->Template->deleteAll(array('Template.theme_id' => $id));
             $delete = $this->Theme->delete($id);
 
             $this->rrmdir(VIEW_PATH . 'Themed/' . $title);
             $this->rrmdir(WWW_ROOT . 'themes/' . $title);
         } else {
         	$this->Theme->Template->updateAll(
-        		array('Template.deleted_time' => $this->Theme->dateTime()),
-        		array('Template.theme_id' => $id)
+        		array(
+                    'Template.deleted_time' => "'" . $this->Theme->dateTime() . "'"
+                ),
+        		array(
+                    'Template.theme_id' => $id
+                )
         	);
             $delete = $this->Theme->saveField('deleted_time', $this->Theme->dateTime());
         }
@@ -112,9 +116,28 @@ class ThemesController extends AppController
 
         if (!empty($permanent))
         {
-            $this->redirect(array('action' => 'index', 'trash' => 1));
+            $count = $this->Theme->find('count', array(
+                'conditions' => array(
+                    'Theme.deleted_time !=' => '0000-00-00 00:00:00'
+                )
+            ));
+
+            $params = array(
+                'controller' => 'templates',
+                'action' => 'index'
+            );
+
+            if ($count > 0)
+            {
+                $params['trash'] = 1;
+            }
+
+            $this->redirect($params);
         } else {
-            $this->redirect(array('action' => 'index'));
+            $this->redirect(array(
+                'controller' => 'templates',
+                'action' => 'index'
+            ));
         }
 	}
 
@@ -132,7 +155,7 @@ class ThemesController extends AppController
         $this->Theme->id = $id;
 
 		$this->Theme->Template->updateAll(
-			array('Template.deleted_time' => '0000-00-00 00:00:00'),
+			array('Template.deleted_time' => "'0000-00-00 00:00:00'"),
 			array('Template.theme_id' => $id)
 		);
 

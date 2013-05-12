@@ -34,6 +34,24 @@ class FieldsController extends AppController
                 )
             ));
 
+            $modules = $this->Field->Module->find('list', array(
+                'conditions' => array(
+                    'Module.is_fields' => 1
+                )
+            ));
+
+            if ($this->params->action != 'admin_index')
+            {
+                foreach($modules as $key => $row)
+                {
+                    $categories['Modules']['module_' . $key] = $row;
+                }
+            }
+            else
+            {
+                $this->set(compact('modules'));
+            }
+
             $field_types = $this->Field->field_types;
 
             $this->set(compact('categories', 'field_types'));
@@ -54,6 +72,11 @@ class FieldsController extends AppController
         if (!empty($this->params->named['category_id']))
         {
             $conditions['Category.id'] = $this->params->named['category_id'];
+        }
+
+        if (!empty($this->params->named['module_id']))
+        {
+            $conditions['Module.id'] = $this->params->named['module_id'];
         }
 
         if (isset($this->params->named['field_type']))
@@ -80,9 +103,10 @@ class FieldsController extends AppController
             ),
             'contain' => array(
                 'Category',
+                'Module',
                 'User'
             ),
-            'fields' => 'Field.*, Category.*, User.*'
+            'fields' => 'Field.*,Category.*,Module.*,User.*'
         );
         
         $this->request->data = $this->paginate('Field');
@@ -154,10 +178,17 @@ class FieldsController extends AppController
             $this->redirect(array('action' => 'index'));                
         }
 
+        if ($this->request->data['Field']['category_id'] > 0)
+        {
+            $conditions['Field.category_id'] = $this->request->data['Field']['category_id'];
+        }
+        else
+        {
+            $conditions['Field.module_id'] = $this->request->data['Field']['module_id'];
+        }
+
         $fields = $this->Field->find('all', array(
-            'conditions' => array(
-                'Field.category_id' => $this->request->data['Field']['category_id']
-            ),
+            'conditions' => $conditions,
             'order' => 'Field.field_order ASC'
         ));
 
@@ -265,7 +296,8 @@ class FieldsController extends AppController
 
         foreach($this->request->data['Field']['field_ids'] as $key => $field)
         {
-            if (!empty($field) && $field > 0) {
+            if (!empty($field) && $field > 0)
+            {
                 $data[$i]['id'] = $field;
                 $data[$i]['field_order'] = $key;
                 
@@ -273,7 +305,7 @@ class FieldsController extends AppController
             }
         }
 
-        if ($this->Field->saveAll($data))
+        if (empty($data) || $this->Field->saveAll($data))
         {
             return json_encode(array(
                 'status' => true,
@@ -306,10 +338,19 @@ class FieldsController extends AppController
         $this->layout = 'ajax';
         $this->autoRender = false;
 
+        $conditions = array();
+
+        if (is_numeric($this->request->data['Field']['category_id']))
+        {
+            $conditions['Field.category_id'] = $this->request->data['Field']['category_id'];
+        }
+        else
+        {
+            $conditions['Field.module_id'] = str_replace('module_', '', $this->request->data['Field']['category_id']);
+        }
+
         $fields = $this->Field->find('all', array(
-            'conditions' => array(
-                'Field.category_id' => $this->request->data['Field']['category_id']
-            ),
+            'conditions' => $conditions,
             'order' => 'Field.field_order ASC'
         ));
 

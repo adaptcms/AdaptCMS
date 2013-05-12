@@ -126,6 +126,7 @@ class TemplatesController extends AppController
 
 		$this->request->data['ThemesData'] = $themes;
 
+		/*
 		$theme_names = Set::extract('{n}.Theme.title', $this->request->data['Themes']);
 
 		if (!empty($this->request->data['ThemesData']))
@@ -138,6 +139,7 @@ class TemplatesController extends AppController
 				}
 			}
 		}
+		*/
 	}
 
     /**
@@ -290,7 +292,20 @@ class TemplatesController extends AppController
 
 	    if (!empty($permanent))
 	    {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    	$count = $this->Template->find('count', array(
+	    		'conditions' => array(
+	    			'Template.deleted_time !=' => '0000-00-00 00:00:00'
+	    		)
+	    	));
+
+	    	$params = array('action' => 'index');
+
+	    	if ($count > 0)
+	    	{
+	    		$params['trash'] = 1;
+	    	}
+
+	    	$this->redirect($params);
 	    } else {
 	    	$this->redirect(array('action' => 'index'));
 	    }
@@ -362,44 +377,30 @@ class TemplatesController extends AppController
     	$this->autoRender = false;
 
     	if ($this->request->is('ajax')) {
+			$conditions = array(
+           		'conditions' => array(
+                	'OR' => array(
+                		'Template.location LIKE' => '%'.$this->request->data['search'].'%',
+                		'Template.label LIKE' => '%'.$this->request->data['search'].'%'
+                	),
+                	'Template.deleted_time' => '0000-00-00 00:00:00'
+           		),
+                'contain' => array(
+                	'Theme'
+                ),
+                'fields' => array(
+                	'id', 'label', 'location', 'Theme.title'
+                )
+        	);
+
     		if (!empty($this->request->data['theme']))
     		{
-    			$conditions = array(
-               		'conditions' => array(
-	                	'OR' => array(
-	                		'Template.location LIKE' => '%'.$this->request->data['search'].'%',
-	                		'Template.title LIKE' => '%'.$this->request->data['search'].'%'
-	                	),
-                		'Template.theme_id' => $this->request->data['theme'],
-                		'Template.deleted_time' => '0000-00-00 00:00:00'
-               		),
-	                'contain' => array(
-	                	'Theme'
-	                ),
-	                'fields' => array(
-	                	'id', 'title', 'location', 'Theme.title'
-	                )
-            	);
-    		} else {
-    			$conditions = array(
-               		'conditions' => array(
-	                	'OR' => array(
-	                		'Template.location LIKE' => '%'.$this->request->data['search'].'%',
-	                		'Template.title LIKE' => '%'.$this->request->data['search'].'%'
-	                	),
-	                	'Template.deleted_time' => '0000-00-00 00:00:00'
-               		),
-	                'contain' => array(
-	                	'Theme'
-	                ),
-	                'fields' => array(
-	                	'id', 'title', 'location', 'Theme.title'
-	                )
-            	); 			
+    			$conditions['conditions']['Template.theme_id'] = $this->request->data['theme'];			
     		}
 
             $results = $this->Template->find('all', $conditions);
 
+            $data = array();
             foreach($results as $result)
             {
             	if (!empty($this->request->data['element']) && 
@@ -407,7 +408,7 @@ class TemplatesController extends AppController
             	{
 	                $data[] = array(
 	                	'id' =>$result['Template']['id'],
-	                	'title' => $result['Template']['title'],
+	                	'title' => $result['Template']['label'],
 	                	'location' => 
 	                		' ('.$result['Template']['location'].') - <i>'.$result['Theme']['title'].' Theme</i>'
 	                );
@@ -461,17 +462,19 @@ class TemplatesController extends AppController
 				{
 					if (!$this->Template->searchArray($data, $file))
 					{
-						$templates[$key]['Template']['title'] = 
+						$title = explode('/', $file);
+
+						$templates[$key]['Template']['title'] = end($title);
+						$templates[$key]['Template']['label'] = 
 							str_replace('Plugin View', 'Plugin', str_replace('.ctp','', Inflector::humanize(str_replace("/"," ", $file))));
 						$templates[$key]['Template']['location'] = $file;
 						$templates[$key]['Template']['theme_id'] = $this->request->data['Theme']['id'];
 						$templates[$key]['Template']['created'] = $this->Template->dateTime();
+						$templates[$key]['Template']['nowrite'] = true;
 
 						$key++;
 					}
 				}
-
-				// die(print_r($templates));
 
 				$this->Template->saveAll($templates);
 				echo "</div>";

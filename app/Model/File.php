@@ -11,7 +11,13 @@ class File extends AppModel
     * Files may have many article values. This is for fields when adding/editing articles of file type.
     */
     public $hasMany = array(
-        'ArticleValue'
+        'ArticleValue' => array(
+            'dependent' => true
+            // 'conditions' => array('ArticleValue.file_id >' => 0)
+        ),
+        'ModuleValue' => array(
+            'dependent' => true
+        )
     );
 
     /**
@@ -166,41 +172,91 @@ class File extends AppModel
     */
     public function beforeAdd($data)
     {
-        foreach($data as $i => $row)
+        foreach($data as $key => $row)
         {
-            if (!empty($row['File']['content']))
+            if (!empty($row['File']) && !empty($data['File']['filename']['name']))
             {
-                $file = $this->slug($row['File']['file_name']) . '.' . $row['File']['file_extension'];
-                $path = WWW_ROOT . $row['File']['dir'] . $file;
+                $unset_file = true;
 
-                $fh = fopen($path, 'w') or die("can't open file");
-                fwrite($fh, $row['File']['content']);
-                fclose($fh);
+                if ($key == 0 && !empty($data['File']['filename']['name']))
+                {
+                    $data[$key]['File'] = array_merge($data[$key]['File'], $data['File']);
+                }
 
-                $data[$key]['File']['filename'] = $file;
-                $data[$key]['File']['mimetype'] = $this->File->mime_type($file);
-                $data[$key]['File']['filesize'] = filesize($path);
+                if (!isset($row['File']['user_id']) && !empty($data['File']['user_id']))
+                {
+                    $data[$key]['File']['user_id'] = $data['File']['user_id'];
+                }
             }
 
-            if (!empty($row) && empty($row['File']['id']))
+            if(!empty($row['File']['id']) && !empty($row['File']['content']))
             {
-                unset($data[$key]['File'], $data[$key]['_Token']);
-
-                foreach($row as $i => $lib)
+                $fh = fopen(WWW_ROOT . $row['File']['dir']. $row['File']['filename'], 'w');
+                if ($fh)
                 {
-                    if (!strstr($row['File']['filename']['type'], 'image') && !empty($row['File']['library']))
-                    {
-                        unset($data[$key][$i]['Media']);
-                    }
+                    fwrite($fh, $row['File']['content']);
+                    fclose($fh);
                 }
-            } elseif(!empty($row['File']['id']) && !empty($row['File']['content']))
-            {
-                $fh = fopen(WWW_ROOT . $row['File']['dir']. $row['File']['filename'], 'w') or die("can't open file");
-                fwrite($fh, $row['File']['content']);
-                fclose($fh);
             }
         }
 
+        if (isset($unset_file))
+        {
+            unset($data['File']);
+        }
+
         return $data;
+    }
+
+    public function beforeSave()
+    {
+        if (!empty($this->data['File']['content']))
+        {
+            if (!empty($this->data['File']['file_name']))
+            {
+                $filename = $this->data['File']['file_name'];
+            }
+            else
+            {
+                $filename = $this->data['File']['filename'];
+            }
+
+            if (!empty($this->data['File']['file_extension']))
+            {
+                $file = $this->slug($filename) . '.' . $this->data['File']['file_extension'];
+            }
+            else
+            {
+                $file = $filename;
+            }
+
+            $path = WWW_ROOT . $this->data['File']['dir'] . $file;
+
+            if (!empty($this->data['File']['old_filename']) && $this->data['File']['old_filename'] != $file)
+            {
+                rename(
+                    WWW_ROOT . $this->data['File']['dir'] . $this->data['File']['old_filename'], 
+                    $path
+                );
+            }
+
+            $fh = fopen($path, 'w');
+            if ($fh)
+            {
+                fwrite($fh, $this->data['File']['content']);
+                fclose($fh);
+            }
+
+            $this->data['File']['filename'] = $file;
+            $this->data['File']['mimetype'] = $this->mime_type($file);
+            $this->data['File']['filesize'] = filesize($path);
+
+            if (isset($this->data[0]['File']))
+            {
+                unset($this->data[0]);
+            }
+        }
+
+        return true;
     }
 }

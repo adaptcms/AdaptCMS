@@ -1,9 +1,20 @@
 <?php
 
-class PollsController extends PollsAppController {
+class PollsController extends PollsAppController
+{
+    /**
+    * Name of the Controller, 'Polls'
+    */
 	public $name = 'Polls';
+
+    /**
+    * array of permissions for this page
+    */
 	private $permissions;
 
+    /**
+    * In this beforeFilter we will get the permissions to be used in the view files
+    */
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
@@ -11,6 +22,11 @@ class PollsController extends PollsAppController {
 		$this->permissions = $this->getPermissions();
 	}
 
+    /**
+    * Returns a paginated index of Polls
+    *
+    * @return associative array of polls data
+    */
 	public function admin_index()
 	{
 		$conditions = array();
@@ -38,56 +54,63 @@ class PollsController extends PollsAppController {
 		$this->request->data = $this->paginate('Poll');
 	}
 
+    /**
+    * Returns nothing before post
+    *
+    * On POST, returns error flash or success flash and redirect to index on success
+    *
+    * @return mixed
+    */
 	public function admin_add()
 	{
-
 		$this->set('articles', $this->Poll->Article->find('list'));
 
-        if ($this->request->is('post')) {
+        if (!empty($this->request->data))
+        {
         	$this->request->data['Poll']['user_id'] = $this->Auth->user('id');
 
-            if ($this->Poll->saveAssociated($this->request->data)) {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your poll has been added.', 'default', array('class' => 'alert alert-success'));
+            if ($this->Poll->saveAssociated($this->request->data))
+            {
+                $this->Session->setFlash('Your poll has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to add your poll.', 'default', array('class' => 'alert alert-error'));
+                $this->Session->setFlash('Unable to add your poll.', 'flash_error');
             }
         } 
 	}
 
+    /**
+    * Before POST, sets request data to form
+    *
+    * After POST, flash error or flash success and redirect to index
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @return associative array of poll data
+    */
 	public function admin_edit($id = null)
 	{
-
 		$this->Poll->id = $id;
 
 	    if (!empty($this->request->data))
 	    {
-    		foreach($this->request->data['PollValue'] as $data) {
-    			if (!empty($data['delete']) && $data['delete'] == 1) {
-    				$this->Poll->PollValue->delete($data['id']);
-    			} elseif (empty($data['id'])) {
-    				$pollValue['PollValue'] = array(
-    					'title' => $data['title'],
-    					'plugin_poll_id' => $id
-    				);
-    				$this->Poll->PollValue->create();
-    				$this->Poll->PollValue->save($pollValue);
-    				unset($pollValue);
-    			} else {
-    				$this->Poll->PollValue->id = $data['id'];
-    				$this->Poll->PollValue->saveField('title', $data['title']);
-    			}
-    		}
-    		unset($this->request->data['PollValue']);
+    		foreach($this->request->data['PollValue'] as $key => $row)
+            {
+                if (!empty($row['delete']) && !empty($row['id']))
+                {
+                    unset($this->request->data['PollValue'][$key]);
+                    $this->Poll->PollValue->delete($row['id']);
+                }
+            }
 
         	$this->request->data['Poll']['user_id'] = $this->Auth->user('id');
 
-	        if ($this->Poll->save($this->request->data)) {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> Your poll has been updated.', 'default', array('class' => 'alert alert-success'));
-	            $this->redirect(array('action' => 'index'));
-	        } else {
-	            $this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> Unable to update your poll.', 'default', array('class' => 'alert alert-error'));
-	        }
+	        if ($this->Poll->saveAssociated($this->request->data))
+            {
+                $this->Session->setFlash('Your poll has been updated.', 'flash_success');
+                $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash('Unable to update your poll.', 'flash_error');
+            }
 	    }
 
         $this->request->data = $this->Poll->find('first', array(
@@ -108,12 +131,18 @@ class PollsController extends PollsAppController {
         }
 	}
 
+    /**
+    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+    *
+    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+    *
+    * @param id ID of the database entry, redirect to index if no permissions
+    * @param title Title of this entry, used for flash message
+    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
+    * @return redirect
+    */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
-		if ($this->request->is('post')) {
-	        throw new MethodNotAllowedException();
-	    }
-
 	    $this->Poll->id = $id;
 
         $data = $this->Poll->find('first', array(
@@ -130,27 +159,32 @@ class PollsController extends PollsAppController {
             $this->redirect(array('action' => 'index'));	        	
         }
 
-        if (!empty($permanent)) {
+        if (!empty($permanent))
+        {
             $delete = $this->Poll->delete($id);
         } else {
         	$delete = $this->Poll->saveField('deleted_time', $this->Poll->dateTime());
         }
 
 	    if ($delete) {
-	        $this->Session->setFlash(Configure::read('alert_btn').'<strong>Success</strong> The poll `'.$title.'` has been deleted.', 'default', array('class' => 'alert alert-success'));
-	        $this->redirect(array('action' => 'index'));
-	    } else {
-	    	$this->Session->setFlash(Configure::read('alert_btn').'<strong>Error</strong> The poll `'.$title.'` has NOT been deleted.', 'default', array('class' => 'alert alert-error'));
-	        $this->redirect(array('action' => 'index'));
-	    }
+            $this->Session->setFlash('Your poll has been deleted.', 'flash_success');
+            $this->redirect(array('action' => 'index'));
+        } else {
+            $this->Session->setFlash('Unable to delete your poll.', 'flash_error');
+        }
 	}
 
+    /**
+    * Restoring an item will take an item in the trash and reset the delete time
+    *
+    * This makes it live wherever applicable
+    *
+    * @param id ID of database entry, redirect if no permissions
+    * @param title Title of this entry, used for flash message
+    * @return redirect
+    */
     public function admin_restore($id = null, $title = null)
     {
-        if ($this->request->is('post')) {
-            throw new MethodNotAllowedException();
-        }
-
         $this->Poll->id = $id;
 
         $data = $this->Poll->find('first', array(
@@ -168,14 +202,16 @@ class PollsController extends PollsAppController {
         }
 
         if ($this->Poll->saveField('deleted_time', '0000-00-00 00:00:00')) {
-            $this->Session->setFlash('The poll `'.$title.'` has been restored.', 'flash_success');
+            $this->Session->setFlash('Your poll `' . $title . '` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The poll `'.$title.'` has NOT been restored.', 'flash_error');
-            $this->redirect(array('action' => 'index'));
+            $this->Session->setFlash('Unable to restore your poll.', 'flash_error');
         }
     }
 
+    /**
+    * Action to vote on a poll
+    */
 	public function vote()
 	{
     	$this->layout = 'ajax';
@@ -205,7 +241,7 @@ class PollsController extends PollsAppController {
         	$data = array(
         		'PollVotingValue' => array(
         			'plugin_poll_id' => $id,
-        			'plugin_poll_value_id' => $this->request->data['Poll']['value'],
+        			'plugin_value_id' => $this->request->data['Poll']['value'],
         			'user_id' => $this->Auth->user('id'),
         			'user_ip' => $_SERVER['REMOTE_ADDR']
         		)
@@ -250,6 +286,9 @@ class PollsController extends PollsAppController {
     	return json_encode($count);
 	}
 
+    /**
+    * Passed poll data and renders vote results element
+    */
 	public function ajax_results()
 	{
     	$this->layout = 'ajax';
@@ -269,12 +308,22 @@ class PollsController extends PollsAppController {
 			$find['Poll']['can_vote'] = $this->Poll->canVote($find, $this->Auth->user('id'));
 		}
 
-    	$this->set('data', $this->Poll->totalVotes($find));
+        $data = $this->Poll->totalVotes($find);
+
+        if (!empty($this->request->data['Block']['title']))
+        {
+            $data['Block']['title'] = $this->request->data['Block']['title'];
+        }
+
+    	$this->set(compact('data'));
 
     	$this->viewPath = 'Elements';
     	$this->render('poll_vote_results');	
 	}
 
+    /**
+    * View poll
+    */
 	public function ajax_view_poll()
 	{
     	$this->layout = 'ajax';
@@ -305,7 +354,14 @@ class PollsController extends PollsAppController {
             $find['options'][$option['id']] = $option['title'];
         }
 
-    	$this->set('data', $this->Poll->totalVotes($find));
+        $data = $this->Poll->totalVotes($find);
+
+        if (!empty($this->request->data['Block']['title']))
+        {
+            $data['Block']['title'] = $this->request->data['Block']['title'];
+        }
+
+        $this->set(compact('data'));
 
     	$this->viewPath = 'Elements';
     	$this->render('poll_vote');			

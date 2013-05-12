@@ -6,9 +6,15 @@ class User extends AppModel
 {
     public $name = 'User';
     public $hasMany = array(
-        'Article',
-        'Comment',
-        'Message',
+        'Article' => array(
+            'dependent' => true
+        ),
+        'Comment' => array(
+            'dependent' => true
+        ),
+        'Message' => array(
+            'dependent' => true
+        ),
         'Block',
         'Category',
         'Field',
@@ -80,7 +86,8 @@ class User extends AppModel
         $path = WWW_ROOT . 'uploads' . DS . 'avatars' . DS;
 
         $this->data = Sanitize::clean($this->data, array(
-            'encode' => false
+            'encode' => false,
+            'remove_html' => false
         ));
 
         if (!empty($this->data['User']['settings']['avatar']) && 
@@ -145,18 +152,41 @@ class User extends AppModel
 
     public function getSecurityAnswers($data)
     {
-      if (!empty($data['User']['security_answers'])) {
         $results = array();
+        if (!empty($data['User']['security_answers'])) {
+            foreach(json_decode(stripslashes($data['User']['security_answers']), true) as $key => $row)
+            {
+                if (!empty($row['question']) && !empty($row['answer'])) {
+                    $results[$key]['question'] = str_replace("'","",$row['question']);
+                    $results[$key]['answer'] = $row['answer'];
+                }
 
-        foreach(json_decode($data['User']['security_answers']) as $key => $row) {
-          if (!empty($row->question) && !empty($row->answer)) {
-            $results[$key]['question'] = str_replace("'","",$row->question);
-            $results[$key]['answer'] = $row->answer;
-          }
+                if ($key == 'activate_code')
+                {
+                    $results['activate_code'] = $row;
+                }
+                elseif ($key == 'activate_time')
+                {
+                    $results['activate_time'] = $row;
+                }
+            }
         }
 
         return $results;
-      }
+    }
+
+    public function getSecurityOptions($data)
+    {
+        $results = array();
+        if (!empty($data['SettingValue']['data_options']))
+        {
+            foreach($data['SettingValue']['data_options'] as $row)
+            {
+                $results[$row] = $row;
+            }
+        }
+
+        return $results;
     }
 
     public function getBlockData($data, $user_id)

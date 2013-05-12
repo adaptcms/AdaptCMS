@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}blocks` (
   `user_id` int(11),
   `location` longtext NOT NULL,
   `limit` int(11),
-  `settings` longtext NOT NULL,
+  `settings` longtext DEFAULT NULL,
+  `data` longtext NOT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -80,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}cron` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -88,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `label` varchar(255) NOT NULL,
   `field_order` int(11) NOT NULL DEFAULT '0',
   `category_id` int(11) DEFAULT '0',
+  `module_id` int(11) DEFAULT '0',
   `field_type` varchar(255) DEFAULT NULL,
   `description` text,
   `field_options` longtext,
@@ -147,6 +149,19 @@ CREATE TABLE IF NOT EXISTS `{prefix}media_files` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}menus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `menu_items` longtext NOT NULL,
+  `settings` longtext,
+  `user_id` varchar(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
@@ -163,6 +178,15 @@ CREATE TABLE IF NOT EXISTS `{prefix}messages` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}module_values` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `module_id` int(11) DEFAULT '0',
+  `field_id` int(11) DEFAULT '0',
+  `file_id` int(11) DEFAULT '0',
+  `data` text,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}modules` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
@@ -170,6 +194,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}modules` (
   `block_active` int(1) NOT NULL DEFAULT '0',
   `is_plugin` int(1) NOT NULL DEFAULT '0',
   `is_searchable` int(1) NOT NULL DEFAULT '0',
+  `is_fields` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
@@ -255,7 +280,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_values` (
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plugin_poll_id` int(11) DEFAULT '0',
-  `plugin_poll_value_id` int(11) DEFAULT '0',
+  `plugin_value_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `user_ip` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
@@ -324,6 +349,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}setting_values` (
 CREATE TABLE IF NOT EXISTS `{prefix}templates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
+  `label` varchar(255) DEFAULT NULL,
   `location` varchar(255) NOT NULL,
   `theme_id` int(11) DEFAULT '0',
   `template` text,

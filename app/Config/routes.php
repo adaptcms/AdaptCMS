@@ -9,9 +9,9 @@
  */
 	Router::connect('/pages/*', array('controller' => 'pages', 'action' => 'display'));
 
-/**
- * Alpha Routes
- */
+	/**
+	 * 3.0 Routes
+	 */
 	Router::connect('/admin', array(
 		'controller' => 'pages', 
 		'action' => 'admin'
@@ -21,9 +21,11 @@
 		'controller' => 'categories', 
 		'action' => 'view'
 	));
-	Router::connect('/article/', array(
+	Router::connect('/article/:id/:slug', array(
 		'controller' => 'articles', 
-		'action' => 'view'
+		'action' => 'view',
+		'id' => '*',
+		'slug' => '*'
 	));
 	Router::connect('/tag/', array(
 		'controller' => 'articles', 
@@ -38,13 +40,61 @@
 	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
 
-	foreach (Configure::read('Plugins.list') as $plugin)
-	{
-		$path = APP . DS . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'routes.php';
+	/**
+	* AdaptCMS 2.0.x Routing
+	*/
+	Router::connect('/article/:id/:category/:slug', array(
+		'controller' => 'install', 
+		'action' => 'old',
+		'id' => '*',
+		'slug' => '*',
+		'category' => '*',
+		'type' => 'article'
+	));
 
-		if (file_exists($path))
+	Router::connect('/section/:slug', array(
+		'controller' => 'install', 
+		'action' => 'old',
+		'type' => 'category',
+		'slug' => '*'
+	));
+
+	Router::connect('/page/:id/:slug', array(
+		'controller' => 'install', 
+		'action' => 'old',
+		'type' => 'page',
+		'id' => '*',
+		'slug' => '*'
+	));
+
+	Router::connect('/profile/', array(
+		'controller' => 'users', 
+		'action' => 'profile'
+	));
+
+	/**
+	* AdaptCMS 1.x Routing
+	*/
+
+	Router::connect('/article-:id-:slug-:category', array(
+		'controller' => 'install', 
+		'action' => 'old',
+		'id' => '*',
+		'slug' => '*',
+		'category' => '*',
+		'type' => 'article'
+	), array('id' => '[0-9]+'));
+
+	if (Configure::check('Plugins.list'))
+	{
+		foreach (Configure::read('Plugins.list') as $plugin)
 		{
-			include_once($path);
+			$path = APP . DS . 'Plugin' . DS . $plugin . DS . 'Config' . DS . 'routes.php';
+
+			if (file_exists($path))
+			{
+				include_once($path);
+			}
 		}
 	}
 

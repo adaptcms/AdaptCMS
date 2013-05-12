@@ -61,11 +61,12 @@ class TinyMceHelper extends AppHelper {
 
 		if (!empty($options['simple']))
 		{
-			$buttons1 = 'bold,italic,underline,|,formatselect,|,bullist,numlist,|,replace,spellchecker,preview,link,unlink,|,image,emotions,';
+			$buttons1 = 'bold,italic,underline,|,formatselect,|,bullist,numlist,|,replace,preview,link,unlink,|,image,emoticons,';
 			$buttons2 = '';
 		} else {
-			$buttons1 = 'bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontsizeselect,formatselect';
-			$buttons2 = 'bullist,numlist,|,undo,redo,|,link,unlink,image,cleanup,code,preview,replace,spellchecker,emotions,media,pagebreak,tinyautosave';
+			$buttons1 = 'undo redo | styleselect | forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image';
+			$buttons1 .= ' | preview media emoticons | code';
+			$buttons2 = '';
 		}
 
 		// remove last comma from lines to avoid the editor breaking in Internet Explorer
@@ -73,17 +74,19 @@ class TinyMceHelper extends AppHelper {
 		tinyMCE.init({
 			// General options
 			mode : '" . $mode . "',
-			theme : 'advanced',
+			theme : 'modern',
 			elements : '" . $elements . "',
-			plugins : 'spellchecker,preview,searchreplace,emotions,media,contextmenu,wordcount,pagebreak,tinyautosave',
+			plugins : [
+		        'autosave advlist autolink lists link image charmap print preview hr anchor pagebreak',
+		        'searchreplace wordcount visualblocks visualchars code fullscreen',
+		        'insertdatetime media nonbreaking save table contextmenu directionality',
+		        'emoticons template paste code textcolor'
+			],
 
-			theme_advanced_buttons1 : '" . $buttons1 . "',
-			theme_advanced_buttons2 : '" . $buttons2 . "',
-			theme_advanced_buttons3 : '',
-			theme_advanced_toolbar_location : 'top',
-			theme_advanced_toolbar_align : 'left',
-			theme_advanced_statusbar_location : 'bottom',
-			theme_advanced_resizing : true,
+			toolbar1 : '" . $buttons1 . "',
+			toolbar2 : '" . $buttons2 . "',
+
+			extended_valid_elements :'script[src|language|type|class]',
 
 			remove_linebreaks : false,
 	        force_p_newlines : false,
@@ -92,7 +95,7 @@ class TinyMceHelper extends AppHelper {
 			remove_script_host : false
 		});
 	</script>";
-	$this->Html->script('/js/tiny_mce/tiny_mce.js', false);
+	$this->Html->script('/js/tinymce/tinymce.min.js', false);
 	}
 
 /**

@@ -1,10 +1,12 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Tools', array('controller' => 'tools', 'action' => 'index')) ?>
 <?php $this->Html->addCrumb('Cron', null) ?>
 
-<div class="left">
+<div class="pull-left">
     <h1>Cron Entries<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <p class="span8">This area is for advanced users. With the Cron Job functionality, users can setup functionality to run on a specific schedule. One example is to set the database to be optimized once every week or a new sitemap to be pinged/generated once a day.</p>
 </div>
-<div class="btn-group" style="float:right;margin-bottom:10px">
+<div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
     View <i class="icon-picture"></i>
     <span class="caret"></span>
@@ -27,11 +29,13 @@
 </div>
 <div class="clear"></div>
 
-<?= $this->Html->link('Add Cron Job <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
-    'class' => 'btn btn-info pull-right', 
-    'style' => 'margin-bottom:10px',
-    'escape' => false
-)) ?>
+<?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_add'])): ?>
+    <?= $this->Html->link('Add Cron Job <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
+        'class' => 'btn btn-info pull-right', 
+        'style' => 'margin-bottom:10px',
+        'escape' => false
+    )) ?>
+<?php endif ?>
 
 <?php if (empty($this->request->data)): ?>
     <div class="clearfix"></div>
@@ -68,32 +72,40 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <?php if (empty($this->params->named['trash'])): ?>
-                                    <li>
-                                        <?= $this->Admin->edit(
-                                            $data['Cron']['id']
-                                        ) ?>
-                                    </li>
-                                    <li>
-                                        <?= $this->Admin->delete(
-                                            $data['Cron']['id'],
-                                            $data['Cron']['title'],
-                                            'cron item'
-                                        ) ?>
-                                    </li>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->edit(
+                                                $data['Cron']['id']
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->delete(
+                                                $data['Cron']['id'],
+                                                $data['Cron']['title'],
+                                                'cron item'
+                                            ) ?>
+                                        </li>
+                                    <?php endif ?>
                                 <?php else: ?>
-                                    <li>
-                                        <?= $this->Admin->restore(
-                                            $data['Cron']['id'],
-                                            $data['Cron']['title']
-                                        ) ?>
-                                    </li>  
-                                    <li>
-                                        <?= $this->Admin->delete_perm(
-                                            $data['Cron']['id'],
-                                            $data['Cron']['title'],
-                                            'cron item'
-                                        ) ?>
-                                    </li>     
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->restore(
+                                                $data['Cron']['id'],
+                                                $data['Cron']['title']
+                                            ) ?>
+                                        </li>  
+                                    <?php endif ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                        <li>
+                                            <?= $this->Admin->delete_perm(
+                                                $data['Cron']['id'],
+                                                $data['Cron']['title'],
+                                                'cron item'
+                                            ) ?>
+                                        </li>  
+                                    <?php endif ?>   
                                 <?php endif ?>
                             </ul>
                         </div>

@@ -6,11 +6,11 @@ class PollVotingValue extends PollsAppModel
 
 	public $belongsTo = array(
         'Poll' => array(
-            'className'    => 'Poll',
+            'className'    => 'Polls.Poll',
             'foreignKey'   => 'poll_id'
         ),
         'PollValue' => array(
-        	'className'	   => 'PollValue',
+        	'className'	   => 'Polls.PollValue',
         	'foreignKey'   => 'value_id'
         )
 	);

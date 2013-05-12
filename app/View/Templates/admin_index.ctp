@@ -228,7 +228,7 @@
                             </td>
                         <?php endif ?>
                     <?php else: ?>
-                        N/A
+                        <td>N/A</td>
                     <?php endif ?>
                     <td>
                         <div class="btn-group">
@@ -285,7 +285,7 @@
                                         ?>
                                     <?php endif ?>
                                 <?php endif ?>
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->params->named['trash_theme'])): ?>
                                     <?php if (!empty($data['Theme']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -412,7 +412,7 @@ Search
     <table class="table table-striped">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('title') ?></th>
+                <th><?= $this->Paginator->sort('label') ?></th>
                 <th><?= $this->Paginator->sort('Theme.title', 'Theme') ?></th>
                 <th><?= $this->Paginator->sort('location', 'Folder') ?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
@@ -424,7 +424,7 @@ Search
             <?php foreach ($this->request->data['Template'] as $data): ?>
             <tr>
                 <td>
-                    <?= $this->Html->link($data['Template']['title'], array('admin' => false, 'controller' => 'templates', 'action' => 'view', $data['Template']['id'])); ?>
+                    <?= $this->Html->link($data['Template']['label'], array('admin' => false, 'controller' => 'templates', 'action' => 'edit', $data['Template']['id'])); ?>
                 </td>
                 <td>
                     <?php if ($data['Template']['theme_id'] > 0): ?>
@@ -453,7 +453,7 @@ Search
                                 <li>
                                     <?= $this->Admin->delete(
                                         $data['Template']['id'],
-                                        $data['Template']['title'],
+                                        $data['Template']['label'],
                                         'template'
                                     ) ?>
                                 </li>
@@ -461,13 +461,13 @@ Search
                                 <li>
                                     <?= $this->Admin->restore(
                                         $data['Template']['id'],
-                                        $data['Template']['title']
+                                        $data['Template']['label']
                                     ) ?>
                                 </li>  
                                 <li>
                                     <?= $this->Admin->delete_perm(
                                         $data['Template']['id'],
-                                        $data['Template']['title'],
+                                        $data['Template']['label'],
                                         'template'
                                     ) ?>
                                 </li>     

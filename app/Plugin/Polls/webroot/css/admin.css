@@ -1,0 +1,16 @@
+.poll-remove,.poll-option-remove,.poll-option-undo {
+	margin-bottom: 10px;
+	margin-left: 10px;
+}
+button.btn, input[type="submit"].btn {
+	float: left;
+}
+label.error {
+	position: absolute;
+   left: 80px;
+   top: 0;
+}
+#options .input.text
+{
+   position: relative;
+}

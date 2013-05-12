@@ -10,6 +10,11 @@ class FieldHelper extends AppHelper
     public $name = 'Field';
 
     /**
+    * To show links, we require the HTML helper
+    */
+    public $helpers = array('Html');
+
+    /**
      * Looks for an textarea field in an array, returns the content or false
      * 
      * @param array $data
@@ -52,6 +57,63 @@ class FieldHelper extends AppHelper
             }
         }
         
+        return;
+    }
+
+    /**
+     * Depending on type of data, returns it
+     * 
+     * @param array $data
+     * @return string
+     */
+    public function getData($data)
+    {
+        if (!empty($data['ArticleValue']))
+        {
+            $row = $data['ArticleValue'];
+        }
+        elseif (!empty($data['ModuleValue']))
+        {
+            $row = $data['ModuleValue'][0];
+        }
+
+        if (!empty($row))
+        {
+            $multi = array(
+                'dropdown',
+                'check',
+                'multi-dropdown',
+                'radio'
+            );
+
+            if ($data['Field']['field_type'] == 'file')
+            {
+                if (!empty($row['File']['filename']))
+                {
+                    return $this->Html->link($row['File']['filename'],
+                        '/' . $row['File']['dir'] . $row['data'],
+                        array('target' => '_blank')
+                    );
+                }
+            } elseif (in_array($data['Field']['field_type'], $multi))
+            {
+                if (!empty($row['data']) && is_array($row['data']))
+                {
+                    return implode(', ', $row['data']);
+                }
+            } elseif ($data['Field']['field_type'] == 'url')
+            {
+                return $this->Html->link(
+                    $row['data'],
+                    $row['data']
+                );
+            }
+            else
+            {
+                return $row['data'];
+            }
+        }
+
         return;
     }
 }

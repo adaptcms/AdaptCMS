@@ -35,8 +35,13 @@ class Media extends AppModel
     */
     public $validate = array(
         'title' => array(
-            'rule' => array(
-                'notEmpty'
+            array(
+                'rule' => 'notEmpty',
+                'message' => 'You must enter in a library title.'
+            ),
+            array(
+                'rule' => 'isUnique',
+                'message' => 'Media title already in use.'
             )
         )
     );
@@ -94,9 +99,40 @@ class Media extends AppModel
 
         if (!empty($this->data['Media']['title']))
         {
+            $this->data['Media']['title'] = strip_tags($this->data['Media']['title']);
             $this->data['Media']['slug'] = $this->slug($this->data['Media']['title']);
         }
         
         return true;
+    }
+
+    public function getLastFileAndCount($data = array())
+    {
+        $prefix = ConnectionManager::enumConnectionObjects();
+
+        foreach($data as $key => $row)
+        {
+            $count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
+            $data[$key]['File']['count'] = $count[0][0]['count'];
+
+            $last_file = $this->find('first', array(
+                'conditions' => array(
+                    'Media.id' => $row['Media']['id']
+                ),
+                'contain' => array(
+                    'File' => array(
+                        'conditions' => array(
+                            'File.deleted_time' => '0000-00-00 00:00:00'
+                        ),
+                        'limit' => 1
+                    )
+                )
+            ));
+
+            if (!empty($last_file['File']))
+                $data[$key]['File'] = array_merge($data[$key]['File'], $last_file['File'][0]);
+        }
+
+        return $data;
     }
 }

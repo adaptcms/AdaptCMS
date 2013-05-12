@@ -18,6 +18,10 @@ class Field extends AppModel
                 'title'
             )
         ),
+        'Module' => array(
+            'className' => 'Module',
+            'foreignKey' => 'module_id'
+        ),
         'User' => array(
             'className' => 'User',
             'foreignKey' => 'user_id'
@@ -30,6 +34,10 @@ class Field extends AppModel
     public $hasMany = array(
         'ArticleValue' => array(
             'className' => 'ArticleValue',
+            'foreignKey' => 'field_id'
+        ),
+        'ModuleValue' => array(
+            'className' => 'ModuleValue',
             'foreignKey' => 'field_id'
         )
     );
@@ -91,6 +99,11 @@ class Field extends AppModel
             {
                 $results[$key]['Field']['field_options'] = json_decode($result['Field']['field_options'], true);
             }
+
+            if (!empty($result['Field']['module_id']))
+            {
+                $results[$key]['Field']['category_id'] = 'module_' . $result['Field']['module_id'];
+            }
         }
 
         return $results;
@@ -112,6 +125,12 @@ class Field extends AppModel
                 $this->data['Field']['field_options'] = 
                     json_encode($this->data['FieldData']);
             }
+
+            if (!empty($this->data['Field']['category_id']) && !is_numeric($this->data['Field']['category_id']))
+            {
+                $this->data['Field']['module_id'] = str_replace('module_', '', $this->data['Field']['category_id']);
+                $this->data['Field']['category_id'] = 0;
+            }
         }
 
         return true;
@@ -126,10 +145,25 @@ class Field extends AppModel
     */
     public function getFields($category_id, $article_id = null)
     {
+        $conditions = array();
+
+        if (is_numeric($category_id))
+        {
+            $conditions['Field.category_id'] = $category_id;
+            $type = 'ArticleValue';
+            $type_id = 'article_id';
+        }
+        else
+        {
+            $id = $this->Module->findByModelTitle($category_id);
+
+            $conditions['Field.module_id'] = $id['Module']['id'];
+            $type = 'ModuleValue';
+            $type_id = 'module_id';
+        }
+
         $conditions = array(
-            'conditions' => array(
-                'Field.category_id' => $category_id
-            ),
+            'conditions' => $conditions,
             'order' => array(
                 'Field.field_order ASC'
             )
@@ -138,9 +172,9 @@ class Field extends AppModel
         if (!empty($article_id))
         {
             $conditions['contain'] = array(
-              'ArticleValue' => array(
+              $type => array(
                   'conditions' => array(
-                      'ArticleValue.article_id' => $article_id
+                      $type . '.' . $type_id => $article_id
                   ),
                   'File'
               )
@@ -150,5 +184,36 @@ class Field extends AppModel
         $fields = $this->find('all', $conditions);
 
         return $fields;
+    }
+
+    public function getData($module, $id)
+    {
+        $data = $this->getFields($module, $id);
+
+        $results = array();
+        foreach($data as $row)
+        {
+            if (!empty($row['ModuleValue'][0]))
+            {
+                $values = '';
+
+                if (!empty($row['ModuleValue'][0]['File']['id']))
+                {
+                    $values = $row['ModuleValue'][0]['File']['dir'] . 
+                        $row['ModuleValue'][0]['File']['filename'];
+                }
+                elseif (!empty($row['ModuleValue'][0]['data']))
+                {
+                    $values = $row['ModuleValue'][0]['data'];
+                }
+
+                $results['Data'][$row['Field']['title']] = $values;
+            }
+        }
+
+        return array(
+            'field_data' => $data,
+            'data' => $results
+        );
     }
 }

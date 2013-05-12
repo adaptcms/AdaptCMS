@@ -402,19 +402,23 @@ class AppController extends Controller
 				$related_values = json_decode($permission['Permission']['related'], true);
 
 				$values = array();
-				foreach($related_values as $key => $val)
-				{
-                    $action = $val['action'][0];
-                    $controller = !empty($val['controller'][0]) ? $val['controller'][0] : $controller;
 
-                    $related['related'][$controller][$action] = array();
+                if (!empty($related_values))
+                {
+                    foreach($related_values as $key => $val)
+                    {
+                        $action = $val['action'][0];
+                        $controller = !empty($val['controller'][0]) ? $val['controller'][0] : $controller;
 
-					$values['OR'][$key]['AND'] = array(
-						'Permission.action' => $action,
-						'Permission.controller' => $controller,
-						'Permission.status' => 1
-					);
-				}
+                        $related['related'][$controller][$action] = array();
+
+                        $values['OR'][$key]['AND'] = array(
+                            'Permission.action' => $action,
+                            'Permission.controller' => $controller,
+                            'Permission.status' => 1
+                        );
+                    }
+                }
 
 				$new_related['related'] = $this->Permission->find('all', array(
 					'conditions' => array(
@@ -473,16 +477,22 @@ class AppController extends Controller
                     'message' => 'You do not have access to this page'
             )));
     	} else {
-            die(debug($this->params));
-
-            $this->redirect(array(
-                    'plugin' => false,
-                    'admin' => false, 
-                    'controller' => 'pages', 
-                    'action' => 'display', 
-                    'denied'
+            if (Configure::read('debug') == 0)
+            {
+                $this->Session->setFlash('Cannot find this page.', 'flash_error');
+                $this->redirect(array(
+                        'plugin' => false,
+                        'admin' => false, 
+                        'controller' => 'pages', 
+                        'action' => 'display', 
+                        'denied'
                     )
-            );
+                );
+            }
+            else
+            {
+                die(debug($this->params));
+            }
         }
     }
 
@@ -502,8 +512,8 @@ class AppController extends Controller
     }
 
     public function blackhole($type) {
-            // debug($this->params);
-    // die(debug($type));
+        // debug($this->params);
+        debug($type);
     }
 
     /**
@@ -514,22 +524,22 @@ class AppController extends Controller
         $this->loadModel('Log');
 
         if (!empty($this->params['pass'][0])) {
-                $action_id = $this->params['pass'][0];
+            $action_id = $this->params['pass'][0];
         } else {
-                $action_id = 0;
+            $action_id = 0;
         }
 
         $log_insert['Log'] = array(
-                // 'data' => json_encode($this->params),
-                'user_id' => $this->Auth->user('id'),
-                'ip_address' => $_SERVER['REMOTE_ADDR'],
-                'plugin' => $this->params->plugin,
-                'controller' => $this->params->controller,
-                'action' => $this->params->action,
-                'action_id' => $action_id,
-                'date' => date('Y-m-d H:i:s')
+            // 'data' => json_encode($this->params),
+            'user_id' => $this->Auth->user('id'),
+            'ip_address' => $_SERVER['REMOTE_ADDR'],
+            'plugin' => $this->params->plugin,
+            'controller' => $this->params->controller,
+            'action' => $this->params->action,
+            'action_id' => $action_id,
+            'date' => date('Y-m-d H:i:s')
         );
-        // $this->Log->save($log_insert);
+        $this->Log->save($log_insert);
     }
     
     /**
@@ -540,110 +550,110 @@ class AppController extends Controller
     public function blocksLookup()
     {
         if ($this->params->prefix != "admin") {
-                $this->loadModel('Block');
+            $this->loadModel('Block');
 
-                if (!empty($this->params['pass'][0])) {
-                        $location = $this->params->controller.'|'.$this->params->action.'|'.$this->params['pass'][0];
-                        $location2 = $this->params->controller.'|'.$this->params->action;
+            if (!empty($this->params['pass'][0])) {
+                $location = $this->params->controller.'|'.$this->params->action.'|'.$this->params['pass'][0];
+                $location2 = $this->params->controller.'|'.$this->params->action;
 
-                        $block_cond = array(
-                                'conditions' => array(
-                                        'OR' => array(
-                                                array('Block.location LIKE' => '%"*"%'),
-                                                array('Block.location LIKE' => '%"' . $location . '"%'),
-                                                array('Block.location LIKE' => '%"' . $location2 . '"%')
-                                        ),
-                                        'Block.deleted_time' => '0000-00-00 00:00:00'
-                                ),
-                                'contain' => array(
-                                        'Module'
-                                )
-                        );
-                } else {
-                        $location = $this->params->controller.'|'.$this->params->action;
-                        $block_cond = array(
-                                'conditions' => array(
-                                        'OR' => array(
-                                                array('Block.location LIKE' => '%"*"%'),
-                                                array('Block.location LIKE' => '%"' . $location . '"%')
-                                        ),
-                                        'Block.deleted_time' => '0000-00-00 00:00:00'
-                                ),
-                                'contain' => array(
-                                        'Module'
-                                )
-                        );
-                }
-
-                $data = $this->Block->find('all', $block_cond);
-
-                if (!empty($data))
-                {
-                        $block_data = array();
-                        $block_permissions = array();
-                        $models = array();
-
-                        foreach($data as $row)
-                        {
-                        if (!empty($row['Block']['settings']))
-                        {
-                            $settings = json_decode($row['Block']['settings']);
-
-                            foreach($settings as $key => $val)
-                            {
-                                $row['Block'][$key] = $val;
-                            }
-
-                            unset($row['Block']['settings']);
-                        }
-
-                        if ($row['Block']['type'] == "dynamic")
-                        {
-                                        if ($row['Module']['is_plugin'] == 1)
-                                        {
-                                                $model = $row['Module']['model_title'];
-                                                $this->loadModel(
-                                                        str_replace(' ','',$row['Module']['title']).'.'.$model
-                                                );
-                                        } else {
-                                                $model = $row['Module']['model_title'];
-                                                $this->loadModel($model);
-                                        }
-
-                                        $permissions = $this->Block->Module->Permission->find('first', array(
-                                                'conditions' => array(
-                                                        'Permission.module_id' => $row['Module']['id'],
-                                                        'Permission.action NOT LIKE' => '%admin%',
-                                                        'Permission.role_id' => $this->Auth->user('id')
-                                                ),
-                                                'order' => 'Permission.related DESC',
-                                                'limit' => 1
-                                        ));
-
-                                        if (!empty($permissions))
-                                        {
-                                                $block_permissions
-                                                        [$row['Block']['title']] = 
-                                                                $this->getRelatedPermissions($permissions);
-                                        }
-
-                                if (method_exists($this->$model, 'getBlockData'))
-                                {
-                                                $block_data
-                                                        [$row['Block']['title']] = $this->$model->getBlockData(
-                                                                $row['Block'], 
-                                                                $this->Auth->user('id')
-                                                );
-                                        }
-                                } elseif (!empty($row['Block']['data'])) {
-                                        $block_data[$row['Block']['title']] = $row['Block']['data'];
-                                }
-                        }
-                }
-
-                $this->set(compact('block_data', 'block_permissions'));
+                $block_cond = array(
+                    'conditions' => array(
+                        'OR' => array(
+                            array('Block.location LIKE' => '%"*"%'),
+                            array('Block.location LIKE' => '%"' . $location . '"%'),
+                            array('Block.location LIKE' => '%"' . $location2 . '"%')
+                            ),
+                        'Block.deleted_time' => '0000-00-00 00:00:00'
+                        ),
+                    'contain' => array(
+                        'Module'
+                        )
+                    );
+            } else {
+                $location = $this->params->controller.'|'.$this->params->action;
+                $block_cond = array(
+                    'conditions' => array(
+                        'OR' => array(
+                            array('Block.location LIKE' => '%"*"%'),
+                            array('Block.location LIKE' => '%"' . $location . '"%')
+                            ),
+                        'Block.deleted_time' => '0000-00-00 00:00:00'
+                        ),
+                    'contain' => array(
+                        'Module'
+                        )
+                    );
             }
-	}
+
+            $data = $this->Block->find('all', $block_cond);
+
+            if (!empty($data))
+            {
+                $block_data = array();
+                $block_permissions = array();
+                $models = array();
+
+                foreach($data as $row)
+                {
+                    if (!empty($row['Block']['settings']))
+                    {
+                        $settings = json_decode($row['Block']['settings']);
+
+                        foreach($settings as $key => $val)
+                        {
+                            $row['Block'][$key] = $val;
+                        }
+
+                        unset($row['Block']['settings']);
+                    }
+
+                    if ($row['Block']['type'] == "dynamic")
+                    {
+                        if ($row['Module']['is_plugin'] == 1)
+                        {
+                            $model = $row['Module']['model_title'];
+                            $this->loadModel(
+                                str_replace(' ','',$row['Module']['title']).'.'.$model
+                                );
+                        } else {
+                            $model = $row['Module']['model_title'];
+                            $this->loadModel($model);
+                        }
+
+                        $permissions = $this->Block->Module->Permission->find('first', array(
+                            'conditions' => array(
+                                'Permission.module_id' => $row['Module']['id'],
+                                'Permission.action NOT LIKE' => '%admin%',
+                                'Permission.role_id' => $this->getRole()
+                                ),
+                            'order' => 'Permission.related DESC',
+                            'limit' => 1
+                            ));
+
+                        if (!empty($permissions))
+                        {
+                            $block_permissions
+                            [$row['Block']['title']] = 
+                            $this->getRelatedPermissions($permissions);
+                        }
+
+                        if (method_exists($this->$model, 'getBlockData'))
+                        {
+                            $block_data
+                            [$row['Block']['title']] = $this->$model->getBlockData(
+                                $row['Block'], 
+                                $this->Auth->user('id')
+                                );
+                        }
+                    } elseif (!empty($row['Block']['data'])) {
+                        $block_data[$row['Block']['title']] = $row['Block']['data'];
+                    }
+                }
+            }
+
+            $this->set(compact('block_data', 'block_permissions'));
+        }
+    }
 
         /**
          * Looks up any cron entries that need to run and run the model function

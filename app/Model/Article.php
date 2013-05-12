@@ -25,8 +25,12 @@ class Article extends AppModel
     * Articles may have many article values and many comments related to it
     */
     public $hasMany = array(
-        'ArticleValue',
-        'Comment'
+        'ArticleValue' => array(
+            'dependent' => true
+        ),
+        'Comment' => array(
+            'dependent' => true
+        )
     );
 
     /**
@@ -85,7 +89,8 @@ class Article extends AppModel
 
             $data[$key]['Comments'] = $this->Comment->find('count', array(
                 'conditions' => array(
-                    'Comment.article_id' => $row['Article']['id']
+                    'Comment.article_id' => $row['Article']['id'],
+                    'Comment.active' => 1
                 )
             ));
         }
@@ -297,14 +302,25 @@ class Article extends AppModel
                 {
                     if (!empty($value['Field']))
                     {
-                        $json = json_decode($value['data'], true);
-
-                        if (empty($json) || !is_array($json))
+                        if (!empty($value['File']))
                         {
-                            $results[$key]['Data'][$value['Field']['title']] = $value['data'];
-                        } else {
-                            $results[$key]['Data'][$value['Field']['title']]['data'] = $json;
-                            $results[$key]['Data'][$value['Field']['title']]['list'] = implode(', ', $json);
+                            if (!empty($value['File']['filename']))
+                            {
+                                $results[$key]['Data'][$value['Field']['title']] = 
+                                    $value['File']['dir'] . $value['File']['filename'];
+                            }
+                        }
+                        else
+                        {
+                            $json = json_decode($value['data'], true);
+
+                            if (empty($json) || !is_array($json))
+                            {
+                                $results[$key]['Data'][$value['Field']['title']] = $value['data'];
+                            } else {
+                                $results[$key]['Data'][$value['Field']['title']]['data'] = $json;
+                                $results[$key]['Data'][$value['Field']['title']]['list'] = implode(', ', $json);
+                            }
                         }
                     }
                 }

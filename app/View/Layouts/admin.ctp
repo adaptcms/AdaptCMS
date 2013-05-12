@@ -156,6 +156,7 @@
                   <ul class="nav nav-list">
                     <li><?= $this->Html->link('Appearance', array('admin' => true, 'plugin' => false, 'controller' => 'templates', 'action' => 'index')) ?></li>
                     <li><?= $this->Html->link('Blocks', array('admin' => true, 'plugin' => false, 'controller' => 'blocks', 'action' => 'index')) ?></li>
+                    <li><?= $this->Html->link('Menus', array('admin' => true, 'plugin' => false, 'controller' => 'menus', 'action' => 'index')) ?></li>
                     <li><?= $this->Html->link('Settings', array('admin' => true, 'plugin' => false, 'controller' => 'settings', 'action' => 'index')) ?></li>
                     <li><?= $this->Html->link('Tools', array('admin' => true, 'plugin' => false, 'controller' => 'tools', 'action' => 'index')) ?></li>
                   </ul>

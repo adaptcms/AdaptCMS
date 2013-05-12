@@ -47,6 +47,7 @@ class Page extends AppModel {
     {
         if (!empty($this->data['Page']['title']))
         {
+            $this->data['Page']['title'] = strip_tags($this->data['Page']['title']);
             $this->data['Page']['slug'] = $this->slug($this->data['Page']['title']);
 
             if (empty($this->data['Page']['id']))

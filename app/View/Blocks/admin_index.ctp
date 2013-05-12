@@ -1,8 +1,9 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
 <?php $this->Html->addCrumb('Blocks', null) ?>
 
-<div class="pull-left">
+<div class="pull-left span7 no-marg-left">
     <h1>Blocks<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <p>Blocks are the meat of displaying data on any area of your site. At the start, features such as Articles, Categories and plugins such as AdaptBB, Links and Polls utilize this to show a poll or list the newest articles.</p>
 </div>
 <div class="btn-toolbar pull-right" style="margin-bottom:10px">
     <div class="btn-group">

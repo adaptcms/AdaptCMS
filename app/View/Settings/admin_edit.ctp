@@ -110,18 +110,28 @@
 						<?= $this->Form->input($key . '.SettingValue.data', array('value' => $row['data'], 'style' => 'width:500px', 'rows' => 15)) ?>
 					<?php elseif ($row['setting_type'] == "text"): ?>
 						<?= $this->Form->input($key . '.SettingValue.data', array('type' => 'text', 'value' => $row['data'])) ?>
+					<?php elseif ($row['setting_type'] == "radio"): ?>
+						<?= $this->Form->label($key . '.SettingValue.data', 'Data') ?>
+						<div class="input radio">
+						    <?= $this->Form->radio($key . '.SettingValue.data', array_combine($row['data_options'], $row['data_options']), array(
+						        'legend' => false, 
+						        'hiddenField' => false, 
+						        'value' => !empty($row['data']) ? $row['data'] : ''
+						    )) ?>
+						</div>
+					<?php elseif ($row['setting_type'] == "check"): ?>
+					    <?= $this->Form->input($key . '.SettingValue.data', array(
+					        'label' => 'Data', 
+					        'multiple' => 'checkbox', 
+					        'options' => array_combine($row['data_options'], $row['data_options']),
+					        'value' => !empty($row['data']) ? $row['data'] : ''
+					    )) ?>
 					<?php elseif ($row['setting_type'] == "dropdown"): ?>
-						<?php 
-							$data_options = null;
-							foreach(json_decode($row['data_options']) as $json) {
-								$data_options[$json] = $json;
-							}
-						?>
 						<?= $this->Form->input($key . '.SettingValue.data', array(
-							'value' => $row['data'], 
-							'options' => $data_options,
+							'value' => !empty($row['data']) ? $row['data'] : '',
+							'options' => $row['data_options'],
 							'empty' => '- Choose -'
-					)) ?>
+						)) ?>
 					<?php endif; ?>
 					<?= $this->Form->input($key . '.SettingValue.description', array(
 						'value' => $row['description'], 

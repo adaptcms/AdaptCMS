@@ -1,4 +1,5 @@
 <?php
+App::uses('Sanitize', 'Utility');
 
 class ForumTopic extends AdaptbbAppModel
 {
@@ -67,6 +68,11 @@ class ForumTopic extends AdaptbbAppModel
         {
             $this->data['ForumTopic']['slug'] = $this->slug($this->data['ForumTopic']['subject']);
         }
+
+        $this->data = Sanitize::clean($this->data, array(
+            'encode' => false,
+            'remove_html' => false
+        ));
         
         return true;
     }

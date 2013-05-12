@@ -1,5 +1,5 @@
 INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `data_options`, `setting_type`, `setting_id`, `model`, `created`, `modified`, `deleted_time`) VALUES
-(null, 'Comment Allowed HTML', '<p>Allowed HTML tags when posting a comment. Entering in nothing will result in all HTML being stripped.</p>', '<strong>,<a>,<p>,<br>', NULL, 'text', 6, NULL, '2013-03-02 14:32:50', '2013-03-02 20:36:33', '0000-00-00 00:00:00');
+(null, 'Comment Allowed HTML', '<p>Allowed HTML tags when posting a comment. Entering in nothing will result in all HTML being stripped.</p>', '<strong>,<a>,<p>,<br>', NULL, 'text', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `plugin`, `controller`, `action`, `status`, `related`, `own`, `any`) VALUES
 (null, 12, 1, 0, '', 'settings', 'admin_restore', 1, NULL, 1, 1),

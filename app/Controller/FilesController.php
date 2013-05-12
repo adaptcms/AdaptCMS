@@ -29,6 +29,9 @@ class FilesController extends AppController
 
             $this->set(compact('file_types'));
 		}
+
+        if ($this->params->action == 'admin_add')
+            $this->Security->validatePost = false;
 	}
 
     /**
@@ -66,7 +69,7 @@ class FilesController extends AppController
 
 	public function admin_add($theme = null)
 	{
-		$media_list = $this->File->Media->find('list');
+        $media_list = $this->File->Media->find('list');
 
 		$this->set(compact('media_list'));
 		
@@ -74,7 +77,7 @@ class FilesController extends AppController
         {
         	$this->request->data['File']['user_id'] = $this->Auth->user('id');
 
-            if ($this->File->saveMany( $this->File->beforeAdd($this->request->data) ))
+            if ($this->File->saveAll( $this->File->beforeAdd($this->request->data) ))
             {
                 $this->Session->setFlash('Your file has been upload.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
@@ -115,7 +118,16 @@ class FilesController extends AppController
         $file = WWW_ROOT.
         		$data['File']['dir'].
         		$data['File']['filename'];
-        $data['info'] = getimagesize($file);
+
+        if (strstr('image', $data['File']['mimetype']))
+        {
+            $data['info'] = getimagesize($file);
+        }
+        else
+        {
+            $this->set('file_contents', file_get_contents($file));
+        }
+
         $data['media-list'] = $this->File->Media->find('list');
 
 	    $this->set('data', $data);
@@ -190,7 +202,20 @@ class FilesController extends AppController
 
         if (!empty($permanent))
         {
-            $this->redirect(array('action' => 'index', 'trash' => 1));
+            $count = $this->File->find('count', array(
+                'conditions' => array(
+                    'File.deleted_time !=' => '0000-00-00 00:00:00'
+                )
+            ));
+
+            $params = array('action' => 'index');
+
+            if ($count > 0)
+            {
+                $params['trash'] = 1;
+            }
+
+            $this->redirect($params);
         } else {
             $this->redirect(array('action' => 'index'));
         }

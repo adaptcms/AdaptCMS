@@ -1,6 +1,6 @@
 {
     "title": "Sitemap Generator",
-    "current_version": "0.9",
+    "current_version": "1.0",
     "api_id": 5,
     "install": {
     	"model_title": "Sitemap",

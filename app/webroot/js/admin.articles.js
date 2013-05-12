@@ -63,7 +63,7 @@ $(document).ready(function(){
                 $("#ArticlePublishingDate").val($('.date_ymd').html());
                 $("#ArticlePublishingTime").val($('.time_gia').html());
                 $("#ArticleStatus").val(0);
-            } else {
+            } else if(btn.match('Publish Later')) {
                 $(".publish_time").toggle();
                 $("#ArticleStatus").val(1);
             }
@@ -137,4 +137,78 @@ $(document).ready(function(){
             }
         });
     }
+
+    $(".admin-validate-article").on('submit', function(e) {
+        if (!$("#pass_form").length)
+        {   
+            e.preventDefault();
+        }
+
+        if ($(this).valid() && !$("#pass_form").length)
+        {
+            var textareas = $(this).find('.textarea textarea');
+
+            if (textareas.length)
+            {
+                var error = 0;
+
+                $.each(textareas, function() {
+                    var id = $(this).attr('id');
+                    var content = tinyMCE.get(id).getContent();
+                    var char_amount = content.replace(/<[^>]+>/g, '').length;
+                    var min = $(this).attr('minlength');
+                    var max = $(this).attr('maxlength');
+                    var error_msg = '';
+
+                    if (content.length == 0 && $(this).hasClass('required'))
+                    {
+                        error++;
+                        error_msg = 'This field is required.';
+                    }
+                    else if(min && char_amount < min)
+                    {
+                        error++;
+                        error_msg = 'Please enter at least ' + min + ' characters. (currently ' + char_amount + ')';
+                    }
+                    else if(max && char_amount > max)
+                    {
+                        error++;
+                        error_msg = 'Please enter no more than ' + max + ' characters. (currently ' + char_amount + ')';
+                    }
+
+                    if (error_msg.length)
+                    {
+                        var msg = '<label for="' + id + '" class="error">' + error_msg + '</label>';
+
+                        if ($(this).parent().find('label.error').length == 0)
+                        {
+                            $(this).parent().append(msg);
+                        }
+                        else
+                        {
+                            $(this).parent().find('label.error').show().html(msg);
+                        }
+                    }
+                    else
+                    {
+                        if ($(this).parent().find('label.error').length > 0)
+                        {
+                            $(this).parent().find('label.error').hide();
+                        }
+                    }
+                });
+            
+                if (error == 0)
+                {
+                    $(this).prepend('<i id="pass_form" class="hidden">1</i>');
+                    $(this).submit();
+                }
+            }
+            else
+            {
+                $(this).prepend('<i id="pass_form" class="hidden">1</i>');
+                $(this).submit();
+            }
+        }
+    });
 });

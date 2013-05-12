@@ -275,9 +275,12 @@ Cache::config('week', array(
     'prefix' => 'cake_week_'
 ));
 
+Configure::write('Component.Api.api_url', 'http://api.adaptcoding.com/');
+Configure::write('Component.Api.adaptcms_url', 'http://adaptcms.charliepage88.com/');
+
 /**
  * Custom Defined global variables
  */
 
 define('VIEW_PATH', ROOT . '/app/View/');
-define('ADAPTCMS_VERSION', 'Beta 2');
+define('ADAPTCMS_VERSION', 'Beta 3');

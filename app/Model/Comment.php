@@ -113,7 +113,8 @@ class Comment extends AppModel
                 {
                     $data[$key]['Comment']['count'] = $this->find('count', array(
                         'conditions' => array(
-                            'Comment.article_id' => $row['Article']['id']
+                            'Comment.article_id' => $row['Article']['id'],
+                            'Comment.active' => 1
                         )
                     ));
                 }

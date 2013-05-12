@@ -17,8 +17,7 @@
     <br />
     <?php
         echo $this->Html->link('Forgot Password', array(
-            'action' => 'update_password',
-            'change' => 'forgot'
+            'action' => 'forgot_password'
         ));
     ?>
 </div>

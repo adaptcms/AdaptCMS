@@ -14,7 +14,7 @@ $(document).ready(function(){
     });
 
     $("#BlockLimit").on('change', function() {
-        if ($(this).val() == 1) {
+        if (!$(this).val()) {
             $("#data").show();
             $("#next-step div").first().hide();
             $(".dynamic .order").hide();

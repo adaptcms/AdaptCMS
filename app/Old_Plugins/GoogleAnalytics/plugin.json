@@ -1,5 +1,15 @@
 {
     "title": "Google Analytics",
+    "current_version": "1.0",
+    "api_id": 7,
+    "install": {
+    	"model_title": "GoogleAnalytics",
+        "permissions": {
+            "file": "Install/permissions.php",
+            "className": "PermissionsInstall",
+            "functionName": "generate"
+        }
+    },
     "components": {
     	"GoogleAnalytics.GoogleAnalytics":null
     }

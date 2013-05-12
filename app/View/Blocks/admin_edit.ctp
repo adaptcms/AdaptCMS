@@ -26,6 +26,12 @@
 <div class="clearfix"></div>
 
 <?= $this->Form->create('Block', array('class' => 'well', 'id' => 'BlockAdminForm')) ?>
+    <p class="pull-right span5">
+        <small>
+            If you add a dynamic data block and choose a specific view for it to appear - you must select a feature and then a view. An example is selecting the 'Article' feature and picking the view 'view'. The data is then accessible in the layout/that features templates.
+        </small>
+    </p>
+
     <h2>Edit Block</h2>
 
     <?= $this->Form->input('type', array(
@@ -106,11 +112,17 @@
     </div>
 
     <div class="code-block">
-        <?= $this->Form->input('code', array('style' => 'width:80%;height: 300px')) ?>
+        <?= $this->Form->input('code', array(
+            'type' => 'textarea', 
+            'style' => 'width:80%;height: 300px'
+        )) ?>
     </div>
 
     <div class="text-block">
-        <?= $this->Form->input('text', array('style' => 'width:80%;height: 300px')) ?>
+        <?= $this->Form->input('text', array(
+            'type' => 'textarea',
+            'style' => 'width:80%;height: 300px'
+        )) ?>
     </div>
 
 	<div class="input radio">
@@ -144,18 +156,18 @@
         </div>
     	<?= $this->Form->input('location_controller', array(
     			'type' => 'select',
-    			'empty' => '- choose controller -',
+    			'empty' => '- choose feature -',
     			'div' => array('id' => 'location_controller'),
     			'label' => false
     	)) ?>
     	<?= $this->Form->input('location_action', array(
     			'type' => 'select',
-    			'empty' => '- choose action -',
+    			'empty' => '- choose view -',
     			'div' => array('id' => 'location_action', 'style' => 'display:none'),
     			'label' => false
     	)) ?>
     	<?= $this->Form->input('location_id', array(
-    			'empty' => '- choose entry (optional) -',
+    			'empty' => '- choose item (optional) -',
     			'div' => array('id' => 'location_id', 'style' => 'display:none'),
     			'label' => false
     	)) ?>

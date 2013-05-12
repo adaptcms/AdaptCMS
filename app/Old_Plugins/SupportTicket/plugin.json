@@ -1,19 +1,24 @@
 {
     "title": "Support Tickets",
-    "current_version": "0.5",
+    "current_version": "0.9",
     "api_id": 3,
     "install": {
     	"block_active": 0,
     	"model_title": "Ticket",
-    	"text": "install_text.md",
+    	"text": "Install/install_text.md",
+        "permissions": {
+            "file": "Install/permissions.php",
+            "className": "PermissionsInstall",
+            "functionName": "generate"
+        },
     	"sql": [
-    		"install_data.sql"
+    		"Install/install_data.sql"
     	]
     },
     "uninstall": {
-    	"text": "uninstall_text.md",
+    	"text": "Install/uninstall_text.md",
     	"sql": [
-    		"uninstall_data.sql"
+    		"Install/uninstall_data.sql"
     	]
     }
 }

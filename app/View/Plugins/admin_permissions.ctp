@@ -3,7 +3,7 @@
 <?php $this->Html->addCrumb('Plugin Permissions', null) ?>
 
 <?= $this->Html->link(
-    '<i class="icon-chevron-left"></i> Back to Plugins',
+    '<i class="icon-list icon-white"></i> Back to Plugins',
     array('action' => 'index'),
     array('class' => 'btn btn-info pull-right admin-edit-options', 'escape' => false)
 ) ?>

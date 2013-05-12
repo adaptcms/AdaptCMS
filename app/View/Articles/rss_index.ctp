@@ -14,7 +14,12 @@ $this->set('channel', array(
 ?>
 
 <?php foreach($this->request->data as $data): ?>
-	<?php $link = array('controller' => 'articles', 'action' => 'view', $data['Article']['slug']) ?>
+	<?php $link = array(
+		'controller' => 'articles', 
+		'action' => 'view', 
+		'slug' => $data['Article']['slug'],
+		'id' => $data['Article']['id']
+	) ?>
 	
 <?= $this->Rss->item(array(), array(
 		'title' => $data['Article']['title'],

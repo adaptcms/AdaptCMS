@@ -4,7 +4,8 @@
 			<?= $this->Html->link('<h2>' . $article['Article']['title'] . '</h2>', array(
 				'controller' => 'articles', 
 				'action' => 'view', 
-				$article['Article']['slug']
+            	'slug' => $article['Article']['slug'],
+            	'id' => $article['Article']['id']
 			), array('escape' => false)) ?>
 
 			<p class="lead">
@@ -15,13 +16,23 @@
 
 			<div id="post-options">
 		        <span class="pull-left">
-		            <?= $this->Html->link('Read More', array('controller' => 'articles', 'action' => 'view', $article['Article']['slug']), array('class' => 'btn btn-primary')) ?>
+		            <?= $this->Html->link('Read More', array(
+		            	'controller' => 'articles', 
+		            	'action' => 'view', 
+		            	'slug' => $article['Article']['slug'],
+		            	'id' => $article['Article']['id']
+	            	), array('class' => 'btn btn-primary')) ?>
 		            <span style="margin-left: 10px">
-		                <i class="icon-search icon-comment"></i>&nbsp;
-		                <?= $this->Html->link($article['Comments'] . ' Comments', array('controller' => 'articles', 'action' => 'view', $article['Article']['slug'])) ?>
+		                <i class="icon icon-comment"></i>&nbsp;
+		                <?= $this->Html->link($article['Comments'] . ' Comments', array(
+	                		'controller' => 'articles', 
+	                		'action' => 'view', 
+			            	'slug' => $article['Article']['slug'],
+			            	'id' => $article['Article']['id']
+                		)) ?>
 		            </span>
 		            <span style="margin-left: 10px">
-		                <i class="icon-search icon-user"></i>&nbsp;
+		                <i class="icon-user"></i>&nbsp;
 		                Posted by <?= $this->Html->link($article['User']['username'], array('controller' => 'users', 'action' => 'profile', $article['User']['username'])) ?>
 		            </span>
 		        </span>

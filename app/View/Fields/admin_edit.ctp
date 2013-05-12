@@ -26,8 +26,8 @@
 	    <?= $this->Html->link(
 	        '<i class="icon-trash icon-white"></i> Delete',
 	        array('action' => 'delete', $this->request->data['Field']['id'], $this->request->data['Field']['title']),
-	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this field?')")) ?>
-	    ?>
+	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this field?')"))
+        ?>
 	</div>
 </ul>
 

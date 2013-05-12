@@ -70,7 +70,7 @@ class AutoLoadJSHelper extends AppHelper
 
         if (!empty($this->params['plugin']))
         {
-            $plugin = ucfirst($this->params['plugin']);
+            $plugin = Inflector::camelize($this->params['plugin']);
 
             $files['controller']['path'] = APP . 'Plugin' . DS . $plugin . DS . 'webroot' . DS . $ext . DS;
             $files['action']['path'] = $files['controller']['path'];

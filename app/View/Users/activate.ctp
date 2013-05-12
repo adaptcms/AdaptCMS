@@ -1,9 +1,19 @@
-<h2>Activate Account</h2>
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Login', array('action' => 'login')) ?>
+<?php $this->Html->addCrumb('Activate Account', null) ?>
 
-<?php
-    echo $this->Form->create('User');
-    echo $this->Form->input('username', array('type' => 'text', 'class' => 'required'));
-    echo $this->Form->input('activate_code', array('type' => 'text', 'class' => 'required'));
+<h2>
+    Activate Account
+</h2>
 
-    echo $this->Form->end('Submit');
-?>
+<?= $this->Form->create('User') ?>
+    <?= $this->Form->input('username', array(
+    	'type' => 'text', 
+    	'class' => 'required'
+    )) ?>
+    <?= $this->Form->input('activate_code', array(
+    	'type' => 'text', 
+    	'class' => 'required'
+    )) ?>
+
+<?= $this->Form->end('Submit') ?>

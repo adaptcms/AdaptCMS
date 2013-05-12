@@ -25,8 +25,6 @@
     <?= $this->AutoLoadJS->getJs() ?>
     <?= $this->AutoLoadJS->getCss() ?>
 
-    <?= $this->Html->css("font-awesome.min.css") ?>
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -44,9 +42,14 @@
     </style>
     <?= $this->Html->css("bootstrap-responsive.min") ?>
 
+    <?= $this->Html->css("font-awesome.min.css") ?>
+
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <?= $this->Html->script('html5.min.js') ?>
+    <![endif]-->
+    <!--[if lt IE 8]>
+      <?= $this->Html->css("font-awesome-ie7.min.css") ?>
     <![endif]-->
 
     <link rel="shortcut icon" href="<?= $this->webroot ?>img/favicon.ico">
@@ -62,7 +65,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="<?= $this->webroot ?>">AdaptCMS Alpha</a>
+          <a class="brand" href="<?= $this->webroot ?>">Your Website</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
             	<?php if ($this->Session->check('Auth.User.username')): ?>

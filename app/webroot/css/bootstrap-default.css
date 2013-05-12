@@ -5622,3 +5622,7 @@ label.error
   display: inline;
   margin-left: 10px;
 }
+.marg-btm
+{
+  margin-bottom: 5px;
+}

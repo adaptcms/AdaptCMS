@@ -99,7 +99,8 @@ class RolesController extends AppController
 	{
       	$this->Role->id = $id;
 
-	    if (!empty($this->request->data)) {
+	    if (!empty($this->request->data))
+        {
 	    	$this->request->data['Role']['title'] = $this->slug($this->request->data['Role']['title']);
 
 	        if ($this->Role->saveAll($this->request->data, array('deep' => true)))

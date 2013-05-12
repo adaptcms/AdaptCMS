@@ -55,7 +55,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <?php if ($this->Admin->hasPermission($permissions['related']['pages']['display'], $data['User']['id'])): ?>
+                        <?php if ($this->Admin->hasPermission($permissions['related']['pages']['display'], $data['User']['id']) && $this->Admin->isActive($data, 'Page')): ?>
                             <?= $this->Html->link($data['Page']['title'], array(
                                 'admin' => false, 
                                 'action' => 'display', 
@@ -84,7 +84,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if ($this->Admin->hasPermission($permissions['related']['pages']['display'], $data['User']['id'])): ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['pages']['display'], $data['User']['id']) && $this->Admin->isActive($data, 'Page')): ?>
                                     <li>
                                         <?= $this->Admin->view(
                                             $data['Page']['slug']

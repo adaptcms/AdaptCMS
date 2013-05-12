@@ -113,8 +113,24 @@
 		        'Active'
 		    )
 		)) ?>
+		
+		<?php foreach($fields as $key => $field): ?>
+		    <?= $this->Element('FieldTypes/' . $field['Field']['field_type'], array(
+		        'model' => 'ModuleValue',
+		        'key' => $key,
+		        'field' => $field,
+		        'icon' => !empty($field['Field']['description']) ? 
+		        "<i class='icon icon-question-sign field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
+		    )) ?>
+		    <?= $this->Form->hidden('ModuleValue.' . $key . '.field_id', array('value' => $field['Field']['id'])) ?>
+		    <?= $this->Form->hidden('ModuleValue.' . $key . '.module_id', array('value' => $this->request->data['User']['id'])) ?>
+		    <?= $this->Form->hidden('ModuleValue.' . $key . '.module_name', array('value' => 'user')) ?>
+		    
+		    <?php if (!empty($field['ModuleValue'][0]['id'])): ?>
+		        <?= $this->Form->hidden('ModuleValue.' . $key . '.id', array('value' => $field['ModuleValue'][0]['id'])) ?>
+		    <?php endif ?>
+		<?php endforeach ?>
 
-		<br />
 		<?= $this->Form->end(array(
 				'label' => 'Submit',
 				'class' => 'btn'
@@ -169,7 +185,12 @@
 		<div class="tab-pane" id="settings">
 			<?= $this->Form->create('SettingValue', array(
 					'controller' => 'settings', 
-					'action' => 'edit/'.$settings[0]['Setting']['id'].'/'.$this->request->data['User']['id'], 
+					'url' => array(
+						'controller' => 'setting_values',
+						'action' => 'edit',
+						$settings[0]['Setting']['id'],
+						$this->request->data['User']['id']
+					),
 					'class' => 'well admin-validate'
 			)) ?>
 
@@ -182,15 +203,9 @@
 					<?php elseif ($row['SettingValue']['setting_type'] == "text"): ?>
 						<?= $this->Form->input('SettingValue.'.$row['SettingValue']['id'].'.data', array('type' => 'text', 'value' => $row['SettingValue']['data'])) ?>
 					<?php elseif ($row['SettingValue']['setting_type'] == "dropdown"): ?>
-						<?php 
-							$data_options = null;
-							foreach(json_decode($row['SettingValue']['data_options']) as $json) {
-								$data_options[$json] = $json;
-							}
-						?>
 						<?= $this->Form->input('SettingValue.'.$row['SettingValue']['id'].'.data', array(
 							'value' => $row['SettingValue']['data'], 
-							'options' => $data_options,
+							'options' => $row['SettingValue']['data_options'],
 							'empty' => '- Choose -'
 					)) ?>
 					<?php endif; ?>
@@ -205,9 +220,8 @@
 					<?= $this->Form->hidden('SettingValue.'.$row['SettingValue']['id'].'.modified', array(
 							'value' => $this->Time->format('Y-m-d H:i:s', time())
 					)) ?>
-			 	<?php endforeach; ?>
+			 	<?php endforeach ?>
 
-			<br />
 			<?= $this->Form->end(array(
 					'label' => 'Submit',
 					'class' => 'btn btn-primary'

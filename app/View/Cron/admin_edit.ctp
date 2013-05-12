@@ -1,4 +1,5 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Tools', array('controller' => 'tools', 'action' => 'index')) ?>
 <?php $this->Html->addCrumb('Cron Entries', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Edit Cron', null) ?>
 

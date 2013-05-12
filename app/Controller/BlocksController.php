@@ -203,7 +203,20 @@ class BlocksController extends AppController
 
 	    if (!empty($permanent))
         {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+            $count = $this->Block->find('count', array(
+                'conditions' => array(
+                    'Block.deleted_time !=' => '0000-00-00 00:00:00'
+                )
+            ));
+
+            $params = array('action' => 'index');
+
+            if ($count > 0)
+            {
+                $params['trash'] = 1;
+            }
+
+            $this->redirect($params);
 	    } else {
 	    	$this->redirect(array('action' => 'index'));
 	    }

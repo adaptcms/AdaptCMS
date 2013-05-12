@@ -107,7 +107,7 @@ class LinksController extends LinksAppController
     * After POST, flash error or flash success and redirect to index
     *
     * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of category data
+    * @return associative array of link data
     */
 	public function admin_edit($id = null)
 	{

@@ -15,13 +15,15 @@ class Poll extends PollsAppModel
 	);
 	public $hasMany = array(
 		'PollValue' => array(
-            'className' => 'PluginPollValue'
+            'className' => 'Polls.PollValue',
+            'dependent' => true
         ),
         'PollVotingValue' => array(
-            'className' => 'PluginPollVotingValue'
+            'className' => 'Polls.PollVotingValue',
+            'dependent' => true,
+            // 'exclusive' => true
         )
 	);
-	public $recursive = -1;
 
     public function getBlockData($data, $user_id)
     {

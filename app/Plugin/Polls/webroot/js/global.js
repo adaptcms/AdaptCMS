@@ -35,12 +35,17 @@ $(document).ready(function() {
             var id = $(this).parent().parent().find('#PollId').val();
         }
 
+        var block = $(this).attr('data-block-title');
+
         if (id) {
             $.post($("#webroot").text() + "ajax/polls/polls/" + type, 
                 {
                     data:{
                         Poll:{
                             id: id
+                        },
+                        Block: {
+                            title: block
                         }
                     }
                 }, function(data) {

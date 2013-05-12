@@ -84,7 +84,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if ($this->Admin->hasPermission($permissions['related']['categories']['admin_edit'], $data['User']['id'])): ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['categories']['view'], $data['User']['id'])): ?>
                                     <li>
                                         <?= $this->Admin->view(
                                             $data['Category']['slug']

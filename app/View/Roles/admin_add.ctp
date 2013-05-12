@@ -8,7 +8,8 @@
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 	<?= $this->Form->input('defaults', array('options' => array(
 			'default-member' => 'Default Member', 
-			'default-guest' => 'Default Guest'
+			'default-guest' => 'Default Guest',
+			'default-admin' => 'Default Admin'
 			),
 		'label' => 'Default Settings',
 		'empty' => '- choose -'

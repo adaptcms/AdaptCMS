@@ -24,10 +24,10 @@ $(document).ready(function() {
 					$url = array('action' => 'view', $row['Media']['slug']);
 					?>
 
-					<?php if (!empty($row['File'][0]['id'])): ?>
+					<?php if (!empty($row['File']['id'])): ?>
 						<?= $this->Html->link(
 								$this->Html->image(
-									'/'.$row['File'][0]['dir'].$row['File'][0]['filename'],
+									'/'.$row['File']['dir'].$row['File']['filename'],
 									array(
 										'style' => 'width: 300px;height: 200px'
 									)
@@ -42,7 +42,7 @@ $(document).ready(function() {
 						<h3>
 							<?= $this->Html->link($row['Media']['title'], $url) ?>
 							<small>
-								<?= count($row['File']) ?> Images
+								<?= $row['File']['count'] ?> Images
 							</small>
 						</h3>
 

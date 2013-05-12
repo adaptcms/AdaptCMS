@@ -72,11 +72,13 @@ class ArticleValue extends AppModel
                     {
                         $this->data['ArticleValue']['file_id'] = $this->File->id;
                         $this->data['ArticleValue']['data'] = $fileUpload['ArticleValue']['data'];
+                        debug($fileUpload);
+                        debug($this->data['ArticleValue']);
                     }
                 }
                 elseif (isset($row['data']['error']) && $row['data']['error'] == 4 && empty($row['data']['tmp_name']))
                 {
-                    $this->data['ArticleValue']['data'] = '';
+                    $this->data['ModuleValue']['data'] = $this->data['ModuleValue']['filename'];
                 }
                 else
                 {

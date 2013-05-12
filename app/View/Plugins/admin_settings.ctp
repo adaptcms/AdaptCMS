@@ -5,7 +5,7 @@
 <h1><?= $plugin ?> Settings</h1>
 
 <?= $this->Html->link(
-    '<i class="icon-chevron-left"></i> Back to Plugins',
+    '<i class="icon-list icon-white"></i> Back to Plugins',
     array('action' => 'index'),
     array('class' => 'btn btn-info pull-right admin-edit-options', 'escape' => false)
 ) ?>
@@ -20,7 +20,7 @@
 			<?php if (strlen($value) == 1 && is_numeric($value) && in_array($value, array(0, 1))): ?>
 				<?= $this->Form->input($key, array('value' => $value, 'type' => 'checkbox', ($value == 1 ? 'checked' : ''))) ?>
 			<?php else: ?>
-				<?= $this->Form->input($key, array('value' => $value)) ?>
+				<?= $this->Form->input($key, array('value' => $value, 'type' => 'text')) ?>
 			<?php endif ?>
 		<?php endforeach ?>
 

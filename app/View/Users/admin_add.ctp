@@ -65,7 +65,18 @@
     )
 )) ?>
 
-<br />
+<?php foreach($fields as $key => $field): ?>
+    <?= $this->Element('FieldTypes/' . $field['Field']['field_type'], array(
+        'model' => 'ModuleValue',
+        'key' => $key,
+        'field' => $field,
+        'icon' => !empty($field['Field']['description']) ? 
+        "<i class='icon icon-question-sign field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
+    )) ?>
+    <?= $this->Form->hidden('ModuleValue.' . $key . '.field_id', array('value' => $field['Field']['id'])) ?>
+    <?= $this->Form->hidden('ModuleValue.' . $key . '.module_name', array('value' => 'user')) ?>
+<?php endforeach ?>
+
 <?= $this->Form->end(array(
 	'label' => 'Submit',
 	'class' => 'btn btn-primary'

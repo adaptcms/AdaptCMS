@@ -6,6 +6,7 @@ class Module extends AppModel {
     public $hasMany = array(
         'Block',
         'Cron',
-        'Permission'
+        'Permission',
+        'Field'
     );
 }

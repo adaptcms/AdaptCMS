@@ -4,16 +4,22 @@
 
 <h2><?= $plugin ?> Assets</h2>
 
-<?= $this->Html->link('Add New File <i class="icon icon-plus icon-white"></i>', array(
-		'controller' => 'themes',
-		'action' => 'admin_asset_add', 
-		null,
-		'Plugin' . $plugin
-	), array(
-		'class' => 'btn btn-info pull-right',
-		'escape' => false,
-		'style' => 'margin-top: 10px'
-)) ?>
+<div class="btn-toolbar pull-right">
+	<?= $this->Html->link('Add New File <i class="icon-plus icon-white"></i>', array(
+			'controller' => 'themes',
+			'action' => 'admin_asset_add', 
+			null,
+			'Plugin' . $plugin
+		), array(
+			'class' => 'btn btn-info',
+			'escape' => false
+	)) ?>
+	<?= $this->Html->link(
+	    '<i class="icon-list icon-white"></i> Back to Plugins',
+	    array('action' => 'index'),
+	    array('class' => 'btn btn-info', 'escape' => false)
+	) ?>
+</div>
 <div class="clearfix"></div>
 
 <?php if (empty($assets_list['assets'])): ?>

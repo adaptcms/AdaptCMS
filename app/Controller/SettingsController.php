@@ -29,12 +29,18 @@ class SettingsController extends AppController
     */
 	public function admin_index()
 	{
+        $conditions = array();
+
+        if (!isset($this->params->named['trash'])) {
+            $conditions['Setting.deleted_time'] = '0000-00-00 00:00:00';
+        } else {
+            $conditions['Setting.deleted_time !='] = '0000-00-00 00:00:00';
+        }
+
         $this->paginate = array(
             'order' => 'Setting.created DESC',
             'limit' => $this->pageLimit,
-            'conditions' => array(
-            	'Setting.deleted_time' => '0000-00-00 00:00:00'
-            )
+            'conditions' => $conditions
         );
         
         $this->request->data = $this->paginate('Setting');
@@ -116,29 +122,43 @@ class SettingsController extends AppController
 
 	    if (!empty($permanent))
 		{
-			$delete_values = $this->Setting->SettingValue->deleteAll(array('SettingValue.setting_id' => $id));;
 			$delete = $this->Setting->delete($id);
+            $delete_values = true;
 		} else {
 			$delete_values = $this->Setting->SettingValue->updateAll(
 	    		array(
-	    			'SettingValue.deleted_time' => $this->Setting->dateTime()
+	    			'SettingValue.deleted_time' => "'" . $this->Setting->dateTime() . "'"
 	    		),
 	    		array(
 	    			'SettingValue.setting_id' => $id
 	    		)
 	    	);
-	    	$delete_setting = $this->Setting->saveField('deleted_time', $this->Setting->dateTime());
+	    	$delete = $this->Setting->saveField('deleted_time', $this->Setting->dateTime());
 		}
 
-	    if ($delete_setting && $delete_values)
+	    if ($delete && $delete_values)
 	    {
 	        $this->Session->setFlash('The setting `'.$title.'` has been deleted.', 'flash_success');
 	    } else {
 	    	$this->Session->setFlash('The setting `'.$title.'` has NOT been deleted.', 'flash_error');
 	    }
 
-	    if (!empty($permanent)) {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    if (!empty($permanent))
+        {
+            $count = $this->Setting->find('count', array(
+                'conditions' => array(
+                    'Setting.deleted_time !=' => '0000-00-00 00:00:00'
+                )
+            ));
+
+            $params = array('action' => 'index');
+
+            if ($count > 0)
+            {
+                $params['trash'] = 1;
+            }
+
+            $this->redirect($params);
 	    } else {
 	    	$this->redirect(array('action' => 'index'));
 	    }
@@ -159,7 +179,7 @@ class SettingsController extends AppController
 
 	    $save_values = $this->Setting->SettingValue->updateAll(
     		array(
-    			'SettingValue.deleted_time' => '0000-00-00 00:00:00'
+    			'SettingValue.deleted_time' => "'0000-00-00 00:00:00'"
     		),
     		array(
     			'SettingValue.setting_id' => $id

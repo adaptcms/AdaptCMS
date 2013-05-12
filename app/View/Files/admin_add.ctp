@@ -22,16 +22,19 @@ $(document).ready(function() {
 	<?php if (!empty($this->params->named['multiple'])): ?>
 		$("#file_upload,#extra").show();
 		$("#file-type").hide();
-		var file_div = $("#file-1").clone().html();
-		$("#file-1 .remove").hide();
+		var file_div = $("#file-0").clone().html();
+		$("#file-0 .remove").hide();
 
 		$(".well").on('click', '.add-file', function(e) {
 			e.preventDefault();
 
-			var length = Number($(".upload-file").length) + 1;
+			var length = Number($(".upload-file").length);
 			var h4 = length;
-			var file_divs = '<div class="upload-file span3 no-marg-left" id="file-1">' + file_div + '</div>';
-			var contents = file_divs.replace(/1/g, length).replace('#1', '#' + h4);
+			var file_divs = '<div class="upload-file span3 no-marg-left" id="file-0">' + file_div + '</div>';
+			var contents = file_divs.replace(/0/g, length).replace('#0', '#' + h4);
+			var contents = contents.replace('File #1', 'File #' + (length + 1));
+			var contents = contents.replace('FileWatermark_" value="' + length, 'FileWatermark_" value="0');
+			var contents = contents.replace('RandomFilename_" value="' + length, 'RandomFilename_" value="0');
 
 			$(contents).insertAfter($(".upload-file:last"));
 
@@ -58,7 +61,7 @@ $(document).ready(function() {
             var id = $(this).prev().attr('id').charAt(0);
 
             if ($(this).parent().next().find("input[value='" + val.val() + "']").length == 0) {
-            	$(this).parent().find('.error').remove();
+            	$(this).parent().parent().find('.error').remove();
                 $(this).parent().next().prepend('<div id="data-' + random + '"><span class="label label-info">' + val.text() + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="' + id + '.Media[]" name="data[' + id + '][Media][]" value="' + val.val() + '"></div>');
             } else {
             	$(this).parent().next().prepend('<label class="error">Library already added!</label>');
@@ -99,10 +102,10 @@ function toggleRemove()
 
 	<?php if (empty($this->params->named['multiple'])): ?>
 		<div id="file_upload" style="display: none">
-			<?= $this->Form->input('1.File.filename', array('type' => 'file', 'class' => 'required')) ?>
-		    <?= $this->Form->hidden('1.File.dir', array('value' => 'uploads/')) ?>
-		    <?= $this->Form->hidden('1.File.mimetype') ?>
-		    <?= $this->Form->hidden('1.File.filesize') ?>
+			<?= $this->Form->input('0.File.filename', array('type' => 'file', 'class' => 'required')) ?>
+		    <?= $this->Form->hidden('0.File.dir', array('value' => 'uploads/')) ?>
+		    <?= $this->Form->hidden('0.File.mimetype') ?>
+		    <?= $this->Form->hidden('0.File.filesize') ?>
 		</div>
 		<div class="clearfix"></div>
 
@@ -124,14 +127,18 @@ function toggleRemove()
 			<?= $this->Form->input('file_name', array(
 		    	'class' => 'required'
 			)) ?>
+
+			<?= $this->Form->input('caption') ?>
+
+			<?= $this->Form->hidden('dir', array('value' => 'uploads/')) ?>
 		</div>
 
 		<div id="extra" style="display: none">
-		    <?= $this->Form->input('1.File.caption') ?>
+		    <?= $this->Form->input('0.File.caption') ?>
 
 		    <h4 class="image-filters">Image Filters</h4>
 
-		    <?= $this->Form->input('1.File.watermark', array('type' => 'checkbox')) ?>
+		    <?= $this->Form->input('0.File.watermark', array('type' => 'checkbox')) ?>
 
 	        <div class="span3 no-marg-left">
 	            <?= $this->Form->input('resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
@@ -139,7 +146,7 @@ function toggleRemove()
 	        </div>
 	        <div class="clearfix"></div>
 
-		    <?= $this->Form->input('1.File.random_filename', array('type' => 'checkbox')) ?>
+		    <?= $this->Form->input('0.File.random_filename', array('type' => 'checkbox')) ?>
 		</div>
 
 		<?= $this->Form->end(array(
@@ -147,7 +154,7 @@ function toggleRemove()
 			'class' => 'btn btn-primary'
 		)) ?>
 	<?php else: ?>
-		<div class="upload-file span3 no-marg-left" id="file-1">
+		<div class="upload-file span3 no-marg-left" id="file-0">
 			<?= $this->Form->button('<i class="icon icon-remove icon-white"></i>', array(
 				'class' => 'btn btn-danger pull-right remove', 
 				'escape' => false
@@ -155,27 +162,26 @@ function toggleRemove()
 
 			<h2>File #1</h2>
 
-			<?= $this->Form->input('1.File.filename', array('type' => 'file', 'class' => 'required')) ?>
-		    <?= $this->Form->hidden('1.File.dir', array('value' => 'uploads/')) ?>
-		    <?= $this->Form->hidden('1.File.mimetype') ?>
-		    <?= $this->Form->hidden('1.File.filesize') ?>
+			<?= $this->Form->input('0.File.filename', array('type' => 'file', 'class' => 'required')) ?>
+		    <?= $this->Form->hidden('0.File.dir', array('value' => 'uploads/')) ?>
+		    <?= $this->Form->hidden('0.File.mimetype') ?>
+		    <?= $this->Form->hidden('0.File.filesize') ?>
 
-		    <?= $this->Form->input('1.File.caption') ?>
+		    <?= $this->Form->input('0.File.caption') ?>
 
 		    <h4 class="image-filters">Image Filters</h4>
 
-		    <?= $this->Form->input('1.File.watermark', array('type' => 'checkbox')) ?>
-		    <?= $this->Form->input('1.File.resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
-		    <?= $this->Form->input('1.File.resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
+		    <?= $this->Form->input('0.File.watermark', array('type' => 'checkbox')) ?>
+		    <?= $this->Form->input('0.File.resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
+		    <?= $this->Form->input('0.File.resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
 		    <div class="clearfix"></div>
-		    <?= $this->Form->input('1.File.random_filename', array('type' => 'checkbox')) ?>
+		    <?= $this->Form->input('0.File.random_filename', array('type' => 'checkbox')) ?>
 
 		    <h4 class="image-filters">Media Libraries</h4>
 
 		    <div class="media-libraries">
-		        <?= $this->Form->input('1.File.library', array(
+		        <?= $this->Form->input('0.File.library', array(
 		            'div' => false, 
-		            'style' => 'margin-bottom: 0',
 		            'empty' => '- add library -',
 		            'options' => $media_list
 		        )) ?>

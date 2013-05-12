@@ -11,7 +11,8 @@
 				<?= $this->Html->link($data['Article']['title'], array(
 						'controller' => 'articles',
 						'action' => 'view',
-						$data['Article']['slug']
+						'slug' => $data['Article']['slug'],
+						'id' => $data['Article']['id']
 				)) ?> @ 
 				<?= $this->Admin->time($data['Article']['created']) ?>
 			</li>

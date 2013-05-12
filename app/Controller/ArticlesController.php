@@ -38,11 +38,19 @@ class ArticlesController extends AppController
 
 		if (in_array($this->params->action, $admin_match))
 		{
-			$this->set('categories', $this->Article->Category->find('list', array(
-	            'conditions' => array(
-	                'Category.deleted_time' => '0000-00-00 00:00:00'
-	            )
-	        )));
+            $categories = $this->Article->Category->find('list', array(
+                'conditions' => array(
+                    'Category.deleted_time' => '0000-00-00 00:00:00'
+                )
+            ));
+
+            if (empty($categories))
+            {
+                $this->Session->setFlash('Please add a category in order to manage articles.', 'flash_error');
+                $this->redirect(array('action' => 'add', 'controller' => 'categories'));
+            }
+
+			$this->set(compact('categories'));
 	    }
 
 	    if ($this->params->action == "admin_add" || $this->params->action == "admin_edit")
@@ -147,7 +155,6 @@ class ArticlesController extends AppController
                 $this->Session->setFlash('Your article has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                debug($this->request->data);
                 $this->Session->setFlash('Unable to add your article.', 'flash_error');
             }
         } 
@@ -163,7 +170,7 @@ class ArticlesController extends AppController
    */
    public function admin_edit($id = null)
    {
-   	$this->Article->id = $id;
+   	    $this->Article->id = $id;
 
 	   if (!empty($this->request->data))
       {
@@ -397,28 +404,39 @@ class ArticlesController extends AppController
 	* Related articles are also retrieved, a check is done to make sure the article data is not empty.
 	* One last check is to see if a custom template and exists and if so, use it.
 	*
-	* @param slug of article
+   * @param slug string
+	* @param id integer
 	* @return associative array
 	*/
-	public function view($slug)
+	public function view($slug = null, $id = null)
 	{
-            $this->request->data = $this->Article->find('first', array(
-                    'conditions' => array(
-                            'Article.slug' => $slug,
-                            'Article.deleted_time' => '0000-00-00 00:00:00',
-                            'Article.publish_time <=' => date('Y-m-d H:i:s'),
-                            'Article.status' => 1
-                    ),
-                    'contain' => array(
-                            'Category',
-                            'User',
-                            'ArticleValue' => array(
-                                    'Field',
-                                    'File'
-                            )
-                    )
-            ));
-            
+      if (empty($slug) && !empty($this->params['slug']))
+      {
+         $slug = $this->params['slug'];
+      }
+
+      if (empty($id) && !empty($this->params['id']))
+      {
+         $id = $this->params['id'];
+      }
+
+        $this->request->data = $this->Article->find('first', array(
+            'conditions' => array(
+                    'Article.slug' => $slug,
+                    'Article.deleted_time' => '0000-00-00 00:00:00',
+                    'Article.publish_time <=' => date('Y-m-d H:i:s'),
+                    'Article.status' => 1
+            ),
+            'contain' => array(
+                'Category',
+                'User',
+                'ArticleValue' => array(
+                        'Field',
+                        'File'
+                )
+            )
+        ));
+
         if (empty($this->request->data))
         {
             $this->Session->setFlash('Invalid Article', 'flash_error');
@@ -508,7 +526,7 @@ class ArticlesController extends AppController
 		$conditions = array(
 			'Article.tags LIKE' => '%"'.$slug.'"%',
 			'Article.status' => 1,
-                        'Article.publish_time <=' => date('Y-m-d H:i:s'),
+            'Article.publish_time <=' => date('Y-m-d H:i:s'),
 			'Article.deleted_time' => '0000-00-00 00:00:00'
 		);
 

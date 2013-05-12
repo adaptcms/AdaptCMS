@@ -44,7 +44,7 @@ class EmailConfig {
 
 	public $default = array(
 		'transport' => 'Mail',
-		'from' => 'you@localhost',
+		'from' => (!empty($_SERVER['SERVER_ADMIN']) ? $_SERVER['SERVER_ADMIN'] : 'webmaster@' . $_SERVER['SERVER_NAME']),
 		//'charset' => 'utf-8',
 		//'headerCharset' => 'utf-8',
 	);

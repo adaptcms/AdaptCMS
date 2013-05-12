@@ -2,22 +2,23 @@ $(document).ready(function() {
 	fixPagination();
 	changeRequiredFields();
 
-	if ($(".breadcrumb li").first().next().find("a").text() == 'Themes') {
-		var href = $(".breadcrumb li").first().next().find("a").attr('href').replace('themes', 'templates');
-		var newLink = '<a href="' + href + '">Templates</a>';
-
-		$(".breadcrumb li").first().next().find("a").replaceWith(newLink);
-	}
-
 	/**
 	 * convience function, button class of 'btn btn-info reset-field ArticleTitle'
 	 * when clicked, will reset the field with the id of 'ArticleTitle'
 	 */
 	$(".reset-field").on('click', function() {
-		var reset_class = $(this).attr('class').split(' ').slice(-1);
-		
-		$("#" + reset_class).val('');
-	});
+		var reset_class = $(this).attr('class');
+
+        if (reset_class)
+        {
+            var new_class = reset_class.split(' ').slice(-1);
+        }
+
+        if (new_class)
+        {
+		    $("#" + new_class).val('');
+        }
+    });
 
 	/*
 	 *
@@ -40,7 +41,44 @@ $(document).ready(function() {
 			$(this).validate();
 		});
 	}
+
+	$('.btn-confirm').on('click', function(e) {
+		if ($(this).attr('title'))
+		{
+			var text = $(this).attr('title');
+		}
+		else
+		{
+			var text = 'this item';
+		}
+
+		if (confirm('Are you sure you wish to delete ' + text + '?'))
+		{
+			return true;
+		}
+
+		return false;
+	});
+
+	$("#captcha .refresh").live('click', function(e) {
+		e.preventDefault();
+
+		reloadCaptcha($(this).parent().parent().attr('id'));
+		$(this).blur(); 
+	});
 });
+
+function reloadCaptcha(id)
+{
+	if (id && id != 'captcha') {
+		var div_id = 'captcha_' + id.replace('captcha_', '');
+	} else {
+		var div_id = 'captcha';
+	}
+
+	$('#' + div_id).find('#siimage').attr('src', $('#webroot').text() + 'libraries/captcha/securimage_show.php?sid=' + Math.random());
+	$('#' + div_id).find('.captcha').val('').focus();
+}
 
 // Grab all required inputs on page, put in a * to note that it's a required field
 function changeRequiredFields() 
@@ -53,42 +91,6 @@ function changeRequiredFields()
 			$(label).append(' <i>*</i>');
 		}
 	});
-}
-
-function fieldTypeToggle(val) 
-{
-	if (val == "date") {
-		fieldLimitToggle('hide');
-	} else if(val == "file") {
-		fieldLimitToggle('hide');
-	} else if(val == "dropdown") {
-		fieldLimitToggle('hide');
-	} else if(val == "multi-dropdown") {
-		fieldLimitToggle('hide');
-	} else if(val == "radio") {
-		fieldLimitToggle('hide');
-	} else if(val == "check") {
-		fieldLimitToggle('hide');
-	} else {
-		fieldLimitToggle('show');
-	}
-}
-
-function fieldLimitToggle(type) 
-{
-	if (type == "show") {
-		$("#FieldFieldLimitMin").val('0').show();
-		$("#FieldFieldLimitMin").prev().show();
-
-		$("#FieldFieldLimitMax").val('0').show();
-		$("#FieldFieldLimitMax").prev().show();
-	} else {
-		$("#FieldFieldLimitMin").val('0').hide();
-		$("#FieldFieldLimitMin").prev().hide();
-
-		$("#FieldFieldLimitMax").val('0').hide();
-		$("#FieldFieldLimitMax").prev().hide();
-	}
 }
 
 /*

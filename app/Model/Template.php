@@ -70,13 +70,19 @@ class Template extends AppModel
 
         	if (!strstr($this->data['Template']['location'], '.ctp'))
         	{
-        		$file = $this->slug($this->data['Template']['title'], 1);
-        		$this->data['Template']['location'] = $this->data['Template']['location'] . '/' . $file . '.ctp';
+        		$file = $this->data['Template']['title'];
+        		$this->data['Template']['location'] = $this->data['Template']['location'] . '/' . $file;
         	}
 
-        	$fh = fopen($path . $this->data['Template']['location'], 'w') or die("can't open file");
-			fwrite($fh, $this->data['Template']['template']);
-			fclose($fh);
+        	if (empty($this->data['Template']['nowrite']))
+        	{
+	        	$fh = fopen($path . $this->data['Template']['location'], 'w');
+	        	if ($fh)
+	        	{
+					fwrite($fh, $this->data['Template']['template']);
+					fclose($fh);
+				}
+			}
         } elseif (!empty($this->data) && !empty($this->data['Template']['old_title']))
         {
 			$theme = $this->Theme->find('first', array(
@@ -92,22 +98,30 @@ class Template extends AppModel
 			$file = str_replace(
 				"_".strtolower(basename($this->data['Template']['location'])), 
 				"",
-				$this->slug($this->data['Template']['title'], 1
-			));
+				$this->data['Template']['title']
+			);
 
         	if (strstr($this->data['Template']['location'], 'Plugin/'))
         	{
         		$path = APP;
+        		$pre = '';
         	} else {
         		$path = VIEW_PATH;
+        		$pre = '';
         	}
 
         	$this->data['Template']['location'] = 
-        		$pre.$this->data['Template']['location'] . '/' . $file.'.ctp';
+        		$pre.$this->data['Template']['location'] . '/' . $file;
 
-        	$fh = fopen($path . $this->data['Template']['location'], 'w') or die("can't open file");
-			fwrite($fh, $this->data['Template']['template']);
-			fclose($fh);
+        	if (empty($this->data['Template']['nowrite']))
+        	{
+	        	$fh = fopen($path . $this->data['Template']['location'], 'w');
+				if ($fh)
+				{
+					fwrite($fh, $this->data['Template']['template']);
+					fclose($fh);
+				}
+			}
 
 			if ($this->data['Template']['location'] != $this->data['Template']['old_location']
 				or $this->data['Template']['title'] != $this->data['Template']['old_title']
@@ -252,8 +266,10 @@ class Template extends AppModel
 		if (!empty($plugin))
 		{
 			$prefix = 'Plugin/' . $plugin . '/View/';
+			$inc_dir = '';
 		} else {
 			$prefix = '';
+			$inc_dir = '';
 		}
 
 		if (file_exists($dir))

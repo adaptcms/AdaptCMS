@@ -27,6 +27,21 @@ class Setting extends AppModel
     * One to Many relationship, setting categories have many values
     */
     public $hasMany = array(
-    	'SettingValue'
+    	'SettingValue' => array(
+            'dependent' => true
+        )
     );
+
+    /**
+    * Cleans category title of HTML
+    */
+    public function beforeSave()
+    {
+        if (!empty($this->data['Setting']['title']))
+        {
+            $this->data['Setting']['title'] = strip_tags($this->data['Setting']['title']);
+        }
+
+        return true;
+    }
 }

@@ -94,7 +94,8 @@
                             <?= $this->Html->link($data['Article']['title'], array(
                                 'admin' => false, 
                                 'action' => 'view', 
-                                $data['Article']['slug']
+                                'slug' => $data['Article']['slug'],
+                                'id' => $data['Article']['id']
                             )) ?>
                         <?php else: ?>
                             <?= $data['Article']['title'] ?>
@@ -139,7 +140,13 @@
                                 <?php if ($this->Admin->hasPermission($permissions['related']['articles']['view'], $data['User']['id'])): ?>
                                     <li>
                                         <?= $this->Admin->view(
-                                            $data['Article']['slug']
+                                            null,
+                                            null,
+                                            null,
+                                            array(
+                                                'slug' => $data['Article']['slug'],
+                                                'id' => $data['Article']['id']
+                                            )
                                         ) ?>
                                     </li>
                                 <?php endif ?>

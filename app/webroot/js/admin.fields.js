@@ -66,9 +66,7 @@ $(document).ready(function() {
                                 description: description
                             }
                         }
-                    }, function(new_data) {
-                    var data = $.parseJSON(new_data);
-
+                    }, function(data) {
                     $("#sort-list").html(data.data);
 
                     if (!id) {
@@ -76,7 +74,7 @@ $(document).ready(function() {
                     } else {
                         $("#FieldFieldOrder").val($("#sort-list li#" + id).index());
                     }
-                });
+                }, 'json');
             }
         });
 
@@ -102,16 +100,16 @@ $(document).ready(function() {
                         }
                     }, function() {
 
-                    $(form).prepend('<i id="pass_form">1</i>');
+                    $(form).prepend('<i id="pass_form" class="hidden">1</i>');
                     $(form).submit();
                 });
             }
         });
 
-        fieldTypeToggle($("#FieldFieldType").val());
+        fieldTypeToggle($("#FieldFieldType").val(), false);
 
         $("#FieldFieldType").on('change', function() {
-            fieldTypeToggle($(this).val());
+            fieldTypeToggle($(this).val(), true);
         });
 
         $("#FieldImport").live('change', function() {
@@ -171,4 +169,40 @@ function noTitle()
 function noCategory()
 {
     $("#sort-list").html('<p>No Category Currently Selected</p>');
+}
+
+function fieldTypeToggle(val,trigger_show) 
+{
+    if (val == "date") {
+        fieldLimitToggle('hide');
+    } else if(val == "file") {
+        fieldLimitToggle('hide');
+    } else if(val == "dropdown") {
+        fieldLimitToggle('hide');
+    } else if(val == "multi-dropdown") {
+        fieldLimitToggle('hide');
+    } else if(val == "radio") {
+        fieldLimitToggle('hide');
+    } else if(val == "check") {
+        fieldLimitToggle('hide');
+    } else if(trigger_show === true) {
+        fieldLimitToggle('show');
+    }
+}
+
+function fieldLimitToggle(type) 
+{
+    if (type == "show") {
+        $("#FieldFieldLimitMin").val('0').show();
+        $("#FieldFieldLimitMin").prev().show();
+
+        $("#FieldFieldLimitMax").val('0').show();
+        $("#FieldFieldLimitMax").prev().show();
+    } else {
+        $("#FieldFieldLimitMin").val('0').hide();
+        $("#FieldFieldLimitMin").prev().hide();
+
+        $("#FieldFieldLimitMax").val('0').hide();
+        $("#FieldFieldLimitMax").prev().hide();
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+App::uses('Sanitize', 'Utility');
 
 class ForumPost extends AdaptbbAppModel
 {
@@ -39,6 +40,19 @@ class ForumPost extends AdaptbbAppModel
             )
         )
     );
+
+    /**
+    * Cleans out user input, html is allowed per setting and removed in controller
+    */
+    public function beforeSave()
+    {
+        $this->data = Sanitize::clean($this->data, array(
+            'encode' => false,
+            'remove_html' => false
+        ));
+
+        return true;
+    }
 
     /**
     * Function that json decodes user settings

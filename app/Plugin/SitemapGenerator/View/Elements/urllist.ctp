@@ -4,7 +4,8 @@
 <?= $this->Html->url(array(
 	'controller' => 'articles',
 	'action' => 'view',
-	$article['Article']['slug']
+    'slug' => $article['Article']['slug'],
+    'id' => $article['Article']['id']
 ), true) ?>
 
 <?php endforeach ?>

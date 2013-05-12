@@ -173,7 +173,20 @@ class PagesController extends AppController
 
 	    if (!empty($permanent))
 	    {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    	$count = $this->Page->find('count', array(
+	    		'conditions' => array(
+	    			'Page.deleted_time !=' => '0000-00-00 00:00:00'
+	    		)
+	    	));
+
+	    	$params = array('action' => 'index');
+
+	    	if ($count > 0)
+	    	{
+	    		$params['trash'] = 1;
+	    	}
+
+	    	$this->redirect($params);
 	    } else {
 	    	$this->redirect(array('action' => 'index'));
 	    }
@@ -226,54 +239,50 @@ class PagesController extends AppController
 	{
 		$path = func_get_args();
 
-		/*
-		$this->GoogleAnalytics->authenticate(
-			array(
-				'email' => 'charliepage88@gmail.com',
-				'password' => '7!kZ98mF$s90aD',
-				'profileId' => '56502081'
-			)
-		);
-		$this->GoogleAnalytics->setDateRange( date("Y-m-d", strtotime('-1 year')), date("Y-m-d") );
-		$chart = $this->GoogleAnalytics->getReport(
-	      array(
-	        'dimensions' => urlencode('ga:month'),
-	        'metrics' => urlencode('ga:visits')
-	      )
-	    );
-	    debug($chart);
-		*/
-
 		if ($path[0] == 'home') {
 			$this->loadModel('Article');
 			$this->loadModel('SettingValue');
 
-			$setting1 = $this->SettingValue->findByTitle('Number of Articles on Homepage');
-			$setting2 = $this->SettingValue->findByTitle('Categories of Articles to show on homepage');
+			$settings = $this->SettingValue->find('all', array(
+				'conditions' => array(
+					'OR' => array(
+						array('SettingValue.title' => 'Number of Articles on Homepage'),
+						array('SettingValue.title' => 'Categories of Articles to show on homepage')
+					)
+				)
+			));
 
-			if (empty($setting1)) {
-				$setting1['SettingValue']['data'] = 5;
+			if (empty($settings[0]))
+			{
+				$limit = 5;
+			}
+			else
+			{
+				$limit = $settings[0]['SettingValue']['data'];
 			}
 
-			if (!empty($setting2)) {
+			if (empty($settings[1]))
+			{
+				$category = $this->Article->Category->find('first');
+				$categories = $category['Category']['slug'];
+			}
+			else
+			{
 				$categories = array_map('strtolower',
 					array_map('trim', 
 						explode(
 							",",
-							$setting2['SettingValue']['data']
+							$settings[1]['SettingValue']['data']
 						)
 					)
 				);
-			} else {
-				$category = $this->Article->Category->find('first');
-				$categories = $category['Category']['slug'];
 			}
 
 			$conditions = array(
-                            'Article.status' => 1,
-                            'Article.publish_time <=' => date('Y-m-d H:i:s'),
-                            'Article.deleted_time' => '0000-00-00 00:00:00',
-                            'Category.slug' => $categories
+                'Article.status' => 1,
+                'Article.publish_time <=' => date('Y-m-d H:i:s'),
+                'Article.deleted_time' => '0000-00-00 00:00:00',
+                'Category.slug' => $categories
 			);
 
 			$permissions = $this->getRelatedPermissions($this->permissionLookup(array('show' => true)));
@@ -292,7 +301,7 @@ class PagesController extends AppController
 						'File'
 					)
 				),
-				'limit' => $setting1['SettingValue']['data'],
+				'limit' => $limit,
 				'conditions' => $conditions,
 				'order' => 'Article.created DESC'
 			);
@@ -301,7 +310,7 @@ class PagesController extends AppController
 	        	$this->paginate('Article')
 	        );
 
-	        $this->set('article', $this->request->data);
+	        $this->set('articles', $this->request->data);
 		}
 
 		if ($path[0] == 'home' or $path[0] == 'denied') {
@@ -323,7 +332,12 @@ class PagesController extends AppController
 			$this->set(compact('page', 'subpage', 'title_for_layout'));
 			$this->render(implode('/', $path));
 		} else {
-			$this->request->data = $this->Page->findBySlug($path[0]);
+			$this->request->data = $this->Page->find('first', array(
+				'conditions' => array(
+					'Page.slug' => $path[0],
+					'Page.deleted_time' => '0000-00-00 00:00:00'
+				)
+			));
 
 			if (!empty($this->request->data)) {
 				$this->set('title_for_layout', $this->request->data['Page']['title']);

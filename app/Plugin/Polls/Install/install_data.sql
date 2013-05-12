@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_values` (
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `plugin_poll_id` int(11) DEFAULT '0',
-  `plugin_poll_value_id` int(11) DEFAULT '0',
+  `plugin_value_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `user_ip` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)

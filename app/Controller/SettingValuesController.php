@@ -20,7 +20,8 @@ class SettingValuesController extends AppController
         {
             $this->SettingValue->create();
 
-    		if ($this->SettingValue->save($this->request->data)) {
+    		if ($this->SettingValue->save($this->request->data))
+            {
                 $this->Session->setFlash('Setting has been saved.', 'flash_success');
                 $this->redirect(array(
                 	'controller' => 'settings', 

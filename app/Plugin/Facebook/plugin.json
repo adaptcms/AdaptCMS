@@ -1,6 +1,6 @@
 {
     "title": "Facebook",
-    "current_version": "0.7",
+    "current_version": "1.0",
     "api_id": 4,
     "install": {
     	"text": "Install/install_text.md"

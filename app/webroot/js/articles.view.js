@@ -34,8 +34,7 @@ $(document).ready(function() {
 	            			captcha: captcha
 	            		}
 	            	}
-	            }, function(return_data) {
-	            var data = $.parseJSON(return_data);
+	            }, function(data) {
 
         		if ($("#flashMessage").length > 0) {
         			$("#flashMessage").remove();
@@ -65,15 +64,8 @@ $(document).ready(function() {
             			$.smoothScroll({scrollTarget: $('#flashMessage').prev().prev()});
             		}
             	}
-            });
+            }, 'json');
 		}
-	});
-
-	$(".refresh").live('click', function(e) {
-		e.preventDefault();
-
-		reloadCaptcha($(this).parent().parent().attr('id'));
-		$(this).blur(); 
 	});
 
 	$("form.PostComment button[type='cancel']").live('click', function(e) {
@@ -137,18 +129,6 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function reloadCaptcha(id)
-{
-	if (id && id != 'captcha') {
-		var div_id = 'captcha_' + id.replace('captcha_', '');
-	} else {
-		var div_id = 'captcha';
-	}
-
-	$('#' + div_id).find('#siimage').attr('src', $('#webroot').text() + 'libraries/captcha/securimage_show.php?sid=' + Math.random());
-	$('#' + div_id).find('.captcha').val('').focus();
-}
 
 function reloadComments(comment_count, id)
 {

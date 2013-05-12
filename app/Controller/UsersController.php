@@ -10,7 +10,9 @@ class UsersController extends AppController {
 		$this->allowedActions = array(
 			'quick_search',
 			'active',
-			'update_password'
+			'update_password',
+			'forgot_password',
+			'forgot_password_activate'
 		);
 
 		parent::beforeFilter();
@@ -83,7 +85,14 @@ class UsersController extends AppController {
 		{
         	$this->request->data['User']['username'] = $this->slug($this->request->data['User']['username']);
 
-            if ($this->User->save($this->request->data)) {
+            if ($this->User->save($this->request->data))
+            {
+				if (!empty($this->request->data['ModuleValue']))
+				{
+					$this->loadModel('ModuleValue');
+					$this->ModuleValue->saveMany($this->request->data['ModuleValue']);
+				}
+
                 $this->Session->setFlash('Your role has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
@@ -94,21 +103,19 @@ class UsersController extends AppController {
 		$this->loadModel('SettingValue');
 
 		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
-		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');
+		$security_options = $this->User->getSecurityOptions($this->SettingValue->findByTitle('Security Question Options'));
 		$user_status = $this->SettingValue->findByTitle('User Status');
-
-		if (!empty($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options'])) {
-			foreach (json_decode($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options']) as $row) {
-				$security_options[$row] = $row;
-			}
-		}
 
 		$this->loadModel('Theme');
 
 		$themes = $this->Theme->find('list');
 		$timezones = $this->getTimeZones();
 
-		$this->set(compact('security_options', 'themes', 'timezones'));
+		$this->loadModel('Field');
+
+		$fields = $this->Field->getFields('User');
+
+		$this->set(compact('security_options', 'themes', 'timezones', 'fields'));
 	}
 
 	public function admin_edit($id = null)
@@ -123,7 +130,14 @@ class UsersController extends AppController {
 
 	    	$this->request->data['User']['username'] = $this->slug($this->request->data['User']['username']);
 
-	        if ($this->User->save($this->request->data)) {
+	        if ($this->User->save($this->request->data))
+	        {
+				if (!empty($this->request->data['ModuleValue']))
+				{
+					$this->loadModel('ModuleValue');
+					$this->ModuleValue->saveMany($this->request->data['ModuleValue']);
+				}
+
 	            $this->Session->setFlash('Your user has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
@@ -169,21 +183,19 @@ class UsersController extends AppController {
 		$this->loadModel('SettingValue');
 
 		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
-		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');
+		$security_options = $this->User->getSecurityOptions($this->SettingValue->findByTitle('Security Question Options'));
 		$user_status = $this->SettingValue->findByTitle('User Status');
-
-		if (!empty($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options'])) {
-			foreach (json_decode($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options']) as $row) {
-				$security_options[$row] = $row;
-			}
-		}
 
 		$this->loadModel('Theme');
 
 		$themes = $this->Theme->find('list');
 		$timezones = $this->getTimeZones();
 
-		$this->set(compact('security_options', 'themes', 'timezones'));
+		$this->loadModel('Field');
+
+		$fields = $this->Field->getFields('User', $this->request->data['User']['id']);
+
+		$this->set(compact('security_options', 'themes', 'timezones', 'fields'));
 
 		$this->request->data['Security'] = $this->User->getSecurityAnswers($this->request->data);
 	}
@@ -255,8 +267,10 @@ class UsersController extends AppController {
 	}
 
 	public function login() {
-		if (!empty($this->request->data)) {
-			if (!empty($this->request->data['User']['type']) && $this->request->data['User']['type'] == "openid") {
+		if (!empty($this->request->data))
+		{
+			if (!empty($this->request->data['User']['type']) && $this->request->data['User']['type'] == "openid")
+			{
 				$realm = 'http://' . $_SERVER['HTTP_HOST'];
 		        $returnTo = $realm;
 
@@ -296,13 +310,7 @@ class UsersController extends AppController {
 						$custom_msg = null;
 					}
 
-					$this->Session->setFlash(
-						Configure::read('alert_btn').
-						'<strong>Error</strong> Your account is inactive'.$custom_msg,
-						 'default', 
-						 array(
-						 	'class' => 'alert alert-error'
-					));
+					$this->Session->setFlash('Your account is inactive' . $custom_msg, 'flash_error');
 				    return $this->redirect($this->Auth->redirect());
 				} else {
 					$password_reset = $this->SettingValue->findByTitle('User Password Reset');
@@ -311,11 +319,14 @@ class UsersController extends AppController {
 						$user = $this->User->findByUsername($this->request->data['User']['username']);
 						if (!empty($user)) {
 							$diff = strtotime($user['User']['last_reset_time']);
-							$math = round((time() - $diff) / (60 * 60 * 24), 0, PHP_ROUND_HALF_DOWN);
+							$math = round((time() - $diff) / (60 * 60 * 24), 0);
 
 							if ($user['User']['last_reset_time'] == '0000-00-00 00:00:00' ||
 								$math > $password_reset['SettingValue']['data']) {
-								$this->redirect(array('action' => 'update_password', 'change' => 'reset'));
+								$this->redirect(array(
+									'action' => 'reset_password',
+									$this->request->data['User']['username']
+								));
 							}  
 						}
 					} 
@@ -345,12 +356,7 @@ class UsersController extends AppController {
 	public function register()
 	{
 		if ($this->Auth->user('id')) {
-			$this->Session->setFlash(
-            		Configure::read('alert_btn')."<strong>Error</strong> You can't register, you are logged in!", 
-            		'default', 
-            		array(
-            			'class' => 'alert alert-error'
-        	));
+        	$this->Session->setFlash("You can't register, you are logged in!", 'flash_error');
 			return $this->redirect('/');
 		}
 
@@ -372,25 +378,11 @@ class UsersController extends AppController {
 			$this->redirect('/');
 		}
 
-		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
-		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');
 		$user_status = $this->SettingValue->findByTitle('User Status');
-
-		if (!empty($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options'])) {
-			foreach (json_decode($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options']) as $row) {
-				$security_options[$row] = $row;
-			}
-		}
-
 		$captcha = $this->SettingValue->findByTitle('Registration Captcha');
 
-		if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes') {
-			$this->set('captcha_setting', true);
-		}
-
-		$this->set(compact('security_options'));
-
-        if ($this->request->is('post')) {
+        if (!empty($this->request->data))
+        {
         	App::import('Vendor', 'securimage');
         	$securimage = new Securimage();
 
@@ -403,16 +395,17 @@ class UsersController extends AppController {
         	$role = $this->User->Role->findByDefaults('default-member');
         	$this->request->data['User']['role_id'] = $role['Role']['id'];
 
-            if (empty($message) && $this->User->save($this->request->data)) {
+            if (empty($message) && $this->User->save($this->request->data))
+            {
             	$this->request->data['User'] = array_merge($this->request->data['User'], array('id' => $this->User->id));
             	
-	        	if ($user_status['SettingValue']['data'] == "Email Activation") {
+	        	if ($user_status['SettingValue']['data'] == "Email Activation")
+	        	{
 	        		$sitename = $this->SettingValue->findByTitle('Site Name');
 	        		$webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
 	        		$email_subject = $this->SettingValue->findByTitle('User Register Email Subject');
 
-	        		$activate_code[0]['activate_code'] = md5(time());
-					// $this->User->id = $this->Auth->user('id');
+	        		$activate_code['activate_code'] = md5(time());
 					$this->User->saveField('settings', json_encode($activate_code));
 
 	        		$email = new CakeEmail();
@@ -430,39 +423,20 @@ class UsersController extends AppController {
 					$email->viewVars(array(
 						'data' => $this->request->data['User'],
 						'sitename' => $sitename['SettingValue']['data'],
-						'activate_code' => $activate_code[0]['activate_code']
+						'activate_code' => $activate_code['activate_code']
 					));
 					$email->send();
 
-                	$this->Session->setFlash(
-                		Configure::read('alert_btn').
-                		'<strong>Success</strong> Account Created<br />
-                		Please visit the link in the email to activate your account.', 
-                		'default', 
-                		array(
-                			'class' => 'alert alert-success'
-                	));
+                	$this->Session->setFlash('Account Created - Please visit the link in the email to activate your account.', 'flash_success');
 	        	} elseif ($user_status['SettingValue']['data'] == "Staff Activation") {
-
-                	$this->Session->setFlash(
-                		Configure::read('alert_btn').
-                		'<strong>Success</strong> Account Created<br />
-                		You cannot login until a staff member has activated your account.', 
-                		'default', 
-                		array(
-                			'class' => 'alert alert-success'
-                	));
+                	$this->Session->setFlash('Account Created - You cannot login until a staff member has activated your account.', 'flash_success');
 	        	} else {
 	            	$this->Auth->login($this->request->data['User']);
 
 					$this->User->id = $this->Auth->user('id');
 					$this->User->saveField('login_time', $this->User->dateTime());
-                	$this->Session->setFlash(
-                		'Account Created', 
-                		'default', 
-                		array(
-                			'class' => 'alert alert-success'
-                	));
+
+                	$this->Session->setFlash('Account Created', 'flash_success');
 				}
 
                 return $this->redirect(array(
@@ -477,7 +451,16 @@ class UsersController extends AppController {
             	$this->Session->setFlash($message, 'flash_error');
             }
         }
-     }
+
+		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
+		$security_options = $this->User->getSecurityOptions($this->SettingValue->findByTitle('Security Question Options'));
+
+		if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes') {
+			$this->set('captcha_setting', true);
+		}
+
+		$this->set(compact('security_options'));
+    }
 
     public function ajax_check_user()
     {
@@ -521,16 +504,6 @@ class UsersController extends AppController {
     	}
     }
 
-    public function ajax_forgot_password()
-    {
-    	$this->layout = 'ajax';
-    	$this->autoRender = false;
-
-    	$data = $this->User->findByUsername($this->request->data['User']['username']);
-
-    	return $data['User']['security_answers'];
-    }
-
     public function activate($username = null, $activate_code = null) {
     	if (!empty($this->request->data)) {
     		if (!empty($this->request->data['User']['username'])) {
@@ -543,214 +516,259 @@ class UsersController extends AppController {
 
     	if (!empty($username) && !empty($activate_code)) {
     		$match = $this->User->findByUsername($username);
-    		$code_match = json_decode($match['User']['settings']);
+    		$code_match = json_decode($match['User']['settings'], true);
 
     		if ($match['User']['status'] == 1) {
     			return $this->redirect(array('action' => 'login'));
     		}
 
-    		if (!empty($code_match[0]->activate_code) && $code_match[0]->activate_code == $activate_code) {
+    		if (!empty($code_match[0]['activate_code']) && $code_match['activate_code'] == $activate_code) {
     			$data['User']['id'] = $match['User']['id'];
     			$data['User']['settings'] = null;
     			$data['User']['status'] = 1;
 
     			$this->User->save($data);
 
-				$this->Session->setFlash(
-                		'Account Activated. You may now login', 
-                		'default', 
-                		array(
-                			'class' => 'alert alert-success'
-            	));
+            	$this->Session->setFlash('Account Activated - You may now login.', 'flash_success');
 
                 return $this->redirect(array('action' => 'login'));
     		} else {
-				$this->Session->setFlash(
-                		'Incorrect Code Entered', 
-                		'default', 
-                		array(
-                			'class' => 'alert alert-error'
-            	));
+            	$this->Session->setFlash('Incorrect Code Entered', 'flash_error');
     		}
     	}
     }
 
-    public function update_password()
+    public function forgot_password()
     {
-    	$this->loadModel('SettingValue');
-    	$password_reset = $this->SettingValue->findByTitle('User Password Reset');
+		if ($this->Auth->user('id'))
+		{
+        	$this->Session->setFlash("You didn't forget your password, you are logged in!", 'flash_error');
+			return $this->redirect('/');
+		}
 
-    	$this->set(compact('password_reset'));
+		if (!empty($this->request->data))
+		{
+        	App::import('Vendor', 'securimage');
+        	$securimage = new Securimage();
 
-    	if (!empty($this->params->named['change']) && $this->params->named['change'] == "forgot") {
-    		if ($this->Auth->user('id')) {
-				$this->Session->setFlash(
-                		Configure::read('alert_btn')."<strong>Error</strong> You didn't forget your password, you are logged in!", 
-                		'default', 
-                		array(
-                			'class' => 'alert alert-error'
-            	));
-    			return $this->redirect('/');
-    		}
+	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
+	        {
+	            $error = 'Invalid Captcha Answer. Please try again.';
+	        }
 
-    		if (!empty($this->params->named['username']) && empty($this->request->data['User']['username'])) {
-    			$this->request->data['User']['username'] = $this->params->named['username'];
-    		}
-    		if (!empty($this->params->named['activate'])) {
-    			$activate = $this->params->named['activate'];
-    			$this->set(compact('activate'));
-    		}
-    		if (!empty($this->request->data['User']['activate'])) {
-    			$activate = $this->request->data['User']['activate'];
-    		}
-
-    		// if (!empty($this->request->data)) {
-    		if ($this->request->is('post')) {
+	        if (empty($error))
+	        {
     			if (!empty($this->request->data['User']['username'])) {
     				$user = $this->User->findByUsername($this->request->data['User']['username']);
-    			} else {
+    			}
+    			elseif (!empty($this->request->data['User']['email']))
+				{
     				$user = $this->User->findByEmail($this->request->data['User']['email']);
     			}
-				
-				if (!$user) {
-					$this->Session->setFlash(
-	                		'No user exists with this email', 
-	                		'default', 
-	                		array(
-	                			'class' => 'alert alert-error'
-	            	));
-				} else {
-					if (!empty($activate) && !empty($this->request->data['User']['password'])) {
-						$find = $this->User->find('first', array(
-							'conditions' => array(
-								'User.security_answers LIKE' => '%"'.$activate.'"%'
-							)
-						));
-						
-						if (!$find) {
-							$this->Session->setFlash(
-			                		'Activate Code/Username No Match', 
-			                		'default', 
-			                		array(
-			                			'class' => 'alert alert-error'
-			            	));
-						} else {
-							$security_data = json_decode($find['User']['security_answers']);
-							foreach($security_data as $key => $row) {
-								if (empty($row->activate_code)) {
-									$new_security_data[$key] = $row;
-								}
-							}
-							$this->request->data['User']['security_answers'] = json_encode($new_security_data);
-							$this->request->data['User']['id'] = $find['User']['id'];
 
-							if ($this->User->save($this->request->data)) {
-								$this->Session->setFlash(
-				                		'Your password has been updated.', 
-				                		'default', 
-				                		array(
-				                			'class' => 'alert alert-success'
-				            	));
+    			if (empty($user))
+    			{
+    				$error = 'Could not find user by that username/email.';
+    			}
+    			else
+    			{
+    				$security_answers = $this->User->getSecurityAnswers($user);
 
-				            	return $this->redirect(array('action' => 'login'));
-							} else {
-								debug($this->request->data);
-							}
-						}
-					} else {
+    				if (!empty($security_answers['activate_code']) && !empty($security_answers['activate_time']))
+    				{
+    					$time_diff = time() - $security_answers['activate_time'];
+    				}
+
+    				if (!empty($time_diff) && $time_diff < 86400)
+    				{
+    					$error = 'Please check your email, a forgot password request was sent out less than 24 hours ago.';
+    				}
+    				else
+    				{
+	    				$this->loadModel('SettingValue');
+
 		        		$sitename = $this->SettingValue->findByTitle('Site Name');
 		        		$webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
 
-		        		$activate_code[0]['activate_code'] = md5(time());
 						$this->User->id = $user['User']['id'];
 
-						if (!empty($user['User']['security_answers'])) {
-							$existing = json_decode($user['User']['security_answers']);
-							foreach($existing as $i => $row) {
-								if (!empty($row->question) && !empty($row->answer)) {
-									$data[$i] = array(
-										'question' => $row->question, 
-										'answer' => $row->answer
-									);
-								}
-							}
-						}
+						$security_answers['activate_code'] = md5(time());
+						$security_answers['activate_time'] = time();
 
-						$data[0]['activate_code'] = $activate_code[0]['activate_code'];
-
-						$this->User->saveField('security_answers', json_encode($data));
+						$this->User->saveField('security_answers', json_encode($security_answers));
 
 		        		$email = new CakeEmail();
 
-						$email->to($this->request->data['User']['email']);
+						$email->to($user['User']['email']);
 						$email->from(array(
 							$webmaster_email['SettingValue']['data'] => $sitename['SettingValue']['data']
 						));
 						$email->subject($sitename['SettingValue']['data']." - Forgot Password Request");
 						if ($this->theme != "Default") {
-							// $email->theme($this->theme);
+							$email->theme($this->theme);
 						}
 						$email->emailFormat('html');
 						$email->template('forgot_password');
 						$email->viewVars(array(
 							'data' => $user['User'],
 							'sitename' => $sitename['SettingValue']['data'],
-							'activate_code' => $activate_code[0]['activate_code']
+							'activate_code' => $security_answers['activate_code']
 						));
-						if ($email->send()) {
+
+						if ($email->send())
+						{
 							$this->set('activate', true);
 
-							$this->Session->setFlash(
-			                		'An email has been dispatched to continue.', 
-			                		'default', 
-			                		array(
-			                			'class' => 'alert alert-success'
-			            	));
+			            	$this->Session->setFlash('An email has been dispatched to continue.', 'flash_success');
 						}
 					}
+    			}
+	        }
+
+	        if (!empty($error))
+	        {
+	        	$this->Session->setFlash($error, 'flash_error');
+	        }
+		}
+    }
+
+    public function forgot_password_activate()
+    {
+		if ($this->Auth->user('id'))
+		{
+        	$this->Session->setFlash("You didn't forget your password, you are logged in!", 'flash_error');
+			return $this->redirect('/');
+		}
+
+		if (!empty($this->request->data))
+		{
+        	App::import('Vendor', 'securimage');
+        	$securimage = new Securimage();
+
+	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
+	        {
+	            $error = 'Invalid Captcha Answer. Please try again.';
+	        }
+
+			if (empty($error))
+			{
+				$user = $this->User->findByUsername($this->request->data['User']['username']);
+
+				if (empty($user))
+				{
+					$error = 'Could not find user by that username.';
 				}
-    		}
-    	} else {
-	    	if (!empty($this->request->data)) {
+				else
+				{
+					$security_answers = $this->User->getSecurityAnswers($user);
+
+					if (!empty($security_answers['activate_code']) && $security_answers['activate_code'] == $this->request->data['User']['activate_code'])
+					{
+						unset($security_answers['activate_code'], $security_answers['activate_time']);
+
+						$this->request->data['User']['id'] = $user['User']['id'];
+						$this->request->data['User']['security_answers'] = json_encode($security_answers);
+
+						if ($this->User->save($this->request->data))
+						{
+			            	$this->Session->setFlash('Your password has been updated. You may now login.', 'flash_success');
+			            	return $this->redirect(array('action' => 'login'));
+			            }
+			            else
+			            {
+			            	$error = 'Could not updated password.';
+			            }
+					}
+					else
+					{
+						$error = 'Either the user has no forgot password code or code entered is incorrect.';
+					}
+				}
+			}
+
+	        if (!empty($error))
+	        {
+	        	$this->Session->setFlash($error, 'flash_error');
+	        }
+		}
+
+		if (!empty($this->params['named']['username']))
+		{
+			$this->request->data['User']['username'] = $this->params['named']['username'];
+		}
+
+		if (!empty($this->params['named']['code']))
+		{
+			$this->request->data['User']['activate_code'] = $this->params['named']['code'];
+		}
+	}
+
+    public function reset_password($username = null)
+    {
+		if ($this->Auth->user('id'))
+		{
+        	$this->Session->setFlash("You can't reset your password, you are logged in!", 'flash_error');
+			return $this->redirect('/');
+		}
+
+    	$this->loadModel('SettingValue');
+    	$password_reset = $this->SettingValue->findByTitle('User Password Reset');
+
+    	$this->set(compact('password_reset'));
+
+    	if (!empty($this->request->data))
+    	{
+        	App::import('Vendor', 'securimage');
+        	$securimage = new Securimage();
+
+	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
+	        {
+	            $error = 'Invalid Captcha Answer. Please try again.';
+	        }
+
+			if (empty($error))
+			{
 	    		$user = $this->User->findByUsername($this->request->data['User']['username']);
-	    		if (!$user) {
-					$this->Session->setFlash(
-	                		'That username does not exist', 
-	                		'default', 
-	                		array(
-	                			'class' => 'alert alert-error'
-	            	));
-	    		} else {
+
+	    		if (empty($user))
+	    		{
+	            	$error = 'That username does not exist.';
+	    		}
+	    		else
+	    		{
 	    			if (AuthComponent::password($this->request->data['User']['password_current']) != 
-	    				$user['User']['password']) {
-						$this->Session->setFlash(
-		                		'Current Password is Incorrect', 
-		                		'default', 
-		                		array(
-		                			'class' => 'alert alert-error'
-		            	));
-	    			} else {
+	    				$user['User']['password'])
+	    			{
+						$error = 'Current Password is Incorrect. Please try again';
+	    			}
+	    			else
+	    			{
 	    				$this->request->data['User']['id'] = $user['User']['id'];
 	    				$this->request->data['User']['last_reset_time'] = $this->User->dateTime();
 	    				$this->request->data['User']['login_time'] = $this->User->dateTime();
 
-	    				if ($this->User->save($this->request->data)) {
+	    				if ($this->User->save($this->request->data))
+	    				{
 	    					$this->Auth->login();
 
-							$this->Session->setFlash(
-			                		'Your password has been updated and you have been logged in', 
-			                		'default', 
-			                		array(
-			                			'class' => 'alert alert-success'
-			            	));
-
+			            	$this->Session->setFlash('Your password has been updated and you have been logged in', 'flash_success');
 			            	return $this->redirect($this->Auth->redirect());
 	    				}
 	    			}
 	    		}
-	    	}
-	    }
-    }
+			}
+
+	        if (!empty($error))
+	        {
+	        	$this->Session->setFlash($error, 'flash_error');
+	        }
+    	}
+
+    	if (!empty($username))
+    	{
+    		$this->request->data['User']['username'] = $username;
+    	}
+	}
 
     public function profile($username = null)
     {
@@ -762,13 +780,7 @@ class UsersController extends AppController {
     	if (empty($username) && $this->Auth->user('id')) {
     		$username = $this->Auth->user('username');
     	} elseif (empty($username)) {
-			$this->Session->setFlash(
-        		'No username supplied', 
-        		'default', 
-        		array(
-        			'class' => 'alert alert-error'
-        		)
-        	);
+        	$this->Session->setFlash('No username supplied', 'flash_error');
         	$this->redirect(array(
         		'controller' => 'pages',
         		'action' => 'display',
@@ -799,28 +811,42 @@ class UsersController extends AppController {
     			)
     		)
     	));
+
+    	$this->loadModel('Field');
+
+    	$data = $this->Field->getData('User', $this->request->data['User']['id']);
+
+    	$this->set('fields', $data['field_data']);
+
+    	$this->request->data = array_merge($this->request->data, $data['data']);
     }
 
     public function edit()
     {
-    	if (!$this->Auth->user('id')) {
-    		$this->redirect($this->params->webroot);
+    	if (!$this->Auth->user('id'))
+    	{
+    		$this->Session->setFlash('You must be logged in to access this page.', 'flash_error');
+    		$this->redirect(array(
+    			'action' => 'login'
+    		));
     	}
 
-		if (!empty($this->request->data)) {
+		if (!empty($this->request->data))
+		{
 			$this->User->id = $this->Auth->user('id');
 
 	    	unset($this->User->validate['password']);
 	    	unset($this->User->validate['username']);
 
-			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(
-                		'Your account has been updated', 
-                		'default', 
-                		array(
-                			'class' => 'alert alert-success'
-                		)
-            	);
+			if ($this->User->save($this->request->data))
+			{
+				if (!empty($this->request->data['ModuleValue']))
+				{
+					$this->loadModel('ModuleValue');
+					$this->ModuleValue->saveMany($this->request->data['ModuleValue']);
+				}
+
+            	$this->Session->setFlash('Your account has been updated', 'flash_success');
 			}
 		}
 
@@ -833,21 +859,19 @@ class UsersController extends AppController {
 		$this->loadModel('SettingValue');
 
 		$this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
-		$this->request->data['SecurityQuestionOptions'] = $this->SettingValue->findByTitle('Security Question Options');
+		$security_options = $this->User->getSecurityOptions($this->SettingValue->findByTitle('Security Question Options'));
 		$user_status = $this->SettingValue->findByTitle('User Status');
-
-		if (!empty($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options'])) {
-			foreach (json_decode($this->request->data['SecurityQuestionOptions']['SettingValue']['data_options']) as $row) {
-				$security_options[$row] = $row;
-			}
-		}
 
 		$this->loadModel('Theme');
 
 		$themes = $this->Theme->find('list');
 		$timezones = $this->getTimeZones();
 
-		$this->set(compact('security_options', 'themes', 'timezones'));
+		$this->loadModel('Field');
+
+		$fields = $this->Field->getFields('User', $this->Auth->user('id'));
+
+		$this->set(compact('security_options', 'themes', 'timezones', 'fields'));
 
 		$this->request->data['Security'] = $this->User->getSecurityAnswers($this->request->data);
     }

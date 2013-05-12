@@ -12,8 +12,10 @@ $(document).ready(function() {
 
 <h1>Plugins</h1>
 
-<?= $this->Html->link('Get More Plugins', $this->Api->url() . 'plugins', array(
-    'class' => 'btn btn-info pull-right admin-edit-options'
+<?= $this->Html->link('Get More Plugins <i class="icon-search"></i>', $this->Api->url() . 'plugins', array(
+    'class' => 'btn btn-info pull-right admin-edit-options',
+    'target' => '_blank',
+    'escape' => false
 )) ?>
 
 <?php if (!empty($plugins)): ?>

@@ -113,59 +113,58 @@ class Block extends AppModel
     */
     public function beforeSave($options = array())
     {
-        $type = $this->data['Block']['type'];
+        if (!empty($this->data['Block']['title']))
+        {
+            $type = $this->data['Block']['type'];
 
-        $this->data['Block']['title'] = $this->slug($this->data['Block']['title']);
-        
-        if ($this->data['Block']['location_type'] == "*") {
-            $this->data['Block']['location'] = json_encode(array("*"));
-        } elseif ($this->data['Block']['location_type'] == "#") {
-            $this->data['Block']['location'] = json_encode(array("#"));
-        } else {
-            foreach($this->data['LocationData'] as $row) {
-                $location_data[] = str_replace('/', '|', $row);
-            }
-
-            $this->data['Block']['location'] = json_encode($location_data);
-            unset($this->data['LocationData']);
-        }
-
-        if (!empty($this->data['Block']['data'])) {
-            $this->data['Block']['settings']['data'] = $this->data['Block']['data'];
-        }
-
-        if (!empty($this->data['Block']['order_by'])) {
-            $this->data['Block']['settings']['order_by'] = $this->data['Block']['order_by'];
-        }
-
-        if (!empty($this->data['Block']['order_dir'])) {
-            $this->data['Block']['settings']['order_dir'] = $this->data['Block']['order_dir'];
-        }
-
-        if (!empty($this->data['Block']['model']) && $type == "dynamic") {
-            if (strstr($this->data['Block']['model'], '.')) {
-                $ex = explode('.', $this->data['Block']['model']);
-
-                $get = $this->Module->find('first', array(
-                    'conditions' => array(
-                        'Module.is_plugin' => 1,
-                        'Module.title' => $ex[0],
-                        'Module.model_title' => $ex[1]
-                    )
-                ));
+            $this->data['Block']['title'] = $this->slug($this->data['Block']['title']);
+            
+            if ($this->data['Block']['location_type'] == "*") {
+                $this->data['Block']['location'] = json_encode(array("*"));
+            } elseif ($this->data['Block']['location_type'] == "#") {
+                $this->data['Block']['location'] = json_encode(array("#"));
             } else {
-                $get = $this->Module->findByModelTitle($this->data['Block']['model']);
+                foreach($this->data['LocationData'] as $row) {
+                    $location_data[] = str_replace('/', '|', $row);
+                }
+
+                $this->data['Block']['location'] = json_encode($location_data);
+                unset($this->data['LocationData']);
             }
 
-            $this->data['Block']['module_id'] = $get['Module']['id'];
-        } elseif ($type == "code" && !empty($this->data['Block']['code'])) {
-            $this->data['Block']['settings']['data'] = $this->data['Block']['code'];
-        } elseif ($type == "text" && !empty($this->data['Block']['text'])) {
-            $this->data['Block']['settings']['data'] = $this->data['Block']['text'];
-        }
+            if (!empty($this->data['Block']['order_by'])) {
+                $this->data['Block']['settings']['order_by'] = $this->data['Block']['order_by'];
+            }
 
-        if (!empty($this->data['Block']['settings'])) {
-            $this->data['Block']['settings'] = json_encode($this->data['Block']['settings']);
+            if (!empty($this->data['Block']['order_dir'])) {
+                $this->data['Block']['settings']['order_dir'] = $this->data['Block']['order_dir'];
+            }
+
+            if (!empty($this->data['Block']['model']) && $type == "dynamic") {
+                if (strstr($this->data['Block']['model'], '.')) {
+                    $ex = explode('.', $this->data['Block']['model']);
+
+                    $get = $this->Module->find('first', array(
+                        'conditions' => array(
+                            'Module.is_plugin' => 1,
+                            'Module.title' => $ex[0],
+                            'Module.model_title' => $ex[1]
+                        )
+                    ));
+                } else {
+                    $get = $this->Module->findByModelTitle($this->data['Block']['model']);
+                }
+
+                $this->data['Block']['module_id'] = $get['Module']['id'];
+            } elseif ($type == "code" && !empty($this->data['Block']['code'])) {
+                $this->data['Block']['data'] = $this->data['Block']['code'];
+            } elseif ($type == "text" && !empty($this->data['Block']['text'])) {
+                $this->data['Block']['data'] = $this->data['Block']['text'];
+            }
+
+            if (!empty($this->data['Block']['settings'])) {
+                $this->data['Block']['settings'] = json_encode($this->data['Block']['settings']);
+            }
         }
 
         return true;

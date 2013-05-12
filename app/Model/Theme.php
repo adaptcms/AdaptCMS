@@ -11,7 +11,9 @@ class Theme extends AppModel
     * A theme has many templates
     */
 	public $hasMany = array(
-        'Template'
+        'Template' => array(
+            'dependent' => true
+        )
     );
 
     /**
@@ -100,8 +102,8 @@ class Theme extends AppModel
     /**
     * Transforms a text string into camel cased text, used in controllers
     *
-    * @param string to camel case the text
-    * @param spaces if set, adds spaces for camel case words
+    * @param string $string to camel case the text
+    * @param string $spaces if set, adds spaces for camel case words
     * @return string
     */
 	public function camelCase($string, $spaces = null) 

@@ -22,6 +22,21 @@
     </div>
     <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown">
+            Filter by Module
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <?php foreach ($modules as $id => $module): ?>
+                <li>
+                    <?= $this->Html->link($module, array(
+                        'module_id' => $id
+                    )) ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn dropdown-toggle" data-toggle="dropdown">
             Filter by Field Type
             <span class="caret"></span>
         </a>
@@ -79,6 +94,7 @@
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('field_type', 'Type') ?></th>
                 <th><?= $this->Paginator->sort('Category.title', 'Category') ?></th>
+                <th><?= $this->Paginator->sort('Module.title', 'Module') ?></th>
                 <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
@@ -102,11 +118,18 @@
                         <?= ucfirst($data['Field']['field_type']) ?>
                     </td>
                     <td>
-                        <?= $this->Html->link($data['Category']['title'], array(
-                                'controller' => 'categories',
-                                'action' => 'admin_edit',
-                                $data['Category']['id']
-                        )) ?>
+                        <?php if (!empty($data['Category']['id'])): ?>
+                            <?= $this->Html->link($data['Category']['title'], array(
+                                    'controller' => 'categories',
+                                    'action' => 'admin_edit',
+                                    $data['Category']['id']
+                            )) ?>
+                        <?php endif ?>
+                    </td>
+                    <td>
+                        <?php if (!empty($data['Module']['id'])): ?>
+                            <?= $data['Module']['title'] ?>
+                        <?php endif ?>
                     </td>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>

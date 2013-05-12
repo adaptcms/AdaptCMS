@@ -14,11 +14,11 @@ class UploadBehavior extends ModelBehavior
 	* Array of accepted image types
 	*/
 	public $image_ext = array(
-            'jpg',
-            'png',
-            'gif',
-            'jpeg'
-	);
+        'jpg',
+        'png',
+        'gif',
+        'jpeg'
+        );
 
 	/**
 	* This function used by articles, uploads the file and attempts to do anything else depending on options picked.
@@ -31,63 +31,85 @@ class UploadBehavior extends ModelBehavior
 	* @param model_name Used for flexibility
 	* @param file_model_name Same as above
 	*/
-	public function uploadFile(&$model, $file = null, $field_id, $id = null, $model_name, $file_model_name)
+	public function uploadFile(&$model, $file = null, $field_id, $id = null, $model_name, $file_model_name, $id_type = null)
 	{
-            if (is_array($file) && $file['size'] > 0)
-            {
-                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-                $tmpName = $file['tmp_name'];
+        if (is_array($file) && $file['size'] > 0)
+        {
+           $prefix = '';
+           $path = path;
+           $dir = 'uploads/';
 
-                $file['name'] = Inflector::slug(str_replace('.' . $ext, '', $file['name'])).'.'.$ext;
+           if (!empty($id_type))
+           {
+              $path = path . 'custom' . DS;
+              $dir = $dir . 'custom/';
 
-                if (file_exists(path . $file['name']))
-                {
-                    $fileData['name'] = $this->generateRand() . '_' . $file['name'];
-                } else {
-                    $fileData['name'] = $file['name'];
-                }
+              if (!empty($id))
+              {
+                 $prefix = $id . '_' . $id_type . '_';
+             }
+         }
 
-                $fileData['type'] = $ext[1];
-                $fileData['size'] = $file['size'];
+         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+         $tmpName = $file['tmp_name'];
 
-                $result = move_uploaded_file($tmpName, path . $fileData['name']);
-                
-                if ($result)
-                {
-                    $this->createThumbnail(
-                        $model, 
-                        path . $fileData['name'], 
-                        path . 'thumb/'.$fileData['name'],
-                        $ext
-                    );
-                }
+         $file['name'] = Inflector::slug(str_replace('.' . $ext, '', $file['name'])).'.'.$ext;
 
-                if (!empty($model->data[$model->name]['watermark']))
-                {
-                    $this->createWatermark(
-                            path . $fileData['name'],
-                            $ext
-                    );
-                }
-                
-                $data = array();
+         if (file_exists($path . $file['name']))
+         {
+            $fileData['name'] = $this->generateRand() . '_' . $prefix . $file['name'];
+        } else {
+            $fileData['name'] = $prefix . $file['name'];
+        }
 
-                $data[$model_name]['data'] = $fileData['name'];
-                $data[$model_name]['field_id'] = $field_id;
-                
-                if (!empty($id))
-                {
-                    $data[$model_name]['article_id'] = $id;
-                }
-                
-                $data[$file_model_name]['filesize'] = $file['size'];
-                $data[$file_model_name]['dir'] = 'uploads/';
-                $data[$file_model_name]['filename'] = $fileData['name'];
-                $data[$file_model_name]['mimetype'] = $file['type'];
+        $fileData['type'] = $ext[1];
+        $fileData['size'] = $file['size'];
 
-                return $data;
-            }
-	}
+        $result = move_uploaded_file($tmpName, $path . $fileData['name']);
+        
+        if (!empty($result))
+        {
+            $this->createThumbnail(
+                $model, 
+                $path . $fileData['name'], 
+                $path . 'thumb/'.$fileData['name'],
+                $ext
+                );
+        }
+
+        if (!empty($model->data[$model->name]['watermark']))
+        {
+            $this->createWatermark(
+                $path . $fileData['name'],
+                $ext
+                );
+        }
+        
+        $data = array();
+
+        $data[$model_name]['data'] = $fileData['name'];
+        $data[$model_name]['field_id'] = $field_id;
+
+        if (!empty($id))
+        {
+           if (empty($id_type))
+           {
+               $data[$model_name]['article_id'] = $id;
+           }
+           else
+           {
+              $data[$model_name]['module_id'] = $id;
+          }
+      }
+
+      $data[$file_model_name]['filesize'] = $file['size'];
+      $data[$file_model_name]['dir'] = $dir;
+      $data[$file_model_name]['filename'] = $fileData['name'];
+      $data[$file_model_name]['mimetype'] = $file['type'];
+
+      return $data;
+  }
+}
 
 	/**
 	* The big one. This is mainly used by Files for when uploading file(s). It handles all
@@ -97,151 +119,161 @@ class UploadBehavior extends ModelBehavior
 	*/
 	public function beforeSave(&$model)
 	{
-            if ($model->name != 'ArticleValue')
+        if ($model->name != 'ArticleValue' && $model->name != 'ModuleValue')
+        {
+            foreach($model->data as $i => $data)
             {
-                foreach($model->data as $i => $data)
+                if ($i != "_Token")
                 {
-                    if ($i != "_Token" && $i != "ArticleValue")
+                    $multi = false;
+
+                    $model_data = $model->data[$model->name];
+
+                    foreach($data as $key => $file)
                     {
-                        $multi = false;
-
-                        if (!empty($data[$model->name]))
+                        if (is_array($file) && isset($file['error']) && $file['error'] == 0 || 
+                            !empty($file[$model->name]) && is_array($file[$model->name]) && isset($file[$model->name]['filename']['error']) && $file[$model->name]['filename']['error'] == 0)
                         {
-                            $data = $data[$model->name];
-                            $multi = true;
-                            $model_data = $model->data[$i][$model->name];
-                        } else {
-                            $model_data = $model->data[$model->name];
-                        }
-
-                        foreach($data as $file)
-                        {
-                            if (is_array($file) && isset($file['error']) && $file['error'] == 0)
+                            if (isset($file[$model->name]['filename']['error']))
                             {
-                                if (empty($file['name']))
-                                {
-                                    $model_data['filename'] = $model_data['old_filename'];
-                                } else {
-                                    $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                                $file = array_merge($file[$model->name], $file[$model->name]['filename']);
+                                $multi = true;
+                            }
 
-                                    $file['name'] = Inflector::slug(str_replace('.' . $ext, '', $file['name'])).'.'.$ext;
-                                    $tmpName = $file['tmp_name'];
-
-                                    if (file_exists(path . $file['name']))
-                                    {
-                                        $fileData['name'] = $this->generateRand() . '_' . $file['name'];
-                                    } else {
-                                        $fileData['name'] = $file['name'];
-
-                                        if (!empty($model_data['random_filename']))
-                                        {
-                                            $fileData['name'] = $this->generateRand(30) . '.' . $ext;
-                                        }
-                                    }
-
-                                    $fileData['type'] = $ext;
-                                    $fileData['size'] = $file['size'];
-
-                                    $result = move_uploaded_file($tmpName, path . $fileData['name']);
-                                    
-                                    if ($result)
-                                    {
-                                        $this->createThumbnail(
-                                            $model, 
-                                            path . $fileData['name'], 
-                                            path . 'thumb/'.$fileData['name'],
-                                            $ext
-                                        );
-                                    }
-
-                                    if (!empty($model_data['watermark']))
-                                    {
-                                        $watermark = $this->createWatermark(
-                                                path . $fileData['name'],
-                                                $ext,
-                                                $this->resize($model)
-                                        );
-                                    }
-
-                                    $model_data['filesize'] = $file['size'];
-                                    $model_data['dir'] = 'uploads/';
-                                    $model_data['filename'] = $fileData['name'];
-                                    $model_data['mimetype'] = $file['type'];
-                                }
-
-                                if ($multi)
-                                {
-                                    $model->data[$i][$model->name] = $model_data;
-                                } else {
-                                    $model->data[$model->name] = $model_data;
-                                }
+                            if (empty($file['name']))
+                            {
+                                $model_data['filename'] = $model_data['old_filename'];
                             } else {
-                                // die(debug($model_data));
+                                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+
+                                $file['name'] = Inflector::slug(str_replace('.' . $ext, '', $file['name'])).'.'.$ext;
+                                $tmpName = $file['tmp_name'];
+
+                                if (file_exists(path . $file['name']))
+                                {
+                                    $fileData['name'] = $this->generateRand() . '_' . $file['name'];
+                                } else {
+                                    $fileData['name'] = $file['name'];
+
+                                    if (!empty($model_data['random_filename']))
+                                    {
+                                        $fileData['name'] = $this->generateRand(30) . '.' . $ext;
+                                    }
+                                }
+
+                                $fileData['type'] = $ext;
+                                $fileData['size'] = $file['size'];
+
+                                $result = move_uploaded_file($tmpName, path . $fileData['name']);
+                                
+                                if ($result)
+                                {
+                                    $this->createThumbnail(
+                                        $model, 
+                                        path . $fileData['name'], 
+                                        path . 'thumb/'.$fileData['name'],
+                                        $ext
+                                        );
+                                }
+
+                                if (!empty($model_data['watermark']))
+                                {
+                                    $watermark = $this->createWatermark(
+                                        path . $fileData['name'],
+                                        $ext,
+                                        $this->resize($model)
+                                        );
+                                }
+
+                                $model_data['filesize'] = $file['size'];
+                                $model_data['dir'] = 'uploads/';
+                                $model_data['filename'] = $fileData['name'];
+                                $model_data['mimetype'] = $file['type'];
+
+                                $file_data = array(
+                                    'filesize' => $model_data['filesize'],
+                                    'dir' => $model_data['dir'],
+                                    'filename' => $model_data['filename'],
+                                    'mimetype' => $model_data['mimetype']
+                                );
+                            }
+
+                            if ($multi)
+                            {
+                                $orig_data = $model->data[$model->name][$key];          
+                                $model->data[$model->name][$key] = array_merge($orig_data, $file_data);
+                            } else {
+                                $model->data[$model->name] = $model_data;
                             }
                         }
                     }
                 }
+            }
 
-                if (empty($model->data[$model->name]['created']) && !empty($model->data[$model->name]['filename']))
-                {
-                    $ext = pathinfo(path . $model->data[$model->name]['filename'], PATHINFO_EXTENSION);
+            // die(debug($model->data));
 
-                    $model->data[$model->name]['filename'] = Inflector::slug(
-                        str_replace(
-                                '.' . $ext, 
-                                '', 
-                                $model->data[$model->name]['filename']
+            if (empty($model->data[$model->name]['created']) && !empty($model->data[$model->name]['filename']))
+            {
+                $ext = pathinfo(path . $model->data[$model->name]['filename'], PATHINFO_EXTENSION);
+
+                $model->data[$model->name]['filename'] = Inflector::slug(
+                    str_replace(
+                        '.' . $ext, 
+                        '', 
+                        $model->data[$model->name]['filename']
                         )).'.'.$ext;
-                    $resize = $this->resize($model);
+                $resize = $this->resize($model);
 
-                    if (!empty($model->data[$model->name]['random_filename']))
+                if (!empty($model->data[$model->name]['random_filename']))
+                {
+                    $model->data[$model->name]['filename'] = $this->generateRand(25) . '.' . $ext;
+                }
+
+                if (!empty($model->data[$model->name]['watermark']))
+                {
+                    $watermark = $this->createWatermark(
+                        path . $model->data[$model->name]['filename'],
+                        $ext,
+                        $resize
+                        );
+                } elseif (!empty($resize))
+                {
+                    $this->resizeImage(
+                        path . $model->data[$model->name]['filename'],
+                        $ext,
+                        $resize
+                        );
+                }
+
+                if (!empty($model->data[$model->name]['old_filename']) && 
+                    $model->data[$model->name]['old_filename'] != $model->data[$model->name]['filename'])
+                {
+
+                    if (file_exists(path . $model->data[$model->name]['old_filename']))
                     {
-                        $model->data[$model->name]['filename'] = $this->generateRand(25) . '.' . $ext;
+                        rename(
+                            path . $model->data[$model->name]['old_filename'],
+                            path . $model->data[$model->name]['filename']
+                            );
+                    } else {
+                        $model->data[$model->name]['filename'] = $model->data[$model->name]['old_filename'];
                     }
 
-                    if (!empty($model->data[$model->name]['watermark']))
+                    if (file_exists(path . 'thumb' . DS .$model->data[$model->name]['old_filename']))
                     {
-                        $watermark = $this->createWatermark(
-                                path . $model->data[$model->name]['filename'],
-                                $ext,
-                                $resize
-                        );
-                    } elseif (!empty($resize))
-                    {
-                        $this->resizeImage(
-                                path . $model->data[$model->name]['filename'],
-                                $ext,
-                                $resize
-                        );
-                    }
-
-                    if (!empty($model->data[$model->name]['old_filename']) && 
-                        $model->data[$model->name]['old_filename'] != $model->data[$model->name]['filename'])
-                    {
-
-                        if (file_exists(path . $model->data[$model->name]['old_filename']))
-                        {
-                                rename(
-                                        path . $model->data[$model->name]['old_filename'],
-                                        path . $model->data[$model->name]['filename']
-                                );
-                        } else {
-                                $model->data[$model->name]['filename'] = $model->data[$model->name]['old_filename'];
-                        }
-
-                        if (file_exists(path . 'thumb' . DS .$model->data[$model->name]['old_filename']))
-                        {
-                                rename(
-                                        path . 'thumb' . DS .$model->data[$model->name]['old_filename'],
-                                        path . 'thumb' . DS .$model->data[$model->name]['filename']
-                                );
-                        }
+                        rename(
+                            path . 'thumb' . DS .$model->data[$model->name]['old_filename'],
+                            path . 'thumb' . DS .$model->data[$model->name]['filename']
+                            );
                     }
                 }
             }
-            
-            return true;
         }
+
+        // die(debug($model->data));
+        
+        return true;
+    }
 
 	/**
 	* Placeholder, this should work in the future
@@ -286,7 +318,7 @@ class UploadBehavior extends ModelBehavior
 				'maxDimension' => '',
 				'thumbnailQuality' => 100,
 				'zoomCrop' => false
-			);
+             );
 
 			$thumb = App::import('Vendor','phpthumb', array('file' => 'phpThumb' . DS . 'phpthumb.class.php'));
 
@@ -389,7 +421,7 @@ class UploadBehavior extends ModelBehavior
 			return array(
 				'width' => $model->data[$model->name]['resize_width'],
 				'height' => $model->data[$model->name]['resize_height']
-			);
+             );
 		} else {
 			return array();
 		}

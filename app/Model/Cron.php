@@ -63,6 +63,7 @@ class Cron extends AppModel
         	$amount = $this->data['Cron']['period_amount'];
         	$type = $this->data['Cron']['period_type'];
         	$this->data['Cron']['run_time'] = date('Y-m-d H:i:s', strtotime('+' . $amount . ' '.$type));
+            $this->data['Cron']['title'] = strip_tags($this->data['Cron']['title']);
         }
         
     	return true;

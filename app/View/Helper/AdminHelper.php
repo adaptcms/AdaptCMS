@@ -140,14 +140,24 @@ class AdminHelper extends AppHelper
      * @param string $controller
      * @return string HTML Link with icon/text
      */
-    public function view($id, $action = 'view', $controller = null)
+    public function view($id = null, $action = 'view', $controller = null, $params = array())
     {
-        return $this->Html->link('<i class="icon-picture"></i> View', array(
-                'action' => $action,
-                'admin' => false,
-                'controller' => (!empty($controller) ? $controller : $this->params->controller),
-                $id
-            ),
+        $vars = array(
+            'action' => !empty($action) ? $action : 'view',
+            'admin' => false,
+            'controller' => (!empty($controller) ? $controller : $this->params->controller)
+        );
+
+        if (!empty($id) && empty($params))
+        {
+            $vars[] = $id;
+        }
+        else
+        {
+            $vars = array_merge($vars, $params);
+        }
+
+        return $this->Html->link('<i class="icon-picture"></i> View', $vars,
             array(
                 'escape' => false
             )
@@ -215,7 +225,7 @@ class AdminHelper extends AppHelper
     }
 
     /**
-     * Convinience function that based on permissions array/user_id, checks to see if user
+     * Convenience function that based on permissions array/user_id, checks to see if user
      * has access to item. Returns true or false.
      * 
      * @param array $permission
@@ -233,5 +243,29 @@ class AdminHelper extends AppHelper
         } else {
             return false;
         }
+    }
+
+    /**
+    * Convenience function checking deleted_time (if exists) and status (if exists) to see
+    * if item is allowed to be viewed on frontend of site.
+    */
+    public function isActive($data, $model)
+    {
+        if (!empty($data) && !empty($model))
+        {
+            if (isset($data[$model]['deleted_time']) && $data[$model]['deleted_time'] == '0000-00-00 00:00:00')
+            {
+                if (!isset($data[$model]['status']) || isset($data[$model]['status']) && $data[$model]['status'] == 1)
+                {
+                    return true;
+                }
+            }
+            elseif (!isset($data[$model]['deleted_time']))
+            {
+                return true;
+            }
+        }
+
+        return;
     }
 }

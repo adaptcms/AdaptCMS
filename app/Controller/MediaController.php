@@ -32,6 +32,7 @@ class MediaController extends AppController
 					'File.deleted_time' => '0000-00-00 00:00:00',
 					'File.mimetype LIKE' => '%image%'
 				),
+				'order' => 'File.created DESC',
 				'limit' => 9
 			);
 
@@ -89,7 +90,7 @@ class MediaController extends AppController
 	{
         if (!empty($this->request->data))
         {
-        	$this->request->data['Media']['slug'] = $this->slug($this->request->data['Media']['title']);
+        	$this->request->data['Media']['user_id'] = $this->Auth->user('id');
         	
             if ($this->Media->saveAll($this->request->data))
             {
@@ -187,7 +188,20 @@ class MediaController extends AppController
 
 	    if (!empty($permanent))
 	    {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
+	    	$count = $this->Media->find('count', array(
+	    		'conditions' => array(
+	    			'Media.deleted_time !=' => '0000-00-00 00:00:00'
+	    		)
+	    	));
+
+	    	$params = array('action' => 'index');
+
+	    	if ($count > 0)
+	    	{
+	    		$params['trash'] = 1;
+	    	}
+
+	    	$this->redirect($params);
 	    } else {
 	    	$this->redirect(array('action' => 'index'));
 	    }
@@ -252,17 +266,10 @@ class MediaController extends AppController
 
 		$this->paginate = array(
 			'conditions' => $conditions,
-			'contain' => array(
-				'File' => array(
-					'conditions' => array(
-						'File.deleted_time' => '0000-00-00 00:00:00'
-					)
-				)
-			),
 			'limit' => 9
 		);
 
-		$this->request->data = $this->paginate('Media');
+		$this->request->data = $this->Media->getLastFileAndCount($this->paginate('Media'));
 
 		$this->set('media', $this->request->data);
 	}

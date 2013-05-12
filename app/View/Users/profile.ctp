@@ -81,6 +81,17 @@
 			<dd>
 				<?= $this->request->data['Role']['title'] ?>
 			</dd>
+
+			<?php if (!empty($fields)): ?>
+				<?php foreach($fields as $field): ?>
+					<dt>
+						<?= Inflector::humanize($field['Field']['title']) ?>
+					</dt>
+					<dd>
+						<?= $this->Field->getData($field) ?>
+					</dd>
+				<?php endforeach ?>
+			<?php endif ?>
 		</dl>
 	</div>
 
