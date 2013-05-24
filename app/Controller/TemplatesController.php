@@ -7,6 +7,8 @@ class TemplatesController extends AppController
     */
 	public $name = 'Templates';
 
+    private $permissions;
+
 	/**
 	* Need API Component
 	*/
@@ -21,18 +23,20 @@ class TemplatesController extends AppController
 	{
 		parent::beforeFilter();
 
-		if ($this->params->action == 'admin_add' || $this->params->action == 'admin_edit')
-		{
-			$themes = $this->Template->Theme->find('list', array(
-	            'order' => 'Theme.id ASC',
-	            'conditions' => array(
-	            	'Theme.deleted_time' => '0000-00-00 00:00:00'
-            	)
-	        ));
-
-			$this->set(compact('themes'));
-		}
+        $this->permissions = $this->getPermissions();
 	}
+
+    private function _getThemes()
+    {
+        $themes = $this->Template->Theme->find('list', array(
+            'order' => 'Theme.id ASC',
+            'conditions' => array(
+                'Theme.deleted_time' => '0000-00-00 00:00:00'
+            )
+        ));
+
+        return $themes;
+    }
 
     /**
     * Returns a paginated index of Templates
@@ -76,7 +80,7 @@ class TemplatesController extends AppController
 		{
 			if ($row['Theme']['deleted_time'] == "0000-00-00 00:00:00")
 			{
-				$themes[$row['Theme']['id']] = $row['Theme']['title'];
+				$themes[$row['Theme']['title']] = $row['Theme']['title'];
 			}
 
 			if (!empty($this->params->named['trash_theme']) && $row['Theme']['deleted_time'] == "0000-00-00 00:00:00" ||
@@ -99,7 +103,7 @@ class TemplatesController extends AppController
 		);
 
 		$this->set('current_theme', $current_theme['SettingValue']);
-		$this->set(compact('themes'));
+        $this->set(compact('themes'));
 
 		$active_path = VIEW_PATH . 'Themed';
 		$active_themes = $this->getThemes($active_path);
@@ -124,22 +128,29 @@ class TemplatesController extends AppController
 			}
 		}
 
-		$this->request->data['ThemesData'] = $themes;
+        $theme_names = Set::extract('{n}.Theme.title', $this->request->data['Themes']);
+        $key = count($this->request->data['Themes']);
 
-		/*
-		$theme_names = Set::extract('{n}.Theme.title', $this->request->data['Themes']);
+        foreach($themes as $theme)
+        {
+            $title = $theme['title'];
 
-		if (!empty($this->request->data['ThemesData']))
-		{
-			foreach($this->request->data['ThemesData'] as $key => $theme)
-			{
-				if (!empty($theme_names) && !in_array($key, $theme_names))
-				{
-					$this->request->data['Themes'][]['Theme'] = $theme;
-				}
-			}
-		}
-		*/
+            if (!in_array($title, $theme_names))
+            {
+                $this->request->data['Themes'][$key]['Data'] = $theme;
+                $this->request->data['Themes'][$key]['Theme']['title'] = $title;
+
+                $key++;
+            }
+            elseif (!empty($theme['data']))
+            {
+                foreach($this->request->data['Themes'] as $key => $row)
+                {
+                    if ($row['Theme']['title'] == $title)
+                        $this->request->data['Themes'][$key]['Data'] = $theme;
+                }
+            }
+        }
 	}
 
     /**
@@ -168,8 +179,10 @@ class TemplatesController extends AppController
 		} else {
 			$theme_id = $this->params->pass[0];
 		}
-	    
-	    $this->set(compact('theme_id'));
+
+        $themes = $this->_getThemes();
+
+	    $this->set(compact('theme_id', 'themes'));
 
 	    if ($theme_id == 1)
 	    {
@@ -201,7 +214,16 @@ class TemplatesController extends AppController
 	        }
 	    }
 
-    	$this->request->data = $this->Template->read();
+        $themes = $this->_getThemes();
+
+    	$this->request->data = $this->Template->find('first', array(
+            'conditions' => array(
+                'Template.id' => $id
+            ),
+            'contain' => array(
+                'Theme'
+            )
+        ));
 
 	    if ($this->request->data['Template']['theme_id'] == 1)
 	    {
@@ -213,7 +235,9 @@ class TemplatesController extends AppController
     	if (strstr($this->request->data['Template']['location'], 'Plugin/'))
     	{
     		$path = APP;
-    	} else {
+    	} elseif ($this->request->data['Template']['theme_id'] != 1) {
+            $path = VIEW_PATH . 'Themed' . DS .$this->request->data['Theme']['title'] . DS;
+        } else {
     		$path = VIEW_PATH;
     	}
 
@@ -230,7 +254,7 @@ class TemplatesController extends AppController
     		$template_contents = null;
     	}
 
-    	$this->set(compact('template_contents'));
+    	$this->set(compact('template_contents', 'themes'));
 
     	$this->set('location', str_replace(
     		"/".basename(
@@ -460,7 +484,7 @@ class TemplatesController extends AppController
 
 				foreach($files as $file)
 				{
-					if (!$this->Template->searchArray($data, $file))
+					if (!empty($data) && !$this->Template->searchArray($data, $file) || empty($data))
 					{
 						$title = explode('/', $file);
 
@@ -526,7 +550,7 @@ class TemplatesController extends AppController
 	{
 		$themes = array();
 		$api_lookup = array();
-		$exclude = array();
+		$exclude = array('empty');
 
 		if ($dh = opendir($path)) {
 			while (($file = readdir($dh)) !== false) {

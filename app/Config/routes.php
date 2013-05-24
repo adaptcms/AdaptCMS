@@ -17,7 +17,7 @@
 		'action' => 'admin'
 	));
 	
-	Router::connect('/category/', array(
+	Router::connect('/category/*', array(
 		'controller' => 'categories', 
 		'action' => 'view'
 	));
@@ -27,11 +27,11 @@
 		'id' => '*',
 		'slug' => '*'
 	));
-	Router::connect('/tag/', array(
+	Router::connect('/tag/*', array(
 		'controller' => 'articles', 
 		'action' => 'tag'
 	));
-	Router::connect('/users/profile/', array(
+	Router::connect('/users/profile/*', array(
 		'controller' => 'users', 
 		'action' => 'profile'
 	));

@@ -61,15 +61,11 @@ class ThemesController extends AppController
         if ($id == 1)
         {
             $this->set('assets_list', $this->Theme->assetsList());
-            $this->set('assets_list_path', WWW_ROOT);
-            $this->set('webroot_path', $this->webroot);
         } else {
             $config_new = $this->getConfig($this->request->data['Theme']['title']);
             $config_old = $this->getConfig($this->request->data['Theme']['title'], 'Old_Themed');
 
             $this->set('assets_list', $this->Theme->assetsList($this->request->data['Theme']['title']));
-            $this->set('assets_list_path', WWW_ROOT.'themes/' . $this->request->data['Theme']['title'].'/');
-            $this->set('webroot_path', $this->webroot.'themes/' . $this->request->data['Theme']['title'].'/');
             $this->set('config', array_merge($config_new, $config_old));
         }
 	}
@@ -94,7 +90,6 @@ class ThemesController extends AppController
             $delete = $this->Theme->delete($id);
 
             $this->rrmdir(VIEW_PATH . 'Themed/' . $title);
-            $this->rrmdir(WWW_ROOT . 'themes/' . $title);
         } else {
         	$this->Theme->Template->updateAll(
         		array(
@@ -183,7 +178,7 @@ class ThemesController extends AppController
         {
             $path = WWW_ROOT;
         } else {
-            $path = WWW_ROOT.'themes/' . $theme.'/';
+            $path = VIEW_PATH.'Themed/' . $theme.'/webroot/';
         }
 
         if (strstr($theme, 'Plugin'))
@@ -261,7 +256,7 @@ class ThemesController extends AppController
         {
             $path = WWW_ROOT;
         } else {
-            $path = WWW_ROOT.'themes/' . $theme.'/';
+            $path = VIEW_PATH.'Themed/' . $theme.'/webroot/';
         }
 
         if (strstr($theme, 'Plugin'))
@@ -354,7 +349,7 @@ class ThemesController extends AppController
         {
             $path = WWW_ROOT;
         } else {
-            $path = WWW_ROOT.'themes/' . $theme.'/';
+            $path = VIEW_PATH.'Themed/' . $theme.'/webroot/';
         }
 
         if (strstr($theme, 'Plugin'))

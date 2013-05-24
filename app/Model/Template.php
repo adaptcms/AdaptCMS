@@ -8,15 +8,16 @@ class Template extends AppModel
 	public $name = 'Template';
 
 	/**
+     * TODO: Need a unique location rule, but checks by theme_id as well
 	* Validation rules
 	*/
     public $validate = array(
-    	'location' => array(
-			array(
-				'rule' => 'isUnique',
-				'message' => 'Template already exists in this location'
-			)
-        )
+//    	'location' => array(
+//			array(
+//				'rule' => 'isUnique',
+//				'message' => 'Template already exists in this location'
+//			)
+//        )
     );
     
     /**
@@ -37,7 +38,10 @@ class Template extends AppModel
 		'..',
 		'Themed',
 		'Old_Themed',
-		'Helper'
+		'Helper',
+        'Install',
+        'theme.json',
+        'plugin.json'
 	);
 
     /**
@@ -64,6 +68,8 @@ class Template extends AppModel
         	if (strstr($this->data['Template']['location'], 'Plugin/'))
         	{
         		$path = APP;
+            } elseif ($this->data['Template']['theme_id'] != 1) {
+                $path = VIEW_PATH . 'Themed' . DS . $theme['Theme']['title'] . DS;
         	} else {
         		$path = VIEW_PATH;
         	}
@@ -105,12 +111,15 @@ class Template extends AppModel
         	{
         		$path = APP;
         		$pre = '';
+            } elseif ($this->data['Template']['theme_id'] != 1) {
+                $path = VIEW_PATH . 'Themed' . DS . $theme['Theme']['title'] . DS;
+                $pre = '';
         	} else {
         		$path = VIEW_PATH;
         		$pre = '';
         	}
 
-        	$this->data['Template']['location'] = 
+        	$this->data['Template']['location'] =
         		$pre.$this->data['Template']['location'] . '/' . $file;
 
         	if (empty($this->data['Template']['nowrite']))
@@ -204,12 +213,12 @@ class Template extends AppModel
 				        						$prefix . $file.' -> '.ucfirst($row).' -> '.ucfirst($val);
 				        				}
 				        			}
+                                    closedir($fol2);
 				        		}
-				        		closedir($fol2);
 	        				}
 	        			}
+                        closedir($fol);
 	        		}
-	        		closedir($fol);
 	        	}
 	        }
 	        closedir($dh);
@@ -229,8 +238,9 @@ class Template extends AppModel
 		if ($folder)
 		{
 			$dir = ROOT . '/app/View/Themed/' . $folder . '/';
-			$inc_dir = "Themed/" . $folder . "/";
-		} else {
+//			$inc_dir = "Themed/" . $folder . "/";
+		    $inc_dir = null;
+        } else {
 			$dir = ROOT . '/app/View/';
 			$inc_dir = null;
 		}
@@ -238,15 +248,19 @@ class Template extends AppModel
 
 		$folders = $this->getFolders($dir, $inc_dir);
 
-     	foreach(Configure::read('Plugins.list') as $plugin)
-     	{
-     		$view_folder = $plugin_dir . $plugin . DS . 'View' . DS;
+        if (empty($folder))
+        {
+            foreach(Configure::read('Plugins.list') as $plugin)
+            {
+                $view_folder = $plugin_dir . $plugin . DS . 'View' . DS;
 
-     		if ($getFolders = $this->getFolders($view_folder, 'Plugin' . DS . $plugin . DS . 'View' . DS, true))
-     		{
-     			$folders = array_merge($folders, $getFolders);
-     		}
-     	}
+                if ($getFolders = $this->getFolders($view_folder, 'Plugin' . DS . $plugin . DS . 'View' . DS, true))
+                {
+                    $folders = array_merge($folders, $getFolders);
+                }
+            }
+        }
+
 	    asort($folders);
 	    
 	    return $folders;		
@@ -280,15 +294,15 @@ class Template extends AppModel
 		        {
 		        	if (!in_array($file, $this->ignoreFolders) && !is_file($file))
 		        	{
-	        			if ($fol = opendir($dir.$file))
+	        			if ($fol = opendir($dir . $file))
 	        			{
 		        			while(($row = readdir($fol)) != false)
 		        			{
 		        				if ($row != ".." && $row != ".")
 		        				{
-		        					if (is_file($dir.$file."/".$row))
+		        					if (is_file($dir . $file . "/" . $row))
 		        					{
-		        						$files[$prefix . $inc_dir.$file."/".$row] = $prefix . $inc_dir.$file."/".$row;
+		        						$files[$prefix . $inc_dir . $file . "/" . $row] = $prefix . $inc_dir . $file . "/" . $row;
 		        					} else {
 		        						if ($fol2 = opendir($dir.$file."/".$row))
 		        						{
@@ -296,7 +310,7 @@ class Template extends AppModel
 		        							{
 		        								if ($row2 != ".." && $row2 != ".")
 		        								{
-		        									$files[$prefix . $inc_dir.$file."/".$row."/".$row2] = $prefix . $inc_dir.$file."/".$row."/".$row2;
+		        									$files[$prefix . $inc_dir . $file . "/" . $row . "/" . $row2] = $prefix . $inc_dir.$file."/".$row."/".$row2;
 		        								}
 		        							}
 		        						}
@@ -334,15 +348,18 @@ class Template extends AppModel
 
 		$files = $this->getFolderAndFilesList($dir);
 
-     	foreach(Configure::read('Plugins.list') as $plugin)
-     	{
-     		$view_folder = $plugin_dir . $plugin . DS . 'View' . DS;
+        if (empty($folder))
+        {
+            foreach(Configure::read('Plugins.list') as $plugin)
+            {
+                $view_folder = $plugin_dir . $plugin . DS . 'View' . DS;
 
-     		if ($getFiles = $this->getFolderAndFilesList($view_folder, $plugin))
-     		{
-     			$files = array_merge($files, $getFiles);
-     		}
-     	}
+                if ($getFiles = $this->getFolderAndFilesList($view_folder, $plugin))
+                {
+                    $files = array_merge($files, $getFiles);
+                }
+            }
+        }
 
 	    if (!empty($files))
 	    {

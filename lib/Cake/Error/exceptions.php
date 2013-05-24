@@ -63,7 +63,7 @@ class CakeBaseException extends RuntimeException {
  *
  * @package       Cake.Error
  */
-if (!class_exists('HttpException')) {
+if (!class_exists('HttpException', false)) {
 	class HttpException extends CakeBaseException {
 	}
 }
@@ -441,7 +441,7 @@ class MissingDatasourceConfigException extends CakeException {
  */
 class MissingDatasourceException extends CakeException {
 
-	protected $_messageTemplate = 'Datasource class %s could not be found.';
+	protected $_messageTemplate = 'Datasource class %s could not be found. %s';
 
 }
 

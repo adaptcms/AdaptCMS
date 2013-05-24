@@ -55,43 +55,51 @@ class Theme extends AppModel
     */
     public function beforeSave()
     {
-        if (!empty($this->data) && 
-            empty($this->data['Theme']['id']) && 
-            !empty($this->data['Theme']['title']))
+        if (empty($this->data['Theme']['skipBeforeSave']))
         {
-            $this->data['Theme']['title'] = $this->slug($this->data['Theme']['title']);
-            $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
-
-            mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title']);
-
-            mkdir(WWW_ROOT . 'themes/' . $this->data['Theme']['title']);
-            mkdir(WWW_ROOT . 'themes/' . $this->data['Theme']['title'] . '/css');
-            mkdir(WWW_ROOT . 'themes/' . $this->data['Theme']['title'] . '/js');
-            mkdir(WWW_ROOT . 'themes/' . $this->data['Theme']['title'] . '/img');
-            
-            foreach($this->Template->folderList() as $folder)
+            if (!empty($this->data) &&
+                empty($this->data['Theme']['id']) &&
+                !empty($this->data['Theme']['title']))
             {
-                mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/' . $folder);
-            }
-        } elseif (!empty($this->data) && !empty($this->data['Theme']['old_title']))
-        {
-            $this->data['Theme']['title'] = $this->slug($this->data['Theme']['title']);
-            $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
+                $this->data['Theme']['title'] = $this->slug($this->data['Theme']['title']);
+                $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
 
-            if ($this->data['Theme']['title'] != $this->data['Theme']['old_title'])
-            {
-                if (file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['old_title']))
+                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title']))
+                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title']);
+
+                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot'))
+                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title']);
+
+                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css'))
+                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css');
+
+                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js'))
+                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js');
+
+                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img'))
+                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img');
+
+                foreach($this->Template->folderList() as $folder)
                 {
-                    rename(
-                        VIEW_PATH . 'Themed/' . $this->data['Theme']['old_title'],
-                        VIEW_PATH . 'Themed/' . $this->data['Theme']['title']
-                    );
-                    rename(
-                        WWW_ROOT.'themes/' . $this->data['Theme']['old_title'],
-                        WWW_ROOT.'themes/' . $this->data['Theme']['title']
-                    );
-                } else {
-                    return false;
+                    if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/' . $folder))
+                        mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/' . $folder);
+                }
+            } elseif (!empty($this->data) && !empty($this->data['Theme']['old_title']))
+            {
+                $this->data['Theme']['title'] = $this->slug($this->data['Theme']['title']);
+                $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
+
+                if ($this->data['Theme']['title'] != $this->data['Theme']['old_title'])
+                {
+                    if (file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['old_title']))
+                    {
+                        rename(
+                            VIEW_PATH . 'Themed/' . $this->data['Theme']['old_title'],
+                            VIEW_PATH . 'Themed/' . $this->data['Theme']['title']
+                        );
+                    } else {
+                        return false;
+                    }
                 }
             }
         }
@@ -151,8 +159,8 @@ class Theme extends AppModel
             $rel_path = '/';
             $view_path = '/';
         } else {
-            $path = WWW_ROOT.'themes/' . $theme.'/';
-            $view_path = DS . 'themes/' . $theme.'/';
+            $path = VIEW_PATH.'Themed/' . $theme.'/webroot/';
+            $view_path = DS . 'theme' . DS . $theme.'/';
             $rel_path = '/';
         }
 

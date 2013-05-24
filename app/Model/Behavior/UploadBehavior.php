@@ -70,8 +70,7 @@ class UploadBehavior extends ModelBehavior
         if (!empty($result))
         {
             $this->createThumbnail(
-                $model, 
-                $path . $fileData['name'], 
+                $path . $fileData['name'],
                 $path . 'thumb/'.$fileData['name'],
                 $ext
                 );
@@ -169,33 +168,51 @@ class UploadBehavior extends ModelBehavior
                                 if ($result)
                                 {
                                     $this->createThumbnail(
-                                        $model, 
-                                        path . $fileData['name'], 
+                                        path . $fileData['name'],
                                         path . 'thumb/'.$fileData['name'],
                                         $ext
                                         );
-                                }
 
-                                if (!empty($model_data['watermark']))
-                                {
-                                    $watermark = $this->createWatermark(
-                                        path . $fileData['name'],
-                                        $ext,
-                                        $this->resize($model)
+
+                                    $resize = $this->resize($model_data);
+
+                                    if (!empty($resize))
+                                    {
+                                        $this->resizeImage(
+                                            path . $fileData['name'],
+                                            $ext,
+                                            $resize
                                         );
+                                    }
+
+                                    $this->createThumbnail(
+                                        path . $fileData['name'],
+                                        path . 'thumb/'.$fileData['name'],
+                                        $ext
+                                    );
+
+                                    if (!empty($model_data['watermark']))
+                                    {
+                                        $this->createWatermark(
+                                            path . $fileData['name'],
+                                            $ext,
+                                            $this->resize($model_data)
+                                            );
+                                    }
+
+
+                                    $model_data['filesize'] = $file['size'];
+                                    $model_data['dir'] = 'uploads/';
+                                    $model_data['filename'] = $fileData['name'];
+                                    $model_data['mimetype'] = $file['type'];
+
+                                    $file_data = array(
+                                        'filesize' => $model_data['filesize'],
+                                        'dir' => $model_data['dir'],
+                                        'filename' => $model_data['filename'],
+                                        'mimetype' => $model_data['mimetype']
+                                    );
                                 }
-
-                                $model_data['filesize'] = $file['size'];
-                                $model_data['dir'] = 'uploads/';
-                                $model_data['filename'] = $fileData['name'];
-                                $model_data['mimetype'] = $file['type'];
-
-                                $file_data = array(
-                                    'filesize' => $model_data['filesize'],
-                                    'dir' => $model_data['dir'],
-                                    'filename' => $model_data['filename'],
-                                    'mimetype' => $model_data['mimetype']
-                                );
                             }
 
                             if ($multi)
@@ -222,7 +239,7 @@ class UploadBehavior extends ModelBehavior
                         '', 
                         $model->data[$model->name]['filename']
                         )).'.'.$ext;
-                $resize = $this->resize($model);
+                $resize = $this->resize($model->data[$model->name]);
 
                 if (!empty($model->data[$model->name]['random_filename']))
                 {
@@ -243,6 +260,12 @@ class UploadBehavior extends ModelBehavior
                         $ext,
                         $resize
                         );
+
+                    $this->createThumbnail(
+                        path . $model->data[$model->name]['filename'],
+                        path . 'thumb/' . $model->data[$model->name]['filename'],
+                        $ext
+                    );
                 }
 
                 if (!empty($model->data[$model->name]['old_filename']) && 
@@ -308,7 +331,7 @@ class UploadBehavior extends ModelBehavior
 	* @param thumbFile Path to where the uploaded image thumbnail should be created
 	* @param ext The extension of this file, must be an image
 	*/
-	public function createThumbnail($model, $fileName, $thumbFile, $ext)
+	public function createThumbnail($fileName, $thumbFile, $ext)
 	{
 		if (in_array($ext, $this->image_ext))
 		{
@@ -370,13 +393,16 @@ class UploadBehavior extends ModelBehavior
 		}
 	}
 
-	/**
-	* Using phpThumb, this function resizes an image to the specific parameters.
-	*
-	* @param fileName Name of file
-	* @param ext The extension of this file, must be an image
-	* @param params array of parameters (only supports width and height, currently)
-	*/
+    /**
+     * Using phpThumb, this function resizes an image to the specific parameters.
+     *
+     * @param Name $fileName
+     * @param The $ext
+     * @param array $params
+     * @internal param $fileName of file
+     * @internal param $ext extension of this file, must be an image
+     * @internal param $params of parameters (only supports width and height, currently)
+     */
 	public function resizeImage($fileName, $ext, $params = array())
 	{
 		if (in_array($ext, $this->image_ext))
@@ -404,35 +430,36 @@ class UploadBehavior extends ModelBehavior
 	* This is a convinience function used by resizeImage and createWatermark that returns an array of
 	* width and height to size to.
 	*
-	* @param model Holds the model
+	* @param data
 	* @return array
 	*/
-	public function resize($model)
+	public function resize($data)
 	{
-		if (!empty($model->data[$model->name]['resize_width']) || !empty($model->data[$model->name]['resize_height']))
+		if (!empty($data['resize_width']) || !empty($data['resize_height']))
 		{
-			if (empty($model->data[$model->name]['resize_width']))
+			if (empty($data['resize_width']))
 			{
-				$model->data[$model->name]['resize_width'] = '';
+				$data['resize_width'] = '';
 			} else {
-				$model->data[$model->name]['resize_height'] = '';
+				$data['resize_height'] = '';
 			}
 
 			return array(
-				'width' => $model->data[$model->name]['resize_width'],
-				'height' => $model->data[$model->name]['resize_height']
+				'width' => $data['resize_width'],
+				'height' => $data['resize_height']
              );
 		} else {
 			return array();
 		}
 	}
 
-	/**
-	* The random generate function is used when a file is marked as generating a random filename.
-	*
-	* @param length The length of this random string, 6 by default.
-	* @return string
-	*/
+    /**
+     * The random generate function is used when a file is marked as generating a random filename.
+     *
+     * @param int|string $length
+     * @internal $length The length of this random string, 6 by default.
+     * @return string
+     */
 	public function generateRand($length = 6)
 	{
 		$characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWZYZabcdefghijklmnopqrstuvwxyz";

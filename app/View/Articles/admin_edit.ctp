@@ -172,6 +172,8 @@
 
     <div class="tab-pane" id="relate">
         <?= $this->Form->create('RelatedArticle', array('action' => 'ajax_add', 'class' => 'well')) ?>
+            <div id="flashMessageRelated" class="alert alert-success"></div>
+
             <h2>
                     Relate Articles 
                     <i class="icon icon-question-sign field-desc" data-content="Linking another article to this one will allow you to show its data on this Articles page. Ex. Halo 5 Game linking to your Halo 5 preview, you can then show Halo 5 Game Details on the preview page." data-title="Related Articles" data-placement="right"></i>
@@ -198,8 +200,8 @@
                 <span class="related-error alert alert-error"></span>
 
                 <div id="related-articles">
-                    <?php if (!empty($related_articles)): ?>
-                        <?php foreach($related_articles as $row): ?>
+                    <?php if (!empty($related_articles['all'])): ?>
+                        <?php foreach($related_articles['all'] as $row): ?>
                             <div id="data-<?= $row['Article']['id'] ?>">
                                 <span class="label label-info">
                                     <?= $row['Article']['title'] ?> (<?= $row['Category']['title'] ?>) <a href="#" class="icon-white icon-remove-sign"></a>
@@ -218,8 +220,6 @@
                 'class' => 'btn btn-primary',
                 'id' => 'related-submit'
             )) ?>
-
-            <div id="flashMessageRelated" class="alert alert-success"></div>
         <?= $this->Form->end() ?>
     </div>
 

@@ -225,21 +225,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}permissions` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `{prefix}plugins` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) DEFAULT NULL,
-  `slug` varchar(100) DEFAULT NULL,
-  `description` text,
-  `version` varchar(255) DEFAULT NULL,
-  `author` varchar(255) DEFAULT NULL,
-  `author_url` varchar(255) DEFAULT NULL,
-  `plugin_url` varchar(255) DEFAULT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
--- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `file_id` int(11) NOT NULL,
@@ -352,7 +337,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}templates` (
   `label` varchar(255) DEFAULT NULL,
   `location` varchar(255) NOT NULL,
   `theme_id` int(11) DEFAULT '0',
-  `template` text,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` varchar(255) DEFAULT '0000-00-00 00:00:00',

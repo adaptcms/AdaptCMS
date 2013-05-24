@@ -137,7 +137,7 @@
     )
 ) ?>
 
-<table class="table table-striped">
+<table id="templates-list" class="table table-striped">
     <thead>
         <tr>
             <th style="width: 50%">Title</th>
@@ -183,22 +183,22 @@
                             </a>
                         <?php endif ?>
 
-                        <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                        <?php if (!empty($data['Data'])): ?>
                             <br />
                             <p class="span10 no-marg-left">
-                                <?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['short_description'] ?>
+                                <?= $data['Data']['data']['short_description'] ?>
                             </p>
 
                             <div class="clearfix"></div>
-                            <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data']['author_url'])): ?>
+                            <?php if (!empty($data['Data']['data']['author_url'])): ?>
                                 <?= $this->Html->link(
-                                    $this->request->data['ThemesData'][$data['Theme']['title']]['data']['author_name'], 
-                                    $this->request->data['ThemesData'][$data['Theme']['title']]['data']['author_url'], 
+                                    $data['Data']['data']['author_name'],
+                                    $data['Data']['data']['author_url'],
                                     array('target' => '_blank')) ?> | 
                             <?php endif ?>
                             
                             <?= $this->Html->link('Theme Page',
-                                $this->Api->url() . 'theme/' . $this->request->data['ThemesData'][$data['Theme']['title']]['data']['slug'],
+                                $this->Api->url() . 'theme/' . $data['Data']['data']['slug'],
                                 array('target' => '_blank')
                             ) ?>
                         <?php endif ?>
@@ -206,23 +206,24 @@
                     <td>
                         <?php if (!empty($data['Theme']['id'])): ?>
                             <?= $this->Admin->time($data['Theme']['created']) ?>
+                        <?php elseif(isset($data['Data']['status']) && $data['Data']['status'] == 0): ?>
+                            Not yet Installed
                         <?php endif ?>
                     </td>
-                    <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
-                        <?php if ($this->request->data['ThemesData'][$data['Theme']['title']]['data']['current_version'] == 
-                            $this->request->data['ThemesData'][$data['Theme']['title']]['current_version']): ?>
-                            <td class="info" data-title="<?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['title'] ?>" data-content="Theme is up to date">
-                                <?= $this->request->data['ThemesData'][$data['Theme']['title']]['current_version'] ?> 
+                    <?php if (!empty($data['Data'])): ?>
+                        <?php if ($data['Data']['data']['current_version'] == $data['Data']['current_version']): ?>
+                            <td class="info" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is up to date">
+                                <?=$data['Data']['current_version'] ?>
                                 <i class="icon icon-ok info"></i>
                             </td>
                         <?php else: ?>
-                            <td class="info" data-title="<?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['title'] ?>" data-content="Theme is out of date, newest version is <?= $this->request->data['ThemesData'][$data['Theme']['title']]['data']['current_version'] ?>">
-                                <?= $this->request->data['ThemesData'][$data['Theme']['title']]['current_version'] ?> 
+                            <td class="info" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is out of date, newest version is <?= $data['Data']['data']['current_version'] ?>">
+                                <?= $data['Data']['current_version'] ?>
                                 <i class="icon icon-ban-circle"></i>
                                 <div class="clearfix"></div>
 
                                 <?= $this->Html->link('Download Latest Version <i class="icon icon-white icon-download-alt"></i>', 
-                                    $this->Api->url() . 'theme/' . $this->request->data['ThemesData'][$data['Theme']['title']]['data']['slug'],
+                                    $this->Api->url() . 'theme/' . $data['Data']['data']['slug'],
                                     array('target' => '_blank', 'class' => 'btn btn-primary pull-right', 'escape' => false)
                                 ) ?>
                             </td>
@@ -237,8 +238,8 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (!empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
-                                    <?php if ($this->request->data['ThemesData'][$data['Theme']['title']]['status'] == 0): ?>
+                                <?php if (!empty($data['Data']['data'])): ?>
+                                    <?php if ($data['Data']['status'] == 0): ?>
                                         <li>
                                             <?= $this->Html->link(
                                                 '<i class="icon-plus"></i> Install',
@@ -270,7 +271,7 @@
                                             ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->request->data['ThemesData'][$data['Theme']['title']]['upgrade_status'] == 1): ?>
+                                    <?php if ($data['Data']['upgrade_status'] == 1): ?>
                                         <?= $this->Html->link(
                                             '<i class="icon-upload"></i> Upgrade',
                                             array(
@@ -294,7 +295,7 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if (empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                                    <?php if (empty($data['Data']['data'])): ?>
                                         <li>
                                             <?= $this->Admin->delete(
                                                 $data['Theme']['id'],
@@ -304,7 +305,7 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                <?php elseif (empty($this->request->data['ThemesData'][$data['Theme']['title']]['data'])): ?>
+                                <?php elseif (empty($data['Data']['data'])): ?>
                                     <li>
                                         <?= $this->Admin->restore(
                                             $data['Theme']['id'],

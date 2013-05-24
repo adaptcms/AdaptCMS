@@ -310,8 +310,8 @@ class Postgres extends DboSource {
  * for resetting sequences after using insertMulti().
  *
  * @param string $table The name of the table to update.
- * @param string $column The column to use when reseting the sequence value, the
- *   sequence name will be fetched using Postgres::getSequence();
+ * @param string $column The column to use when resetting the sequence value,
+ *   the sequence name will be fetched using Postgres::getSequence();
  * @return boolean success.
  */
 	public function resetSequence($table, $column) {
@@ -628,16 +628,10 @@ class Postgres extends DboSource {
  */
 	public function limit($limit, $offset = null) {
 		if ($limit) {
-			$rt = '';
-			if (!strpos(strtolower($limit), 'limit') || strpos(strtolower($limit), 'limit') === 0) {
-				$rt = ' LIMIT';
-			}
-
-			$rt .= ' ' . $limit;
+			$rt = sprintf(' LIMIT %u', $limit);
 			if ($offset) {
-				$rt .= ' OFFSET ' . $offset;
+				$rt .= sprintf(' OFFSET %u', $offset);
 			}
-
 			return $rt;
 		}
 		return null;

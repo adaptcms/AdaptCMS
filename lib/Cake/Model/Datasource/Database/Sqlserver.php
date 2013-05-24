@@ -21,11 +21,11 @@
 App::uses('DboSource', 'Model/Datasource');
 
 /**
- * Dbo layer for Mircosoft's offical SQLServer driver
+ * Dbo layer for Microsoft's official SQLServer driver
  *
  * A Dbo layer for MS SQL Server 2005 and higher. Requires the
  * `pdo_sqlsrv` extension to be enabled.
- * 
+ *
  * @link http://www.php.net/manual/en/ref.pdo-sqlsrv.php
  *
  * @package       Cake.Model.Datasource.Database
@@ -216,14 +216,20 @@ class Sqlserver extends DboSource {
 			$fields[$field] = array(
 				'type' => $this->column($column),
 				'null' => ($column->Null === 'YES' ? true : false),
-				'default' => preg_replace("/^[(]{1,2}'?([^')]*)?'?[)]{1,2}$/", "$1", $column->Default),
+				'default' => $column->Default,
 				'length' => $this->length($column),
 				'key' => ($column->Key == '1') ? 'primary' : false
 			);
 
 			if ($fields[$field]['default'] === 'null') {
 				$fields[$field]['default'] = null;
-			} else {
+			}
+			if ($fields[$field]['default'] !== null) {
+				$fields[$field]['default'] = preg_replace(
+					"/^[(]{1,2}'?([^')]*)?'?[)]{1,2}$/",
+					"$1",
+					$fields[$field]['default']
+				);
 				$this->value($fields[$field]['default'], $fields[$field]['type']);
 			}
 
@@ -378,9 +384,9 @@ class Sqlserver extends DboSource {
 			if (!strpos(strtolower($limit), 'top') || strpos(strtolower($limit), 'top') === 0) {
 				$rt = ' TOP';
 			}
-			$rt .= ' ' . $limit;
+			$rt .= sprintf(' %u', $limit);
 			if (is_int($offset) && $offset > 0) {
-				$rt = ' OFFSET ' . intval($offset) . ' ROWS FETCH FIRST ' . intval($limit) . ' ROWS ONLY';
+				$rt = sprintf(' OFFSET %u ROWS FETCH FIRST %u ROWS ONLY', $offset, $limit);
 			}
 			return $rt;
 		}

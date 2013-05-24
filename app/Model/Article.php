@@ -53,6 +53,8 @@ class Article extends AppModel
     */
     public function getRelatedArticles($id, $related)
     {
+        $data = array();
+
         $find = $this->find('all', array(
             'conditions' => array(
                 'OR' => array(
@@ -61,11 +63,27 @@ class Article extends AppModel
                 )
             ),
             'contain' => array(
-                'Category'
+                'Category',
+                'User',
+                'ArticleValue' => array(
+                    'Field',
+                    'File'
+                )
             )
         ));
 
-        return $find;
+        if (!empty($find))
+        {
+            foreach($find as $row)
+            {
+                $data[$row['Category']['slug']][] = $row;
+            }
+        }
+
+        return array(
+            'all' => $find,
+            'category' => $data
+        );
     }
 
     /**

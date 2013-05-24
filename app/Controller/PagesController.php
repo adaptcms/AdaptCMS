@@ -261,12 +261,7 @@ class PagesController extends AppController
 				$limit = $settings[0]['SettingValue']['data'];
 			}
 
-			if (empty($settings[1]))
-			{
-				$category = $this->Article->Category->find('first');
-				$categories = $category['Category']['slug'];
-			}
-			else
+			if (!empty($settings[1]))
 			{
 				$categories = array_map('strtolower',
 					array_map('trim', 
@@ -278,12 +273,14 @@ class PagesController extends AppController
 				);
 			}
 
-			$conditions = array(
+            $conditions = array(
                 'Article.status' => 1,
                 'Article.publish_time <=' => date('Y-m-d H:i:s'),
-                'Article.deleted_time' => '0000-00-00 00:00:00',
-                'Category.slug' => $categories
-			);
+                'Article.deleted_time' => '0000-00-00 00:00:00'
+            );
+
+            if (!empty($categories))
+                $conditions['Category.slug'] = $categories;
 
 			$permissions = $this->getRelatedPermissions($this->permissionLookup(array('show' => true)));
 

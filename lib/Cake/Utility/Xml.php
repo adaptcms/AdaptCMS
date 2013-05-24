@@ -300,10 +300,9 @@ class Xml {
 			$childValue = (string)$value;
 		}
 
+		$child = $dom->createElement($key);
 		if ($childValue) {
-			$child = $dom->createElement($key, $childValue);
-		} else {
-			$child = $dom->createElement($key);
+			$child->appendChild($dom->createTextNode($childValue));
 		}
 		if ($childNS) {
 			$child->setAttribute('xmlns', $childNS);
@@ -361,7 +360,7 @@ class Xml {
 		$asString = trim((string)$xml);
 		if (empty($data)) {
 			$data = $asString;
-		} elseif (!empty($asString)) {
+		} elseif (strlen($asString) > 0) {
 			$data['@'] = $asString;
 		}
 

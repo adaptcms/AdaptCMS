@@ -560,14 +560,13 @@ class View extends Object {
 				//@codingStandardsIgnoreStart
 				@unlink($filename);
 				//@codingStandardsIgnoreEnd
-				unset ($out);
+				unset($out);
 				return false;
 			} else {
 				if ($this->layout === 'xml') {
 					header('Content-type: text/xml');
 				}
-				$commentLength = strlen('<!--cachetime:' . $match['1'] . '-->');
-				return substr($out, $commentLength);
+				return substr($out, strlen($match[0]));
 			}
 		}
 	}
@@ -755,7 +754,7 @@ class View extends Object {
  *   update/replace a script element.
  * @param string $content The content of the script being added, optional.
  * @return void
- * @deprecated Will be removed in 3.0. Supersceeded by blocks functionality.
+ * @deprecated Will be removed in 3.0. Superseded by blocks functionality.
  * @see View::start()
  */
 	public function addScript($name, $content = null) {

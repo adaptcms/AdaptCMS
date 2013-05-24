@@ -99,6 +99,19 @@ class FilesController extends AppController
 	{
 		$this->File->id = $id;
 
+        if (!empty($this->request->data))
+        {
+            $this->request->data['File']['user_id'] = $this->Auth->user('id');
+
+            if ($this->File->saveAll($this->request->data))
+            {
+                $this->Session->setFlash('Your file has been updated.', 'flash_success');
+                $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash('Unable to update your file.', 'flash_error');
+            }
+        }
+
         $data = $this->File->find('first', array(
         	'conditions' => array(
         		'File.id' => $id
@@ -119,7 +132,7 @@ class FilesController extends AppController
         		$data['File']['dir'].
         		$data['File']['filename'];
 
-        if (strstr('image', $data['File']['mimetype']))
+        if (strstr($data['File']['mimetype'], 'image'))
         {
             $data['info'] = getimagesize($file);
         }
@@ -131,19 +144,6 @@ class FilesController extends AppController
         $data['media-list'] = $this->File->Media->find('list');
 
 	    $this->set('data', $data);
-
-	    if (!empty($this->request->data))
-	    {
-	    	$this->request->data['File']['user_id'] = $this->Auth->user('id');
-
-	        if ($this->File->saveAll($this->request->data))
-	        {
-	            $this->Session->setFlash('Your file has been updated.', 'flash_success');
-	            $this->redirect(array('action' => 'index'));
-	        } else {
-	            $this->Session->setFlash('Unable to update your file.', 'flash_error');
-	        }
-	    }
 	}
 
     /**

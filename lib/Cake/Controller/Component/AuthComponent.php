@@ -173,7 +173,7 @@ class AuthComponent extends Component {
 	protected static $_user = array();
 
 /**
- * A URL (defined as a string or array) to the controller action that handles
+ * An URL (defined as a string or array) to the controller action that handles
  * logins. Defaults to `/users/login`
  *
  * @var mixed
@@ -217,9 +217,9 @@ class AuthComponent extends Component {
 
 /**
  * Controls handling of unauthorized access.
- * - For default value `true` unauthorized user is redirected to the referrer url
+ * - For default value `true` unauthorized user is redirected to the referrer URL
  *   or AuthComponent::$loginRedirect or '/'.
- * - If set to a string or array the value is used as an url to redirect to.
+ * - If set to a string or array the value is used as an URL to redirect to.
  * - If set to false a ForbiddenException exception is thrown instead of redirecting.
  *
  * @var mixed
@@ -310,7 +310,7 @@ class AuthComponent extends Component {
 
 		if ($loginAction == $url) {
 			if (empty($request->data)) {
-				if (!$this->Session->check('Auth.redirect') && !$this->loginRedirect && env('HTTP_REFERER')) {
+				if (!$this->Session->check('Auth.redirect') && env('HTTP_REFERER')) {
 					$this->Session->write('Auth.redirect', $controller->referer(null, true));
 				}
 			}
@@ -554,7 +554,7 @@ class AuthComponent extends Component {
 	}
 
 /**
- * Log a user out. 
+ * Log a user out.
  *
  * Returns the login action to redirect to. Triggers the logout() method of
  * all the authenticate objects, so they can perform custom logout logic.
@@ -645,9 +645,17 @@ class AuthComponent extends Component {
 /**
  * Get the URL a use should be redirected to upon login.
  *
- * If no parameter is passed, gets the authentication redirect URL. Pass a url in to
- * set the destination a user should be redirected to upon logging in. Will fallback to
- * AuthComponent::$loginRedirect if there is no stored redirect value.
+ * Pass an URL in to set the destination a user should be redirected to upon
+ * logging in.
+ *
+ * If no parameter is passed, gets the authentication redirect URL. The URL
+ * returned is as per following rules:
+ *
+ *  - Returns the session Auth.redirect value if it is present and for the same
+ *    domain the current app is running on.
+ *  - If there is no session value and there is a $loginRedirect, the $loginRedirect
+ *    value is returned.
+ *  - If there is no session and no $loginRedirect, / is returned.
  *
  * @param string|array $url Optional URL to write as the login redirect URL.
  * @return string Redirect URL
@@ -663,8 +671,10 @@ class AuthComponent extends Component {
 			if (Router::normalize($redir) == Router::normalize($this->loginAction)) {
 				$redir = $this->loginRedirect;
 			}
-		} else {
+		} elseif ($this->loginRedirect) {
 			$redir = $this->loginRedirect;
+		} else {
+			$redir = '/';
 		}
 		return Router::normalize($redir);
 	}

@@ -57,9 +57,8 @@
                         <?php if ($this->Admin->hasPermission($permissions['related']['categories']['view'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['Category']['title'], array(
                                 'admin' => false, 
-                                'controller' => 'Categories', 
-                                'action' => 'view', 
-                                $data['Category']['id']
+                                'action' => 'view',
+                                $data['Category']['slug']
                             )) ?>
                         <?php else: ?>
                             <?= $data['Category']['title'] ?>

@@ -472,62 +472,6 @@ class InstallController extends Controller
                 $settings['permissions'] = $data['install']['permissions'];
             }
 
-            if ( !empty($data['components']) )
-            {
-                $system_path = realpath(CACHE . '/../system/');
-
-                if (file_exists($system_path . '/components.json'))
-                {
-                    $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
-                    $add = array_keys($data['components']);
-
-                    foreach($components_array as $key => $component)
-                    {
-                        if (!is_numeric($key) && $key == $add[0] || $component == $add[0])
-                        {
-                            $component_exists = 1;
-                        }
-                    }
-
-                    if (empty($component_exists))
-                    {
-                        $components_array[$add[0]] = $data['components'][$add[0]];
-                    }
-
-                    $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
-                    fwrite($fh, json_encode($components_array));
-                    fclose($fh);
-                }
-            }
-
-            if ( !empty($data['helpers']) )
-            {
-                $system_path = realpath(CACHE . '/../system/');
-
-                if (file_exists($system_path . '/helpers.json'))
-                {
-                    $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
-                    $add = array_keys($data['helpers']);
-
-                    foreach($helpers_array as $key => $helper)
-                    {
-                        if (!is_numeric($key) && $key == $add[0] || $helper == $add[0])
-                        {
-                            $helper_exists = 1;
-                        }
-                    }
-
-                    if (empty($helper_exists))
-                    {
-                        $helpers_array[$add[0]] = $data['helpers'][$add[0]];
-                    }
-
-                    $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
-                    fwrite($fh, json_encode($helpers_array));
-                    fclose($fh);
-                }
-            }
-
             $sql = $this->runPluginSQL( 'install', $prefix['default']['prefix'], $sql_files, $path, $settings );
 
             $this->set( compact( 'sql' ) );
@@ -535,6 +479,62 @@ class InstallController extends Controller
             if ( empty( $sql['error'] ) ) {
                 if ( mkdir( $new_path, 0775 ) ) {
                     rename( $path, $new_path );
+                }
+
+                if ( !empty($data['components']) )
+                {
+                    $system_path = realpath(CACHE . '/../system/');
+
+                    if (file_exists($system_path . '/components.json'))
+                    {
+                        $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
+                        $add = array_keys($data['components']);
+
+                        foreach($components_array as $key => $component)
+                        {
+                            if (!is_numeric($key) && $key == $add[0] || $component == $add[0])
+                            {
+                                $component_exists = 1;
+                            }
+                        }
+
+                        if (empty($component_exists))
+                        {
+                            $components_array[$add[0]] = $data['components'][$add[0]];
+                        }
+
+                        $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
+                        fwrite($fh, json_encode($components_array));
+                        fclose($fh);
+                    }
+                }
+
+                if ( !empty($data['helpers']) )
+                {
+                    $system_path = realpath(CACHE . '/../system/');
+
+                    if (file_exists($system_path . '/helpers.json'))
+                    {
+                        $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
+                        $add = array_keys($data['helpers']);
+
+                        foreach($helpers_array as $key => $helper)
+                        {
+                            if (!is_numeric($key) && $key == $add[0] || $helper == $add[0])
+                            {
+                                $helper_exists = 1;
+                            }
+                        }
+
+                        if (empty($helper_exists))
+                        {
+                            $helpers_array[$add[0]] = $data['helpers'][$add[0]];
+                        }
+
+                        $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
+                        fwrite($fh, json_encode($helpers_array));
+                        fclose($fh);
+                    }
                 }
 
                 $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
@@ -588,52 +588,6 @@ class InstallController extends Controller
                 $settings['title'] = $data['title'];
             }
 
-            if ( !empty($data['components']) )
-            {
-                $system_path = realpath(CACHE . '/../system/');
-
-                if (file_exists($system_path . '/components.json'))
-                {
-                    $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
-                    $remove = array_keys($data['components']);
-
-                    foreach($components_array as $key => $component)
-                    {
-                        if (!is_numeric($key) && $key == $remove[0] || $component == $remove[0])
-                        {
-                            unset($components_array[$key]);
-                        }
-                    }
-
-                    $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
-                    fwrite($fh, json_encode($components_array));
-                    fclose($fh);
-                }
-            }
-
-            if ( !empty($data['helpers']) )
-            {
-                $system_path = realpath(CACHE . '/../system/');
-
-                if (file_exists($system_path . '/helpers.json'))
-                {
-                    $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
-                    $remove = array_keys($data['helpers']);
-
-                    foreach($helpers_array as $key => $helper)
-                    {
-                        if (!is_numeric($key) && $key == $remove[0] || $helper == $remove[0])
-                        {
-                            unset($helpers_array[$key]);
-                        }
-                    }
-
-                    $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
-                    fwrite($fh, json_encode($helpers_array));
-                    fclose($fh);
-                }
-            }
-
             $sql = $this->runPluginSQL( 'uninstall', $prefix['default']['prefix'], $sql_files, $path, $settings );
 
             $this->set( compact( 'sql' ) );
@@ -641,6 +595,52 @@ class InstallController extends Controller
             if ( empty( $sql['error'] ) ) {
                 if ( mkdir( $new_path, 0775 ) ) {
                     rename( $path, $new_path );
+                }
+
+                if ( !empty($data['components']) )
+                {
+                    $system_path = realpath(CACHE . '/../system/');
+
+                    if (file_exists($system_path . '/components.json'))
+                    {
+                        $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
+                        $remove = array_keys($data['components']);
+
+                        foreach($components_array as $key => $component)
+                        {
+                            if (!is_numeric($key) && $key == $remove[0] || $component == $remove[0])
+                            {
+                                unset($components_array[$key]);
+                            }
+                        }
+
+                        $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
+                        fwrite($fh, json_encode($components_array));
+                        fclose($fh);
+                    }
+                }
+
+                if ( !empty($data['helpers']) )
+                {
+                    $system_path = realpath(CACHE . '/../system/');
+
+                    if (file_exists($system_path . '/helpers.json'))
+                    {
+                        $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
+                        $remove = array_keys($data['helpers']);
+
+                        foreach($helpers_array as $key => $helper)
+                        {
+                            if (!is_numeric($key) && $key == $remove[0] || $helper == $remove[0])
+                            {
+                                unset($helpers_array[$key]);
+                            }
+                        }
+
+                        $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
+                        fwrite($fh, json_encode($helpers_array));
+                        fclose($fh);
+                    }
                 }
 
                 $this->Session->setFlash( 'SQL has been removed successfully.', 'flash_success' );
@@ -732,12 +732,16 @@ class InstallController extends Controller
                 $settings['title'] = $theme;
             }
 
+            if (!empty($data['install']['afterInstallFilter']))
+                $settings['afterInstallFilter'] = $data['install']['afterInstallFilter'];
+
             $sql = $this->runThemeSQL( 'install', $prefix['default']['prefix'], $sql_files, $path, $settings );
 
             $this->set( compact( 'sql' ) );
 
             if ( empty( $sql['error'] ) ) {
-                if ( mkdir( $new_path, 0775 ) ) {
+                if (!file_exists($new_path))
+                {
                     rename( $path, $new_path );
                 }
 
@@ -781,6 +785,9 @@ class InstallController extends Controller
             } else {
                 $settings['title'] = $theme;
             }
+
+            if (!empty($data['install']['afterUninstallFilter']))
+                $settings['afterUninstallFilter'] = $data['install']['afterUninstallFilter'];
 
             $sql = $this->runThemeSQL( 'uninstall', $prefix['default']['prefix'], $sql_files, $path, $settings );
 
@@ -861,9 +868,150 @@ class InstallController extends Controller
 
                 $data['Theme']['title'] = $settings['title'];
                 $data['Theme']['created'] = date('Y-m-d H:i:s');
+                $data['Theme']['skipBeforeSave'] = true;
 
                 if ( !$this->Theme->save( $data ) ) {
                     $error = 1;
+                }
+            }
+
+            if (!empty( $settings['afterInstallFilter']['file'] ) &&
+                !empty( $settings['afterInstallFilter']['className'] ) &&
+                !empty( $settings['afterInstallFilter']['functionName'] ) &&
+                file_exists( $path . $settings['afterInstallFilter']['file'] ))
+            {
+                $className = $settings['afterInstallFilter']['className'];
+                $functionName = $settings['afterInstallFilter']['functionName'];
+
+                include_once( $path . $settings['afterInstallFilter']['file'] );
+
+                $class = new $className();
+
+                $data = $class->$functionName();
+
+                if (!empty($data['Categories']))
+                {
+                    $this->loadModel('User');
+
+                    $categories = array();
+
+                    foreach($data['Categories'] as $row)
+                    {
+                        $key = $row['title'];
+
+                        $category = $this->User->Category->findByTitle($key);
+
+                        if (!empty($category))
+                        {
+                            $categories[$key]['id'] = $category['Category']['id'];
+                        }
+                        else
+                        {
+                            $this->User->Category->create();
+
+                            $data = array();
+
+                            $data['Category']['title'] = $key;
+                            $data['Category']['user_id'] = $this->Session->read('Auth.User.id');
+                            $data['Category']['created'] = date('Y-m-d H:i:s');
+                            $data['Category']['modified'] = date('Y-m-d H:i:s');
+
+                            if ($this->User->Category->save($data))
+                            {
+                                $categories[$key]['id'] = $this->User->Category->id;
+                            }
+                        }
+
+                        if (!empty($row['Field']))
+                        {
+                            foreach($row['Field'] as $field)
+                            {
+                                $field_lookup = $this->User->Category->Field->find('first', array(
+                                    'conditions' => array(
+                                        'Field.title' => $field['title'],
+                                        'Category.id' => $categories[$key]['id']
+                                    ),
+                                    'contain' => array(
+                                        'Category'
+                                    )
+                                ));
+
+                                if (!empty($field_lookup))
+                                {
+                                    $categories[$key]['Field'][$field['title']] = $field_lookup['Field']['id'];
+                                }
+                                else
+                                {
+                                    $this->User->Category->Field->create();
+                                    $data = array();
+
+                                    if (!empty($field['description']))
+                                        $data['Field']['description'] = $field['description'];
+
+                                    if (isset($field['required']))
+                                        $data['Field']['required'] = $field['required'];
+
+                                    if (!empty($field['field_options']))
+                                        $data['Field']['field_options'] = $field['field_options'];
+
+                                    $data['Field']['title'] = $field['title'];
+                                    $data['Field']['field_type'] = $field['field_type'];
+                                    $data['Field']['user_id'] = $this->Session->read('Auth.User.id');
+                                    $data['Field']['category_id'] = $categories[$key]['id'];
+                                    $data['Field']['created'] = date('Y-m-d H:i:s');
+                                    $data['Field']['modified'] = date('Y-m-d H:i:s');
+
+                                    if ($this->User->Category->Field->save($data))
+                                    {
+                                        $categories[$key]['Field'][$data['Field']['title']] = $this->User->Category->Field->id;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!empty($row['Article']))
+                        {
+                            foreach($row['Article'] as $article)
+                            {
+                                $this->User->Category->Article->create();
+                                $data = array();
+
+                                if (!empty($article['tags']))
+                                    $data['Article']['tags'] = $article['tags'];
+
+                                $data['Article']['title'] = $article['title'];
+                                $data['Article']['status'] = 1;
+                                $data['Article']['publish_time'] = date('Y-m-d H:i:s');
+                                $data['Article']['created'] = date('Y-m-d H:i:s');
+                                $data['Article']['modified'] = date('Y-m-d H:i:s');
+                                $data['Article']['user_id'] = $this->Session->read('Auth.User.id');
+                                $data['Article']['category_id'] = $categories[$key]['id'];
+
+                                if ($this->User->Category->Article->save($data))
+                                {
+                                    $article_id = $this->User->Category->Article->id;
+                                }
+
+                                if (!empty($article_id) && !empty($article['ArticleValue']))
+                                {
+                                    foreach($article['ArticleValue'] as $value)
+                                    {
+                                        if (!empty($categories[$key]['Field'][$value['field_name']]))
+                                        {
+                                            $this->User->Category->Article->ArticleValue->create();
+                                            $data = array();
+
+                                            $data['ArticleValue']['data'] = $value['data'];
+                                            $data['ArticleValue']['article_id'] = $article_id;
+                                            $data['ArticleValue']['field_id'] = $categories[$key]['Field'][$value['field_name']];
+
+                                            $this->User->Category->Article->ArticleValue->save($data);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         } elseif ( $type = 'uninstall' && !empty( $settings['title'] ) ) {
@@ -873,6 +1021,21 @@ class InstallController extends Controller
                 if ( !$this->Theme->delete( $data['Theme']['id'] ) ) {
                     $error = 1;
                 }
+            }
+
+            if (!empty( $settings['afterUninstallFilter']['file'] ) &&
+                !empty( $settings['afterUninstallFilter']['className'] ) &&
+                !empty( $settings['afterUninstallFilter']['functionName'] ) &&
+                file_exists( $path . $settings['afterUninstallFilter']['file'] ))
+            {
+                $className = $settings['afterUninstallFilter']['className'];
+                $functionName = $settings['afterUninstallFilter']['functionName'];
+
+                include_once( $path . $settings['afterUninstallFilter']['file'] );
+
+                $class = new $className();
+
+                $data = $class->$functionName();
             }
         }
 

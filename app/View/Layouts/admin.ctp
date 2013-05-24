@@ -204,8 +204,9 @@
 
       <footer>
         <p class="pull-left">
-          <?= $this->Api->version_check() ?>
-          <span id="version-check"></span>
+            Powered by
+            <?= $this->Html->link('AdaptCMS ', 'http://www.adaptcms.com', array('target' => '_blank')) ?>
+            <?= $this->Api->version_check() ?>
         </p>
         <p class="pull-right">&copy; <a href="http://www.adaptcms.com" target="_blank">AdaptCMS</a> 2006-2013  <?= $this->Html->link(
           $this->Html->image('cake.power.gif'),

@@ -6,10 +6,6 @@
       <?php echo $title_for_layout; ?>
     </title>
     <?php
-      echo $this->Html->meta('icon');
-
-      echo $this->Html->css('cake.generic');
-
       echo $this->fetch('meta');
       echo $this->fetch('css');
       echo $this->fetch('script');
@@ -43,7 +39,7 @@
         padding: 9px 0;
       }
     </style>
-    <link href="<?= $this->webroot ?>css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="<?= $this->webroot ?>css/bootstrap-responsive.min.css" rel="stylesheet">
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>

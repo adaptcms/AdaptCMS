@@ -125,12 +125,10 @@ class PermissionsInstall
           'action' => 'change_status'
       )
     );
-    
+
     /**
-     * 
-     * 
-     * @param type $roles
-     * @param type $module_id
+     * @param array $roles
+     * @param int $module_id
      * @return array
      */
     public function generate($roles = array(), $module_id = 0)

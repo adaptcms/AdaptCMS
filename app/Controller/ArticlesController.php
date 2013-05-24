@@ -431,8 +431,8 @@ class ArticlesController extends AppController
                 'Category',
                 'User',
                 'ArticleValue' => array(
-                        'Field',
-                        'File'
+                    'Field',
+                    'File'
                 )
             )
         ));

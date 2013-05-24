@@ -104,6 +104,8 @@ $(document).ready(function(){
         }
     }
 
+    $("#flashMessageRelated").hide();
+
     if ($("#related-submit").length)
     {
         $("#related-submit").live('click', function(e) {
@@ -124,8 +126,10 @@ $(document).ready(function(){
                         }
                     }, function(data) {
                     if (data) {
-                        $("#flashMessageRelated").replaceWith(data);
-                        $("#flashMessageRelated").fadeOut(3000);
+                        $("#flashMessageRelated").replaceWith(data).show();
+                        $("#flashMessageRelated").fadeOut(3500, function() {
+                            $(this).html('');
+                        });
                     }
                 });
             }

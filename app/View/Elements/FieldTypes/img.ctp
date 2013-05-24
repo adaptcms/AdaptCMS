@@ -1,7 +1,10 @@
+<?php
+$model = !empty($model) ? $model : 'ArticleValue';
+?>
 <div>
-    <?= $this->Form->hidden('ArticleValue.' . $key . '.data') ?>
-    <?= $this->Form->hidden($key . 'ArticleValue.file_id') ?>
-    <?= $this->Form->label($icon . $field['Field']['label']) ?>
+    <?= $this->Form->hidden($model . '.' . $key . '.data') ?>
+    <?= $this->Form->hidden($model . '.' . $key . '.file_id') ?>
+    <?= $this->Form->label($model . '.' . $key . 'data', $icon . $field['Field']['label'], array('escape' => false)) ?>
 
     <?= $this->Html->link(
             'Attach Image <i class="icon icon-white icon-upload"></i>', 
@@ -15,9 +18,9 @@
 
     <p>&nbsp;</p>
     <ul class="selected-images span12 thumbnails">
-        <?php if (!empty($field['ArticleValue'][0]['File'])): ?>
+        <?php if (!empty($field[$model][0]['File'])): ?>
             <?= $this->element('media_modal_image', array(
-                    'image' => $field['ArticleValue'][0]['File'], 
+                    'image' => $field[$model][0]['File'], 
                     'key' => 0, 
                     'check' => true
             )) ?>
@@ -28,6 +31,6 @@
 
 <?= $this->element('media_modal', array(
     'limit' => 1, 
-    'ids' => 'ArticleValue.' . $key . '.data', 
+    'ids' => $model . '.' . $key . '.data', 
     'id' => $field['Field']['id']
 )) ?>

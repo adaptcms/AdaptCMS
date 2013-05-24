@@ -3,6 +3,11 @@ App::uses('Controller', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
 App::import('Model', 'ConnectionManager');
 
+/**
+ * Class AppController
+ * @property Cron $Cron
+ * @property Module $Module
+ */
 class AppController extends Controller
 {
     /**
@@ -66,7 +71,7 @@ class AppController extends Controller
      * A whole lot is going on in this one. We look for and attempt to load components/helpers, call Auth/Authorize,
      * load the layout, run the accessCheck, run the cron, blocks lookup, 
      * 
-     * @return none
+     * @return null
      */
     public function beforeFilter()
     {
@@ -88,7 +93,7 @@ class AppController extends Controller
                     $componentName = explode('.', $key);
                     $name = $componentName[1];
 
-                    $this->$componentName[1] = $this->Components->load($key, $component);
+                    $this->$name = $this->Components->load($key, $component);
                 } else {
                     $this->$key = $this->Components->load($key, $component);
                 }
@@ -140,7 +145,15 @@ class AppController extends Controller
         $this->runCron();
         $this->blocksLookup();
 
-        $this->theme = 'Default';
+        $this->loadModel('SettingValue');
+
+        if ($theme = $this->SettingValue->findByTitle('default-theme')) {
+            $this->theme = $theme['SettingValue']['data'];
+        }
+        else
+        {
+            $this->theme = 'Default';
+        }
 
         if ($this->Auth->user('id')) {
             $current_user = $this->Auth->user();
@@ -159,8 +172,6 @@ class AppController extends Controller
 
         // Number of Items Per Page
         if ($this->params->action == "admin_index") {
-            $this->loadModel('SettingValue');
-
             if ($limit = $this->SettingValue->findByTitle('Number of Items Per Page')) {
                     $this->pageLimit = $limit['SettingValue']['data'];
             } else {
@@ -633,7 +644,7 @@ class AppController extends Controller
                         if (!empty($permissions))
                         {
                             $block_permissions
-                            [$row['Block']['title']] = 
+                            [$row['Block']['title']] =
                             $this->getRelatedPermissions($permissions);
                         }
 
@@ -662,20 +673,23 @@ class AppController extends Controller
          */
 	public function runCron()
 	{
-		$this->loadModel('Cron');
+        $this->loadModel('Cron');
 
 		$find = $this->Cron->find('first', array(
 			'conditions' => array(
 				'Cron.run_time <=' => date('Y-m-d H:i:s'),
 				'Cron.deleted_time' => '0000-00-00 00:00:00'
 			),
-			'contain' => array(
-				'Module'
-			),
 			'order' => 'run_time ASC'
 		));
 
-		if (!empty($find)) {
+		if (!empty($find))
+        {
+            $module = $this->Cron->Module->findById($find['Cron']['module_id']);
+
+            if (!empty($module))
+                $find = array_merge($find, $module);
+
 			$function = $find['Cron']['function'];
 
 			if ($find['Module']['is_plugin'] == 1) {

@@ -213,12 +213,8 @@
       <footer>
         <p>
           <span class="pull-left">
-            <?= $this->Html->link(
-                $this->Html->image('cake.power.gif', array('border' => '0')),
-                'http://www.cakephp.org/',
-                array('target' => '_blank', 'escape' => false)
-              )
-            ?>
+              Powered by
+              <?= $this->Html->link('AdaptCMS ' . ADAPTCMS_VERSION, 'http://www.adaptcms.com', array('target' => '_blank')) ?>
           </span>
           <span class="pull-right">
           	&copy; 2006-13 <?= $this->Html->link('AdaptCMS', 'http://www.adaptcms.com', array('target' => '_blank')) ?><br />

@@ -1,9 +1,9 @@
-<?php $this->Html->addCrumb($this->request->data['Category']['title'], array(
+<?php $this->Html->addCrumb($article['Category']['title'], array(
 	'controller' => 'categories',
 	'action' => 'view',
-	$this->request->data['Category']['slug']
+	$article['Category']['slug']
 )) ?>
-<?php $this->Html->addCrumb($this->request->data['Article']['title'], null) ?>
+<?php $this->Html->addCrumb($article['Article']['title'], null) ?>
 
 <?php if (!empty($wysiwyg)): ?>
 	<?php $this->TinyMce->editor(array('simple' => true)) ?>
@@ -12,20 +12,20 @@
 <?= $this->Html->script('jquery.smooth-scroll.min.js') ?>
 
 <div class="span8 no-marg-left">
-	<h1><?= $this->request->data['Article']['title'] ?></h1>
+	<h1><?= $article['Article']['title'] ?></h1>
 
 	<p class="lead">
-		@ <em><?= $this->Admin->time($this->request->data['Article']['created']) ?></em>
+		@ <em><?= $this->Admin->time($article['Article']['created']) ?></em>
 	</p>
 
 	<?= $this->Field->getTextAreaData($this->request->data) ?>
 
 	<div id="post-options">
         <span class="pull-left">
-        	<?= $this->Html->link($this->request->data['Category']['title'], array(
+        	<?= $this->Html->link($article['Category']['title'], array(
         		'controller' => 'categories',
         		'action' => 'view',
-        		$this->request->data['Category']['slug']
+        		$article['Category']['slug']
         	), array('class' => 'btn btn-primary')) ?>
             <span style="margin-left: 10px">
                 <i class="icon-search icon-user"></i>&nbsp;
@@ -37,8 +37,8 @@
             </span>
         </span>
         <span class="pull-right">
-        	<?php if (!empty($this->request->data['Article']['tags'])): ?>
-	            <?php foreach($this->request->data['Article']['tags'] as $tag): ?>
+        	<?php if (!empty($article['Article']['tags'])): ?>
+	            <?php foreach($article['Article']['tags'] as $tag): ?>
 	                <?= $this->Html->link('<span class="btn btn-success">'.$tag.'</span>', array(
 	                		'controller' => 'articles', 
 	                		'action' => 'tag', 
@@ -56,27 +56,4 @@
 
 <?= $this->element('post_comment') ?>
 
-<div id="comments">
-	<?php if (!empty($this->request->data['Comments'])): ?>
-		<?php foreach($this->request->data['Comments'] as $parent_id_1 => $comment): ?>
-
-			<?= $this->element('view_comment', array('data' => $comment, 'level' => 1)) ?>
-
-			<?php if (!empty($comment['children'])): ?>
-				<?php foreach($comment['children'] as $parent_id_2 => $comment_2): ?>
-
-					<?= $this->element('view_comment', array('data' => $comment_2, 'level' => 2)) ?>
-
-					<?php if (!empty($comment_2['children'])): ?>
-						<?php foreach($comment_2['children'] as $parent_id_3 => $comment_3): ?>
-						
-							<?= $this->element('view_comment', array('data' => $comment_3, 'level' => 3)) ?>
-						<?php endforeach ?>
-					<?php endif ?>
-
-				<?php endforeach ?>
-			<?php endif ?>
-
-		<?php endforeach ?>
-	<?php endif ?>
-</div>
+<?= $this->element('view_all_comments', array('comments' => $this->request->data['Comments'])) ?>
