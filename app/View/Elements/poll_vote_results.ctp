@@ -24,7 +24,10 @@
 
 	<?php if ($data['Poll']['can_vote'] && !empty($block_permissions[$data['Block']['title']]['related'])): ?>
 		<span class="pull-right">
-			<?= $this->Html->link('Go Back', '#', array('class' => 'pull-right go-back')) ?>
+			<?= $this->Html->link('Go Back', '#', array(
+				'class' => 'pull-right go-back',
+				'data-block-title' => $data['Block']['title']
+			)) ?>
 		</span>
 	<?php endif ?>
 
