@@ -15,7 +15,7 @@ INSERT INTO `{prefix}categories` (`id`, `title`, `slug`, `user_id`, `created`, `
 (2, 'News', 'news', 1, '{date}', '{date}', '0000-00-00 00:00:00'),
 (3, 'Games', 'games', 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
-INSERT INTO `{prefix}fields` (`id`, `title`, `label`, `field_order`, `category_id`, `module_id`, `field_type_id`, `description`, `field_options`, `field_limit_min`, `field_limit_max`, `required`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
+INSERT INTO `{prefix}fields` (`id`, `title`, `label`, `field_order`, `category_id`, `module_id`, `field_type_id`, `field_type_slug`, `description`, `field_options`, `field_limit_min`, `field_limit_max`, `required`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'summary', 'summary', 0, 2, 0, 11, 'textarea', 'You ought to enter a short summary of the news article.', '', 0, 0, 1, 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}field_types` (`id`, `title`, `label`, `slug`, `limit`, `user_id`, `ord`, `active`, `created`, `modified`, `deleted_time`) VALUES
