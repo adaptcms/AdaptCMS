@@ -30,7 +30,7 @@
         )
     )) ?>
 
-	<div class="pull-left">
+	<div class="pull-left" style="margin-bottom: 15px;">
 		<h3>Add Menu Item</h3>
 
 		<legend>Custom Link</legend>
@@ -122,7 +122,15 @@
     <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
     <?= $this->Form->hidden('old_title', array('value' => $this->request->data['Menu']['title'])) ?>
 
-<?= $this->Form->end(array(
-	'label' => 'Submit',
-	'class' => 'btn btn-primary'
-)) ?>
+<?php if ($writable == 1): ?>
+    <?= $this->Form->end(array(
+        'label' => 'Submit',
+        'class' => 'btn btn-primary'
+    )) ?>
+<?php else: ?>
+    <?= $this->Element('writable_notice', array(
+        'type' => 'template',
+        'file' => $writable
+    )) ?>
+    <?= $this->Form->end() ?>
+<?php endif ?>

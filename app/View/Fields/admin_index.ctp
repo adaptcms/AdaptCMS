@@ -37,7 +37,7 @@
     </div>
     <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown">
-            Filter by Field Type
+            Filter by Type
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -92,17 +92,17 @@
         <thead>
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
-                <th><?= $this->Paginator->sort('field_type', 'Type') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('FieldType.title', 'Type') ?></th>
                 <th><?= $this->Paginator->sort('Category.title', 'Category') ?></th>
                 <th><?= $this->Paginator->sort('Module.title', 'Module') ?></th>
-                <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('User.username', 'Author') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
 
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['fields']['admin_edit'], $data['User']['id'])): ?>
@@ -114,8 +114,8 @@
                             <?= $data['Field']['title'] ?>
                         <?php endif ?>
                     </td>
-                    <td>
-                        <?= ucfirst($data['Field']['field_type']) ?>
+                    <td class="hidden-phone">
+                        <?= $data['FieldType']['label'] ?>
                     </td>
                     <td>
                         <?php if (!empty($data['Category']['id'])): ?>
@@ -131,7 +131,7 @@
                             <?= $data['Module']['title'] ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['User']['username'], array(
                                 'controller' => 'users',
@@ -140,7 +140,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Field']['created']) ?>
                     </td>
                     <td>
@@ -175,7 +175,7 @@
                                                 $data['Field']['title']
                                             ) ?>
                                         </li>
-                                    <?php endif ?> 
+                                    <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['fields']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->delete_perm(
@@ -183,15 +183,15 @@
                                                 $data['Field']['title'],
                                                 'field'
                                             ) ?>
-                                        </li>  
+                                        </li>
                                     <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach; ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

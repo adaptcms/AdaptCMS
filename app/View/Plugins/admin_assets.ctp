@@ -5,7 +5,7 @@
 <h2><?= $plugin ?> Assets</h2>
 
 <div class="btn-toolbar pull-right">
-	<?= $this->Html->link('Add New File <i class="icon-plus icon-white"></i>', array(
+	<?= $this->Html->link('Add File <i class="icon-plus icon-white"></i>', array(
 			'controller' => 'themes',
 			'action' => 'admin_asset_add', 
 			null,
@@ -31,7 +31,7 @@
 		<thead>
 			<tr>
 				<th>File</th>
-				<th>Type</th>
+				<th class="hidden-phone">Type</th>
 				<th>Size</th>
 				<th>Options</th>
 			</tr>
@@ -53,7 +53,7 @@
                             array('class' => 'pull-right', 'target' => '_blank', 'escape' => false));
                         ?>
 					</td>
-					<td>
+					<td class="hidden-phone>
 						<?= pathinfo($assets_list['path'] . $row, PATHINFO_EXTENSION) ?>
 					</td>
 					<td>

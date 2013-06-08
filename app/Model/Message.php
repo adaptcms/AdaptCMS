@@ -48,6 +48,9 @@ class Message extends AppModel
             'remove_html' => false
         ));
 
+        if (!empty($this->data['Message']['message']))
+            $this->data['Message']['message'] = stripslashes(str_replace('\n', '', $this->data['Message']['message']));
+
         return true;
     }
 }

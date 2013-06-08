@@ -58,30 +58,32 @@
 	<?= $this->Form->hidden('ord') ?>
 	<?= $this->Form->hidden('id') ?>
 
-	<h4>Forum Order</h4>
+    <div class="hidden-phone">
+        <h4>Forum Order</h4>
 
-	<ul id="sort-list" class="unstyled span6 no-marg-left">
-		<?php if (!empty($forums)): ?>
-			<?php foreach($forums as $forum): ?>
-				<li class="btn" id="<?= $forum['Forum']['id'] ?>">
-					<i class="icon icon-move"></i> 
-					<span>
-						<?= $forum['Forum']['title'] ?>
-					</span> 
+        <ul id="sort-list" class="unstyled span6 no-marg-left">
+            <?php if (!empty($forums)): ?>
+                <?php foreach($forums as $forum): ?>
+                    <li class="btn" id="<?= $forum['Forum']['id'] ?>">
+                        <i class="icon icon-move"></i>
+                        <span>
+                            <?= $forum['Forum']['title'] ?>
+                        </span>
 
-					<?php if ($forum['Forum']['id'] == $this->request->data['Forum']['id']): ?>
-						<span class="label label-info pull-right">
-							Current Forum
-						</span>
-					<?php endif ?>
+                        <?php if ($forum['Forum']['id'] == $this->request->data['Forum']['id']): ?>
+                            <span class="label label-info pull-right">
+                                Current Forum
+                            </span>
+                        <?php endif ?>
 
-					<div class="clearfix"></div>
-				</li>
-			<?php endforeach ?>
-		<?php endif ?>
-	</ul>
+                        <div class="clearfix"></div>
+                    </li>
+                <?php endforeach ?>
+            <?php endif ?>
+        </ul>
 
-	<div class="clearfix"></div>
+        <div class="clearfix"></div>
+    </div>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

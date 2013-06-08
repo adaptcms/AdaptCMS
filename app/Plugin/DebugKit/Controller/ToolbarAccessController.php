@@ -23,6 +23,7 @@ App::uses('Security', 'Utility');
 App::uses('DebugKitAppController', 'DebugKit.Controller');
 
 class ToolbarAccessController extends DebugKitAppController {
+
 /**
  * name
  *
@@ -34,7 +35,7 @@ class ToolbarAccessController extends DebugKitAppController {
  * Helpers
  *
  * @var array
- **/
+ */
 	public $helpers = array(
 		'DebugKit.Toolbar' => array('output' => 'DebugKit.HtmlToolbar'),
 		'Js', 'Number', 'DebugKit.SimpleGraph'
@@ -44,21 +45,21 @@ class ToolbarAccessController extends DebugKitAppController {
  * Components
  *
  * @var array
- **/
+ */
 	public $components = array('RequestHandler', 'DebugKit.Toolbar');
 
 /**
  * Uses
  *
  * @var array
- **/
+ */
 	public $uses = array('DebugKit.ToolbarAccess');
 
 /**
  * beforeFilter callback
  *
  * @return void
- **/
+ */
 	public function beforeFilter() {
 		parent::beforeFilter();
 		if (isset($this->Toolbar)) {
@@ -66,13 +67,19 @@ class ToolbarAccessController extends DebugKitAppController {
 		}
 		$this->helpers['DebugKit.Toolbar']['cacheKey'] = $this->Toolbar->cacheKey;
 		$this->helpers['DebugKit.Toolbar']['cacheConfig'] = 'debug_kit';
+
+		if (isset($this->Auth) && method_exists($this->Auth, 'mapActions')) {
+			$this->Auth->mapActions(array(
+				'read' => array('history_state', 'sql_explain')
+			));
+		}
 	}
 
 /**
  * Get a stored history state from the toolbar cache.
  *
  * @return void
- **/
+ */
 	public function history_state($key = null) {
 		if (Configure::read('debug') == 0) {
 			return $this->redirect($this->referer());
@@ -83,16 +90,17 @@ class ToolbarAccessController extends DebugKitAppController {
 	}
 
 /**
- * Run SQL explain/profiling on queries. Checks the hash + the hashed queries, 
- * if there is mismatch a 404 will be rendered.  If debug == 0 a 404 will also be
- * rendered.  No explain will be run if a 404 is made.
+ * Run SQL explain/profiling on queries. Checks the hash + the hashed queries,
+ * if there is mismatch a 404 will be rendered. If debug == 0 a 404 will also be
+ * rendered. No explain will be run if a 404 is made.
  *
+ * @throws BadRequestException
  * @return void
  */
 	public function sql_explain() {
 		if (
 			!$this->request->is('post') ||
-			empty($this->request->data['log']['sql']) || 
+			empty($this->request->data['log']['sql']) ||
 			empty($this->request->data['log']['ds']) ||
 			empty($this->request->data['log']['hash']) ||
 			Configure::read('debug') == 0
@@ -106,4 +114,5 @@ class ToolbarAccessController extends DebugKitAppController {
 		$result = $this->ToolbarAccess->explainQuery($this->request->data['log']['ds'], $this->request->data['log']['sql']);
 		$this->set(compact('result'));
 	}
+
 }

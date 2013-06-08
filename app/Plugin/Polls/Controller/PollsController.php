@@ -219,18 +219,28 @@ class PollsController extends PollsAppController
 
     	$id = $this->request->data['Poll']['id'];
 
+        $conditions = array();
+        if ($this->Auth->user('id'))
+        {
+            $conditions['conditions'] = array(
+                'OR' => array(
+                    'PollVotingValue.user_id' => $this->Auth->user('id'),
+                    'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
+                )
+            );
+        }
+        else
+        {
+            $conditions['conditions']['PollVotingValue.user_ip'] = $_SERVER['REMOTE_ADDR'];
+        }
+
         $count = $this->Poll->find('first', array(
             'conditions' => array(
                 'Poll.id' => $id
             ),
             'contain' => array(
                 'PollVotingValue' => array(
-                    'conditions' => array(
-                        'OR' => array(
-                            'PollVotingValue.user_id' => $this->Auth->user('id'),
-                            'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
-                        )
-                    )
+                    $conditions
                 )
             )
         ));

@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Class PagesController
+ * @property SettingValue $SettingValue
+ * @property Article $Article
+ * @property Page $Page
+ * @property paginate $paginate
+ * @property params $params
+ * @property pageLimit $pageLimit
+ * @property Api $Api
+ */
 class PagesController extends AppController 
 {
     /**
@@ -32,7 +42,7 @@ class PagesController extends AppController
     /**
     * Returns a paginated index of Pages
     *
-    * @return associative array of pages data
+    * @return array of pages data
     */
 	public function admin_index()
 	{
@@ -90,7 +100,7 @@ class PagesController extends AppController
     * After POST, flash error or flash success and redirect to index
     *
     * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of page data
+    * @return array of page data
     */
 	public function admin_edit($id = null)
 	{
@@ -123,18 +133,31 @@ class PagesController extends AppController
             $this->Session->setFlash('You cannot access another users item.', 'flash_error');
             $this->redirect(array('action' => 'index'));	        	
         }
+
+        $path = $this->Page->_getPath($this->request->data['Page']['slug']);
+        if (is_writable($path))
+        {
+            $writable = 1;
+        }
+        else
+        {
+            $writable = $path;
+        }
+
+        $this->set(compact('writable'));
 	}
 
     /**
-    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
-    *
-    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
-    *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
-    */
+     * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+     *
+     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+     *
+     * @param id ID of the database entry, redirect to index if no permissions
+     * @param title Title of this entry, used for flash message
+     * @param If|null $permanent
+     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
+     * @return redirect
+     */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
 	    $this->Page->id = $id;
@@ -199,7 +222,7 @@ class PagesController extends AppController
     *
     * @param id ID of database entry, redirect if no permissions
     * @param title Title of this entry, used for flash message
-    * @return redirect
+    * @return mixed|redirect
     */
     public function admin_restore($id = null, $title = null)
     {
@@ -233,7 +256,7 @@ class PagesController extends AppController
     *
     * If requested page does not exist, redirect to homepage.
     *
-    * @return associative array or redirect
+    * @return array or redirect
     */
 	public function display()
 	{
@@ -263,14 +286,15 @@ class PagesController extends AppController
 
 			if (!empty($settings[1]))
 			{
-				$categories = array_map('strtolower',
-					array_map('trim', 
-						explode(
-							",",
-							$settings[1]['SettingValue']['data']
-						)
-					)
-				);
+                $categories_find = $this->Article->Category->find('all', array(
+                    'conditions' => array(
+                        'Category.title' => explode(",", $settings[1]['SettingValue']['data'])
+                    ),
+                    'fields' => 'id'
+                ));
+
+                if (!empty($categories_find))
+                    $categories = Set::extract('{n}.Category.id', $categories_find);
 			}
 
             $conditions = array(
@@ -280,7 +304,7 @@ class PagesController extends AppController
             );
 
             if (!empty($categories))
-                $conditions['Category.slug'] = $categories;
+                $conditions['Article.category_id'] = $categories;
 
 			$permissions = $this->getRelatedPermissions($this->permissionLookup(array('show' => true)));
 
@@ -290,14 +314,6 @@ class PagesController extends AppController
 		    }
 
 			$this->paginate = array(
-				'contain' => array(
-					'Category',
-					'User',
-					'ArticleValue' => array(
-						'Field',
-						'File'
-					)
-				),
 				'limit' => $limit,
 				'conditions' => $conditions,
 				'order' => 'Article.created DESC'
@@ -354,7 +370,7 @@ class PagesController extends AppController
 	*
 	* The default AdaptCMS install has two dynamic blocks setup, pulling in the newest 5 users and articles.
     *
-    * @return associative array of news, blog, newest_plugin and newest_theme
+    * @return array of news, blog, newest_plugin and newest_theme
     */
 	public function admin()
 	{

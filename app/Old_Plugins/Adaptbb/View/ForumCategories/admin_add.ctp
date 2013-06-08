@@ -16,35 +16,37 @@
 	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 	<?= $this->Form->hidden('ord', array('value' => 0)) ?>
 
-	<h4>Category Order</h4>
+    <div class="hidden-phone">
+        <h4>Category Order</h4>
 
-	<ul id="sort-list" class="unstyled span6 no-marg-left">
-		<?php if (!empty($categories)): ?>
-			<?php foreach($categories as $category): ?>
-				<li class="btn" id="<?= $category['ForumCategory']['id'] ?>">
-					<i class="icon icon-move"></i> 
-					<span>
-						<?= $category['ForumCategory']['title'] ?>
-					</span> 
+        <ul id="sort-list" class="unstyled span6 no-marg-left">
+            <?php if (!empty($categories)): ?>
+                <?php foreach($categories as $category): ?>
+                    <li class="btn" id="<?= $category['ForumCategory']['id'] ?>">
+                        <i class="icon icon-move"></i>
+                        <span>
+                            <?= $category['ForumCategory']['title'] ?>
+                        </span>
 
-					<div class="clearfix"></div>
-				</li>
-			<?php endforeach ?>
-		<?php endif ?>
-		<li class="btn" id="0">
-			<i class="icon icon-move"></i>
-			<span>
-				Category
-			</span>
-			<span class="label label-info pull-right">
-				Current Category
-			</span>
-			
-			<div class="clearfix"></div>
-		</li>
-	</ul>
+                        <div class="clearfix"></div>
+                    </li>
+                <?php endforeach ?>
+            <?php endif ?>
+            <li class="btn" id="0">
+                <i class="icon icon-move"></i>
+                <span>
+                    Category
+                </span>
+                <span class="label label-info pull-right">
+                    Current Category
+                </span>
 
-	<div class="clearfix"></div>
+                <div class="clearfix"></div>
+            </li>
+        </ul>
+
+        <div class="clearfix"></div>
+    </div>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

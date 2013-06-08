@@ -52,9 +52,12 @@ class FieldsController extends AppController
                 $this->set(compact('modules'));
             }
 
-            $field_types = $this->Field->field_types;
+            $types = $this->Field->FieldType->getList();
 
-            $this->set(compact('categories', 'field_types'));
+            $this->set('field_types', $types['list']);
+            $this->set('field_rules', $types['rules']);
+
+            $this->set(compact('categories'));
         }
 
         $this->permissions = $this->getPermissions();
@@ -104,9 +107,10 @@ class FieldsController extends AppController
             'contain' => array(
                 'Category',
                 'Module',
-                'User'
+                'User',
+                'FieldType'
             ),
-            'fields' => 'Field.*,Category.*,Module.*,User.*'
+            'fields' => 'Field.*,FieldType.*,Category.*,Module.*,User.*'
         );
         
         $this->request->data = $this->paginate('Field');

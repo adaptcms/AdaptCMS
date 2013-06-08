@@ -17,6 +17,10 @@
  * @since         DebugKit 0.1
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  **/
+
+$this->Number = $this->Helpers->load('Number');
+$this->SimpleGraph = $this->Helpers->load('DebugKit.SimpleGraph');
+
 if (!isset($debugKitInHistoryMode)):
 	$timers = DebugTimer::getAll(true);
 	$currentMemory = DebugKitDebugger::getMemoryUse();
@@ -41,7 +45,7 @@ endif;
 	$memoryPoints = DebugKitDebugger::getMemoryPoints();
 
 	$rows = array();
-	foreach($memoryPoints as $key => $value):
+	foreach ($memoryPoints as $key => $value):
 		$rows[] = array($key, $this->Number->toReadableSize($value));
 	endforeach;
 

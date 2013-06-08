@@ -44,14 +44,13 @@
             <th></th>
         </tr>
     </thead>
-
-    <?php foreach ($this->request->data as $data): ?>
-        <tbody>
+    <tbody>
+        <?php foreach ($this->request->data as $data): ?>
             <tr>
                 <td>
                     <?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_edit'])): ?>
                         <?= $this->Html->link($data['Role']['title'], array(
-                            'action' => 'edit', 
+                            'action' => 'edit',
                             $data['Role']['id']
                         )) ?>
                     <?php else: ?>
@@ -92,7 +91,7 @@
                                             $data['Role']['id'],
                                             $data['Role']['title']
                                         ) ?>
-                                    </li>  
+                                    </li>
                                 <?php endif ?>
                                 <?php if ($this->Admin->hasPermission($permissions['related']['roles']['admin_delete'])): ?>
                                     <li>
@@ -101,15 +100,15 @@
                                             $data['Role']['title'],
                                             'role'
                                         ) ?>
-                                    </li> 
+                                    </li>
                                 <?php endif ?>
                             <?php endif ?>
                         </ul>
                     </div>
                 </td>
             </tr>
-        </tbody>
-    <?php endforeach; ?>
+        <?php endforeach ?>
+    </tbody>
 </table>
 
 <?= $this->element('admin_pagination') ?>

@@ -2,6 +2,10 @@ $(document).ready(function() {
 	fixPagination();
 	changeRequiredFields();
 
+	$('.btn-confirm').live('click', function(e) {
+		return confirm('You sure you wish to delete this item?');
+	});
+
 	/**
 	 * convience function, button class of 'btn btn-info reset-field ArticleTitle'
 	 * when clicked, will reset the field with the id of 'ArticleTitle'

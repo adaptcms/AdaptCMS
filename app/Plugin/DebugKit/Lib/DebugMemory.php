@@ -26,7 +26,7 @@ class DebugMemory {
  *
  * @var array
  */
-	private static $__points = array();
+	protected static $_points = array();
 
 /**
  * Get current memory usage
@@ -40,7 +40,7 @@ class DebugMemory {
 /**
  * Get peak memory use
  *
- * @return integer peak memory use (in bytes).  Returns 0 if memory_get_peak_usage() is not available
+ * @return integer peak memory use (in bytes). Returns 0 if memory_get_peak_usage() is not available
  */
 	public static function getPeak() {
 		return memory_get_peak_usage();
@@ -61,15 +61,15 @@ class DebugMemory {
 			$trace = debug_backtrace();
 			$message = Debugger::trimpath($trace[0]['file']) . ' line ' . $trace[0]['line'];
 		}
-		if (isset(self::$__points[$message])) {
+		if (isset(self::$_points[$message])) {
 			$originalMessage = $message;
 			$i = 1;
-			while (isset(self::$__points[$message])) {
+			while (isset(self::$_points[$message])) {
 				$i++;
 				$message = $originalMessage . ' #' . $i;
 			}
 		}
-		self::$__points[$message] = $memoryUse;
+		self::$_points[$message] = $memoryUse;
 		return true;
 	}
 
@@ -80,9 +80,9 @@ class DebugMemory {
  * @return array Array of memory marks stored so far.
  */
 	public static function getAll($clear = false) {
-		$marks = self::$__points;
+		$marks = self::$_points;
 		if ($clear) {
-			self::$__points = array();
+			self::$_points = array();
 		}
 		return $marks;
 	}
@@ -92,7 +92,7 @@ class DebugMemory {
  * @return void
  */
 	public static function clear() {
-		self::$__points = array();
+		self::$_points = array();
 	}
 
 }

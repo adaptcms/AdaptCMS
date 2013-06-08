@@ -94,6 +94,9 @@ class Comment extends AppModel
             'remove_html' => false
         ));
 
+        if (!empty($this->data['Comment']['comment_text']))
+            $this->data['Comment']['comment_text'] = stripslashes(str_replace('\n', '', $this->data['Comment']['comment_text']));
+
         return true;
     }
 

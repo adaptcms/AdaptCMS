@@ -14,7 +14,7 @@ $(document).ready(function() {
                 {
                     data:{
                         'Link':{
-                            id: id,
+                            id: id
                         }
                     }
                 }, function(data) {

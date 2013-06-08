@@ -34,8 +34,8 @@ class PluginsController extends AppController
 		$inactive_path = APP . 'Old_Plugins';
 		$inactive_plugins = $this->getPlugins($inactive_path);
 
-		$plugins = array_merge($inactive_plugins['plugins'], $active_plugins['plugins']);
-		$api_lookup = array_merge($inactive_plugins['api_lookup'], $active_plugins['api_lookup']);
+		$plugins = array_merge($active_plugins['plugins'], $inactive_plugins['plugins']);
+		$api_lookup = array_merge($active_plugins['api_lookup'], $inactive_plugins['api_lookup']);
 
 		if (!empty($api_lookup)){
 			if ($data = $this->Api->pluginsLookup($api_lookup)) {
@@ -79,6 +79,15 @@ class PluginsController extends AppController
 		} else {
 			$params = array();
 		}
+
+        if (is_writable($config_path))
+        {
+            $this->set('writable', 1);
+        }
+        else
+        {
+            $this->set('writable', $config_path);
+        }
 
 		if (!empty($this->request->data))
 		{
@@ -242,10 +251,18 @@ class PluginsController extends AppController
 
 		 			if (file_exists($config) && is_readable($config))
 		 			{
-		 				$plugins[$file]['config'] = 1;
-		 			} else {
-		 				$plugins[$file]['config'] = 0;
+                        $params = array();
+
+                        require($config);
+
+                        $param_check = json_decode($params);
+
+                        if (!empty($param_check))
+		 				    $plugins[$file]['config'] = 1;
 		 			}
+
+                    if (!isset($plugins[$file]['config']))
+                        $plugins[$file]['config'] = 0;
                 }
             }
 		}

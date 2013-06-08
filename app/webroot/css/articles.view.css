@@ -23,3 +23,8 @@
 .PostComment button[type='cancel'] {
 	margin-left: 5px;
 }
+
+#comments .comment
+{
+	clear: left;
+}

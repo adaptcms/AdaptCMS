@@ -63,11 +63,6 @@
 				'action' => 'convert_adaptcms'
 			)) ?>
 			</li>
-			<li>
-			<?= $this->Html->link('AdaptBB 1.0', array(
-				'action' => 'convert_adaptbb'
-			)) ?>
-			</li>
 		</ul>
 	</div>
 	<div class="clearfix"></div>

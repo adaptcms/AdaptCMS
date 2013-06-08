@@ -6945,3 +6945,13 @@ h4.image-filters
 {
   color: #999999;
 }
+
+.btn.btn-primary.admin-homepage,.btn.btn-success.admin-homepage
+{
+    margin-top: -12px;
+}
+
+div.input.textarea
+{
+    margin-bottom:5px;
+}

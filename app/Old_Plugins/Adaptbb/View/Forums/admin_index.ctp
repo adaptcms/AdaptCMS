@@ -39,7 +39,7 @@
             'escape' => false
         )) ?>
     <?php endif ?>
-    <?= $this->Html->link('Manage Forum Categories <i class="icon icon-th-list icon-white"></i>', array('controller' => 'forum_categories'), array(
+    <?= $this->Html->link('Manage Categories <i class="icon icon-th-list icon-white"></i>', array('controller' => 'forum_categories'), array(
         'class' => 'btn btn-success',
         'escape' => false
     )) ?>
@@ -56,19 +56,18 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('ForumCategory.title', 'Category') ?></th>
-                <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('User.username', 'Author') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['forums']['admin_edit'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['Forum']['title'], array(
-                                'action' => 'edit', 
+                                'action' => 'edit',
                                 $data['Forum']['id']
                             )) ?>
                         <?php else: ?>
@@ -78,7 +77,7 @@
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['forum_categories']['admin_edit'], $data['ForumCategory']['id'])): ?>
                             <?= $this->Html->link($data['ForumCategory']['title'], array(
-                                'action' => 'edit', 
+                                'action' => 'edit',
                                 'controller' => 'forum_categories',
                                 $data['ForumCategory']['id']
                             )) ?>
@@ -86,7 +85,7 @@
                             <?= $data['ForumCategory']['title'] ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['User']['username'], array(
                                 'controller' => 'users',
@@ -95,7 +94,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Forum']['created']) ?>
                     </td>
                     <td>
@@ -129,24 +128,24 @@
                                                 $data['Forum']['id'],
                                                 $data['Forum']['title']
                                             ) ?>
-                                        </li> 
+                                        </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['forums']['admin_delete'], $data['User']['id'])): ?> 
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['forums']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->delete_perm(
                                                 $data['Forum']['id'],
                                                 $data['Forum']['title'],
                                                 'forum'
                                             ) ?>
-                                        </li> 
-                                    <?php endif ?>    
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

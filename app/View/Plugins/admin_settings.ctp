@@ -24,9 +24,17 @@
 			<?php endif ?>
 		<?php endforeach ?>
 
-		<?= $this->Form->submit('Submit', array(
-			'class' => 'btn btn-primary'
-		)) ?>
+        <?php if ($writable == 1): ?>
+            <?= $this->Form->submit('Submit', array(
+                'class' => 'btn btn-primary'
+            )) ?>
+        <?php else: ?>
+            <?= $this->Element('writable_notice', array(
+                'type' => 'configuration',
+                'file' => $writable,
+                'sensitive' => true
+            )) ?>
+        <?php endif ?>
 	<?php endif ?>
 	
 <?= $this->Form->end() ?>

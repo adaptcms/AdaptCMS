@@ -15,6 +15,23 @@ INSERT INTO `{prefix}categories` (`id`, `title`, `slug`, `user_id`, `created`, `
 (2, 'News', 'news', 1, '{date}', '{date}', '0000-00-00 00:00:00'),
 (3, 'Games', 'games', 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
+INSERT INTO `{prefix}fields` (`id`, `title`, `label`, `field_order`, `category_id`, `module_id`, `field_type_id`, `description`, `field_options`, `field_limit_min`, `field_limit_max`, `required`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'summary', 'summary', 0, 2, 0, 11, 'textarea', 'You ought to enter a short summary of the news article.', '', 0, 0, 1, 1, '{date}', '{date}', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}field_types` (`id`, `title`, `label`, `slug`, `limit`, `user_id`, `ord`, `active`, `created`, `modified`, `deleted_time`) VALUES
+(null, 'text', 'Text Input', 'text', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Check', 'Checkbox', 'check', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Date', '', 'date', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Dropdown', 'Dropdown Selector', 'dropdown', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Email', '', 'email', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'File', '', 'file', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Img', 'Image', 'img', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Multi Dropdown', 'Dropdown Selector Multiple', 'multi-dropdown', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Num', 'Number', 'num', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Radio', '', 'radio', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Textarea', 'Text Box', 'textarea', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Url', 'Website  URL', 'url', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
 INSERT INTO `{prefix}modules` (`id`, `title`, `model_title`, `block_active`, `is_plugin`, `is_searchable`, `is_fields`) VALUES
 (1, 'Articles', 'Article', 1, 0, 1, 0),
 (2, 'Blocks', 'Block', 0, 0, 0, 0),
@@ -36,9 +53,6 @@ INSERT INTO `{prefix}modules` (`id`, `title`, `model_title`, `block_active`, `is
 (19, 'Cron', 'cron', 0, 0, 0, 0),
 (20, 'Comments', 'comment', 1, 0, 0, 0),
 (18, 'Messages', 'message', 0, 0, 0, 0);
--- --------------------------------------------------------
-INSERT INTO `{prefix}fields` (`id`, `title`, `label`, `field_order`, `category_id`, `field_type`, `description`, `field_options`, `field_limit_min`, `field_limit_max`, `required`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'summary', 'summary', 0, 2, 'textarea', 'You ought to enter a short summary of the news article.', '', 0, 0, 1, 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}pages` (`id`, `title`, `slug`, `content`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Contact Us', 'contact-us', '<p>Here is a blank contact page!</p>', 1, '{date}', '{date}', '0000-00-00 00:00:00'),
@@ -330,10 +344,28 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (346, NULL, 4, 0, '', 'plugins', 'admin_permissions', 0, '', 2, 2),
 (347, 0, 1, 0, '', 'tools', 'admin_convert_adaptcms', 1, '', 2, 2),
 (348, 0, 4, 0, '', 'tools', 'admin_convert_adaptcms', 0, '', 2, 2),
-(349, 0, 1, 0, '', 'tools', 'admin_convert_adaptbb', 1, '', 2, 2),
-(350, 0, 4, 0, '', 'tools', 'admin_convert_adaptbb', 0, '', 2, 2),
-(351, 12, 1, 0, '', 'settings', 'admin_restore', 0, NULL, 2, 2),
-(352, 12, 4, 0, '', 'settings', 'admin_restore', 0, NULL, 2, 2);
+(349, 12, 1, 0, '', 'settings', 'admin_restore', 0, NULL, 2, 2),
+(350, 12, 4, 0, '', 'settings', 'admin_restore', 0, NULL, 2, 2),
+(null, NULL, 1, 0, '', 'menus', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'menus', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'menus', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'menus', 'admin_add', 1, '', 0, 0),
+(null, NULL, 1, 0, '', 'menus', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_add', 1, '', 0, 0),
+(null, NULL, 4, 0, '', 'menus', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_add', 1, '', 0, 0),
+(null, NULL, 1, 0, '', 'field_types', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_add', 1, '', 0, 0),
+(null, NULL, 4, 0, '', 'field_types', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, 1, '{date}', '{date}', '0000-00-00 00:00:00');

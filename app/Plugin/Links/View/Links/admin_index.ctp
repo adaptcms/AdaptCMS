@@ -51,14 +51,13 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('views') ?></th>
-                <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('User.username', 'Author') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?= $this->Html->link($data['Link']['title'], $data['Link']['url'], array('target' => '_new')) ?>
@@ -66,7 +65,7 @@
                     <td>
                         <?= $this->Number->format($data['Link']['views']) ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['User']['username'], array(
                                 'controller' => 'users',
@@ -75,7 +74,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Link']['created']) ?>
                     </td>
                     <td>
@@ -125,14 +124,14 @@
                                                 'link'
                                             ) ?>
                                         </li>
-                                    <?php endif ?>  
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

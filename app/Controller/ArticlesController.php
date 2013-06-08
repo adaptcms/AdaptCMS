@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Class ArticlesController
+ * @property Article $Article
+ */
 class ArticlesController extends AppController
 {
     /**
@@ -397,17 +400,19 @@ class ArticlesController extends AppController
     	}
 	}
 
-	/**
-	* View action for an article. Permissions are checked, core article data is retrieved, threaded
-	* array of comments are retrieved and related comment settings.
-	*
-	* Related articles are also retrieved, a check is done to make sure the article data is not empty.
-	* One last check is to see if a custom template and exists and if so, use it.
-	*
-   * @param slug string
-	* @param id integer
-	* @return associative array
-	*/
+    /**
+     * View action for an article. Permissions are checked, core article data is retrieved, threaded
+     * array of comments are retrieved and related comment settings.
+     *
+     * Related articles are also retrieved, a check is done to make sure the article data is not empty.
+     * One last check is to see if a custom template and exists and if so, use it.
+     *
+     * @param null|string $slug
+     * @param int|null $id
+     * @internal param string $slug
+     * @internal param int $id
+     * @return associative array
+     */
 	public function view($slug = null, $id = null)
 	{
       if (empty($slug) && !empty($this->params['slug']))
@@ -422,18 +427,10 @@ class ArticlesController extends AppController
 
         $this->request->data = $this->Article->find('first', array(
             'conditions' => array(
-                    'Article.slug' => $slug,
-                    'Article.deleted_time' => '0000-00-00 00:00:00',
-                    'Article.publish_time <=' => date('Y-m-d H:i:s'),
-                    'Article.status' => 1
-            ),
-            'contain' => array(
-                'Category',
-                'User',
-                'ArticleValue' => array(
-                    'Field',
-                    'File'
-                )
+                'Article.slug' => $slug,
+                'Article.deleted_time' => '0000-00-00 00:00:00',
+                'Article.publish_time <=' => date('Y-m-d H:i:s'),
+                'Article.status' => 1
             )
         ));
 
@@ -441,11 +438,14 @@ class ArticlesController extends AppController
         {
             $this->Session->setFlash('Invalid Article', 'flash_error');
             $this->redirect(array(
-                    'controller' => 'pages', 
-                    'action' => 'display', 
-                    'home'
+                'controller' => 'pages',
+                'action' => 'display',
+                'home'
             ));
         }
+
+        $article = $this->Article->getAllRelatedArticles(array($this->request->data));
+        $this->request->data = $article[0];
 
         if ($this->Auth->user('id') && 
         	$this->request->data['User']['id'] != $this->Auth->user('id') && 
@@ -494,10 +494,16 @@ class ArticlesController extends AppController
 			));
 		}
 
-        $this->set('related_articles', $this->Article->getRelatedArticles(
-        	$this->request->data['Article']['id'], 
-        	$this->request->data['Article']['related_articles']
-        ));
+        if (!empty($this->request->data['RelatedArticles']['all']))
+        {
+            $related_articles = $this->request->data['RelatedArticles'];
+        }
+        else
+        {
+            $related_articles = array();
+        }
+
+        $this->set(compact('related_articles'));
 
         $this->set('article', $this->request->data);
 
@@ -512,13 +518,15 @@ class ArticlesController extends AppController
         }
 	}
 
-	/**
-	* Listing of articles by tag
-	*
-	* @param tag name
-	* @param limit by default lists 10 per page
-	* @return associative array of articles
-	*/
+    /**
+     * Listing of articles by tag
+     *
+     * @param name $tag
+     * @param by|int $limit
+     * @internal param \name $tag
+     * @internal param \by $limit default lists 10 per page
+     * @return associative array of articles
+     */
 	public function tag($tag, $limit = 10)
 	{
 		$slug = $this->slug($tag);
@@ -557,13 +565,15 @@ class ArticlesController extends AppController
         $this->set('tag', $slug);
 	}
 
-	/**
-	* Not fully functional, renders rss file but headers are not proper XML.
-	*
-	* @param category filter by category, optional
-	* @param limit amount to list on rss, 10 by default
-	* @return associative array of articles
-	*/
+    /**
+     * Not fully functional, renders rss file but headers are not proper XML.
+     *
+     * @param filter|null $category
+     * @param amount|int $limit
+     * @internal param \filter $category by category, optional
+     * @internal param \amount $limit to list on rss, 10 by default
+     * @return associative array of articles
+     */
 	public function rss_index($category = null, $limit = 10)
 	{
             $cond =  array(

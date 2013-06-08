@@ -12,7 +12,7 @@
 	<li>
 		<a href="#assets" data-toggle="tab">Theme Assets</a>
 	</li>
-	<div class="right">
+	<div class="right hidden-phone">
 	    <?= $this->Html->link(
 	        '<i class="icon-chevron-left"></i> Return to Index',
 	        array('action' => 'index', 'controller' => 'templates'),
@@ -75,9 +75,9 @@
 				<thead>
 					<tr>
 						<th>File</th>
-						<th>Type</th>
+						<th class="hidden-phone">Type</th>
 						<th>Size</th>
-						<th>Options</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -95,8 +95,8 @@
 		                            array('class' => 'pull-right', 'target' => '_blank', 'escape' => false));
 		                        ?>
 							</td>
-							<td>
-								<?= pathinfo($assets_list['path'] . DS . $key, PATHINFO_EXTENSION) ?>
+							<td class="hidden-phone">
+								<?= pathinfo($assets_list['path']  . $row, PATHINFO_EXTENSION) ?>
 							</td>
 							<td>
 								<?= $this->Number->toReadableSize( filesize($assets_list['path'] . DS . str_replace('&', '.', str_replace('__', '/', $key)) ) ) ?>

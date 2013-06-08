@@ -81,7 +81,8 @@ class Category extends AppModel
     */
     public function beforeSave()
     {
-        $this->data['Category']['slug'] = $this->slug($this->data['Category']['title']);
+        if (!empty($this->data['Category']['title']))
+            $this->data['Category']['slug'] = $this->slug($this->data['Category']['title']);
 
         return true;
     }

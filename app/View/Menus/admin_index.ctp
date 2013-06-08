@@ -47,18 +47,17 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_edit'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['Menu']['title'], array(
-                                'action' => 'admin_edit', 
+                                'action' => 'admin_edit',
                                 $data['Menu']['id']
                             )) ?>
                         <?php else: ?>
@@ -74,7 +73,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Menu']['created']) ?>
                     </td>
                     <td>
@@ -119,7 +118,7 @@
                                                 $data['Menu']['id'],
                                                 $data['Menu']['title']
                                             ) ?>
-                                        </li>  
+                                        </li>
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
@@ -128,15 +127,15 @@
                                                 $data['Menu']['title'],
                                                 'menu'
                                             ) ?>
-                                        </li>  
-                                    <?php endif ?>   
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

@@ -1,7 +1,5 @@
 <script type="text/javascript">
 $(document).ready(function() {
-    $("#UserRegisterForm").validate();
-
     $("#UserPasswordConfirm").rules("add", {
         required: true,
         equalTo: "#UserPassword",
@@ -68,7 +66,7 @@ $(document).ready(function() {
     <h1>New User</h1>
 
     <?php
-        echo $this->Form->create();
+        echo $this->Form->create('User', array('class' => 'admin-validate'));
         echo $this->Form->input('username', array('class' => 'required'));
     ?>
     <span id="username_ajax_result"></span>

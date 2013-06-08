@@ -7,7 +7,7 @@ class Field extends AppModel
     public $name = "Field";
 
     /**
-    * Every field belongs to a category and a User
+    * Every field belongs to a category, user, module and has a field type
     */
     public $belongsTo = array(
         'Category' => array(
@@ -25,11 +25,15 @@ class Field extends AppModel
         'User' => array(
             'className' => 'User',
             'foreignKey' => 'user_id'
+        ),
+        'FieldType' => array(
+            'className' => 'FieldType',
+            'foreignKey' => 'field_type_id'
         )
     );
 
     /**
-    * All article values are related to a field
+    * All article/module values are related to a field
     */
     public $hasMany = array(
         'ArticleValue' => array(
@@ -47,11 +51,6 @@ class Field extends AppModel
     */
     public $validate = array(
         'title' => array(
-            'rule' => array(
-                'notEmpty'
-            )
-        ),
-        'field_type' => array(
             'rule' => array(
                 'notEmpty'
             )
@@ -82,10 +81,11 @@ class Field extends AppModel
     );
 
     /**
-    * This afterFind will simply, automatically, decode the field options json field
-    *
-    * @return array of filtered field data
-    */
+     * This afterFind will simply, automatically, decode the field options json field
+     *
+     * @param mixed $results
+     * @return array of filtered field data
+     */
     public function afterFind($results)
     {
         if (empty($results))
@@ -114,22 +114,25 @@ class Field extends AppModel
         if (!empty($this->data['Field']['title']))
         {
             if (empty($this->data['Field']['label']))
-            {
                 $this->data['Field']['label'] = $this->data['Field']['title'];
-            }
 
             $this->data['Field']['title'] = $this->slug($this->data['Field']['title']);
 
             if (!empty($this->data['FieldData']))
-            {
-                $this->data['Field']['field_options'] = 
-                    json_encode($this->data['FieldData']);
-            }
+                $this->data['Field']['field_options'] = json_encode($this->data['FieldData']);
 
             if (!empty($this->data['Field']['category_id']) && !is_numeric($this->data['Field']['category_id']))
             {
                 $this->data['Field']['module_id'] = str_replace('module_', '', $this->data['Field']['category_id']);
                 $this->data['Field']['category_id'] = 0;
+            }
+
+            if (!empty($this->data['Field']['field_type_id']))
+            {
+                $field_type = $this->FieldType->findById($this->data['Field']['field_type_id']);
+
+                if (!empty($field_type))
+                    $this->data['Field']['field_type_slug'] = $field_type['FieldType']['slug'];
             }
         }
 
@@ -180,7 +183,9 @@ class Field extends AppModel
               )
             );
         }
-        
+
+        $conditions['contain'][] = 'FieldType';
+
         $fields = $this->find('all', $conditions);
 
         return $fields;

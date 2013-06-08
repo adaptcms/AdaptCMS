@@ -14,7 +14,7 @@ $(document).ready(function(){
     });
 
     $("#BlockLimit").on('change', function() {
-        if (!$(this).val()) {
+        if ($(this).val() == 1) {
             $("#data").show();
             $("#next-step div").first().hide();
             $(".dynamic .order").hide();
@@ -181,8 +181,7 @@ function get_data(get)
     				get: get
     			}
     		}
-    	}, function(data) {
-    		var new_data = $.parseJSON(data);
+    	}, function(new_data) {
     		var data_list = '';
 
     		if (get == 'controllers') {
@@ -197,7 +196,7 @@ function get_data(get)
 
 	    		$("#BlockLocationController option").remove();
 	    		$("#BlockLocationController").append(data_list).prepend(empty);
-	    		$("#BlockLocationController").val("option:first");
+				$("#BlockLocationController option:first").attr('selected', 'selected');
 	    	} else if(get == 'actions') {
     			var empty = $("#BlockLocationAction option[value='']");
 	    		for (var row in new_data) {
@@ -206,13 +205,13 @@ function get_data(get)
 
 	    		$("#BlockLocationAction option").remove();
 	    		$("#BlockLocationAction").append(data_list).prepend(empty);
-	    		$("#BlockLocationAction").val("option:first");
+	    		$("#BlockLocationAction option:first").attr('selected', 'selected');
 
 	    		$("#location_action").show();
 	    	}
 
 	    	$("#location").show();
-    });
+    }, 'json');
 }
 
 function get_model_data(type)
@@ -274,7 +273,7 @@ function get_model_data(type)
 	    	} else if(type == 'action') {
 	    		$("#BlockLocationId option").remove();
 	    		$("#BlockLocationId").append(data_list).prepend(empty);
-	    		$("#BlockLocationId").val("option:first");
+	    		$("#BlockLocationId option:first").attr('selected', 'selected');
 
 	    		$("#location_id").show();
 	    	}
@@ -311,7 +310,7 @@ function get_model_data(type)
                 $("#locations").prepend('<label class="error">Location already added!</label>');
             }
 
-            $("#BlockLocationController").val("option:first").trigger('change');
+            $("#BlockLocationController option:first").attr('selected', 'selected').trigger('change');
 			$("#BlockLocationController,#BlockLocationAction").removeClass('required').removeAttr('required');
 			$("#location_action").hide();
 		}

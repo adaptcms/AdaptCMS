@@ -145,7 +145,7 @@ $(document).ready(function() {
 
 				if (data.status)
 				{
-					$("#posts #post-" + post_id).load(reload_url + ' #posts #post-' + post_id, function() {
+					$("#posts #post-" + post_id).load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts #post-' + post_id, function() {
 						$("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
 						$.smoothScroll();
 						tinyMCE.activeEditor.setContent('');
@@ -192,7 +192,7 @@ $(document).ready(function() {
 
 				if (data.status)
 				{
-					$("#posts").load(reload_url + ' #posts', function() {
+					$("#posts").load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts', function() {
 						$("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
 						$.smoothScroll();
 						tinyMCE.activeEditor.setContent('');

@@ -54,7 +54,7 @@
 				<?php if (!empty($post['User']['settings']['avatar'])): ?>
 					<?= $this->Html->image(
 						'/uploads/avatars/' . $post['User']['settings']['avatar'],
-						array('style' => 'max-width: 160px;margin-bottom: 15px', 'class' => 'img-polaroid')
+						array('style' => 'max-width: 140px;margin-bottom: 15px', 'class' => 'img-polaroid')
 					) ?>
 				<?php endif ?>
 

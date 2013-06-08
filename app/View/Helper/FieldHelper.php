@@ -28,7 +28,7 @@ class FieldHelper extends AppHelper
 
         if (!empty($data['ArticleValue'])) {
             foreach($data['ArticleValue'] as $value) {
-                if ($value['Field']['field_type'] == 'textarea') {
+                if ($value['Field']['field_type_slug'] == 'textarea') {
                     return $value['data'];
                 }
             }
@@ -51,7 +51,7 @@ class FieldHelper extends AppHelper
 
         if (!empty($data['ArticleValue'])) {
             foreach($data['ArticleValue'] as $value) {
-                if ($value['Field']['field_type'] == 'img') {
+                if ($value['Field']['field_type_slug'] == 'img') {
                     return $value['File']['filename'];
                 }
             }
@@ -86,7 +86,7 @@ class FieldHelper extends AppHelper
                 'radio'
             );
 
-            if ($data['Field']['field_type'] == 'file')
+            if ($data['Field']['field_type_slug'] == 'file')
             {
                 if (!empty($row['File']['filename']))
                 {
@@ -95,13 +95,13 @@ class FieldHelper extends AppHelper
                         array('target' => '_blank')
                     );
                 }
-            } elseif (in_array($data['Field']['field_type'], $multi))
+            } elseif (in_array($data['Field']['field_type_slug'], $multi))
             {
                 if (!empty($row['data']) && is_array($row['data']))
                 {
                     return implode(', ', $row['data']);
                 }
-            } elseif ($data['Field']['field_type'] == 'url')
+            } elseif ($data['Field']['field_type_slug'] == 'url')
             {
                 return $this->Html->link(
                     $row['data'],

@@ -17,7 +17,9 @@
  * @since         DebugKit 0.1
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  **/
+App::uses('Controller', 'Controller');
 App::uses('AppController', 'Controller');
+
 class DebugKitAppController extends AppController {
-	
+
 }

@@ -106,9 +106,9 @@ $(document).ready(function() {
             }
         });
 
-        fieldTypeToggle($("#FieldFieldType").val(), false);
+        fieldTypeToggle($("#FieldFieldTypeId").val(), false);
 
-        $("#FieldFieldType").on('change', function() {
+        $("#FieldFieldTypeId").on('change', function() {
             fieldTypeToggle($(this).val(), true);
         });
 
@@ -173,6 +173,7 @@ function noCategory()
 
 function fieldTypeToggle(val,trigger_show) 
 {
+    /*
     if (val == "date") {
         fieldLimitToggle('hide');
     } else if(val == "file") {
@@ -186,6 +187,27 @@ function fieldTypeToggle(val,trigger_show)
     } else if(val == "check") {
         fieldLimitToggle('hide');
     } else if(trigger_show === true) {
+        fieldLimitToggle('show');
+    }
+
+    if ($('#field-rules .field').length)
+    {
+        $.each($('#field-rules .field'), function() {
+            console.log($(this).attr('data-slug'));
+            console.log($(this).html());
+        });
+    }
+    */
+
+    var field = $('.field[data-id="' + val + '"]');
+
+    if (val && field.length)
+    {
+        var toggle = field.html();
+
+        fieldLimitToggle(toggle);
+    } else if(trigger_show === true)
+    {
         fieldLimitToggle('show');
     }
 }

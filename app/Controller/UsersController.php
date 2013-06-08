@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Class UsersController
+ * @property Field $Field
+ */
 class UsersController extends AppController {
 	public $name = 'Users';
 	private $permissions;

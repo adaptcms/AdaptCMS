@@ -47,6 +47,8 @@ class CronController extends AppController
 
 			$this->set(compact('modules', 'period_amount'));
 		}
+
+		$this->permissions = $this->getPermissions();
 	}
 
     /**

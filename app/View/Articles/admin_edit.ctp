@@ -26,7 +26,7 @@
 			<a href="#comments" data-toggle="tab">Comments</a>
 		</li>
 	<?php endif ?>
-	<div class="pull-right">
+	<div class="pull-right hidden-phone">
 	    <?= $this->Html->link(
 	        '<i class="icon-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),
@@ -55,7 +55,7 @@
             )) ?>
             
             <?php foreach($fields as $key => $field): ?>
-                <?= $this->Element('FieldTypes/' . $field['Field']['field_type'], array(
+                <?= $this->Element('FieldTypes/' . $field['FieldType']['slug'], array(
                     'key' => $key,
                     'field' => $field,
                     'icon' => !empty($field['Field']['description']) ? 

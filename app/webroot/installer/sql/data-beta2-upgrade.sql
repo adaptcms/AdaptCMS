@@ -44,3 +44,61 @@ CREATE TABLE IF NOT EXISTS `{prefix}menus` (
   `deleted_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `plugin`, `controller`, `action`, `status`, `related`, `own`, `any`) VALUES
+(null, NULL, 1, 0, '', 'menus', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'menus', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'menus', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'menus', 'admin_add', 1, '', 0, 0),
+(null, NULL, 1, 0, '', 'menus', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'menus', 'admin_add', 1, '', 0, 0),
+(null, NULL, 4, 0, '', 'menus', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 1, 0, '', 'field_types', 'admin_add', 1, '', 0, 0),
+(null, NULL, 1, 0, '', 'field_types', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_restore', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_delete', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_edit', 1, '', 1, 1),
+(null, NULL, 4, 0, '', 'field_types', 'admin_add', 1, '', 0, 0),
+(null, NULL, 4, 0, '', 'field_types', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1);
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}field_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `limit` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `ord` int(11) NOT NULL DEFAULT '0',
+  `active` int(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+ALTER TABLE  `{prefix}fields` ADD  `module_id` int( 11 ) NULL DEFAULT NULL AFTER  `category_id`
+-- --------------------------------------------------------
+ALTER TABLE  `{prefix}fields` CHANGE  `field_type`  `field_type_id` INT( 11 ) NULL DEFAULT NULL
+-- --------------------------------------------------------
+ALTER TABLE  `{prefix}fields` ADD  `field_type_slug` VARCHAR( 255 ) NOT NULL AFTER  `field_type_id`
+-- --------------------------------------------------------
+INSERT INTO `{prefix}field_types` (`id`, `title`, `label`, `slug`, `limit`, `user_id`, `ord`, `active`, `created`, `modified`, `deleted_time`) VALUES
+(null, 'text', 'Text Input', 'text', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Check', 'Checkbox', 'check', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Date', '', 'date', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Dropdown', 'Dropdown Selector', 'dropdown', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Email', '', 'email', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'File', '', 'file', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Img', 'Image', 'img', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Multi Dropdown', 'Dropdown Selector Multiple', 'multi-dropdown', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Num', 'Number', 'num', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Radio', '', 'radio', 0, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Textarea', 'Text Box', 'textarea', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(null, 'Url', 'Website  URL', 'url', 1, 1, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00');
+-- --------------------------------------------------------

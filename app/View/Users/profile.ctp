@@ -10,12 +10,12 @@
 	</li>
 	<?php if (!empty($this->request->data['Article'])): ?>
 		<li>
-			<a href="#articles" data-toggle="tab">Posted Articles</a>
+			<a href="#articles" data-toggle="tab">Articles</a>
 		</li>
 	<?php endif ?>
 	<?php if (!empty($this->request->data['Comment'])): ?>
 		<li>
-			<a href="#comments" data-toggle="tab">Posted Comments</a>
+			<a href="#comments" data-toggle="tab">Comments</a>
 		</li>
 	<?php endif ?>
 	<li>

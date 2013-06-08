@@ -53,7 +53,7 @@
 		<?php endforeach ?>
 	<?php endif ?>
 
-	<a href="<?= $this->Api->url() ?>plugins" class="btn btn-primary pull-right" target="_blank">View All Plugins »</a>
+	<a href="<?= $this->Api->url() ?>plugins" class="btn btn-primary admin-homepage pull-right" target="_blank">View All Plugins »</a>
 </div>
 
 <div class="span6 well">
@@ -72,7 +72,7 @@
 		<?php endforeach ?>
 	<?php endif ?>
 
-	<a href="<?= $this->Api->siteUrl() ?>category/news" class="btn btn-primary pull-right" target="_blank">View More News »</a>
+	<a href="<?= $this->Api->siteUrl() ?>category/news" class="btn btn-primary admin-homepage pull-right" target="_blank">View More News »</a>
 </div>
 <div class="clearfix"></div>
 
@@ -92,7 +92,7 @@
 		<?php endforeach ?>
 	<?php endif ?>
 
-	<a href="<?= $this->Api->url() ?>themes" class="btn btn-success pull-right" target="_blank">View All Themes »</a>
+	<a href="<?= $this->Api->url() ?>themes" class="btn btn-success admin-homepage pull-right" target="_blank">View All Themes »</a>
 	<div class="clearfix"></div>
 </div>
 
@@ -112,6 +112,6 @@
 		<?php endforeach ?>
 	<?php endif ?>
 
-	<a href="<?= $this->Api->siteUrl() ?>category/blog" class="btn btn-success pull-right" target="_blank">View More Blogs »</a>
+	<a href="<?= $this->Api->siteUrl() ?>category/blog" class="btn btn-success admin-homepage pull-right" target="_blank">View More Blogs »</a>
 	<div class="clearfix"></div>
 </div>

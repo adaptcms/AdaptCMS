@@ -9,7 +9,7 @@
 	<li>
 		<a href="#permission" data-toggle="tab">Add Permission</a>
 	</li>
-	<div class="right">
+	<div class="right hidden-phone">
 	    <?= $this->Html->link(
 	        '<i class="icon-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),

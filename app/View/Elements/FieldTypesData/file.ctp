@@ -1,0 +1,1 @@
+<?= (!empty($data['File']) ? $data['File']['dir'] . $data['File']['filename'] : '') ?>

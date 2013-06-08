@@ -16,7 +16,7 @@
 			<a href="#fields" data-toggle="tab">Related Fields</a>
 		</li>
 	<?php endif ?>
-	<div class="right">
+	<div class="right hidden-phone">
 	    <?= $this->Html->link(
 	        '<i class="icon-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),

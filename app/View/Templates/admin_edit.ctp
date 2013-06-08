@@ -63,7 +63,15 @@
 	)) ?>
 	<?= $this->Form->hidden('id') ?>
 
-<?= $this->Form->end(array(
-	'label' => 'Submit',
-	'class' => 'btn btn-primary'
-)) ?>
+<?php if ($writable == 1): ?>
+    <?= $this->Form->end(array(
+        'label' => 'Submit',
+        'class' => 'btn btn-primary'
+    )) ?>
+<?php else: ?>
+    <?= $this->Element('writable_notice', array(
+        'type' => 'template',
+        'file' => $writable
+    )) ?>
+    <?= $this->Form->end() ?>
+<?php endif ?>

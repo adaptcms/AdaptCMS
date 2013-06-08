@@ -87,4 +87,20 @@ class AppModel extends Model
             return strtolower(Inflector::slug($str));
         }
     }
+
+    public function arrayKeyById($data = array(), $model)
+    {
+        $results = array();
+
+        if (!empty($data))
+        {
+            foreach($data as $row)
+            {
+                if (!empty($row[$model]['id']))
+                    $results[$row[$model]['id']] = $row[$model];
+            }
+        }
+
+        return $results;
+    }
 }

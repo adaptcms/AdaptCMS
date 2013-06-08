@@ -11,18 +11,25 @@ class InstallController extends Controller
 
     private $upgrade_versions = array(
         'beta' => array(
-         'sql' => array(
-             'beta'
-             ),
-         'upgrade_text' => 'upgrade-beta.md'
-         ),
+            'sql' => array(
+                'beta'
+            ),
+            'upgrade_text' => 'upgrade-beta.md'
+        ),
         'beta2' => array(
-         'sql' => array(
-            'beta',
-            'beta2'
+            'sql' => array(
+                'beta',
+                'beta2'
             )
-         )
-        );
+        ),
+//        'beta3' => array(
+//            'sql' => array(
+//                'beta',
+//                'beta2',
+//                'beta3'
+//            )
+//        )
+    );
 
     public function beforeFilter()
     {

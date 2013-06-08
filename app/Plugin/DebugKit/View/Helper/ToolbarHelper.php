@@ -1,7 +1,7 @@
 <?php
 /**
- * Abstract Toolbar helper.  Provides Base methods for content
- * specific debug toolbar helpers.  Acts as a facade for other toolbars helpers as well.
+ * Abstract Toolbar helper. Provides Base methods for content
+ * specific debug toolbar helpers. Acts as a facade for other toolbars helpers as well.
  *
  * PHP versions 5
  *
@@ -23,18 +23,21 @@ App::uses('AppHelper', 'View/Helper');
 App::uses('ConnectionManager', 'Model');
 
 class ToolbarHelper extends AppHelper {
+
 /**
- * settings property to be overloaded.  Subclasses should specify a format
+ * settings property to be overloaded. Subclasses should specify a format
  *
  * @var array
  */
 	public $settings = array();
+
 /**
  * flag for whether or not cache is enabled.
  *
  * @var boolean
- **/
+ */
 	protected $_cacheEnabled = false;
+
 /**
  * Construct the helper and make the backend helper.
  *
@@ -66,17 +69,30 @@ class ToolbarHelper extends AppHelper {
 		}
 
 		parent::__construct($View, $options);
-
 	}
+
+/**
+ * afterLayout callback
+ *
+ * @param string $layoutFile
+ * @return void
+ */
+	public function afterLayout($layoutFile) {
+		if (!$this->request->is('requested')) {
+			$this->send();
+		}
+	}
+
 /**
  * Get the name of the backend Helper
  * used to conditionally trigger toolbar output
  *
  * @return string
- **/
+ */
 	public function getName() {
 		return $this->_backEndClassName;
 	}
+
 /**
  * call__
  *
@@ -91,16 +107,17 @@ class ToolbarHelper extends AppHelper {
 			return $this->{$this->_backEndClassName}->dispatchMethod($method, $params);
 		}
 	}
+
 /**
  * Allows for writing to panel cache from view.
  * Some panels generate all variables in the view by
- * necessity ie. Timer.  Using this method, will allow you to replace in full
+ * necessity ie. Timer. Using this method, will allow you to replace in full
  * the content for a panel.
  *
  * @param string $name Name of the panel you are replacing.
  * @param string $content Content to write to the panel.
  * @return boolean Sucess of write.
- **/
+ */
 	public function writeCache($name, $content) {
 		if (!$this->_cacheEnabled) {
 			return false;
@@ -109,12 +126,13 @@ class ToolbarHelper extends AppHelper {
 		$existing[0][$name]['content'] = $content;
 		return Cache::write($this->_cacheKey, $existing, $this->_cacheConfig);
 	}
+
 /**
  * Read the toolbar
  *
  * @param string $name Name of the panel you want cached data for
  * @return mixed Boolean false on failure, array of data otherwise.
- **/
+ */
 	public function readCache($name, $index = 0) {
 		if (!$this->_cacheEnabled) {
 			return false;
@@ -125,6 +143,7 @@ class ToolbarHelper extends AppHelper {
 		}
 		return $existing[$index][$name]['content'];
 	}
+
 /**
  * Gets the query logs for the given connection names.
  *
@@ -142,13 +161,13 @@ class ToolbarHelper extends AppHelper {
 	public function getQueryLogs($connection, $options = array()) {
 		$options += array('explain' => false, 'cache' => true, 'threshold' => 20);
 		$db = ConnectionManager::getDataSource($connection);
-		
+
 		if (!method_exists($db, 'getLog')) {
 			return array();
 		}
 
 		$log = $db->getLog();
-		
+
 		$out = array(
 			'queries' => array(),
 			'count' => $log['count'],
@@ -175,6 +194,20 @@ class ToolbarHelper extends AppHelper {
 			}
 			if ($isHtml) {
 				$query['query'] = h($query['query']);
+				if (!empty($query['params']) && is_array($query['params'])) {
+					$bindParam = $bindType = null;
+					if (preg_match('/.+ :.+/', $query['query'])) {
+						$bindType = true;
+					}
+					foreach ($query['params'] as $bindKey => $bindVal) {
+						if ($bindType === true) {
+							$bindParam .= h($bindKey) ." => " . h($bindVal) . ", ";
+						} else {
+							$bindParam .= h($bindVal) . ", ";
+						}
+					}
+					$query['query'] .= " [ " . rtrim($bindParam, ', ') . " ]";
+				}
 			}
 			unset($query['params']);
 			$out['queries'][] = $query;

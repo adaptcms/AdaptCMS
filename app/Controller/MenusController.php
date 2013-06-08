@@ -1,5 +1,13 @@
 <?php
-
+/**
+ * Class MenusController
+ * @property Menu $Menu
+ * @property Template $Template
+ * @property params $params
+ * @property paginate $paginate
+ * @property redirect $redirect
+ * @property pageLimit $pageLimit
+ */
 class MenusController extends AppController
 {
     /**
@@ -35,7 +43,7 @@ class MenusController extends AppController
     /**
     * Returns a paginated index of Menus
     *
-    * @return associative array of block data
+    * @return array of block data
     */
 	public function admin_index()
 	{
@@ -111,8 +119,8 @@ class MenusController extends AppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry
-    * @return associative array of menu data
+    * @param int - ID of the database entry
+    * @return array of menu data
     */
     public function admin_edit($id = null)
     {
@@ -132,18 +140,31 @@ class MenusController extends AppController
         }
 
         $this->request->data = $this->Menu->read();
+
+        $path = $this->Menu->_getPath($this->request->data['Menu']['slug']);
+        if (is_writable($path))
+        {
+            $writable = 1;
+        }
+        else
+        {
+            $writable = $path;
+        }
+
+        $this->set(compact('writable'));
     }
 
     /**
-    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
-    *
-    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
-    *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
-    */
+     * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+     *
+     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+     *
+     * @param int - ID of the database entry, redirect to index if no permissions
+     * @param string - Title of this entry, used for flash message
+     * @param boolean $permanent
+     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
+     * @return redirect
+     */
     public function admin_delete($id = null, $title = null, $permanent = null)
     {
         $this->Menu->id = $id;
@@ -188,8 +209,8 @@ class MenusController extends AppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
+    * @param int - ID of database entry, redirect if no permissions
+    * @param string - Title of this entry, used for flash message
     * @return redirect
     */
     public function admin_restore($id = null, $title = null)

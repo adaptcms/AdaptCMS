@@ -44,11 +44,10 @@
 
     <?= $this->Html->css("font-awesome.min.css") ?>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <?= $this->Html->script('html5.min.js') ?>
     <![endif]-->
-    <!--[if lt IE 8]>
+    <!--[if IE 7]>
       <?= $this->Html->css("font-awesome-ie7.min.css") ?>
     <![endif]-->
 

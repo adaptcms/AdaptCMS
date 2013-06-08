@@ -57,7 +57,7 @@
 
 <ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
 	<li class="active">
-		<a href="#main" data-toggle="tab">Edit Settings Category</a>
+		<a href="#main" data-toggle="tab">Edit Category</a>
 	</li>
 	<?php if (!empty($this->request->data['SettingValue'])): ?>
 		<li>
@@ -67,7 +67,7 @@
 	<li>
 		<a href="#add-setting" data-toggle="tab">Add Setting</a>
 	</li>
-	<div class="right">
+	<div class="right hidden-phone">
 	    <?= $this->Html->link(
 	        '<i class="icon-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),

@@ -141,7 +141,7 @@
     <thead>
         <tr>
             <th style="width: 50%">Title</th>
-            <th>Created</th>
+            <th class="hidden-phone">Created</th>
             <th>Theme Version</th>
             <th></th>
         </tr>
@@ -158,7 +158,7 @@
                         </a>
                     </td>
                     <td></td>
-                    <td></td>
+                    <td class="hidden-phone"></td>
                     <td>
                         <div class="btn-group">
                             <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
@@ -183,7 +183,7 @@
                             </a>
                         <?php endif ?>
 
-                        <?php if (!empty($data['Data'])): ?>
+                        <?php if (!empty($data['Data']['data'])): ?>
                             <br />
                             <p class="span10 no-marg-left">
                                 <?= $data['Data']['data']['short_description'] ?>
@@ -210,14 +210,14 @@
                             Not yet Installed
                         <?php endif ?>
                     </td>
-                    <?php if (!empty($data['Data'])): ?>
+                    <?php if (!empty($data['Data']['data'])): ?>
                         <?php if ($data['Data']['data']['current_version'] == $data['Data']['current_version']): ?>
-                            <td class="info" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is up to date">
+                            <td class="info hidden-phone" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is up to date">
                                 <?=$data['Data']['current_version'] ?>
                                 <i class="icon icon-ok info"></i>
                             </td>
                         <?php else: ?>
-                            <td class="info" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is out of date, newest version is <?= $data['Data']['data']['current_version'] ?>">
+                            <td class="info hidden-phone" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is out of date, newest version is <?= $data['Data']['data']['current_version'] ?>">
                                 <?= $data['Data']['current_version'] ?>
                                 <i class="icon icon-ban-circle"></i>
                                 <div class="clearfix"></div>
@@ -228,8 +228,12 @@
                                 ) ?>
                             </td>
                         <?php endif ?>
+                    <?php elseif (!empty($data['Data']['current_version'])): ?>
+                        <td class="hidden-phone">
+                            <?= $data['Data']['current_version'] ?>
+                        </td>
                     <?php else: ?>
-                        <td>N/A</td>
+                        <td class="hidden-phone">N/A</td>
                     <?php endif ?>
                     <td>
                         <div class="btn-group">
@@ -238,7 +242,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (!empty($data['Data']['data'])): ?>
+                                <?php if (!empty($data['Data'])): ?>
                                     <?php if ($data['Data']['status'] == 0): ?>
                                         <li>
                                             <?= $this->Html->link(
@@ -295,7 +299,7 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if (empty($data['Data']['data'])): ?>
+                                    <?php if (empty($data['Data'])): ?>
                                         <li>
                                             <?= $this->Admin->delete(
                                                 $data['Theme']['id'],
@@ -305,7 +309,7 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                <?php elseif (empty($data['Data']['data'])): ?>
+                                <?php elseif (empty($data['Data'])): ?>
                                     <li>
                                         <?= $this->Admin->restore(
                                             $data['Theme']['id'],
@@ -415,8 +419,8 @@ Search
             <tr>
                 <th><?= $this->Paginator->sort('label') ?></th>
                 <th><?= $this->Paginator->sort('Theme.title', 'Theme') ?></th>
-                <th><?= $this->Paginator->sort('location', 'Folder') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('location', 'Folder') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
@@ -425,17 +429,17 @@ Search
             <?php foreach ($this->request->data['Template'] as $data): ?>
             <tr>
                 <td>
-                    <?= $this->Html->link($data['Template']['label'], array('admin' => false, 'controller' => 'templates', 'action' => 'edit', $data['Template']['id'])); ?>
+                    <?= $this->Html->link($data['Template']['label'], array('controller' => 'templates', 'action' => 'edit', $data['Template']['id'])); ?>
                 </td>
                 <td>
                     <?php if ($data['Template']['theme_id'] > 0): ?>
                         <?= $data['Theme']['title'] ?>
                     <?php endif; ?>
                 </td>
-                <td>
+                <td class="hidden-phone">
                     /<?= str_replace(basename($data['Template']['location']), "",$data['Template']['location']) ?>
                 </td>
-                <td>
+                <td class="hidden-phone">
                     <?= $this->Admin->time($data['Template']['created']) ?>
                 </td>
                 <td>

@@ -48,9 +48,8 @@
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['settings']['admin_edit'], $data['Setting']['id'])): ?>
@@ -61,7 +60,7 @@
                     <td>
                         <?= $this->Admin->time($data['Setting']['created']) ?>
                     </td>
-            		<td>
+                    <td>
                         <div class="btn-group">
                             <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                                 Actions
@@ -101,15 +100,15 @@
                                                 $data['Setting']['title'],
                                                 'setting category'
                                             ) ?>
-                                        </li>  
-                                    <?php endif ?>   
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

@@ -162,12 +162,18 @@ class ForumPostsController extends AdaptbbAppController
                 'ForumPost.id' => $id
             ),
             'contain' => array(
-                'User',
-                'ForumTopic' => array(
-                    'Forum'
-                )
+                'User'
             )
         ));
+
+		$topic = $this->ForumPost->ForumTopic->find('first', array(
+			'conditions' => array(
+				'ForumTopic.id' => $post['ForumPost']['topic_id']
+			),
+			'contain' => array(
+				'Forum'
+			)
+		));
 
         if (empty($post['ForumPost']))
         {
@@ -175,7 +181,8 @@ class ForumPostsController extends AdaptbbAppController
             $this->redirect(array(
                 'controller' => 'forum_topics',
                 'action' => 'view', 
-                $this->slug($post['ForumTopic']['subject']) 
+                'slug' => $topic['ForumTopic']['slug'],
+				'forum_slug' => $topic['Forum']['slug']
             ));
         }
 
@@ -185,7 +192,7 @@ class ForumPostsController extends AdaptbbAppController
             $this->redirect(array(
                 'controller' => 'forum_topics',
                 'action' => 'view', 
-                $this->slug($post['ForumTopic']['subject']) 
+                $this->slug($topic['ForumTopic']['subject']) 
             ));               
         }
 
@@ -193,19 +200,19 @@ class ForumPostsController extends AdaptbbAppController
 
         if ($this->ForumPost->saveField('deleted_time', $this->ForumPost->dateTime()) )
         {
-            $this->ForumPost->ForumTopic->Forum->id = $post['ForumTopic']['Forum']['id'];
+            $this->ForumPost->ForumTopic->Forum->id = $topic['ForumTopic']['id'];
 
             $data = array();
-            $data['Forum']['id'] = $post['ForumTopic']['Forum']['id'];
-            $data['Forum']['num_posts'] = $post['ForumTopic']['Forum']['num_posts'] - 1;
+            $data['Forum']['id'] = $topic['Forum']['id'];
+            $data['Forum']['num_posts'] = $topic['Forum']['num_posts'] - 1;
 
             $this->ForumPost->ForumTopic->Forum->save($data);
 
-            $this->ForumPost->ForumTopic->id = $post['ForumTopic']['id'];
+            $this->ForumPost->ForumTopic->id = $topic['ForumTopic']['id'];
 
             $data = array();
-            $data['ForumTopic']['id'] = $post['ForumTopic']['id'];
-            $data['ForumTopic']['num_posts'] = $post['ForumTopic']['num_posts'] - 1;
+            $data['ForumTopic']['id'] = $topic['ForumTopic']['id'];
+            $data['ForumTopic']['num_posts'] = $topic['ForumTopic']['num_posts'] - 1;
 
             $this->ForumPost->ForumTopic->save($data);
 
@@ -213,7 +220,8 @@ class ForumPostsController extends AdaptbbAppController
             $this->redirect(array(
                 'controller' => 'forum_topics',
                 'action' => 'view', 
-                $this->slug($post['ForumTopic']['subject']) 
+                'slug' => $topic['ForumTopic']['slug'],
+				'forum_slug' => $topic['Forum']['slug']
             )); 
         } else {
             $this->Session->setFlash('Unable to delete the post.', 'flash_error');

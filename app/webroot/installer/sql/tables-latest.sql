@@ -83,6 +83,21 @@ CREATE TABLE IF NOT EXISTS `{prefix}cron` (
   `deleted_time` datetime NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}field_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `limit` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `ord` int(11) NOT NULL DEFAULT '0',
+  `active` int(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
@@ -90,7 +105,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `field_order` int(11) NOT NULL DEFAULT '0',
   `category_id` int(11) DEFAULT '0',
   `module_id` int(11) DEFAULT '0',
-  `field_type` varchar(255) DEFAULT NULL,
+  `field_type_id` int(11) NOT NULL,
+  `field_type_slug` varchar(255) DEFAULT NULL,
   `description` text,
   `field_options` longtext,
   `field_limit_min` int(11) NOT NULL DEFAULT '0',

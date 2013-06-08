@@ -5,11 +5,11 @@
 <li id="file-<?= $image['id'] ?>" class="file_info span4 center">
 	<?php if (file_exists($image_path.$image['dir'].$image['filename'])): ?>
 		<?= $this->Html->image('/'.$image['dir'].$image['filename'], array(
-			'style' => 'cursor: pointer;max-width: 265px;max-height: 185px;display: inline', 
+			'style' => 'cursor: pointer;width: 250px;height: 175px;display: inline',
 			'class' => 'thumbnail'
 		)) ?>
 	<?php else: ?>
-		<?= $this->Html->image('http://placehold.it/300x200', array('style' => 'cursor: pointer', 'class' => 'thumbnail')) ?>
+		<?= $this->Html->image('http://placehold.it/250x175', array('style' => 'cursor: pointer', 'class' => 'thumbnail')) ?>
 	<?php endif ?>
 
 	<h4 style="margin-top: 10px">

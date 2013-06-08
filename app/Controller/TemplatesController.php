@@ -111,8 +111,8 @@ class TemplatesController extends AppController
 		$inactive_path = VIEW_PATH . 'Old_Themed';
 		$inactive_themes = $this->getThemes($inactive_path);
 
-		$themes = array_merge($inactive_themes['themes'], $active_themes['themes']);
-		$api_lookup = array_merge($inactive_themes['api_lookup'], $active_themes['api_lookup']);
+		$themes = array_merge($active_themes['themes'], $inactive_themes['themes']);
+		$api_lookup = array_merge($active_themes['api_lookup'], $inactive_themes['api_lookup']);
 
 		if (!empty($api_lookup))
 		{
@@ -131,6 +131,10 @@ class TemplatesController extends AppController
         $theme_names = Set::extract('{n}.Theme.title', $this->request->data['Themes']);
         $key = count($this->request->data['Themes']);
 
+        /**
+        * TODO - It does the below for the last item, but with an installed theme with no api data, it will not
+        * do the proper checking - it shows it, but not the uninstall link. (cause $data['Data'] is empty)
+        */
         foreach($themes as $theme)
         {
             $title = $theme['title'];
@@ -241,10 +245,12 @@ class TemplatesController extends AppController
     		$path = VIEW_PATH;
     	}
 
-        if (is_readable($path . $this->request->data['Template']['location']))
+        $location = $path . $this->request->data['Template']['location'];
+
+        if (is_readable($location))
         {
-	 		$handle = fopen($path . $this->request->data['Template']['location'], "r");
-	 		if (filesize($path . $this->request->data['Template']['location']) > 0)
+	 		$handle = fopen($location, "r");
+	 		if (filesize($location) > 0)
 	 		{
 				$template_contents = fread($handle, filesize($path.$this->request->data['Template']['location']));
     		} else {
@@ -253,8 +259,17 @@ class TemplatesController extends AppController
     	} else {
     		$template_contents = null;
     	}
+        
+        if (is_writable($location))
+        {
+            $writable = 1;
+        }
+        else
+        {
+            $writable = $location;
+        }
 
-    	$this->set(compact('template_contents', 'themes'));
+    	$this->set(compact('template_contents', 'themes', 'writable'));
 
     	$this->set('location', str_replace(
     		"/".basename(

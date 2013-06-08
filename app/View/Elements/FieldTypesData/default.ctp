@@ -1,0 +1,1 @@
+<?= (!empty($data['data']) ? $data['data'] : '') ?>

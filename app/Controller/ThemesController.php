@@ -240,14 +240,16 @@ class ThemesController extends AppController
     }
 
     /**
-    * Function allows user to edit a web asset for a default/non-default theme or plugin
-    *
-    * Before POST, displays edit form to alter content and after POST redirects to appropiate page with flash msg.
-    *
-    * @param file path and name of file
-    * @param theme name of theme
-    * @return mixed
-    */
+     * Function allows user to edit a web asset for a default/non-default theme or plugin
+     *
+     * Before POST, displays edit form to alter content and after POST redirects to appropiate page with flash msg.
+     *
+     * @param string $file
+     * @param string $theme
+     * @internal param \path $file and name of file
+     * @internal param \name $theme of theme
+     * @return mixed
+     */
     public function admin_asset_edit($file, $theme)
     {
         $file = str_replace('__', '/', str_replace('&', '.', $file) );
@@ -287,9 +289,18 @@ class ThemesController extends AppController
             $this->set(compact('ext'));
         }
 
+        if (is_writable($path . $file))
+        {
+            $writable = 1;
+        }
+        else
+        {
+            $writable = $path . $file;
+        }
+
         $dir = $ext['dirname'];
 
-        $this->set(compact('theme', 'dir'));
+        $this->set(compact('theme', 'dir', 'writable'));
 
         if (!empty($this->request->data))
         {

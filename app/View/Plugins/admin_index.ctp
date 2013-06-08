@@ -24,8 +24,8 @@ $(document).ready(function() {
             <tr>
                 <th>Plugin Name</th>
                 <th>Status</th>
-                <th>Current Version</th>
-                <th>Details</th>
+                <th class="hidden-phone">Current Version</th>
+                <th class="hidden-phone">Details</th>
                 <th></th>
             </tr>
         </thead>
@@ -56,12 +56,12 @@ $(document).ready(function() {
                     <?php if (!empty($plugin['current_version'])): ?>      
                         <?php if (!empty($plugin['data'])): ?>
                             <?php if ($plugin['data']['current_version'] == $plugin['current_version']): ?>
-                                <td class="info" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is up to date">
+                                <td class="info hidden-phone" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is up to date">
                                     <?= $plugin['current_version'] ?> 
                                     <i class="icon icon-ok info"></i>
                                 </td>
                             <?php else: ?>
-                                <td class="info" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is out of date, newest version is <?= $plugin['data']['current_version'] ?>">
+                                <td class="info hidden-phone" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is out of date, newest version is <?= $plugin['data']['current_version'] ?>">
                                     <?= $plugin['current_version'] ?> 
                                     <i class="icon icon-ban-circle"></i>
 
@@ -72,14 +72,14 @@ $(document).ready(function() {
                                 </td>
                             <?php endif ?>
                         <?php else: ?>
-                            <td>
+                            <td class="hidden-phone">
                                 <?= $plugin['current_version'] ?>
                             </td>
                         <?php endif ?>
                     <?php else: ?>
-                        <td></td>
+                        <td class="hidden-phone"></td>
                     <?php endif ?>
-                    <td>
+                    <td class="hidden-phone">
                         <?php if (!empty($plugin['data'])): ?>
                             <?php if (!empty($plugin['data']['author_url'])): ?>
                                 <?= $this->Html->link($plugin['data']['author_name'], $plugin['data']['author_url'], array('target' => '_blank')) ?> | 

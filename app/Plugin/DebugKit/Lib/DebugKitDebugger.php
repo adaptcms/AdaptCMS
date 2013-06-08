@@ -31,6 +31,7 @@ App::uses('DebugMemory', 'DebugKit.Lib');
  * This file will not be needed in future version of CakePHP.
  */
 class DebugKitDebugger extends Debugger {
+
 /**
  * destruct method
  *
@@ -160,7 +161,7 @@ class DebugKitDebugger extends Debugger {
 /**
  * Get peak memory use
  *
- * @return integer peak memory use (in bytes).  Returns 0 if memory_get_peak_usage() is not available
+ * @return integer peak memory use (in bytes). Returns 0 if memory_get_peak_usage() is not available
  * @deprecated Use DebugMemory::getPeak() instead.
  */
 	public static function getPeakMemoryUse() {
@@ -218,10 +219,11 @@ class DebugKitDebugger extends Debugger {
 			FireCake::log($data['context'], 'Context');
 		}
 		if (isset($data['trace'])) {
-			FireCake::log($data['trace'], 'Trace');
+			FireCake::log(preg_split('/[\r\n]+/', $data['trace']), 'Trace');
 		}
 		FireCake::groupEnd();
 	}
+
 }
 
 

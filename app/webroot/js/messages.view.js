@@ -34,7 +34,7 @@ $(document).ready(function() {
 	           
 				if (data.status)
 				{
-					$(".messages").load(form_url + ' .messages', function() {
+					$(".messages").load(form_url + '?unique=' + Math.round(Math.random()*10000) + ' .messages', function() {
 						$("#flashMessage.alert-success").show().fadeOut(3000);
 					});
 				}

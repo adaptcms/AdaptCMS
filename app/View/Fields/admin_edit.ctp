@@ -13,11 +13,11 @@
 		<a href="#main" data-toggle="tab">Edit Field</a>
 	</li>
 	<?php if (!empty($fields)): ?>
-		<li>
+		<li class="hidden-phone">
 			<a href="#order" data-toggle="tab">Field Order</a>
 		</li>
 	<?php endif ?>
-	<div class="pull-right">
+	<div class="pull-right hidden-phone">
 	    <?= $this->Html->link(
 	        '<i class="icon-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),
@@ -48,8 +48,9 @@
 				'empty' => '- Choose Category -',
 				'class' => 'required'
 			)) ?>
-			<?= $this->Form->input('field_type', array(
-				'options' => $field_types, 
+			<?= $this->Form->input('field_type_id', array(
+				'options' => $field_types,
+                'label' => 'Field Type',
 				'empty' => '- Choose -', 
 				'class' => 'required'
 			)) ?>
@@ -98,7 +99,7 @@
 		)) ?>
 	</div>
 
-	<div class="tab-pane" id="order">
+	<div class="tab-pane hidden-phone" id="order">
 		<div class="well">
 			<h2>Field Order</h2>
 
@@ -131,4 +132,12 @@
 			<div class="clearfix"></div>
 		</div>
 	</div>
+</div>
+
+<div class="hidden" id="field-rules">
+    <?php if (!empty($field_rules)): ?>
+        <?php foreach($field_rules as $field => $rule): ?>
+            <div class="field" data-id="<?= $field ?>"><?= $rule ?></div>
+        <?php endforeach ?>
+    <?php endif ?>
 </div>

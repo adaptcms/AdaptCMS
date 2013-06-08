@@ -20,8 +20,8 @@
 				<th><?= $this->Paginator->sort('subject') ?></th>
 				<th><?= $this->Paginator->sort('User.username', 'Submitted By') ?></th>
 				<th><?= $this->Paginator->sort('TicketCategory.title', 'Category') ?></th>
-				<th># of Replies</th>
-				<th><?= $this->Paginator->sort('created') ?></th>
+				<th class="hidden-phone"># of Replies</th>
+				<th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -45,10 +45,10 @@
 							<?= $ticket['TicketCategory']['title'] ?>
 						<?php endif ?>
 					</td>
-					<td>
+					<td class="hidden-phone">
 						<?= $ticket['Ticket']['replies'] ?>
 					</td>
-					<td>
+					<td class="hidden-phone">
 						<?= $this->Admin->time($ticket['Ticket']['created'], 'F d, Y') ?>
 					</td>
 				</tr>

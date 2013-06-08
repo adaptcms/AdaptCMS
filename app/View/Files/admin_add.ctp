@@ -73,7 +73,7 @@ $(document).ready(function() {
 function toggleRemove()
 {
 	$(".upload-file:last .remove").show();
-	$(".upload-file:not(:last) .remove,.upload-file:first .remove").hide();
+	$(".upload-file:not(:last),.upload-file:first").find('.remove').hide();
 }
 </script>
 

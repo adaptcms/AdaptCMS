@@ -4,7 +4,6 @@ $model = !empty($model) ? $model : 'ArticleValue';
 <?= $this->Form->input($model . '.' . $key . '.data', array(
     'label' => $icon . $field['Field']['label'], 
     'rows' => 15, 
-    'style' => 'width:500px',
     'class' => !empty($field['Field']['required']) ? 'required' : '',
     'minlength' => $field['Field']['field_limit_min'] > 0 ? $field['Field']['field_limit_min'] : '',
     'maxlength' => $field['Field']['field_limit_max'] > 0 ? $field['Field']['field_limit_max'] : '',

@@ -135,7 +135,7 @@ function reloadComments(comment_count, id)
 	var comment_count = $("#comments .comment").length;
 	var form_url = $('.PostComment').attr('action');
 
-	$("#comments").load(form_url + ' #comments', function() {
+	$("#comments").load(form_url + '?unique=' + Math.round(Math.random()*10000) + ' #comments', function() {
 		if (id) {
 			$("#comments").find('#comment-' + id + ' .header h5').append('<span class="label label-important pull-right">New!</span>');
 		}

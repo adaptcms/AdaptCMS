@@ -3,7 +3,7 @@
 <?php $this->Html->addCrumb('Cron Entries', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Edit Cron', null) ?>
 
-<div class="pull-right admin-edit-options">
+<div class="pull-right admin-edit-options clearfix">
     <?= $this->Html->link(
         '<i class="icon-chevron-left"></i> Return to Index',
         array('action' => 'index'),
@@ -15,7 +15,6 @@
         array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this cron entry?')"));
     ?>
 </div>
-<div class="clearfix"></div>
 
 <?= $this->Form->create('Cron', array('class' => 'well admin-validate')) ?>
 	<h2>Edit Cron Entry</h2>

@@ -8,7 +8,7 @@
 <div class="btn-toolbar pull-right" style="margin-bottom:10px">
     <div class="btn-group">
         <a class="btn dropdown-toggle" data-toggle="dropdown">
-            Filter by Block Type
+            Filter by Type
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
@@ -64,19 +64,18 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('type') ?></th>
-                <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('User.username', 'Author') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['blocks']['admin_edit'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['Block']['title'], array(
-                                'action' => 'edit', 
+                                'action' => 'edit',
                                 $data['Block']['id']
                             )) ?>
                         <?php else: ?>
@@ -86,7 +85,7 @@
                     <td>
                         <?= $block_types[$data['Block']['type']] ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['User']['username'], array(
                                 'controller' => 'users',
@@ -95,7 +94,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Block']['created']) ?>
                     </td>
                     <td>
@@ -129,7 +128,7 @@
                                                 $data['Block']['id'],
                                                 $data['Block']['title']
                                             ) ?>
-                                        </li>  
+                                        </li>
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['blocks']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
@@ -138,15 +137,15 @@
                                                 $data['Block']['title'],
                                                 'block'
                                             ) ?>
-                                        </li>   
-                                    <?php endif ?>  
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        <?php endforeach ?>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

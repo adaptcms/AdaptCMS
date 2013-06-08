@@ -36,7 +36,7 @@
                 'class' => 'btn btn-info', 
                 'escape' => false
         )) ?>
-        <?= $this->Html->link('Add New File <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
+        <?= $this->Html->link('Add File <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
             'class' => 'btn btn-info', 
             'escape' => false
         )) ?>
@@ -53,36 +53,35 @@
         <thead>
             <tr>
                 <th><?= $this->Paginator->sort('filename', 'File Name') ?></th>
-                <th><?= $this->Paginator->sort('mimetype', 'Type') ?></th>
-                <th>Preview</th>
-                <th><?= $this->Paginator->sort('filesize', 'Size') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
-                <th>Options</th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('mimetype', 'Type') ?></th>
+                <th class="hidden-phone">Preview</th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('filesize', 'Size') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
+                <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['files']['view'], $data['User']['id'])): ?>
                             <?= $this->Html->link(
-                                $data['File']['filename'], 
-                                '/' . $data['File']['dir'] . $data['File']['filename'], 
+                                $data['File']['filename'],
+                                '/' . $data['File']['dir'] . $data['File']['filename'],
                                 array('target' => '_blank')
                             ) ?>
                         <?php else: ?>
                             <?= $data['File']['filename'] ?>
                         <?php endif ?>
                     </td>
-                    <td><?= $data['File']['mimetype'] ?></td>
-                    <td style="text-align: center">
+                    <td class="hidden-phone"><?= $data['File']['mimetype'] ?></td>
+                    <td class="hidden-phone" style="text-align: center">
                         <?php if (strstr($data['File']['mimetype'], "image")):?>
                             <?= $this->Html->image("/".$data['File']['dir']."thumb/".$data['File']['filename']) ?>
                         <?php endif; ?>
                     </td>
-                    <td><?= $this->Number->toReadableSize($data['File']['filesize']) ?></td>
-                    <td>
+                    <td class="hidden-phone"><?= $this->Number->toReadableSize($data['File']['filesize']) ?></td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['File']['created']) ?>
                     </td>
                     <td>
@@ -95,8 +94,8 @@
                                 <?php if ($this->Admin->hasPermission($permissions['related']['files']['view'], $data['User']['id'])): ?>
                                     <li>
                                         <?= $this->Html->link(
-                                            '<i class="icon-picture"></i> View', 
-                                            '/' . $data['File']['dir'] . $data['File']['filename'], 
+                                            '<i class="icon-picture"></i> View',
+                                            '/' . $data['File']['dir'] . $data['File']['filename'],
                                             array('target' => '_blank', 'escape' => false)
                                         ) ?>
                                     </li>
@@ -126,7 +125,7 @@
                                                 $data['File']['id'],
                                                 null
                                             ) ?>
-                                        </li>  
+                                        </li>
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
@@ -135,15 +134,15 @@
                                                 null,
                                                 'file'
                                             ) ?>
-                                        </li> 
-                                    <?php endif ?>    
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach; ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

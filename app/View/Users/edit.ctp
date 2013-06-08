@@ -61,6 +61,15 @@ $(document).ready(function(){
 
 <h1>Edit Account</h1>
 
+<div class="pull-right" style="margin-bottom: 10px;">
+    <?= $this->Html->link(
+        '<i class="icon-chevron-left"></i> Return to Profile',
+        array('action' => 'profile', $this->Session->read('Auth.User.username')),
+        array('class' => 'btn', 'escape' => false
+        )) ?>
+</div>
+<div class="clearfix"></div>
+
 <?= $this->Form->create('User', array('class' => 'well', 'type' => 'file')) ?>
 
 <?php    

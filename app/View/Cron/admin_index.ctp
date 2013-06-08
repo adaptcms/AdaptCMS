@@ -47,21 +47,29 @@
         <thead>
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th>Runs Every...</th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
-                        <?= $this->Html->link($data['Cron']['title'], array(
-                            'action' => 'view', 
-                            $data['Cron']['id']
-                        )) ?>
+                        <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
+                            <?= $this->Html->link($data['Cron']['title'], array(
+                                'action' => 'edit',
+                                $data['Cron']['id']
+                            )) ?>
+                        <?php else: ?>
+                            <?= $data['Cron']['title'] ?>
+                        <?php endif ?>
                     </td>
                     <td>
+                        <?= $data['Cron']['period_amount'] ?>
+                        <?= $data['Cron']['period_type'] ?>(s)
+                    </td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Cron']['created']) ?>
                     </td>
                     <td>
@@ -72,14 +80,14 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <?php if (empty($this->params->named['trash'])): ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
                                                 $data['Cron']['id']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
                                         <li>
                                             <?= $this->Admin->delete(
                                                 $data['Cron']['id'],
@@ -89,30 +97,30 @@
                                         </li>
                                     <?php endif ?>
                                 <?php else: ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
                                         <li>
                                             <?= $this->Admin->restore(
                                                 $data['Cron']['id'],
                                                 $data['Cron']['title']
                                             ) ?>
-                                        </li>  
+                                        </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
                                         <li>
                                             <?= $this->Admin->delete_perm(
                                                 $data['Cron']['id'],
                                                 $data['Cron']['title'],
                                                 'cron item'
                                             ) ?>
-                                        </li>  
-                                    <?php endif ?>   
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

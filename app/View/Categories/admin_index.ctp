@@ -45,18 +45,17 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['categories']['view'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['Category']['title'], array(
-                                'admin' => false, 
+                                'admin' => false,
                                 'action' => 'view',
                                 $data['Category']['slug']
                             )) ?>
@@ -73,7 +72,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Category']['created']) ?>
                     </td>
                     <td>
@@ -115,7 +114,7 @@
                                                 $data['Category']['id'],
                                                 $data['Category']['title']
                                             ) ?>
-                                        </li>  
+                                        </li>
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['categories']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
@@ -124,15 +123,15 @@
                                                 $data['Category']['title'],
                                                 'category'
                                             ) ?>
-                                        </li>  
-                                    <?php endif ?>   
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach; ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

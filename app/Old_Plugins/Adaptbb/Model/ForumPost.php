@@ -51,6 +51,9 @@ class ForumPost extends AdaptbbAppModel
             'remove_html' => false
         ));
 
+        if (!empty($this->data['ForumPost']['content']))
+            $this->data['ForumPost']['content'] = stripslashes(str_replace('\n', '', $this->data['ForumPost']['content']));
+
         return true;
     }
 

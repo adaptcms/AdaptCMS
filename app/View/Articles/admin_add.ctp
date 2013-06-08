@@ -22,7 +22,7 @@
     )) ?>
 
     <?php foreach($fields as $key => $field): ?>
-        <?= $this->Element('FieldTypes/' . $field['Field']['field_type'], array(
+        <?= $this->Element('FieldTypes/' . $field['FieldType']['slug'], array(
             'key' => $key,
             'field' => $field,
             'icon' => !empty($field['Field']['description']) ? 

@@ -9,7 +9,7 @@
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
 
-<ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
+<ul id="admin-tab" class="nav nav-tabs pull-left" style="margin-bottom:0">
 	<li class="active">
 		<a href="#main" data-toggle="tab">Edit User</a>
 	</li>
@@ -23,7 +23,7 @@
 	</li>
 </ul>
 
-<div class="right">
+<div class="right hidden-phone">
     <?= $this->Html->link(
         '<i class="icon-chevron-left"></i> Return to Index',
         array('action' => 'index'),
@@ -140,43 +140,47 @@
 	<?php if (!empty($this->request->data['Article'])): ?>
 		<div class="tab-pane" id="articles">
 			<table class="table">
-			    <tr>
-			        <th>Title</th>
-			        <th>Category</th>
-			        <th>Status</th>
-			        <th>Created</th>
-			    </tr>
-				<?php foreach($this->request->data['Article'] as $article): ?>
-					<tr>
-						<td>
-							<?= $this->Html->link($article['title'], array(
-									'controller' => 'articles', 
-									'action' => 'edit', 
-									$article['id']
-							), array('target' => '_blank')) ?>
-						</td>
-						<td>
-							<?= $this->Html->link($article['Category']['title'], array(
-									'controller' => 'categories',
-									'action' => 'edit', 
-									$article['Category']['id']
-							), array('target' => '_blank')) ?>
-						</td>
-						<td>
-							<?php if ($article['status'] == 1): ?>
-								Article is Live
-							<?php elseif ($article['status'] == 0 && $article['publish_time'] == "0000-00-00 00:00:00"): ?>
-								Article is Saved as a Draft, NOT live
-							<?php else: ?>
-								Article will go Live - 
-								<?= $this->Time->format("F d, Y h:i a", $article['publish_time']) ?>
-							<?php endif ?>
-						</td>
-						<td>
-							<?= $this->Time->format('F jS, Y h:i A', $article['created']) ?>
-						</td>
-					</tr>
-				<?php endforeach ?>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th class="hidden-phone">Status</th>
+                        <th class="hidden-phone">Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($this->request->data['Article'] as $article): ?>
+                        <tr>
+                            <td>
+                                <?= $this->Html->link($article['title'], array(
+                                        'controller' => 'articles',
+                                        'action' => 'edit',
+                                        $article['id']
+                                ), array('target' => '_blank')) ?>
+                            </td>
+                            <td>
+                                <?= $this->Html->link($article['Category']['title'], array(
+                                        'controller' => 'categories',
+                                        'action' => 'edit',
+                                        $article['Category']['id']
+                                ), array('target' => '_blank')) ?>
+                            </td>
+                            <td class="hidden-phone">
+                                <?php if ($article['status'] == 1): ?>
+                                    Article is Live
+                                <?php elseif ($article['status'] == 0 && $article['publish_time'] == "0000-00-00 00:00:00"): ?>
+                                    Article is Saved as a Draft, NOT live
+                                <?php else: ?>
+                                    Article will go Live -
+                                    <?= $this->Time->format("F d, Y h:i a", $article['publish_time']) ?>
+                                <?php endif ?>
+                            </td>
+                            <td class="hidden-phone">
+                                <?= $this->Time->format('F jS, Y h:i A', $article['created']) ?>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
 			</table>
 		</div>
 	<?php endif ?>
@@ -212,8 +216,7 @@
 					<?= $this->Form->input('SettingValue.'.$row['SettingValue']['id'].'.description', array(
 						'value' => $row['SettingValue']['description'], 
 						'rows' => 15, 
-						'style' => 'width:500px',
-						'class' => 'required'
+						'class' => 'required span4'
 					)) ?><br />
 
 					<?= $this->Form->hidden('SettingValue.'.$row['SettingValue']['id'].'.id', array('value' => $row['SettingValue']['id'])) ?>

@@ -7,6 +7,7 @@ App::import('Model', 'ConnectionManager');
  * Class AppController
  * @property Cron $Cron
  * @property Module $Module
+ * @property Role $Role
  */
 class AppController extends Controller
 {
@@ -16,9 +17,7 @@ class AppController extends Controller
      * @var array 
      */
     public $components = array(
-        'DebugKit.Toolbar' => array(
-            'debug' => 2
-        ),
+        'DebugKit.Toolbar',
         'RequestHandler',
         'Auth' => array(
             'loginAction' => array(
@@ -66,6 +65,11 @@ class AppController extends Controller
      * @var string
      */
     private $permissions;
+
+    /**
+     * @var mixed
+     */
+    private $role;
 
     /**
      * A whole lot is going on in this one. We look for and attempt to load components/helpers, call Auth/Authorize,
@@ -226,6 +230,9 @@ class AppController extends Controller
                 'xml'
         );
 
+        if (!$this->getRole())
+            $this->setRole();
+
         if (!empty($this->allowedActions) && in_array($this->params->action, $this->allowedActions)) {
                 $allowed = 1;
         } elseif (strstr($this->params->action, "login") or strstr($this->params->action, "activate") or strstr($this->params->action, "logout") 
@@ -320,16 +327,23 @@ class AppController extends Controller
      */
     public function getRole()
     {
-            if ($this->Auth->user('role_id')) {
-                    return $this->Auth->user('role_id');
+        return $this->role;
+    }
+
+    public function setRole()
+    {
+        if ($this->Auth->user('role_id')) {
+            $this->role = $this->Auth->user('role_id');
+        } else {
+            $this->loadModel('Role');
+            if ($role = $this->Role->findByDefaults('default-guest')) {
+                $this->role = $role['Role']['id'];
             } else {
-                    $this->loadModel('Role');
-                    if ($role = $this->Role->findByDefaults('default-guest')) {
-                            return $role['Role']['id'];
-                    } else {
-                            return null;
-                    }
+                $this->role = null;
             }
+        }
+
+        return $this->role;
     }
 
 	public function permissionLookup( $params = array() )

@@ -52,20 +52,27 @@ class Page extends AppModel {
 
             if (empty($this->data['Page']['id']))
             {
-                $fh = fopen(VIEW_PATH."Pages/" . $this->data['Page']['slug'] . ".ctp", 'w') or die("can't open file");
+                $fh = fopen($this->_getPath($this->data['Page']['slug']), 'w') or die("can't open file");
                 fwrite($fh, $this->data['Page']['content']);
                 fclose($fh);
             } else {
-                $fh = fopen(VIEW_PATH."Pages/" . $this->data['Page']['slug'] . ".ctp", 'w') or die("can't open file");
+                $fh = fopen($this->_getPath($this->data['Page']['slug']), 'w') or die("can't open file");
                 fwrite($fh, $this->data['Page']['content']);
                 fclose($fh);
 
                 if ($this->data['Page']['title'] != $this->data['Page']['old_title']) {
-                    unlink(VIEW_PATH."Pages/" . $this->slug($this->data['Page']['old_title']) . ".ctp");
+                    unlink(
+                        $this->_getPath( $this->slug($this->data['Page']['old_title']) )
+                    );
                 }
             }
         }
 
         return true;
+    }
+
+    public function _getPath($slug)
+    {
+        return VIEW_PATH . 'Pages' . DS . $slug . '.ctp';
     }
 }

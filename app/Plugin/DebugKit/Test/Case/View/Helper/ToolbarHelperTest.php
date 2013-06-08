@@ -54,8 +54,8 @@ class ToolbarHelperTestCase extends CakeTestCase {
 		$this->_viewPaths = App::path('views');
 		App::build(array(
 			'View' => array(
-				CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'Test' . DS . 'test_app' . DS . 'View'. DS,
-				APP . 'Plugin' . DS . 'DebugKit' . DS . 'View'. DS,
+				CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'Test' . DS . 'test_app' . DS . 'View' . DS,
+				APP . 'Plugin' . DS . 'DebugKit' . DS . 'View' . DS,
 				CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'View' . DS
 		)), true);
 		$this->_debug = Configure::read('debug');
@@ -71,7 +71,7 @@ class ToolbarHelperTestCase extends CakeTestCase {
 		$this->assertTrue($result);
 	}
 /**
- * Ensure that the cache writing only affects the 
+ * Ensure that the cache writing only affects the
  * top most level of the history stack. As this is where the current request is stored.
  *
  * @return void
@@ -85,10 +85,10 @@ class ToolbarHelperTestCase extends CakeTestCase {
 		$this->Toolbar->writeCache('test', array('new', 'values'));
 
 		$result = $this->Toolbar->readCache('test');
-		$this->assertEqual($result, array('new', 'values'));
+		$this->assertEquals($result, array('new', 'values'));
 
 		$result = $this->Toolbar->readCache('test', 1);
-		$this->assertEqual($result, array('second', 'values'));
+		$this->assertEquals($result, array('second', 'values'));
 	}
 /**
  * test cache reading for views
@@ -98,15 +98,15 @@ class ToolbarHelperTestCase extends CakeTestCase {
 	public function testCacheRead() {
 		$result = $this->Toolbar->writeCache('test', array('stuff', 'to', 'cache'));
 		$this->assertTrue($result, 'Cache write failed %s');
-		
+
 		$result = $this->Toolbar->readCache('test');
-		$this->assertEqual($result, array('stuff', 'to', 'cache'), 'Cache value is wrong %s');
-		
+		$this->assertEquals($result, array('stuff', 'to', 'cache'), 'Cache value is wrong %s');
+
 		$result = $this->Toolbar->writeCache('test', array('new', 'stuff'));
 		$this->assertTrue($result, 'Cache write failed %s');
-		
+
 		$result = $this->Toolbar->readCache('test');
-		$this->assertEqual($result, array('new', 'stuff'), 'Cache value is wrong %s');
+		$this->assertEquals($result, array('new', 'stuff'), 'Cache value is wrong %s');
 	}
 /**
  * Test that reading/writing doesn't work with no cache config.
@@ -123,7 +123,7 @@ class ToolbarHelperTestCase extends CakeTestCase {
 		$this->assertFalse($result, 'Reading cache succeeded with no cache config %s');
 	}
 /**
- * ensure that getQueryLogs works and writes to the cache so the history panel will 
+ * ensure that getQueryLogs works and writes to the cache so the history panel will
  * work.
  *
  * @return void
@@ -144,7 +144,7 @@ class ToolbarHelperTestCase extends CakeTestCase {
 
 		$cached = $this->Toolbar->readCache('sql_log');
 		$this->assertTrue(isset($cached[$model->useDbConfig]));
-		$this->assertEqual($cached[$model->useDbConfig]['queries'][0], $result['queries'][0]);
+		$this->assertEquals($cached[$model->useDbConfig]['queries'][0], $result['queries'][0]);
 	}
 
 /**

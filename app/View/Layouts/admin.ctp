@@ -7,13 +7,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <?= $this->Html->css("bootstrap-responsive.min.css") ?>
-
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <?= $this->Html->script('html5.min.js') ?>
     <![endif]-->
-    <!--[if lt IE 8]>
+    <!--[if IE 7]>
       <?= $this->Html->css("font-awesome-ie7.min.css") ?>
     <![endif]-->
 
@@ -33,6 +31,7 @@
     <?php endif ?>
 
     <?= $this->Html->css("bootstrap-admin.min") ?>
+    <?= $this->Html->css("bootstrap-responsive.min.css") ?>
     <?= $this->Html->css("font-awesome.min.css") ?>
 
     <?= $this->Html->script('global.js') ?>
@@ -101,12 +100,13 @@
                     </a>
                   </h3>
                 </div>
-                <?php $options = array('articles', 'categories', 'fields', 'pages') ?>
+                <?php $options = array('articles', 'categories', 'fields', 'pages', 'field_types') ?>
                 <div id="content" class="accordion-body collapse<?= (in_array($this->params->controller, $options) ? ' in': '') ?>">
                   <ul class="nav nav-list">
                     <li><?= $this->Html->link('Articles', array('admin' => true, 'plugin' => false, 'controller' => 'articles', 'action' => 'index')) ?></li>
                     <li><?= $this->Html->link('Categories', array('admin' => true, 'plugin' => false, 'controller' => 'categories', 'action' => 'index')) ?></li>
                     <li><?= $this->Html->link('Fields', array('admin' => true, 'plugin' => false, 'controller' => 'fields', 'action' => 'index')) ?></li>
+                    <!-- <li><?= $this->Html->link('Field Types', array('admin' => true, 'plugin' => false, 'controller' => 'field_types', 'action' => 'index')) ?></li> -->
                     <li><?= $this->Html->link('Pages', array('admin' => true, 'plugin' => false, 'controller' => 'pages', 'action' => 'index')) ?></li>
                   </ul>
                 </div>
@@ -139,7 +139,7 @@
                 <div id="media" class="accordion-body collapse<?= (in_array($this->params->controller, $options) ? ' in': '') ?>">
                   <ul class="nav nav-list">
                     <li><?= $this->Html->link('Files', array('admin' => true, 'plugin' => false, 'controller' => 'files', 'action' => 'index')) ?></li>
-                    <li><?= $this->Html->link('Media Library', array('admin' => true, 'plugin' => false, 'controller' => 'media', 'action' => 'index')) ?></li>
+                    <li><?= $this->Html->link('Media Libraries', array('admin' => true, 'plugin' => false, 'controller' => 'media', 'action' => 'index')) ?></li>
                   </ul>
                 </div>
               </div>
@@ -151,7 +151,7 @@
                     </a>
                   </h3>
                 </div>
-                <?php $options = array('themes', 'templates', 'blocks', 'settings', 'tools') ?>
+                <?php $options = array('themes', 'templates', 'blocks', 'settings', 'tools', 'menus', 'cron') ?>
                 <div id="system" class="accordion-body collapse<?= (in_array($this->params->controller, $options) ? ' in': '') ?>">
                   <ul class="nav nav-list">
                     <li><?= $this->Html->link('Appearance', array('admin' => true, 'plugin' => false, 'controller' => 'templates', 'action' => 'index')) ?></li>

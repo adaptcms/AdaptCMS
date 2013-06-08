@@ -32,26 +32,36 @@ class CodeMirrorHelper extends AppHelper
 
         $this->Html->script('/libraries/codemirror/mode/javascript/javascript.js', false);
         $this->Html->script('/libraries/codemirror/mode/scheme/scheme.js', false);
-        echo "<script type='text/javascript'>
-        $(document).ready(function() {
-          var editor = CodeMirror.fromTextArea(document.getElementById('".$template."'), {
-            mode: 'scheme',
-            tabMode: 'indent',
-            theme: 'lesser-dark',
-            lineNumbers: true
-          });
-          editor.on('change', function() {
-            clearTimeout(pending);
-            setTimeout(update, 400);
-          });
-          var pending;
-          function looksLikeScheme(code) {
-            return !/^\s*\(\s*function\b/.test(code) && /^\s*[;\(]/.test(code);
-          }
-          function update() {
-            editor.setOption('mode', looksLikeScheme(editor.getValue()) ? 'scheme' : 'javascript');
-          }
-          update();
+        echo "<script type='text/javascript'>$(document).ready(function() {";
+        if (!is_array($template))
+        {
+            $template = array($template);
+        }
+
+        foreach($template as $id)
+        {
+            echo "
+              var editor = CodeMirror.fromTextArea(document.getElementById('".$id."'), {
+                mode: 'scheme',
+                tabMode: 'indent',
+                theme: 'lesser-dark',
+                lineNumbers: true
+              });
+              editor.on('change', function() {
+                clearTimeout(pending);
+                setTimeout(update, 400);
+              });
+              var pending;
+              function looksLikeScheme(code) {
+                return !/^\s*\(\s*function\b/.test(code) && /^\s*[;\(]/.test(code);
+              }
+              function update() {
+                editor.setOption('mode', looksLikeScheme(editor.getValue()) ? 'scheme' : 'javascript');
+              }
+              update();
+            ";
+        }
+        echo "
         });
         </script>";	
     }

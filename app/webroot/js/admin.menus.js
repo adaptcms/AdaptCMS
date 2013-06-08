@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 			var hidden = hidden + hidden_ord + hidden_text;
 
-			var div = '<li class="btn no-marg-left clearfix" id="' + count + '"><i class="icon icon-move"></i> ' + text + hidden + ' <i class="icon icon-trash remove-item"></i></li>';
+			var div = '<li class="btn no-marg-left clearfix" id="' + count + '"><i class="icon icon-move hidden-phone"></i> ' + text + hidden + ' <i class="icon icon-trash remove-item"></i></li>';
 
 			$('.menu-items ul').append(div);
 			$.smoothScroll({

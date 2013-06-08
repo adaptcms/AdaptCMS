@@ -85,16 +85,15 @@ class Menu extends AppModel
 
             $this->data['Menu']['menu_items'] = json_encode( $items );
 
-            $path = APP . DS . 'View' . DS . 'Elements' . DS . 'Menus' . DS;
             if (!empty($this->data['Menu']['old_title']) && $this->data['Menu']['title'] != $this->data['Menu']['old_title'])
             {
                 $old_slug = $this->slug($this->data['Menu']['old_title']);
 
-                if (file_exists($path . $old_slug . '.ctp'))
+                if (file_exists($this->_getPath($old_slug)))
                 {
                     rename(
-                        $path . $old_slug . '.ctp',
-                        $path . $this->data['Menu']['slug'] . '.ctp'
+                        $this->_getPath($old_slug),
+                        $this->_getPath($this->data['Menu']['slug'])
                     );
                 }
             }
@@ -105,7 +104,7 @@ class Menu extends AppModel
 
                 $content = $this->_generateMenuHtml($data);
 
-                $fh = fopen($path . $this->data['Menu']['slug'] . '.ctp', 'w');
+                $fh = fopen($this->_getPath($this->data['Menu']['slug']), 'w');
                 if ($fh)
                 {
                     fwrite($fh, $content);
@@ -140,10 +139,23 @@ class Menu extends AppModel
         return $results;
     }
 
+    /**
+     * @param array $data
+     * @return string
+     */
     public function _generateMenuHtml($data = array())
     {
         $view = new View();
 
         return $view->element('view_menu', array('data' => $data));
+    }
+
+    /**
+     * @param $slug
+     * @return string
+     */
+    public function _getPath($slug)
+    {
+        return APP . DS . 'View' . DS . 'Elements' . DS . 'Menus' . DS . $slug . '.ctp';
     }
 }

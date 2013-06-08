@@ -1,39 +1,37 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
 <?php $this->Html->addCrumb('Pages', null) ?>
 
-<div class="left">
+<div class="pull-left">
     <h1>Pages<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
-<div class="btn-group" style="float:right;margin-bottom:10px">
-  <a class="btn dropdown-toggle" data-toggle="dropdown">
+<div class="btn-group pull-right" style="margin-bottom:10px">
+    <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_add'])): ?>
+        <?= $this->Html->link('Add Page <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
+            'class' => 'btn btn-info',
+            'escape' => false
+        )) ?>
+    <?php endif ?>
+    <a class="btn dropdown-toggle" data-toggle="dropdown">
     View <i class="icon-picture"></i>
     <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu view">
+    </a>
+    <ul class="dropdown-menu view">
     <li>
         <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
-            'admin' => true, 
+            'admin' => true,
             'action' => 'index'
         ), array('escape' => false)) ?>
     </li>
     <li>
         <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
-            'admin' => true, 
-            'action' => 'index', 
+            'admin' => true,
+            'action' => 'index',
             'trash' => 1
         ), array('escape' => false)) ?>
     </li>
-  </ul>
+    </ul>
 </div>
-<div class="clear"></div>
-
-<?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_add'])): ?>
-    <?= $this->Html->link('Add Page <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
-        'class' => 'btn btn-info pull-right', 
-        'style' => 'margin-bottom:10px',
-        'escape' => false
-    )) ?>
-<?php endif ?>
+<div class="clearfix"></div>
 
 <?php if (empty($this->request->data)): ?>
     <div class="clearfix"></div>
@@ -46,19 +44,18 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['pages']['display'], $data['User']['id']) && $this->Admin->isActive($data, 'Page')): ?>
                             <?= $this->Html->link($data['Page']['title'], array(
-                                'admin' => false, 
-                                'action' => 'display', 
+                                'admin' => false,
+                                'action' => 'display',
                                 $data['Page']['slug']
                             )) ?>
                         <?php else: ?>
@@ -74,7 +71,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['Page']['created']) ?>
                     </td>
                     <td>
@@ -91,7 +88,7 @@
                                         ) ?>
                                     </li>
                                 <?php endif ?>
-                                
+
                                 <?php if (empty($this->params->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
@@ -132,8 +129,8 @@
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

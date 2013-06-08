@@ -73,13 +73,13 @@
                 <th>
                     <?= $this->Paginator->sort('title') ?>
                 </th>
-        		<th>
+        		<th class="hidden-phone">
                     <?= $this->Paginator->sort('User.username', 'Author') ?>
                 </th>
         		<th>
                     <?= $this->Paginator->sort('Category.title', 'Category') ?>
                 </th>
-                <th>
+                <th class="hidden-phone">
                     <?= $this->Paginator->sort('created') ?>
                 </th>
                 <th></th>
@@ -115,7 +115,7 @@
                             <?php endif ?>
                         </span>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['User']['username'], array(
                                 'controller' => 'users',
@@ -125,7 +125,7 @@
                         <?php endif ?>
                     </td>
                     <td><?= $data['Category']['title'] ?></td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time(
                             $data['Article']['created']
                         ) ?>

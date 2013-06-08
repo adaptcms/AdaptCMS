@@ -25,10 +25,11 @@
 	)) ?>
 	
 	<?= $this->Html->link('Attach Images <i class="icon icon-white icon-upload"></i>', '#media-modal', array(
-		'class' => 'btn btn-primary', 
+		'class' => 'btn btn-primary clearfix',
+        'style' => 'margin-bottom: 10px;',
 		'escape' => false, 
-		'data-toggle' => 'modal'))
-	?>
+		'data-toggle' => 'modal'
+    )) ?>
 
 	<ul class="selected-images span12 thubmnails">
 		<?php if (!empty($this->request->data['File'])): ?>

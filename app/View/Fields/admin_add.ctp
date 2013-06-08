@@ -36,9 +36,11 @@
 				'empty' => '- Choose Category -',
 				'value' => (!empty($this->params['pass'][0]) ? $this->params['pass'][0] : "")
 			)) ?>
-			<?= $this->Form->input('field_type', array(
-				'options' => $field_types, 
-				'empty' => '- Choose -', 'class' => 'required'
+			<?= $this->Form->input('field_type_id', array(
+				'options' => $field_types,
+                'label' => 'Field Type',
+				'empty' => '- Choose -',
+                'class' => 'required'
 			)) ?>
 
 			<div class="field_options" style="margin-bottom: 9px">
@@ -85,4 +87,12 @@
 			<div class="clearfix"></div>
 		</div>
 	</div>
+</div>
+
+<div class="hidden" id="field-rules">
+    <?php if (!empty($field_rules)): ?>
+        <?php foreach($field_rules as $field => $rule): ?>
+            <div class="field" data-id="field-<?= $field ?>"><?= $rule ?></div>
+        <?php endforeach ?>
+    <?php endif ?>
 </div>

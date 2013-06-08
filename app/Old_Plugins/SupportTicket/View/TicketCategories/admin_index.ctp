@@ -52,18 +52,17 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-            <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['ticket_categories']['admin_edit'], $data['User']['id'])): ?>
                             <?= $this->Html->link($data['TicketCategory']['title'], array(
-                                'action' => 'edit', 
+                                'action' => 'edit',
                                 $data['TicketCategory']['id']
                             )) ?>
                         <?php else: ?>
@@ -79,7 +78,7 @@
                             )) ?>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['TicketCategory']['created']) ?>
                     </td>
                     <td>
@@ -113,24 +112,24 @@
                                                 $data['TicketCategory']['id'],
                                                 $data['TicketCategory']['title']
                                             ) ?>
-                                        </li> 
+                                        </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['ticket_categories']['admin_delete'], $data['User']['id'])): ?> 
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['ticket_categories']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->delete_perm(
                                                 $data['TicketCategory']['id'],
                                                 $data['TicketCategory']['title'],
                                                 'ticket category'
                                             ) ?>
-                                        </li> 
-                                    <?php endif ?>    
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

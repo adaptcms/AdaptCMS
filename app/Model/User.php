@@ -18,6 +18,7 @@ class User extends AppModel
         'Block',
         'Category',
         'Field',
+        'FieldType',
         'Page',
         'File',
         'Media'

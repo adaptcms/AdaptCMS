@@ -19,7 +19,7 @@
 
 <?= $this->Html->link('« Back to Messages', array('action' => 'index'), array(
 	'class' => 'btn btn-primary pull-right', 
-	'style' => 'margin-bottom: 10px;margin-top: -10px'
+	'style' => 'margin-bottom: 10px;'
 )) ?>
 <div class="clearfix"></div>
 

@@ -32,30 +32,32 @@
 	<?= $this->Form->hidden('ord') ?>
 	<?= $this->Form->hidden('id') ?>
 
-	<h4>Category Order</h4>
+    <div class="hidden-phone">
+        <h4>Category Order</h4>
 
-	<ul id="sort-list" class="unstyled span6 no-marg-left">
-		<?php if (!empty($categories)): ?>
-			<?php foreach($categories as $category): ?>
-				<li class="btn" id="<?= $category['ForumCategory']['id'] ?>">
-					<i class="icon icon-move"></i> 
-					<span>
-						<?= $category['ForumCategory']['title'] ?>
-					</span> 
+        <ul id="sort-list" class="unstyled span6 no-marg-left">
+            <?php if (!empty($categories)): ?>
+                <?php foreach($categories as $category): ?>
+                    <li class="btn" id="<?= $category['ForumCategory']['id'] ?>">
+                        <i class="icon icon-move"></i>
+                        <span>
+                            <?= $category['ForumCategory']['title'] ?>
+                        </span>
 
-					<?php if ($category['ForumCategory']['id'] == $this->request->data['ForumCategory']['id']): ?>
-						<span class="label label-info pull-right">
-							Current Category
-						</span>
-					<?php endif ?>
+                        <?php if ($category['ForumCategory']['id'] == $this->request->data['ForumCategory']['id']): ?>
+                            <span class="label label-info pull-right">
+                                Current Category
+                            </span>
+                        <?php endif ?>
 
-					<div class="clearfix"></div>
-				</li>
-			<?php endforeach ?>
-		<?php endif ?>
-	</ul>
+                        <div class="clearfix"></div>
+                    </li>
+                <?php endforeach ?>
+            <?php endif ?>
+        </ul>
 
-	<div class="clearfix"></div>
+        <div class="clearfix"></div>
+    </div>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

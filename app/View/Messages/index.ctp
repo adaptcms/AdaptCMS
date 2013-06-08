@@ -5,15 +5,19 @@
 )) ?>
 <?php $this->Html->addCrumb('Messages', null) ?>
 
-<div class="left">
+<div class="pull-left">
     <h1>Messages - <?= ucfirst($box) ?></h1>
 </div>
-<div class="btn-group pull-right" style="margin-bottom:10px">
-  <a class="btn dropdown-toggle" data-toggle="dropdown">
+<div class="btn-group pull-right">
+    <?= $this->Html->link('Send Message', array('action' => 'send'), array(
+        'class' => 'btn btn-primary',
+        'style' => 'margin-right: 10px'
+    )) ?>
+    <a class="btn dropdown-toggle" data-toggle="dropdown">
     View <i class="icon-picture"></i>
     <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" style="min-width: 0px">
+    </a>
+    <ul class="dropdown-menu" style="min-width: 0px">
     <li<?= ($box == 'inbox' ? ' class="active"' : '') ?>>
         <?= $this->Html->link('Inbox', array('inbox')) ?>
     </li>
@@ -26,14 +30,9 @@
     <li<?= ($box == 'archive' ? ' class="active"' : '') ?>>
         <?= $this->Html->link('Archive', array('archive')) ?>
     </li>
-  </ul>
+    </ul>
 </div>
-<div class="clear"></div>
-
-<?= $this->Html->link('Send Message', array('action' => 'send'), array(
-    'class' => 'btn btn-primary pull-right', 
-    'style' => 'margin-bottom:10px;margin-right: 10px'
-)) ?>
+<div class="clearfix"></div>
 
 <?php if (!empty($messages)): ?>
     <table class="table table-hover">
@@ -46,10 +45,10 @@
                 <th><?= $this->Paginator->sort('title', 'Subject') ?></th>
                 <th><?= $this->Paginator->sort('Sender.username', 'From') ?>
                 <th><?= $this->Paginator->sort('Receiver.username', 'To') ?>
-                <th><?= $this->Paginator->sort('created') ?></th>
-                <th><?= $this->Paginator->sort('last_reply_time', 'Last Reply') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('last_reply_time', 'Last Reply') ?></th>
                 <?php if ($box != 'outbox'): ?>
-                    <th>Options</th>
+                    <th></th>
                 <?php endif ?>
             </tr>
         </thead>
@@ -114,10 +113,10 @@
                         $message['Receiver']['username']
                     )) ?>
                 </td>
-                <td>
+                <td class="hidden-phone">
                     <?= $this->Admin->time($message['Message']['created'], 'words') ?>
                 </td>
-                <td>
+                <td class="hidden-phone">
                     <?php if ($message['Message']['last_reply_time'] == '0000-00-00 00:00:00'): ?>
                         No Replies
                     <?php else: ?>

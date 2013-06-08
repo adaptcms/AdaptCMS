@@ -1,0 +1,22 @@
+{
+    "title": "Gaming",
+    "current_version": "1.0",
+    "api_id": 1,
+    "install": {
+    	"text": "Install/install_text.md",
+        "afterInstallFilter": {
+            "file": "Install/install.php",
+            "className": "InstallFilters",
+            "functionName": "afterInstallFilter"
+        }
+    },
+    "uninstall": {
+    	"text": "Install/uninstall_text.md"
+    },
+    "upgrade": {
+        "text": "Install/upgrade_text.md",
+        "sql": [
+            "Install/upgrade_data.sql"
+        ]
+    }
+}

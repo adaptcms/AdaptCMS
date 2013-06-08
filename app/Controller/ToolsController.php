@@ -422,11 +422,6 @@ class ToolsController extends AppController
 		}
 	}
 
-	public function admin_convert_adaptbb()
-	{
-
-	}
-
 	/**
 	* This is a big one. After we get the wordpress prefix, category the content will be copied to and textfield for post content
 	* we then loop through each wordpress item and save it. Currently this includes pages, posts, users (password is reset with email),

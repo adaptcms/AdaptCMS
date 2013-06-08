@@ -110,23 +110,22 @@
         <thead>
             <tr>
                 <th><?= $this->Paginator->sort('username') ?></th>
-                <th><?= $this->Paginator->sort('status') ?></th>
-                <th><?= $this->Paginator->sort('email', 'E-Mail') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('status') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('email', 'E-Mail') ?></th>
                 <th><?= $this->Paginator->sort('Role.title', 'Role') ?></th>
-                <th><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
             </tr>
         </thead>
-
-        <?php foreach ($this->request->data as $data): ?>
-                <tbody>
+        <tbody>
+            <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
                             <?= $this->Html->link(
                                     $data['User']['username'], array(
-                                        'admin' => false, 
-                                        'action' => 'profile', 
+                                        'admin' => false,
+                                        'action' => 'profile',
                                         $data['User']['username']
                                     )
                             ) ?>
@@ -134,20 +133,20 @@
                             <?= $data['User']['username'] ?>
                         <?php endif ?>
                     </td>
-                    <td style="text-align: center">
+                    <td class="hidden-phone" style="text-align: center">
                         <?php if ($data['User']['status'] == 0): ?>
                             <i class="icon-remove-sign user-status" id="<?= $data['User']['id'] ?>"></i>
                         <?php else: ?>
                             <i class="icon-ok-sign user-status"></i>
                         <?php endif ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $data['User']['email'] ?>
                     </td>
                     <td>
                         <?= $data['Role']['title'] ?>
                     </td>
-                    <td>
+                    <td class="hidden-phone">
                         <?= $this->Admin->time($data['User']['created']) ?>
                     </td>
                     <td>
@@ -190,7 +189,7 @@
                                                 $data['User']['id'],
                                                 $data['User']['username']
                                             ) ?>
-                                        </li>  
+                                        </li>
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
@@ -199,15 +198,15 @@
                                                 $data['User']['username'],
                                                 'user'
                                             ) ?>
-                                        </li>   
-                                    <?php endif ?>  
+                                        </li>
+                                    <?php endif ?>
                                 <?php endif ?>
                             </ul>
                         </div>
                     </td>
                 </tr>
-            </tbody>
-        <?php endforeach ?>
+            <?php endforeach ?>
+        </tbody>
     </table>
 <?php endif ?>
 

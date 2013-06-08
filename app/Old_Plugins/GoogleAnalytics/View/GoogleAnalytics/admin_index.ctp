@@ -48,7 +48,7 @@
 
 	<div class="google-analytics-container">
 		<div class="inner">
-			<div id="chart" style="height:250px"></div>
+			<div id="chart" class="hidden-phone" style="height:250px"></div>
 
 			<div id="chart-data" class="hidden">
 				<?php foreach($views as $view): ?>

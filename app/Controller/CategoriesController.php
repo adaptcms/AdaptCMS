@@ -253,6 +253,18 @@ class CategoriesController extends AppController
 	*/
 	public function view($slug)
 	{
+        $category = $this->Category->findBySlug($slug);
+
+        if (empty($category))
+        {
+            $this->Session->setFlash('Invalid Category', 'flash_error');
+            $this->redirect(array(
+                'controller' => 'pages',
+                'action' => 'display',
+                'home'
+            ));
+        }
+
 		$this->loadModel('SettingValue');
 		
 		if ($limit = $this->SettingValue->findByTitle('Number of Articles to list on Category Page'))
@@ -263,9 +275,9 @@ class CategoriesController extends AppController
 		}
 
 		$conditions = array(
-			'Category.slug' => $slug,
+			'Article.category_id' => $category['Category']['id'],
 			'Article.status' => 1,
-                        'Article.publish_time <=' => date('Y-m-d H:i:s'),
+            'Article.publish_time <=' => date('Y-m-d H:i:s'),
 			'Article.deleted_time' => '0000-00-00 00:00:00'
 		);
 
@@ -277,14 +289,6 @@ class CategoriesController extends AppController
 		$this->paginate = array(
 			'order' => 'Article.created DESC',
 			'conditions' => $conditions,
-			'contain' => array(
-				'Category',
-				'ArticleValue' => array(
-					'Field',
-					'File'
-				),
-				'User'
-			),
 			'limit' => $limit
 		);
 
@@ -293,18 +297,6 @@ class CategoriesController extends AppController
 		$this->request->data = $this->Category->Article->getAllRelatedArticles(
 			$articles
 		);
-
-		$category = $this->Category->findBySlug($slug);
-
-		if (empty($category))
-		{
-			$this->Session->setFlash('Invalid Category', 'flash_error');
-			$this->redirect(array(
-				'controller' => 'pages', 
-				'action' => 'display', 
-				'home'
-			));
-		}
 
 		$this->set('category', $category['Category']);
 		$this->set('article', $this->request->data);
