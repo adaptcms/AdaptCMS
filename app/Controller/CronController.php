@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class CronController
+ */
 class CronController extends AppController
 {
     /**

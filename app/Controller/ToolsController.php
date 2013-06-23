@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class ToolsController
+ */
 class ToolsController extends AppController
 {
     /**
@@ -30,7 +34,7 @@ class ToolsController extends AppController
 	{
 		$total_count = 0;
 		$success_count = 0;
-		$folders = array('persistent', 'models', 'views');
+		$folders = array('persistent', 'persistent/api', 'models', 'views');
 
 		foreach($folders as $folder) {
 			if (clearCache(null, $folder)) {
@@ -39,6 +43,13 @@ class ToolsController extends AppController
 
 			$total_count++;
 		}
+
+        if (function_exists('apc_clear_cache'))
+        {
+            apc_clear_cache();
+            apc_clear_cache('user');
+            apc_clear_cache('opcode');
+        }
 
 		if ($success_count == $total_count && $success_count > 0) {
 			$this->Session->setFlash('Cache has been cleared.', 'flash_success');

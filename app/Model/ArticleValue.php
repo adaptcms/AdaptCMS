@@ -78,7 +78,14 @@ class ArticleValue extends AppModel
                 }
                 elseif (isset($row['data']['error']) && $row['data']['error'] == 4 && empty($row['data']['tmp_name']))
                 {
-                    $this->data['ModuleValue']['data'] = $this->data['ModuleValue']['filename'];
+                    if (!empty($this->data['ArticleValue']['filename']))
+                    {
+                        $this->data['ArticleValue']['data'] = $this->data['ArticleValue']['filename'];
+                    }
+                    else
+                    {
+                        $this->data['ArticleValue']['data'] = '';
+                    }
                 }
                 else
                 {

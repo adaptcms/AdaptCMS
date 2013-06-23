@@ -12,8 +12,9 @@
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v2.1
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 /**
  * ViewBlock implements the concept of Blocks or Slots in the View layer.
  * Slots or blocks are combined with extending views and layouts to afford slots
@@ -139,7 +140,7 @@ class ViewBlock {
 	public function concat($name, $value = null, $mode = ViewBlock::APPEND) {
 		if (isset($value)) {
 			if (!is_string($value)) {
-				throw new CakeException(__d('cake_dev', '$value must be a string.'));
+				throw new CakeException(__d('cake_dev', '%s must be a string.', '$value'));
 			}
 			if (!isset($this->_blocks[$name])) {
 				$this->_blocks[$name] = '';

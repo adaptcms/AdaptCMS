@@ -1,6 +1,6 @@
 {
     "title": "Polls",
-    "current_version": "0.9",
+    "current_version": "1.0",
     "api_id": 1,
     "install": {
     	"block_active": 1,
@@ -20,11 +20,5 @@
     	"sql": [
     		"Install/uninstall_data.sql"
     	]
-    },
-    "upgrade": {
-        "text": "Install/upgrade_text.md",
-        "sql": [
-            "Install/upgrade_data.sql"
-        ]
     }
 }

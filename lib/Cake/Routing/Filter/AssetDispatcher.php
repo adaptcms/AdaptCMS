@@ -14,7 +14,7 @@
  * @link		  http://cakephp.org CakePHP(tm) Project
  * @package		  Cake.Routing
  * @since		  CakePHP(tm) v 2.2
- * @license		  MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('DispatcherFilter', 'Routing');
@@ -124,7 +124,7 @@ class AssetDispatcher extends DispatcherFilter {
 		}
 
 		$plugin = Inflector::camelize($parts[0]);
-		if (CakePlugin::loaded($plugin)) {
+		if ($plugin && CakePlugin::loaded($plugin)) {
 			unset($parts[0]);
 			$fileFragment = urldecode(implode(DS, $parts));
 			$pluginWebroot = CakePlugin::path($plugin) . 'webroot' . DS;

@@ -15,7 +15,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model.Datasource
  * @since         CakePHP(tm) v 0.10.0.1076
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('DataSource', 'Model/Datasource');
@@ -641,7 +641,6 @@ class DboSource extends DataSource {
  * Returns an array of all result rows for a given SQL query.
  * Returns false if no rows matched.
  *
- *
  * ### Options
  *
  * - `cache` - Returns the cached version of the query, if exists and stores the result in cache.
@@ -652,7 +651,7 @@ class DboSource extends DataSource {
  * @param string $sql SQL statement
  * @param array $params parameters to be bound as values for the SQL statement
  * @param array $options additional options for the query.
- * @return array Array of resultset rows, or false if no rows matched
+ * @return boolean|array Array of resultset rows, or false if no rows matched
  */
 	public function fetchAll($sql, $params = array(), $options = array()) {
 		if (is_string($options)) {

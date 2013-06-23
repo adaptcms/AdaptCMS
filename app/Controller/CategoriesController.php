@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class CategoriesController
+ */
 class CategoriesController extends AppController
 {
     /**

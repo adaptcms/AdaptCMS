@@ -32,7 +32,7 @@
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
  */
-	Configure::write('debug', 2);
+
 
 /**
  * Configure the Error handler used to handle errors for your application.  By default
@@ -116,7 +116,45 @@
  * Turn off all caching application-wide.
  *
  */
-	Configure::write('Cache.disable', true);
+    $admin_matches = array(
+//        '/admin/plugins'
+    );
+
+    $matches = array(
+        '/article',
+        '/media',
+        '/category',
+        '/users/profile/'
+    );
+
+    /*
+    foreach($admin_matches as $match)
+    {
+        if (!isset($caching) && strstr($_SERVER['REQUEST_URI'], $match))
+        {
+            $caching = false;
+        }
+    }
+    */
+
+    if (!isset($caching))
+    {
+        foreach($matches as $match)
+        {
+            if (!isset($caching) && !strstr($_SERVER['REQUEST_URI'], '/admin') && strstr($_SERVER['REQUEST_URI'], $match))
+            {
+                $caching = false;
+            }
+        }
+    }
+
+    $caching = (!isset($caching) ? true : $caching);
+
+	Configure::write('Cache.disable', $caching);
+
+    Configure::write('debug', $caching);
+
+    Configure::write('dev', 0);
 
 /**
  * Enable cache checking.
@@ -174,7 +212,8 @@
  */
 	Configure::write('Session', array(
 		'defaults' => 'php',
-		'cookie' => 'adaptcms'
+		'cookie' => 'adaptcms',
+		'checkAgent' => false
 	));
 
 /**
@@ -232,11 +271,11 @@
  */
 $engine = 'File';
 if (extension_loaded('apc') && function_exists('apc_dec') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
-	$engine = 'Apc';
+//	$engine = 'Apc';
 }
 
 // In development mode, caches should expire quickly.
-$duration = '+999 days';
+$duration = '+1 day';
 if (Configure::read('debug') >= 1) {
 	$duration = '+10 seconds';
 }
@@ -265,7 +304,8 @@ Cache::config('_cake_model_', array(
 	'prefix' => $prefix . 'cake_model_',
 	'path' => CACHE . 'models' . DS,
 	'serialize' => ($engine === 'File'),
-	'duration' => $duration
+	'duration' => $duration,
+    'callbacks' => true
 ));
 
 Cache::config('week', array(
@@ -275,12 +315,20 @@ Cache::config('week', array(
     'prefix' => 'cake_week_'
 ));
 
-Configure::write('Component.Api.api_url', 'http://api.adaptcoding.com/');
-Configure::write('Component.Api.adaptcms_url', 'http://adaptcms.charliepage88.com/');
+Cache::config('api', array(
+    'engine' => $engine,
+    'duration' => '+1 day',
+    'path' => CACHE . 'persistent' . DS,
+    'prefix' => 'api_',
+    'groups' => array('api')
+));
+
+Configure::write('Component.Api.api_url', 'http://api.adaptcms.com/');
+Configure::write('Component.Api.adaptcms_url', 'http://www.adaptcms.com/');
 
 /**
  * Custom Defined global variables
  */
 
 define('VIEW_PATH', ROOT . '/app/View/');
-define('ADAPTCMS_VERSION', 'Beta 3');
+define('ADAPTCMS_VERSION', '3.0');

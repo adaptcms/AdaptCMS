@@ -5,6 +5,9 @@
     "install": {
         "text": "Install/install_text.md"
     },
+    "uninstall": {
+        "text": "Install/uninstall_text.md"
+    },
     "helpers": {
         "Disqus.Disqus":null
     }

@@ -40,11 +40,13 @@ class Link extends LinksAppModel
     );
 
     /**
-    * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
-    * created the block. This is customizable so you can do a contain of related data if you wish.
-    *
-    * @return associative array
-    */
+     * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
+     * created the block. This is customizable so you can do a contain of related data if you wish.
+     *
+     * @param $data
+     * @param $user_id
+     * @return array
+     */
 	public function getBlockData($data, $user_id)
     {
         $cond = array(
@@ -76,12 +78,13 @@ class Link extends LinksAppModel
     }
 
     /**
-    * This works in conjuction with the Search feature. With links, we just confirm that the Search can use this.
-    * For a more detailed example, checkout the 'Article' model. You can specify conditions, contain, order, etc.
-    *
-    * @param q string containing search parameter
-    * @return associative array
-    */
+     * This works in conjuction with the Search feature. With links, we just confirm that the Search can use this.
+     * For a more detailed example, checkout the 'Article' model. You can specify conditions, contain, order, etc.
+     *
+     * @param string $q
+     * @internal param string $q containing search parameter
+     * @return array
+     */
     public function getSearchParams( $q )
     {
         return array(
@@ -93,7 +96,7 @@ class Link extends LinksAppModel
     * We get any files and format them accordingly to ensure that any file uploaded is attached to this link.
     * If a link title is not specified, then the title of the link is set. Also any file picked, is attached to the link. (non-uploaded files)
     * 
-    * @return true
+    * @return boolean
     */
     public function beforeSave()
     {
@@ -114,9 +117,7 @@ class Link extends LinksAppModel
         }
 
         if (empty($this->data['Link']['link_title']))
-        {
             $this->data['Link']['link_title'] = $this->data['Link']['title'];
-        }
 
         return true;
     }

@@ -15,9 +15,9 @@
       <?= $this->Html->css("font-awesome-ie7.min.css") ?>
     <![endif]-->
 
-  <?php
-    echo $this->Html->meta('icon');
+  <?= $this->Html->meta('favicon.ico', '/img/favicon.ico', array('type' => 'icon')) ?>
 
+  <?php
     echo $this->fetch('meta');
     echo $this->fetch('css');
     echo $this->fetch('script');
@@ -25,10 +25,6 @@
     <?= $this->Html->script('jquery.min.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
     <?= $this->Html->script('jquery.validate.min.js') ?>
-
-    <?php if ($this->params->action != "admin_index"): ?>
-      <?= $this->Html->script('angular.min.js') ?>
-    <?php endif ?>
 
     <?= $this->Html->css("bootstrap-admin.min") ?>
     <?= $this->Html->css("bootstrap-responsive.min.css") ?>
@@ -195,7 +191,9 @@
           'lastClass' => 'active'
         ), 'Home') ?>
 
+        <!--nocache-->
         <?= $this->Session->flash() ?>
+        <!--/nocache-->
 
         <?= $this->fetch('content') ?>
 

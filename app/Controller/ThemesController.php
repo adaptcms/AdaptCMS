@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class ThemesController
+ */
 class ThemesController extends AppController
 {
     /**

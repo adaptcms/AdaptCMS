@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class SettingsController
+ */
 class SettingsController extends AppController
 {
     /**

@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class BlocksController
+ */
 class BlocksController extends AppController
 {
     /**

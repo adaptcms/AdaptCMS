@@ -9,9 +9,10 @@
     <title>
       <?= $title_for_layout ?>
     </title>
-    <?php
-      echo $this->Html->meta('icon');
 
+    <?= $this->Html->meta('favicon.ico', '/img/favicon.ico', array('type' => 'icon')) ?>
+
+    <?php
       echo $this->fetch('meta');
       echo $this->fetch('css');
       echo $this->fetch('script');
@@ -50,8 +51,6 @@
     <!--[if IE 7]>
       <?= $this->Html->css("font-awesome-ie7.min.css") ?>
     <![endif]-->
-
-    <link rel="shortcut icon" href="<?= $this->webroot ?>img/favicon.ico">
   </head>
 
   <body>
@@ -67,6 +66,7 @@
           <a class="brand" href="<?= $this->webroot ?>">Your Website</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
+                <!--nocache-->
             	<?php if ($this->Session->check('Auth.User.username')): ?>
             		Logged in as 
             			<?= $this->Html->link($this->Session->read('Auth.User.username'), 
@@ -113,6 +113,7 @@
         				array('class' => 'navbar-link')
         			) ?>
             	<?php endif ?>
+                <!--/nocache-->
             </p>
             <ul class="nav">
               <li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
@@ -185,11 +186,13 @@
               <?php endif ?>
               <li class="nav-header">Poll</li>
 
-              <?= $this->element('show_poll', array('data' => $block_data['show-poll'])) ?>
+              <!--nocache-->
+                <?= $this->element('Polls.show_poll', array('data' => $block_data['show-poll'])) ?>
+              <!--/nocache-->
 
               <li class="nav-header">Links</li>
 
-              <?= $this->element('links_list', array('data' => $block_data['latest-links'])) ?>
+              <?= $this->element('Links.links_list', array('data' => $block_data['latest-links'])) ?>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
@@ -200,8 +203,9 @@
             'escape' => false,
             'lastClass' => 'active'
           ), 'Home') ?>
-
+          <!--nocache-->
           <?= $this->Session->flash() ?>
+          <!--/nocache-->
 
           <?= $this->fetch('content') ?>
         </div><!--/span-->

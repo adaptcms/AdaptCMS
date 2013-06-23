@@ -7,7 +7,10 @@ App::import('Model', 'ConnectionManager');
  * Class AppController
  * @property Cron $Cron
  * @property Module $Module
+ * @property Permission $Permission
  * @property Role $Role
+ * @property redirect $redirect
+ * @property params $params
  */
 class AppController extends Controller
 {
@@ -58,7 +61,8 @@ class AppController extends Controller
         'AutoLoadJS',
         'Admin'
     );
-    
+    public $cacheAction = '1 day';
+
     /**
      * Will hold the permissions later on
      * 
@@ -130,7 +134,7 @@ class AppController extends Controller
             }
         }
 
-        parent::beforeFilter();
+//        parent::beforeFilter();
 
         $this->Security->blackHoleCallback = 'blackhole';
         $this->Auth->allow();
@@ -145,9 +149,15 @@ class AppController extends Controller
         $this->set('username', $this->Auth->user('username'));
 
         $this->layout();
+
+        $this->loadModel('Permission');
+
+        if (!$this->getRole())
+            $this->setRole();
+
+        $this->blocksLookup();
         $this->accessCheck();
         $this->runCron();
-        $this->blocksLookup();
 
         $this->loadModel('SettingValue');
 
@@ -220,93 +230,84 @@ class AppController extends Controller
      */
     public function accessCheck()
     {
-        $this->loadModel('Permission');
-
         $webroot_exts = array(
-                'json',
-                'css',
-                'js',
-                'less',
-                'xml'
+            'json',
+            'css',
+            'js',
+            'less',
+            'xml'
         );
 
-        if (!$this->getRole())
-            $this->setRole();
-
         if (!empty($this->allowedActions) && in_array($this->params->action, $this->allowedActions)) {
-                $allowed = 1;
+            $allowed = 1;
         } elseif (strstr($this->params->action, "login") or strstr($this->params->action, "activate") or strstr($this->params->action, "logout") 
-                or strstr($this->params->action, "register") or strstr($this->params->action, "_password")
-                or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "denied")
-                or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home")
-                || !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install' && !strstr($this->params->action, 'plugin') ||
-                !empty($this->params->ext) && in_array($this->params->ext, $webroot_exts)) {
+            or strstr($this->params->action, "register") or strstr($this->params->action, "_password")
+            or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "denied")
+            or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home")
+            || !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install' && !strstr($this->params->action, 'plugin') ||
+            !empty($this->params->ext) && in_array($this->params->ext, $webroot_exts)) {
                         $this->Auth->allow($this->params->action);
         } elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id')
-                || $this->params->action == "admin" && !$this->Auth->User('id')
-                && strtolower($this->params->controller) != "users"
-                ) {
-                        $this->Auth->deny($this->params->action);
+            || $this->params->action == "admin" && !$this->Auth->User('id')
+            && strtolower($this->params->controller) != "users"
+            ) {
+                $this->Auth->deny($this->params->action);
         } elseif ($this->getRole()) {
-                if (empty($this->params->plugin)) {
-                        $this->params->plugin = '';
-                }
+            if (empty($this->params->plugin)) {
+                $this->params->plugin = '';
+            }
 
-                if ($this->params->action == "admin" && $this->params->controller == "pages") {
+            if ($this->params->action == "admin" && $this->params->controller == "pages") {
+                $permission = $this->Permission->find('first', array(
+                    'conditions' => array(
+                        'Permission.role_id' => $this->getRole(),
+                        'Permission.status' => 1,
+                        'Permission.action LIKE' => '%admin%'
+                    )
+                ));
+            } else {
+                if (!empty($this->params->pass[0]) && is_numeric($this->params->pass[0])) {
+                    $permission = $this->Permission->find('first', array(
+                        'conditions' => array(
+                            'Permission.role_id' => $this->getRole(),
+                            'Permission.action' => $this->params->action,
+                            'Permission.controller' => $this->params->controller,
+                            'Permission.plugin' => $this->params->plugin,
+                            'Permission.action_id' => $this->params->pass[0]
+                        )
+                    ));
 
+                    if (empty($permission)) {
                         $permission = $this->Permission->find('first', array(
-                                'conditions' => array(
-                                        'Permission.role_id' => $this->getRole(),
-                                        'Permission.status' => 1,
-                                        'Permission.action LIKE' => '%admin%'
-                                )
+                            'conditions' => array(
+                                'Permission.role_id' => $this->getRole(),
+                                'Permission.action' => $this->params->action,
+                                'Permission.controller' => $this->params->controller,
+                                'Permission.plugin' => $this->params->plugin
+                            )
                         ));
+                    }
                 } else {
-                        if (!empty($this->params->pass[0]) && is_numeric($this->params->pass[0])) {
-                                $permission = $this->Permission->find('first', array(
-                                        'conditions' => array(
-                                                'Permission.role_id' => $this->getRole(),
-                                                'Permission.action' => $this->params->action,
-                                                'Permission.controller' => $this->params->controller,
-                                                'Permission.plugin' => $this->params->plugin,
-                                                'Permission.action_id' => $this->params->pass[0]
-                                        )
-                                ));
-
-                                if (empty($permission)) {
-                                        $permission = $this->Permission->find('first', array(
-                                                'conditions' => array(
-                                                        'Permission.role_id' => $this->getRole(),
-                                                        'Permission.action' => $this->params->action,
-                                                        'Permission.controller' => $this->params->controller,
-                                                        'Permission.plugin' => $this->params->plugin,
-                                                ),
-                                        ));
-                                }
-
-                        } else {
-                                $permission = $this->Permission->find('first', array(
-                                        'conditions' => array(
-                                                'Permission.role_id' => $this->getRole(),
-                                                'Permission.action' => $this->params->action,
-                                                'Permission.controller' => $this->params->controller,
-                                        )
-                                ));
-                        }
+                    $permission = $this->Permission->find('first', array(
+                        'conditions' => array(
+                            'Permission.role_id' => $this->getRole(),
+                            'Permission.action' => $this->params->action,
+                            'Permission.controller' => $this->params->controller
+                        )
+                    ));
                 }
+            }
 
-                $this->permissions = $this->getRelatedPermissions($permission);
-                $this->set('permissions', $this->permissions);
+            $this->permissions = $this->getRelatedPermissions($permission);
+            $this->set('permissions', $this->permissions);
 
-                if (!empty($permission['Permission']['status']) && $permission['Permission']['status'] == 0) {
-                        $this->denyRedirect();
-                        $this->Auth->deny($this->params->action);
-                } elseif (empty($permission['Permission']['status'])) {
-                        $this->denyRedirect();
-                        $this->Auth->deny($this->params->action);
-                } elseif ($permission['Permission']['status'] == 1) {
-                        $this->Auth->allow($this->params->action);
-                }
+            if (!empty($permission['Permission']['status']) && $permission['Permission']['status'] == 0) {
+                $this->Auth->deny($this->params->action);
+            } elseif (empty($permission['Permission']['status'])) {
+                $this->Auth->deny($this->params->action);
+            } elseif ($permission['Permission']['status'] == 1) {
+                $this->Auth->allow($this->params->action);
+            }
         }
     }
 
@@ -502,21 +503,24 @@ class AppController extends Controller
                     'message' => 'You do not have access to this page'
             )));
     	} else {
-            if (Configure::read('debug') == 0)
+            if (Configure::read('debug') == 2 && 1 == 2)
             {
-                $this->Session->setFlash('Cannot find this page.', 'flash_error');
+                die(debug($this->params));
+            }
+            else
+            {
+                /*
+                $this->Session->setFlash('You do not have access to this page.', 'flash_error');
                 $this->redirect(array(
-                        'plugin' => false,
+                        'plugin' => null,
                         'admin' => false, 
                         'controller' => 'pages', 
                         'action' => 'display', 
                         'denied'
                     )
                 );
-            }
-            else
-            {
-                die(debug($this->params));
+                */
+                throw new NotFoundException();
             }
         }
     }
@@ -530,9 +534,9 @@ class AppController extends Controller
      */
     public function slug($str, $orig = null) {
         if ($orig == null) {
-                return strtolower(Inflector::slug($str, "-"));
+            return strtolower(Inflector::slug($str, "-"));
         } else {
-                return strtolower(Inflector::slug($str));
+            return strtolower(Inflector::slug($str));
         }
     }
 
@@ -587,13 +591,13 @@ class AppController extends Controller
                             array('Block.location LIKE' => '%"*"%'),
                             array('Block.location LIKE' => '%"' . $location . '"%'),
                             array('Block.location LIKE' => '%"' . $location2 . '"%')
-                            ),
-                        'Block.deleted_time' => '0000-00-00 00:00:00'
                         ),
+                        'Block.deleted_time' => '0000-00-00 00:00:00'
+                    ),
                     'contain' => array(
                         'Module'
-                        )
-                    );
+                    )
+                );
             } else {
                 $location = $this->params->controller.'|'.$this->params->action;
                 $block_cond = array(
@@ -601,13 +605,13 @@ class AppController extends Controller
                         'OR' => array(
                             array('Block.location LIKE' => '%"*"%'),
                             array('Block.location LIKE' => '%"' . $location . '"%')
-                            ),
-                        'Block.deleted_time' => '0000-00-00 00:00:00'
                         ),
+                        'Block.deleted_time' => '0000-00-00 00:00:00'
+                    ),
                     'contain' => array(
                         'Module'
-                        )
-                    );
+                    )
+                );
             }
 
             $data = $this->Block->find('all', $block_cond);
@@ -650,10 +654,10 @@ class AppController extends Controller
                                 'Permission.module_id' => $row['Module']['id'],
                                 'Permission.action NOT LIKE' => '%admin%',
                                 'Permission.role_id' => $this->getRole()
-                                ),
+                            ),
                             'order' => 'Permission.related DESC',
                             'limit' => 1
-                            ));
+                        ));
 
                         if (!empty($permissions))
                         {

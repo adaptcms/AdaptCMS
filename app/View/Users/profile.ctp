@@ -24,6 +24,7 @@
 			'action' => 'index'
 		)) ?>
 	</li>
+    <!--nocache-->
 	<?php if ($this->Admin->isLoggedIn()): ?>
 		<li class="pull-right">
 			<?= $this->Html->link('Edit Your Profile', array(
@@ -31,6 +32,7 @@
 			)) ?>
 		</li>
 	<?php endif ?>
+    <!--/nocache-->
 </ul>
 
 <div id="myTabContent" class="tab-content well">

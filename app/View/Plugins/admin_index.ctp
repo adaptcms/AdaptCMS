@@ -1,6 +1,6 @@
 <script type="text/javascript">
 $(document).ready(function() {
-    $(".info").popover({
+    $(".plugin-info").popover({
         trigger: 'hover',
         placement: 'left'
     });
@@ -32,7 +32,19 @@ $(document).ready(function() {
 
         <tbody>
             <?php foreach ($plugins as $key => $plugin): ?>
-                <tr>
+                <?php if (!empty($plugin['current_version'])): ?>
+                    <?php if (!empty($plugin['data'])): ?>
+                        <?php if ($plugin['data']['current_version'] == $plugin['current_version']): ?>
+                            <tr class="plugin-info" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is up to date">
+                        <?php else: ?>
+                            <tr class="plugin-info" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is out of date, newest version is <?= $plugin['data']['current_version'] ?>">
+                        <?php endif ?>
+                    <?php else: ?>
+                        <tr>
+                    <?php endif ?>
+                <?php else: ?>
+                    <tr>
+                <?php endif ?>
                     <td style="width:30%">
                         <?php if (!empty($plugin['data']['short_description'])): ?>
                             <strong>
@@ -56,12 +68,12 @@ $(document).ready(function() {
                     <?php if (!empty($plugin['current_version'])): ?>      
                         <?php if (!empty($plugin['data'])): ?>
                             <?php if ($plugin['data']['current_version'] == $plugin['current_version']): ?>
-                                <td class="info hidden-phone" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is up to date">
+                                <td class="hidden-phone">
                                     <?= $plugin['current_version'] ?> 
                                     <i class="icon icon-ok info"></i>
                                 </td>
                             <?php else: ?>
-                                <td class="info hidden-phone" data-title="<?= $plugin['data']['title'] ?>" data-content="Plugin is out of date, newest version is <?= $plugin['data']['current_version'] ?>">
+                                <td class="hidden-phone">
                                     <?= $plugin['current_version'] ?> 
                                     <i class="icon icon-ban-circle"></i>
 

@@ -1,4 +1,6 @@
 <?php
+App::uses('AppController', 'Controller');
+
 /**
  * Class ArticlesController
  * @property Article $Article

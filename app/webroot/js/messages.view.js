@@ -29,16 +29,14 @@ $(document).ready(function() {
 	            			title: subject
 	            		}
 	            	}
-	            }, function(return_data) {
-	            var data = $.parseJSON(return_data);
-	           
+	            }, function(data) {
 				if (data.status)
 				{
 					$(".messages").load(form_url + '?unique=' + Math.round(Math.random()*10000) + ' .messages', function() {
 						$("#flashMessage.alert-success").show().fadeOut(3000);
 					});
 				}
-	        });
+	        }, 'json');
 		}
 	});
 });

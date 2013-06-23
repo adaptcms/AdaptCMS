@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class MediaController
+ */
 class MediaController extends AppController
 {
     /**

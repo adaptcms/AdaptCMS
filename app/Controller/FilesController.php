@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class FilesController
+ */
 class FilesController extends AppController
 {
     /**
@@ -168,9 +172,7 @@ class FilesController extends AppController
             )
         ));
         
-        echo $id;
-
-        if ($data['File']['user_id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+        if ($file['File']['user_id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
             $this->Session->setFlash('You cannot access another users item.', 'flash_error');
             $this->redirect(array('action' => 'index'));	        	

@@ -1,5 +1,11 @@
 <?php
-
+App::uses('AppController', 'Controller');
+/**
+ * Class PollsController
+ * @property Poll $Poll
+ * @property paginate $paginate
+ * @property pageLimit $pageLimit
+ */
 class PollsController extends PollsAppController
 {
     /**
@@ -25,7 +31,7 @@ class PollsController extends PollsAppController
     /**
     * Returns a paginated index of Polls
     *
-    * @return associative array of polls data
+    * @return array of polls data
     */
 	public function admin_index()
 	{
@@ -132,15 +138,16 @@ class PollsController extends PollsAppController
 	}
 
     /**
-    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
-    *
-    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
-    *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
-    */
+     * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+     *
+     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+     *
+     * @param integer $id of the database entry, redirect to index if no permissions
+     * @param string $title of this entry, used for flash message
+     * @param boolean $permanent
+     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
+     * @return redirect
+     */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
 	    $this->Poll->id = $id;
@@ -167,10 +174,10 @@ class PollsController extends PollsAppController
         }
 
 	    if ($delete) {
-            $this->Session->setFlash('Your poll has been deleted.', 'flash_success');
+            $this->Session->setFlash('Your poll `' . $title . '` has been deleted.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('Unable to delete your poll.', 'flash_error');
+            $this->Session->setFlash('Unable to delete your poll `' . $title . '`.', 'flash_error');
         }
 	}
 
@@ -179,8 +186,8 @@ class PollsController extends PollsAppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
+    * @param integer $id of database entry, redirect if no permissions
+    * @param string $title of this entry, used for flash message
     * @return redirect
     */
     public function admin_restore($id = null, $title = null)
@@ -219,14 +226,17 @@ class PollsController extends PollsAppController
 
     	$id = $this->request->data['Poll']['id'];
 
-        $conditions = array();
+        $conditions = array(
+            'conditions' => array(
+                'PollVotingValue.plugin_poll_id' => $id
+            )
+        );
+
         if ($this->Auth->user('id'))
         {
-            $conditions['conditions'] = array(
-                'OR' => array(
-                    'PollVotingValue.user_id' => $this->Auth->user('id'),
-                    'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
-                )
+            $conditions['conditions']['OR'] = array(
+                'PollVotingValue.user_id' => $this->Auth->user('id'),
+                'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
             );
         }
         else
@@ -234,18 +244,9 @@ class PollsController extends PollsAppController
             $conditions['conditions']['PollVotingValue.user_ip'] = $_SERVER['REMOTE_ADDR'];
         }
 
-        $count = $this->Poll->find('first', array(
-            'conditions' => array(
-                'Poll.id' => $id
-            ),
-            'contain' => array(
-                'PollVotingValue' => array(
-                    $conditions
-                )
-            )
-        ));
+        $count = $this->Poll->PollVotingValue->find('count', $conditions);
 
-        if (count($count['PollVotingValue']) == 0) {
+        if ($count == 0) {
         	$this->Poll->id = $id;
 
         	$data = array(
@@ -280,20 +281,25 @@ class PollsController extends PollsAppController
 
         			$find['Poll']['total_votes'] = $find['Poll']['total_votes'] + $row['votes'];
         		}
-
-        		$this->set('data', $find);
-
-		    	$this->viewPath = 'Elements';
-		    	$this->render('poll_vote_results');
         	}
         } else {
-        	return json_encode(array(
-        		'error' => true,
-        		'message' => 'You have already voted on this poll'
-        	));
+        	$this->set('error', 'You have already voted on this poll');
         }
 
-    	return json_encode($count);
+        if (empty($find))
+            $find = $this->Poll->find('first', array(
+                'conditions' => array(
+                    'Poll.id' => $id
+                ),
+                'contain' => array(
+                    'PollValue'
+                )
+            ));
+
+        $this->set('data', $find);
+
+        $this->viewPath = 'Elements';
+        $this->render('Polls.poll_vote_results');
 	}
 
     /**
@@ -314,9 +320,7 @@ class PollsController extends PollsAppController
 		));
 
 		if (!empty($this->permissions['related']['polls']['vote']))
-		{
 			$find['Poll']['can_vote'] = $this->Poll->canVote($find, $this->Auth->user('id'));
-		}
 
         $data = $this->Poll->totalVotes($find);
 
@@ -328,7 +332,7 @@ class PollsController extends PollsAppController
     	$this->set(compact('data'));
 
     	$this->viewPath = 'Elements';
-    	$this->render('poll_vote_results');	
+    	$this->render('Polls.poll_vote_results');
 	}
 
     /**
@@ -374,6 +378,6 @@ class PollsController extends PollsAppController
         $this->set(compact('data'));
 
     	$this->viewPath = 'Elements';
-    	$this->render('poll_vote');			
+    	$this->render('Polls.poll_vote');
 	}
 }

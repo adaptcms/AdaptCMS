@@ -11,7 +11,7 @@
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Controller
  * @since         CakePHP(tm) v 0.2.9
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
 App::uses('CakeResponse', 'Network');
@@ -632,11 +632,11 @@ class Controller extends Object implements CakeEventListener {
  */
 	public function constructClasses() {
 		$this->_mergeControllerVars();
-		$this->Components->init($this);
 		if ($this->uses) {
 			$this->uses = (array)$this->uses;
-			list(, $this->modelClass) = pluginSplit(current($this->uses));
+			list(, $this->modelClass) = pluginSplit(reset($this->uses));
 		}
+		$this->Components->init($this);
 		return true;
 	}
 

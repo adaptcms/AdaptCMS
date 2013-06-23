@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class PermissionsController
+ */
 class PermissionsController extends AppController
 {
     /**

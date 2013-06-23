@@ -7,12 +7,13 @@
  * For full copyright and license information, please see the LICENSE.txt
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright   Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link        http://cakephp.org CakePHP(tm) Project
- * @package     Cake.View.Helper
- * @since       CakePHP(tm) v 0.10.0.1076
- * @license     MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://cakephp.org CakePHP(tm) Project
+ * @package       Cake.View.Helper
+ * @since         CakePHP(tm) v 0.10.0.1076
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 App::uses('ClassRegistry', 'Utility');
 App::uses('AppHelper', 'View/Helper');
 App::uses('Hash', 'Utility');
@@ -272,6 +273,13 @@ class FormHelper extends AppHelper {
 	public function tagIsInvalid() {
 		$entity = $this->entity();
 		$model = array_shift($entity);
+
+		// 0.Model.field. Fudge entity path
+		if (empty($model) || is_numeric($model)) {
+			array_splice($entity, 1, 0, $model);
+			$model = array_shift($entity);
+		}
+
 		$errors = array();
 		if (!empty($entity) && isset($this->validationErrors[$model])) {
 			$errors = $this->validationErrors[$model];
@@ -2645,7 +2653,7 @@ class FormHelper extends AppHelper {
 					) {
 						$htmlOptions['disabled'] = 'disabled';
 					}
-					if ($hasDisabled && !$disabledIsArray) {
+					if ($hasDisabled && !$disabledIsArray && $attributes['style'] === 'checkbox') {
 						$htmlOptions['disabled'] = $attributes['disabled'] === true ? 'disabled' : $attributes['disabled'];
 					}
 

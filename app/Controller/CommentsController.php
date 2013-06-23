@@ -1,6 +1,10 @@
 <?php
+App::uses('AppController', 'Controller');
 App::import('Vendor', 'securimage');
 
+/**
+ * Class CommentsController
+ */
 class CommentsController extends AppController
 {
     /**

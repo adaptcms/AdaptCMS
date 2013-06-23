@@ -1,4 +1,6 @@
 <?php
+App::uses('AppController', 'Controller');
+
 /**
  * Class UsersController
  * @property Field $Field
@@ -794,7 +796,7 @@ class UsersController extends AppController {
         if ($username != $this->Auth->user('username') && $this->permissions['any'] == 0)
         {
             $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
+            $this->redirect('/');
         }
 
     	$this->request->data = $this->User->find('first', array(
@@ -815,7 +817,13 @@ class UsersController extends AppController {
     		)
     	));
 
-    	$this->loadModel('Field');
+        if (empty($this->request->data))
+        {
+            $this->Session->setFlash('User does not exist.', 'flash_error');
+            $this->redirect('/');
+        }
+
+        $this->loadModel('Field');
 
     	$data = $this->Field->getData('User', $this->request->data['User']['id']);
 

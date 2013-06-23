@@ -1,5 +1,9 @@
 <?php
-
+App::uses('AppController', 'Controller');
+/**
+ * Class LinksController
+ * @property Link $Link
+ */
 class LinksController extends LinksAppController
 {
     /**
@@ -11,7 +15,6 @@ class LinksController extends LinksAppController
     * array of permissions for this page
     */
 	private $permissions;
-
 
     /**
     * In this beforeFilter we will get the permissions to be used in the view files
@@ -47,7 +50,7 @@ class LinksController extends LinksAppController
     /**
     * Returns a paginated index of Links
     *
-    * @return associative array of links data
+    * @return array of links data
     */
 	public function admin_index()
 	{
@@ -106,8 +109,8 @@ class LinksController extends LinksAppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of link data
+    * @param integer $id of the database entry, redirect to index if no permissions
+    * @return array of link data
     */
 	public function admin_edit($id = null)
 	{
@@ -143,15 +146,16 @@ class LinksController extends LinksAppController
 	}
 
     /**
-    * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
-    *
-    * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
-    *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
-    */
+     * If item has no delete time, then initial deletion is to the trash area (making it in-active on site, if applicable)
+     *
+     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
+     *
+     * @param integer $id of the database entry, redirect to index if no permissions
+     * @param string $title of this entry, used for flash message
+     * @param string $permanent
+     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
+     * @return redirect
+     */
 	public function admin_delete($id = null, $title = null, $permanent = null)
 	{
 	    $this->Link->id = $id;
@@ -192,8 +196,8 @@ class LinksController extends LinksAppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
+    * @param integer $id of database entry, redirect if no permissions
+    * @param string $title of this entry, used for flash message
     * @return redirect
     */
     public function admin_restore($id = null, $title = null)
@@ -251,6 +255,6 @@ class LinksController extends LinksAppController
             return $views;
     	}
 
-    	return;
+    	return false;
     }
 }

@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class SearchController
+ */
 class SearchController extends AppController
 {
     /**

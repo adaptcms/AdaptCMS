@@ -2,6 +2,9 @@
 App::import('Model', 'ConnectionManager');
 App::uses('Controller', 'Controller');
 
+/**
+ * Class InstallController
+ */
 class InstallController extends Controller
 {
     public $name = 'Install';
@@ -22,23 +25,97 @@ class InstallController extends Controller
                 'beta2'
             )
         ),
-//        'beta3' => array(
-//            'sql' => array(
-//                'beta',
-//                'beta2',
-//                'beta3'
-//            )
-//        )
+        'beta3' => array(
+            'sql' => array(
+                'beta',
+                'beta2',
+                'beta3'
+            )
+        )
     );
 
     public function beforeFilter()
     {
         $this->layout = 'install';
         $this->viewPath = 'View';
+
+        $actions = array(
+            'database',
+            'sql',
+            'account'
+        );
+
+        if (in_array($this->params->action, $actions))
+            $this->_tryDbConnection();
+
+        $api_actions = array(
+            'install_theme',
+            'uninstall_theme',
+            'upgrade_theme',
+            'install_plugin',
+            'uninstall_plugin',
+            'upgrade_plugin',
+            'upgrade'
+        );
+
+        if (in_array($this->params->action, $api_actions))
+        {
+            if ($this->Session->read('Auth.User.Role.id'))
+            {
+                $role_id = $this->Session->read('Auth.User.Role.id');
+            }
+            else
+            {
+                $role_id = 0;
+            }
+
+            $this->loadModel('Permission');
+            $permission = $this->Permission->find('first', array(
+                'conditions' => array(
+                    'Permission.controller' => 'install',
+                    'Permission.action' => $this->params->action,
+                    'Permission.status' => 1,
+                    'Permission.role_id' => $role_id
+                )
+            ));
+
+            if (empty($permission))
+                throw new ForbiddenException();
+        }
+    }
+
+    public function _tryDbConnection()
+    {
+        try {
+            $db = ConnectionManager::getDataSource('default');
+            if ($db->isConnected()) {
+                if (file_exists($this->_installFile()))
+                    $this->redirect('/');
+            }
+        } catch (Exception $e) {
+        }
+    }
+
+    public function _installFile()
+    {
+        return APP . 'tmp' . DS . 'system' . DS .'installed.txt';
+    }
+
+    public function _updateInstallFile()
+    {
+        $file = $this->_installFile();
+        if (!file_exists($file))
+        {
+            $fp = fopen($file, 'w') or die("can't open file");
+            fwrite($fp, ADAPTCMS_VERSION);
+            fclose($fp);
+        }
+
+        return true;
     }
 
     public function index()
-    {	
+    {
         $this->set('title_for_layout', 'Install AdaptCMS');
         $this->set('upgrade_versions', $this->upgrade_versions);
 
@@ -148,12 +225,18 @@ class InstallController extends Controller
 
     public function finish()
     {
+        if (!$this->request->is('POST'))
+            $this->redirect('/');
+
+        $this->_updateInstallFile();
+
         $this->set('title_for_layout', 'Install AdaptCMS :: Finish');
     }
 
     public function upgrade($version = null)
     {
         $this->set('title_for_layout', 'Install AdaptCMS :: Upgrade');
+        $this->set(compact('version'));
 
         if (!in_array($version, array_keys($this->upgrade_versions) ))
         {
@@ -167,7 +250,8 @@ class InstallController extends Controller
             $this->set('upgrade_text', file_get_contents($notes_path . $this->upgrade_versions[$version]['upgrade_text']) );
         }
 
-        if (!empty($this->request->data)) {
+        if (!empty($this->request->data))
+        {
             $prefix = ConnectionManager::enumConnectionObjects();
 
             if (!empty($this->upgrade_versions[$version]['sql']))
@@ -176,11 +260,18 @@ class InstallController extends Controller
 
                 foreach($this->upgrade_versions[$version]['sql'] as $file)
                 {
-                    $sql_results[] = $this->runSQL($prefix['default']['prefix'], $file . '-upgrade', 1, 0);
+                    $results = $this->runSQL($prefix['default']['prefix'], $file . '-upgrade', 1, 0);
+                    $sql_results[] = $results;
+
+                    if (!empty($results['error']))
+                        $error = 1;
                 }
 
                 $this->set( compact('sql_results') );
             }
+
+            if (!isset($error))
+                $this->_updateInstallFile();
         }
     }
 
@@ -453,100 +544,117 @@ class InstallController extends Controller
         }
 
         if ( !empty( $this->request->data ) ) {
-            $prefix = ConnectionManager::enumConnectionObjects();
-            $settings = array();
-
-            if ( !empty( $data['install']['block_active'] ) ) {
-                $settings['block_active'] = $data['install']['block_active'];
-            }
-
-            if ( !empty( $data['install']['is_searchable'] ) ) {
-                $settings['is_searchable'] = $data['install']['is_searchable'];
-            }
-
-            if ( !empty( $data['install']['model_title'] ) ) {
-                $settings['model_title'] = $data['install']['model_title'];
-            }
-
-            if ( !empty( $data['install']['title'] ) ) {
-                $settings['title'] = $data['install']['title'];
-            } elseif ( !empty( $data['title'] )) {
-                $settings['title'] = $data['title'];
-            }
-            
-            if ( !empty( $data['install']['permissions']) )
+            if (!is_writable($path))
             {
-                $settings['permissions'] = $data['install']['permissions'];
+                $this->set('error', 'Please chmod this folder recursively to 777 - ' . $path);
             }
+            elseif (!is_writable(APP . 'Plugin'))
+            {
+                $this->set('error', 'Please chmod this folder recursively to 777 - ' . APP . 'Plugin');
+            }
+            else
+            {
+                $prefix = ConnectionManager::enumConnectionObjects();
+                $settings = array();
 
-            $sql = $this->runPluginSQL( 'install', $prefix['default']['prefix'], $sql_files, $path, $settings );
-
-            $this->set( compact( 'sql' ) );
-
-            if ( empty( $sql['error'] ) ) {
-                if ( mkdir( $new_path, 0775 ) ) {
-                    rename( $path, $new_path );
+                if ( !empty( $data['install']['block_active'] ) ) {
+                    $settings['block_active'] = $data['install']['block_active'];
                 }
 
-                if ( !empty($data['components']) )
+                if ( !empty( $data['install']['is_searchable'] ) ) {
+                    $settings['is_searchable'] = $data['install']['is_searchable'];
+                }
+
+                if ( !empty( $data['install']['model_title'] ) ) {
+                    $settings['model_title'] = $data['install']['model_title'];
+                }
+
+                if ( !empty( $data['install']['title'] ) ) {
+                    $settings['title'] = $data['install']['title'];
+                } elseif ( !empty( $data['title'] )) {
+                    $settings['title'] = $data['title'];
+                }
+
+                if ( !empty( $data['install']['permissions']) )
                 {
-                    $system_path = realpath(CACHE . '/../system/');
-
-                    if (file_exists($system_path . '/components.json'))
-                    {
-                        $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
-                        $add = array_keys($data['components']);
-
-                        foreach($components_array as $key => $component)
-                        {
-                            if (!is_numeric($key) && $key == $add[0] || $component == $add[0])
-                            {
-                                $component_exists = 1;
-                            }
-                        }
-
-                        if (empty($component_exists))
-                        {
-                            $components_array[$add[0]] = $data['components'][$add[0]];
-                        }
-
-                        $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
-                        fwrite($fh, json_encode($components_array));
-                        fclose($fh);
-                    }
+                    $settings['permissions'] = $data['install']['permissions'];
                 }
 
-                if ( !empty($data['helpers']) )
-                {
-                    $system_path = realpath(CACHE . '/../system/');
+                $sql = $this->runPluginSQL( 'install', $prefix['default']['prefix'], $sql_files, $path, $settings );
 
-                    if (file_exists($system_path . '/helpers.json'))
-                    {
-                        $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
-                        $add = array_keys($data['helpers']);
+                $this->set( compact( 'sql' ) );
 
-                        foreach($helpers_array as $key => $helper)
-                        {
-                            if (!is_numeric($key) && $key == $add[0] || $helper == $add[0])
-                            {
-                                $helper_exists = 1;
-                            }
-                        }
-
-                        if (empty($helper_exists))
-                        {
-                            $helpers_array[$add[0]] = $data['helpers'][$add[0]];
-                        }
-
-                        $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
-                        fwrite($fh, json_encode($helpers_array));
-                        fclose($fh);
+                if ( empty( $sql['error'] ) ) {
+                    if ( !file_exists($new_path) && mkdir( $new_path, 0775 ) ) {
+                        rename( $path, $new_path );
                     }
-                }
+                    else
+                    {
+                        $this->loadModel('User');
+                        $this->User->recursiveDelete($new_path);
+                        rename( $path, $new_path );
+                    }
 
-                $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
-            } else {
-                $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
+                    if ( !empty($data['components']) )
+                    {
+                        $system_path = realpath(CACHE . '/../system/');
+
+                        if (file_exists($system_path . '/components.json'))
+                        {
+                            $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
+                            $add = array_keys($data['components']);
+
+                            foreach($components_array as $key => $component)
+                            {
+                                if (!is_numeric($key) && $key == $add[0] || $component == $add[0])
+                                {
+                                    $component_exists = 1;
+                                }
+                            }
+
+                            if (empty($component_exists))
+                            {
+                                $components_array[$add[0]] = $data['components'][$add[0]];
+                            }
+
+                            $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
+                            fwrite($fh, json_encode($components_array));
+                            fclose($fh);
+                        }
+                    }
+
+                    if ( !empty($data['helpers']) )
+                    {
+                        $system_path = realpath(CACHE . '/../system/');
+
+                        if (file_exists($system_path . '/helpers.json'))
+                        {
+                            $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
+                            $add = array_keys($data['helpers']);
+
+                            foreach($helpers_array as $key => $helper)
+                            {
+                                if (!is_numeric($key) && $key == $add[0] || $helper == $add[0])
+                                {
+                                    $helper_exists = 1;
+                                }
+                            }
+
+                            if (empty($helper_exists))
+                            {
+                                $helpers_array[$add[0]] = $data['helpers'][$add[0]];
+                            }
+
+                            $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
+                            fwrite($fh, json_encode($helpers_array));
+                            fclose($fh);
+                        }
+                    }
+
+                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
+                } else {
+                    $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
+                }
             }
         }
     }
@@ -728,33 +836,49 @@ class InstallController extends Controller
         }
 
         if ( !empty( $this->request->data ) ) {
-            $prefix = ConnectionManager::enumConnectionObjects();
-            $settings = array();
-
-            if ( !empty( $data['install']['title'] ) ) {
-                $settings['title'] = $data['install']['title'];
-            } elseif ( !empty( $data['title'] )) {
-                $settings['title'] = $data['title'];
-            } else {
-                $settings['title'] = $theme;
+            if (!is_writable($path))
+            {
+                $this->set('error', 'Please chmod this folder recursively to 777 - ' . $path);
             }
+            elseif (!is_writable(VIEW_PATH . 'Themed'))
+            {
+                $this->set('error', 'Please chmod this folder recursively to 777 - ' . VIEW_PATH . 'Themed');
+            }
+            else
+            {
+                $prefix = ConnectionManager::enumConnectionObjects();
+                $settings = array();
 
-            if (!empty($data['install']['afterInstallFilter']))
-                $settings['afterInstallFilter'] = $data['install']['afterInstallFilter'];
-
-            $sql = $this->runThemeSQL( 'install', $prefix['default']['prefix'], $sql_files, $path, $settings );
-
-            $this->set( compact( 'sql' ) );
-
-            if ( empty( $sql['error'] ) ) {
-                if (!file_exists($new_path))
-                {
-                    rename( $path, $new_path );
+                if ( !empty( $data['install']['title'] ) ) {
+                    $settings['title'] = $data['install']['title'];
+                } elseif ( !empty( $data['title'] )) {
+                    $settings['title'] = $data['title'];
+                } else {
+                    $settings['title'] = $theme;
                 }
 
-                $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
-            } else {
-                $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
+                if (!empty($data['install']['afterInstallFilter']))
+                    $settings['afterInstallFilter'] = $data['install']['afterInstallFilter'];
+
+                $sql = $this->runThemeSQL( 'install', $prefix['default']['prefix'], $sql_files, $path, $settings );
+
+                $this->set( compact( 'sql' ) );
+
+                if ( empty( $sql['error'] ) ) {
+                    if ( !file_exists($new_path) && mkdir( $new_path, 0775 ) ) {
+                        rename( $path, $new_path );
+                    }
+                    else
+                    {
+                        $this->loadModel('User');
+                        $this->User->recursiveDelete($new_path);
+                        rename( $path, $new_path );
+                    }
+
+                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
+                } else {
+                    $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
+                }
             }
         }
     }

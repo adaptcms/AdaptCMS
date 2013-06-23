@@ -103,4 +103,37 @@ class AppModel extends Model
 
         return $results;
     }
+
+    /**
+     *
+     */
+    public function afterSave()
+    {
+        clearCache();
+    }
+
+    /**
+     *
+     */
+    public function afterDelete()
+    {
+        clearCache();
+    }
+
+    /**
+     * @param $dir
+     * @return bool
+     */
+    public function recursiveDelete($dir) {
+        if (!file_exists($dir)) return true;
+        if (!is_dir($dir) || is_link($dir)) return unlink($dir);
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') continue;
+            if (!$this->recursiveDelete($dir . "/" . $item)) {
+                chmod($dir . "/" . $item, 0777);
+                if (!$this->recursiveDelete($dir . "/" . $item)) return false;
+            };
+        }
+        return rmdir($dir);
+    }
 }

@@ -1,1 +1,1 @@
-Sorry to see you go, please reconsider in the future.
+Thank you for using the Support Ticket Plugin! You can re-install any time in the main Plugins area.

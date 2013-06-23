@@ -1,5 +1,5 @@
 <?php
-
+App::uses('AppController', 'Controller');
 /**
  * Class PagesController
  * @property SettingValue $SettingValue
@@ -8,7 +8,7 @@
  * @property paginate $paginate
  * @property params $params
  * @property pageLimit $pageLimit
- * @property Api $Api
+ * @property CmsApi $CmsApi
  */
 class PagesController extends AppController 
 {
@@ -37,6 +37,9 @@ class PagesController extends AppController
 		parent::beforeFilter();
 
 		$this->permissions = $this->getPermissions();
+
+        if ($this->params->action == 'display' || $this->params->action == 'admin')
+            Configure::write('Cache.disable', false);
 	}
 
     /**
@@ -377,11 +380,13 @@ class PagesController extends AppController
 		/*
 		* API Component is used to connect to the adaptcms.com website
 		*/
-		$this->Api = $this->Components->load('Api');
+		$this->CmsApi = $this->Components->load('CmsApi');
 
-		$this->set('news', $this->Api->getSiteArticles(1, 'news'));
-		$this->set('blog', $this->Api->getSiteArticles(1, 'blog'));
-		$this->set('newest_plugin', $this->Api->getPlugins(1, 'created', 'desc'));
-		$this->set('newest_theme', $this->Api->getThemes(1, 'created', 'desc'));
+        $data = $this->CmsApi->getAdminData();
+
+		$this->set('news', $data['site-news']);
+		$this->set('blog', $data['site-blogs']);
+		$this->set('plugin', $data['plugins']);
+		$this->set('theme', $data['themes']);
 	}	
 }

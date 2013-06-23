@@ -53,9 +53,9 @@
                     url: "<?= $this->webroot ?>admin/templates/ajax_quick_search/",
                     dataType: "json",
                     type: "POST",
+                    cache: false,
                     data: {search: query, theme: $("#theme").val()},
                     success: function(data) {
-                        console.log(data);
                         if (data) {
                             var return_list = [], i = data.length;
                             while (i--) {
@@ -76,7 +76,7 @@
         }
     });
 
-    $(".info").popover({
+    $(".theme-info").popover({
         trigger: 'hover',
         placement: 'left'
     });
@@ -173,8 +173,16 @@
                         </div>
                     </td>
                 </tr>
-            <?php else: ?>  
-                <tr>
+            <?php else: ?>
+                <?php if (!empty($data['Data']['data'])): ?>
+                    <?php if ($data['Data']['data']['current_version'] == $data['Data']['current_version']): ?>
+                        <tr class="theme-info" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is up to date">
+                    <?php else: ?>
+                        <tr class="theme-info" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is out of date, newest version is <?= $data['Data']['data']['current_version'] ?>">
+                    <?php endif ?>
+                <?php else: ?>
+                    <tr>
+                <?php endif ?>
                     <td>
                         <?= $data['Theme']['title'] ?> 
                         <?php if (!empty($data['Theme']['id'])): ?>
@@ -212,12 +220,12 @@
                     </td>
                     <?php if (!empty($data['Data']['data'])): ?>
                         <?php if ($data['Data']['data']['current_version'] == $data['Data']['current_version']): ?>
-                            <td class="info hidden-phone" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is up to date">
+                            <td class="hidden-phone">
                                 <?=$data['Data']['current_version'] ?>
-                                <i class="icon icon-ok info"></i>
+                                <i class="icon icon-ok"></i>
                             </td>
                         <?php else: ?>
-                            <td class="info hidden-phone" data-title="<?= $data['Data']['data']['title'] ?>" data-content="Theme is out of date, newest version is <?= $data['Data']['data']['current_version'] ?>">
+                            <td class="hidden-phone">
                                 <?= $data['Data']['current_version'] ?>
                                 <i class="icon icon-ban-circle"></i>
                                 <div class="clearfix"></div>

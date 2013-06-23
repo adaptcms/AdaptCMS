@@ -4,6 +4,7 @@
     "api_id": 7,
     "install": {
     	"model_title": "GoogleAnalytics",
+        "text": "Install/install_text.md",
         "permissions": {
             "file": "Install/permissions.php",
             "className": "PermissionsInstall",
@@ -12,5 +13,8 @@
     },
     "components": {
     	"GoogleAnalytics.GoogleAnalytics":null
+    },
+    "uninstall": {
+        "text": "Install/uninstall_text.md"
     }
 }

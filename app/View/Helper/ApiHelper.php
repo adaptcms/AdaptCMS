@@ -53,7 +53,7 @@ class ApiHelper extends AppHelper
 
     /**
      * Unused JSONP function that does a call to the API, we use CURL instead.
-     * 
+     *
      * @param string $action
      * @param string $data
      * @param string $return
@@ -64,7 +64,7 @@ class ApiHelper extends AppHelper
     {
         return "<script type='text/javascript'>
                     $(document).ready(function() {
-                            $.getJSON('" . $this->url() . "get/" . $action . "?callback=?', " . json_encode( $data ) . ", function(data) {
+                            $.getJSON('" . $this->url() . "v1/" . $action . "?callback=?', " . json_encode( $data ) . ", function(data) {
                         " . $return . "
                       });
                     });
@@ -103,10 +103,10 @@ class ApiHelper extends AppHelper
 
         return;
     }
-    
+
     /**
      * Writes cache to specified file with specified data
-     * 
+     *
      * @param string $file
      * @param string $data
      * @return none
@@ -133,7 +133,7 @@ class ApiHelper extends AppHelper
             $data['api_secret'] = Configure::read('api_secret');
         }
 
-        $url = $this->url() . "get/" . $action . $this->getArgs($data);
+        $url = $this->url() . "v1/" . $action . $this->getArgs($data);
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

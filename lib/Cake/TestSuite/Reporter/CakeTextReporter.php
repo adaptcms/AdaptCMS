@@ -14,8 +14,9 @@
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 1.3
- * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
+ * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
+
 App::uses('CakeBaseReporter', 'TestSuite/Reporter');
 App::uses('TextCoverageReport', 'TestSuite/Coverage');
 
@@ -161,7 +162,7 @@ class CakeTextReporter extends CakeBaseReporter {
 		}
 
 		if (1 > count($testCases)) {
-			$buffer .= "EMPTY";
+			$buffer .= 'EMPTY';
 			echo $buffer;
 		}
 

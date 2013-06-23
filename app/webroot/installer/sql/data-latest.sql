@@ -1,12 +1,12 @@
 INSERT INTO `{prefix}articles` (`id`, `title`, `slug`, `tags`, `related_articles`, `user_id`, `category_id`, `status`, `publish_time`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'Welcome to AdaptCMS Beta 3!', 'welcome-to-adaptcms-beta-3', NULL, '', 1, 2, 1, '{date}', '{date}', '{date}', '0000-00-00 00:00:00');
+(1, 'Welcome to AdaptCMS 3.0!', 'welcome-to-adaptcms-3-0', NULL, '', 1, 2, 1, '{date}', '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}article_values` (`id`, `article_id`, `field_id`, `file_id`, `data`) VALUES
 (1, 1, 1, 0, '<p>Hope you enjoy this third and final limited beta release of AdaptCMS. Poke around, do as you wish and any bugs reported or feedback is greatly appreciated.</p>\r\n<p>Thank you,<br />AdaptCMS Team</p>');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}blocks` (`id`, `title`, `type`, `module_id`, `user_id`, `location`, `limit`, `settings`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'show-poll', 'dynamic', 8, 1, '["*"]', 1, '{"data":"1"}', '{date}', '{date}', '0000-00-00 00:00:00'),
-(2, 'latest-links', 'dynamic', 17, 1, '["*"]', 3, '{"order_dir":"asc"}', '{date}', '{date}', '0000-00-00 00:00:00'),
+(2, 'latest-links', 'dynamic', 17, 1, '["*"]', 3, '{"order_by":"created","order_dir":"asc"}', '{date}', '{date}', '0000-00-00 00:00:00'),
 (3, 'admin-main-articles-newest', 'dynamic', 1, 1, '["Pages|admin"]', 5, '{"category_id":"","order_by":"created","order_dir":"desc"}', '{date}', '{date}', '0000-00-00 00:00:00'),
 (4, 'admin-main-users-newest', 'dynamic', 9, 1, '["Pages|admin"]', 5, '{"order_by":"created","order_dir":"desc"}', '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
@@ -55,7 +55,7 @@ INSERT INTO `{prefix}modules` (`id`, `title`, `model_title`, `block_active`, `is
 (18, 'Messages', 'message', 0, 0, 0, 0);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}pages` (`id`, `title`, `slug`, `content`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'Contact Us', 'contact-us', '<p>Here is a blank contact page!</p>', 1, '{date}', '{date}', '0000-00-00 00:00:00'),
+(1, 'Contact Us', 'contact-us', '<p>This is a blank contact page, please fill in your contact info.</p>', 1, '{date}', '{date}', '0000-00-00 00:00:00'),
 (2, 'Home', 'home', '<?php if (!empty($articles)): ?>\r\n	<?php foreach($articles as $article): ?>\r\n		<div class="span8 no-marg-left">\r\n			<?= $this->Html->link(''<h2>'' . $article[''Article''][''title''] . ''</h2>'', array(\r\n				''controller'' => ''articles'', \r\n				''action'' => ''view'', \r\n            	''slug'' => $article[''Article''][''slug''],\r\n            	''id'' => $article[''Article''][''id'']\r\n			), array(''escape'' => false)) ?>\r\n\r\n			<p class="lead">\r\n				@ <em><?= $this->Admin->time($article[''Article''][''created'']) ?></em>\r\n			</p>\r\n\r\n			<blockquote><?= $this->Field->getTextAreaData($article) ?></blockquote>\r\n\r\n			<div id="post-options">\r\n		        <span class="pull-left">\r\n		            <?= $this->Html->link(''Read More'', array(\r\n		            	''controller'' => ''articles'', \r\n		            	''action'' => ''view'', \r\n		            	''slug'' => $article[''Article''][''slug''],\r\n		            	''id'' => $article[''Article''][''id'']\r\n	            	), array(''class'' => ''btn btn-primary'')) ?>\r\n		            <span style="margin-left: 10px">\r\n		                <i class="icon icon-comment"></i>&nbsp;\r\n		                <?= $this->Html->link($article[''Comments''] . '' Comments'', array(\r\n	                		''controller'' => ''articles'', \r\n	                		''action'' => ''view'', \r\n			            	''slug'' => $article[''Article''][''slug''],\r\n			            	''id'' => $article[''Article''][''id'']\r\n                		)) ?>\r\n		            </span>\r\n		            <span style="margin-left: 10px">\r\n		                <i class="icon-user"></i>&nbsp;\r\n		                Posted by <?= $this->Html->link($article[''User''][''username''], array(''controller'' => ''users'', ''action'' => ''profile'', $article[''User''][''username''])) ?>\r\n		            </span>\r\n		        </span>\r\n		        <span class="pull-right">\r\n		        	<?php if (!empty($article[''Article''][''tags''])): ?>\r\n			            <?php foreach($article[''Article''][''tags''] as $tag): ?>\r\n			                <?= $this->Html->link(''<span class="btn btn-success">''.$tag.''</span>'', array(''controller'' => ''articles'', ''action'' => ''tag'', $tag), array(''class'' => ''tags'', ''escape'' => false)) ?>\r\n			            <?php endforeach ?>\r\n		        	<?php endif ?>\r\n		        </span>\r\n		    </div>\r\n		</div>\r\n\r\n		<div class="clearfix"></div>\r\n\r\n		<hr>\r\n	<?php endforeach ?>\r\n<?php endif ?>\r\n\r\n<?= $this->element(''admin_pagination'') ?>', 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `plugin`, `controller`, `action`, `status`, `related`, `own`, `any`) VALUES
@@ -365,7 +365,21 @@ INSERT INTO `{prefix}permissions` (`id`, `module_id`, `role_id`, `action_id`, `p
 (null, NULL, 4, 0, '', 'field_types', 'admin_delete', 1, '', 1, 1),
 (null, NULL, 4, 0, '', 'field_types', 'admin_edit', 1, '', 1, 1),
 (null, NULL, 4, 0, '', 'field_types', 'admin_add', 1, '', 0, 0),
-(null, NULL, 4, 0, '', 'field_types', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1);
+(null, NULL, 4, 0, '', 'field_types', 'admin_index', 1, '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
+(null, NULL, 1, 0, '', 'install', 'install_plugin', 1, '', 2, 2),
+(null, NULL, 1, 0, '', 'install', 'uninstall_plugin', 1, '', 2, 2),
+(null, NULL, 1, 0, '', 'install', 'upgrade_plugin', 1, '', 2, 2),
+(null, NULL, 1, 0, '', 'install', 'install_theme', 1, '', 2, 2),
+(null, NULL, 1, 0, '', 'install', 'uninstall_theme', 1, '', 2, 2),
+(null, NULL, 1, 0, '', 'install', 'upgrade_theme', 1, '', 2, 2),
+(null, NULL, 1, 0, '', 'install', 'upgrade', 1, '', 2, 2),
+(null, NULL, 4, 0, '', 'install', 'install_plugin', 0, '', 2, 2),
+(null, NULL, 4, 0, '', 'install', 'uninstall_plugin', 0, '', 2, 2),
+(null, NULL, 4, 0, '', 'install', 'upgrade_plugin', 0, '', 2, 2),
+(null, NULL, 4, 0, '', 'install', 'install_theme', 0, '', 2, 2),
+(null, NULL, 4, 0, '', 'install', 'uninstall_theme', 0, '', 2, 2),
+(null, NULL, 4, 0, '', 'install', 'upgrade_theme', 0, '', 2, 2),
+(null, NULL, 4, 0, '', 'install', 'upgrade', 0, '', 2, 2);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_links` (`id`, `file_id`, `title`, `url`, `link_title`, `link_target`, `views`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 0, 'AdaptCMS', 'http://www.adaptcms.com', 'AdaptCMS', '_new', 0, 1, '{date}', '{date}', '0000-00-00 00:00:00');
@@ -374,10 +388,11 @@ INSERT INTO `{prefix}plugin_poll_values` (`id`, `title`, `plugin_poll_id`, `vote
 (1, 'NBA', 1, 0),
 (2, 'NHL', 1, 0),
 (3, 'Soccer', 1, 0),
-(4, 'NFL', 1, 0);
+(4, 'NFL', 1, 0),
+(5, 'MLB', 1, 0);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_polls` (`id`, `article_id`, `title`, `poll_type`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
-(1, NULL, 'Your favorite sport?', NULL, 1, '{date}', '{date}', '0000-00-00 00:00:00');
+(1, NULL, 'What is your favorite sport?', NULL, 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}roles` (`id`, `title`, `defaults`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'admin', 'default-admin', '0000-00-00 00:00:00', '{date}', '0000-00-00 00:00:00'),
@@ -394,18 +409,17 @@ INSERT INTO `{prefix}settings` (`id`, `title`, `created`, `deleted_time`) VALUES
 (6, 'Comments', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `data_options`, `setting_type`, `setting_id`, `model`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'Site Name', '<p>What do you think? A site...name</p>', 'Alpha', NULL, 'text', 1, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
-(2, 'Webmaster Email', '<p>email DUMMY - okay, sorry</p>', 'charliepage88@gmail.com', NULL, 'text', 1, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
+(1, 'Site Name', '<p>Fill in the name of your website.</p>', 'AdaptCMS Install', NULL, 'text', 1, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
+(2, 'Webmaster Email', '<p>Provider the email of the webmaster/site owner.</p>', 'no-reply@example.com', NULL, 'text', 1, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (5, 'default-theme', '', 'Default', NULL, 'text', 2, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
-(7, 'test', '', '', '["360","PS3"]', 'dropdown', 2, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (8, 'Security Question Options', '<p>Security Questions incase of lost password.</p>', '', '["What was your mothers maiden name?","Name of your first pet?","Color of your first car?","Your favorite sport?"]', 'dropdown', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (9, 'Security Questions', '<p>How many must a user select when signing up?</p>', '2', '["0","1","2","3"]', 'dropdown', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (10, 'Number of Articles on Homepage', '', '5', NULL, 'text', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
-(11, 'Categories of Articles to show on homepage', '', 'News', NULL, 'text', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
+(11, 'Categories of Articles to show on homepage', '<p>Separate by a comma, the categories of articles to display on the homepage. Leave blank to allow all.</p>', '', NULL, 'text', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (12, 'User Status', '<p>Choosing email activation, user must activate their account via an email link sent to them. Staff activation requires one with access to manually activate a user account.</p>', 'Staff Activation', '["Email Activation","Staff Activation"]', 'dropdown', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (21, 'User Register Email Subject', '', 'New Account Created', NULL, 'text', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
-(22, 'Number of Articles to list on Category Page', '', '3', NULL, 'text', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
-(23, 'Number of Items Per Page', '', '9', NULL, 'text', 5, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
+(22, 'Number of Articles to list on Category Page', '', '10', NULL, 'text', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
+(23, 'Number of Items Per Page', '', '10', NULL, 'text', 5, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (28, 'Comment Post WYSIWYG Editor', '<p>Will the wysiwyg editor be enabled when posting a comment?</p>', 'Yes', '["Yes","No"]', 'dropdown', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (27, 'Comment Post Flood Limit', '<p>x amount of seconds before a user can post another comment. 30 by default.</p>', '30', NULL, 'text', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (26, 'Comment Post Captcha Non-Logged In', '<p>Does a non-logged in user have to enter in a captcha code, to have their comment posted?</p>\r\n<p>*note* The guest group must have permission to view an article/to post a comment, in order for this to have effect.</p>', 'Yes', '["Yes","No"]', 'dropdown', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),

@@ -1,0 +1,24 @@
+{
+    "title": "Google Maps",
+    "current_version": "1.0",
+    "api_id": 9,
+    "install": {
+        "block_active": 1,
+        "model_title": "GoogleMaps",
+        "permissions": {
+            "file": "Install/permissions.php",
+            "className": "PermissionsInstall",
+            "functionName": "generate"
+        },
+        "text": "Install/install_text.md",
+        "sql": [
+            "Install/install_data.sql"
+        ]
+    },
+    "uninstall": {
+        "text": "Install/uninstall_text.md",
+        "sql": [
+            "Install/uninstall_data.sql"
+        ]
+    }
+}

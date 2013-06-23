@@ -97,7 +97,7 @@ class Menu extends AppModel
                     );
                 }
             }
-            else
+            elseif(!empty($this->data['Menu']['slug']) && !empty($settings))
             {
                 $data = array_merge($this->data['Menu'], $settings);
                 $data['items'] = $items;
@@ -157,5 +157,23 @@ class Menu extends AppModel
     public function _getPath($slug)
     {
         return APP . DS . 'View' . DS . 'Elements' . DS . 'Menus' . DS . $slug . '.ctp';
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeDelete()
+    {
+        $row = $this->findById($this->id);
+
+        if (!empty($row['Menu']['slug']))
+        {
+            $path = $this->_getPath($row['Menu']['slug']);
+
+            if (file_exists($path))
+                unlink($path);
+        }
+
+        return true;
     }
 }

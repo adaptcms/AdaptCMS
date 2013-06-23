@@ -1,5 +1,9 @@
 <?php
+App::uses('AppController', 'Controller');
 
+/**
+ * Class PluginsController
+ */
 class PluginsController extends AppController
 {
     /**
@@ -11,7 +15,7 @@ class PluginsController extends AppController
 	* API Component is used to connect to the adaptcms.com website
 	*/
 	public $components = array(
-		'Api'
+		'CmsApi'
 	);
 
 	/**
@@ -38,7 +42,7 @@ class PluginsController extends AppController
 		$api_lookup = array_merge($active_plugins['api_lookup'], $inactive_plugins['api_lookup']);
 
 		if (!empty($api_lookup)){
-			if ($data = $this->Api->pluginsLookup($api_lookup)) {
+			if ($data = $this->CmsApi->pluginsLookup($api_lookup)) {
 				foreach($plugins as $key => $plugin) {
 					if (!empty($plugin['api_id']) && !empty($data['data'][$plugin['api_id']])) {
 						$plugins[$key]['data'] = $data['data'][$plugin['api_id']];
@@ -56,7 +60,7 @@ class PluginsController extends AppController
 	* After POST, attempts to update settings from form by updating the plugins config file
 	* and sets flash message on success or error.
 	*
-	* @param plugin name
+	* @param string $plugin
 	* @return mixed
 	*/
 	public function admin_settings($plugin)

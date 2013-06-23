@@ -1,5 +1,9 @@
 <?php
-
+App::uses('AppController', 'Controller');
+/**
+ * Class TemplatesController
+ * @property CmsApi $CmsApi
+ */
 class TemplatesController extends AppController
 {
     /**
@@ -7,13 +11,17 @@ class TemplatesController extends AppController
     */
 	public $name = 'Templates';
 
+    /**
+     * @var
+     */
     private $permissions;
 
-	/**
-	* Need API Component
-	*/
-	public $components = array(
-		'Api'
+    /**
+     * Need API Component
+     * @var array
+     */
+    public $components = array(
+		'CmsApi'
 	);
 
 	/**
@@ -41,7 +49,7 @@ class TemplatesController extends AppController
     /**
     * Returns a paginated index of Templates
     *
-    * @return associative array of template and theme data
+    * @return \\ array of template and theme data
     */
 	public function admin_index()
 	{
@@ -116,7 +124,7 @@ class TemplatesController extends AppController
 
 		if (!empty($api_lookup))
 		{
-			if ($data = $this->Api->themesLookup($api_lookup))
+			if ($data = $this->CmsApi->themesLookup($api_lookup))
 			{
 				foreach($themes as $key => $theme)
 				{
