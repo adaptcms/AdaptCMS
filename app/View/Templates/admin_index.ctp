@@ -394,8 +394,14 @@ Search
         <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            <?php foreach ($this->request->data['Themes'] as $theme): ?>
-            <li><?= $this->Html->link($theme['Theme']['title'], array('controller' => 'templates', 'action' => 'add', $theme['Theme']['id'])) ?></li>
+            <?php foreach ($themes_dropdown as $theme_id => $theme): ?>
+                <li>
+                    <?= $this->Html->link($theme, array(
+                        'controller' => 'templates',
+                        'action' => 'add',
+                        $theme_id
+                    )) ?>
+                </li>
             <?php endforeach; ?>
         </ul>
     </div>
@@ -405,7 +411,7 @@ Search
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            <?php foreach ($themes as $theme_id => $theme): ?>
+            <?php foreach ($themes_dropdown as $theme_id => $theme): ?>
                 <li>
                     <?= $this->Html->link($theme, array(
                         'theme_id' => $theme_id
@@ -416,10 +422,13 @@ Search
     </div>
 </div>
 
-<?php if (empty($this->request->data)): ?>
+<?php if (empty($this->request->data['Templates'])): ?>
     <div class="clearfix"></div>
     <div class="well">
-        No Items Found
+        No Templates Found. If you just installed AdaptCMS, refresh the default theme -
+        <a class="btn btn-small btn-info refresh" id="1" href="#">
+            <i class="icon-refresh icon-white"></i>
+        </a>
     </div>
 <?php else: ?>
     <table class="table table-striped">

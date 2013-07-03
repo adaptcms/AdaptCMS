@@ -66,6 +66,7 @@ class UploadBehavior extends ModelBehavior
         $fileData['size'] = $file['size'];
 
         $result = move_uploaded_file($tmpName, $path . $fileData['name']);
+        chmod($path . $fileData['name'], 0755);
         
         if (!empty($result))
         {
@@ -73,7 +74,7 @@ class UploadBehavior extends ModelBehavior
                 $path . $fileData['name'],
                 $path . 'thumb/'.$fileData['name'],
                 $ext
-                );
+            );
         }
 
         if (!empty($model->data[$model->name]['watermark']))
@@ -81,7 +82,7 @@ class UploadBehavior extends ModelBehavior
             $this->createWatermark(
                 $path . $fileData['name'],
                 $ext
-                );
+            );
         }
         
         $data = array();
@@ -164,6 +165,7 @@ class UploadBehavior extends ModelBehavior
                                 $fileData['size'] = $file['size'];
 
                                 $result = move_uploaded_file($tmpName, path . $fileData['name']);
+                                chmod(path . $fileData['name'], 0755);
                                 
                                 if ($result)
                                 {
@@ -277,7 +279,8 @@ class UploadBehavior extends ModelBehavior
                         rename(
                             path . $model->data[$model->name]['old_filename'],
                             path . $model->data[$model->name]['filename']
-                            );
+                        );
+                        chmod(path . $model->data[$model->name]['filename'], 0755);
                     } else {
                         $model->data[$model->name]['filename'] = $model->data[$model->name]['old_filename'];
                     }
@@ -287,7 +290,8 @@ class UploadBehavior extends ModelBehavior
                         rename(
                             path . 'thumb' . DS .$model->data[$model->name]['old_filename'],
                             path . 'thumb' . DS .$model->data[$model->name]['filename']
-                            );
+                        );
+                        chmod(path . 'thumb' . DS .$model->data[$model->name]['filename'], 0755);
                     }
                 }
             }
@@ -358,6 +362,8 @@ class UploadBehavior extends ModelBehavior
 
 			$phpThumb->GenerateThumbnail();
 			$phpThumb->RenderToFile($thumbFile);
+
+            chmod($thumbFile, 0755);
 		}
 	}
 

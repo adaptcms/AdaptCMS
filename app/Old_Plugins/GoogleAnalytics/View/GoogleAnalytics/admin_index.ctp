@@ -1,3 +1,11 @@
+<?php $this->Html->addCrumb('Admin', '/admin') ?>
+<?php $this->Html->addCrumb('Plugins', array(
+    'controller' => 'plugins',
+    'action' => 'index',
+    'plugin' => false
+)) ?>
+<?php $this->Html->addCrumb('Google Analytics', null) ?>
+
 <?php if (!empty($text)): ?>
 	<h2>
 		Google Analytics Plugin Setup

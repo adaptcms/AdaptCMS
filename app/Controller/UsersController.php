@@ -472,7 +472,7 @@ class UsersController extends AppController {
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-    	if($this->RequestHandler->isAjax()) {
+    	if($this->request->is('ajax')) {
 	    	$count = $this->User->findByUsername($this->request->data['User']['username']);
 	    	
 	    	if (empty($count)) {
@@ -490,7 +490,7 @@ class UsersController extends AppController {
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-    	if($this->RequestHandler->isAjax()) {
+    	if($this->request->is('ajax')) {
     		$this->User->id = $this->request->data['User']['id'];
 	    	
 	    	if ($this->User->saveField('status', $this->request->data['User']['status'])) {
@@ -892,7 +892,7 @@ class UsersController extends AppController {
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-    	if ($this->RequestHandler->isAjax() && !empty($this->request->data['User']['username'])) {
+    	if ($this->request->is('ajax') && !empty($this->request->data['User']['username'])) {
     		$data = array();
     		$find = $this->User->find('all', array(
     			'conditions' => array(

@@ -5,11 +5,15 @@
 )) ?>
 <?php $this->Html->addCrumb($article['Article']['title'], null) ?>
 
+<?php $this->set('title_for_layout', $article['Article']['title']) ?>
+
 <?php if (!empty($wysiwyg)): ?>
 	<?php $this->TinyMce->editor(array('simple' => true)) ?>
 <?php endif ?>
 
+<?= $this->Html->script('jquery.blockui.min.js') ?>
 <?= $this->Html->script('jquery.smooth-scroll.min.js') ?>
+<?= $this->Html->script('comments.js') ?>
 
 <div class="span8 no-marg-left">
 	<h1><?= $article['Article']['title'] ?></h1>
@@ -54,6 +58,8 @@
 
 <h2>Comments</h2>
 
-<?= $this->element('post_comment') ?>
+<!--nocache-->
+<?= $this->element('post_comment', array('cached' => false)) ?>
+<!--/nocache-->
 
 <?= $this->element('view_all_comments', array('comments' => $this->request->data['Comments'])) ?>

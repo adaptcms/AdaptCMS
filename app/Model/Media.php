@@ -135,4 +135,20 @@ class Media extends AppModel
 
         return $data;
     }
+
+    public function getFileCount($data = array())
+    {
+        $prefix = ConnectionManager::enumConnectionObjects();
+
+        if (!empty($data))
+        {
+            foreach($data as $key => $row)
+            {
+                $count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
+                $data[$key]['Media']['file_count'] = $count[0][0]['count'];
+            }
+        }
+
+        return $data;
+    }
 }

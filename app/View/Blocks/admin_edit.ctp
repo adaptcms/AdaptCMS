@@ -4,10 +4,7 @@
 
 <?php
     $this->CodeMirror->editor('BlockCode');
-    $this->TinyMce->editor(array(
-        'mode' => 'exact',
-        'elements' => 'BlockText'
-    ));
+    $this->TinyMce->editor(array('selector' => '#BlockText'));
 ?>
 <?= $this->Html->script('data-tagging.js') ?>
 
@@ -187,6 +184,7 @@
 	<div class="btn-group" style="margin-top:10px">
 	    <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
         <?= $this->Form->hidden('id') ?>
+
         <?= $this->Form->end(array(
             'label' => 'Submit',
             'class' => 'btn btn-primary'

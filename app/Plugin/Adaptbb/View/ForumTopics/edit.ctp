@@ -47,6 +47,13 @@ $(document).ready(function(){
 			)
 		)) ?>
 	<?php endif ?>
+    <?php if (!empty($topic_type)): ?>
+        <?= $this->Form->input('topic_type', array(
+            'options' => $topic_type
+        )) ?>
+    <?php else: ?>
+        <?= $this->Form->hidden('topic_type', array('value' => 'topic' )) ?>
+    <?php endif ?>
     <!--/nocache-->
 
 	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>

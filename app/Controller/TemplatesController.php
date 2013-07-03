@@ -84,11 +84,13 @@ class TemplatesController extends AppController
             )
         );
 
+        $themes_dropdown = array();
 		foreach ($this->request->data['Themes'] as $key => $row)
 		{
 			if ($row['Theme']['deleted_time'] == "0000-00-00 00:00:00")
 			{
 				$themes[$row['Theme']['title']] = $row['Theme']['title'];
+				$themes_dropdown[$row['Theme']['id']] = $row['Theme']['title'];
 			}
 
 			if (!empty($this->params->named['trash_theme']) && $row['Theme']['deleted_time'] == "0000-00-00 00:00:00" ||
@@ -111,7 +113,7 @@ class TemplatesController extends AppController
 		);
 
 		$this->set('current_theme', $current_theme['SettingValue']);
-        $this->set(compact('themes'));
+        $this->set(compact('themes', 'themes_dropdown'));
 
 		$active_path = VIEW_PATH . 'Themed';
 		$active_themes = $this->getThemes($active_path);
@@ -386,7 +388,7 @@ class TemplatesController extends AppController
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-    	if ($this->RequestHandler->isAjax()) {
+    	if ($this->request->is('ajax')) {
     		if (!empty($this->request->data['Setting']['id']) &&
     			!empty($this->request->data['Setting']['data'])) {
 	    		
@@ -477,7 +479,7 @@ class TemplatesController extends AppController
 		$this->layout = 'ajax';
 		$this->autoRender = false;
 
-		if ($this->RequestHandler->isAJax())
+		if ($this->request->is('ajax'))
 		{
 			if (!empty($this->request->data['Theme']['name']))
 			{
@@ -545,7 +547,7 @@ class TemplatesController extends AppController
     	$this->layout = 'ajax';
     	$this->autoRender = false;
 
-    	if ($this->RequestHandler->isAjax())
+    	if ($this->request->is('ajax'))
     	{
     		if ($this->request->data['Theme']['id'] == 1)
     		{

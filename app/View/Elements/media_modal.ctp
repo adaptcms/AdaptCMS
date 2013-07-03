@@ -191,7 +191,10 @@ function getImagesDefault(modal_id)
 
 function loadAjax(href, id)
 {
-	$("#" + id).find(".modal-body").load(href + ' .modal-body', function() {
+    var modal = $("#" + id).find(".modal-body");
+
+    modal.load(href + '?unique=' + Math.round(Math.random()*10000) + ' #' + id, function() {
+        modal.replaceWith($(this).find('.modal-body'));
 		fixPagination();
 		getImagesDefault(id);
 	});

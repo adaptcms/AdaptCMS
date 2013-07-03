@@ -1,7 +1,3 @@
-<?php
-    $this->TinyMce->editor();
-?>
-
 <?php $this->Html->addCrumb('Profile', array(
     'action' => 'profile',
     'controller' => 'users',
@@ -9,6 +5,9 @@
 )) ?>
 <?php $this->Html->addCrumb('Messages', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('View Message', null) ?>
+
+<?php $this->TinyMce->editor(array('simple' => true)) ?>
+<?= $this->Html->script('jquery.blockui.min.js') ?>
 
 <h1>
 	View Message
@@ -107,6 +106,7 @@
 	<?= $this->Form->input('message', array(
 		'class' => 'span7',
 		'style' => 'height: 100%',
+        'required' => false,
 		'placeholder' => 'Enter in your message...'
 	)) ?>
 

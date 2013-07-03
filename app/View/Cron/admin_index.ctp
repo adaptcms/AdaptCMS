@@ -1,10 +1,10 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
 <?php $this->Html->addCrumb('Tools', array('controller' => 'tools', 'action' => 'index')) ?>
-<?php $this->Html->addCrumb('Cron', null) ?>
+<?php $this->Html->addCrumb('Cron Jobs', null) ?>
 
-<div class="pull-left">
-    <h1>Cron Entries<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
-    <p class="span8">This area is for advanced users. With the Cron Job functionality, users can setup functionality to run on a specific schedule. One example is to set the database to be optimized once every week or a new sitemap to be pinged/generated once a day.</p>
+<div class="pull-left span7 no-marg-left">
+    <h1>Cron Jobs<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <p>This area is for advanced users. With the Cron Job functionality, users can setup functionality to run on a specific schedule. One example is to set the database to be optimized once every week or a new sitemap to be pinged/generated once a day.</p>
 </div>
 <div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -92,7 +92,7 @@
                                             <?= $this->Admin->delete(
                                                 $data['Cron']['id'],
                                                 $data['Cron']['title'],
-                                                'cron item'
+                                                'cron job'
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -110,7 +110,7 @@
                                             <?= $this->Admin->delete_perm(
                                                 $data['Cron']['id'],
                                                 $data['Cron']['title'],
-                                                'cron item'
+                                                'cron job'
                                             ) ?>
                                         </li>
                                     <?php endif ?>

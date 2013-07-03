@@ -15,13 +15,12 @@ App::import('Model', 'ConnectionManager');
 class AppController extends Controller
 {
     /**
-     * Array of necessary components. DebugKit, RequestHandler, Auth, Sesson and Security - by default. 
+     * Array of necessary components. DebugKit, Auth, Sesson and Security - by default.
      * 
      * @var array 
      */
     public $components = array(
         'DebugKit.Toolbar',
-        'RequestHandler',
         'Auth' => array(
             'loginAction' => array(
                 'controller' => 'users',
@@ -83,6 +82,8 @@ class AppController extends Controller
      */
     public function beforeFilter()
     {
+//        echo '#1: ' . microtime() . '<br />';
+
         $system_path = realpath(CACHE . '/../system/');
 
         /*
@@ -134,7 +135,7 @@ class AppController extends Controller
             }
         }
 
-//        parent::beforeFilter();
+        parent::beforeFilter();
 
         $this->Security->blackHoleCallback = 'blackhole';
         $this->Auth->allow();
@@ -155,18 +156,29 @@ class AppController extends Controller
         if (!$this->getRole())
             $this->setRole();
 
+//        echo '#2: ' . microtime() . '<br />';
+
         $this->blocksLookup();
+//        echo '#3: ' . microtime() . '<br />';
         $this->accessCheck();
+//        echo '#4: ' . microtime() . '<br />';
         $this->runCron();
 
         $this->loadModel('SettingValue');
 
-        if ($theme = $this->SettingValue->findByTitle('default-theme')) {
-            $this->theme = $theme['SettingValue']['data'];
+        if ($cache_theme = Cache::read('Global.theme'))
+        {
+            $this->theme = $cache_theme;
         }
         else
         {
-            $this->theme = 'Default';
+            if ($theme = $this->SettingValue->findByTitle('default-theme')) {
+                $this->theme = $theme['SettingValue']['data'];
+            }
+            else
+            {
+                $this->theme = 'Default';
+            }
         }
 
         if ($this->Auth->user('id')) {
@@ -180,9 +192,8 @@ class AppController extends Controller
             $this->set(compact('current_user'));
         }
 
-        if ($this->RequestHandler->isAjax() || $this->RequestHandler->isRss()) {
+        if ($this->request->is('ajax') || $this->request->is('rss'))
             Configure::write('debug', 0);
-        }
 
         // Number of Items Per Page
         if ($this->params->action == "admin_index") {
@@ -192,6 +203,7 @@ class AppController extends Controller
                     $this->pageLimit = 10;
             }
         }
+//        echo '#5: ' . microtime() . '<br />';
     }
 
     /**
@@ -691,48 +703,51 @@ class AppController extends Controller
          */
 	public function runCron()
 	{
-        $this->loadModel('Cron');
-
-		$find = $this->Cron->find('first', array(
-			'conditions' => array(
-				'Cron.run_time <=' => date('Y-m-d H:i:s'),
-				'Cron.deleted_time' => '0000-00-00 00:00:00'
-			),
-			'order' => 'run_time ASC'
-		));
-
-		if (!empty($find))
+        if ($this->params->controller != 'cron')
         {
-            $module = $this->Cron->Module->findById($find['Cron']['module_id']);
+            $this->loadModel('Cron');
 
-            if (!empty($module))
-                $find = array_merge($find, $module);
+            $find = $this->Cron->find('first', array(
+                'conditions' => array(
+                    'Cron.run_time <=' => date('Y-m-d H:i:s'),
+                    'Cron.deleted_time' => '0000-00-00 00:00:00'
+                ),
+                'order' => 'run_time ASC'
+            ));
 
-			$function = $find['Cron']['function'];
+            if (!empty($find))
+            {
+                $module = $this->Cron->Module->findById($find['Cron']['module_id']);
 
-			if ($find['Module']['is_plugin'] == 1) {
-				$model = $find['Module']['model_title'];
-				$this->loadModel(
-					str_replace(' ','',$find['Module']['title']).'.'.$model
-				);
-			} else {
-				$model = $find['Module']['model_title'];
-				$this->loadModel($model);
-			}
+                if (!empty($module))
+                    $find = array_merge($find, $module);
 
-			try {
-				$this->$model->$function();
-			} catch (Exception $e) {
+                $function = $find['Cron']['function'];
 
-			}
+                if ($find['Module']['is_plugin'] == 1) {
+                    $model = $find['Module']['model_title'];
+                    $this->loadModel(
+                        str_replace(' ','',$find['Module']['title']).'.'.$model
+                    );
+                } else {
+                    $model = $find['Module']['model_title'];
+                    $this->loadModel($model);
+                }
 
-			$amount = $find['Cron']['period_amount'];
-        	$type = $find['Cron']['period_type'];
-        	$run_time = date('Y-m-d H:i:s', strtotime('+' . $amount . ' '.$type));
+                try {
+                    $this->$model->$function();
+                } catch (Exception $e) {
 
-        	$this->Cron->id = $find['Cron']['id'];
-        	$this->Cron->saveField('run_time', $run_time);
-		}
+                }
+
+                $amount = $find['Cron']['period_amount'];
+                $type = $find['Cron']['period_type'];
+                $run_time = date('Y-m-d H:i:s', strtotime('+' . $amount . ' '.$type));
+
+                $this->Cron->id = $find['Cron']['id'];
+                $this->Cron->saveField('run_time', $run_time);
+            }
+        }
 	}
 
     /**
@@ -848,5 +863,26 @@ class AppController extends Controller
             '11' => '(GMT +11:00) Magadan, Solomon Islands, New Caledonia',
             '12' => '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka'
         );
+    }
+
+    /**
+     * Convenience function that based on permissions array/user_id, checks to see if user
+     * has access to item. Returns true or false.
+     *
+     * @param array $permission
+     * @param integer $user_id
+     * @return boolean
+     */
+    public function hasPermission($permission = null, $user_id = null)
+    {
+        if (!empty($permission) && !empty($user_id) && $user_id == $this->Auth->User('id') ||
+            !empty($permission) && $permission['any'] > 0 ||
+            !empty($permission) && $permission['action'] == 'admin_add' && $permission['any'] == 0 ||
+            !empty($permission) && $permission['any'] == 2)
+        {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

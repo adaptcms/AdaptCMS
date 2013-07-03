@@ -12,11 +12,5 @@
     },
     "uninstall": {
     	"text": "Install/uninstall_text.md"
-    },
-    "upgrade": {
-        "text": "Install/upgrade_text.md",
-        "sql": [
-            "Install/upgrade_data.sql"
-        ]
     }
 }

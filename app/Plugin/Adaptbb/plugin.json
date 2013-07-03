@@ -4,6 +4,7 @@
     "api_id": 6,
     "install": {
     	"model_title": "ForumPost",
+        "block_active": 1,
         "permissions": {
             "file": "Install/permissions.php",
             "className": "PermissionsInstall",

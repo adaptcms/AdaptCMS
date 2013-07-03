@@ -130,6 +130,9 @@ class Article extends AppModel
      */
     public function getAllRelatedArticles($data = array(), $loop = false, $categories = array(), $users = array(), $fields = array(), $files = array())
     {
+        if (empty($data))
+            return array();
+
         foreach($data as $key => $row)
         {
             $article_id = $row['Article']['id'];
@@ -396,9 +399,7 @@ class Article extends AppModel
         }
 
         if (!empty($this->data['Article']['title']))
-        {
             $this->data['Article']['slug'] = $this->slug($this->data['Article']['title']);
-        }
 
         /**
         * Add
@@ -477,28 +478,6 @@ class Article extends AppModel
                         {
                             $results[$key]['Data'][$value['Field']['title']] = $view->element('FieldTypesData/default', array('data' => $value));
                         }
-                        /*
-                        if (!empty($value['File']))
-                        {
-                            if (!empty($value['File']['filename']))
-                            {
-                                $results[$key]['Data'][$value['Field']['title']] =
-                                    $value['File']['dir'] . $value['File']['filename'];
-                            }
-                        }
-                        else
-                        {
-                            $json = json_decode($value['data'], true);
-
-                            if (empty($json) || !is_array($json))
-                            {
-                                $results[$key]['Data'][$value['Field']['title']] = $value['data'];
-                            } else {
-                                $results[$key]['Data'][$value['Field']['title']]['data'] = $json;
-                                $results[$key]['Data'][$value['Field']['title']]['list'] = implode(', ', $json);
-                            }
-                        }
-                        */
                     }
                 }
             }

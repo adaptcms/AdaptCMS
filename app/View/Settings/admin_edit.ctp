@@ -129,14 +129,13 @@
 					<?php elseif ($row['setting_type'] == "dropdown"): ?>
 						<?= $this->Form->input($key . '.SettingValue.data', array(
 							'value' => !empty($row['data']) ? $row['data'] : '',
-							'options' => $row['data_options'],
+							'options' => array_combine($row['data_options'], $row['data_options']),
 							'empty' => '- Choose -'
 						)) ?>
 					<?php endif; ?>
 					<?= $this->Form->input($key . '.SettingValue.description', array(
 						'value' => $row['description'], 
 						'rows' => 15, 
-						'style' => 'width:500px',
 						'class' => 'required'
 					)) ?>
 					<?= $this->Form->input($key . '.SettingValue.deleted', array(
@@ -197,11 +196,12 @@
 			<div class="clearfix"></div>
 
 			<?= $this->Form->input('description', array(
-				'rows' => 15, 'style' => 'width:500px', 'class' => 'required',
-					'div' => array(
-						'class' => 'input text clear',
-						'style' => 'margin-top: -9px'
-						)
+				'rows' => 15,
+                'class' => 'required',
+                'div' => array(
+                    'class' => 'input text clearfix',
+                    'style' => 'margin-top: -9px'
+                )
 			)) ?>
 			<?= $this->Form->hidden('setting_id', array('value' => $this->request->data['Setting']['id'])) ?>
 			<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>

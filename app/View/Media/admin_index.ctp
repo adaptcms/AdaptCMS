@@ -63,7 +63,7 @@
                         <?php endif ?>
                     </td>
                     <td>
-                        <?= !empty($data['File']) ? count($data['File']) : 0 ?>
+                        <?= $data['Media']['file_count'] ?>
                     </td>
                     <td class="hidden-phone">
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>

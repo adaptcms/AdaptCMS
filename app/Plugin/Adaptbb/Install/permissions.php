@@ -24,106 +24,129 @@ class PermissionsInstall
     );
     
     private $member_data = array(
-      array(
-          'controller' => 'forum_topics',
-          'action' => 'add',
-          'status' => 1
-      ),
-      array(
+        array(
+            'controller' => 'forum_topics',
+            'action' => 'add',
+            'related' => '[{"action":["add_sticky"]},{"action":["add_announcement"]}]',
+            'status' => 0
+        ),
+        array(
+            'controller' => 'forum_topics',
+            'action' => 'add_sticky',
+            'status' => 1,
+            'label' => 'Create Sticky Topic'
+        ),
+        array(
+            'controller' => 'forum_topics',
+            'action' => 'add_announcement',
+            'status' => 0,
+            'label' => 'Create Announcement Topic'
+        ),
+        array(
           'controller' => 'forum_topics',
           'action' => 'edit',
           'status' => 1,
-          'related' => '[{"action":["change_status"]}]',
+          'related' => '[{"action":["change_status"]},{"action":["add_sticky"]},{"action":["add_announcement"]}]',
           'any' => 0,
           'own' => 1
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_topics',
           'action' => 'delete',
           'status' => 1,
           'any' => 0,
           'own' => 1
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_posts',
           'action' => 'ajax_post',
           'status' => 1
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_posts',
           'action' => 'ajax_edit',
           'status' => 1,
           'any' => 0,
           'own' => 1
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_posts',
           'action' => 'delete',
           'status' => 1,
           'any' => 0,
           'own' => 1
-      )
+        )
     );
     
     private $admin_data = array(
-      array(
+        array(
+            'controller' => 'forum_topics',
+            'action' => 'add_sticky',
+            'status' => 1
+        ),
+        array(
+            'controller' => 'forum_topics',
+            'action' => 'add_announcement',
+            'status' => 1
+        ),
+        array(
           'controller' => 'forum_categories',
           'action' => 'admin_index',
           'related' => '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["admin_index"],"controller":["forums"]},{"action":["profile"],"controller":["users"]}]'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_categories',
           'action' => 'admin_add'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_categories',
           'action' => 'admin_edit'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_categories',
           'action' => 'admin_delete'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_categories',
           'action' => 'admin_restore'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_categories',
           'action' => 'admin_ajax_order'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forums',
           'action' => 'admin_index',
           'related' => '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["admin_index"],{"controller":["forum_categories"],"action":["admin_edit"]},"controller":["forum_categories"]},{"action":["profile"],"controller":["users"]}]'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forums',
           'action' => 'admin_add'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forums',
           'action' => 'admin_edit'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forums',
           'action' => 'admin_delete'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forums',
           'action' => 'admin_restore'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forums',
           'action' => 'admin_ajax_forums'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forums',
           'action' => 'admin_ajax_order'
-      ),
-      array(
+        ),
+        array(
           'controller' => 'forum_topics',
           'action' => 'change_status'
-      )
+        )
     );
 
     /**
@@ -154,7 +177,8 @@ class PermissionsInstall
                             'status' => $permission['status'],
                             'related' => !empty($permission['related']) ? $permission['related'] : '',
                             'own' => !empty($permission['own']) ? $permission['own'] : 2,
-                            'any' => !empty($permission['any']) ? $permission['any'] : 2
+                            'any' => !empty($permission['any']) ? $permission['any'] : 2,
+                            'label' => !empty($permission['label']) ? !empty($permission['label']) : ''
                         );
                     }
                 }
@@ -173,7 +197,8 @@ class PermissionsInstall
                             'status' => $permission['status'],
                             'related' => !empty($permission['related']) ? $permission['related'] : '',
                             'own' => !empty($permission['own']) ? $permission['own'] : 2,
-                            'any' => !empty($permission['any']) ? $permission['any'] : 2
+                            'any' => !empty($permission['any']) ? $permission['any'] : 2,
+                            'label' => !empty($permission['label']) ? !empty($permission['label']) : ''
                         );
                     }
                 }
@@ -195,7 +220,8 @@ class PermissionsInstall
                               'status' => 1,
                               'related' => !empty($permission['related']) ? $permission['related'] : '',
                               'own' => !empty($permission['own']) ? $permission['own'] : 1,
-                              'any' => !empty($permission['any']) ? $permission['any'] : 1
+                              'any' => !empty($permission['any']) ? $permission['any'] : 1,
+                              'label' => !empty($permission['label']) ? !empty($permission['label']) : ''
                             );
                         }
                     }
@@ -212,7 +238,8 @@ class PermissionsInstall
                               'status' => strstr($permission['action'], 'admin') ? 0 : 1,
                               'related' => !empty($permission['related']) ? $permission['related'] : '',
                               'own' => !empty($permission['own']) ? $permission['own'] : 0,
-                              'any' => !empty($permission['any']) ? $permission['any'] : 0
+                              'any' => !empty($permission['any']) ? $permission['any'] : 0,
+                              'label' => !empty($permission['label']) ? !empty($permission['label']) : ''
                             );
                         }
                     }

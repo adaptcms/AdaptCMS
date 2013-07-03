@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 		if (form.prev().parent().hasClass('post-body'))
 		{
-			form.prev().show();
+			form.parent().find('.message,.signature').show();
 		}
 
 		form.hide();
@@ -16,58 +16,58 @@ $(document).ready(function() {
 	$('.edit-post').live('click', function(e) {
 		e.preventDefault();
 
-		var href = $(this).attr('href');
+        $.each($('.post-content'), function() {
+            if ($(this).parent().parent().is(':visible'))
+            {
+                $(this).parent().parent().find('.cancel-edit-post').trigger('click');
+            }
+        });
 
-		if ($(this).attr('data-id'))
-		{
-			var id = $(this).attr('data-id');
-		}
-		else
-		{
-			var id = $(this).parent().attr('id');
-		}
+		var href = $(this).attr('href');
+        var id = $(this).attr('data-id') ? $(this).attr('data-id') : $(this).parent().attr('id');
 
 		var post_id = id.replace('edit_post_', '');
 		var form = $(this).parent().parent().parent().parent().find('.EditPost');
 
 		if (form.is(':hidden'))
 		{
-			if (tinyMCE.selectedInstance.id != 'ForumPost' + post_id + 'Content')
+			if (tinyMCE.activeEditor && tinyMCE.activeEditor.id != 'ForumPost' + post_id + 'Content')
 			{
-				tinyMCE.EditorManager.execCommand('mceRemoveControl', false, tinyMCE.selectedInstance.id);
-
-				if (tinyMCE.selectedInstance.id != 'ForumPost' + post_id + 'Content')
-				{
-					tinyMCE.EditorManager.execCommand('mceRemoveControl', false, tinyMCE.selectedInstance.id);
-				}
-			}
-
-			if (form.prev().length)
-			{
-				form.prev().hide();
-				tinyMCE.activeEditor.setContent(form.prev().html());
+				tinyMCE.execCommand('mceRemoveEditor', false, tinyMCE.activeEditor.id);
 			}
 		}
 		else
 		{
-			if (tinyMCE.selectedInstance.id == 'ForumPost' + post_id + 'Content')
+			if (tinyMCE.activeEditor && tinyMCE.activeEditor.id == 'ForumPost' + post_id + 'Content')
 			{
-				tinyMCE.EditorManager.execCommand('mceRemoveControl', false, tinyMCE.selectedInstance.id);
+				tinyMCE.execCommand('mceRemoveEditor', false, tinyMCE.activeEditor.id);
 			}
 
-			tinyMCE.execCommand('mceAddControl', false, 'ForumPostContent');
-			form.prev().show();
+			tinyMCE.execCommand('mceAddEditor', false, 'ForumPostContent');
+			form.parent().find('.message,.signature').show();
 		}
 
 		form.toggle();
 
 		if (form.is(':visible'))
 		{
-			if (tinyMCE.selectedInstance.id == 'ForumPost' + post_id + 'Content')
+			if (tinyMCE.activeEditor && tinyMCE.activeEditor.id == 'ForumPost' + post_id + 'Content')
 			{
-				tinyMCE.EditorManager.execCommand('mceRemoveControl', false, tinyMCE.selectedInstance.id);
-				tinyMCE.execCommand('mceAddControl', false, 'ForumPost' + post_id + 'Content');
-			}
+				tinyMCE.execCommand('mceRemoveEditor', false, tinyMCE.activeEditor.id);
+            }
+
+            if (!tinyMCE.activeEditor || tinyMCE.activeEditor.id == 'ForumPost' + post_id + 'Content')
+            {
+                tinyMCE.execCommand('mceAddEditor', false, 'ForumPost' + post_id + 'Content');
+            }
+
+            var body_msg = form.parent().find('.message,.signature');
+
+            if (body_msg.length)
+            {
+                body_msg.hide();
+                tinyMCE.activeEditor.setContent(form.parent().find('.message').html());
+            }
 		}
 
 		$('#AddPost').hide();
@@ -83,10 +83,14 @@ $(document).ready(function() {
 			}
 		});
 
-		if (tinyMCE.selectedInstance.id != 'ForumPostContent')
+		if (tinyMCE.activeEditor && tinyMCE.activeEditor.id != 'ForumPostContent')
 		{
-			tinyMCE.EditorManager.execCommand('mceRemoveControl', false, tinyMCE.selectedInstance.id);
-			tinyMCE.execCommand('mceAddControl', false, 'ForumPostContent');
+			tinyMCE.execCommand('mceRemoveEditor', false, tinyMCE.activeEditor.id);
+        }
+
+        if (!tinyMCE.activeEditor || tinyMCE.activeEditor.id != 'ForumPostContent')
+        {
+			tinyMCE.execCommand('mceAddEditor', false, 'ForumPostContent');
 		}
 
 		if ($(this).hasClass('quote'))
@@ -122,6 +126,8 @@ $(document).ready(function() {
 		}
 		else
 		{
+            getBlockUI();
+
 			$("#flashMessage.alert-error").hide();
 
 			forum_id = $(this).find('.forum_id').val();
@@ -145,10 +151,17 @@ $(document).ready(function() {
 
 				if (data.status)
 				{
-					$("#posts #post-" + post_id).load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts #post-' + post_id, function() {
+                    var post = $("#posts #post-" + post_id);
+
+					post.load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts', function() {
+                        post.replaceWith($(this).find('#post-' + post_id));
+
 						$("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
+                        tinyMCE.activeEditor.setContent('');
+
+                        $.unblockUI();
 						$.smoothScroll();
-						tinyMCE.activeEditor.setContent('');
+
 						setTimeout(function() {
 							$("#flashMessage.alert-success").fadeOut(2500);
 						}, 3000);
@@ -171,6 +184,8 @@ $(document).ready(function() {
 			$("#flashMessage.alert-error").html('<strong>Error</strong> Please enter in a message').show();
 			$.smoothScroll({scrollTarget: $("#flashMessage.alert-error").prev() });
 		} else {
+            getBlockUI();
+
 			$("#flashMessage.alert-error").hide();
 
 			forum_id = $("#ForumPostForumId").val();
@@ -192,10 +207,17 @@ $(document).ready(function() {
 
 				if (data.status)
 				{
-					$("#posts").load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts', function() {
+                    var posts = $("#posts");
+
+                    posts.load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts_container', function() {
+                        posts.replaceWith($(this).find('#posts'));
+
 						$("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
+                        tinyMCE.activeEditor.setContent('');
+
+                        $.unblockUI();
 						$.smoothScroll();
-						tinyMCE.activeEditor.setContent('');
+
 						setTimeout(function() {
 							$("#flashMessage.alert-success").fadeOut(2500);
 						}, 3000);

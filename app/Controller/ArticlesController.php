@@ -602,14 +602,9 @@ class ArticlesController extends AppController
                     'order' => 'Article.created DESC'
             );
 
-            if ($this->RequestHandler->isRss() ) {
-                    // echo 1;
-            }
-
             $this->request->data = $this->paginate('Article');
             Configure::write('debug', 0);
             $this->layout = 'rss/default';
-            $this->RequestHandler->setContent('rss', 'application/rss+xml');
 	}
 
 	/**

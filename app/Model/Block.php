@@ -56,7 +56,7 @@ class Block extends AppModel
     * This is called when editing a block in the admin area, formatting the data
     * so that the form gets all the data appropiately.
     *
-    * @param data Array of Block Data
+    * @param $data array of Block Data
     * @return array Array of formatted data
     */
     public function formatData($data)
@@ -108,8 +108,8 @@ class Block extends AppModel
     * Before Saving, we slug the title, format the locations into a json_encoded array
     * and format any extra options and miscelaneous options.
     *
-    * @param options array
-    * @return true
+    * @param $options array
+    * @return boolean
     */
     public function beforeSave($options = array())
     {
@@ -124,6 +124,7 @@ class Block extends AppModel
             } elseif ($this->data['Block']['location_type'] == "#") {
                 $this->data['Block']['location'] = json_encode(array("#"));
             } else {
+                $location_data = array();
                 foreach($this->data['LocationData'] as $row) {
                     $location_data[] = str_replace('/', '|', $row);
                 }
@@ -183,6 +184,7 @@ class Block extends AppModel
             )
         ));
 
+        $models = array();
         foreach ($module_list as $row)
         {
             if ($row['Module']['is_plugin'] == 1)

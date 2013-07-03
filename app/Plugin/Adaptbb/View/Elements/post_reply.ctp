@@ -1,6 +1,6 @@
 <?= $this->Form->create('ForumPost', array(
 	'id' => empty($post_id) ? 'AddPost' : 'edit_post_' . $post['id'],
-	'class' => !empty($post_id) ? 'EditPost' : '',
+	'class' => !empty($post_id) ? 'EditPost' : 'visible',
 	'url' => array(
 		'ajax' => true,
 		'controller' => 'forum_posts',

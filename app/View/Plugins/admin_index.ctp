@@ -18,7 +18,14 @@ $(document).ready(function() {
     'escape' => false
 )) ?>
 
-<?php if (!empty($plugins)): ?>
+<?php if (empty($plugins)): ?>
+    <div class="clearfix"></div>
+    <div class="well">
+        No Plugins - <?= $this->Html->link('Click here', $this->Api->url() . 'plugins', array(
+            'target' => '_blank',
+        )) ?> to look for Plugins on the official website.
+    </div>
+<?php else: ?>
     <table class="table table-striped">
         <thead>
             <tr>

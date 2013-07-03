@@ -88,6 +88,8 @@ class Template extends AppModel
 					fwrite($fh, $this->data['Template']['template']);
 					fclose($fh);
 				}
+
+                chmod($path . $this->data['Template']['location'], 0777);
 			}
         } elseif (!empty($this->data) && !empty($this->data['Template']['old_title']))
         {
@@ -137,9 +139,9 @@ class Template extends AppModel
 				or $this->data['Template']['theme_id'] != $this->data['Template']['old_theme'])
 			{
 				if (is_readable($path . $this->data['Template']['old_location']))
-				{
 					unlink($path . $this->data['Template']['old_location']);
-				}
+
+                chmod($path . $this->data['Template']['location'], 0777);
 			}
         }
 

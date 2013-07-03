@@ -1,9 +1,9 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
 <?php $this->Html->addCrumb('Menu', null) ?>
 
-<div class="pull-left">
+<div class="pull-left span7 no-marg-left">
     <h1>Menus<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
-    <p class="span7">The menu manager allows you to create as many menus as you would like. Add custom links or link to current static pages, articles, whatever you'd like.</p>
+    <p>The menu manager allows you to create as many menus as you would like. Add custom links or link to current static pages, articles, whatever you'd like.</p>
 </div>
 <div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -26,7 +26,6 @@
     </li>
   </ul>
 </div>
-<div class="clear"></div>
 
 <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_add'])): ?>
     <?= $this->Html->link('Add Menu <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(

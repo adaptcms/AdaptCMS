@@ -392,6 +392,12 @@ class InstallController extends Controller
                     $data['Module']['is_searchable'] = 0;
                 }
 
+                if ( !empty( $settings['is_fields'] ) && $settings['is_fields'] == 1 ) {
+                    $data['Module']['is_fields'] = 1;
+                } else {
+                    $data['Module']['is_fields'] = 0;
+                }
+
                 $data['Module']['title'] = $settings['title'];
                 $data['Module']['model_title'] = $settings['model_title'];
                 $data['Module']['is_plugin'] = 1;
@@ -565,6 +571,10 @@ class InstallController extends Controller
                     $settings['is_searchable'] = $data['install']['is_searchable'];
                 }
 
+                if ( !empty( $data['install']['is_fields'] ) ) {
+                    $settings['is_fields'] = $data['install']['is_fields'];
+                }
+
                 if ( !empty( $data['install']['model_title'] ) ) {
                     $settings['model_title'] = $data['install']['model_title'];
                 }
@@ -691,6 +701,10 @@ class InstallController extends Controller
 
             if ( !empty( $data['install']['is_searchable'] ) ) {
                 $settings['is_searchable'] = $data['install']['is_searchable'];
+            }
+
+            if ( !empty( $data['install']['is_fields'] ) ) {
+                $settings['is_fields'] = $data['install']['is_fields'];
             }
 
             if ( !empty( $data['install']['model_title'] ) ) {

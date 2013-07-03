@@ -140,8 +140,8 @@ class MessagesController extends AppController
 		{
 			$this->request->data['Message']['sender_user_id'] = $this->Auth->user('id');
 
-			if ($this->RequestHandler->isAjax())
-			{
+			if ($this->request->is('ajax'))
+            {
 		    	$this->layout = 'ajax';
 		    	$this->autoRender = false;
 

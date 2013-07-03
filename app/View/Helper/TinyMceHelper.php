@@ -47,10 +47,10 @@ class TinyMceHelper extends AppHelper {
  * @return void
  */
 	public function editor($options = array()) {
-		if (!empty($options['mode'])) {
-			$mode = $options['mode'];
+		if (!empty($options['selector'])) {
+            $selector = $options['selector'];
 		} else {
-			$mode = 'textareas';
+			$selector = 'textarea';
 		}
 
 		if (!empty($options['elements'])) {
@@ -73,7 +73,7 @@ class TinyMceHelper extends AppHelper {
 		echo "<script type='text/javascript'>
 		tinyMCE.init({
 			// General options
-			mode : '" . $mode . "',
+			selector : '" . $selector . "',
 			theme : 'modern',
 			elements : '" . $elements . "',
 			plugins : [

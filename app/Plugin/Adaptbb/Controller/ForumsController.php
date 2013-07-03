@@ -364,21 +364,30 @@ class ForumsController extends AdaptbbAppController
             $this->redirect(array('action' => 'index'));
         }
 
-        $this->paginate = array(
+        $cond = array(
             'conditions' => array(
                 'Forum.deleted_time' => '0000-00-00 00:00:00',
                 'Forum.slug' => $slug,
-                'ForumTopic.deleted_time' => '0000-00-00 00:00:00'
+                'ForumTopic.deleted_time' => '0000-00-00 00:00:00',
+                'ForumTopic.topic_type !=' => array('topic', 'sticky')
             ),
             'contain' => array(
                 'Forum',
                 'User'
             ),
-            'order' => 'ForumTopic.created ASC',
-            'limit' => Configure::read('Adaptbb.num_topics_per_page_forum')
+            'order' => 'ForumTopic.created DESC'
         );
+
+        $announcements = $this->Forum->ForumTopic->getStats( $this->Forum->ForumTopic->find('all', $cond) );
+
+        $cond['conditions']['ForumTopic.topic_type !='] = 'announcement';
+        $cond['order'] = 'ForumTopic.topic_type ASC, ForumTopic.created DESC';
+        $cond['limit'] = Configure::read('Adaptbb.num_topics_per_page_forum');
+
+        $this->paginate = $cond;
 
         $this->set('topics', $this->Forum->ForumTopic->getStats($this->paginate('ForumTopic')) );
         $this->set('forum', $forum['Forum']);
+        $this->set(compact('announcements'));
     }
 }

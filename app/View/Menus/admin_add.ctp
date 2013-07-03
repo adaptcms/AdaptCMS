@@ -9,6 +9,15 @@
 	<h2>Add Menu</h2>
 
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
+    <?= $this->Form->input('Menu.settings.header', array(
+        'label' => 'Header Type',
+        'options' => $header_types,
+        'empty' => 'Do not show header'
+    )) ?>
+    <?= $this->Form->input('Menu.settings.separator', array(
+        'label' => 'Separator HTML Tag',
+        'options' => $separator_types
+    )) ?>
 
 	<div class="pull-left">
 		<h3>Add Menu Item</h3>
@@ -17,7 +26,8 @@
 
 		<?= $this->Form->input('url', array(
 			'class' => 'link-url url',
-			'label' => 'Website URL'
+			'label' => 'Website URL',
+            'placeholder' => 'http://'
 		)) ?>
 		<?= $this->Form->input('url_text', array(
 			'class' => 'link-url-text',

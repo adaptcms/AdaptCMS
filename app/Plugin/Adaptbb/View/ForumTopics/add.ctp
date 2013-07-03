@@ -32,6 +32,16 @@ $(document).ready(function(){
 		'style' => 'height: 100%'
 	)) ?>
 
+    <!--nocache-->
+    <?php if (!empty($topic_type)): ?>
+        <?= $this->Form->input('topic_type', array(
+            'options' => $topic_type
+        )) ?>
+    <?php else: ?>
+        <?= $this->Form->hidden('topic_type', array('value' => 'topic' )) ?>
+    <?php endif ?>
+    <!--/nocache-->
+
 	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 	<?= $this->Form->hidden('forum_id', array('value' => $forum['id'] )) ?>
 

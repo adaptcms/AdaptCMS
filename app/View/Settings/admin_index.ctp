@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Settings', null) ?>
 
 <div class="pull-left">
-    <h1>Setting Categories<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Settings<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">

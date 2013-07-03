@@ -79,7 +79,7 @@ class MediaController extends AppController
             )
         );
         
-		$this->request->data = $this->paginate('Media');
+		$this->request->data = $this->Media->getFileCount($this->paginate('Media'));
 	}
 
     /**

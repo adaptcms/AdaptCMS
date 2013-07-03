@@ -12,6 +12,8 @@ class ForumTopicsController extends AdaptbbAppController
     */
 	private $permissions;
 
+    private $topic_type = array();
+
     /**
     * In this beforeFilter we will get the permissions to be used in the view files
     */
@@ -20,6 +22,24 @@ class ForumTopicsController extends AdaptbbAppController
 		parent::beforeFilter();
 	
 		$this->permissions = $this->getPermissions();
+
+        if ($this->params->action == 'add' || $this->params->action == 'edit')
+        {
+            if ($this->hasPermission($this->permissions['related']['forum_topics']['add_sticky']))
+                $this->topic_type['sticky'] = 'Sticky';
+
+
+            if ($this->hasPermission($this->permissions['related']['forum_topics']['add_announcement']))
+                $this->topic_type['announcement'] = 'Announcement';
+
+            if (!empty($this->topic_type))
+            {
+                $this->topic_type['topic'] = 'Topic';
+                $this->topic_type = array_reverse($this->topic_type);
+            }
+
+            $this->set('topic_type', $this->topic_type);
+        }
 	}
 
     /**
@@ -54,7 +74,7 @@ class ForumTopicsController extends AdaptbbAppController
 
         $this->ForumTopic->id = $topic['ForumTopic']['id'];
 
-        if (!$this->RequestHandler->isAjax())
+        if (!$this->request->is('ajax'))
         {
             $data['ForumTopic']['id'] = $topic['ForumTopic']['id'];
             $data['ForumTopic']['num_views'] = $topic['ForumTopic']['num_views'] + 1;
@@ -91,6 +111,10 @@ class ForumTopicsController extends AdaptbbAppController
                 $posts
             );
         }
+
+        $field = $this->ForumTopic->User->Field->findByTitle('Signature');
+
+        $posts = $this->ForumTopic->User->getModuleData($posts, $field);
 
         $this->set('forum', $topic['Forum']);
         $this->set('topic', $topic['ForumTopic']);
@@ -134,6 +158,9 @@ class ForumTopicsController extends AdaptbbAppController
                     $html_tags . ',<blockquote>,<small>'
                 );
             }
+
+            if ($this->request->data['ForumTopic']['topic_type'] != 'topic' && empty($this->topic_type))
+                $this->request->data['ForumTopic']['topic_type'] = 'topic';
 
             if ($this->ForumTopic->save($this->request->data))
             {
@@ -181,6 +208,9 @@ class ForumTopicsController extends AdaptbbAppController
                     $html_tags . ',<blockquote>,<small>'
                 );
             }
+
+            if ($this->request->data['ForumTopic']['topic_type'] != 'topic' && empty($this->topic_type))
+                $this->request->data['ForumTopic']['topic_type'] = 'topic';
 
             if ($this->ForumTopic->save($this->request->data))
             {

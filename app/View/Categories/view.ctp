@@ -1,6 +1,8 @@
 <?php $this->Html->addCrumb($category['title'], null) ?>
 
-<h1><?= $title_for_layout ?></h1>
+<?php $this->set('title_for_layout', $category['title']) ?>
+
+<h1><?= $category['title'] ?></h1>
 
 <?php if (empty($this->request->data)): ?>
 	<p>No Articles Found</p>

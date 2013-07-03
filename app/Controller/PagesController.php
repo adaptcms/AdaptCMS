@@ -269,29 +269,23 @@ class PagesController extends AppController
 			$this->loadModel('Article');
 			$this->loadModel('SettingValue');
 
-			$settings = $this->SettingValue->find('all', array(
-				'conditions' => array(
-					'OR' => array(
-						array('SettingValue.title' => 'Number of Articles on Homepage'),
-						array('SettingValue.title' => 'Categories of Articles to show on homepage')
-					)
-				)
-			));
+			$num_articles = $this->SettingValue->findByTitle('Number of Articles on Homepage');
+			$categories_home = $this->SettingValue->findByTitle('Categories of Articles to show on homepage');
 
-			if (empty($settings[0]))
+			if (empty($num_articles))
 			{
 				$limit = 5;
 			}
 			else
 			{
-				$limit = $settings[0]['SettingValue']['data'];
+				$limit = $num_articles['SettingValue']['data'];
 			}
 
-			if (!empty($settings[1]))
+			if (!empty($categories_home))
 			{
                 $categories_find = $this->Article->Category->find('all', array(
                     'conditions' => array(
-                        'Category.title' => explode(",", $settings[1]['SettingValue']['data'])
+                        'Category.title' => explode(",", $categories_home['SettingValue']['data'])
                     ),
                     'fields' => 'id'
                 ));

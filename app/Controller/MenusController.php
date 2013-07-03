@@ -38,7 +38,10 @@ class MenusController extends AppController
             $pages = $this->Menu->User->Page->find('list');
             $categories = $this->Menu->User->Category->find('list');
 
-            $this->set(compact('pages', 'categories'));
+            $separator_types = $this->Menu->getSeparatorTypes();
+            $header_types = $this->Menu->getHeaderTypes();
+
+            $this->set(compact('pages', 'categories', 'header_types', 'separator_types'));
         }
     }
 
@@ -144,7 +147,7 @@ class MenusController extends AppController
         $this->request->data = $this->Menu->read();
 
         $path = $this->Menu->_getPath($this->request->data['Menu']['slug']);
-        if (is_writable($path))
+        if (!file_exists($path) || is_writable($path))
         {
             $writable = 1;
         }

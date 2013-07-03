@@ -53,6 +53,8 @@ $(document).ready(function(){
 });
 </script>
 
+<?php $this->TinyMce->editor() ?>
+
 <?php $this->Html->addCrumb('Profile', array(
     'action' => 'profile',
     $this->Session->read('Auth.User.username')
@@ -151,7 +153,7 @@ $(document).ready(function(){
 )) ?>
 
 <?php foreach($fields as $key => $field): ?>
-    <?= $this->Element('FieldTypes/' . $field['Field']['field_type'], array(
+    <?= $this->Element('FieldTypes/' . $field['FieldType']['slug'], array(
         'model' => 'ModuleValue',
         'key' => $key,
         'field' => $field,

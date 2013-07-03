@@ -19,32 +19,33 @@ class PluginsController extends AppController
 	);
 
 	/**
-	* There is no real 'Plugin List' stored in a database, so no model uses by default
-	*/
-	public $uses = array();
-
-
-	/**
 	* The Index gets all active and inactive plugins along with basic info.
-	* A lookup is performed to get info from the AdaptCMS website, if an API ID is provided.
+	* A lookup is performed to get info from the AdaptCMS website.
 	*
 	* @return array of plugin data
 	*/
 	public function admin_index()
 	{
-		$active_path = APP . 'Plugin';
-		$active_plugins = $this->getPlugins($active_path);
+        $plugins = array();
+        $api_lookup = array();
 
-		$inactive_path = APP . 'Old_Plugins';
-		$inactive_plugins = $this->getPlugins($inactive_path);
+		$active_plugins = $this->getPlugins( $this->Plugin->getActivePath() );
+		$inactive_plugins = $this->getPlugins( $this->Plugin->getInactivePath() );
 
-		$plugins = array_merge($active_plugins['plugins'], $inactive_plugins['plugins']);
-		$api_lookup = array_merge($active_plugins['api_lookup'], $inactive_plugins['api_lookup']);
+        if (!empty($active_plugins['plugins']) || !empty($inactive_plugins['plugins']))
+		    $plugins = array_merge($active_plugins['plugins'], $inactive_plugins['plugins']);
 
-		if (!empty($api_lookup)){
-			if ($data = $this->CmsApi->pluginsLookup($api_lookup)) {
-				foreach($plugins as $key => $plugin) {
-					if (!empty($plugin['api_id']) && !empty($data['data'][$plugin['api_id']])) {
+        if (!empty($active_plugins['api_lookup']) || !empty($inactive_plugins['api_lookup']))
+		    $api_lookup = array_merge($active_plugins['api_lookup'], $inactive_plugins['api_lookup']);
+
+		if (!empty($api_lookup))
+        {
+			if ($data = $this->CmsApi->pluginsLookup($api_lookup))
+            {
+				foreach($plugins as $key => $plugin)
+                {
+					if (!empty($plugin['api_id']) && !empty($data['data'][$plugin['api_id']]))
+                    {
 						$plugins[$key]['data'] = $data['data'][$plugin['api_id']];
 					}
 				}
@@ -65,21 +66,18 @@ class PluginsController extends AppController
 	*/
 	public function admin_settings($plugin)
 	{
-		$path = APP . 'Plugin' . DS . $plugin;
-		$config_path = $path . DS . 'Config' . DS . 'config.php';
+        $path = $this->Plugin->getActivePath() . $plugin . DS;
+		$config_path = $path . 'Config' . DS . 'config.php';
 
 		if (file_exists($config_path))
 		{
 			$params = Configure::read($plugin);
 
 			if (isset($params['admin_menu']))
-			{
 				unset($params['admin_menu']);
-			}
-			if (isset($params['admin_menu_label']))
-			{
+
+            if (isset($params['admin_menu_label']))
 				unset($params['admin_menu_label']);
-			}
 		} else {
 			$params = array();
 		}
@@ -104,7 +102,7 @@ class PluginsController extends AppController
 
         	if (fwrite($fh, $new_contents))
         	{
-        		if ($plugin_json = $this->getPluginJson($path . DS . 'plugin.json'))
+        		if ($plugin_json = $this->getPluginJson($path . 'plugin.json'))
         		{
         			if (!empty($plugin_json['install']['model_title']))
         			{
@@ -132,66 +130,66 @@ class PluginsController extends AppController
 	}
         
         
-        /**
-         * A simple function that grabs all permissions (grouped by role) for a plugin for editing on page.
-         * Flash message on success/error.
-         * 
-         * @param type $plugin
-         */
-        public function admin_permissions($plugin)
-        {
-            $this->loadModel('Role');
-            
-            $roles = $this->Role->find('all', array(
-                'contain' => array(
-                    'Permission' => array(
-                        'conditions' => array(
-                            'Permission.plugin' => Inflector::underscore($plugin)
-                        ),
-                        'order' => 'Permission.controller ASC, Permission.action ASC'
-                    )
+    /**
+     * A simple function that grabs all permissions (grouped by role) for a plugin for editing on page.
+     * Flash message on success/error.
+     *
+     * @param string $plugin
+     */
+    public function admin_permissions($plugin)
+    {
+        $this->loadModel('Role');
+
+        $roles = $this->Role->find('all', array(
+            'contain' => array(
+                'Permission' => array(
+                    'conditions' => array(
+                        'Permission.plugin' => Inflector::underscore($plugin)
+                    ),
+                    'order' => 'Permission.controller ASC, Permission.action ASC'
                 )
-            ));
-            
-            $this->set(compact('plugin', 'roles'));
-            
-            if (!empty($this->request->data))
+            )
+        ));
+
+        $this->set(compact('plugin', 'roles'));
+
+        if (!empty($this->request->data))
+        {
+            if ($this->Role->Permission->saveMany($this->request->data))
             {
-//                die(debug($this->request->data));
-                if ($this->Role->Permission->saveMany($this->request->data))
-                {
-                    $this->Session->setFlash('Plugin permissions have been updated.', 'flash_success');
-                }
-                else 
-                {
-                    $this->Session->setFlash('Unable to update plugin permissions.', 'flash_error');
-                }
+                $this->Session->setFlash('Plugin permissions have been updated.', 'flash_success');
+            }
+            else
+            {
+                $this->Session->setFlash('Unable to update plugin permissions.', 'flash_error');
             }
         }
+    }
 
-	/**
-	* Function hooks into Themes to manage web assets for plugins
-	*
-	* @param plugin name
-	* @return variables to output list of assets
-	*/
+    /**
+     * Function hooks into Themes to manage web assets for plugins
+     *
+     * @param string $plugin
+     * @return void
+     */
 	public function admin_assets($plugin)
 	{
-            $this->loadModel('Theme');
+        $this->loadModel('Theme');
 
-            $this->set('assets_list', $this->Theme->assetsList(null, $plugin));
-            $this->set('assets_list_path', APP);
-            $this->set('webroot_path', $this->webroot);
+        $this->set('assets_list', $this->Theme->assetsList(null, $plugin));
+        $this->set('assets_list_path', APP);
+        $this->set('webroot_path', $this->webroot);
 
-            $this->set(compact('plugin'));
+        $this->set(compact('plugin'));
 	}
 
-	/**
-	* Convienence method, need to get plugin JSON file contents several times in this controller.
-	*
-	* @param path of plugin JSON file
-	* @return json_decode array of data, false if it can't get file contents
-	*/
+    /**
+     * Convienence method, need to get plugin JSON file contents several times in this controller.
+     *
+     * @param string $path
+     * @internal param \of $path plugin JSON file
+     * @return array|boolean of data, false if it can't get file contents
+     */
 	private function getPluginJson($path)
 	{
 		if (file_exists($path) && is_readable($path))
@@ -202,15 +200,15 @@ class PluginsController extends AppController
 			return json_decode($file, true);
 		}
 
-		return;
+		return false;
 	}
 
 	/**
 	* Convienence method
 	* Goes through folder of Plugins, setting all data needed on plugin listing.
 	*
-	* @param path of specified Plugin folder
-	* @return of plugin data with api information
+	* @param string $path of specified Plugin folder
+	* @return array plugin data with api information
 	*/
 	private function getPlugins($path)
 	{
@@ -220,9 +218,12 @@ class PluginsController extends AppController
 		$plugins = array();
 		$api_lookup = array();
 
-		if ($dh = opendir($path)) {
-			while (($file = readdir($dh)) !== false) {
-                if (!in_array($file, $exclude) && $file != ".." && $file != ".") {
+		if ($dh = opendir($path))
+        {
+			while (($file = readdir($dh)) !== false)
+            {
+                if (!in_array($file, $exclude) && $file != ".." && $file != ".")
+                {
                 	$json = $path . DS . $file . DS . 'plugin.json';
 
 		 			if ($plugin = $this->getPluginJson($json))

@@ -38,29 +38,21 @@ class SettingValue extends AppModel
     * Field data options are transformed and if a user flags a setting to be deleted
     * then the deleted time is set.
     *
-    * @return true
+    * @return boolean
     */
     public function beforeSave()
     {
-        if (!empty($this->data['FieldData'])) {
-            $this->data['SettingValue']['data_options'] = 
-                str_replace("'","",json_encode($this->data['FieldData']));
-        }
+        if (!empty($this->data['FieldData']))
+            $this->data['SettingValue']['data_options'] = str_replace("'","",json_encode($this->data['FieldData']));
 
         if (!empty($this->data['SettingValue']['deleted']))
-        {
             $this->data['SettingValue']['deleted_time'] = $this->dateTime();
-        }
 
         if (!empty($this->data['SettingValue']['title']))
-        {
             $this->data['SettingValue']['title'] = strip_tags($this->data['SettingValue']['title']);
-        }
 
         if (!empty($this->data['SettingValue']['data']) && is_array($this->data['SettingValue']['data']))
-        {
             $this->data['SettingValue']['data'] = json_encode($this->data['SettingValue']['data']);
-        }
 
         return true;
     }
@@ -69,7 +61,7 @@ class SettingValue extends AppModel
     * Goes through setting values and json_decodes data_options if applicable and if setting value type
     * is of a multi-data (meaning its contents gets json_encoded), then json_decode it into an array.
     *
-    * @param results
+    * @param array $results
     * @return array of filtered data
     */
     public function afterFind($results)

@@ -7,7 +7,7 @@
   <head>
     <?= $this->Html->charset() ?>
     <title>
-      <?= $title_for_layout ?>
+      Your Website | <?= $title_for_layout ?>
     </title>
 
     <?= $this->Html->meta('favicon.ico', '/img/favicon.ico', array('type' => 'icon')) ?>

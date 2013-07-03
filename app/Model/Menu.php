@@ -48,6 +48,8 @@ class Menu extends AppModel
             $this->data['Menu']['settings'] = json_encode($settings);
         }
 
+//        die(debug($this->data));
+
         if (!empty($this->data['Menu']['items']))
         {
             App::import('Model','Page');
@@ -109,6 +111,7 @@ class Menu extends AppModel
                 {
                     fwrite($fh, $content);
                     fclose($fh);
+                    chmod($this->_getPath($this->data['Menu']['slug']), 0755);
                 }
             }
         }
@@ -175,5 +178,26 @@ class Menu extends AppModel
         }
 
         return true;
+    }
+
+    public function getHeaderTypes()
+    {
+        return array(
+            'h1' => 'Header1 <h1>',
+            'h2' => 'Header2 <h2>',
+            'h3' => 'Header3 <h3>',
+            'h4' => 'Header4 <h4>',
+            'strong' => 'Bold <strong>',
+            'text' => 'Normal Text Style'
+        );
+    }
+
+    public function getSeparatorTypes()
+    {
+        return array(
+            'li' => 'li list <li>',
+            'br' => 'Break Line <br />',
+            'p' => 'Paragraph <p>'
+        );
     }
 }

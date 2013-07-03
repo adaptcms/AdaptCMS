@@ -99,7 +99,7 @@ class SearchController extends AppController
 							$params['permissions']
 						)))
 					{
-						if ($this->RequestHandler->isAjax())
+						if ($this->request->is('ajax'))
 						{
 							return false;
 						} else {
@@ -113,7 +113,7 @@ class SearchController extends AppController
 						'plugin' => ($module['Module']['is_plugin'] == 1 ? Inflector::tableize($model['name']) : '')
 					)))
 				{
-					if ($this->RequestHandler->isAjax())
+					if ($this->request->is('ajax'))
 					{
 						return false;
 					} else {

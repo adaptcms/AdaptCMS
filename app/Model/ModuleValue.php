@@ -116,4 +116,42 @@ class ModuleValue extends AppModel
                 
         return $data;
     }
+
+    public function getValue($field, $foreign_id, $view)
+    {
+        if (empty($field) || empty($foreign_id))
+            return null;
+
+        $data = $this->find('first', array(
+           'conditions' => array(
+               'ModuleValue.field_id' => $field['Field']['id'],
+               'ModuleValue.module_id' => $foreign_id
+           )
+        ));
+
+        $result = '';
+        if (!empty($data['ModuleValue']))
+        {
+            $slug = $field['Field']['field_type_slug'];
+
+            if (file_exists($this->_getPath() . $slug . '.ctp'))
+            {
+                $result = $view->element('FieldTypesData/' . $slug, array('data' => $data['ModuleValue']));
+            }
+            else
+            {
+                $result = $view->element('FieldTypesData/default', array('data' => $data['ModuleValue']));
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    public function _getPath()
+    {
+        return VIEW_PATH . 'Elements' . DS . 'FieldTypesData' . DS;
+    }
 }

@@ -11,23 +11,12 @@
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 	<?= $this->Form->input('Menu.settings.header', array(
         'label' => 'Header Type',
-        'options' => array(
-            'h1' => 'Header1 <h1>',
-            'h2' => 'Header2 <h2>',
-            'h3' => 'Header3 <h3>',
-            'h4' => 'Header4 <h4>',
-            'strong' => 'Bold <strong>',
-            'text' => 'Normal Text Style'
-        ),
+        'options' => $header_types,
         'empty' => 'Do not show header'
     )) ?>
     <?= $this->Form->input('Menu.settings.separator', array(
         'label' => 'Separator HTML Tag',
-        'options' => array(
-            'li' => 'li list <li>',
-            'br' => 'Break Line <br />',
-            'p' => 'Paragraph <p>'
-        )
+        'options' => $separator_types
     )) ?>
 
 	<div class="pull-left" style="margin-bottom: 15px;">
@@ -37,7 +26,8 @@
 
 		<?= $this->Form->input('url', array(
 			'class' => 'link-url url',
-			'label' => 'Website URL'
+			'label' => 'Website URL',
+            'placeholder' => 'http://'
 		)) ?>
 		<?= $this->Form->input('url_text', array(
 			'class' => 'link-url-text',

@@ -221,4 +221,41 @@ class User extends AppModel
 
         return $this->find('all', $cond);
     }
+
+    /**
+     * @param array $data
+     * @param array $field
+     * @return array
+     */
+    public function getModuleData($data = array(), $field = array())
+    {
+        if (empty($data) || empty($field))
+        {
+            return $data;
+        }
+
+        $view = new View();
+        $view->autoRender = false;
+
+        $user_data = array();
+        foreach($data as $key => $row)
+        {
+            if (!empty($row['User']))
+            {
+                if (empty($user_data[$row['User']['id']]))
+                {
+                    $value = $this->Field->ModuleValue->getValue($field, $row['User']['id'], $view);
+
+                    $user_data[$row['User']['id']] = $value;
+                    $data[$key]['User']['Data'][$field['Field']['title']] = $value;
+                }
+                else
+                {
+                    $data[$key]['User']['Data'][$field['Field']['title']] = $user_data[$row['User']['id']];
+                }
+            }
+        }
+
+        return $data;
+    }
 }

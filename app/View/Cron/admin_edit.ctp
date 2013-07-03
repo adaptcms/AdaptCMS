@@ -1,7 +1,7 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
 <?php $this->Html->addCrumb('Tools', array('controller' => 'tools', 'action' => 'index')) ?>
-<?php $this->Html->addCrumb('Cron Entries', array('action' => 'index')) ?>
-<?php $this->Html->addCrumb('Edit Cron', null) ?>
+<?php $this->Html->addCrumb('Cron Jobs', array('action' => 'index')) ?>
+<?php $this->Html->addCrumb('Edit Cron Job', null) ?>
 
 <div class="pull-right admin-edit-options clearfix">
     <?= $this->Html->link(
@@ -17,7 +17,7 @@
 </div>
 
 <?= $this->Form->create('Cron', array('class' => 'well admin-validate')) ?>
-	<h2>Edit Cron Entry</h2>
+	<h2>Edit Cron Job</h2>
 
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 	<?= $this->Form->input('module_id', array(

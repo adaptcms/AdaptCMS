@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}articles` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`category_id`,`status`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}article_values` (
@@ -21,7 +22,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}article_values` (
   `field_id` int(11) DEFAULT '0',
   `file_id` int(11) DEFAULT '0',
   `data` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `article_id` (`article_id`,`field_id`,`file_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}blocks` (
@@ -37,7 +39,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}blocks` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `deleted_time` (`deleted_time`,`module_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}categories` (
@@ -48,7 +51,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}categories` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}comments` (
@@ -67,7 +71,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}comments` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `article_id` (`article_id`,`user_id`,`deleted_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}cron` (
@@ -81,22 +86,9 @@ CREATE TABLE IF NOT EXISTS `{prefix}cron` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `{prefix}field_types` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `label` varchar(255) NOT NULL,
-  `slug` varchar(255) NOT NULL,
-  `limit` int(11) NOT NULL DEFAULT '0',
-  `user_id` int(11) NOT NULL DEFAULT '0',
-  `ord` int(11) NOT NULL DEFAULT '0',
-  `active` int(1) NOT NULL DEFAULT '0',
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL,
-  `deleted_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`id`),
+  KEY `run_time` (`run_time`,`deleted_time`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -116,8 +108,25 @@ CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`,`field_type_id`,`user_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}field_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `label` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `limit` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `ord` int(11) NOT NULL DEFAULT '0',
+  `active` int(1) NOT NULL DEFAULT '0',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `slug` (`slug`,`deleted_time`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -131,7 +140,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}files` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}logs` (
@@ -155,14 +165,16 @@ CREATE TABLE IF NOT EXISTS `{prefix}media` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`deleted_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}media_files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `file_id` int(11) NOT NULL,
   `media_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `file_id` (`file_id`,`media_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}menus` (
@@ -175,7 +187,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}menus` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `deleted_time` (`deleted_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}messages` (
@@ -191,16 +204,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}messages` (
   `receiver_archived_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `is_read` int(1) NOT NULL DEFAULT '0',
   `parent_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `{prefix}module_values` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `module_id` int(11) DEFAULT '0',
-  `field_id` int(11) DEFAULT '0',
-  `file_id` int(11) DEFAULT '0',
-  `data` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `sender_user_id` (`sender_user_id`,`receiver_user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}modules` (
@@ -211,8 +216,19 @@ CREATE TABLE IF NOT EXISTS `{prefix}modules` (
   `is_plugin` int(1) NOT NULL DEFAULT '0',
   `is_searchable` int(1) NOT NULL DEFAULT '0',
   `is_fields` int(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `model_title` (`model_title`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}module_values` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `module_id` int(11) DEFAULT '0',
+  `field_id` int(11) DEFAULT '0',
+  `file_id` int(11) DEFAULT '0',
+  `data` text,
+  PRIMARY KEY (`id`),
+  KEY `module_id` (`module_id`,`field_id`,`file_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -223,11 +239,13 @@ CREATE TABLE IF NOT EXISTS `{prefix}pages` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `slug` (`slug`,`user_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}permissions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(255) DEFAULT NULL,
   `module_id` int(11) DEFAULT '0',
   `role_id` int(11) NOT NULL DEFAULT '0',
   `action_id` int(11) NOT NULL DEFAULT '0',
@@ -238,7 +256,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}permissions` (
   `related` longtext,
   `own` int(1) NOT NULL DEFAULT '0',
   `any` int(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`,`action_id`,`plugin`,`controller`,`action`,`status`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (
@@ -254,7 +273,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `file_id` (`file_id`,`user_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
@@ -266,7 +286,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `article_id` (`article_id`,`user_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_values` (
@@ -275,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_values` (
   `plugin_poll_id` int(11) NOT NULL,
   `votes` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `poll_id` (`plugin_poll_id`)
+  KEY `plugin_poll_id` (`plugin_poll_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
@@ -284,34 +305,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
   `plugin_value_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `user_ip` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `{prefix}plugin_support_resources` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(50) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `ticket_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `deleted_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
--- --------------------------------------------------------
-CREATE TABLE IF NOT EXISTS `{prefix}plugin_support_tickets` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `send_user_id` int(11) NOT NULL,
-  `reply_user_id` int(11) NOT NULL,
-  `category` varchar(255) NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `message` text NOT NULL,
-  `full_name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `priority` varchar(50) NOT NULL,
-  `parent_id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `deleted_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `plugin_poll_id` (`plugin_poll_id`,`plugin_value_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}roles` (
@@ -321,7 +316,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}roles` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `defaults` (`defaults`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}settings` (
@@ -344,7 +340,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}setting_values` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `title` (`title`,`setting_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}templates` (
@@ -356,7 +353,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}templates` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` varchar(255) DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `theme_id` (`theme_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}themes` (
@@ -365,7 +363,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}themes` (
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `deleted_time` (`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}users` (
@@ -384,5 +383,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}users` (
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_reset_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `facebook_id` varchar(250) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

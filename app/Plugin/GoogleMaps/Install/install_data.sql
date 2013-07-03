@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_google_maps` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------

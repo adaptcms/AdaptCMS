@@ -4,10 +4,7 @@
 
 <?php
     $this->CodeMirror->editor('BlockCode');
-    $this->TinyMce->editor(array(
-        'mode' => 'exact',
-        'elements' => 'BlockText'
-    ));
+    $this->TinyMce->editor(array('selector' => '#BlockText'));
 ?>
 <?= $this->Html->script('data-tagging.js') ?>
 

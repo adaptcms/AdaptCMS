@@ -10,6 +10,8 @@ $(document).ready(function() {
 		{
 			$("#flashMessage.alert-error").show();
 		} else {
+            getBlockUI();
+
 			$("#flashMessage.alert-error").hide();
 
 			receiver_user_id = $("#MessageReceiverUserId").val();
@@ -33,6 +35,7 @@ $(document).ready(function() {
 				if (data.status)
 				{
 					$(".messages").load(form_url + '?unique=' + Math.round(Math.random()*10000) + ' .messages', function() {
+                        $.unblockUI();
 						$("#flashMessage.alert-success").show().fadeOut(3000);
 					});
 				}

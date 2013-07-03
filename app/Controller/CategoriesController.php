@@ -304,7 +304,6 @@ class CategoriesController extends AppController
 
 		$this->set('category', $category['Category']);
 		$this->set('article', $this->request->data);
-		$this->set('title_for_layout', ucfirst($slug));
 
 		if ($this->theme != "Default" && 
 			file_exists(VIEW_PATH.'Themed/'.$this->theme.'/Categories/'.$slug.'.ctp') ||
