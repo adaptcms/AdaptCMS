@@ -20,7 +20,7 @@ class AppController extends Controller
      * @var array 
      */
     public $components = array(
-        'DebugKit.Toolbar',
+        // 'DebugKit.Toolbar',
         'Auth' => array(
             'loginAction' => array(
                 'controller' => 'users',
@@ -129,9 +129,14 @@ class AppController extends Controller
 
         if ($this->params->controller != "install") {
             try {
-                    $db = ConnectionManager::getDataSource('default');
+                $db = ConnectionManager::getDataSource('default');
             } catch (Exception $e) {
-                    $this->redirect(array('controller' => 'install', 'admin' => false));
+                $this->redirect(array(
+                    'controller' => 'install',
+                    'action' => 'index',
+                    'admin' => false,
+                    'plugin' => null
+                ));
             }
         }
 
@@ -211,7 +216,7 @@ class AppController extends Controller
      * 
      * @param string $layout
      * @param string $prefix
-     * @return none
+     * @return void
      */
     public function layout($layout = null, $prefix = null)
     {
@@ -238,7 +243,7 @@ class AppController extends Controller
     /**
      * Access Check
      * 
-     * @return none
+     * @return void
      */
     public function accessCheck()
     {
@@ -313,9 +318,11 @@ class AppController extends Controller
             $this->permissions = $this->getRelatedPermissions($permission);
             $this->set('permissions', $this->permissions);
 
-            if (!empty($permission['Permission']['status']) && $permission['Permission']['status'] == 0) {
+            if (isset($permission['Permission']['status']) && $permission['Permission']['status'] == 0) {
+                $this->denyRedirect();
                 $this->Auth->deny($this->params->action);
             } elseif (empty($permission['Permission']['status'])) {
+                $this->denyRedirect();
                 $this->Auth->deny($this->params->action);
             } elseif ($permission['Permission']['status'] == 1) {
                 $this->Auth->allow($this->params->action);
@@ -415,7 +422,7 @@ class AppController extends Controller
 	{
 		if (!empty($permission))
 		{
-			$permissions = array();
+            $data = array();
 
 			if (!empty($permission['Permission']['controller']))
 			{
@@ -438,6 +445,7 @@ class AppController extends Controller
 			if (!empty($permission['Permission']['related']))
 			{
 				$related_values = json_decode($permission['Permission']['related'], true);
+                $related = array();
 
 				$values = array();
 
@@ -483,7 +491,7 @@ class AppController extends Controller
 				$permissions = $permission['Permission'];
 			}
 
-			return $permissions;
+			return !empty($permissions) ? $permissions : array();
 		} else {
 			return false;
 		}
@@ -504,8 +512,8 @@ class AppController extends Controller
 
     /**
      * If AJAX request, returns json_encode array, otherwise a redirect
-     * 
-     * @return type
+     *
+     * @return void
      */
     public function denyRedirect()
     {
@@ -515,24 +523,28 @@ class AppController extends Controller
                     'message' => 'You do not have access to this page'
             )));
     	} else {
-            if (Configure::read('debug') == 2 && 1 == 2)
+            if (Configure::read('dev') == 1)
             {
                 die(debug($this->params));
             }
             else
             {
-                /*
                 $this->Session->setFlash('You do not have access to this page.', 'flash_error');
-                $this->redirect(array(
+
+                if (Controller::referer() && Router::url( $this->here, true ) != Controller::referer())
+                {
+                    $this->redirect( Controller::referer() );
+                }
+                else
+                {
+                    $this->redirect(array(
                         'plugin' => null,
-                        'admin' => false, 
-                        'controller' => 'pages', 
-                        'action' => 'display', 
+                        'admin' => false,
+                        'controller' => 'pages',
+                        'action' => 'display',
                         'denied'
-                    )
-                );
-                */
-                throw new NotFoundException();
+                    ));
+                }
             }
         }
     }
@@ -553,8 +565,14 @@ class AppController extends Controller
     }
 
     public function blackhole($type) {
-        // debug($this->params);
-        debug($type);
+        if ($type != 'auth')
+        {
+            $this->Session->setFlash(
+                'We have encountered an ' . $type . ' error. Please ensure you are logged in and for forms - refresh the page and submit again.',
+                'flash_error'
+            );
+            $this->redirect( Controller::referer() );
+        }
     }
 
     /**
@@ -632,7 +650,6 @@ class AppController extends Controller
             {
                 $block_data = array();
                 $block_permissions = array();
-                $models = array();
 
                 foreach($data as $row)
                 {
@@ -696,11 +713,11 @@ class AppController extends Controller
         }
     }
 
-        /**
-         * Looks up any cron entries that need to run and run the model function
-         * 
-         * @return none
-         */
+    /**
+     * Looks up any cron entries that need to run and run the model function
+     *
+     * @return void
+     */
 	public function runCron()
 	{
         if ($this->params->controller != 'cron')
@@ -752,7 +769,7 @@ class AppController extends Controller
 
     /**
      * 
-     * @param type $user
+     * @param string $user
      */
     public function beforeFacebookLogin($user)
     {

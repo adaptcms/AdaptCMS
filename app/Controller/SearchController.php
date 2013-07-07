@@ -26,6 +26,8 @@ class SearchController extends AppController
 			'search'
 		);
 
+        $this->Security->unlockedActions = array('search');
+
 		parent::beforeFilter();
 
 		$this->loadModel('Module');

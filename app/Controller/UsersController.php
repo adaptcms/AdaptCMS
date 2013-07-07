@@ -4,6 +4,7 @@ App::uses('AppController', 'Controller');
 /**
  * Class UsersController
  * @property Field $Field
+ * @property SettingValue $SettingValue
  */
 class UsersController extends AppController {
 	public $name = 'Users';
@@ -19,6 +20,8 @@ class UsersController extends AppController {
 			'forgot_password',
 			'forgot_password_activate'
 		);
+
+        $this->Security->unlockedActions = array('ajax_check_user');
 
 		parent::beforeFilter();
 
@@ -98,10 +101,10 @@ class UsersController extends AppController {
 					$this->ModuleValue->saveMany($this->request->data['ModuleValue']);
 				}
 
-                $this->Session->setFlash('Your role has been added.', 'flash_success');
+                $this->Session->setFlash('Your user has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your role.', 'flash_error');
+                $this->Session->setFlash('Unable to add your user.', 'flash_error');
             }
         }
 
@@ -274,80 +277,52 @@ class UsersController extends AppController {
 	public function login() {
 		if (!empty($this->request->data))
 		{
-			if (!empty($this->request->data['User']['type']) && $this->request->data['User']['type'] == "openid")
-			{
-				$realm = 'http://' . $_SERVER['HTTP_HOST'];
-		        $returnTo = $realm;
+            $status = $this->User->findByUsername($this->request->data['User']['username']);
+            $this->loadModel('SettingValue');
 
-				if ($this->request->isPost() && !$this->Openid->isOpenIDResponse()) {
-		            try {
-		                $this->Openid->authenticate($this->data['OpenidUrl']['openid'], $returnTo, $realm);
-		            } catch (InvalidArgumentException $e) {
-		                $this->Session->write('msg', 'Invalid OpenID');
-		            } catch (Exception $e) {
-		                $this->Session->write('msg', $e->getMessage());
-		            }
-		            $this->Session->write('msg', 1);
-		        } elseif ($this->Openid->isOpenIDResponse()) {
-		            $response = $this->Openid->getResponse($returnTo);
+            if (!empty($status) && $status['User']['status'] == 0 || !empty($status) && $status['User']['deleted_time'] != '0000-00-00 00:00:00') {
+                $user_status = $this->SettingValue->findByTitle('User Status');
 
-		            if ($response->status == Auth_OpenID_CANCEL) {
-		                $this->Session->write('msg', 'Verification cancelled');
-		            } elseif ($response->status == Auth_OpenID_FAILURE) {
-		                $this->Session->write('msg', 'OpenID verification failed: '.$response->message);
-		            } elseif ($response->status == Auth_OpenID_SUCCESS) {
-		            	$this->Session->write('msg','success');
-		            }
-		            $this->Session->write('msg', 2);
-		        }
-			} else {
-				$status = $this->User->findByUsername($this->request->data['User']['username']);
-				$this->loadModel('SettingValue');
+                if ($user_status['SettingValue']['data'] == "Email Activation") {
+                    $custom_msg = ", please visit the link you received in your email in order to login.";
+                } elseif ($user_status['SettingValue']['data'] == "Staff Activation") {
+                    $custom_msg = ", you must wait for an admin to activate your account.";
+                } else {
+                    $custom_msg = null;
+                }
 
-				if (!empty($status) && $status['User']['status'] == 0) {
-					$user_status = $this->SettingValue->findByTitle('User Status');
+                $this->Session->setFlash('Your account is inactive' . $custom_msg, 'flash_error');
+                return $this->redirect( $this->Auth->redirect() );
+            } else {
+                $password_reset = $this->SettingValue->findByTitle('User Password Reset');
 
-					if ($user_status['SettingValue']['data'] == "Email Activation") {
-						$custom_msg = ", please visit the link you received in your email in order to login.";
-					} elseif ($user_status['SettingValue']['data'] == "Staff Activation") {
-						$custom_msg = ", you must wait for an admin to activate your account.";
-					} else {
-						$custom_msg = null;
-					}
+                if (!empty($password_reset) && $password_reset['SettingValue']['data'] > 0) {
+                    $user = $this->User->findByUsername($this->request->data['User']['username']);
+                    if (!empty($user)) {
+                        $diff = strtotime($user['User']['last_reset_time']);
+                        $math = round((time() - $diff) / (60 * 60 * 24), 0);
 
-					$this->Session->setFlash('Your account is inactive' . $custom_msg, 'flash_error');
-				    return $this->redirect($this->Auth->redirect());
-				} else {
-					$password_reset = $this->SettingValue->findByTitle('User Password Reset');
+                        if ($user['User']['last_reset_time'] == '0000-00-00 00:00:00' ||
+                            $math > $password_reset['SettingValue']['data']) {
+                            $this->redirect(array(
+                                'action' => 'reset_password',
+                                $this->request->data['User']['username']
+                            ));
+                        }
+                    }
+                }
 
-					if (!empty($password_reset) && $password_reset['SettingValue']['data'] > 0) {
-						$user = $this->User->findByUsername($this->request->data['User']['username']);
-						if (!empty($user)) {
-							$diff = strtotime($user['User']['last_reset_time']);
-							$math = round((time() - $diff) / (60 * 60 * 24), 0);
+                if ($this->Auth->login())
+                {
+                    $this->User->id = $this->Auth->user('id');
+                    $this->User->saveField('login_time', $this->User->dateTime());
 
-							if ($user['User']['last_reset_time'] == '0000-00-00 00:00:00' ||
-								$math > $password_reset['SettingValue']['data']) {
-								$this->redirect(array(
-									'action' => 'reset_password',
-									$this->request->data['User']['username']
-								));
-							}  
-						}
-					} 
-
-					if ($this->Auth->login())
-					{
-						$this->User->id = $this->Auth->user('id');
-						$this->User->saveField('login_time', $this->User->dateTime());
-
-						$this->Session->setFlash('Welcome back '.$this->Auth->User('username').'!', 'flash_success');
-					    return $this->redirect($this->Auth->redirect());
-					} else {
-					    $this->Session->setFlash('Username or password is incorrect', 'flash_error');
-					}
-				}
-			}
+                    $this->Session->setFlash('Welcome back '.$this->Auth->User('username').'!', 'flash_success');
+                    return $this->redirect( $this->Auth->redirect() );
+                } else {
+                    $this->Session->setFlash('Username or password is incorrect', 'flash_error');
+                }
+            }
 		}
 	}
 
@@ -358,14 +333,14 @@ class UsersController extends AppController {
         $this->redirect($this->Auth->logout());
     }
 
-	public function register()
+    public function register()
 	{
 		if ($this->Auth->user('id')) {
         	$this->Session->setFlash("You can't register, you are logged in!", 'flash_error');
 			return $this->redirect('/');
 		}
 
-		$this->loadModel('SettingValue');
+        $this->loadModel('SettingValue');
 		
 		$reg_closed = $this->SettingValue->findByTitle('Is Registration Open?');
 
@@ -388,28 +363,35 @@ class UsersController extends AppController {
 
         if (!empty($this->request->data))
         {
-        	App::import('Vendor', 'securimage');
-        	$securimage = new Securimage();
+            if (!empty($captcha['SettingValue']['data']))
+            {
+                include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
+                $securimage = new Securimage();
 
-	        if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes' && 
-	            !$securimage->check($this->request->data['captcha'])) {
-	            $message = 'Invalid Captcha Answer. Please try again.';
-	        }
+                if ($captcha['SettingValue']['data'] == 'Yes' &&
+                    !$securimage->check($this->request->data['captcha'])) {
+                    $message = 'Invalid Captcha Answer. Please try again.';
+                }
+            }
 
         	$this->request->data['User']['security_answers'] = json_encode($this->request->data['Security']);
         	$role = $this->User->Role->findByDefaults('default-member');
         	$this->request->data['User']['role_id'] = $role['Role']['id'];
 
+            if (empty($user_status['SettingValue']['data']))
+                $this->request->data['User']['status'] = 1;
+
             if (empty($message) && $this->User->save($this->request->data))
             {
+                $password = $this->request->data['User']['password'];
             	$this->request->data['User'] = array_merge($this->request->data['User'], array('id' => $this->User->id));
+
+                $sitename = $this->SettingValue->findByTitle('Site Name');
+                $webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
+                $email_subject = $this->SettingValue->findByTitle('User Register Email Subject');
             	
 	        	if ($user_status['SettingValue']['data'] == "Email Activation")
 	        	{
-	        		$sitename = $this->SettingValue->findByTitle('Site Name');
-	        		$webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
-	        		$email_subject = $this->SettingValue->findByTitle('User Register Email Subject');
-
 	        		$activate_code['activate_code'] = md5(time());
 					$this->User->saveField('settings', json_encode($activate_code));
 
@@ -436,6 +418,11 @@ class UsersController extends AppController {
 	        	} elseif ($user_status['SettingValue']['data'] == "Staff Activation") {
                 	$this->Session->setFlash('Account Created - You cannot login until a staff member has activated your account.', 'flash_success');
 	        	} else {
+                    $temp_data = $this->request->data['User'];
+                    $temp_data['password'] = $password;
+
+                    $this->_welcomeEmail($temp_data, $sitename, $webmaster_email, $email_subject);
+
 	            	$this->Auth->login($this->request->data['User']);
 
 					$this->User->id = $this->Auth->user('id');
@@ -553,7 +540,7 @@ class UsersController extends AppController {
 
 		if (!empty($this->request->data))
 		{
-        	App::import('Vendor', 'securimage');
+            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
         	$securimage = new Securimage();
 
 	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
@@ -647,7 +634,7 @@ class UsersController extends AppController {
 
 		if (!empty($this->request->data))
 		{
-        	App::import('Vendor', 'securimage');
+            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
         	$securimage = new Securimage();
 
 	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
@@ -723,7 +710,7 @@ class UsersController extends AppController {
 
     	if (!empty($this->request->data))
     	{
-        	App::import('Vendor', 'securimage');
+            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
         	$securimage = new Securimage();
 
 	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
@@ -912,5 +899,28 @@ class UsersController extends AppController {
     			$data
     		);
     	}
+    }
+
+    public function _welcomeEmail($data, $sitename, $webmaster_email, $email_subject)
+    {
+        $site_name = $sitename['SettingValue']['data'];
+
+        $email = new CakeEmail();
+
+        $email->to($data['email']);
+        $email->from(array(
+            $webmaster_email['SettingValue']['data'] => $site_name
+        ));
+        $email->subject($email_subject['SettingValue']['data']);
+        if ($this->theme != "Default") {
+            // $email->theme($this->theme);
+        }
+        $email->emailFormat('html');
+        $email->template('new_account');
+        $email->viewVars(array(
+            'data' => $data,
+            'sitename' => $site_name
+        ));
+        $email->send();
     }
 }

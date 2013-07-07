@@ -1,6 +1,5 @@
 <?php
 App::uses('AppController', 'Controller');
-App::import('Vendor', 'securimage');
 
 /**
  * Class CommentsController
@@ -11,6 +10,13 @@ class CommentsController extends AppController
     * Name of the Controller, 'Comments'
     */
 	public $name = 'Comments';
+
+    public function beforeFilter()
+    {
+        $this->Security->unlockedActions = array('ajax_post');
+
+        parent::beforeFilter();
+    }
 
     /**
     * Flash error or flash success and redirect back to article
@@ -78,6 +84,7 @@ class CommentsController extends AppController
 
         if (!$this->Auth->user('id'))
         {
+            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
             $securimage = new Securimage();
         }
 

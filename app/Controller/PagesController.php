@@ -141,6 +141,7 @@ class PagesController extends AppController
         if (is_writable($path))
         {
             $writable = 1;
+            $this->request->data['Page']['content'] = $this->Page->getContent($this->request->data['Page']['slug']);
         }
         else
         {
@@ -181,11 +182,6 @@ class PagesController extends AppController
 
         if (!empty($permanent)) {
             $delete = $this->Page->delete($id);
-
-		    if (is_readable(VIEW_PATH.'Pages/' . $this->slug($title) . '.ctp'))
-		    {
-		    	unlink(VIEW_PATH.'Pages/' . $this->slug($title) . '.ctp');
-		    }
         } else {
             $delete = $this->Page->saveField('deleted_time', $this->Page->dateTime());
         }

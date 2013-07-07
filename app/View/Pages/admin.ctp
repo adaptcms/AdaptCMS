@@ -40,17 +40,15 @@
 <div class="span6 well no-margin-left">
 	<h3>Newest Plugin from AdaptCMS.com</h3>
 
-	<?php if (!empty($newest_plugin)): ?>
-		<?php foreach($newest_plugin as $plugin): ?>
-			<a href="<?= $this->Api->url() ?>plugin/<?= $plugin['slug'] ?>" target="_blank">
-				<?= $plugin['title'] ?>
-			</a><br />
-			<em>@ <?= $this->Admin->time($plugin['created'], 'words') ?></em>
+	<?php if (!empty($plugin)): ?>
+        <a href="<?= $this->Api->url() ?>plugin/<?= $plugin['slug'] ?>" target="_blank">
+            <?= $plugin['title'] ?>
+        </a><br />
+        <em>@ <?= $this->Admin->time($plugin['created'], 'words') ?></em>
 
-			<p style="margin-top: 10px">
-				<?= $plugin['short_description'] ?>
-			</p>
-		<?php endforeach ?>
+        <p style="margin-top: 10px">
+            <?= $plugin['short_description'] ?>
+        </p>
 	<?php endif ?>
 
 	<a href="<?= $this->Api->url() ?>plugins" class="btn btn-primary admin-homepage pull-right" target="_blank">View All Plugins »</a>
@@ -60,16 +58,14 @@
 	<h3>Latest News from AdaptCMS.com</h3>
 
 	<?php if (!empty($news)): ?>
-		<?php foreach($news as $article): ?>
-			<a href="<?= $this->Api->siteUrl() ?>article/<?= $article['slug'] ?>" target="_blank">
-				<?= $article['title'] ?>
-			</a><br />
-			<em>@ <?= $this->Admin->time($article['created'], 'words') ?></em>
+        <a href="<?= $this->Api->siteUrl() ?>article/view/<?= $news['slug'] ?>" target="_blank">
+            <?= $news['title'] ?>
+        </a><br />
+        <em>@ <?= $this->Admin->time($news['created'], 'words') ?></em>
 
-			<p>
-				<?= $this->Text->truncate($article['data'], 150) ?>
-			</p>
-		<?php endforeach ?>
+        <p>
+            <?= $this->Text->truncate($news['data'], 150) ?>
+        </p>
 	<?php endif ?>
 
 	<a href="<?= $this->Api->siteUrl() ?>category/news" class="btn btn-primary admin-homepage pull-right" target="_blank">View More News »</a>
@@ -79,17 +75,15 @@
 <div class="span6 well no-margin-left">
 	<h3>Newest Theme from AdaptCMS.com</h3>
 
-	<?php if (!empty($newest_theme)): ?>
-		<?php foreach($newest_theme as $theme): ?>
-			<a href="<?= $this->Api->url() ?>theme/<?= $theme['slug'] ?>" target="_blank">
-				<?= $theme['title'] ?>
-			</a><br />
-			<em>@ <?= $this->Admin->time($theme['created'], 'words') ?></em>
+	<?php if (!empty($theme)): ?>
+        <a href="<?= $this->Api->url() ?>theme/<?= $theme['slug'] ?>" target="_blank">
+            <?= $theme['title'] ?>
+        </a><br />
+        <em>@ <?= $this->Admin->time($theme['created'], 'words') ?></em>
 
-			<p style="margin-top: 10px">
-				<?= $theme['short_description'] ?>
-			</p>
-		<?php endforeach ?>
+        <p style="margin-top: 10px">
+            <?= $theme['short_description'] ?>
+        </p>
 	<?php endif ?>
 
 	<a href="<?= $this->Api->url() ?>themes" class="btn btn-success admin-homepage pull-right" target="_blank">View All Themes »</a>
@@ -100,16 +94,14 @@
 	<h3>Latest Blog from AdaptCMS.com</h3>
 
 	<?php if (!empty($blog)): ?>
-		<?php foreach($blog as $article): ?>
-			<a href="<?= $this->Api->siteUrl() ?>article/<?= $article['slug'] ?>" target="_blank">
-				<?= $article['title'] ?>
-			</a><br />
-			<em>@ <?= $this->Admin->time($article['created'], 'words') ?></em>
+        <a href="<?= $this->Api->siteUrl() ?>article/view/<?= $blog['slug'] ?>" target="_blank">
+            <?= $blog['title'] ?>
+        </a><br />
+        <em>@ <?= $this->Admin->time($blog['created'], 'words') ?></em>
 
-			<p>
-				<?= $this->Text->truncate($article['data'], 150) ?>
-			</p>
-		<?php endforeach ?>
+        <p>
+            <?= $this->Text->truncate($blog['data'], 150) ?>
+        </p>
 	<?php endif ?>
 
 	<a href="<?= $this->Api->siteUrl() ?>category/blog" class="btn btn-success admin-homepage pull-right" target="_blank">View More Blogs »</a>

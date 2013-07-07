@@ -61,25 +61,16 @@ class ArticlesController extends AppController
 	    if ($this->params->action == "admin_add" || $this->params->action == "admin_edit")
 	    {
 			$this->loadModel('File');
-			if ($this->params->action == "admin_edit")
-			{
-				$images = $this->File->find('all', array(
-					'conditions' => array(
-						'File.deleted_time' => '0000-00-00 00:00:00',
-						'File.mimetype LIKE' => '%image%'
-					)
-				));
-			} else {
-				$this->paginate = array(
-					'conditions' => array(
-						'File.deleted_time' => '0000-00-00 00:00:00',
-						'File.mimetype LIKE' => '%image%'
-					),
-					'limit' => 9
-				);
 
-				$images = $this->paginate('File');
-			}
+            $this->paginate = array(
+                'conditions' => array(
+                    'File.deleted_time' => '0000-00-00 00:00:00',
+                    'File.mimetype LIKE' => '%image%'
+                ),
+                'limit' => 9
+            );
+
+            $images = $this->paginate('File');
 			$image_path = WWW_ROOT;
 
 			$this->set(compact('images', 'image_path'));
@@ -117,16 +108,8 @@ class ArticlesController extends AppController
 		$this->paginate = array(
             'order' => 'Article.created DESC',
             'contain' => array(
-            	'User' => array(
-		            'conditions' => array(
-            			'User.deleted_time' => '0000-00-00 00:00:00'
-        			)
-	            ),
-            	'Category' => array(
-        	        'conditions' => array(
-            			'Category.deleted_time' => '0000-00-00 00:00:00'
-            		)
-        	    )
+            	'User',
+            	'Category'
         	),
             'limit' => $this->pageLimit,
             'conditions' => $conditions
@@ -173,23 +156,23 @@ class ArticlesController extends AppController
    * @param id ID of the database entry, redirect to index if no permissions
    * @return associative array of category data
    */
-   public function admin_edit($id = null)
-   {
-   	    $this->Article->id = $id;
+    public function admin_edit($id = null)
+    {
+        $this->Article->id = $id;
 
-	   if (!empty($this->request->data))
-      {
-         $this->request->data['Article']['user_id'] = $this->Auth->user('id');
+        if (!empty($this->request->data))
+        {
+            $this->request->data['Article']['user_id'] = $this->Auth->user('id');
 
-         if ($this->Article->saveAssociated($this->Article->ArticleValue->checkOnEdit($this->request->data)) )
-         {
-            $this->Session->setFlash('Your article has been updated.', 'flash_success');
-            $this->redirect(array('action' => 'index'));
-         } else {
-            $this->Session->setFlash('Unable to update your article.', 'flash_error');
-         }
-      }
-            
+            if ($this->Article->saveAssociated($this->Article->ArticleValue->checkOnEdit($this->request->data)) )
+            {
+                $this->Session->setFlash('Your article has been updated.', 'flash_success');
+                $this->redirect(array('action' => 'index'));
+            } else {
+                $this->Session->setFlash('Unable to update your article.', 'flash_error');
+            }
+        }
+
         $this->request->data = $this->Article->find('first', array(
             'conditions' => array(
                 'Article.id' => $id
@@ -215,23 +198,62 @@ class ArticlesController extends AppController
         $category_id = $this->request->data['Category']['id'];
 
         $this->set('related_articles', $this->Article->getRelatedArticles(
-            $id, 
+            $id,
             $this->request->data['Article']['related_articles']
         ));
 
-        $this->paginate = array(
+        $comments = array();
+        $conditions = array(
             'conditions' => array(
-                'Comment.article_id' => $id
-            ),
-            'contain' => array(
-                'User'
+                'Comment.article_id' => $id,
+                'Comment.deleted_time' => '0000-00-00 00:00:00'
             )
         );
-        $comments = $this->paginate('Comment');
+
+        $comments_count = $this->Article->Comment->find('count', $conditions);
+
+        $cur_limit = !empty($this->params['named']['limit']) ? $this->params['named']['limit'] : 5;
+
+        if ($comments_count > 0)
+        {
+            if ($comments_count > $cur_limit)
+            {
+                $diff = $comments_count - $cur_limit;
+
+                if ($diff >= 5)
+                {
+                    $new_comments_limit = $cur_limit + 5;
+                    $new_comments_amount = 5;
+                }
+                else
+                {
+                    $new_comments_limit = $cur_limit + $diff;
+                    $new_comments_amount = $diff;
+                }
+            }
+            else
+            {
+                $cur_limit = $comments_count;
+            }
+
+            $conditions['contain'] = array('User');
+            $conditions['limit'] = $cur_limit;
+            $conditions['order'] = 'Comment.created DESC';
+
+            $comments = $this->Article->Comment->find('all', $conditions);
+        }
 
         $fields = $this->Article->Category->Field->getFields($category_id, $id);
 
-        $this->set(compact('fields', 'category_id', 'comments'));
+        $this->set(compact(
+            'fields',
+            'category_id',
+            'comments',
+            'comments_count',
+            'new_comments_limit',
+            'new_comments_amount',
+            'cur_limit'
+        ));
     }
 
     /**
@@ -464,7 +486,8 @@ class ArticlesController extends AppController
 			),
 			'contain' => array(
 				'User'
-			)
+			),
+            'order' => 'Comment.created DESC'
 		));
 
 		$this->loadModel('SettingValue');

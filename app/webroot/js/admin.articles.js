@@ -215,4 +215,31 @@ $(document).ready(function(){
             }
         }
     });
+
+    $('#comments .load-more').live('click', function(e) {
+        e.preventDefault();
+
+        getBlockUI();
+
+        var href = $(this).attr('href');
+        var form = $('.comments-form');
+
+        form.load(href + '?unique=' + Math.round(Math.random()*10000) + ' #comments-container', function() {
+            form.replaceWith($(this).find('.comments-form'));
+
+            for (var i in tinymce.editors) {
+                if (i.match(/CommentText/g))
+                {
+                    tinyMCE.execCommand('mceRemoveEditor', false, i);
+                }
+            }
+
+            $.each($('#comments .wysiwyg'), function() {
+                tinyMCE.execCommand('mceAddEditor', false, $(this).attr('id'));
+            });
+
+            $.unblockUI();
+            $.smoothScroll({scrollTarget: $('#comments').next()});
+        });
+    });
 });

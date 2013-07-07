@@ -49,7 +49,7 @@ $(document).ready(function() {
 						array(
 							'class' => 'fancybox thumbnail',
 							'rel' => $media['Media']['title'],
-							'title' => $row['File']['filename'] . ' ' . $row['File']['caption'],
+							'title' => empty($row['File']['caption']) ? $row['File']['filename'] : $row['File']['caption'],
 							'escape' => false
 						)
 				) ?>

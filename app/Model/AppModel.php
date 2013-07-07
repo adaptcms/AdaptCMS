@@ -33,12 +33,13 @@ class AppModel extends Model
 
     /**
      * Returns datetime
-     * 
+     *
+     * @param null $time
      * @return datetime
      */
-    public function dateTime()
+    public function dateTime($time = null)
     {
-        return date('Y-m-d H:i:s');
+        return $time ? date('Y-m-d H:i:s', $time) : date('Y-m-d H:i:s');
     }
 
     /**

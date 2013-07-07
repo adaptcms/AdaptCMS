@@ -75,8 +75,12 @@ class CategoriesController extends AppController
 
             if ($this->Category->save($this->request->data))
             {
-                $this->Session->setFlash('Your category has been added.', 'flash_success');
-                $this->redirect(array('action' => 'index'));
+                $this->Session->setFlash('Your category has been added. Now you may want to add some fields to the category.', 'flash_success');
+                $this->redirect(array(
+                    'controller' => 'fields',
+                    'action' => 'add',
+                    $this->Category->id
+                ));
             } else {
                 $this->Session->setFlash('Unable to add your category.', 'flash_error');
             }
@@ -177,19 +181,6 @@ class CategoriesController extends AppController
 	    if (!empty($permanent))
 	    {
 	    	$delete = $this->Category->delete($id);
-
-	    	$article_path = VIEW_PATH . 'Articles' . DS . $this->slug($title) . '.ctp';
-	    	$categories_path = VIEW_PATH . 'Categories' . DS . $this->slug($title) . '.ctp';
-
-	    	if (file_exists($article_path))
-	    	{
-	    		unlink($article_path);
-	    	}
-
-	    	if (file_exists($categories_path))
-	    	{
-	    		unlink($categories_path);
-	    	}
 	    } else {
 	    	$delete = $this->Category->saveField('deleted_time', $this->Category->dateTime());
 	    }
@@ -257,6 +248,9 @@ class CategoriesController extends AppController
 	*/
 	public function view($slug)
 	{
+        if (!empty($slug))
+            $slug = $this->slug($slug);
+
         $category = $this->Category->findBySlug($slug);
 
         if (empty($category))
@@ -305,7 +299,7 @@ class CategoriesController extends AppController
 		$this->set('category', $category['Category']);
 		$this->set('article', $this->request->data);
 
-		if ($this->theme != "Default" && 
+		if ($this->theme != "Default" &&
 			file_exists(VIEW_PATH.'Themed/'.$this->theme.'/Categories/'.$slug.'.ctp') ||
 			file_exists(VIEW_PATH.'Categories/'.$slug.'.ctp'))
 		{

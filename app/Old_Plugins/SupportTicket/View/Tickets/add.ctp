@@ -14,8 +14,7 @@
 	)) ?>
 	<?= $this->Form->input('email', array(
 		'type' => 'text', 
-		'class' => 'required email',
-		'value' => !empty($current_user['email']) ? $current_user['email'] : ''
+		'class' => 'required email'
 	)) ?>
 
 	<?= $this->Form->input('subject', array(

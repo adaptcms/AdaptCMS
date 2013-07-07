@@ -244,10 +244,22 @@ class ToolsController extends AppController
 				}
 
 				$field_types = array(
-					'file' => 'file',
-					'select' => 'dropdown',
-					'textfield' => 'text',
-					'textarea' => 'textarea'
+					'file' => array(
+                        'slug' => 'file',
+                        'id' => 6
+                    ),
+					'select' => array(
+                        'slug' => 'dropdown',
+                        'id' => 4
+                    ),
+					'textfield' => array(
+                        'slug' => 'text',
+                        'id' => 1
+                    ),
+					'textarea' => array(
+                        'slug' => 'textarea',
+                        'id' => 11
+                    )
 				);
 
 				$fields = $this->User->query('SELECT * FROM ' . $prefix . 'fields');
@@ -267,13 +279,14 @@ class ToolsController extends AppController
 							$data['Field']['created'] = $this->User->dateTime();
 							$data['Field']['title'] = $this->slug($field[$prefix . 'fields']['name']);
 							$data['Field']['category_id'] = $section_data[$field[$prefix . 'fields']['section']];
-							$data['Field']['field_type'] = $field_types[$field[$prefix . 'fields']['type']];
+							$data['Field']['field_type_id'] = $field_types[$field[$prefix . 'fields']['type']]['id'];
+							$data['Field']['field_type_slug'] = $field_types[$field[$prefix . 'fields']['type']]['slug'];
 							$data['Field']['description'] = $field[$prefix . 'fields']['description'];
 
 							if (!empty($field[$prefix . 'fields']['data']))
 							{
 								$field_options = json_encode( explode(',', $field[$prefix . 'fields']['data']) );
-								$data['Field']['field_options'] = $field_options;
+								$data['Field']['field_options'] = strip_tags($field_options);
 							}
 
 							if (!empty($field[$prefix . 'fields']['required']))
@@ -398,7 +411,9 @@ class ToolsController extends AppController
 				{
 					foreach($values as $row)
 					{
-						if (!empty($field_data[$row[$prefix . 'data']['field_name']]) && !empty($field_data[$row[$prefix . 'data']['field_name']]))
+						if (!empty($field_data[$row[$prefix . 'data']['field_name']]) &&
+                            !empty($field_data[$row[$prefix . 'data']['field_name']]) &&
+                            !empty($article_data[$row[$prefix . 'data']['item_id']]))
 						{
 							$data = array();
 							$this->User->Category->Article->ArticleValue->create();

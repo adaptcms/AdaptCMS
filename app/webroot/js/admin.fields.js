@@ -201,11 +201,23 @@ function fieldTypeToggle(val,trigger_show)
 
     var field = $('.field[data-id="' + val + '"]');
 
-    if (val && field.length)
+    if (val)
     {
-        var toggle = field.html();
+        if (val == 2 || val == 4 || val == 8 || val == 10)
+        {
+            $('.field_options').show();
+        }
+        else
+        {
+            $('.field_options').hide();
+        }
 
-        fieldLimitToggle(toggle);
+        if (field.length)
+        {
+            var toggle = field.html();
+
+            fieldLimitToggle(toggle);
+        }
     } else if(trigger_show === true)
     {
         fieldLimitToggle('show');

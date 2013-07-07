@@ -30,7 +30,7 @@ $(document).ready(function() {
 
 			var length = Number($(".upload-file").length);
 			var h4 = length;
-			var file_divs = '<div class="upload-file span3 no-marg-left" id="file-0">' + file_div + '</div>';
+			var file_divs = '<div class="upload-file span4 no-marg-left" id="file-0">' + file_div + '</div>';
 			var contents = file_divs.replace(/0/g, length).replace('#0', '#' + h4);
 			var contents = contents.replace('File #1', 'File #' + (length + 1));
 			var contents = contents.replace('FileWatermark_" value="' + length, 'FileWatermark_" value="0');
@@ -39,7 +39,10 @@ $(document).ready(function() {
 			$(contents).insertAfter($(".upload-file:last"));
 
 			var options = $('.upload-file:first .media-libraries select option').clone();
-			$(".upload-file:last .media-libraries select option").replaceWith(options);
+            var library = $(".upload-file:last .media-libraries");
+
+			library.find("select option").replaceWith(options);
+            library.find("select").val('');
 
 			toggleRemove();
 		});
@@ -154,7 +157,7 @@ function toggleRemove()
 			'class' => 'btn btn-primary'
 		)) ?>
 	<?php else: ?>
-		<div class="upload-file span3 no-marg-left" id="file-0">
+		<div class="upload-file span4 no-marg-left" id="file-0">
 			<?= $this->Form->button('<i class="icon icon-remove icon-white"></i>', array(
 				'class' => 'btn btn-danger pull-right remove', 
 				'escape' => false

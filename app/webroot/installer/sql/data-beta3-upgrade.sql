@@ -62,7 +62,14 @@ ALTER TABLE  `{prefix}plugin_polls` ADD INDEX (  `article_id` ,  `user_id` ,  `d
 -- --------------------------------------------------------
 ALTER TABLE  `{prefix}plugin_poll_values` ADD INDEX (  `plugin_poll_id` ) ;
 -- --------------------------------------------------------
-ALTER TABLE  `{prefix}plugin_poll_voting_values` ADD INDEX (  `plugin_poll_id` ,  `plugin_value_id` ,  `user_id` ) ;
+ALTER TABLE  `{prefix}permissions` ADD  `label` VARCHAR( 255 ) NULL AFTER `id`
 -- --------------------------------------------------------
-ALTER TABLE  `beta_permissions` ADD  `label` VARCHAR( 255 ) NULL AFTER `id`
--- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}captcha_codes` (
+  `id` varchar(40) NOT NULL,
+  `namespace` varchar(32) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  `code_display` varchar(32) NOT NULL,
+  `created` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`namespace`),
+  KEY `created` (`created`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;

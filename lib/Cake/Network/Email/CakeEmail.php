@@ -1070,8 +1070,6 @@ class CakeEmail {
 			$content = implode("\n", $content) . "\n";
 		}
 
-		$this->_textMessage = $this->_htmlMessage = '';
-		$this->_createBoundary();
 		$this->_message = $this->_render($this->_wrap($content));
 
 		$contents = $this->transportClass()->send($this);
@@ -1258,7 +1256,7 @@ class CakeEmail {
 		$message = str_replace(array("\r\n", "\r"), "\n", $message);
 		$lines = explode("\n", $message);
 		$formatted = array();
-		$cut = ($wrapLength == CakeEmail::LINE_LENGTH_MUST) ? true : false;
+		$cut = ($wrapLength == CakeEmail::LINE_LENGTH_MUST);
 
 		foreach ($lines as $line) {
 			if (empty($line)) {
@@ -1444,9 +1442,12 @@ class CakeEmail {
  * @return array Email body ready to be sent
  */
 	protected function _render($content) {
+		$this->_textMessage = $this->_htmlMessage = '';
+
 		$content = implode("\n", $content);
 		$rendered = $this->_renderTemplates($content);
 
+		$this->_createBoundary();
 		$msg = array();
 
 		$contentIds = array_filter((array)Hash::extract($this->_attachments, '{s}.contentId'));
@@ -1616,9 +1617,8 @@ class CakeEmail {
 		$charset = strtoupper($this->charset);
 		if (array_key_exists($charset, $this->_contentTypeCharset)) {
 			return strtoupper($this->_contentTypeCharset[$charset]);
-		} else {
-			return strtoupper($this->charset);
 		}
+		return strtoupper($this->charset);
 	}
 
 }

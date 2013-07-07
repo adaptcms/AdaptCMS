@@ -222,7 +222,7 @@ function get_model_data(type)
 		var empty = $("#BlockData option[value='']");
 		var text = $("#BlockModel :selected").text().replace('Plugin - ', '');
 		var component = $("#BlockModel").val();
-        if ($("#custom-data").length > 0) {
+        if (type != 'action' && $("#custom-data").length > 0) {
             var custom = $.trim($("#custom-data").html());
         }
 	} else if(type == 'action') {
@@ -244,7 +244,7 @@ function get_model_data(type)
 
     		var data_list = '';
 
-            if (new_data.custom) {
+            if (type != 'action' && new_data.custom) {
                 $("#custom-data").html(new_data.custom).show();
             }
 

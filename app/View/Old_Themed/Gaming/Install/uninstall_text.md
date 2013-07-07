@@ -1,0 +1,1 @@
+Thank you for using the Gamign Theme! You can re-install any time in the main Appearance area.

@@ -2,9 +2,7 @@
 <?php $this->Html->addCrumb('Users', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Edit User', null) ?>
 
-<?php
-	$this->TinyMce->editor();
-?>
+<?php $this->TinyMce->editor() ?>
 
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
@@ -42,16 +40,24 @@
 		<?= $this->Form->create('User', array('type' => 'file', 'class' => 'well admin-validate')) ?>
 			<h2>Edit User</h2>
 		
-		<?php    
-			echo $this->Form->input('username', array('type' => 'text', 'class' => 'required'));
-			echo $this->Form->input('password', array('type' => 'password', 'label' => 'New Password?', 'required' => false));
-			echo $this->Form->input('password_confirm', array('type' => 'password', 'label' => 'Confirm New Password'));
-			echo $this->Form->input('email', array('type' => 'text', 'class' => 'required'));
-			echo $this->Form->input('role_id', array('empty' => '- choose -', 'class' => 'required'));
+		<?= $this->Form->input('username', array('type' => 'text', 'class' => 'required')) ?>
+        <?= $this->Form->input('password', array(
+            'type' => 'password',
+            'label' => 'New Password?',
+            'required' => false
+        )) ?>
+        <?= $this->Form->input('password_confirm', array(
+            'type' => 'password',
+            'label' => 'Confirm New Password'
+        )) ?>
+        <?= $this->Form->input('email', array('type' => 'text', 'class' => 'required')) ?>
+        <?= $this->Form->input('role_id', array(
+            'empty' => '- choose -',
+            'class' => 'required'
+        )) ?>
 
-			echo $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time())));
-		    echo $this->Form->hidden('id');
-		 ?>
+        <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
+        <?= $this->Form->hidden('id') ?>
 
 		<?php if (!empty($this->request->data['SecurityQuestions']['SettingValue']['data'])): ?>
 		    <?php if (!empty($security_options)): ?>
@@ -115,7 +121,7 @@
 		)) ?>
 		
 		<?php foreach($fields as $key => $field): ?>
-		    <?= $this->Element('FieldTypes/' . $field['Field']['field_type'], array(
+		    <?= $this->Element('FieldTypes/' . $field['FieldType']['slug'], array(
 		        'model' => 'ModuleValue',
 		        'key' => $key,
 		        'field' => $field,

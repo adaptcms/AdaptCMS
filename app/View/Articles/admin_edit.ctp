@@ -14,6 +14,9 @@
 <?= $this->Html->script('bootstrap-datepicker.js') ?>
 <?= $this->Html->script('bootstrap-typeahead.js') ?>
 
+<?= $this->Html->script('jquery.blockui.min.js') ?>
+<?= $this->Html->script('jquery.smooth-scroll.min.js') ?>
+
 <ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
 	<li<?= (empty($this->params['pass'][1]) ? " class='active'" : "") ?>>
 		<a href="#main" data-toggle="tab">Edit Article</a>
@@ -23,7 +26,7 @@
 	</li>
 	<?php if (!empty($comments)): ?>
 		<li<?= (!empty($this->params['pass'][1]) ? " class='active'" : "") ?>>
-			<a href="#comments" data-toggle="tab">Comments</a>
+			<a href="#comments-container" data-toggle="tab">Comments</a>
 		</li>
 	<?php endif ?>
 	<div class="pull-right hidden-phone">
@@ -45,7 +48,10 @@
     <div class="tab-pane<?= (empty($this->params['pass'][1]) ? " fade active in" : "") ?>" id="main">
         <?= $this->Form->create('Article', array('type' => 'file', 'class' => 'well admin-validate-article')) ?>
 
-            <h2>Edit Article</h2>
+            <h2>
+                Edit Article -
+                <?= $this->request->data['Category']['title'] ?>
+            </h2>
 
             <?= $this->Form->input('title', array(
                 'type' => 'text', 
@@ -174,10 +180,13 @@
         <?= $this->Form->create('RelatedArticle', array('action' => 'ajax_add', 'class' => 'well')) ?>
             <div id="flashMessageRelated" class="alert alert-success"></div>
 
-            <h2>
-                    Relate Articles 
-                    <i class="icon icon-question-sign field-desc" data-content="Linking another article to this one will allow you to show its data on this Articles page. Ex. Halo 5 Game linking to your Halo 5 preview, you can then show Halo 5 Game Details on the preview page." data-title="Related Articles" data-placement="right"></i>
+            <h2 class="pull-left">
+                Relate Articles
             </h2>
+            <h4 class="pull-left">
+                <i class="icon icon-question-sign field-desc" data-content="Linking another article to this one will allow you to show its data on this Articles page. Ex. Halo 5 Game linking to your Halo 5 preview, you can then show Halo 5 Game Details on the preview page." data-title="Related Articles" data-placement="right"></i>
+            </h4>
+            <div class="clearfix"></div>
 
             <div class="pull-left" style="margin-bottom: 20px">
                 <?= $this->Form->input('category', array(
@@ -215,7 +224,7 @@
             </div>
             <div class="clearfix"></div>
 
-            <?= $this->Form->button('Submit', array(
+            <?= $this->Form->button('Update', array(
                 'type' => 'submit',
                 'class' => 'btn btn-primary',
                 'id' => 'related-submit'
@@ -223,87 +232,97 @@
         <?= $this->Form->end() ?>
     </div>
 
-    <div class="tab-pane<?= (!empty($this->params['pass'][1]) ? " fade active in" : "") ?>" id="comments">
-        <?= $this->Form->create('Comment', array(
-            'url' => array(
-                'controller' => 'comments',
-                'action' => 'edit', 
-                $this->request->data['Article']['id']
-            ),
-            'class' => 'well'
-        )) ?>
+    <?php if (!empty($comments)): ?>
+        <div class="tab-pane<?= (!empty($this->params['pass'][1]) ? " fade active in" : "") ?>" id="comments-container">
+            <?= $this->Form->create('Comment', array(
+                'url' => array(
+                    'controller' => 'comments',
+                    'action' => 'edit',
+                    $this->request->data['Article']['id']
+                ),
+                'class' => 'well comments-form'
+            )) ?>
 
                 <h2>Comments</h2>
 
                 <?= $this->Form->input('all', array(
                     'div' => array(
                             'class' => 'pull-right'
-                    ), 
-                    'class' => 'check-all', 
-                    'label' => 'Check All', 
-                    'type' => 'checkbox', 
+                    ),
+                    'class' => 'check-all',
+                    'label' => 'Check All',
+                    'type' => 'checkbox',
                     'checked' => false
                 )) ?>
                 <div class="clearfix"></div>
 
-                <?php foreach($comments as $i => $comment): ?>
+                <div id="comments">
+                    <?php foreach($comments as $i => $comment): ?>
                         <?php $id = $comment['Comment']['id'] ?>
 
-                        <?php if ($i % 2 === 0 && $i != 0): ?>
-                                <div class="clearfix"></div><br />
-                        <?php endif ?>
+                        <div class="pull-left comment clearfix">
+                            <h4>
+                                @ <?= $this->Time->format('F jS, Y h:i A', $comment['Comment']['created']) ?>
+                                by
+                                <?php if (!empty($comment['User']['id'])): ?>
+                                    <?= $this->Html->link($comment['User']['username'], array(
+                                        'controller' => 'users',
+                                        'action' => 'edit',
+                                        $comment['User']['id']
+                                        ), array('target' => '_blank')
+                                ) ?>
+                                <?php else: ?>
+                                    <span class="field-desc" data-content="
+                                    IP: <?= $comment['Comment']['author_ip'] ?><br />
+                                    <?php if (!empty($comment['Comment']['author_name'])): ?>
+                                            <?= $comment['Comment']['author_name'] ?><br />
+                                    <?php endif ?>
+                                    <?php if (!empty($comment['Comment']['author_email'])): ?>
+                                            <?= $comment['Comment']['author_email'] ?><br />
+                                    <?php endif ?>
+                                    <?php if (!empty($comment['Comment']['author_website'])): ?>
+                                            <?= $this->Html->link($comment['Comment']['author_website'], $comment['Comment']['author_website'], array('target' => '_blank')) ?><br />
+                                    <?php endif ?>
+                                    " data-title="Comment Info">
+                                            Guest
+                                    </span>
+                                <?php endif ?>
+                            </h4>
 
-                        <div class="pull-left" style="margin-left: 50px">
-                                <h4>
-                                        @ <?= $this->Time->format('F jS, Y h:i A', $comment['Comment']['created']) ?>
-                                        by 
-                                        <?php if (!empty($comment['User']['id'])): ?>
-                                                <?= $this->Html->link($comment['User']['username'], array(
-                                                        'controller' => 'users',
-                                                        'action' => 'edit',
-                                                        $comment['User']['id']
-                                                        ), array('target' => '_blank')
-                                        ) ?>
-                                        <?php else: ?>
-                                                <span class="field-desc" data-content="
-                                                IP: <?= $comment['Comment']['author_ip'] ?><br />
-                                                <?php if (!empty($comment['Comment']['author_name'])): ?>
-                                                        <?= $comment['Comment']['author_name'] ?><br />
-                                                <?php endif ?>	
-                                                <?php if (!empty($comment['Comment']['author_email'])): ?>
-                                                        <?= $comment['Comment']['author_email'] ?><br />
-                                                <?php endif ?>	
-                                                <?php if (!empty($comment['Comment']['author_website'])): ?>
-                                                        <?= $this->Html->link($comment['Comment']['author_website'], $comment['Comment']['author_website'], array('target' => '_blank')) ?><br />
-                                                <?php endif ?>
-                                                " data-title="Comment Info">
-                                                        Guest
-                                                </span>
-                                        <?php endif ?>
-                                </h4>
+                            <?= $this->Form->input($i . '.Comment.comment_text', array(
+                                'class' => 'wysiwyg required',
+                                'style' => 'width:45%;height:120px',
+                                'value' => $comment['Comment']['comment_text'],
+                                'label' => false
+                            )) ?>
 
-                                <?= $this->Form->input($i . '.Comment.comment_text', array(
-                                        'class' => 'wysiwyg required', 
-                                        'style' => 'width:45%;height:120px',
-                                        'value' => $comment['Comment']['comment_text'],
-                                        'label' => false
-                                )) ?>
+                            <?= $this->Form->input($i . '.Comment.active', array(
+                                'type' => 'checkbox',
+                                'value' => 1,
+                                'checked' => ($comment['Comment']['active'] == 1 ? 'checked' : '')
+                            )) ?>
 
-                                <?= $this->Form->input($i . '.Comment.active', array(
-                                                'type' => 'checkbox', 
-                                                'value' => 1,
-                                                'checked' => ($comment['Comment']['active'] == 1 ? 'checked' : '')
-                                )) ?>
-
-                                <?= $this->Form->hidden($i . '.Comment.id', array('value' => $id)) ?>
+                            <?= $this->Form->hidden($i . '.Comment.id', array('value' => $id)) ?>
                         </div>
-                <?php endforeach ?>
+                    <?php endforeach ?>
+                    <div class="clearfix"></div>
 
-                <div class="clearfix"></div>
+                    <div class="btn-group pull-right" style="font-size: 1em;">
+                        <span style="margin-right: 10px;">
+                            Showing <?= $cur_limit ?> of <?= $comments_count ?> total
+                        </span>
+
+                        <?php if (!empty($new_comments_limit)): ?>
+                            <?= $this->Html->link('Load ' . $new_comments_amount . ' More...', array(
+                                $this->request->data['Article']['id'],
+                                'limit' => $new_comments_limit
+                            ), array('class' => 'load-more')) ?>
+                        <?php endif ?>
+                    </div>
+                </div>
 
                 <?= $this->Form->submit('Update Comments', array('class' => 'btn')) ?>
-        <?= $this->Form->end() ?>
-
-        <?= $this->element('admin_pagination') ?>
-    </div>
+            <?= $this->Form->end() ?>
+        </div>
+    <?php endif ?>
 </div>

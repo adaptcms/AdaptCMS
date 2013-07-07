@@ -11,8 +11,12 @@ class Category extends AppModel
     * Relationship to 'Field' and 'Article', with both models having many items with the same category
     */
     public $hasMany = array(
-        'Field', 
-        'Article'
+        'Field' => array(
+            'dependent' => true
+        ),
+        'Article' => array(
+            'dependent' => true
+        )
     );
 
     /**
@@ -42,11 +46,13 @@ class Category extends AppModel
     );
 
     /**
-    * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
-    * created the block. This is customizable so you can do a contain of related data if you wish.
-    *
-    * @return associative array
-    */
+     * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
+     * created the block. This is customizable so you can do a contain of related data if you wish.
+     *
+     * @param $data
+     * @param $user_id
+     * @return array
+     */
     public function getBlockData($data, $user_id)
     {
         $cond = array(
@@ -88,34 +94,82 @@ class Category extends AppModel
     }
 
     /**
-    * If a new category, creates article and category template.
-    * If modified and new title, renames template files.
-    *
-    * @return true
-    */
+     * If a new category, creates article and category template.
+     * If modified and new title, renames template files.
+     *
+     * @param $model
+     * @param $created
+     * @return true
+     */
     public function afterSave($model, $created)
     {
-        if (!empty($this->data['Category']['old_title']) && 
-            $this->data['Category']['title'] != $this->data['Category']['old_title'])
+        if (!empty($this->data['Category']['title']))
         {
-            $old_slug = $this->slug($this->data['Category']['old_title']);
+            if (!empty($this->data['Category']['old_title']) && $this->data['Category']['title'] != $this->data['Category']['old_title'])
+            {
+                $old_slug = $this->slug($this->data['Category']['old_title']);
 
-            $old_article_file = VIEW_PATH . 'Articles' . DS . $old_slug . '.ctp';
-            $new_article_file = VIEW_PATH . 'Articles' . DS . $this->data['Category']['slug'] . '.ctp';
-            rename($old_article_file, $new_article_file);
+                rename(
+                    $this->_getArticlesPath($old_slug),
+                    $this->_getArticlesPath($this->data['Category']['slug'])
+                );
+                rename(
+                    $this->_getCategoriesPath($old_slug),
+                    $this->_getCategoriesPath($this->data['Category']['slug'])
+                );
+            }
+            elseif (empty($this->data['Category']['old_title']))
+            {
+                copy(
+                    $this->_getArticlesPath('view'),
+                    $this->_getArticlesPath($this->data['Category']['slug'])
+                );
+                copy(
+                    $this->_getCategoriesPath('view'),
+                    $this->_getCategoriesPath($this->data['Category']['slug'])
+                );
+            }
+        }
 
-            $old_category_file = VIEW_PATH . 'Categories' . DS . $old_slug . '.ctp';
-            $new_category_file = VIEW_PATH . 'Categories' . DS . $this->data['Category']['slug'] . '.ctp';
-            rename($old_category_file, $new_category_file);
-        } elseif (empty($this->data['Category']['old_title']))
+        return true;
+    }
+
+    /**
+     * @param $slug
+     * @return string
+     */
+    public function _getCategoriesPath($slug)
+    {
+        return VIEW_PATH . 'Categories' . DS . $slug . '.ctp';
+    }
+
+    /**
+     * @param $slug
+     * @return string
+     */
+    public function _getArticlesPath($slug)
+    {
+        return VIEW_PATH . 'Articles' . DS . $slug . '.ctp';
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeDelete()
+    {
+        $row = $this->findById($this->id);
+
+        if (!empty($row['Category']['slug']))
         {
-            $old_article_file = VIEW_PATH . 'Articles' . DS . 'view.ctp';
-            $new_article_file = VIEW_PATH . 'Articles' . DS . $this->data['Category']['slug'] . '.ctp';
-            copy($old_article_file, $new_article_file);
+            $categories_path = $this->_getCategoriesPath($row['Category']['slug']);
 
-            $old_category_file = VIEW_PATH . 'Categories' . DS . 'view.ctp';
-            $new_category_file = VIEW_PATH . 'Categories' . DS . $this->data['Category']['slug'] . '.ctp';
-            copy($old_category_file, $new_category_file);
+            if (file_exists($categories_path))
+                unlink($categories_path);
+
+            $articles_path = $this->_getArticlesPath($row['Category']['slug']);
+
+            if (file_exists($articles_path))
+                unlink($articles_path);
         }
 
         return true;

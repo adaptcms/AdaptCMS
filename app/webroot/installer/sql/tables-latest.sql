@@ -43,6 +43,16 @@ CREATE TABLE IF NOT EXISTS `{prefix}blocks` (
   KEY `deleted_time` (`deleted_time`,`module_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}captcha_codes` (
+  `id` varchar(40) NOT NULL,
+  `namespace` varchar(32) NOT NULL,
+  `code` varchar(32) NOT NULL,
+  `code_display` varchar(32) NOT NULL,
+  `created` int(11) NOT NULL,
+  PRIMARY KEY (`id`,`namespace`),
+  KEY `created` (`created`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
@@ -85,10 +95,10 @@ CREATE TABLE IF NOT EXISTS `{prefix}cron` (
   `period_type` varchar(255) NOT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
-  `deleted_time` datetime NOT NULL
+  `deleted_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `run_time` (`run_time`,`deleted_time`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -234,7 +244,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `slug` varchar(100) DEFAULT NULL,
-  `content` text,
   `user_id` int(11),
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -258,6 +267,83 @@ CREATE TABLE IF NOT EXISTS `{prefix}permissions` (
   `any` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`,`action_id`,`plugin`,`controller`,`action`,`status`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forums` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `slug` varchar(50) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `description` longtext,
+  `status` int(11) NOT NULL,
+  `num_posts` int(1) NOT NULL DEFAULT '0',
+  `num_topics` int(11) NOT NULL DEFAULT '0',
+  `ord` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `icon_url` varchar(250) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`,`user_id`,`deleted_time`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forum_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `slug` varchar(50) NOT NULL,
+  `ord` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`deleted_time`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forum_posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` longtext NOT NULL,
+  `topic_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `topic_id` (`topic_id`,`user_id`,`deleted_time`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forum_topics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject` varchar(255) NOT NULL,
+  `num_views` int(11) NOT NULL,
+  `num_posts` int(11) NOT NULL,
+  `status` int(1) NOT NULL DEFAULT '0',
+  `slug` varchar(255) NOT NULL,
+  `content` longtext NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `forum_id` int(11) NOT NULL,
+  `topic_type` varchar(50) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`forum_id`,`deleted_time`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}plugin_google_maps` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `map_type` varchar(255) NOT NULL,
+  `locations` longtext,
+  `options` longtext,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
+  `deleted_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (

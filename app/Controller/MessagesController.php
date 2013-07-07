@@ -26,62 +26,65 @@ class MessagesController extends AppController
 	*/
 	public function index($box_slug = null)
 	{
-		if (!empty($box_slug) && in_array($box_slug, $this->boxes) && $box_slug != 'inbox') {
-			if ($box_slug == "archive")
-			{
-				$conditions = array(
-					'OR' => array(
-						array(
-							'AND' => array(
-								'Message.sender_user_id' => $this->Auth->user('id'),
-								'Message.sender_archived_time !=' => '0000-00-00 00:00:00'
-							)
-						),
-						array(
-							'AND' => array(
-								'Message.receiver_user_id' => $this->Auth->user('id'),
-								'Message.receiver_archived_time !=' => '0000-00-00 00:00:00'
-							)
-						)
-					)
-	            );
-			} else {
-				$conditions = array(
-	            	'Message.sender_archived_time' => '0000-00-00 00:00:00',
-	            	'Message.sender_user_id' => $this->Auth->user('id')
-	            );
+        $conditions['archive'] = array(
+            'OR' => array(
+                array(
+                    'AND' => array(
+                        'Message.sender_user_id' => $this->Auth->user('id'),
+                        'Message.sender_archived_time !=' => '0000-00-00 00:00:00'
+                    )
+                ),
+                array(
+                    'AND' => array(
+                        'Message.receiver_user_id' => $this->Auth->user('id'),
+                        'Message.receiver_archived_time !=' => '0000-00-00 00:00:00'
+                    )
+                )
+            )
+        );
 
-	            if ($box_slug == "outbox")
-	            {
-	            	$conditions['Message.is_read'] = 0; 
-	            } elseif ($box_slug == "sentbox")
-	           	{
-	            	$conditions['Message.is_read'] = 1; 
-	           	}
-	        }
-        } else {
-			$conditions = array(
-            	'Message.receiver_archived_time' => '0000-00-00 00:00:00',
-            	'Message.parent_id' => 0,
-            	'Message.receiver_user_id' => $this->Auth->user('id')
-            );
-            $box_slug = 'inbox';
+        $conditions['outbox'] = array(
+            'Message.sender_archived_time' => '0000-00-00 00:00:00',
+            'Message.sender_user_id' => $this->Auth->user('id'),
+            'Message.is_read' => 0
+        );
+
+        $conditions['sentbox'] = array(
+            'Message.sender_archived_time' => '0000-00-00 00:00:00',
+            'Message.sender_user_id' => $this->Auth->user('id'),
+            'Message.is_read' => 1
+        );
+
+        $conditions['inbox'] = array(
+            'Message.receiver_archived_time' => '0000-00-00 00:00:00',
+            'Message.parent_id' => 0,
+            'Message.receiver_user_id' => $this->Auth->user('id')
+        );
+
+        $box_count = array();
+        foreach($this->boxes as $box)
+        {
+            $box_count[$box] = $this->Message->find('count', array('conditions' => $conditions[$box]));
         }
+
+        if (empty($box_slug))
+            $box_slug = 'inbox';
 
 		$this->paginate = array(
             'order' => 'Message.created DESC',
             'limit' => 10,
-            'conditions' => $conditions,
+            'conditions' => $conditions[$box_slug],
             'contain' => array(
 				'Receiver',
 				'Sender'
 			)
         );
-        
+
 		$this->request->data = $this->paginate('Message');
 
 		$this->set('messages', $this->request->data);
 		$this->set( 'box', $box_slug );
+		$this->set( compact('box_count') );
 	}
 
 	/**
@@ -167,7 +170,7 @@ class MessagesController extends AppController
             		));
             	} else {
 	                $this->Session->setFlash('Your message has been sent.', 'flash_success');
-	                $this->redirect(array('action' => 'index'));
+	                $this->redirect(array('action' => 'index', 'outbox'));
 	            }
             } else {
             	if ($this->layout == 'ajax')

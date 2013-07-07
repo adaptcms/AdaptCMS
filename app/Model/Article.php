@@ -176,7 +176,7 @@ class Article extends AppModel
                     foreach($article_values as $i => $value)
                     {
                         $file_id = $value['ArticleValue']['file_id'];
-                        
+
                         if (!empty($file_id) && empty($files[$file_id]))
                         {
                             $files[$file_id] = $this->ArticleValue->File->find('first', array(
@@ -188,21 +188,11 @@ class Article extends AppModel
                             if (!empty($files[$file_id]))
                                 $article_values[$i]['ArticleValue']['File'] = $files[$file_id]['File'];
                         }
+                        elseif (!empty($files[$file_id]))
+                        {
+                            $article_values[$i]['ArticleValue']['File']= $files[$file_id]['File'];
+                        }
 
-                        /*
-                        $field_id = $value['ArticleValue']['field_id'];
-
-                        if (!empty($field_id) && empty($fields[$field_id]))
-                            $fields[$field_id] = $field_id;
-                            $fields[$field_id] = $this->ArticleValue->Field->find('first', array(
-                                'conditions' => array(
-                                    'Field.id' => $field_id
-                                )
-                            ));
-
-                        if (!empty($fields[$field_id]))
-                            $article_values[$i]['ArticleValue']['Field'] = $fields[$field_id]['Field'];
-                        */
 
                         if (!empty($value['ArticleValue']['field_id']))
                             $fields[$value['ArticleValue']['field_id']] = $value['ArticleValue']['field_id'];
@@ -515,5 +505,32 @@ class Article extends AppModel
         }
 
         return $results;
+    }
+
+    public function afterDelete()
+    {
+        $id = $this->id;
+        $related = $this->find('all', array(
+            'conditions' => array(
+                'Article.related_articles LIKE' => '%"' . $id . '"%'
+            )
+        ));
+
+        if (!empty($related))
+        {
+            foreach($related as $article)
+            {
+                $values = json_decode($article['Article']['related_articles'], true);
+
+                foreach($values as $key => $value)
+                {
+                    if ($value == $id)
+                        unset($values[$key]);
+                }
+
+                $this->id = $article['Article']['id'];
+                $this->saveField('related_articles', json_encode( array_values($values) ));
+            }
+        }
     }
 }

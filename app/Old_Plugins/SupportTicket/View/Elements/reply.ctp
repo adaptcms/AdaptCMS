@@ -16,11 +16,11 @@
 		'value' => !empty($current_user['email']) ? $current_user['email'] : ''
 	)) ?>
 
-	<?= $this->Form->input( 'message', array(
+	<?= $this->Form->input('message', array(
 		'class' => 'span7',
 		'style' => 'height: 100%',
 		'label' => 'Message',
-		'required' => true,
+		'required' => false,
 		'value' => ''
 	)) ?>
 

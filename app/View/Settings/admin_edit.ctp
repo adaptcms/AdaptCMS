@@ -21,15 +21,15 @@
     			$("#text").html('<?= $this->Form->input("SettingValue.data", array("class" => "required", "type" => "text")) ?>');
     			$("#field_data").html(null);
     			$(".field_options").hide();
-    			if (tinyMCE.getInstanceById(id)) {
+    			if (typeof tinyMCE.editors['id'] !== 'undefined') {
 				    tinyMCE.execCommand('mceFocus', false, id);                    
-				    tinyMCE.execCommand('mceRemoveControl', false, id);
+				    tinyMCE.execCommand('mceRemoveEditor', false, id);
 				}
     		} else if (field_type == "check" || field_type == "radio" || field_type == "dropdown") {
     			$(".field_options").show();
-    			if (tinyMCE.getInstanceById(id)) {
+    			if (typeof tinyMCE.editors['id'] !== 'undefined') {
 				    tinyMCE.execCommand('mceFocus', false, id);                    
-				    tinyMCE.execCommand('mceRemoveControl', false, id);
+				    tinyMCE.execCommand('mceRemoveEditor', false, id);
 				}
 				$("#text").html(null);
     		} else {
@@ -192,7 +192,7 @@
 						'id' => 'add-data'
 					)) ?>
 			</div>
-			<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
+			<div id="field_data" class="clearfix" style="width: 30%;margin-bottom: 15px"></div>
 			<div class="clearfix"></div>
 
 			<?= $this->Form->input('description', array(

@@ -40,7 +40,6 @@ class InstallController extends Controller
         $this->viewPath = 'View';
 
         $actions = array(
-            'database',
             'sql',
             'account'
         );
@@ -79,7 +78,7 @@ class InstallController extends Controller
                 )
             ));
 
-            if (empty($permission))
+            if (empty($permission) || $permission['Permission']['status'] == 0)
                 throw new ForbiddenException();
         }
     }
@@ -138,7 +137,7 @@ class InstallController extends Controller
                 $this->request->data['password'],
                 $this->request->data['database'],
                 $this->request->data['prefix']
-                );
+            );
 
             $new_file = str_replace($match, $replace,  $new_file);
 
@@ -225,9 +224,6 @@ class InstallController extends Controller
 
     public function finish()
     {
-        if (!$this->request->is('POST'))
-            $this->redirect('/');
-
         $this->_updateInstallFile();
 
         $this->set('title_for_layout', 'Install AdaptCMS :: Finish');

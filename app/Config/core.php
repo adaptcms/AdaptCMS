@@ -121,7 +121,7 @@
     );
 
     $matches = array(
-        '/article',
+        '/article/',
         '/media',
         '/category',
         '/users/profile/'
@@ -148,7 +148,7 @@
         }
     }
 
-    $caching = (!isset($caching) ? true : $caching);
+    $caching = !isset($caching) ? true : $caching;
 
 	Configure::write('Cache.disable', $caching);
 

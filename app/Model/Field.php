@@ -38,11 +38,13 @@ class Field extends AppModel
     public $hasMany = array(
         'ArticleValue' => array(
             'className' => 'ArticleValue',
-            'foreignKey' => 'field_id'
+            'foreignKey' => 'field_id',
+            'dependent' => true
         ),
         'ModuleValue' => array(
             'className' => 'ModuleValue',
-            'foreignKey' => 'field_id'
+            'foreignKey' => 'field_id',
+            'dependent' => true
         )
     );
 

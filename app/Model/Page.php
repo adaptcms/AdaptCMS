@@ -60,11 +60,10 @@ class Page extends AppModel {
                 fwrite($fh, $this->data['Page']['content']);
                 fclose($fh);
 
-                if ($this->data['Page']['title'] != $this->data['Page']['old_title']) {
+                if ($this->data['Page']['title'] != $this->data['Page']['old_title'])
                     unlink(
                         $this->_getPath( $this->slug($this->data['Page']['old_title']) )
                     );
-                }
             }
         }
 
@@ -74,5 +73,31 @@ class Page extends AppModel {
     public function _getPath($slug)
     {
         return VIEW_PATH . 'Pages' . DS . $slug . '.ctp';
+    }
+
+    public function getContent($slug)
+    {
+        $path = $this->_getPath($slug);
+
+        $handle = fopen($path, "r");
+        return fread($handle, filesize($path));
+    }
+
+    /**
+     * @return bool
+     */
+    public function beforeDelete()
+    {
+        $row = $this->findById($this->id);
+
+        if (!empty($row['Page']['slug']))
+        {
+            $path = $this->_getPath($row['Page']['slug']);
+
+            if (file_exists($path))
+                unlink($path);
+        }
+
+        return true;
     }
 }

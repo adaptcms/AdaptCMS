@@ -19,16 +19,16 @@
     </a>
     <ul class="dropdown-menu" style="min-width: 0px">
     <li<?= ($box == 'inbox' ? ' class="active"' : '') ?>>
-        <?= $this->Html->link('Inbox', array('inbox')) ?>
+        <?= $this->Html->link('Inbox (' . $box_count['inbox'] . ')', array('inbox')) ?>
     </li>
     <li<?= ($box == 'outbox' ? ' class="active"' : '') ?>>
-        <?= $this->Html->link('Outbox', array('outbox')) ?>
+        <?= $this->Html->link('Outbox (' . $box_count['outbox'] . ')', array('outbox')) ?>
     </li>
     <li<?= ($box == 'sentbox' ? ' class="active"' : '') ?>>
-        <?= $this->Html->link('Sentbox', array('sentbox')) ?>
+        <?= $this->Html->link('Sentbox (' . $box_count['sentbox'] . ')', array('sentbox')) ?>
     </li>
     <li<?= ($box == 'archive' ? ' class="active"' : '') ?>>
-        <?= $this->Html->link('Archive', array('archive')) ?>
+        <?= $this->Html->link('Archive (' . $box_count['archive'] . ')', array('archive')) ?>
     </li>
     </ul>
 </div>

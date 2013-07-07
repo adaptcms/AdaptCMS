@@ -5,19 +5,26 @@ App::uses('Component', 'Controller');
 class GoogleAnalyticsComponent extends Component
 {
     public $name = 'GoogleAnalyticsComponent';
+    private $ga;
+    private $profile_id;
 
-    public function __construct()
+    public function __start()
     {
-        if (Configure::read('GoogleAnalytics.email') && Configure::read('GoogleAnalytics.password') &&
-            Configure::read('GoogleAnalytics.profile_id'))
+        if (empty($this->ga) || empty($this->profile_id))
         {
-            $this->ga = new gapi(Configure::read('GoogleAnalytics.email'), Configure::read('GoogleAnalytics.password'));
-            $this->profile_id = Configure::read('GoogleAnalytics.profile_id');
+            if (Configure::read('GoogleAnalytics.email') && Configure::read('GoogleAnalytics.password') &&
+                Configure::read('GoogleAnalytics.profile_id'))
+            {
+                $this->ga = new gapi(Configure::read('GoogleAnalytics.email'), Configure::read('GoogleAnalytics.password'));
+                $this->profile_id = Configure::read('GoogleAnalytics.profile_id');
+            }
         }
     }
 
     public function getTopKeywords($start_date, $end_date)
     {
+        $this->__start();
+
         $cache_file = CACHE . DS.  'persistent' . DS . 'google-analytics-top-keywords-' . $start_date . $end_date . '.tmp';
 
         if ($this->checkCache($cache_file))
@@ -56,6 +63,8 @@ class GoogleAnalyticsComponent extends Component
 
     public function getTopBrowsers($start_date, $end_date)
     {
+        $this->__start();
+
         $cache_file = CACHE . DS.  'persistent' . DS . 'google-analytics-top-browsers-' . $start_date . $end_date . '.tmp';
 
         if ($this->checkCache($cache_file))
@@ -95,6 +104,8 @@ class GoogleAnalyticsComponent extends Component
 
     public function getTopOperatingSystems($start_date, $end_date)
     {
+        $this->__start();
+
         $cache_file = CACHE . DS.  'persistent' . DS . 'google-analytics-top-operating-systems-' . $start_date . $end_date . '.tmp';
 
         if ($this->checkCache($cache_file))
@@ -134,6 +145,8 @@ class GoogleAnalyticsComponent extends Component
 
     public function getTopSources($start_date, $end_date)
     {
+        $this->__start();
+
         $cache_file = CACHE . DS.  'persistent' . DS . 'google-analytics-top-sources-' . $start_date . $end_date . '.tmp';
 
         if ($this->checkCache($cache_file))
@@ -181,6 +194,8 @@ class GoogleAnalyticsComponent extends Component
 
     public function getOverviewStats($start_date, $end_date)
     {
+        $this->__start();
+
         $cache_file = CACHE . DS.  'persistent' . DS . 'google-analytics-overview-stats-' . $start_date . $end_date . '.tmp';
 
         if ($this->checkCache($cache_file))

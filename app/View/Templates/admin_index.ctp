@@ -422,7 +422,7 @@ Search
     </div>
 </div>
 
-<?php if (empty($this->request->data['Templates'])): ?>
+<?php if (empty($this->request->data['Template'])): ?>
     <div class="clearfix"></div>
     <div class="well">
         No Templates Found. If you just installed AdaptCMS, refresh the default theme -

@@ -118,6 +118,13 @@
             <ul class="nav">
               <li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
               <li><a href="<?= $this->webroot ?>admin">Admin</a></li>
+              <li>
+                  <?= $this->Html->link('Forums', array(
+                      'plugin' => 'adaptbb',
+                      'controller' => 'forums',
+                      'action' => 'index'
+                  )) ?>
+              </li>
             </ul>
             <?= $this->Element('Search/search_basic') ?>
           </div><!--/.nav-collapse -->
@@ -155,18 +162,6 @@
               	)) ?>
               </li>
               <li class="nav-header">Categories</li>
-              <?php if (!empty($block_data['categories-list'])): ?>
-                <?php foreach($block_data['categories-list'] as $cat): ?>
-                  <li>
-                    <?= $this->Html->link($cat['Category']['title'], array(
-                        'plugin' => null,
-                        'controller' => 'categories',
-                        'action' => 'view',
-                        $cat['Category']['slug']
-                    )) ?>
-                  </li>
-                <?php endforeach ?>
-              <?php else: ?>
                 <li>
                   <?= $this->Html->link('News', array(
                       'plugin' => null,
@@ -175,15 +170,6 @@
                       'news'
                   )) ?>
                 </li>
-                <li>
-                  <?= $this->Html->link('Reviews', array(
-                      'plugin' => null,
-                      'controller' => 'categories',
-                      'action' => 'view',
-                      'reviews'
-                  )) ?>
-                </li>
-              <?php endif ?>
               <li class="nav-header">Poll</li>
 
               <!--nocache-->

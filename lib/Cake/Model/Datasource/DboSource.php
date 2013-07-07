@@ -280,7 +280,7 @@ class DboSource extends DataSource {
 /**
  * Disconnects from database.
  *
- * @return boolean True if the database could be disconnected, else false
+ * @return boolean Always true
  */
 	public function disconnect() {
 		if ($this->_result instanceof PDOStatement) {
@@ -592,25 +592,23 @@ class DboSource extends DataSource {
 					$recursive = $params[5 + $off];
 				}
 				return $args[2]->find('all', compact('conditions', 'fields', 'order', 'limit', 'page', 'recursive'));
+			}
+			if (isset($params[3 + $off])) {
+				$recursive = $params[3 + $off];
+			}
+			return $args[2]->find('first', compact('conditions', 'fields', 'order', 'recursive'));
+		}
+		if (isset($args[1]) && $args[1] === true) {
+			return $this->fetchAll($args[0], true);
+		} elseif (isset($args[1]) && !is_array($args[1])) {
+			return $this->fetchAll($args[0], false);
+		} elseif (isset($args[1]) && is_array($args[1])) {
+			if (isset($args[2])) {
+				$cache = $args[2];
 			} else {
-				if (isset($params[3 + $off])) {
-					$recursive = $params[3 + $off];
-				}
-				return $args[2]->find('first', compact('conditions', 'fields', 'order', 'recursive'));
+				$cache = true;
 			}
-		} else {
-			if (isset($args[1]) && $args[1] === true) {
-				return $this->fetchAll($args[0], true);
-			} elseif (isset($args[1]) && !is_array($args[1])) {
-				return $this->fetchAll($args[0], false);
-			} elseif (isset($args[1]) && is_array($args[1])) {
-				if (isset($args[2])) {
-					$cache = $args[2];
-				} else {
-					$cache = true;
-				}
-				return $this->fetchAll($args[0], $args[1], array('cache' => $cache));
-			}
+			return $this->fetchAll($args[0], $args[1], array('cache' => $cache));
 		}
 	}
 
@@ -632,9 +630,8 @@ class DboSource extends DataSource {
 				$this->fetchVirtualField($resultRow);
 			}
 			return $resultRow;
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 /**
@@ -1327,7 +1324,7 @@ class DboSource extends DataSource {
 	}
 
 /**
- * A more efficient way to fetch associations.	Woohoo!
+ * A more efficient way to fetch associations.
  *
  * @param Model $model Primary model object
  * @param string $query Association query
@@ -1343,8 +1340,7 @@ class DboSource extends DataSource {
 	}
 
 /**
- * mergeHasMany - Merge the results of hasMany relations.
- *
+ * Merge the results of hasMany relations.
  *
  * @param array $resultSet Data to merge into
  * @param array $merge Data to merge
@@ -1570,7 +1566,7 @@ class DboSource extends DataSource {
 					}
 					return true;
 				}
-			break;
+				break;
 			case 'hasMany':
 				$assocData['fields'] = $this->fields($linkModel, $association, $assocData['fields']);
 				if (!empty($assocData['foreignKey'])) {
@@ -1586,7 +1582,7 @@ class DboSource extends DataSource {
 					'offset' => $assocData['offset'],
 					'group' => null
 				);
-			break;
+				break;
 			case 'hasAndBelongsToMany':
 				$joinFields = array();
 				$joinAssoc = null;
@@ -1623,7 +1619,7 @@ class DboSource extends DataSource {
 						'conditions' => $this->getConstraint('hasAndBelongsToMany', $model, $linkModel, $joinAlias, $assocData, $association)
 					))
 				);
-			break;
+				break;
 		}
 		if (isset($query)) {
 			return $this->buildStatement($query, $model);
@@ -1670,7 +1666,7 @@ class DboSource extends DataSource {
 	}
 
 /**
- * Builds and generates a JOIN statement from an array.	 Handles final clean-up before conversion.
+ * Builds and generates a JOIN statement from an array. Handles final clean-up before conversion.
  *
  * @param array $join An array defining a JOIN statement in a query
  * @return string An SQL JOIN statement to be used in a query
@@ -1698,7 +1694,7 @@ class DboSource extends DataSource {
 	}
 
 /**
- * Builds and generates an SQL statement from an array.	 Handles final clean-up before conversion.
+ * Builds and generates an SQL statement from an array. Handles final clean-up before conversion.
  *
  * @param array $query An array defining an SQL query
  * @param Model $model The model object which initiated the query
@@ -1916,7 +1912,7 @@ class DboSource extends DataSource {
 	}
 
 /**
- * Gets a list of record IDs for the given conditions.	Used for multi-record updates and deletes
+ * Gets a list of record IDs for the given conditions. Used for multi-record updates and deletes
  * in databases that do not support aliases in UPDATE/DELETE queries.
  *
  * @param Model $model
@@ -2597,22 +2593,22 @@ class DboSource extends DataSource {
 			switch ($operator) {
 				case '=':
 					$operator = 'IN';
-				break;
+					break;
 				case '!=':
 				case '<>':
 					$operator = 'NOT IN';
-				break;
+					break;
 			}
 			$value = "({$value})";
 		} elseif ($null || $value === 'NULL') {
 			switch ($operator) {
 				case '=':
 					$operator = 'IS';
-				break;
+					break;
 				case '!=':
 				case '<>':
 					$operator = 'IS NOT';
-				break;
+					break;
 			}
 		}
 		if ($virtual) {

@@ -36,6 +36,7 @@
 <?php endif ?>
 
 <?php if (empty($this->request->data)): ?>
+    <div class="clearfix"></div>
     <div class="well">
         No Items Found
     </div>

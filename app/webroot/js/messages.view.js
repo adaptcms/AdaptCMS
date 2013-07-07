@@ -36,6 +36,7 @@ $(document).ready(function() {
 				{
 					$(".messages").load(form_url + '?unique=' + Math.round(Math.random()*10000) + ' .messages', function() {
                         $.unblockUI();
+                        tinyMCE.activeEditor.setContent('');
 						$("#flashMessage.alert-success").show().fadeOut(3000);
 					});
 				}

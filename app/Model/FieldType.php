@@ -13,7 +13,8 @@ class FieldType extends AppModel
     public $hasMany = array(
         'Field' => array(
             'className' => 'Field',
-            'foreignKey' => 'field_type_id'
+            'foreignKey' => 'field_type_id',
+            'dependent' => true
         )
     );
 
