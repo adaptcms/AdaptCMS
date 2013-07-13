@@ -365,7 +365,7 @@ class UsersController extends AppController {
         {
             if (!empty($captcha['SettingValue']['data']))
             {
-                include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
+                include_once(APP . 'webroot/libraries/captcha/securimage.php');
                 $securimage = new Securimage();
 
                 if ($captcha['SettingValue']['data'] == 'Yes' &&
@@ -540,7 +540,7 @@ class UsersController extends AppController {
 
 		if (!empty($this->request->data))
 		{
-            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
+            include_once(APP . 'webroot/libraries/captcha/securimage.php');
         	$securimage = new Securimage();
 
 	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
@@ -634,7 +634,7 @@ class UsersController extends AppController {
 
 		if (!empty($this->request->data))
 		{
-            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
+            include_once(APP . 'webroot/libraries/captcha/securimage.php');
         	$securimage = new Securimage();
 
 	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
@@ -710,7 +710,7 @@ class UsersController extends AppController {
 
     	if (!empty($this->request->data))
     	{
-            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
+            include_once(APP . 'webroot/libraries/captcha/securimage.php');
         	$securimage = new Securimage();
 
 	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))

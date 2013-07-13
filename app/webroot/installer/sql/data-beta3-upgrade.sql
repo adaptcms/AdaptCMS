@@ -73,3 +73,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}captcha_codes` (
   PRIMARY KEY (`id`,`namespace`),
   KEY `created` (`created`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `data_options`, `setting_type`, `setting_id`, `model`, `created`, `modified`, `deleted_time`) VALUES
+(null, 'RSS Description', '<p>Enter in a description that will appear in your RSS feed.</p>', 'This is your website''s RSS feed, enter in a little bit about your website.', NULL, 'textarea', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00');

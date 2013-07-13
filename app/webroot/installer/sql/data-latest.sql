@@ -492,7 +492,7 @@ INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `dat
 (12, 'User Status', '<p>Choosing email activation, user must activate their account via an email link sent to them. Staff activation requires one with access to manually activate a user account.</p>', 'Staff Activation', '["Email Activation","Staff Activation"]', 'dropdown', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (21, 'User Register Email Subject', '', 'New Account Created', NULL, 'text', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (22, 'Number of Articles to list on Category Page', '', '10', NULL, 'text', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
-(23, 'Number of Items Per Page', '', '10', NULL, 'text', 5, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
+(23, 'Number of Items Per Page', '', '10', NULL, 'text', 10, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (28, 'Comment Post WYSIWYG Editor', '<p>Will the wysiwyg editor be enabled when posting a comment?</p>', 'Yes', '["Yes","No"]', 'dropdown', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (27, 'Comment Post Flood Limit', '<p>x amount of seconds before a user can post another comment. 30 by default.</p>', '30', NULL, 'text', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (26, 'Comment Post Captcha Non-Logged In', '<p>Does a non-logged in user have to enter in a captcha code, to have their comment posted?</p>\r\n<p>*note* The guest group must have permission to view an article/to post a comment, in order for this to have effect.</p>', 'Yes', '["Yes","No"]', 'dropdown', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
@@ -500,7 +500,8 @@ INSERT INTO `{prefix}setting_values` (`id`, `title`, `description`, `data`, `dat
 (24, 'User Password Reset', '<p>Set this to 0 to disable, if more than 0 then x is the amount of days that can pass before a new password is required. This is mandated upon login.</p>', '0', NULL, 'text', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (29, 'Is Registration Open?', '<p>If set to "No", then users cannot register.</p>', 'Yes', '["Yes","No"]', 'dropdown', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
 (30, 'Closed Registration Message', '', '<p>You cannot register at the moment.</p>', NULL, 'textarea', 3, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
-(31, 'Comment Allowed HTML', '<p>Allowed HTML tags when posting a comment. Entering in nothing will result in all HTML being stripped.</p>', '<strong>,<a>,<p>,<br>', NULL, 'text', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00');
+(31, 'Comment Allowed HTML', '<p>Allowed HTML tags when posting a comment. Entering in nothing will result in all HTML being stripped.</p>', '<strong>,<a>,<p>,<br>', NULL, 'text', 6, NULL, '{date}', '{date}', '0000-00-00 00:00:00'),
+(32, 'RSS Description', '<p>Enter in a description that will appear in your RSS feed.</p>', 'This is your website''s RSS feed, enter in a little bit about your website.', NULL, 'textarea', 4, NULL, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}themes` (`id`, `title`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Default', '{date}', '{date}', '0000-00-00 00:00:00');

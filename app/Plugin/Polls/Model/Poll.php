@@ -37,7 +37,7 @@ class Poll extends PollsAppModel
         );
 
         if (!empty($data['limit'])) {
-            $cond['limit'] = $data['limit'];
+//            $cond['limit'] = $data['limit'];
         }
 
         if (!empty($data['order_by'])) {
@@ -60,7 +60,7 @@ class Poll extends PollsAppModel
             $results[$key] = $row;
             $results[$key]['Block'] = $data;
 
-            $results[$key]['Poll']['can_vote'] = $this->canVote($row, $user_id);
+            $results[$key]['Poll']['can_vote'] = $this->canVote($row['Poll']['id'], $user_id);
             $results[$key] = $this->totalVotes($results[$key]);
 
             foreach($row['PollValue'] as $option) {
@@ -86,25 +86,19 @@ class Poll extends PollsAppModel
         return $data;
     }
 
-    public function canVote($row, $user_id)
+    public function canVote($id, $user_id)
     {
-        $count = $this->find('first', array(
+        $count = $this->PollVotingValue->find('all', array(
             'conditions' => array(
-                'Poll.id' => $row['Poll']['id']
-            ),
-            'contain' => array(
-                'PollVotingValue' => array(
-                    'conditions' => array(
-                        'OR' => array(
-                            'PollVotingValue.user_id' => $user_id,
-                            'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
-                        )
-                    )
+                'PollVotingValue.plugin_poll_id' => $id,
+                'OR' => array(
+                    'PollVotingValue.user_id' => $user_id,
+                    'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
                 )
             )
         ));
         
-        if (count($count['PollVotingValue']) == 0) {
+        if (count($count) == 0) {
             return true;
         } else {
             return false;

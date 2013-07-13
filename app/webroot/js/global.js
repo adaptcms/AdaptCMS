@@ -1,7 +1,6 @@
 $.ajaxSetup({ cache: false });
 
 $(document).ready(function() {
-	fixPagination();
 	changeRequiredFields();
 
 	$('.btn-confirm').live('click', function(e) {
@@ -97,43 +96,6 @@ function changeRequiredFields()
 			$(label).append(' <i>*</i>');
 		}
 	});
-}
-
-/*
- * Fixes cake pagination with bootstrap, otherwise current page just shows number and breaks bootstrap paginator
- */
-function fixPagination()
-{
-	if ($(".active.paginator").length > 0) {
-		var li_active_paginator_html = $(".active.paginator").html();
-		var li_active_paginator = $(".active.paginator").clone().wrap('<p>').parent().html().
-			replace(li_active_paginator_html, '<a>' + li_active_paginator_html + '</a>');
-		$("li.active.paginator").replaceWith(li_active_paginator);
-	}
-
-	if ($(".pagination ul li a").length > 0) {
-		$(".pagination ul li a").each(function() {
-			if (!$(this).attr('href') && $(this).text()) {
-				$(this).css('cursor', 'default');
-			} else if(!$(this).text()) {
-				$(this).remove();
-			}
-		});
-	}
-
-	if ($(".pagination ul span a").length > 0)
-	{
-		orig = $(".pagination ul span").wrap('<li class="' + $(".pagination ul span").attr('class') + '">');
-
-		val = orig.find('a');
-
-		if (orig.hasClass('next') && val.html('«'))
-		{
-			val.html('»');
-		}
-
-		orig.replaceWith(val);
-	}
 }
 
 function getBlockUI()

@@ -25,7 +25,11 @@
     
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 	<?= $this->Form->hidden('old_title', array('value' => $this->request->data['Page']['title'])) ?>
-	<?= $this->Form->input('content', array('style' => 'width:80%;height: 300px', 'class' => 'required')) ?>
+	<?= $this->Form->input('content', array(
+        'rows' => 25,
+        'style' => 'width:80%',
+        'class' => 'required'
+    )) ?>
 
 	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
     <?= $this->Form->hidden('id') ?>

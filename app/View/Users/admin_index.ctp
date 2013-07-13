@@ -2,33 +2,8 @@
 <?php $this->Html->addCrumb('Users', null) ?>
 
 <?php if ($this->Admin->hasPermission($permissions['related']['users']['ajax_change_user'])): ?>
-    <script type="text/javascript">
-    $(document).ready(function(){
-
-        $(".user-status").live('click', function() {
-            if ($(this).hasClass('icon-remove-sign')) {
-                var user_id = $(this).attr('id');
-                var new_status = 1;
-
-                $.post("<?= $this->webroot ?>ajax/users/change_user/", {data:{User:{id:user_id, status: new_status}}}, function(data) {
-                    if ($("#user-change-status").length != 0) {
-                        $("#user-change-status").replaceWith(data);
-                    } else {
-                        $(data).insertBefore($(".span9 h1"));
-                    }
-
-                    if ($("#user-change-status").hasClass('alert-success')) {
-                        $("#" + user_id).removeClass('icon-remove-sign').addClass('icon-ok-sign');
-                    }
-                });
-            }
-        });
-
-    });
-    </script>
+    <div id="user-change-status"></div>
 <?php endif ?>
-
-<div id="user-change-status"></div>
 
 <div class="left">
     <h1>Users<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
@@ -135,7 +110,7 @@
                     </td>
                     <td class="hidden-phone" style="text-align: center">
                         <?php if ($data['User']['status'] == 0): ?>
-                            <i class="icon-remove-sign user-status" id="<?= $data['User']['id'] ?>"></i>
+                            <i class="icon-remove-sign user-status" data-id="<?= $data['User']['id'] ?>" title="Click to activate User" alt="Click to activate User"></i>
                         <?php else: ?>
                             <i class="icon-ok-sign user-status"></i>
                         <?php endif ?>

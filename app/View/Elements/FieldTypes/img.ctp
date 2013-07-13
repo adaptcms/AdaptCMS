@@ -2,8 +2,12 @@
 $model = !empty($model) ? $model : 'ArticleValue';
 ?>
 <div>
-    <?= $this->Form->hidden($model . '.' . $key . '.data') ?>
-    <?= $this->Form->hidden($model . '.' . $key . '.file_id') ?>
+    <?= $this->Form->hidden($model . '.' . $key . '.data', array(
+        'value' => !empty($field[$model][0]['File']) ? $field[$model][0]['File']['id'] : ''
+    )) ?>
+    <?= $this->Form->hidden($model . '.' . $key . '.file_id', array(
+        'value' => !empty($field[$model][0]['File']) ? $field[$model][0]['File']['id'] : ''
+    )) ?>
     <?= $this->Form->label($model . '.' . $key . 'data', $icon . $field['Field']['label'], array('escape' => false)) ?>
 
     <?= $this->Html->link(
@@ -21,7 +25,7 @@ $model = !empty($model) ? $model : 'ArticleValue';
         <?php if (!empty($field[$model][0]['File'])): ?>
             <?= $this->element('media_modal_image', array(
                     'image' => $field[$model][0]['File'], 
-                    'key' => 0, 
+                    'key' => 0,
                     'check' => true
             )) ?>
         <?php endif ?>

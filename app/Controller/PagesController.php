@@ -38,8 +38,10 @@ class PagesController extends AppController
 
 		$this->permissions = $this->getPermissions();
 
-        if ($this->params->action == 'display' || $this->params->action == 'admin')
+        if ($this->params->action == 'display')
             Configure::write('Cache.disable', false);
+            Configure::write('Cache.check', true);
+            Configure::write('debug', 0);
 	}
 
     /**

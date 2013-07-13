@@ -249,9 +249,10 @@ class CategoriesController extends AppController
 	public function view($slug)
 	{
         if (!empty($slug))
+        {
             $slug = $this->slug($slug);
-
-        $category = $this->Category->findBySlug($slug);
+            $category = $this->Category->findBySlug($slug);
+        }
 
         if (empty($category))
         {

@@ -12,6 +12,8 @@
 		<url>
 			<loc>
 				<?= $this->Html->url(array(
+                    'admin' => false,
+                    'plugin' => false,
 					'controller' => 'articles',
 					'action' => 'view',
                     'slug' => $article['Article']['slug'],
@@ -28,6 +30,8 @@
 		<url>
 			<loc>
 				<?= $this->Html->url(array(
+                    'admin' => false,
+                    'plugin' => false,
 					'controller' => 'categories',
 					'action' => 'view',
 					$category['Category']['slug']
@@ -43,6 +47,8 @@
 		<url>
 			<loc>
 				<?= $this->Html->url(array(
+                    'admin' => false,
+                    'plugin' => false,
 					'controller' => 'media',
 					'action' => 'view',
 					$media['Media']['slug']
@@ -58,6 +64,8 @@
 	<url>
 		<loc>
 			<?= $this->Html->url(array(
+                'admin' => false,
+                'plugin' => false,
 				'controller' => 'media',
 				'action' => 'index'
 			), true) ?>
@@ -72,6 +80,8 @@
 		<url>
 			<loc>
 				<?= $this->Html->url(array(
+                    'admin' => false,
+                    'plugin' => false,
 					'controller' => 'pages',
 					'action' => 'display',
 					$page['Page']['slug']
@@ -87,6 +97,8 @@
 		<url>
 			<loc>
 				<?= $this->Html->url(array(
+                    'admin' => false,
+                    'plugin' => false,
 					'controller' => 'users',
 					'action' => 'profile',
 					$user['User']['username']

@@ -24,13 +24,15 @@ class UploadBehavior extends ModelBehavior
 	* This function used by articles, uploads the file and attempts to do anything else depending on options picked.
 	* This includes random file name, watermark, attempts to thumbnail and formats data.
 	*
-	* @param model Holds the model
-	* @param file The file itself (array)
-	* @param field_id Used for formatting data
-	* @param id The article ID
-	* @param model_name Used for flexibility
-	* @param file_model_name Same as above
-	*/
+	* @param model $model the model
+	* @param $file string file itself (array)
+	* @param $field_id string for formatting data
+	* @param $id integer The article ID
+	* @param $model_name string Used for flexibility
+	* @param $file_model_name string Same as above
+    * @param $id_type
+    * @return array
+     */
 	public function uploadFile(&$model, $file = null, $field_id, $id = null, $model_name, $file_model_name, $id_type = null)
 	{
         if (is_array($file) && $file['size'] > 0)
@@ -327,14 +329,14 @@ class UploadBehavior extends ModelBehavior
 		}
 	}
 
-	/**
-	* Using phpThumb, this function creates a thumbnail with the specified parameters
-	*
-	* @param model Holds the model
-	* @param fileName Name of file
-	* @param thumbFile Path to where the uploaded image thumbnail should be created
-	* @param ext The extension of this file, must be an image
-	*/
+    /**
+     * Using phpThumb, this function creates a thumbnail with the specified parameters
+     *
+     * @param $fileName string Name of file
+     * @param $thumbFile string Path to where the uploaded image thumbnail should be created
+     * @param $ext string The extension of this file, must be an image
+     * @internal param \model $model Holds the model
+     */
 	public function createThumbnail($fileName, $thumbFile, $ext)
 	{
 		if (in_array($ext, $this->image_ext))

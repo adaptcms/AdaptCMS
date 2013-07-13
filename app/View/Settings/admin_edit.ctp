@@ -13,7 +13,7 @@
 
     		if (field_type == "textarea") {
     			$("#text").html('<?= $this->Form->input("SettingValue.data", array("class" => "required", "rows" => 15, "style" => "width:500px")) ?>');
-    			tinyMCE.execCommand('mceAddControl', false, id);
+    			tinyMCE.execCommand('mceAddEditor', false, id);
     			$("#field_data").html(null);
     			$(".field_options").hide();
     			$(".input.text.clear").css("margin-top", "0");
@@ -21,13 +21,13 @@
     			$("#text").html('<?= $this->Form->input("SettingValue.data", array("class" => "required", "type" => "text")) ?>');
     			$("#field_data").html(null);
     			$(".field_options").hide();
-    			if (typeof tinyMCE.editors['id'] !== 'undefined') {
+    			if (typeof tinyMCE.editors[id] !== 'undefined') {
 				    tinyMCE.execCommand('mceFocus', false, id);                    
 				    tinyMCE.execCommand('mceRemoveEditor', false, id);
 				}
     		} else if (field_type == "check" || field_type == "radio" || field_type == "dropdown") {
     			$(".field_options").show();
-    			if (typeof tinyMCE.editors['id'] !== 'undefined') {
+    			if (typeof tinyMCE.editors[id] !== 'undefined') {
 				    tinyMCE.execCommand('mceFocus', false, id);                    
 				    tinyMCE.execCommand('mceRemoveEditor', false, id);
 				}
@@ -39,16 +39,6 @@
     		$(".field_options").html("");
     	}
     });
-
-	$('.admin-validate .delete').on('change', function() {
-		if ($(this).attr('checked'))
-		{
-			if (!confirm('Are you sure you wish to delete this setting? This is permanent.'))
-			{
-				$(this).attr('checked', false);
-			}
-		}
-	});
  });
  </script>
 

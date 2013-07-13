@@ -77,6 +77,11 @@
             <ul class="nav">
               <li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
               <li><a href="<?= $this->webroot ?>admin">Admin</a></li>
+              <li>
+                  <?= $this->Html->link('Help', Configure::read('Component.Api.adaptcms_url') . 'support', array(
+                      'target' => '_blank'
+                  )) ?>
+              </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

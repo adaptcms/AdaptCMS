@@ -84,7 +84,7 @@ class CommentsController extends AppController
 
         if (!$this->Auth->user('id'))
         {
-            include_once(realpath('../webroot/libraries/captcha') . '/securimage.php');
+            include_once(APP . 'webroot/libraries/captcha/securimage.php');
             $securimage = new Securimage();
         }
 

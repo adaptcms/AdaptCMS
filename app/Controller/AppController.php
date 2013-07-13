@@ -44,7 +44,8 @@ class AppController extends Controller
         'Session',
         'Security' => array(
             'csrfExpires' => '+3 hour'
-        )
+        ),
+        'Paginator'
     );
 
     /**
@@ -257,10 +258,10 @@ class AppController extends Controller
 
         if (!empty($this->allowedActions) && in_array($this->params->action, $this->allowedActions)) {
             $allowed = 1;
-        } elseif (strstr($this->params->action, "login") or strstr($this->params->action, "activate") or strstr($this->params->action, "logout") 
-            or strstr($this->params->action, "register") or strstr($this->params->action, "_password")
-            or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "denied")
-            or !empty($this->params->pass[0]) && strstr($this->params->pass[0], "home")
+        } elseif ($this->params->action == "login" or strstr($this->params->action, "activate") or $this->params->action == "logout"
+            or $this->params->action == "register" or strstr($this->params->action, "_password")
+            or !empty($this->params->pass[0]) && $this->params->pass[0] == "denied"
+            or !empty($this->params->pass[0]) && $this->params->pass[0] == "home"
             || !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install' && !strstr($this->params->action, 'plugin') ||
             !empty($this->params->ext) && in_array($this->params->ext, $webroot_exts)) {
                         $this->Auth->allow($this->params->action);
@@ -531,7 +532,7 @@ class AppController extends Controller
             {
                 $this->Session->setFlash('You do not have access to this page.', 'flash_error');
 
-                if (Controller::referer() && Router::url( $this->here, true ) != Controller::referer())
+                if (Controller::referer() && !strstr(Controller::referer(), $this->here))
                 {
                     $this->redirect( Controller::referer() );
                 }
@@ -787,7 +788,7 @@ class AppController extends Controller
     		'conditions' => array(
     			'OR' => array(
     				'User.email' => $this->Connect->user('email'),
-    				'User.facebook_id' => $this->Connect->user('facebook_id')
+    				'User.settings LIKE' => '%"facebook_id": "' . $this->Connect->user('facebook_id') . '"'
     			)
     		)
     	));
@@ -797,8 +798,13 @@ class AppController extends Controller
 	    		$this->User->id = $find['User']['id'];
 	    		$this->Auth->login($find['User']);
 
-	    		if (empty($find['User']['facebook_id'])) {
-	    			$this->User->saveField('facebook_id', $this->Connect->user('facebook_id'));
+	    		if (empty($find['User']['settings']['facebook_id'])) {
+	    			$this->User->saveField('settings', array_merge(
+                        $find['User']['settings'],
+                        array(
+                            'facebook_id' => $this->Connect->user('facebook_id')
+                        )
+                    ));
 	    		}
 
 				$this->User->saveField('login_time', $this->User->dateTime());

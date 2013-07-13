@@ -489,18 +489,30 @@ class Article extends AppModel
         {
             return false;
         }
-        
-        foreach($results as $key => $result)
+
+        if (!empty($results['id']))
         {
-            if (!empty($result['Article']['tags']))
+            if (!empty($results['Article']['tags']))
             {
-                $results[$key]['Article']['tags'] = json_decode($result['Article']['tags'], true);
-                $results[$key]['Article']['tags_list'] = implode(', ', $results[$key]['Article']['tags']);
+                $results['Article']['tags'] = json_decode($results['Article']['tags'], true);
+                $results['Article']['tags_list'] = implode(', ', $results['Article']['tags']);
             }
 
-            if (!empty($result['Article']['settings']))
+            if (!empty($results['Article']['settings']))
+                $results['Article']['settings'] = json_decode($results['Article']['settings'], true);
+        }
+        else
+        {
+            foreach($results as $key => $result)
             {
-                $results[$key]['Article']['settings'] = json_decode($result['Article']['settings'], true);
+                if (!empty($result['Article']['tags']))
+                {
+                    $results[$key]['Article']['tags'] = json_decode($result['Article']['tags'], true);
+                    $results[$key]['Article']['tags_list'] = implode(', ', $results[$key]['Article']['tags']);
+                }
+
+                if (!empty($result['Article']['settings']))
+                    $results[$key]['Article']['settings'] = json_decode($result['Article']['settings'], true);
             }
         }
 

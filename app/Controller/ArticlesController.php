@@ -593,41 +593,63 @@ class ArticlesController extends AppController
     /**
      * Not fully functional, renders rss file but headers are not proper XML.
      *
-     * @param filter|null $category
-     * @param amount|int $limit
-     * @internal param \filter $category by category, optional
-     * @internal param \amount $limit to list on rss, 10 by default
-     * @return associative array of articles
+     * @param $category string
+     * @param $limit integer
+     * @return array of articles
      */
 	public function rss_index($category = null, $limit = 10)
 	{
-            $cond =  array(
-                    'Article.status' => 1,
-                    'Article.publish_time <=' => date('Y-m-d H:i:s'),
-                    'Article.deleted_time' => '0000-00-00 00:00:00'
-            );
-            
-            if (!empty($category)) 
-            {
-                $cond['Category.slug'] = $category;
-            }
+        $cond = array(
+            'Article.status' => 1,
+            'Article.publish_time <=' => date('Y-m-d H:i:s'),
+            'Article.deleted_time' => '0000-00-00 00:00:00'
+        );
 
-            $this->paginate = array(
-                    'contain' => array(
-                            'Category',
-                            'User',
-                            'ArticleValue' => array(
-                                    'Field'
-                            )
-                    ),
-                    'conditions' => $cond,
-                    'limit' => $limit,
-                    'order' => 'Article.created DESC'
-            );
+        if (!empty($category))
+            $cond['Category.slug'] = $category;
 
-            $this->request->data = $this->paginate('Article');
-            Configure::write('debug', 0);
-            $this->layout = 'rss/default';
+        $this->paginate = array(
+            'contain' => array(
+                'Category',
+                'User',
+                'ArticleValue' => array(
+                    'Field'
+                )
+            ),
+            'conditions' => $cond,
+            'limit' => $limit,
+            'order' => 'Article.created DESC'
+        );
+
+        $this->request->data = $this->Paginator->paginate('Article');
+        Configure::write('debug', 0);
+        $this->layout = 'rss/default';
+
+        $this->loadModel('SettingValue');
+
+        $sitename = $this->SettingValue->findByTitle('Site Name');
+
+        if (!empty($sitename['SettingValue']['data']))
+        {
+            $sitename = $sitename['SettingValue']['data'];
+        }
+        else
+        {
+            $sitename = 'Your Website';
+        }
+
+        $description = $this->SettingValue->findByTitle('RSS Description');
+
+        if (!empty($description['SettingValue']['data']))
+        {
+            $description = $description['SettingValue']['data'];
+        }
+        else
+        {
+            $description = "This is your website's RSS feed, enter in a little bit about your website.";
+        }
+
+        $this->set(compact('sitename', 'description'));
 	}
 
 	/**

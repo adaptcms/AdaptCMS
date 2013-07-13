@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}comments` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}cron` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `module_id` int(11) NOT NULL,
   `function` varchar(255) NOT NULL,
@@ -468,7 +468,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}users` (
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_reset_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `facebook_id` varchar(250) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;

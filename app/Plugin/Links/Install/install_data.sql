@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (
   `link_title` varchar(255) DEFAULT NULL,
   `link_target` varchar(255) DEFAULT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
+  `user_id` int(11),
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL,

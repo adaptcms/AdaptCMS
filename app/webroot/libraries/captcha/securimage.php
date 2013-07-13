@@ -1650,7 +1650,7 @@ class Securimage
         }
 
         if (!class_exists('DATABASE_CONFIG'))
-            include_once($_SERVER['DOCUMENT_ROOT'] . '/app/Config/database.php');
+            include_once(realpath('./../../../') . '/Config/database.php');
 
         $db = new DATABASE_CONFIG();
 

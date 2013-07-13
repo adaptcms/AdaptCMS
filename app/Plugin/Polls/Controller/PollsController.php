@@ -319,8 +319,8 @@ class PollsController extends PollsAppController
 			)
 		));
 
-		if (!empty($this->permissions['related']['polls']['vote']))
-			$find['Poll']['can_vote'] = $this->Poll->canVote($find, $this->Auth->user('id'));
+		if (!empty($find['Poll']['id']) && !empty($this->permissions['related']['polls']['vote']))
+			$find['Poll']['can_vote'] = $this->Poll->canVote($find['Poll']['id'], $this->Auth->user('id'));
 
         $data = $this->Poll->totalVotes($find);
 
@@ -359,10 +359,8 @@ class PollsController extends PollsAppController
 			)
 		));
 
-		if (!empty($this->permissions['related']['polls']['vote']))
-		{
-			$find['Poll']['can_vote'] = $this->Poll->canVote($find, $this->Auth->user('id'));
-		}
+		if (!empty($find['Poll']['id']) && !empty($this->permissions['related']['polls']['vote']))
+			$find['Poll']['can_vote'] = $this->Poll->canVote($find['Poll']['id'], $this->Auth->user('id'));
 
         foreach($find['PollValue'] as $option) {
             $find['options'][$option['id']] = $option['title'];

@@ -15,20 +15,20 @@ class InstallController extends Controller
     private $upgrade_versions = array(
         'beta' => array(
             'sql' => array(
-                'beta'
+                'beta',
+                'beta2',
+                'beta3'
             ),
             'upgrade_text' => 'upgrade-beta.md'
         ),
         'beta2' => array(
             'sql' => array(
-                'beta',
-                'beta2'
+                'beta2',
+                'beta3'
             )
         ),
         'beta3' => array(
             'sql' => array(
-                'beta',
-                'beta2',
                 'beta3'
             )
         )

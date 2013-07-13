@@ -7,14 +7,15 @@ $this->set('channel', array(
 			'href' => $this->Html->url('', true)
 		)
 	),
-	'title' => 'testing',
-	'description' => 'desc',
+	'title' => $sitename,
+	'description' => $description,
 	'language' => 'en-us'
 ));
 ?>
 
 <?php foreach($this->request->data as $data): ?>
 	<?php $link = array(
+        'rss' => false,
 		'controller' => 'articles', 
 		'action' => 'view', 
 		'slug' => $data['Article']['slug'],

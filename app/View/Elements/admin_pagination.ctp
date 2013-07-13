@@ -1,13 +1,14 @@
 <?php
-    $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'));
+$numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 'currentClass' => 'active paginator', 'first' => '1'));
 ?>
-
 <?php if (!empty($numbers)): ?>
     <div class="pagination">
         <ul>
-            <?= $this->Paginator->prev('«', array('tag' => 'li'), '<a>«</a>', array('escape' => false, 'class' => 'disabled')) ?>
-            <?= $numbers ?>
-            <?= $this->Paginator->next('»', array('tag' => 'li'), '<a>«</a>', array('escape' => false, 'class' => 'next disabled')) ?>
+            <?php
+            echo $this->Paginator->prev(__('«'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+            echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
+            echo $this->Paginator->next(__('»'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+            ?>
         </ul>
     </div>
 

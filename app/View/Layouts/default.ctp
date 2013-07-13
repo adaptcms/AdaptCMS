@@ -117,7 +117,9 @@
             </p>
             <ul class="nav">
               <li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
-              <li><a href="<?= $this->webroot ?>admin">Admin</a></li>
+              <?php if ($this->Session->read('Auth.User.id') && $this->Session->read('Auth.User.Role.defaults')): ?>
+                <li><a href="<?= $this->webroot ?>admin">Admin</a></li>
+              <?php endif ?>
               <li>
                   <?= $this->Html->link('Forums', array(
                       'plugin' => 'adaptbb',
