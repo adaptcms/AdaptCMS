@@ -1,3 +1,20 @@
+<?php $this->Html->addCrumb($article['Category']['title'], array(
+    'controller' => 'categories',
+    'action' => 'view',
+    $article['Category']['slug']
+)) ?>
+<?php $this->Html->addCrumb($article['Article']['title'], null) ?>
+
+<?php $this->set('title_for_layout', $article['Article']['title']) ?>
+
+<?php if (!empty($wysiwyg)): ?>
+    <?php $this->TinyMce->editor(array('simple' => true)) ?>
+<?php endif ?>
+
+<?= $this->Html->script('jquery.blockui.min.js') ?>
+<?= $this->Html->script('jquery.smooth-scroll.min.js') ?>
+<?= $this->Html->script('comments.js') ?>
+
 <h1>
   <?= $article['Article']['title'] ?>
   <?php if (!empty($article['Data']['system-icon'])): ?>
@@ -42,32 +59,11 @@
     )) ?><br />
   <?php endforeach ?>
 <?php endif ?>
-  
+
 <h2>Comments</h2>
 
-<?= $this->element('post_comment') ?>
-  
-<div id="comments">
-    <?php if (!empty($this->request->data['Comments'])): ?>
-        <?php foreach($this->request->data['Comments'] as $parent_id_1 => $comment): ?>
+<!--nocache-->
+<?= $this->element('post_comment', array('cached' => false)) ?>
+<!--/nocache-->
 
-            <?= $this->element('view_comment', array('data' => $comment, 'level' => 1)) ?>
-
-            <?php if (!empty($comment['children'])): ?>
-                <?php foreach($comment['children'] as $parent_id_2 => $comment_2): ?>
-
-                    <?= $this->element('view_comment', array('data' => $comment_2, 'level' => 2)) ?>
-
-                    <?php if (!empty($comment_2['children'])): ?>
-                        <?php foreach($comment_2['children'] as $parent_id_3 => $comment_3): ?>
-
-                            <?= $this->element('view_comment', array('data' => $comment_3, 'level' => 3)) ?>
-                        <?php endforeach ?>
-                    <?php endif ?>
-
-                <?php endforeach ?>
-            <?php endif ?>
-
-        <?php endforeach ?>
-    <?php endif ?>
-</div>
+<?= $this->element('view_all_comments', array('comments' => $this->request->data['Comments'])) ?>

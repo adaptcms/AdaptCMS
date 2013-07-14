@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
   `article_id` int(11) DEFAULT '0',
   `title` varchar(255) DEFAULT NULL,
   `poll_type` varchar(255) DEFAULT NULL,
+  `user_id` int(11),
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

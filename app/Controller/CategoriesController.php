@@ -16,6 +16,10 @@ class CategoriesController extends AppController
     */
 	private $permissions;
 
+    public $cacheAction = array(
+        'view' => '1 day'
+    );
+
     /**
     * In this beforeFilter we will get the permissions to be used in the view files
     */

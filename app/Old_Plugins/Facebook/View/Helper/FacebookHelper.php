@@ -571,7 +571,7 @@ class FacebookHelper extends AppHelper {
 	}());");
 			return $init;
 		} else {
-			return "<span class='error'>No Facebook configuration detected. Please add the facebook configuration file to your config folder.</span>";
+			return "<span class='error'>Facebook Plugin not configured. Site admin - please visit the admin panel and fill in your App ID, API Key and Secret.</span>";
 		}
 	}
 	

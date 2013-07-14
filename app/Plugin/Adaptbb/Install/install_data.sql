@@ -62,3 +62,9 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_adaptbb_forum_topics` (
 -- --------------------------------------------------------
 INSERT INTO `{prefix}fields` (`id`, `title`, `label`, `field_order`, `category_id`, `module_id`, `field_type_id`, `field_type_slug`, `description`, `field_options`, `field_limit_min`, `field_limit_max`, `required`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (null, 'signature', 'Signature', 4, 0, 9, 13, 'textarea', '<p>You may enter in your signature that will appear under your posts in the Forums.</p>', '', 0, 0, 0, 1, '{date}', '{date}', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_adaptbb_forums` (`id`, `title`, `slug`, `category_id`, `description`, `status`, `num_posts`, `num_topics`, `ord`, `user_id`, `icon_url`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'Off Topic', 'off-topic', 1, '<p>All discussions go here.</p>', 1, 0, 0, 0, 1, '', '{date}', '{date}', '0000-00-00 00:00:00');
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_adaptbb_forum_categories` (`id`, `title`, `slug`, `ord`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'General', 'general', 0, 1, '{date}', '{date}', '0000-00-00 00:00:00');

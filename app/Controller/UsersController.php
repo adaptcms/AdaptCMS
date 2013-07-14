@@ -11,6 +11,10 @@ class UsersController extends AppController {
 	private $permissions;
 	public $helpers = array('Captcha');
 
+    public $cacheAction = array(
+        'profile' => '1 day'
+    );
+
 	public function beforeFilter()
 	{
 		$this->allowedActions = array(

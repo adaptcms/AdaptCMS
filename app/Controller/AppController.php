@@ -62,7 +62,6 @@ class AppController extends Controller
         'AutoLoadJS',
         'Admin'
     );
-    public $cacheAction = '1 day';
 
     /**
      * Will hold the permissions later on
@@ -531,8 +530,6 @@ class AppController extends Controller
             }
             else
             {
-                debug($this->here);
-                die();
                 $this->Session->setFlash('You do not have access to this page.', 'flash_error');
 
                 if (Controller::referer() && !strstr(Controller::referer(), $this->here))
@@ -572,7 +569,7 @@ class AppController extends Controller
         if ($type != 'auth')
         {
             $this->Session->setFlash(
-                'We have encountered an ' . $type . ' error. Please ensure you are logged in and for forms - refresh the page and submit again.',
+                'We have encountered an ' . $type . ' error. Please ensure you are logged in and for forms - try and submit again.',
                 'flash_error'
             );
             $this->redirect( Controller::referer() );

@@ -59,7 +59,7 @@
 			<changefreq>daily</changefreq>
 			<priority>0.50</priority>
 		</url>
-		<?php $media_time = $media['Media']['modified'] ?>
+		<?php $media_time = strtotime($media['Media']['modified']) ?>
 	<?php endforeach ?>
 	<url>
 		<loc>
@@ -71,7 +71,7 @@
 			), true) ?>
 
 		</loc>
-		<lastmod><?= date("Y-m-d", strtotime($media_time)) ?></lastmod>
+		<lastmod><?= date("Y-m-d", !empty($media_time) ? $media_time : time()) ?></lastmod>
 		<changefreq>daily</changefreq>
 		<priority>0.50</priority>
 	</url>

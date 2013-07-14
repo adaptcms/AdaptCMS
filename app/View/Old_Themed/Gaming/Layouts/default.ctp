@@ -7,11 +7,12 @@
   <head>
     <?= $this->Html->charset() ?>
     <title>
-      <?= $title_for_layout ?>
+        Your Gaming Website | <?= $title_for_layout ?>
     </title>
-    <?php
-      echo $this->Html->meta('icon');
 
+    <?= $this->Html->meta('favicon.ico', $this->webroot . 'img/favicon.ico', array('type' => 'icon')) ?>
+
+    <?php
       echo $this->fetch('meta');
       echo $this->fetch('css');
       echo $this->fetch('script');
@@ -44,15 +45,12 @@
 
     <?= $this->Html->css("font-awesome.min.css") ?>
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <?= $this->Html->script('html5.min.js') ?>
     <![endif]-->
-    <!--[if lt IE 8]>
+    <!--[if IE 7]>
       <?= $this->Html->css("font-awesome-ie7.min.css") ?>
     <![endif]-->
-
-    <link rel="shortcut icon" href="<?= $this->webroot ?>img/favicon.ico">
   </head>
 
   <body>
@@ -210,14 +208,20 @@
                       'xbox-360'
                   )) ?>
               </li>
-              
-              <li class="nav-header">Poll</li>
 
-              <?= $this->element('show_poll', array('data' => $block_data['show-poll'])) ?>
+                <?php if (!empty($block_data['show-poll'])): ?>
+                  <li class="nav-header">Poll</li>
 
-              <li class="nav-header">Links</li>
+                    <!--nocache-->
+                    <?= $this->element('Polls.show_poll', array('data' => $block_data['show-poll'])) ?>
+                    <!--/nocache-->
+                <?php endif ?>
 
-              <?= $this->element('links_list', array('data' => $block_data['latest-links'])) ?>
+                <?php if (!empty($block_data['latest-links'])): ?>
+                    <li class="nav-header">Links</li>
+
+                    <?= $this->element('Links.links_list', array('data' => $block_data['latest-links'])) ?>
+                <?php endif ?>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
@@ -229,7 +233,9 @@
             'lastClass' => 'active'
           ), 'Home') ?>
 
-          <?= $this->Session->flash() ?>
+            <!--nocache-->
+            <?= $this->Session->flash() ?>
+            <!--/nocache-->
 
           <?= $this->fetch('content') ?>
         </div><!--/span-->
@@ -237,22 +243,18 @@
 
       <hr>
 
-      <footer>
-        <p>
+        <footer>
+            <p>
           <span class="pull-left">
-            <?= $this->Html->link(
-                $this->Html->image('cake.power.gif', array('border' => '0')),
-                'http://www.cakephp.org/',
-                array('target' => '_blank', 'escape' => false)
-              )
-            ?>
+              Powered by
+              <?= $this->Html->link('AdaptCMS ' . ADAPTCMS_VERSION, 'http://www.adaptcms.com', array('target' => '_blank')) ?>
           </span>
           <span class="pull-right">
           	&copy; 2006-13 <?= $this->Html->link('AdaptCMS', 'http://www.adaptcms.com', array('target' => '_blank')) ?><br />
             Cosmo theme by <?= $this->Html->link('Bootswatch', 'http://bootswatch.com/cosmo/', array('target' => '_blank')) ?>
           </span>
-        </p>
-      </footer>
+            </p>
+        </footer>
 
     </div><!--/.fluid-container-->
 

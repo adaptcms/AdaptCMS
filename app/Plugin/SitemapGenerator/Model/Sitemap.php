@@ -18,7 +18,11 @@ class Sitemap extends AppModel
 		$articles = $this->Article->find('all');
 		$categories = $this->Article->Category->find('all');
 		$libraries = Classregistry::init('Media')->find('all');
-		$pages = Classregistry::init('Page')->find('all');
+		$pages = Classregistry::init('Page')->find('all', array(
+            'conditions' => array(
+                'Page.slug !=' => 'home'
+            )
+        ));
 		$users = Classregistry::init('User')->find('all');
 
 		$data = array(

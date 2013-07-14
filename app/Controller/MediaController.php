@@ -18,6 +18,8 @@ class MediaController extends AppController
 		'Media'
 	);
 
+    public $cacheAction = '1 day';
+
     /**
     * In this beforeFilter we will get the permissions to be used in the view files
     * If this is an admin add or edit action, an array of images and the image path is set to the view

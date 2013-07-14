@@ -28,3 +28,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_support_tickets` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`,`category_id`,`deleted_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
+INSERT INTO `{prefix}plugin_support_categories` (`id`, `title`, `slug`, `description`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'Default', 'default', 'This is a default category', 1, '{date}', '{date}', '0000-00-00 00:00:00');

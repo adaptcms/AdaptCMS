@@ -65,14 +65,18 @@ class ForumTopic extends AdaptbbAppModel
     public function beforeSave()
     {
         if (!empty($this->data['ForumTopic']['subject']))
-        {
             $this->data['ForumTopic']['slug'] = $this->slug($this->data['ForumTopic']['subject']);
-        }
 
         $this->data = Sanitize::clean($this->data, array(
             'encode' => false,
             'remove_html' => false
         ));
+
+        if (!empty($this->data['ForumTopic']['content']))
+            $this->data['ForumTopic']['content'] = stripslashes(str_replace('\n', '', $this->data['ForumTopic']['content']));
+
+        if (!empty($this->data['ForumTopic']['subject']))
+            $this->data['ForumTopic']['subject'] = stripslashes(str_replace('\n', '', $this->data['ForumTopic']['subject']));
         
         return true;
     }

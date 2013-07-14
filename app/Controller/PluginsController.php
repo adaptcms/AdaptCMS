@@ -213,7 +213,8 @@ class PluginsController extends AppController
 	private function getPlugins($path)
 	{
 		$exclude = array(
-			'DebugKit'
+			'DebugKit',
+            'empty'
 		);
 		$plugins = array();
 		$api_lookup = array();

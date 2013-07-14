@@ -29,6 +29,10 @@ class PagesController extends AppController
 		'Field'
 	);
 
+    public $cacheAction = array(
+        'display' => '1 day'
+    );
+
     /**
     * In this beforeFilter we will get the permissions to be used in the view files
     */
@@ -37,13 +41,6 @@ class PagesController extends AppController
 		parent::beforeFilter();
 
 		$this->permissions = $this->getPermissions();
-
-        if ($this->params->action == 'display')
-        {
-            Configure::write('Cache.disable', false);
-            Configure::write('Cache.check', true);
-            Configure::write('debug', 0);
-        }
     }
 
     /**

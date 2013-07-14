@@ -24,6 +24,10 @@ class ArticlesController extends AppController
 		'Captcha',
 		'Field'
 	);
+
+    public $cacheAction = array(
+        'view' => 86400
+    );
 	
     /**
     * In this beforeFilter we will get the permissions to be used in the view files

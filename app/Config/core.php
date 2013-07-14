@@ -107,39 +107,6 @@ Configure::write('dev', 0);
  * Turn off all caching application-wide.
  *
  */
-    $admin_matches = array(
-//        '/admin/plugins'
-    );
-
-    $matches = array(
-        '/article/',
-        '/media',
-        '/category',
-        '/users/profile/'
-    );
-
-    /*
-    foreach($admin_matches as $match)
-    {
-        if (!isset($caching) && strstr($_SERVER['REQUEST_URI'], $match))
-        {
-            $caching = false;
-        }
-    }
-    */
-
-    if (!isset($caching))
-    {
-        foreach($matches as $match)
-        {
-            if (!isset($caching) && !strstr($_SERVER['REQUEST_URI'], '/admin') && strstr($_SERVER['REQUEST_URI'], $match))
-            {
-                $caching = false;
-            }
-        }
-    }
-
-    $caching = !isset($caching) ? true : $caching;
 
     if (Configure::read('dev') > 0)
     {
@@ -147,9 +114,9 @@ Configure::write('dev', 0);
         $debug = 2;
     }
 
-	Configure::write('Cache.disable', $caching);
+	Configure::write('Cache.disable', !isset($caching) ? false : true);
 
-    Configure::write('debug', isset($debug) ? $debug : $caching);
+    Configure::write('debug', !isset($debug) ? 0 : $debug);
 
 /**
  * Enable cache checking.
@@ -160,7 +127,7 @@ Configure::write('dev', 0);
  * or in each action using $this->cacheAction = true.
  *
  */
-	Configure::write('Cache.check', !$caching ? true : false);
+	Configure::write('Cache.check', !isset($debug) ? true : false);
 
 /**
  * Defines the default error type when using the log() function. Used for

@@ -10,7 +10,7 @@
       Your Website | <?= $title_for_layout ?>
     </title>
 
-    <?= $this->Html->meta('favicon.ico', '/img/favicon.ico', array('type' => 'icon')) ?>
+    <?= $this->Html->meta('favicon.ico', $this->webroot . 'img/favicon.ico', array('type' => 'icon')) ?>
 
     <?php
       echo $this->fetch('meta');
@@ -172,15 +172,20 @@
                       'news'
                   )) ?>
                 </li>
-              <li class="nav-header">Poll</li>
 
-              <!--nocache-->
-                <?= $this->element('Polls.show_poll', array('data' => $block_data['show-poll'])) ?>
-              <!--/nocache-->
+                <?php if (!empty($block_data['show-poll'])): ?>
+                    <li class="nav-header">Poll</li>
 
-              <li class="nav-header">Links</li>
+                    <!--nocache-->
+                    <?= $this->element('Polls.show_poll', array('data' => $block_data['show-poll'])) ?>
+                    <!--/nocache-->
+                <?php endif ?>
 
-              <?= $this->element('Links.links_list', array('data' => $block_data['latest-links'])) ?>
+                <?php if (!empty($block_data['latest-links'])): ?>
+                  <li class="nav-header">Links</li>
+
+                  <?= $this->element('Links.links_list', array('data' => $block_data['latest-links'])) ?>
+                <?php endif ?>
             </ul>
           </div><!--/.well -->
         </div><!--/span-->

@@ -657,6 +657,9 @@ class InstallController extends Controller
                         }
                     }
 
+                    clearCache(null, 'views');
+                    clearCache(null, 'persistent');
+
                     $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
                 } else {
                     $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
@@ -768,6 +771,9 @@ class InstallController extends Controller
                     }
                 }
 
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
+
                 $this->Session->setFlash( 'SQL has been removed successfully.', 'flash_success' );
             } else {
                 $this->Session->setFlash( 'SQL could not be removed.', 'flash_error' );
@@ -805,8 +811,10 @@ class InstallController extends Controller
                 try {
                     unlink( $path . DS . 'Install' . DS . 'upgrade.json' );
 
-                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
+                    clearCache(null, 'views');
                     clearCache(null, 'persistent');
+
+                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
                 } catch(Exception $e)
                 {
                     $error = $path . DS . 'Install' . DS . 'upgrade.json';
@@ -885,6 +893,9 @@ class InstallController extends Controller
                         rename( $path, $new_path );
                     }
 
+                    clearCache(null, 'views');
+                    clearCache(null, 'persistent');
+
                     $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
                 } else {
                     $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
@@ -939,6 +950,9 @@ class InstallController extends Controller
                     rename( $path, $new_path );
                 }
 
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
+
                 $this->Session->setFlash( 'SQL has been removed successfully.', 'flash_success' );
             } else {
                 $this->Session->setFlash( 'SQL could not be removed.', 'flash_error' );
@@ -976,8 +990,10 @@ class InstallController extends Controller
                 try {
                     unlink( $path . DS . 'Install' . DS . 'upgrade.json' );
 
-                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
+                    clearCache(null, 'views');
                     clearCache(null, 'persistent');
+
+                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
                 } catch(Exception $e)
                 {
                     $error = $path . DS . 'Install' . DS . 'upgrade.json';
