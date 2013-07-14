@@ -15,7 +15,7 @@
       <?= $this->Html->css("font-awesome-ie7.min.css") ?>
     <![endif]-->
 
-  <?= $this->Html->meta('favicon.ico', '/img/favicon.ico', array('type' => 'icon')) ?>
+  <?= $this->Html->meta('favicon.ico', $this->webroot . 'img/favicon.ico', array('type' => 'icon')) ?>
 
   <?php
     echo $this->fetch('meta');

@@ -95,16 +95,23 @@ class Field extends AppModel
             return;
         }
 
-        foreach($results as $key => $result)
+        if (!empty($results['id']))
         {
-            if (!empty($result['Field']['field_options']))
-            {
-                $results[$key]['Field']['field_options'] = json_decode($result['Field']['field_options'], true);
-            }
+            if (!empty($results['field_options']))
+                $results['field_options'] = json_decode($results['field_options'], true);
 
-            if (!empty($result['Field']['module_id']))
+            if (!empty($results['module_id']))
+                $results['category_id'] = 'module_' . $results['module_id'];
+        }
+        else
+        {
+            foreach($results as $key => $result)
             {
-                $results[$key]['Field']['category_id'] = 'module_' . $result['Field']['module_id'];
+                if (!empty($result['Field']['field_options']))
+                    $results[$key]['Field']['field_options'] = json_decode($result['Field']['field_options'], true);
+
+                if (!empty($result['Field']['module_id']))
+                    $results[$key]['Field']['category_id'] = 'module_' . $result['Field']['module_id'];
             }
         }
 

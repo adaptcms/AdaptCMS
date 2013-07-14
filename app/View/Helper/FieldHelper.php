@@ -12,7 +12,9 @@ class FieldHelper extends AppHelper
     /**
     * To show links, we require the HTML helper
     */
-    public $helpers = array('Html');
+    public $helpers = array(
+        'Html'
+    );
 
     /**
      * Looks for an textarea field in an array, returns the content or false
@@ -115,5 +117,22 @@ class FieldHelper extends AppHelper
         }
 
         return;
+    }
+
+    public function getFirstParagraph($data, $length = 150)
+    {
+        if (strstr($data, '<p>'))
+        {
+            $start = strpos($data, '<p>');
+            $end = strpos($data, '</p>', $start);
+            return substr($data, $start, $end - $start + 4);
+        }
+        else
+        {
+            $this->helpers[] = 'Text';
+            $this->Text->truncate($data, $length);
+        }
+
+        return $data;
     }
 }

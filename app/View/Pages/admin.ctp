@@ -63,9 +63,7 @@
         </a><br />
         <em>@ <?= $this->Admin->time($news['created'], 'words') ?></em>
 
-        <p>
-            <?= $this->Text->truncate($news['data'], 150) ?>
-        </p>
+        <?= $this->Field->getFirstParagraph($news['data']) ?>
 	<?php endif ?>
 
 	<a href="<?= $this->Api->siteUrl() ?>category/news" class="btn btn-primary admin-homepage pull-right" target="_blank">View More News »</a>
@@ -99,9 +97,7 @@
         </a><br />
         <em>@ <?= $this->Admin->time($blog['created'], 'words') ?></em>
 
-        <p>
-            <?= $this->Text->truncate($blog['data'], 150) ?>
-        </p>
+        <?= $this->Field->getFirstParagraph($blog['data']) ?>
 	<?php endif ?>
 
 	<a href="<?= $this->Api->siteUrl() ?>category/blog" class="btn btn-success admin-homepage pull-right" target="_blank">View More Blogs »</a>

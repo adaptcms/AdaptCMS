@@ -1,4 +1,6 @@
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script><script type="text/javascript" src="/google_maps/js/gmaps.js"></script><link rel="stylesheet" type="text/css" href="/google_maps/css/admin.google_maps.css" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="<?= $this->webroot ?>google_maps/js/gmaps.js"></script>
+<link rel="stylesheet" type="text/css" href="<?= $this->webroot ?>google_maps/css/admin.google_maps.css" />
     <script>
         var map;
         $(document).ready(function() {

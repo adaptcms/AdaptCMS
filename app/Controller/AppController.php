@@ -20,7 +20,7 @@ class AppController extends Controller
      * @var array 
      */
     public $components = array(
-        // 'DebugKit.Toolbar',
+//        'DebugKit.Toolbar',
         'Auth' => array(
             'loginAction' => array(
                 'controller' => 'users',
@@ -29,7 +29,8 @@ class AppController extends Controller
                 'plugin' => false
             ),        
             'loginRedirect' => array(
-                'plugin' => false, 
+                'plugin' => false,
+                'admin' => false,
                 'controller' => 'pages', 
                 'action' => 'display', 
                 'home'
@@ -530,6 +531,8 @@ class AppController extends Controller
             }
             else
             {
+                debug($this->here);
+                die();
                 $this->Session->setFlash('You do not have access to this page.', 'flash_error');
 
                 if (Controller::referer() && !strstr(Controller::referer(), $this->here))
@@ -907,5 +910,18 @@ class AppController extends Controller
         } else {
             return false;
         }
+    }
+
+    public function hasAccessToAdmin($role = null)
+    {
+        $permission = $this->Permission->find('first', array(
+            'conditions' => array(
+                'Permission.role_id' => !empty($role) ? $role : $this->getRole(),
+                'Permission.status' => 1,
+                'Permission.action LIKE' => '%admin%'
+            )
+        ));
+
+        return !empty($permission) ? true : false;
     }
 }

@@ -318,7 +318,15 @@ class UsersController extends AppController {
                     $this->User->saveField('login_time', $this->User->dateTime());
 
                     $this->Session->setFlash('Welcome back '.$this->Auth->User('username').'!', 'flash_success');
-                    return $this->redirect( $this->Auth->redirect() );
+
+                    if (!$this->hasAccessToAdmin( $this->Auth->User('Role.id') ))
+                    {
+                        $this->redirect('/');
+                    }
+                    else
+                    {
+                        $this->redirect('/admin');
+                    }
                 } else {
                     $this->Session->setFlash('Username or password is incorrect', 'flash_error');
                 }
