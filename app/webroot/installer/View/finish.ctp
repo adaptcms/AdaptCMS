@@ -12,7 +12,7 @@
 		</li>
 	</ul>
 
-	<p>For security purposes, please chmod the following files to <strong>644</strong>:</p>
+	<p>Please login to your admin panel and then afterwards, for security purposes, please chmod the following files to <strong>644</strong>:</p>
 
 	<p>
 		<div class="alert alert-info">

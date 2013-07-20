@@ -443,26 +443,29 @@ class ArticlesController extends AppController
      */
 	public function view($slug = null, $id = null)
 	{
-      if (empty($slug) && !empty($this->params['slug']))
-      {
-         $slug = $this->params['slug'];
-      }
-
-      if (empty($id) && !empty($this->params['id']))
-      {
-         $id = $this->params['id'];
-      }
-
-        $this->request->data = $this->Article->find('first', array(
+        $conditions = array(
             'conditions' => array(
-                'Article.slug' => $slug,
                 'Article.deleted_time' => '0000-00-00 00:00:00',
                 'Article.publish_time <=' => date('Y-m-d H:i:s'),
                 'Article.status' => 1
             )
-        ));
+        );
 
-        if (empty($this->request->data))
+        if (empty($slug) && !empty($this->params['slug']))
+        {
+            $slug = $this->params['slug'];
+            $conditions['conditions']['Article.slug'] = $slug;
+        }
+
+        if (empty($id) && !empty($this->params['id']))
+        {
+            $id = $this->params['id'];
+            $conditions['conditions']['Article.id'] = $id;
+        }
+
+        $this->request->data = $this->Article->find('first', $conditions);
+
+        if (empty($slug) || empty($id) || empty($this->request->data))
         {
             $this->Session->setFlash('Invalid Article', 'flash_error');
             $this->redirect(array(

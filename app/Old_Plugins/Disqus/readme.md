@@ -4,7 +4,7 @@ The Disqus plugin provides an easy to use helpers so users that use the commenti
 
 ## Installation
 
-To install, first download the zip and unpack the folder inside into your 'app/Old_Plugins' folder - be sure to chmod this new folder to 755. Then login into your admin panel and click on 'Manage Plugins'. You should see this plugin listed and an option to install on the right side.
+To install, first download the zip and unpack the folder 'Disqus' into your 'app/Old_Plugins' folder - be sure to chmod this new folder to 755. Then login into your admin panel and click on 'Manage Plugins'. You should see this plugin listed and an option to install on the right side.
 Simply click that and click continue on the install and enter in your Disqus short name by going to - Admin > Manage Plugins > Disqus Settings.
 
 Insert this code where you want comments to appear:

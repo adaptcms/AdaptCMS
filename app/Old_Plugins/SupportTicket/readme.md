@@ -4,7 +4,7 @@ Support Tickets let you use a simple system for users to submit issues on your s
 
 ## Installation
 
-To install, first download the zip and unpack the folder inside into your 'app/Old_Plugins' folder - be sure to chmod this new folder to 755. Then login into your admin panel and click on 'Manage Plugins'. You should see this plugin listed and an option to install on the right side.
+To install, first download the zip and unpack the folder 'SupportTicket' into your 'app/Old_Plugins' folder - be sure to chmod this new folder to 755. Then login into your admin panel and click on 'Manage Plugins'. You should see this plugin listed and an option to install on the right side.
 Simply click that and click continue on the install and everything should be done!
 
 ### More Resources

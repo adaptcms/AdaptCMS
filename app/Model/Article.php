@@ -209,11 +209,11 @@ class Article extends AppModel
                 )
             ));
 
-            if (!empty($row['Article']['related_articles']) && empty($loop))
+            if (empty($loop))
             {
                 $data[$key]['RelatedArticles'] = $this->getRelatedArticles(
                     $row['Article']['id'],
-                    $row['Article']['related_articles'],
+                    !empty($row['Article']['related_articles']) ? $row['Article']['related_articles'] : array(),
                     $categories,
                     $users,
                     $fields,

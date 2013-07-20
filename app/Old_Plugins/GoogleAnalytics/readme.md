@@ -6,7 +6,7 @@ After that, you'll have website statistics from the comfort of your site's admin
 
 ## Installation
 
-To install, first download the zip and unpack the folder inside into your 'app/Old_Plugins' folder - be sure to chmod this new folder to 755. Then login into your admin panel and click on 'Manage Plugins'.
+To install, first download the zip and unpack the folder 'GoogleAnalytics' into your 'app/Old_Plugins' folder - be sure to chmod this new folder to 755. Then login into your admin panel and click on 'Manage Plugins'.
 You should see this plugin listed and an option to install on the right side. Simply click that and click continue on the install and then go to plugins - from there you will need to go to the Google Analytics plugin settings and enter in your credentials and you're all set!
 
 ### More Resources
