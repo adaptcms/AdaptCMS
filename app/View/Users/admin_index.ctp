@@ -1,12 +1,12 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
 <?php $this->Html->addCrumb('Users', null) ?>
 
-<?php if ($this->Admin->hasPermission($permissions['related']['users']['ajax_change_user'])): ?>
+<?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_ajax_change_user'])): ?>
     <div id="user-change-status"></div>
 <?php endif ?>
 
 <div class="left">
-    <h1>Users<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Users<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 
 <div class="btn-toolbar pull-right" style="margin-bottom:10px">
@@ -96,7 +96,7 @@
             <?php foreach ($this->request->data as $data): ?>
                 <tr>
                     <td>
-                        <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
+                        <?php if (empty($this->request->named['trash']) && $this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
                             <?= $this->Html->link(
                                     $data['User']['username'], array(
                                         'admin' => false,
@@ -112,7 +112,7 @@
                         <?php if ($data['User']['status'] == 0): ?>
                             <i class="icon-remove-sign user-status" data-id="<?= $data['User']['id'] ?>" title="Click to activate User" alt="Click to activate User"></i>
                         <?php else: ?>
-                            <i class="icon-ok-sign user-status"></i>
+	                        <i class="icon-ok-sign user-status" data-id="<?= $data['User']['id'] ?>" title="Click to de-activate User" alt="Click to de-activate User"></i>
                         <?php endif ?>
                     </td>
                     <td class="hidden-phone">
@@ -131,16 +131,15 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
-                                    <li>
-                                        <?= $this->Admin->view(
-                                            $data['User']['username'],
-                                            'profile'
-                                        ) ?>
-                                    </li>
-                                <?php endif ?>
-
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
+	                                <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
+		                                <li>
+			                                <?= $this->Admin->view(
+				                                $data['User']['username'],
+				                                'profile'
+			                                ) ?>
+		                                </li>
+	                                <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -150,10 +149,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['User']['id'],
-                                                $data['User']['username'],
-                                                'user'
+                                                $data['User']['username']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -168,10 +166,10 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['User']['id'],
                                                 $data['User']['username'],
-                                                'user'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

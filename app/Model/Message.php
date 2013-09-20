@@ -40,8 +40,12 @@ class Message extends AppModel
 
     /**
     * Cleans out user input
+    *
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
         $this->data = Sanitize::clean($this->data, array(
             'encode' => false,

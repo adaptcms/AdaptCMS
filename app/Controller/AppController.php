@@ -2,15 +2,21 @@
 App::uses('Controller', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
 App::import('Model', 'ConnectionManager');
-
 /**
  * Class AppController
  * @property Cron $Cron
  * @property Module $Module
+ * @property Article $Article
+ * @property User $User
  * @property Permission $Permission
  * @property Role $Role
- * @property redirect $redirect
- * @property params $params
+ * @property Theme $Theme
+ * @property Log $Log
+ * @property ModuleValue $ModuleValue
+ * @property Block $Block
+ * @property SettingValue $SettingValue
+ * @property Setting $Setting
+ * @property CakeRequest $request
  */
 class AppController extends Controller
 {
@@ -76,6 +82,28 @@ class AppController extends Controller
     private $role;
 
     /**
+     * @var array
+     */
+    public $paginate = array();
+
+    /**
+     * @var int
+     */
+    public $pageLimit = 10;
+
+    /**
+     * @var array
+     */
+    public $allowedActions = array();
+
+    /**
+     * @var string
+     */
+    public $theme;
+
+	private $_elementView;
+
+    /**
      * A whole lot is going on in this one. We look for and attempt to load components/helpers, call Auth/Authorize,
      * load the layout, run the accessCheck, run the cron, blocks lookup, 
      * 
@@ -83,18 +111,28 @@ class AppController extends Controller
      */
     public function beforeFilter()
     {
-//        echo '#1: ' . microtime() . '<br />';
-
-        $system_path = realpath(CACHE . '/../system/');
+        /*
+        * Loads Up Helpers from config file
+        */
+        if (Configure::check('internal.system.helpers'))
+        {
+            foreach(Configure::read('internal.system.helpers') as $key => $helper)
+            {
+                if (is_numeric($key))
+                {
+                    $this->helpers[] = $helper;
+                } else {
+                    $this->helpers[] = $key;
+                }
+            }
+        }
 
         /*
-        * Loads Up Components from JSON file
+        * Loads Up Components from config file
         */
-        if (file_exists($system_path . '/components.json'))
+        if (Configure::check('internal.system.components'))
         {
-            $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
-
-            foreach($components_array as $key => $component)
+            foreach(Configure::read('internal.system.components') as $key => $component)
             {
                 if (is_numeric($key))
                 {
@@ -110,25 +148,7 @@ class AppController extends Controller
             }
         }
 
-        /*
-        * Loads Up Helpers from JSON file
-        */
-        if (file_exists($system_path . '/helpers.json'))
-        {
-            $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
-
-            foreach($helpers_array as $key => $helper)
-            {
-                if (is_numeric($key))
-                {
-                    $this->helpers[] = $helper;
-                } else {
-                    $this->helpers[] = $key;
-                }
-            }
-        }
-
-        if ($this->params->controller != "install") {
+        if ($this->request->controller != "install") {
             try {
                 $db = ConnectionManager::getDataSource('default');
             } catch (Exception $e) {
@@ -158,6 +178,8 @@ class AppController extends Controller
         $this->layout();
 
         $this->loadModel('Permission');
+
+//        debug($this->Permission->find('all'));
 
         if (!$this->getRole())
             $this->setRole();
@@ -202,13 +224,16 @@ class AppController extends Controller
             Configure::write('debug', 0);
 
         // Number of Items Per Page
-        if ($this->params->action == "admin_index") {
-            if ($limit = $this->SettingValue->findByTitle('Number of Items Per Page')) {
-                    $this->pageLimit = $limit['SettingValue']['data'];
-            } else {
-                    $this->pageLimit = 10;
-            }
+        if ($this->request->action == "admin_index" || $this->request->action == 'index') {
+            $limit = $this->SettingValue->findByTitle('Number of Items Per Page');
+
+            if (!empty($limit))
+                $this->pageLimit = $limit['SettingValue']['data'];
         }
+
+        $this->Paginator->settings = array(
+            'limit' => $this->pageLimit
+        );
 //        echo '#5: ' . microtime() . '<br />';
     }
 
@@ -229,11 +254,11 @@ class AppController extends Controller
                 $this->set('prefix', 'admin');
             }
         } else {
-            if (!empty($this->params->prefix) && $this->params->prefix == "admin" or 
-                $this->params->action == "admin" && strtolower($this->params->controller) != "users") {
+            if (!empty($this->request->prefix) && $this->request->prefix == "admin" or 
+                $this->request->action == "admin" && strtolower($this->request->controller) != "users") {
                 $this->layout = "admin";
                 $this->set('prefix', 'admin');
-            } elseif (!empty($this->params->prefix) && $this->params->prefix == "rss") {
+            } elseif (!empty($this->request->prefix) && $this->request->prefix == "rss") {
                 $this->layout = "rss/default";
             } else {
                 $this->layout = "default";
@@ -256,26 +281,26 @@ class AppController extends Controller
             'xml'
         );
 
-        if (!empty($this->allowedActions) && in_array($this->params->action, $this->allowedActions)) {
+        if (!empty($this->allowedActions) && in_array($this->request->action, $this->allowedActions)) {
             $allowed = 1;
-        } elseif ($this->params->action == "login" or strstr($this->params->action, "activate") or $this->params->action == "logout"
-            or $this->params->action == "register" or strstr($this->params->action, "_password")
-            or !empty($this->params->pass[0]) && $this->params->pass[0] == "denied"
-            or !empty($this->params->pass[0]) && $this->params->pass[0] == "home"
-            || !empty($this->params->prefix) && $this->params->prefix == "rss" || $this->params->controller == 'install' && !strstr($this->params->action, 'plugin') ||
-            !empty($this->params->ext) && in_array($this->params->ext, $webroot_exts)) {
-                        $this->Auth->allow($this->params->action);
-        } elseif (!empty($this->params->prefix) && $this->params->prefix == "admin" && !$this->Auth->User('id')
-            || $this->params->action == "admin" && !$this->Auth->User('id')
-            && strtolower($this->params->controller) != "users"
+        } elseif ($this->request->action == "login" or strstr($this->request->action, "activate") or $this->request->action == "logout"
+            or $this->request->action == "register" or strstr($this->request->action, "_password")
+            or !empty($this->request->pass[0]) && $this->request->pass[0] == "denied"
+            or !empty($this->request->pass[0]) && $this->request->pass[0] == "home"
+            || !empty($this->request->prefix) && $this->request->prefix == "rss" || $this->request->controller == 'install' && !strstr($this->request->action, 'plugin') ||
+            !empty($this->request->ext) && in_array($this->request->ext, $webroot_exts)) {
+                        $this->Auth->allow($this->request->action);
+        } elseif (!empty($this->request->prefix) && $this->request->prefix == "admin" && !$this->Auth->User('id')
+            || $this->request->action == "admin" && !$this->Auth->User('id')
+            && strtolower($this->request->controller) != "users"
             ) {
-                $this->Auth->deny($this->params->action);
+                $this->Auth->deny($this->request->action);
         } elseif ($this->getRole()) {
-            if (empty($this->params->plugin)) {
-                $this->params->plugin = '';
+            if (empty($this->request->plugin)) {
+                $this->request->plugin = '';
             }
 
-            if ($this->params->action == "admin" && $this->params->controller == "pages") {
+            if ($this->request->action == "admin" && $this->request->controller == "pages") {
                 $permission = $this->Permission->find('first', array(
                     'conditions' => array(
                         'Permission.role_id' => $this->getRole(),
@@ -284,14 +309,14 @@ class AppController extends Controller
                     )
                 ));
             } else {
-                if (!empty($this->params->pass[0]) && is_numeric($this->params->pass[0])) {
+                if (!empty($this->request->pass[0]) && is_numeric($this->request->pass[0])) {
                     $permission = $this->Permission->find('first', array(
                         'conditions' => array(
                             'Permission.role_id' => $this->getRole(),
-                            'Permission.action' => $this->params->action,
-                            'Permission.controller' => $this->params->controller,
-                            'Permission.plugin' => $this->params->plugin,
-                            'Permission.action_id' => $this->params->pass[0]
+                            'Permission.action' => $this->request->action,
+                            'Permission.controller' => $this->request->controller,
+                            'Permission.plugin' => $this->request->plugin,
+                            'Permission.action_id' => $this->request->pass[0]
                         )
                     ));
 
@@ -299,9 +324,9 @@ class AppController extends Controller
                         $permission = $this->Permission->find('first', array(
                             'conditions' => array(
                                 'Permission.role_id' => $this->getRole(),
-                                'Permission.action' => $this->params->action,
-                                'Permission.controller' => $this->params->controller,
-                                'Permission.plugin' => $this->params->plugin
+                                'Permission.action' => $this->request->action,
+                                'Permission.controller' => $this->request->controller,
+                                'Permission.plugin' => $this->request->plugin
                             )
                         ));
                     }
@@ -309,8 +334,8 @@ class AppController extends Controller
                     $permission = $this->Permission->find('first', array(
                         'conditions' => array(
                             'Permission.role_id' => $this->getRole(),
-                            'Permission.action' => $this->params->action,
-                            'Permission.controller' => $this->params->controller
+                            'Permission.action' => $this->request->action,
+                            'Permission.controller' => $this->request->controller
                         )
                     ));
                 }
@@ -321,12 +346,12 @@ class AppController extends Controller
 
             if (isset($permission['Permission']['status']) && $permission['Permission']['status'] == 0) {
                 $this->denyRedirect();
-                $this->Auth->deny($this->params->action);
+                $this->Auth->deny($this->request->action);
             } elseif (empty($permission['Permission']['status'])) {
                 $this->denyRedirect();
-                $this->Auth->deny($this->params->action);
+                $this->Auth->deny($this->request->action);
             } elseif ($permission['Permission']['status'] == 1) {
-                $this->Auth->allow($this->params->action);
+                $this->Auth->allow($this->request->action);
             }
         }
     }
@@ -378,19 +403,19 @@ class AppController extends Controller
 		
 		if ( empty($params['action']) )
 		{
-			$params['action'] = $this->params->action;
+			$params['action'] = $this->request->action;
 		}
 
 		if ( empty($params['controller']) )
 		{
-			$params['controller'] = $this->params->controller;
+			$params['controller'] = $this->request->controller;
 		}
 
 		if ( empty($params['plugin']) )
 		{
-			if ( !empty($this->params->plugin) )
+			if ( !empty($this->request->plugin) )
 			{
-				$params['plugin'] = $this->params->plugin;
+				$params['plugin'] = $this->request->plugin;
 			} else {
 				$params['plugin'] = '';
 			}
@@ -430,7 +455,7 @@ class AppController extends Controller
 				$controller = $permission['Permission']['controller'];
 			} elseif (empty($controller))
 			{
-				$controller = $this->params->controller;
+				$controller = $this->request->controller;
 			}
 
 			if (is_array($permission) && empty($permission['Permission']))
@@ -514,19 +539,21 @@ class AppController extends Controller
     /**
      * If AJAX request, returns json_encode array, otherwise a redirect
      *
-     * @return void
+     * @return mixed
      */
     public function denyRedirect()
     {
     	if ($this->request->is('ajax')) {
-            return die(json_encode(array(
-                    'status' => 'error',
-                    'message' => 'You do not have access to this page'
-            )));
+		    return new CakeResponse(array(
+			    'body' => 'You do not have access to this page',
+			    'type' => 'json',
+			    'status' => 401
+		    ));
     	} else {
             if (Configure::read('dev') == 1)
             {
-                die(debug($this->params));
+//                die(debug($this->params));
+	            return true;
             }
             else
             {
@@ -534,11 +561,11 @@ class AppController extends Controller
 
                 if (Controller::referer() && !strstr(Controller::referer(), $this->here))
                 {
-                    $this->redirect( Controller::referer() );
+                    return $this->redirect( Controller::referer() );
                 }
                 else
                 {
-                    $this->redirect(array(
+                    return $this->redirect(array(
                         'plugin' => null,
                         'admin' => false,
                         'controller' => 'pages',
@@ -550,29 +577,21 @@ class AppController extends Controller
         }
     }
 
-    /**
-     * Slugs string
-     * 
-     * @param string $str
-     * @param string $orig
-     * @return string
-     */
-    public function slug($str, $orig = null) {
-        if ($orig == null) {
-            return strtolower(Inflector::slug($str, "-"));
-        } else {
-            return strtolower(Inflector::slug($str));
-        }
-    }
-
-    public function blackhole($type) {
+	/**
+	 * Blackhole
+	 *
+	 * @param $type
+	 *
+	 * @return void
+	 */
+	public function blackhole($type) {
         if ($type != 'auth')
         {
             $this->Session->setFlash(
                 'We have encountered an ' . $type . ' error. Please ensure you are logged in and for forms - try and submit again.',
                 'flash_error'
             );
-            $this->redirect( Controller::referer() );
+            return $this->redirect( Controller::referer() );
         }
     }
 
@@ -593,9 +612,9 @@ class AppController extends Controller
             // 'data' => json_encode($this->params),
             'user_id' => $this->Auth->user('id'),
             'ip_address' => $_SERVER['REMOTE_ADDR'],
-            'plugin' => $this->params->plugin,
-            'controller' => $this->params->controller,
-            'action' => $this->params->action,
+            'plugin' => $this->request->plugin,
+            'controller' => $this->request->controller,
+            'action' => $this->request->action,
             'action_id' => $action_id,
             'date' => date('Y-m-d H:i:s')
         );
@@ -603,18 +622,19 @@ class AppController extends Controller
     }
     
     /**
+     * Blocks Lookup
      * Looks up any blocks that should run on page and loads them
      * 
-     * @return none
+     * @return void
      */
     public function blocksLookup()
     {
-        if ($this->params->prefix != "admin") {
+        if ($this->request->prefix != "admin") {
             $this->loadModel('Block');
 
             if (!empty($this->params['pass'][0])) {
-                $location = $this->params->controller.'|'.$this->params->action.'|'.$this->params['pass'][0];
-                $location2 = $this->params->controller.'|'.$this->params->action;
+                $location = $this->request->controller.'|'.$this->request->action.'|'.$this->params['pass'][0];
+                $location2 = $this->request->controller.'|'.$this->request->action;
 
                 $block_cond = array(
                     'conditions' => array(
@@ -622,22 +642,20 @@ class AppController extends Controller
                             array('Block.location LIKE' => '%"*"%'),
                             array('Block.location LIKE' => '%"' . $location . '"%'),
                             array('Block.location LIKE' => '%"' . $location2 . '"%')
-                        ),
-                        'Block.deleted_time' => '0000-00-00 00:00:00'
+                        )
                     ),
                     'contain' => array(
                         'Module'
                     )
                 );
             } else {
-                $location = $this->params->controller.'|'.$this->params->action;
+                $location = $this->request->controller.'|'.$this->request->action;
                 $block_cond = array(
                     'conditions' => array(
                         'OR' => array(
                             array('Block.location LIKE' => '%"*"%'),
                             array('Block.location LIKE' => '%"' . $location . '"%')
-                        ),
-                        'Block.deleted_time' => '0000-00-00 00:00:00'
+                        )
                     ),
                     'contain' => array(
                         'Module'
@@ -717,21 +735,37 @@ class AppController extends Controller
     /**
      * Looks up any cron entries that need to run and run the model function
      *
-     * @return void
+     * @param mixed $test
+     * @return boolean
      */
-	public function runCron()
+	public function runCron($test = null)
 	{
-        if ($this->params->controller != 'cron')
+        $return = false;
+
+        if ($this->request->controller != 'cron' || $test)
         {
             $this->loadModel('Cron');
 
-            $find = $this->Cron->find('first', array(
-                'conditions' => array(
-                    'Cron.run_time <=' => date('Y-m-d H:i:s'),
-                    'Cron.deleted_time' => '0000-00-00 00:00:00'
-                ),
-                'order' => 'run_time ASC'
-            ));
+            if (!$test)
+            {
+                $conditions = array(
+                    'conditions' => array(
+                        'Cron.run_time <=' => date('Y-m-d H:i:s'),
+                        'Cron.active' => 1
+                    ),
+                    'order' => 'run_time ASC'
+                );
+            }
+            else
+            {
+                $conditions = array(
+                    'conditions' => array(
+                        'Cron.id' => $test
+                    )
+                );
+            }
+
+            $find = $this->Cron->find('first', $conditions);
 
             if (!empty($find))
             {
@@ -752,20 +786,30 @@ class AppController extends Controller
                     $this->loadModel($model);
                 }
 
+                $cron = array();
+
                 try {
                     $this->$model->$function();
+                    $cron['Cron']['active'] = 1;
                 } catch (Exception $e) {
-
+                    $cron['Cron']['active'] = 0;
                 }
 
                 $amount = $find['Cron']['period_amount'];
                 $type = $find['Cron']['period_type'];
-                $run_time = date('Y-m-d H:i:s', strtotime('+' . $amount . ' '.$type));
 
                 $this->Cron->id = $find['Cron']['id'];
-                $this->Cron->saveField('run_time', $run_time);
+
+                $cron['Cron']['run_time'] = date('Y-m-d H:i:s', strtotime('+' . $amount . ' '.$type));
+                $cron['Cron']['last_run'] = date('Y-m-d H:i:s');
+
+                $this->Cron->save($cron);
+
+                $return =  $cron['Cron']['active'];
             }
         }
+
+        return $return;
 	}
 
     /**
@@ -835,7 +879,7 @@ class AppController extends Controller
 
     /**
      * 
-     * @return redirect
+     * @return void
      */
     public function afterFacebookLogin()
     {
@@ -909,7 +953,37 @@ class AppController extends Controller
         }
     }
 
-    public function hasAccessToAdmin($role = null)
+	/**
+	 * Has Access To Item
+	 *
+	 * @param $data
+	 *
+	 * @return mixed
+	 */
+	public function hasAccessToItem($data)
+	{
+		if (empty($data))
+		{
+			$this->Session->setFlash('Item does not exist.', 'flash_error');
+			$redirect = true;
+		}
+
+		if (!empty($data['User']['id']) && $data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
+		{
+			$this->Session->setFlash('You cannot access another users item.', 'flash_error');
+			$redirect = true;
+		}
+
+		return (isset($redirect) ? $this->redirect(array('action' => 'index')) : true);
+	}
+
+	/**
+	 * Has Access To Admin
+	 *
+	 * @param null $role
+	 * @return bool
+	 */
+	public function hasAccessToAdmin($role = null)
     {
         $permission = $this->Permission->find('first', array(
             'conditions' => array(
@@ -921,4 +995,68 @@ class AppController extends Controller
 
         return !empty($permission) ? true : false;
     }
+
+	public function _sendEmail()
+	{
+
+	}
+
+	/**
+	 * Ajax Response
+	 *
+	 * @param mixed $element
+	 * @param array $params
+	 * @param string $type
+	 * @param string $status
+	 *
+	 * @return CakeResponse
+	 */
+	public function _ajaxResponse($element, $params = array(), $type = 'json', $status = 'success')
+	{
+		$this->layout = 'ajax';
+		$this->autoRender = false;
+
+		if (!is_array($element))
+		{
+			$contents = $this->_getElement($element, $params);
+		}
+		else
+		{
+			$contents = $element['body'];
+		}
+
+		if($type == 'json')
+		{
+			$data = array(
+				'status' => $status,
+				'data' => $contents
+			);
+
+			$body = json_encode($data);
+		}
+		else
+		{
+			$body = $contents;
+		}
+
+		return new CakeResponse(array('body' => $body, 'type' => $type));
+	}
+
+	/**
+	 * Get Element
+	 *
+	 * @param $element
+	 * @param array $params
+	 *
+	 * @return string
+	 */
+	public function _getElement($element, $params = array())
+	{
+		if (!$this->_elementView)
+		{
+			$this->_elementView = new View($this, false);
+		}
+
+		return $this->_elementView->element($element, $params);
+	}
 }

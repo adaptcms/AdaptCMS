@@ -38,7 +38,7 @@ class SearchController extends AppController
 			)
 		));
 
-		if ($this->params->action == 'search')
+		if ($this->request->action == 'search')
 		{
 			$modules = implode(',', array_keys($modules) );
 		}
@@ -59,7 +59,7 @@ class SearchController extends AppController
 	* Hooks up to the 'getSearchParams' model function of a specified module 
 	* (or all that have the is_searchable flag set, this includes plugins)
 	*
-	* @return associative array of search data
+	* @return array Array of search data
 	*/
 	public function search()
 	{
@@ -83,7 +83,7 @@ class SearchController extends AppController
 				$model['load']
 			);
 
-			$this->paginate = array(
+			$this->Paginator->settings = array(
 				'conditions' => array(
 					'title LIKE' => '%' . $q . '%'
 				)
@@ -95,7 +95,7 @@ class SearchController extends AppController
 
 				if ( is_array($params) )
 				{
-					$this->paginate = $params;
+					$this->Paginator->settings = $params;
 				
 					if (!empty($params['permissions']) && !$this->permissionLookup(array(
 							$params['permissions']
@@ -124,7 +124,7 @@ class SearchController extends AppController
 				}
 			}
 
-			$data = $this->paginate(
+			$data = $this->Paginator->paginate(
 				$model['name']
 			);
 

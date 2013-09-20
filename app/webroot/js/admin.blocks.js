@@ -231,60 +231,60 @@ function get_model_data(type)
 	}
 
     $.post($("#webroot").text() + "admin/blocks/ajax_get_model/", 
-    	{
-    		data:{
-    			Block:{
-    				module_id: component,
-    				type: type,
-                    custom: custom
-    			}
-    		}
-    	}, function(data) {
-    		var new_data = $.parseJSON(data);
+    {
+        data:{
+            Block:{
+                module_id: component,
+                type: type,
+                custom: custom
+            }
+        }
+    }, function(response) {
+        var new_data = $.parseJSON(response.data);
 
-    		var data_list = '';
+        var data_list = '';
 
-            if (type != 'action' && new_data.custom) {
-                $("#custom-data").html(new_data.custom).show();
+        if (type != 'action' && new_data.custom) {
+            $("#custom-data").html(new_data.custom).show();
+        }
+
+        for (var row in new_data.data) {
+            data_list += '<option value="' + row + '">' + new_data.data[row] + '</option>';
+        }
+
+        if (type == 'model_field') {
+            $("#BlockData option").remove();
+            $("#BlockData").append(data_list).prepend(empty);
+
+            var length = Number(text.length) - 1;
+
+            if (text.substr(-3) == 'ies') {
+                var new_text = text.substr(0, text.length-3) + 'y';
+            } else if (text[length] == 's') {
+                var new_text = text.substring(0, text.length-1);
+            } else {
+                var new_text = text;
             }
 
-    		for (var row in new_data.data) {
-    			data_list += '<option value="' + row + '">' + new_data.data[row] + '</option>';
-    		}
+            $("label[for='BlockData']").html(new_text + ' <i>*</i>');
+            $("label[for='BlockLimit'] strong").html(text);
 
-    		if (type == 'model_field') {
-	    		$("#BlockData option").remove();
-	    		$("#BlockData").append(data_list).prepend(empty);
+            $("#next-step").show();
+        } else if(type == 'action') {
+            $("#BlockLocationId option").remove();
+            $("#BlockLocationId").append(data_list).prepend(empty);
+            $("#BlockLocationId option:first").attr('selected', 'selected');
 
-                var length = Number(text.length) - 1;
+            $("#location_id").show();
+        }
 
-                if (text.substr(-3) == 'ies') {
-                    var new_text = text.substr(0, text.length-3) + 'y';
-                } else if (text[length] == 's') {
-                    var new_text = text.substring(0, text.length-1);
-                } else {
-                    var new_text = text;
-                }
+        if ($("#BlockDataHidden").length == 1) {
+            var val = $("#BlockDataHidden").text();
+            $("#BlockData option[value='" + val + "']").attr('selected', 'selected');
 
-	    		$("label[for='BlockData']").html(new_text + ' <i>*</i>');
-	    		$("label[for='BlockLimit'] strong").html(text);
-
-	    		$("#next-step").show();
-	    	} else if(type == 'action') {
-	    		$("#BlockLocationId option").remove();
-	    		$("#BlockLocationId").append(data_list).prepend(empty);
-	    		$("#BlockLocationId option:first").attr('selected', 'selected');
-
-	    		$("#location_id").show();
-	    	}
-
-            if ($("#BlockDataHidden").length == 1) {
-                var val = $("#BlockDataHidden").text();
-                $("#BlockData option[value='" + val + "']").attr('selected', 'selected');
-
-                $("#BlockDataHidden").remove();
-            }
-    });
+            $("#BlockDataHidden").remove();
+        }
+    }, 'json');
 
     $("#location_add").live('click', function() {
 		var controller = $("#BlockLocationController :selected").val();

@@ -8,7 +8,9 @@ $(document).ready(function(){
                     dataType: "json",
                     type: "POST",
                     data: {search: query, category: $("#category").val(), id: $("#ArticleId").val()},
-                    success: function(data) {
+                    success: function(response) {
+                        var data = $.parseJSON(response.data);
+
                         if (data) {
                             var return_list = [], i = data.length;
                             while (i--) {
@@ -39,18 +41,13 @@ $(document).ready(function(){
             }
         });
 
-        $(".field-desc").popover({
-            trigger: 'hover',
-            placement: 'left'
-        });
-
         $.each($(".checkbox"), function(i, val) {
             if (!$(this).hasClass('input')) {
                 $(this).replaceWith($(this).find('input,label'));
             }
         });
 
-        $("button").live('click', function(){
+        $(".publish_options button").live('click', function(){
             var btn = $(this).html();
 
             if (btn == "Publish Now") {
@@ -104,7 +101,8 @@ $(document).ready(function(){
         }
     }
 
-    $("#flashMessageRelated").hide();
+    var flash = $("#flashMessageRelated");
+    flash.hide();
 
     if ($("#related-submit").length)
     {
@@ -117,16 +115,18 @@ $(document).ready(function(){
                 }).get();
 
                 $.post($("#webroot").text() + "admin/articles/ajax_related_add/", 
-                    {
-                        data:{
-                            Article:{
-                                id: $("#ArticleId").val(),
-                                ids: values
-                            }
+                {
+                    data:{
+                        Article:{
+                            id: $("#ArticleId").val(),
+                            ids: values
                         }
-                    }, function(data) {
+                    }
+                }, function(response) {
+                    var data = response.data;
+
                     if (data) {
-                        $("#flashMessageRelated").replaceWith(data).show();
+                        flash.replaceWith(data).show();
                         $("#flashMessageRelated").fadeOut(3500, function() {
                             $(this).html('');
                         });
@@ -143,8 +143,9 @@ $(document).ready(function(){
     }
 
     $(".admin-validate-article").on('submit', function(e) {
+        console.log(1);
         if (!$("#pass_form").length)
-        {   
+        {
             e.preventDefault();
         }
 

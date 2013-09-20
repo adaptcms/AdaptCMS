@@ -26,18 +26,31 @@ class Link extends LinksAppModel
     */
     public $validate = array(
         'title' => array(
-            array(
+            'notEmpty' => array(
                 'rule' => 'notEmpty',
                 'message' => 'Link title cannot be empty'
             )
         ),
         'url' => array(
-            array(
+            'notEmpty' => array(
                 'rule' => 'notEmpty',
                 'message' => 'Link URL cannot be empty'
+            ),
+            'url' => array(
+                'rule' => 'url',
+                'message' => 'Please enter in a valid website address starting with http://'
+            )
+        ),
+        'image_url' => array(
+            array(
+                'rule' => 'url',
+                'message' => 'Please enter in a valid website address starting with http://',
+	            'allowEmpty' => true
             )
         )
     );
+
+	public $actsAs = array('Delete');
 
     /**
      * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
@@ -51,7 +64,8 @@ class Link extends LinksAppModel
     {
         $cond = array(
             'conditions' => array(
-                'Link.deleted_time' => '0000-00-00 00:00:00'
+                'Link.deleted_time' => '0000-00-00 00:00:00',
+                'Link.active' => 1
             ),
             'contain' => array(
                 'File'
@@ -116,7 +130,7 @@ class Link extends LinksAppModel
             }
         }
 
-        if (empty($this->data['Link']['link_title']))
+        if (empty($this->data['Link']['link_title']) && !empty($this->data['Link']['title']))
             $this->data['Link']['link_title'] = $this->data['Link']['title'];
 
         return true;

@@ -1,4 +1,14 @@
 <?php
+/**
+ * Class Field
+ *
+ * @property Module $Module
+ * @property ModuleValue $ModuleValue
+ * @property FieldType $FieldType
+ * @property Category $Category
+ *
+ * @method findById(integer $id)
+ */
 class Field extends AppModel
 {
     /**
@@ -61,7 +71,22 @@ class Field extends AppModel
             'rule' => array(
                 'notEmpty'
             )
-        )
+        ),
+	    'field_type_id' => array(
+		    'rule' => array(
+			    'notEmpty'
+		    )
+	    )
+    );
+
+    /**
+     * @var array
+     */
+    public $actsAs = array(
+        'Slug' => array(
+            'slugField' => 'title'
+        ),
+        'Delete'
     );
 
     /**
@@ -86,46 +111,51 @@ class Field extends AppModel
      * This afterFind will simply, automatically, decode the field options json field
      *
      * @param mixed $results
+     * @param boolean $primary
+     *
      * @return array of filtered field data
      */
-    public function afterFind($results)
+    public function afterFind($results, $primary = false)
     {
-        if (empty($results))
+        if (!empty($results))
         {
-            return;
-        }
+	        if (!empty($results['id']))
+	        {
+	            if (!empty($results['field_options']))
+	                $results['field_options'] = json_decode($results['field_options'], true);
 
-        if (!empty($results['id']))
-        {
-            if (!empty($results['field_options']))
-                $results['field_options'] = json_decode($results['field_options'], true);
+	            if (!empty($results['module_id']))
+	                $results['category_id'] = 'module_' . $results['module_id'];
+	        }
+	        else
+	        {
+	            foreach($results as $key => $result)
+	            {
+	                if (!empty($result['Field']['field_options']))
+	                    $results[$key]['Field']['field_options'] = json_decode($result['Field']['field_options'], true);
 
-            if (!empty($results['module_id']))
-                $results['category_id'] = 'module_' . $results['module_id'];
-        }
-        else
-        {
-            foreach($results as $key => $result)
-            {
-                if (!empty($result['Field']['field_options']))
-                    $results[$key]['Field']['field_options'] = json_decode($result['Field']['field_options'], true);
-
-                if (!empty($result['Field']['module_id']))
-                    $results[$key]['Field']['category_id'] = 'module_' . $result['Field']['module_id'];
-            }
+	                if (!empty($result['Field']['module_id']))
+	                    $results[$key]['Field']['category_id'] = 'module_' . $result['Field']['module_id'];
+	            }
+	        }
         }
 
         return $results;
     }
 
-    public function beforeSave()
+    /**
+    * Before Save
+    *
+    * @param array $options
+    *
+    * @return boolean
+    */
+    public function beforeSave($options = array())
     {
         if (!empty($this->data['Field']['title']))
         {
             if (empty($this->data['Field']['label']))
                 $this->data['Field']['label'] = $this->data['Field']['title'];
-
-            $this->data['Field']['title'] = $this->slug($this->data['Field']['title']);
 
             if (!empty($this->data['FieldData']))
                 $this->data['Field']['field_options'] = json_encode($this->data['FieldData']);
@@ -200,12 +230,22 @@ class Field extends AppModel
         return $fields;
     }
 
-    public function getData($module, $id)
+	/**
+	 * Get Data
+	 *
+	 * @param $module
+	 * @param $id
+	 * @param array $fields
+	 *
+	 * @return array
+	 */
+	public function getData($module, $id, $fields = array())
     {
-        $data = $this->getFields($module, $id);
+	    if (empty($fields))
+	        $fields = $this->getFields($module, $id);
 
         $results = array();
-        foreach($data as $row)
+        foreach($fields as $row)
         {
             if (!empty($row['ModuleValue'][0]))
             {
@@ -226,8 +266,157 @@ class Field extends AppModel
         }
 
         return array(
-            'field_data' => $data,
+            'field_data' => $fields,
             'data' => $results
         );
     }
+
+	/**
+	 * Get All Data
+	 *
+	 * @param string $module
+	 * @param array $fields
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	public function getAllModuleData($module, $fields = array(), $data = array())
+	{
+		if (!empty($fields) && !empty($data))
+		{
+			$fields_list = array();
+			foreach($fields as $field)
+			{
+				$fields_list[$field['Field']['id']] = $field;
+			}
+
+			foreach($data as $key => $row)
+			{
+				if (!empty($row[$module]['id']))
+				{
+					$results = $this->ModuleValue->find('all', array(
+						'conditions' => array(
+							'ModuleValue.module_id' => $row[$module]['id']
+						)
+					));
+
+					if (!empty($results))
+					{
+						$data[$key]['Data'] = $this->parseModuleData($results, $fields_list);
+					}
+				}
+
+				if (!empty($row['children']))
+				{
+					foreach($row['children'] as $i => $level_2)
+					{
+						$val = $level_2[$module];
+
+						$level_2_results = $this->ModuleValue->find('all', array(
+							'conditions' => array(
+								'ModuleValue.module_id' => $val['id']
+							)
+						));
+
+						if (!empty($level_2_results))
+						{
+							$data[$key]['children'][$i]['Data'] = $this->parseModuleData($level_2_results, $fields_list);
+						}
+
+						if (!empty($level_2['children']))
+						{
+							foreach($level_2['children'] as $j => $level_3)
+							{
+								$var = $level_3[$module];
+
+								$level_3_results = $this->ModuleValue->find('all', array(
+									'conditions' => array(
+										'ModuleValue.module_id' => $var['id']
+									)
+								));
+
+								if (!empty($level_3_results))
+								{
+									$data[$key]['children'][$i]['children'][$j]['Data'] = $this->parseModuleData($level_3_results, $fields_list);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Parse Module Data
+	 *
+	 * @param array $data
+	 * @param array $fields
+	 *
+	 * @return array
+	 */
+	public function parseModuleData($data = array(), $fields = array())
+	{
+		$view = new View();
+		$view->autoRender = false;
+
+		$data_path = VIEW_PATH . 'Elements' . DS . 'FieldTypesData' . DS;
+
+		$value = array();
+		if (!empty($data))
+		{
+			foreach($data as $row)
+			{
+				$field = $fields[$row['ModuleValue']['field_id']];
+				$slug = $field['Field']['field_type_slug'];
+
+				if (!empty($row['ModuleValue']['file_id']))
+				{
+					$row['ModuleValue'] = array_merge(
+						$row['ModuleValue'],
+						$this->ModuleValue->File->findById($row['ModuleValue']['file_id'])
+					);
+				}
+
+				if (file_exists($data_path . $slug . '.ctp'))
+				{
+					$value[$field['Field']['title']] = $view->element('FieldTypesData/' . $slug, array('data' => $row['ModuleValue']));
+				}
+				else
+				{
+					$value[$field['Field']['title']] = $view->element('FieldTypesData/default', array('data' => $row['ModuleValue']));
+				}
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Save Field Order
+	 *
+	 * @param array $data
+	 * @return mixed
+	 */
+	public function saveFieldOrder($data = array())
+	{
+		$ids = explode(',', $data['Field']['order']);
+
+		$data = array();
+		$i = 0;
+		foreach($ids as $key => $field)
+		{
+			if (!empty($field) && $field > 0)
+			{
+				$data[$i]['id'] = $field;
+				$data[$i]['field_order'] = $key;
+
+				$i++;
+			}
+		}
+
+		return $this->saveMany($data);
+	}
 }

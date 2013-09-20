@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Menus', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Edit Menu', null) ?>
 
-<?= $this->Html->script('jquery-ui-1.9.2.custom.min.js') ?>
+<?= $this->Html->script('jquery-ui.min.js') ?>
 <?= $this->Html->script('jquery.smooth-scroll.min.js') ?>
 
 <?= $this->Form->create('Menu', array('class' => 'well admin-validate')) ?>
@@ -109,7 +109,6 @@
 	<div class="clearfix"></div>
 
     <?= $this->Form->hidden('id') ?>
-    <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
     <?= $this->Form->hidden('old_title', array('value' => $this->request->data['Menu']['title'])) ?>
 
 <?php if ($writable == 1): ?>

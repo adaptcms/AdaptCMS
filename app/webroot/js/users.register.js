@@ -15,17 +15,19 @@ $(document).ready(function() {
     $("#UserUsername").live('change', function() {
         var username = $("#UserUsername").val();
         if (username.length > 0) {
-            $.post($('#webroot').text() +  "ajax/users/check_user/", {data:{User:{username:username}}}, function(data) {
-                if (data == 1) {
-                    $("#username_ajax_result").hide();
+            $.post($('#webroot').text() +  "ajax/users/check_user/", { data:{ User:{ username:username } } }, function(response) {
+                var container =  $("#username_ajax_result");
+                
+                if (response.data == 1) {
+                    container.hide();
                     $("#submit").attr('disabled', false);
                 } else {
-                    $("#username_ajax_result").attr('class', 'error-message');
-                    $("#username_ajax_result").text('Username is already in use');
-                    $("#username_ajax_result").css('display','inline');
+                    container.attr('class', 'error-message');
+                    container.text('Username is already in use');
+                    container.css('display','inline');
                     $("#submit").attr('disabled', true);
                 }
-            });
+            }, 'json');
         }
     });
 
@@ -38,11 +40,11 @@ $(document).ready(function() {
             $("div#" + id).hide();
         }
 
-        $.each($(".security-question"), function(i, row) {
+        $.each($(".security-question"), function() {
             if ($(this).attr('id') != id) {
                 var new_id = $(this).attr('id');
 
-                $.each($("#UserSecurityQuestionHidden option"), function(key, val) {
+                $.each($("#UserSecurityQuestionHidden option"), function() {
                     var find = $("form").find($(".security-question option[value='" + $(this).val() + "']:selected")).val();
 
                     if ($(this).val() == find && find) {

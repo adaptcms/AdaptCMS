@@ -1,6 +1,8 @@
 <?php
 /**
  * Class GoogleMap
+ *
+ * @property User $User
  */
 class GoogleMap extends AppModel
 {
@@ -29,6 +31,14 @@ class GoogleMap extends AppModel
                 'message' => 'Please name this map'
             )
         )
+    );
+
+    /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
     );
 
     /**
@@ -134,8 +144,7 @@ class GoogleMap extends AppModel
      */
     public function beforeSave()
     {
-        if (!empty($this->data['GoogleMap']['title']))
-            $this->data['GoogleMap']['slug'] = $this->slug($this->data['GoogleMap']['title']);
+        parent::beforeSave();
 
         if (!empty($this->data['GoogleMap']['map_type']))
         {

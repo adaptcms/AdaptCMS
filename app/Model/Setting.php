@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class Setting
+ *
+ * @property SettingValue $SettingValue
+ */
 class Setting extends AppModel
 {
     /**
@@ -32,15 +36,23 @@ class Setting extends AppModel
         )
     );
 
+	public $actsAs = array(
+		'Delete' => array(
+			'cascade' => true
+		)
+	);
+
     /**
     * Cleans category title of HTML
+    *
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
         if (!empty($this->data['Setting']['title']))
-        {
             $this->data['Setting']['title'] = strip_tags($this->data['Setting']['title']);
-        }
 
         return true;
     }

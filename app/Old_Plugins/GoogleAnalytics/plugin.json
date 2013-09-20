@@ -1,6 +1,6 @@
 {
     "title": "Google Analytics",
-    "current_version": "1.0",
+    "current_version": "1.1",
     "api_id": 7,
     "install": {
     	"model_title": "GoogleAnalytics",

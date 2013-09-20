@@ -6,7 +6,7 @@
 
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
-<?= $this->Html->script('jquery-ui-1.9.2.custom.min.js') ?>
+<?= $this->Html->script('jquery-ui.min.js') ?>
 
 <ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
 	<li class="active">
@@ -33,15 +33,14 @@
 
 <div class="clearfix"></div>
 
-<div id="myTabContent" class="tab-content">
-	<div class="tab-pane fade active in" id="main">
-		<?= $this->Form->create('Field', array('action' => 'edit', 'class' => 'well admin-validate')) ?>
-
+<?= $this->Form->create('Field', array('action' => 'edit', 'class' => 'admin-validate')) ?>
+	<div id="myTabContent" class="tab-content">
+		<div class="tab-pane fade active in well" id="main">
 			<h2>Edit Field</h2>
 
 			<?= $this->Form->input('title', array(
-		    	'type' => 'text', 
-		    	'class' => 'required'
+		        'type' => 'text',
+		        'class' => 'required'
 		    )) ?>
 		    <?= $this->Form->input('label', array('type' => 'text')) ?>
 			<?= $this->Form->input('category_id', array(
@@ -51,19 +50,19 @@
 			<?= $this->Form->input('field_type_id', array(
 				'options' => $field_types,
                 'label' => 'Field Type',
-				'empty' => '- Choose -', 
+				'empty' => '- Choose -',
 				'class' => 'required'
 			)) ?>
 
 			<div class="field_options" style="margin-bottom: 9px">
 				<?= $this->Form->input('field_options', array(
-					'div' => false, 
+					'div' => false,
 					'style' => 'margin-bottom: 0',
 					'type' => 'text',
 					'value' => ''
 				)) ?>
 				<?= $this->Form->button('Add', array(
-					'class' => 'btn btn-info', 
+					'class' => 'btn btn-info',
 					'type' => 'button',
 					'id' => 'add-data'
 				)) ?>
@@ -79,7 +78,7 @@
 			<div class="clearfix"></div>
 
 			<?= $this->Form->input('description', array(
-				'rows' => 15, 
+				'rows' => 15,
 				'style' => 'width: 45%',
 				'div' => array(
 					'class' => 'input text clear'
@@ -87,52 +86,32 @@
 			)) ?>
 			<?= $this->Form->input('field_limit_min', array('label' => 'Field Limit Minimum')) ?>
 			<?= $this->Form->input('field_limit_max', array('label' => 'Field Limit Maximum')) ?>
-			<?= $this->Form->hidden('field_order') ?>
 			<?= $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?')) ?>
 
+			<?= $this->Form->hidden('field_order') ?>
+			<?= $this->Form->hidden('order') ?>
 		    <?= $this->Form->hidden('id') ?>
-		    <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
+		</div>
 
-		<?= $this->Form->end(array(
-			'label' => 'Submit',
-			'class' => 'btn btn-primary'
-		)) ?>
-	</div>
+		<div class="tab-pane hidden-phone" id="order">
+			<div class="well">
+				<h2>Field Order</h2>
 
-	<div class="tab-pane hidden-phone" id="order">
-		<div class="well">
-			<h2>Field Order</h2>
+				<ul id="sort-list" class="unstyled span5 col-lg-5">
+					<?= $this->Element('Fields/admin_ajax_fields', array(
+						'fields' => $fields,
+						'original' => $this->request->data['Field']
+					)) ?>
+				</ul>
 
-			<ul id="sort-list" class="unstyled span6">
-				<?php if (!empty($fields)): ?>
-					<?php foreach($fields as $field): ?>
-						<li class="btn" id="<?= $field['Field']['id'] ?>">
-							<i class="icon icon-move"></i> 
-							<?php if ($this->request->data['Field']['id'] == $field['Field']['id']): ?>
-								<span>
-									<?= $this->request->data['Field']['title'] ?>
-								</span> 
-								<i class="icon icon-question-sign" data-content="<?= $this->request->data['Field']['description'] ?>" data-title="<?= $this->request->data['Field']['title'] ?>"></i> 
-								<span class="label label-info pull-right">
-									Current Field
-								</span>
-							<?php else: ?>
-								<span>
-									<?= $field['Field']['label'] ?>
-								</span> 
-								<i class="icon icon-question-sign" data-content="<?= $field['Field']['description'] ?>" data-title="<?= $field['Field']['label'] ?>"></i>
-							<?php endif ?>
-
-							<div class="clearfix"></div>
-						</li>
-					<?php endforeach ?>
-				<?php endif ?>
-			</ul>
-
-			<div class="clearfix"></div>
+				<div class="clearfix"></div>
+			</div>
 		</div>
 	</div>
-</div>
+<?= $this->Form->end(array(
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
+)) ?>
 
 <div class="hidden" id="field-rules">
     <?php if (!empty($field_rules)): ?>

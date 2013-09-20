@@ -40,7 +40,6 @@
 			<?php endif ?>
 
 			<?= $this->Form->hidden('old_title', array('value' => $this->request->data['Theme']['title'])) ?>
-			<?= $this->Form->hidden('modified', array('value' => $this->Time->format('Y-m-d H:i:s', time()))) ?>
 		    <?= $this->Form->hidden('id') ?>
 
 		<?php if ($this->request->data['Theme']['id'] == 1): ?>

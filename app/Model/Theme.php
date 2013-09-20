@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Class Theme
+ *
+ * @property Template $Template
+ *
+ * @method findByTitle(string $title)
+ */
 class Theme extends AppModel
 {
     /**
@@ -32,6 +38,15 @@ class Theme extends AppModel
         )
     );
 
+	/**
+	 * @var array
+	 */
+	public $actsAs = array(
+		'Delete' => array(
+			'cascade' => true
+		)
+	);
+
     /**
     * Types of files that can be edited
     */
@@ -51,9 +66,11 @@ class Theme extends AppModel
     /**
     * Creates folders need for themes
     *
-    * @return true
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
         if (empty($this->data['Theme']['skipBeforeSave']))
         {
@@ -61,23 +78,22 @@ class Theme extends AppModel
                 empty($this->data['Theme']['id']) &&
                 !empty($this->data['Theme']['title']))
             {
-                $this->data['Theme']['title'] = $this->slug($this->data['Theme']['title']);
                 $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
 
                 if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title']))
                     mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title']);
 
-                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot'))
-                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title']);
+                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot'))
+                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot');
 
-                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css'))
-                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css');
+                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css'))
+                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css');
 
-                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js'))
-                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js');
+                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js'))
+                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js');
 
-                if (!file_exists(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img'))
-                    mkdir(WWW_ROOT . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img');
+                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img'))
+                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img');
 
                 foreach($this->Template->folderList() as $folder)
                 {
@@ -86,7 +102,6 @@ class Theme extends AppModel
                 }
             } elseif (!empty($this->data) && !empty($this->data['Theme']['old_title']))
             {
-                $this->data['Theme']['title'] = $this->slug($this->data['Theme']['title']);
                 $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
 
                 if ($this->data['Theme']['title'] != $this->data['Theme']['old_title'])
@@ -106,6 +121,21 @@ class Theme extends AppModel
 
         return true;
     }
+
+	/**
+	 * Before Delete
+	 *
+	 * @param bool $cascade
+	 * @return bool
+	 */
+	public function beforeDelete($cascade = true)
+	{
+		$theme = $this->findById($this->id);
+
+		$this->recursiveDelete(VIEW_PATH . 'Themed/' . $theme['Theme']['title']);
+
+		return true;
+	}
 
     /**
     * Transforms a text string into camel cased text, used in controllers
@@ -128,8 +158,8 @@ class Theme extends AppModel
     /**
     * Returns list of assets for specified theme along with plugin assets
     *
-    * @param theme name
-    * @param plugin false by default, otherwise provides name of plugin
+    * @param string $theme theme name
+    * @param boolean $plugin false by default, otherwise provides name of plugin
     * @return array of theme assets
     */
     public function getAssets($theme = null, $plugin = false)
@@ -138,7 +168,7 @@ class Theme extends AppModel
         
         foreach(Configure::read('Plugins.list') as $plugin)
         {
-            $assets = array_merge($assets, $this->assets($theme, $plugin));
+            $assets = array_merge($assets, $this->getAssets($theme, $plugin));
         }
 
         return $assets;
@@ -147,8 +177,8 @@ class Theme extends AppModel
     /**
     * Returns list of assets for specified theme
     *
-    * @param theme name
-    * @param plugin false by default, otherwise provides name of plugin
+    * @param string $theme theme name
+    * @param boolean $plugin false by default, otherwise provides name of plugin
     * @return array of theme assets
     */
 	public function assetsList($theme = null, $plugin = false)
@@ -201,15 +231,11 @@ class Theme extends AppModel
 
                                     $data[$rel_path . $new_path] = $file . DS . $row;
                                 } else {
-                                    $new_path = str_replace('.', '&', $row);
-
                                     $data[$rel_path . $row] = $row;
                                 }
                             }
                         }
                     } else {
-                        $new_path = str_replace('.', '&', $file);
-
                     	$data[$rel_path . $file] = $file;
                     }
                 }
@@ -221,5 +247,124 @@ class Theme extends AppModel
             'path' => $path,
             'view_path' => $view_path
         );
+	}
+
+	/**
+	 * Removes files inside of a folder
+	 *
+	 * @param string $dir path to folder to loop through
+	 * @return null
+	 */
+	public function rrmdir($dir)
+	{
+		/**
+		 * Source: Anonymous
+		 * http://us2.php.net/manual/en/function.rmdir.php#107233
+		 **/
+		if (is_dir($dir))
+		{
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..")
+				{
+					if (filetype($dir . "/" . $object) == "dir")
+					{
+						rmdir($dir . "/" . $object);
+					} else {
+						unlink($dir . "/" . $object);
+					}
+				}
+			}
+
+			reset($objects);
+			rmdir($dir);
+		}
+	}
+
+	/**
+	 * Gets config file for a theme with a JSON file
+	 *
+	 * @param $name
+	 * @param string $folder
+	 * @return array Array of configuration, blank array on false
+	 */
+	public function getConfig($name, $folder = 'Themed')
+	{
+		$json = VIEW_PATH . DS . $folder . DS . $name . DS . 'theme.json';
+
+		if (file_exists($json) && is_readable($json)) {
+			$handle = fopen($json, "r");
+			$json_file = fread($handle, filesize($json));
+
+			return json_decode($json_file, true);
+		}
+
+		return array();
+	}
+
+	/**
+	 * The function gets parameters needed on the view such as status of the Theme
+	 *
+	 * @param string $path path to themes
+	 * @return array of theme data
+	 */
+	public function getThemes($path)
+	{
+		$themes = array();
+		$api_lookup = array();
+		$exclude = array('empty');
+
+		if ($dh = opendir($path)) {
+			while (($file = readdir($dh)) !== false) {
+				if (!in_array($file, $exclude) && $file != ".." && $file != ".") {
+					$json = $path . DS . $file . DS . 'theme.json';
+
+					if (file_exists($json) && is_readable($json)) {
+						$handle = fopen($json, "r");
+						$json_file = fread($handle, filesize($json));
+
+						$themes[$file] = json_decode($json_file, true);
+
+						if (!empty($themes[$file]['api_id'])) {
+							$api_lookup[] = $themes[$file]['api_id'];
+						}
+
+						$upgrade = $path . DS . $file . DS . 'Install' . DS . 'upgrade.json';
+
+						if (file_exists($upgrade) && is_readable($upgrade))
+						{
+							$themes[$file]['upgrade_status'] = 1;
+						} else {
+							$themes[$file]['upgrade_status'] = 0;
+						}
+
+						if (strstr($path, 'Old')) {
+							$themes[$file]['status'] = 0;
+						} else {
+							$themes[$file]['status'] = 1;
+						}
+					}
+				}
+			}
+		}
+
+		return array(
+			'themes' => $themes,
+			'api_lookup' => $api_lookup
+		);
+	}
+
+	/**
+	 * Get Themes List
+	 *
+	 * @return array
+	 */
+	public function getThemesList()
+	{
+		$themes = $this->find('list', array(
+			'order' => 'Theme.id ASC',
+		));
+
+		return $themes;
 	}
 }

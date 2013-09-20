@@ -3154,17 +3154,19 @@ table th[class*="span"],
 }
 
 .collapse {
-  position: relative;
-  height: 0;
-  overflow: hidden;
-  -webkit-transition: height 0.35s ease;
-     -moz-transition: height 0.35s ease;
-       -o-transition: height 0.35s ease;
-          transition: height 0.35s ease;
+    display: none;
 }
 
 .collapse.in {
-  height: auto;
+    display: block;
+}
+
+.collapsing {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    -webkit-transition: height 0.35s ease;
+    transition: height 0.35s ease;
 }
 
 .close {
@@ -5946,33 +5948,28 @@ a.badge:focus {
 }
 
 .accordion {
-  /*margin-bottom: 20px;*/
+    margin-bottom: 21px;
 }
 
 .accordion-group {
-  /*margin-bottom: 2px;*/
-  /*border: 1px solid #e5e5e5;*/
-  -webkit-border-radius: 0;
-     -moz-border-radius: 0;
-          border-radius: 0;
+    margin-bottom: 2px;
+    border: 1px solid #e5e5e5;
+    border-radius: 0;
 }
 
 .accordion-heading {
-  border-bottom: 0;
+    border-bottom: 0;
 }
 
 .accordion-heading .accordion-toggle {
-  display: block;
-  /*padding: 8px 15px;*/
-}
-
-.accordion-toggle {
-  cursor: pointer;
+    display: block;
+    padding: 8px 15px;
+    cursor: pointer;
 }
 
 .accordion-inner {
-  /*padding: 9px 15px;*/
-  /*border-top: 1px solid #e5e5e5;*/
+    padding: 9px 15px;
+    border-top: 1px solid #e5e5e5;
 }
 
 .carousel {
@@ -6896,6 +6893,8 @@ a.thumbnail:hover {
   background-color: #e60033;
 }
 
+
+
 #content.accordion-body ul
 {
   margin-bottom: 0;
@@ -6954,4 +6953,19 @@ h4.image-filters
 div.input.textarea
 {
     margin-bottom:5px;
+}
+
+.panel-heading a.accordion-toggle h3
+{
+    color: #fff;
+}
+
+.panel-heading a:hover.accordion-toggle,.panel-heading a:active.accordion-toggle,.panel-heading a:visited.accordion-toggle
+{
+    text-decoration: none;
+}
+
+.accordion-toggle
+{
+    color: #000!important;
 }

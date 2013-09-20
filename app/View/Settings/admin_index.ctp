@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Settings', null) ?>
 
 <div class="pull-left">
-    <h1>Settings<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Settings<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -67,7 +67,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['settings']['admin_edit'], $data['Setting']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -77,10 +77,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['settings']['admin_delete'], $data['Setting']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Setting']['id'],
-                                                $data['Setting']['title'],
-                                                'setting category'
+                                                $data['Setting']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -95,10 +94,10 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['settings']['admin_delete'], $data['Setting']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Setting']['id'],
                                                 $data['Setting']['title'],
-                                                'setting category'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

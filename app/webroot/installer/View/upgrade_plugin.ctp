@@ -1,23 +1,53 @@
+<script>
+    $(document).ready(function() {
+        $(".upgrade").live('click', function() {
+            window.location.href = $("#webroot").text() + "<?= $plugin ?>/" + $(this).attr('id');
+        });
+    });
+</script>
+
 <?php if (empty($this->request->data) && empty($sql['error'])): ?>
 	<?= $this->Form->create('Upgrade', array('class' => 'well')) ?>
-		<?php if (!empty($upgrade_text)): ?>
-			<h2 class="no-bg">Upgrade Notes From Manufacturer</h2>
-
-			<?= $upgrade_text ?>
-		<?php endif ?>
-
 		<h1 class="no-bg">Notice</h1>
 
 		<p>
-			Please note that Insane Visions currently reviews all plugins, but does not gurantee these plugins to be fully working and any damage caused is not our responsibility. We advise all users to review information on the official page of the Plugin and to ensure the best and safest chance of getting a plugin, to use the official website.
+			Please note that Insane Visions currently reviews all plugins, but does not gurantee these plugins to be fully working and any damage caused is not our responsibility.
+            We advise all users to review information on the official page of the Plugin and to ensure the best and safest chance of getting a plugin, to use the
+            <?= $this->Html->link('official website', Configure::read('Component.Api.api_url'), array('target' => '_blank')) ?>.
 		</p>
 
+        <?php if (!empty($version)): ?>
+            <?php if (!empty($upgrade_text)): ?>
+                <h2 class="no-bg">Upgrade Notes From Manufacturer</h2>
+
+                <?= $upgrade_text ?>
+            <?php endif ?>
+
+            <?= $this->Form->submit('Confirm Upgrade to ' . $version, array('class' => 'btn')) ?>
+        <?php else: ?>
+            <?php if (empty($versions)): ?>
+                No Upgrade Available.
+                <?= $this->Html->link('Click here', array(
+                    'controller' => 'plugins',
+                    'action' => 'index',
+                    'admin' => true
+                )) ?> to return to the Plugins Page.
+            <?php else: ?>
+                <div class="btn-group">
+                    <?php if (!empty($versions)): ?>
+                        <?php foreach($versions as $key => $version): ?>
+                            <button id="<?= $key ?>" class="btn upgrade" type="button">Upgrade from <?= ucfirst($version) ?></button>
+                        <?php endforeach ?>
+                    <?php endif ?>
+                </div>
+            <?php endif ?>
+        <?php endif ?>
+
 		<?= $this->Form->hidden('upgrade') ?>
-	<?= $this->Form->end('Upgrade Plugin') ?>
+	<?= $this->Form->end() ?>
 <?php else: ?>
 	<div class="well">
 		<?php if (!empty($sql)): ?>
-
 			<?php foreach($sql['sql'] as $file => $count): ?>
 				<h2>
 					<?= $file ?>
@@ -33,28 +63,28 @@
 					</span>
 				<?php endif ?>
 			<?php endforeach ?>
+        <?php endif ?>
 
-			<?php if (empty($sql['sql']['error']) && !empty($error)): ?>
-				Please manually remove the following file:
+        <?php if (empty($sql['sql']['error']) && !empty($error)): ?>
+            Please manually remove the following file:
 
-				<p>
-					<?= $error ?>
-				</p>
+            <p>
+                <?= $error ?>
+            </p>
 
-				Then you can <?= $this->Html->link('Click here', array(
-					'controller' => 'plugins',
-					'action' => 'index',
-					'admin' => true
-				)) ?> to return to the Plugins Page.
-			<?php elseif (empty($sql['sql']['error']) && empty($error)): ?>
-				<p>
-					The Plugin has been upgraded successfully! <?= $this->Html->link('Click here', array(
-						'controller' => 'plugins',
-						'action' => 'index',
-						'admin' => true
-					)) ?> to return to the Plugins Page.
-				</p>
-			<?php endif ?>
-		<?php endif ?>
+            Then you can <?= $this->Html->link('Click here', array(
+                'controller' => 'plugins',
+                'action' => 'index',
+                'admin' => true
+            )) ?> to return to the Plugins Page.
+        <?php elseif (empty($sql['sql']['error']) && empty($error)): ?>
+            <p>
+                The Plugin has been upgraded successfully! <?= $this->Html->link('Click here', array(
+                    'controller' => 'plugins',
+                    'action' => 'index',
+                    'admin' => true
+                )) ?> to return to the Plugins Page.
+            </p>
+        <?php endif ?>
 	</div>
 <?php endif ?>

@@ -32,10 +32,6 @@
 		'class' => 'required'
 	)) ?>
 
-	<?= $this->Form->hidden('created', array(
-		'value' => $this->Admin->datetime()
-	)) ?>
-
 <?= $this->Form->end(array(
 	'label' => 'Submit',
 	'class' => 'btn btn-primary'

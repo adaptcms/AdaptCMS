@@ -7,11 +7,13 @@
 		<ul>
 			<?php foreach($block_data['admin-main-articles-newest'] as $article): ?>
 				<li>
-					<?= $this->Admin->edit(
-						$article['Article']['id'],
-						'articles',
-						$article['Article']['title']
-					) ?> @ <?= $this->Admin->time($article['Article']['created'], 'words') ?>
+					<?= $this->Html->link($article['Article']['title'], array(
+						'admin' => true,
+						'controller' => 'articles',
+						'action' => 'edit',
+						$article['Article']['id']
+					)) ?>
+					 @ <?= $this->Admin->time($article['Article']['created'], 'words') ?>
 				</li>
 			<?php endforeach ?>
 		</ul>
@@ -25,11 +27,13 @@
 		<ul>
 			<?php foreach($block_data['admin-main-users-newest'] as $user): ?>
 				<li>
-					<?= $this->Admin->edit(
-						$user['User']['id'],
-						'users',
-						$user['User']['username']
-					) ?> @  <?= $this->Admin->time($user['User']['created'], 'words') ?>
+					<?= $this->Html->link($user['User']['username'], array(
+						'admin' => true,
+						'controller' => 'users',
+						'action' => 'edit',
+						$user['User']['id']
+					)) ?>
+					@  <?= $this->Admin->time($user['User']['created'], 'words') ?>
 				</li>
 			<?php endforeach ?>
 		</ul>

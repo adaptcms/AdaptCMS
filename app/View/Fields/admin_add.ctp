@@ -5,7 +5,7 @@
 <?php $this->TinyMce->editor() ?>
 
 <?= $this->Html->script('data-tagging.js') ?>
-<?= $this->Html->script('jquery-ui-1.9.2.custom.min.js') ?>
+<?= $this->Html->script('jquery-ui.min.js') ?>
 
 <?= $this->Html->css("data-tagging.css") ?>
 
@@ -19,9 +19,9 @@
 </ul>
 <div class="clearfix"></div>
 
-<div id="myTabContent" class="tab-content">
-	<div class="tab-pane fade active in" id="main">
-		<?= $this->Form->create('Field', array('class' => 'well admin-validate')) ?>
+<?= $this->Form->create('Field', array('class' => 'admin-validate')) ?>
+	<div id="myTabContent" class="tab-content">
+		<div class="tab-pane fade active in well" id="main">
 			<h2>Add Field</h2>
 
 			<?= $this->Form->input('import', array(
@@ -45,19 +45,19 @@
 
 			<div class="field_options" style="margin-bottom: 9px">
 				<?= $this->Form->input('field_options', array(
-					'div' => false, 
+					'div' => false,
 					'style' => 'margin-bottom: 0',
 					'type' => 'text'
 				)) ?>
 				<?= $this->Form->button('Add', array(
-					'class' => 'btn btn-info', 
+					'class' => 'btn btn-info',
 					'type' => 'button',
 					'id' => 'add-data'
 				)) ?>
 			</div>
 			<div id="field_data" style="width: 30%;margin-bottom: 9px"></div>
 			<div class="clearfix"></div>
-			
+
 			<?= $this->Form->input('description', array('rows' => 15, 'style' => 'width: 45%',
 				'div' => array(
 					'class' => 'input text'
@@ -65,29 +65,28 @@
 			)) ?>
 			<?= $this->Form->input('field_limit_min', array('value' => 0, 'label' => 'Field Limit Minimum')) ?>
 			<?= $this->Form->input('field_limit_max', array('value' => 0, 'label' => 'Field Limit Maximum')) ?>
-			<?= $this->Form->hidden('field_order', array('value' => 0)) ?>
 			<?= $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?')) ?>
 
-			<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
+			<?= $this->Form->hidden('field_order', array('value' => 0)) ?>
+			<?= $this->Form->hidden('order') ?>
+		</div>
 
-		<?= $this->Form->end(array(
-			'label' => 'Submit',
-			'class' => 'btn btn-primary'
-		)) ?>
-	</div>
+		<div class="tab-pane" id="order">
+			<div class="well">
+				<h2>Field Order</h2>
 
-	<div class="tab-pane" id="order">
-		<div class="well">
-			<h2>Field Order</h2>
+				<ul id="sort-list" class="unstyled span5 col-lg-5">
+					<p>Please select a category first.</p>
+				</ul>
 
-			<ul id="sort-list" class="unstyled span6">
-				<p>Please select a category first.</p>
-			</ul>
-
-			<div class="clearfix"></div>
+				<div class="clearfix"></div>
+			</div>
 		</div>
 	</div>
-</div>
+<?= $this->Form->end(array(
+	'label' => 'Submit',
+	'class' => 'btn btn-primary'
+)) ?>
 
 <div class="hidden" id="field-rules">
     <?php if (!empty($field_rules)): ?>

@@ -21,7 +21,7 @@ $model = !empty($model) ? $model : 'ArticleValue';
     ) ?>
 
     <p>&nbsp;</p>
-    <ul class="selected-images span12 thumbnails">
+    <ul class="selected-images col-lg-12 thumbnails">
         <?php if (!empty($field[$model][0]['File'])): ?>
             <?= $this->element('media_modal_image', array(
                     'image' => $field[$model][0]['File'], 

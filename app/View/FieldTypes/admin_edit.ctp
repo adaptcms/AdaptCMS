@@ -33,7 +33,6 @@
     )) ?>
 
 	<?= $this->Form->hidden('id') ?>
-	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

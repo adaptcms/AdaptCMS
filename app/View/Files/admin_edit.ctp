@@ -8,18 +8,6 @@
 <script>
 $(document).ready(function() {
     $(".field_options").show();
-
-    $("#add-media").on('click', function() {
-        var val = $("#FileLibrary :selected");
-
-        if (val.val()) {
-            var random = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-
-            if ($(".media_libraries input[value='" + val.val() + "']").length == 0) {
-                $(".media_libraries").prepend('<div id="data-' + random + '"><span class="label label-info">' + val.text() + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="Media[]" name="Media[]" value="' + val.val() + '"></div>');
-            }
-        }
-    });
 });
 </script>
 
@@ -34,7 +22,7 @@ $(document).ready(function() {
 
     <?= $this->Html->link(
         '<i class="icon-trash icon-white"></i> Delete',
-        array('action' => 'delete', $data['File']['id']),
+        array('action' => 'delete', $this->request->data['File']['id']),
         array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file?')"));
     ?>
 </div>
@@ -42,23 +30,23 @@ $(document).ready(function() {
 
 <?= $this->Form->create('File', array('type' => 'file', 'class' => 'well admin-validate')) ?>
 
-    <?php if (!empty($data['File']['filename']) &&
-              !empty($data['File']['dir'])): ?>
+    <?php if (!empty($this->request->data['File']['filename']) &&
+              !empty($this->request->data['File']['dir'])): ?>
     	<label>Current File</label>
         <?php
             $var = "<p><a href='".$this->params->webroot.
-                    $data['File']['dir'].
-                    $data['File']['filename']."' target='_new'>";
+                    $this->request->data['File']['dir'].
+                    $this->request->data['File']['filename']."' target='_new'>";
         ?>
-        <?php if (strstr($data['File']['mimetype'], "image")):?>
+        <?php if (strstr($this->request->data['File']['mimetype'], "image")):?>
             <?= $this->Html->image(
-                    "/".$data['File']['dir']."thumb/".
-                    $data['File']['filename']
+                    "/".$this->request->data['File']['dir']."thumb/".
+                    $this->request->data['File']['filename']
             ) ?>
             <?= $var ?>
             View Full Size
-            <?php if (!empty($data['info'])): ?>
-                - <?= $data['info'][0] ?> x <?= $data['info'][1] ?>
+            <?php if (!empty($this->request->data['info'])): ?>
+                - <?= $this->request->data['info'][0] ?> x <?= $this->request->data['info'][1] ?>
             <?php endif ?>
             </a></p>
         <?php else: ?>
@@ -68,7 +56,7 @@ $(document).ready(function() {
     <?php endif; ?>
 
     <?= $this->Form->input('filename', array(
-        'value' => $data['File']['filename'], 
+        'value' => $this->request->data['File']['filename'], 
         'label' => 'File Name'
     )) ?>
 
@@ -83,26 +71,29 @@ $(document).ready(function() {
         )) ?>
     <?php endif ?>
 
-    <?= $this->Form->input('caption', array('value' => $data['File']['caption'])) ?>
+    <?= $this->Form->input('caption', array('value' => $this->request->data['File']['caption'])) ?>
 
-    <?= $this->Form->hidden('old_filename', array('value' => $data['File']['filename'])) ?>
+    <?= $this->Form->hidden('old_filename', array('value' => $this->request->data['File']['filename'])) ?>
 
-    <?= $this->Form->hidden('dir', array('value' => $data['File']['dir'])) ?>
-    <?= $this->Form->hidden('mimetype', array('value' => $data['File']['mimetype'])) ?>
-    <?= $this->Form->hidden('filesize', array('value' => $data['File']['filesize'])) ?>
+    <?= $this->Form->hidden('dir', array('value' => $this->request->data['File']['dir'])) ?>
+    <?= $this->Form->hidden('mimetype', array('value' => $this->request->data['File']['mimetype'])) ?>
+    <?= $this->Form->hidden('filesize', array('value' => $this->request->data['File']['filesize'])) ?>
 
-    <?php if (!empty($data['File']['id'])): ?>
-        <?= $this->Form->hidden('id', array('value' => $data['File']['id'])) ?>
+    <?php if (!empty($this->request->data['File']['id'])): ?>
+        <?= $this->Form->hidden('id', array('value' => $this->request->data['File']['id'])) ?>
     <?php endif ?>
         
-    <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
-
-    <?php if (strstr($data['File']['mimetype'], "image")): ?>
+    <?php if (strstr($this->request->data['File']['mimetype'], "image")): ?>
         <h4 class="image-filters">Image Filters</h4>
 
-        <?php if (empty($data['File']['watermark'])): ?>
+        <?php if (empty($this->request->data['File']['watermark'])): ?>
             <?= $this->Form->input('watermark', array('type' => 'checkbox')) ?>
         <?php endif ?>
+
+		<?= $this->Form->input('zoom', array(
+			'options' => $zoom_levels,
+			'label' => 'Thumbnail Crop Level'
+		)) ?>
         
         <div class="span3 no-marg-left">
             <?= $this->Form->input('resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
@@ -119,17 +110,16 @@ $(document).ready(function() {
                 'div' => false, 
                 'style' => 'margin-bottom: 0',
                 'empty' => '- add library -',
-                'options' => $data['media-list']
+                'options' => $media_list
             )) ?>
             <?= $this->Form->button('Add', array(
-                'class' => 'btn btn-info', 
-                'type' => 'button',
-                'id' => 'add-media'
+                'class' => 'btn btn-info add-media',
+                'type' => 'button'
             )) ?>
         </div>
         <div class="media_libraries">
-            <?php if (!empty($data['Media'])): ?>
-                <?php foreach($data['Media'] as $key => $media): ?>
+            <?php if (!empty($this->request->data['Media'])): ?>
+                <?php foreach($this->request->data['Media'] as $key => $media): ?>
                     <div id="data-<?= $key ?>">
                         <span class="label label-info">
                             <?= $media['title'] ?> <a href="#" class="icon-white icon-remove-sign"></a>

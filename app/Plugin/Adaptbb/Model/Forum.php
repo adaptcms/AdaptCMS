@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Class Forum
+ *
+ * @property ForumCategory $ForumCategory
+ * @property User $User
+ * @property ForumTopic $ForumTopic
+ */
 class Forum extends AdaptbbAppModel
 {
     /**
@@ -39,25 +45,18 @@ class Forum extends AdaptbbAppModel
     );
 
     /**
-    * Sets the slug
-    *
-    * @return true
-    */
-    public function beforeSave()
-    {
-        if (!empty($this->data['Forum']['title']))
-        {
-            $this->data['Forum']['slug'] = $this->slug($this->data['Forum']['title']);
-        }
-
-        return true;
-    }
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
+    );
 
     /**
     * Gets amount of topics, posts, users and newest user for forum index
     *
-    * @param data
-    * @return data new data
+    * @param array $data
+    * @return array new data
     */
     public function getIndexStats($data)
     {
@@ -68,14 +67,12 @@ class Forum extends AdaptbbAppModel
 
         $stats['users'] = $this->User->find('count', array(
             'conditions' => array(
-                'User.deleted_time' => '0000-00-00 00:00:00',
                 'User.status' => 1
             )
         ));
 
         $stats['newest_user'] = $this->User->find('first', array(
             'conditions' => array(
-                'User.deleted_time' => '0000-00-00 00:00:00',
                 'User.status' => 1
             ),
             'order' => 'User.created DESC'
@@ -93,14 +90,12 @@ class Forum extends AdaptbbAppModel
                     $find = $this->ForumTopic->ForumPost->find('first', array(
                         'conditions' => array(
                             'ForumTopic.forum_id' => $forum['id'],
-                            'ForumTopic.status' => 1,
-                            'ForumTopic.deleted_time' => '0000-00-00 00:00:00'
+                            'ForumTopic.status' => 1
                         ),
                         'contain' => array(
                             'ForumTopic',
                             'User'
-                        ),
-                        'order' => 'ForumPost.created DESC'
+                        )
                     ));
 
                     if (!empty($find))
@@ -115,4 +110,30 @@ class Forum extends AdaptbbAppModel
 
         return $data;
     }
+
+	/**
+	 * Save Forum Order
+	 *
+	 * @param array $data
+	 * @return mixed
+	 */
+	public function saveForumOrder($data = array())
+	{
+		$ids = explode(',', $data['Forum']['order']);
+
+		$data = array();
+		$i = 0;
+		foreach($ids as $key => $field)
+		{
+			if (!empty($field) && $field > 0)
+			{
+				$data[$i]['id'] = $field;
+				$data[$i]['ord'] = $key;
+
+				$i++;
+			}
+		}
+
+		return $this->saveMany($data);
+	}
 }

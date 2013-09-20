@@ -44,7 +44,6 @@
 				'value' => $this->request->data['Category']['title']
 			)) ?>
 
-			<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
 			<?= $this->Form->hidden('id') ?>
 
 		<?= $this->Form->end(array(

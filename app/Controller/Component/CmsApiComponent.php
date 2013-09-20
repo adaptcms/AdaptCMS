@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class CmsApiComponent
+ */
 class CmsApiComponent extends Object
 {
     /**
@@ -370,6 +372,8 @@ class CmsApiComponent extends Object
     }
 
     /**
+     * Get Admin Data
+     *
      * @return bool|mixed
      */
     public function getAdminData()

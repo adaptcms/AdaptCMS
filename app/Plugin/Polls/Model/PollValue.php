@@ -1,8 +1,11 @@
 <?php
-
+App::uses('PollsAppModel', 'Polls.Model');
+/**
+ * Class PollValue
+ */
 class PollValue extends PollsAppModel
 {
-	public $name = 'PluginPollValue';
+	public $useTable = 'plugin_poll_values';
 
 	public $belongsTo = array(
         'Poll' => array(

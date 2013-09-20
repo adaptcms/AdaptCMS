@@ -4,6 +4,16 @@ App::uses('Controller', 'Controller');
 
 /**
  * Class InstallController
+ *
+ * @property Article $Article
+ * @property User $User
+ * @property Role $Role
+ * @property Module $Module
+ * @property SettingValue $SettingValue
+ * @property Theme $Theme
+ * @property Category $Category
+ * @property Page $Page
+ * @property Permission $Permission
  */
 class InstallController extends Controller
 {
@@ -17,20 +27,29 @@ class InstallController extends Controller
             'sql' => array(
                 'beta',
                 'beta2',
-                'beta3'
+                'beta3',
+                '3-0'
             ),
             'upgrade_text' => 'upgrade-beta.md'
         ),
         'beta2' => array(
             'sql' => array(
                 'beta2',
-                'beta3'
+                'beta3',
+                '3-0'
             )
         ),
         'beta3' => array(
             'sql' => array(
-                'beta3'
+                'beta3',
+                '3-0'
             )
+        ),
+        '3.0' => array(
+            'sql' => array(
+                '3-0'
+            ),
+            'upgrade_text' => 'upgrade-3-0.md'
         )
     );
 
@@ -44,7 +63,7 @@ class InstallController extends Controller
             'account'
         );
 
-        if (in_array($this->params->action, $actions))
+        if (in_array($this->request->action, $actions))
             $this->_tryDbConnection();
 
         $api_actions = array(
@@ -57,7 +76,7 @@ class InstallController extends Controller
             'upgrade'
         );
 
-        if (in_array($this->params->action, $api_actions))
+        if (in_array($this->request->action, $api_actions))
         {
             if ($this->Session->read('Auth.User.Role.id'))
             {
@@ -72,7 +91,7 @@ class InstallController extends Controller
             $permission = $this->Permission->find('first', array(
                 'conditions' => array(
                     'Permission.controller' => 'install',
-                    'Permission.action' => $this->params->action,
+                    'Permission.action' => $this->request->action,
                     'Permission.status' => 1,
                     'Permission.role_id' => $role_id
                 )
@@ -81,6 +100,24 @@ class InstallController extends Controller
             if (empty($permission) || $permission['Permission']['status'] == 0)
                 throw new ForbiddenException();
         }
+    }
+
+    /**
+     * Update System Configuration Method
+     *
+     * @param $old
+     * @param $new
+     * @return int
+     */
+    public function _updateSystemConfiguration($old, $new)
+    {
+        $path = APP . 'Config' . DS . 'configuration.php';
+
+        $orig_contents = file_get_contents($path);
+        $new_contents = str_replace( json_encode($old), json_encode($new), $orig_contents );
+        $fh = fopen($path, 'w') or die("can't open file");
+
+        return fwrite($fh, $new_contents);
     }
 
     public function _tryDbConnection()
@@ -196,14 +233,13 @@ class InstallController extends Controller
     {
         $this->set('title_for_layout', 'Install AdaptCMS :: Create Admin Account');
 
-        $db = ConnectionManager::getDataSource('default');
+        ConnectionManager::getDataSource('default');
 
         $this->loadModel('SettingValue');
         $this->loadModel('User');
 
         $this->request->data['SecurityQuestions'] = $this->SettingValue->findByTitle('Security Questions');
         $security_options = $this->User->getSecurityOptions($this->SettingValue->findByTitle('Security Question Options'));
-        $user_status = $this->SettingValue->findByTitle('User Status');
         $this->set(compact('security_options'));
 
         if (!empty($this->request->data) && !empty($this->request->data['Security'])) {
@@ -231,6 +267,8 @@ class InstallController extends Controller
 
     public function upgrade($version = null)
     {
+	    $version = str_replace('_', '.', $version);
+
         $this->set('title_for_layout', 'Install AdaptCMS :: Upgrade');
         $this->set(compact('version'));
 
@@ -601,61 +639,58 @@ class InstallController extends Controller
                         rename( $path, $new_path );
                     }
 
+                    $system = Configure::read('internal.system');
+
                     if ( !empty($data['components']) )
                     {
-                        $system_path = realpath(CACHE . '/../system/');
+                        $add = array_keys($data['components']);
+                        $components = $system['components'];
 
-                        if (file_exists($system_path . '/components.json'))
+                        if (!empty($components))
                         {
-                            $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
-                            $add = array_keys($data['components']);
-
-                            foreach($components_array as $key => $component)
+                            foreach($components as $key => $component)
                             {
                                 if (!is_numeric($key) && $key == $add[0] || $component == $add[0])
                                 {
                                     $component_exists = 1;
                                 }
                             }
+                        }
 
-                            if (empty($component_exists))
-                            {
-                                $components_array[$add[0]] = $data['components'][$add[0]];
-                            }
-
-                            $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
-                            fwrite($fh, json_encode($components_array));
-                            fclose($fh);
+                        if (empty($component_exists))
+                        {
+	                        $components[$add[0]] = $data['components'][$add[0]];
+                            Configure::write('internal.system.components', $components);
+                            $update_config = true;
                         }
                     }
 
                     if ( !empty($data['helpers']) )
                     {
-                        $system_path = realpath(CACHE . '/../system/');
+                        $add = array_keys($data['helpers']);
+                        $helpers = $system['helpers'];
 
-                        if (file_exists($system_path . '/helpers.json'))
+                        if (!empty($helpers))
                         {
-                            $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
-                            $add = array_keys($data['helpers']);
-
-                            foreach($helpers_array as $key => $helper)
+                            foreach($helpers as $key => $helper)
                             {
                                 if (!is_numeric($key) && $key == $add[0] || $helper == $add[0])
                                 {
                                     $helper_exists = 1;
                                 }
                             }
+                        }
 
-                            if (empty($helper_exists))
-                            {
-                                $helpers_array[$add[0]] = $data['helpers'][$add[0]];
-                            }
-
-                            $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
-                            fwrite($fh, json_encode($helpers_array));
-                            fclose($fh);
+                        if (empty($helper_exists))
+                        {
+                            $helpers[$add[0]] = $data['helpers'][$add[0]];
+                            Configure::write('internal.system.helpers', $helpers);
+                            $update_config = true;
                         }
                     }
+
+                    if (!empty($update_config))
+                        $this->_updateSystemConfiguration($system, Configure::read('internal.system'));
 
                     clearCache(null, 'views');
                     clearCache(null, 'persistent');
@@ -725,51 +760,56 @@ class InstallController extends Controller
                     rename( $path, $new_path );
                 }
 
+                $system = Configure::read('internal.system');
+
                 if ( !empty($data['components']) )
                 {
-                    $system_path = realpath(CACHE . '/../system/');
+                    $remove = array_keys($data['components']);
+                    $components = $system['components'];
 
-                    if (file_exists($system_path . '/components.json'))
+                    if (!empty($components))
                     {
-                        $components_array = json_decode( file_get_contents($system_path . '/components.json'), true );
-                        $remove = array_keys($data['components']);
-
-                        foreach($components_array as $key => $component)
+                        foreach($components as $key => $component)
                         {
                             if (!is_numeric($key) && $key == $remove[0] || $component == $remove[0])
                             {
-                                unset($components_array[$key]);
+                                unset($components[$key]);
                             }
                         }
+                    }
 
-                        $fh = fopen($system_path . '/components.json', 'w') or die("can't open file");
-                        fwrite($fh, json_encode($components_array));
-                        fclose($fh);
+                    if (empty($component_exists))
+                    {
+                        Configure::write('internal.system.components', $components);
+                        $update_config = true;
                     }
                 }
 
                 if ( !empty($data['helpers']) )
                 {
-                    $system_path = realpath(CACHE . '/../system/');
+                    $remove = array_keys($data['helpers']);
+                    $helpers = $system['helpers'];
 
-                    if (file_exists($system_path . '/helpers.json'))
+                    if (!empty($helpers))
                     {
-                        $helpers_array = json_decode( file_get_contents($system_path . '/helpers.json'), true );
-                        $remove = array_keys($data['helpers']);
-
-                        foreach($helpers_array as $key => $helper)
+                        foreach($helpers as $key => $helper)
                         {
                             if (!is_numeric($key) && $key == $remove[0] || $helper == $remove[0])
                             {
-                                unset($helpers_array[$key]);
+                                unset($helpers[$key]);
                             }
                         }
+                    }
 
-                        $fh = fopen($system_path . '/helpers.json', 'w') or die("can't open file");
-                        fwrite($fh, json_encode($helpers_array));
-                        fclose($fh);
+                    if (empty($helper_exists))
+                    {
+                        Configure::write('internal.system.helpers', $helpers);
+                        $update_config = true;
                     }
                 }
+
+                if (!empty($update_config))
+                    $this->_updateSystemConfiguration($system, Configure::read('internal.system'));
 
                 clearCache(null, 'views');
                 clearCache(null, 'persistent');
@@ -781,7 +821,15 @@ class InstallController extends Controller
         }
     }
 
-    public function upgrade_plugin( $plugin )
+    /**
+     * Upgrade Plugin
+     *
+     * @param $plugin
+     * @param null $version
+     *
+     * @return void
+     */
+    public function upgrade_plugin( $plugin, $version = null )
     {
         $this->set('title_for_layout', 'AdaptCMS :: Plugin Upgrade');
 
@@ -791,34 +839,43 @@ class InstallController extends Controller
             $file_data = file_get_contents( $path . 'plugin.json' );
             $data = json_decode( $file_data, true );
 
-            if ( !empty( $data['upgrade']['text'] ) && file_exists( $path . $data['upgrade']['text'] ) ) {
-                $this->set( 'upgrade_text', file_get_contents( $path . $data['upgrade']['text'] ) );
-            }
+            if (!empty($version))
+            {
+                $version = str_replace('_', '.', $version);
+                $this->set(compact('version'));
 
-            if ( !empty( $data['upgrade']['sql'] ) ) {
-                $sql_files = $data['upgrade']['sql'];
+                if ( !empty( $data['upgrade'][$version]['text'] ) && file_exists( $path . $data['upgrade'][$version]['text'] ) ) {
+                    $this->set( 'upgrade_text', file_get_contents( $path . $data['upgrade'][$version]['text'] ) );
+                }
+
+                if ( !empty( $data['upgrade'][$version]['sql'] ) ) {
+                    $sql_files = $data['upgrade'][$version]['sql'];
+                }
+            }
+            elseif (!empty($data['upgrade']))
+            {
+                $values = array_keys($data['upgrade']);
+                $keys = array_map(create_function('$value', 'return str_replace(".", "_", $value);'), $values);
+
+                $versions = array_combine($keys, $values);
+
+                $this->set(compact('versions'));
             }
         }
 
-        if ( !empty( $this->request->data ) ) {
+        if ( !empty( $this->request->data ) && !empty( $version ) ) {
             $prefix = ConnectionManager::enumConnectionObjects();
 
-            $sql = $this->runPluginSQL( 'upgrade', $prefix['default']['prefix'], $sql_files, $path, array() );
+            if (!empty($sql_files) && is_array($sql_files))
+                $sql = $this->runPluginSQL( 'upgrade', $prefix['default']['prefix'], $sql_files, $path, array() );
 
             $this->set( compact( 'sql' ) );
 
             if ( empty( $sql['error'] ) ) {
-                try {
-                    unlink( $path . DS . 'Install' . DS . 'upgrade.json' );
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
 
-                    clearCache(null, 'views');
-                    clearCache(null, 'persistent');
-
-                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
-                } catch(Exception $e)
-                {
-                    $error = $path . DS . 'Install' . DS . 'upgrade.json';
-                }
+                $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
             } else {
                 $error = 'SQL Error';
             }
@@ -829,6 +886,8 @@ class InstallController extends Controller
                 $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
             }
         }
+
+        $this->set(compact('plugin'));
     }
 
     public function install_theme( $theme )
@@ -960,7 +1019,15 @@ class InstallController extends Controller
         }
     }
 
-    public function upgrade_theme( $theme )
+    /**
+     * Upgrade Theme
+     *
+     * @param $theme
+     * @param null $version
+     *
+     * @return void
+     */
+    public function upgrade_theme( $theme, $version = null )
     {
         $this->set('title_for_layout', 'AdaptCMS :: Theme Upgrade');
 
@@ -970,34 +1037,43 @@ class InstallController extends Controller
             $file_data = file_get_contents( $path . 'theme.json' );
             $data = json_decode( $file_data, true );
 
-            if ( !empty( $data['upgrade']['text'] ) && file_exists( $path . $data['upgrade']['text'] ) ) {
-                $this->set( 'upgrade_text', file_get_contents( $path . $data['upgrade']['text'] ) );
-            }
+            if (!empty($version))
+            {
+                $version = str_replace('_', '.', $version);
+                $this->set(compact('version'));
 
-            if ( !empty( $data['upgrade']['sql'] ) ) {
-                $sql_files = $data['upgrade']['sql'];
+                if ( !empty( $data['upgrade'][$version]['text'] ) && file_exists( $path . $data['upgrade'][$version]['text'] ) ) {
+                    $this->set( 'upgrade_text', file_get_contents( $path . $data['upgrade'][$version]['text'] ) );
+                }
+
+                if ( !empty( $data['upgrade'][$version]['sql'] ) ) {
+                    $sql_files = $data['upgrade'][$version]['sql'];
+                }
+            }
+            elseif (!empty($data['upgrade']))
+            {
+                $values = array_keys($data['upgrade']);
+                $keys = array_map(create_function('$value', 'return str_replace(".", "_", $value);'), $values);
+
+                $versions = array_combine($keys, $values);
+
+                $this->set(compact('versions'));
             }
         }
 
-        if ( !empty( $this->request->data ) ) {
+        if ( !empty( $this->request->data ) && !empty( $version ) ) {
             $prefix = ConnectionManager::enumConnectionObjects();
 
-            $sql = $this->runThemeSQL( 'upgrade', $prefix['default']['prefix'], $sql_files, $path, array() );
+            if (!empty($sql_files) && is_array($sql_files))
+                $sql = $this->runThemeSQL( 'upgrade', $prefix['default']['prefix'], $sql_files, $path, array() );
 
             $this->set( compact( 'sql' ) );
 
             if ( empty( $sql['error'] ) ) {
-                try {
-                    unlink( $path . DS . 'Install' . DS . 'upgrade.json' );
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
 
-                    clearCache(null, 'views');
-                    clearCache(null, 'persistent');
-
-                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
-                } catch(Exception $e)
-                {
-                    $error = $path . DS . 'Install' . DS . 'upgrade.json';
-                }
+                $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
             } else {
                 $error = 'SQL Error';
             }
@@ -1008,6 +1084,8 @@ class InstallController extends Controller
                 $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
             }
         }
+
+        $this->set(compact('theme'));
     }
 
     public function runThemeSQL( $type, $prefix, $files = array(), $path, $settings = array() )
@@ -1081,6 +1159,8 @@ class InstallController extends Controller
 
                         if (!empty($row['Field']))
                         {
+	                        $types = array();
+
                             foreach($row['Field'] as $field)
                             {
                                 $field_lookup = $this->User->Category->Field->find('first', array(
@@ -1111,8 +1191,15 @@ class InstallController extends Controller
                                     if (!empty($field['field_options']))
                                         $data['Field']['field_options'] = $field['field_options'];
 
+	                                if (empty($types[$field['field_type']]))
+	                                {
+		                                $type = $this->User->Category->Field->FieldType->findBySlug($field['field_type']);
+		                                $types[$field['field_type']] = $type['FieldType']['id'];
+	                                }
+
                                     $data['Field']['title'] = $field['title'];
-                                    $data['Field']['field_type'] = $field['field_type'];
+                                    $data['Field']['field_type_slug'] = $field['field_type'];
+                                    $data['Field']['field_type_id'] = $types[$field['field_type']];
                                     $data['Field']['user_id'] = $this->Session->read('Auth.User.id');
                                     $data['Field']['category_id'] = $categories[$key]['id'];
                                     $data['Field']['created'] = date('Y-m-d H:i:s');
@@ -1192,7 +1279,7 @@ class InstallController extends Controller
 
                 $class = new $className();
 
-                $data = $class->$functionName();
+                $class->$functionName();
             }
         }
 
@@ -1245,23 +1332,20 @@ class InstallController extends Controller
 
     public function old()
     {
-        if (!empty($this->params['type']))
+        if (!empty($this->request->params['type']))
         {
-            $db = ConnectionManager::getDataSource( 'default' );
+            ConnectionManager::getDataSource( 'default' );
 
-            if ($this->params['type'] == 'article' && !empty($this->params['slug']))
+            if ($this->request->params['type'] == 'article' && !empty($this->request->params['slug']))
             {
                 $this->loadModel('Article');
 
                 $conditions = array(
-                    'Article.deleted_time' => '0000-00-00 00:00:00',
-                    'Article.slug' => $this->params['slug']
+                    'Article.slug' => $this->request->params['slug']
                 );
 
-                if (!empty($this->params['category']))
-                {
-                    $conditions['Category.title'] = $this->params['category'];
-                }
+                if (!empty($this->request->params['category']))
+                    $conditions['Category.title'] = $this->request->params['category'];
 
                 $find = $this->Article->find('first', array(
                     'conditions' => $conditions,
@@ -1281,14 +1365,13 @@ class InstallController extends Controller
                 }
             }
 
-            if ($this->params['type'] == 'category' && !empty($this->params['slug']))
+            if ($this->request->params['type'] == 'category' && !empty($this->request->params['slug']))
             {
                 $this->loadModel('Category');
 
                 $find = $this->Category->find('first', array(
                     'conditions' => array(
-                        'Category.deleted_time' => '0000-00-00 00:00:00',
-                        'Category.slug' => $this->params['slug']
+                        'Category.slug' => $this->request->params['slug']
                     )
                 ));
 
@@ -1302,14 +1385,13 @@ class InstallController extends Controller
                 }
             }
 
-            if ($this->params['type'] == 'page' && !empty($this->params['slug']))
+            if ($this->request->params['type'] == 'page' && !empty($this->request->params['slug']))
             {
                 $this->loadModel('Page');
 
                 $find = $this->Page->find('first', array(
                     'conditions' => array(
-                        'Page.deleted_time' => '0000-00-00 00:00:00',
-                        'Page.slug' => $this->params['slug']
+                        'Page.slug' => $this->request->params['slug']
                     )
                 ));
 
@@ -1329,7 +1411,7 @@ class InstallController extends Controller
             }
             else
             {
-                $this->Session->setFlash('The ' . $this->params['type'] . ' does not exist.', 'flash_error');
+                $this->Session->setFlash('The ' . $this->request->params['type'] . ' does not exist.', 'flash_error');
                 $this->redirect('/');
             }
         }

@@ -29,25 +29,20 @@ class SettingsController extends AppController
     /**
     * Returns a paginated index of Settings
     *
-    * @return associative array of settings data
+    * @return array Array of settings data
     */
 	public function admin_index()
 	{
         $conditions = array();
 
-        if (!isset($this->params->named['trash'])) {
-            $conditions['Setting.deleted_time'] = '0000-00-00 00:00:00';
-        } else {
-            $conditions['Setting.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+        if (isset($this->request->named['trash']))
+            $conditions['Setting.only_deleted'] = true;
 
-        $this->paginate = array(
-            'order' => 'Setting.created DESC',
-            'limit' => $this->pageLimit,
+        $this->Paginator->settings = array(
             'conditions' => $conditions
         );
         
-        $this->request->data = $this->paginate('Setting');
+        $this->request->data = $this->Paginator->paginate('Setting');
 	}
 
     /**
@@ -76,10 +71,10 @@ class SettingsController extends AppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of settings data
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @return array Array of settings data
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
 		$this->Setting->id = $id;
 
@@ -96,18 +91,12 @@ class SettingsController extends AppController
 
         $this->request->data = $this->Setting->find('first', array(
         	'conditions' => array(
-        		'Setting.id' => $id,
-        		'Setting.deleted_time' => '0000-00-00 00:00:00',
+        		'Setting.id' => $id
         	),
         	'contain' => array(
-				'SettingValue' => array(
-					'conditions' => array(
-						'SettingValue.deleted_time' => '0000-00-00 00:00:00'
-						)
-					)
-				)
+				'SettingValue'
         	)
-        );
+        ));
 	}
 
     /**
@@ -115,57 +104,27 @@ class SettingsController extends AppController
     *
     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
 	    $this->Setting->id = $id;
 
-	    if (!empty($permanent))
+		$data = $this->Setting->findById($id);
+		$this->hasAccessToItem($data);
+
+		$permanent = $this->Setting->remove($data);
+
+		$this->Session->setFlash('The setting category `'.$title.'` has been deleted.', 'flash_success');
+
+		if ($permanent)
 		{
-			$delete = $this->Setting->delete($id);
-            $delete_values = true;
+			$this->redirect(array('action' => 'index', 'trash' => 1));
 		} else {
-			$delete_values = $this->Setting->SettingValue->updateAll(
-	    		array(
-	    			'SettingValue.deleted_time' => "'" . $this->Setting->dateTime() . "'"
-	    		),
-	    		array(
-	    			'SettingValue.setting_id' => $id
-	    		)
-	    	);
-	    	$delete = $this->Setting->saveField('deleted_time', $this->Setting->dateTime());
+			$this->redirect(array('action' => 'index'));
 		}
-
-	    if ($delete && $delete_values)
-	    {
-	        $this->Session->setFlash('The setting `'.$title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash('The setting `'.$title.'` has NOT been deleted.', 'flash_error');
-	    }
-
-	    if (!empty($permanent))
-        {
-            $count = $this->Setting->find('count', array(
-                'conditions' => array(
-                    'Setting.deleted_time !=' => '0000-00-00 00:00:00'
-                )
-            ));
-
-            $params = array('action' => 'index');
-
-            if ($count > 0)
-            {
-                $params['trash'] = 1;
-            }
-
-            $this->redirect($params);
-	    } else {
-	    	$this->redirect(array('action' => 'index'));
-	    }
 	}
 
     /**
@@ -173,26 +132,15 @@ class SettingsController extends AppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
-    * @return redirect
+    * @param integer $id ID of database entry, redirect if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-	public function admin_restore($id = null, $title = null)
+	public function admin_restore($id, $title = null)
 	{
 	    $this->Setting->id = $id;
 
-	    $save_values = $this->Setting->SettingValue->updateAll(
-    		array(
-    			'SettingValue.deleted_time' => "'0000-00-00 00:00:00'"
-    		),
-    		array(
-    			'SettingValue.setting_id' => $id
-    		)
-    	);
-
-    	$save_setting = $this->Setting->saveField('deleted_time', '0000-00-00 00:00:00');
-
-	    if ($save_setting && $save_values)
+	    if ($this->Setting->restore())
 	    {
 	        $this->Session->setFlash('The setting `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));

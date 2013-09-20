@@ -3,6 +3,8 @@ App::uses('AppController', 'Controller');
 
 /**
  * Class CategoriesController
+ *
+ * @property Category $Category
  */
 class CategoriesController extends AppController
 {
@@ -33,33 +35,26 @@ class CategoriesController extends AppController
     /**
     * Returns a paginated index of Categories
     *
-    * @return associative array of categories data
+    * @return array Array of categories data
     */
 	public function admin_index()
 	{
 		$conditions = array();
 
 	    if ($this->permissions['any'] == 0)
-	    {
 	    	$conditions['User.id'] = $this->Auth->user('id');
-	    }
 
-		if (!isset($this->params->named['trash'])) {
-			$conditions['Category.deleted_time'] = '0000-00-00 00:00:00';
-		} else {
-			$conditions['Category.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+		if (isset($this->request->named['trash']))
+			$conditions['Category.only_deleted'] = true;
 
-		$this->paginate = array(
-            'order' => 'Category.created DESC',
-            'limit' => $this->pageLimit,
+		$this->Paginator->settings = array(
             'conditions' => $conditions,
             'contain' => array(
             	'User'
             )
         );
         
-		$this->request->data = $this->paginate('Category');
+		$this->request->data = $this->Paginator->paginate('Category');
 	}
 
     /**
@@ -96,16 +91,15 @@ class CategoriesController extends AppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of category data
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @return array Array of category data
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
       	$this->Category->id = $id;
 
-      	$this->paginate = array(
+      	$this->Paginator->settings = array(
       		'conditions' => array(
-      			'Article.deleted_time' => '0000-00-00 00:00:00',
       			'Article.category_id' => $id
       		),
       		'contain' => array(
@@ -114,11 +108,10 @@ class CategoriesController extends AppController
       		'limit' => 7
       	);
 
-      	$articles = $this->paginate('Article');
+      	$articles = $this->Paginator->paginate('Article');
 
       	$fields = $this->Category->Field->find('all', array(
       		'conditions' => array(
-      			'Field.deleted_time' => '0000-00-00 00:00:00',
       			'Field.category_id' => $id
       		)
       	));
@@ -138,20 +131,8 @@ class CategoriesController extends AppController
 	        }
 	    }
 
-        $this->request->data = $this->Category->find('first', array(
-        	'conditions' => array(
-        		'Category.id' => $id
-        	),
-        	'contain' => array(
-        		'User'
-        	)
-        ));
-
-        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+        $this->request->data = $this->Category->findById($id);
+		$this->hasAccessToItem($this->request->data);
 	}
 
     /**
@@ -159,49 +140,27 @@ class CategoriesController extends AppController
     *
     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return mixed
     */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
 	    $this->Category->id = $id;
 
-        $data = $this->Category->find('first', array(
-        	'conditions' => array(
-        		'Category.id' => $id
-        	),
-        	'contain' => array(
-    			'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+        $data = $this->Category->findById($id);
+		$this->hasAccessToItem($data);
 
-	    if (!empty($permanent))
-	    {
-	    	$delete = $this->Category->delete($id);
-	    } else {
-	    	$delete = $this->Category->saveField('deleted_time', $this->Category->dateTime());
-	    }
+		$permanent = $this->Category->remove($data);
 
-	    if ($delete)
-	    {
-	        $this->Session->setFlash('The category `'.$title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash('The category `'.$title.'` has NOT been deleted.', 'flash_error');
-	    }
+		$this->Session->setFlash('The category `'.$title.'` has been deleted.', 'flash_success');
 
-	    if (!empty($permanent))
-	    {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
-	    } else {
-	    	$this->redirect(array('action' => 'index'));
-	    }
+		if ($permanent)
+		{
+			$this->redirect(array('action' => 'index', 'trash' => 1));
+		} else {
+			$this->redirect(array('action' => 'index'));
+		}
 	}
 
     /**
@@ -209,29 +168,18 @@ class CategoriesController extends AppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
-    * @return redirect
+    * @param integer $id ID of database entry, redirect if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return mixed
     */
-	public function admin_restore($id = null, $title = null)
+	public function admin_restore($id, $title = null)
 	{
 	    $this->Category->id = $id;
 
-        $data = $this->Category->find('first', array(
-        	'conditions' => array(
-        		'Category.id' => $id
-        	),
-        	'contain' => array(
-    			'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+        $data = $this->Category->findById($id);
+		$this->hasAccessToItem($data);
 
-	    if ($this->Category->saveField('deleted_time', '0000-00-00 00:00:00'))
+	    if ($this->Category->restore())
 	    {
 	        $this->Session->setFlash('The category `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
@@ -246,22 +194,21 @@ class CategoriesController extends AppController
 	* belonging to specified category and uses either the default template, or, 
 	* if it exists, a custom template.
 	* 
-	* @param slug Slug of the Category
-	* @return article Associative Array of article data
-	* @return title_for_layout Page Title
+	* @param string $slug Slug of the Category
+	* @return mixed
 	*/
 	public function view($slug)
 	{
         if (!empty($slug))
         {
-            $slug = $this->slug($slug);
+            $slug = $this->Category->slug($slug);
             $category = $this->Category->findBySlug($slug);
         }
 
         if (empty($category))
         {
             $this->Session->setFlash('Invalid Category', 'flash_error');
-            $this->redirect(array(
+            return $this->redirect(array(
                 'controller' => 'pages',
                 'action' => 'display',
                 'home'
@@ -280,22 +227,19 @@ class CategoriesController extends AppController
 		$conditions = array(
 			'Article.category_id' => $category['Category']['id'],
 			'Article.status' => 1,
-            'Article.publish_time <=' => date('Y-m-d H:i:s'),
-			'Article.deleted_time' => '0000-00-00 00:00:00'
+            'Article.publish_time <=' => date('Y-m-d H:i:s')
 		);
 
 	    if ($this->permissions['any'] == 0 && $this->Auth->user('id'))
-	    {
 	    	$conditions['User.id'] = $this->Auth->user('id');
-	    }
 
-		$this->paginate = array(
+		$this->Paginator->settings = array(
 			'order' => 'Article.created DESC',
 			'conditions' => $conditions,
 			'limit' => $limit
 		);
 
-		$articles = $this->paginate('Article');
+		$articles = $this->Paginator->paginate('Article');
 
 		$this->request->data = $this->Category->Article->getAllRelatedArticles(
 			$articles
@@ -317,14 +261,11 @@ class CategoriesController extends AppController
 	*
 	* This is temporary.
 	*
-	* @return json_encode Array of related Article Data
+	* @return string
 	*/
 	public function index()
 	{
 		$data = $this->Category->find('all', array(
-			'conditions' => array(
-				'Category.deleted_time' => '0000-00-00 00:00:00'
-			),
 			'fields' => array(
 				'id', 'title', 'slug', 'created'
 			)

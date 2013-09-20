@@ -27,7 +27,6 @@ $(document).ready(function() {
 	            if (count == key)
 	            {
 	            	$(".search-loading").hide();
-	            	fixPagination();
 	            }
 	        });
 	    });
@@ -56,7 +55,6 @@ $(document).ready(function() {
             id.html(data);
 
             $(".search-loading").hide();
-            fixPagination();
         });
 	});
 });

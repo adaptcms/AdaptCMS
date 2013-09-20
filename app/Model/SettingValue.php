@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class SettingValue
+ *
+ * @method findByTitle(string $title)
+ */
 class SettingValue extends AppModel 
 {
     /**
@@ -29,7 +33,15 @@ class SettingValue extends AppModel
         )
     );
 
-    public $multi_data_types = array(
+	/**
+	 * @var array
+	 */
+	public $actsAs = array('Delete');
+
+	/**
+	 * @var array
+	 */
+	public $multi_data_types = array(
         'check',
         'multi-dropdown'
     );
@@ -38,15 +50,17 @@ class SettingValue extends AppModel
     * Field data options are transformed and if a user flags a setting to be deleted
     * then the deleted time is set.
     *
+    * @param array $options
+    *
     * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
         if (!empty($this->data['FieldData']))
             $this->data['SettingValue']['data_options'] = str_replace("'","",json_encode($this->data['FieldData']));
 
         if (!empty($this->data['SettingValue']['deleted']))
-            $this->data['SettingValue']['deleted_time'] = $this->dateTime();
+            $this->data['SettingValue'] = $this->remove($this->data, false);
 
         if (!empty($this->data['SettingValue']['title']))
             $this->data['SettingValue']['title'] = strip_tags($this->data['SettingValue']['title']);
@@ -62,9 +76,11 @@ class SettingValue extends AppModel
     * is of a multi-data (meaning its contents gets json_encoded), then json_decode it into an array.
     *
     * @param array $results
+    * @param boolean $primary
+    *
     * @return array of filtered data
     */
-    public function afterFind($results)
+    public function afterFind($results, $primary = false)
     {
         if (!empty($results))
         {

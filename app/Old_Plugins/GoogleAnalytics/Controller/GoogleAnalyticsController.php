@@ -1,5 +1,10 @@
 <?php
-
+App::uses('AppController', 'Controller');
+/**
+ * Class GoogleAnalyticsController
+ *
+ * @property GoogleAnalyticsComponent $GoogleAnalytics
+ */
 class GoogleAnalyticsController extends AppController
 {
 	public $name = 'GoogleAnalytics';
@@ -41,6 +46,7 @@ class GoogleAnalyticsController extends AppController
 	        $sources = $this->GoogleAnalytics->getTopSources($start_date, $end_date);
 	        $browsers = $this->GoogleAnalytics->getTopBrowsers($start_date, $end_date);
 	        $operating_systems = $this->GoogleAnalytics->getTopOperatingSystems($start_date, $end_date);
+			$tracking_status = $this->GoogleAnalytics->checkTrackingStatus();
 
 	        $data = $this->GoogleAnalytics->getOverviewStats($start_date, $end_date);
 	        $stats = $data['stats'];
@@ -55,7 +61,8 @@ class GoogleAnalyticsController extends AppController
 	        		'start_date', 
 	        		'end_date', 
 	        		'browsers', 
-	        		'operating_systems'
+	        		'operating_systems',
+			        'tracking_status'
 	        	)
 	        );
 	    }

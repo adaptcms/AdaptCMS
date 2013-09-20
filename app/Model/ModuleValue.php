@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Class ModuleValue
+ *
+ * @property Field $Field
+ * @property File $File
+ *
+ * @method findByModuleId(integer $id)
+ */
 class ModuleValue extends AppModel
 {
     /**
@@ -28,13 +35,36 @@ class ModuleValue extends AppModel
             'foreignKey' => 'file_id'
         )
     );
-    
+
+	/**
+	 * Set Module Id
+	 *
+	 * @param array $data
+	 * @param integer $module_id
+	 *
+	 * @return boolean
+	 */
+	public function setModuleId($data = array(), $module_id)
+	{
+		if (!empty($data))
+		{
+			foreach($data as $key => $row)
+			{
+				$data[$key]['module_id'] = $module_id;
+			}
+		}
+
+		return $this->saveMany($data);
+	}
+
     /**
-     * The beforeSave manages file uploads/changes and json_encode type field data
-     * 
-     * @return boolean
-     */
-    public function beforeSave()
+    * The beforeSave manages file uploads/changes and json_encode type field data
+    * 
+    * @param array $options
+    *
+    * @return boolean
+    */
+    public function beforeSave($options = array())
     {
         if (!empty($this->data['ModuleValue']))
         {
@@ -117,7 +147,16 @@ class ModuleValue extends AppModel
         return $data;
     }
 
-    public function getValue($field, $foreign_id, $view)
+	/**
+	 * Get Value
+	 *
+	 * @param $field
+	 * @param $foreign_id
+	 * @param $view
+	 *
+	 * @return null|string
+	 */
+	public function getValue($field, $foreign_id, $view)
     {
         if (empty($field) || empty($foreign_id))
             return null;

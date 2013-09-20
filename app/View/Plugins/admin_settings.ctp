@@ -19,6 +19,12 @@
 		<?php foreach($params as $key => $value): ?>
 			<?php if (strlen($value) == 1 && is_numeric($value) && in_array($value, array(0, 1))): ?>
 				<?= $this->Form->input($key, array('value' => $value, 'type' => 'checkbox', ($value == 1 ? 'checked' : ''))) ?>
+            <?php elseif(strlen($value) > 20 && strstr($value, ' ')): ?>
+                <?= $this->Form->input($key, array(
+                    'value' => $value,
+                    'type' => 'textarea',
+                    'class' => 'span4'
+                )) ?>
 			<?php else: ?>
 				<?= $this->Form->input($key, array('value' => $value, 'type' => 'text')) ?>
 			<?php endif ?>

@@ -7,7 +7,7 @@
 <?php $this->Html->addCrumb('Forum Categories', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Edit Forum Category', null) ?>
 
-<?= $this->Html->script('jquery-ui-1.9.2.custom.min.js') ?>
+<?= $this->Html->script('jquery-ui.min.js') ?>
 
 <div class="pull-right admin-edit-options">
     <?= $this->Html->link(
@@ -28,14 +28,11 @@
 	<h2>Edit Forum Category</h2>
 
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
-	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
-	<?= $this->Form->hidden('ord') ?>
-	<?= $this->Form->hidden('id') ?>
 
     <div class="hidden-phone">
         <h4>Category Order</h4>
 
-        <ul id="sort-list" class="unstyled span6 no-marg-left">
+        <ul id="sort-list" class="unstyled span5 col-lg-5 no-marg-left">
             <?php if (!empty($categories)): ?>
                 <?php foreach($categories as $category): ?>
                     <li class="btn" id="<?= $category['ForumCategory']['id'] ?>">
@@ -58,6 +55,10 @@
 
         <div class="clearfix"></div>
     </div>
+
+	<?= $this->Form->hidden('id') ?>
+	<?= $this->Form->hidden('ord') ?>
+	<?= $this->Form->hidden('order') ?>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

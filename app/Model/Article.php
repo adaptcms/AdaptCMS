@@ -52,6 +52,14 @@ class Article extends AppModel
     );
 
     /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
+    );
+
+    /**
      * A convenience function that will retrieve all related articles
      *
      * @param integer $id
@@ -103,6 +111,56 @@ class Article extends AppModel
 
         if (!empty($find))
         {
+            if (!empty($fields))
+            {
+                $new_fields = Set::extract('{n}.ArticleValue.{n}.field_id', $find);
+
+                if (!empty($new_fields))
+                {
+                    $temp_fields = array();
+                    foreach($new_fields as $val)
+                    {
+                        foreach($val as $value)
+                        {
+                            $temp_fields[$value] = $value;
+                        }
+                    }
+
+                    $fields = array_unique(array_merge(
+                        $fields,
+                        $temp_fields
+                    ));
+                }
+
+                $field_data = $this->ArticleValue->Field->find('all', array(
+                    'conditions' => array(
+                        'Field.id' => $fields
+                    )
+                ));
+
+                $field_data = $this->arrayKeyById($field_data, 'Field');
+            }
+
+            if (!empty($field_data))
+            {
+                foreach($find as $key => $row)
+                {
+                    if (!empty($row['ArticleValue']))
+                    {
+                        foreach($row['ArticleValue'] as $i => $value)
+                        {
+                            $field_id = $value['field_id'];
+
+                            if (!empty($field_data[$field_id]))
+                                $find[$key]['ArticleValue'][$i]['Field'] = $field_data[$field_id];
+                        }
+                    }
+                }
+            }
+
+            $find = $this->convertFieldData($find);
+
+
             foreach($find as $row)
             {
                 $data[$row['Category']['slug']][] = $row;
@@ -269,7 +327,6 @@ class Article extends AppModel
     {
         $cond = array(
             'conditions' => array(
-                'Article.deleted_time' => '0000-00-00 00:00:00',
                 'Article.status !=' => 0,
                 'Article.publish_time <=' => date('Y-m-d H:i:s')
             ),
@@ -376,9 +433,11 @@ class Article extends AppModel
     * This beforeSave will set the slug and ensure the proper File request data is being
     * passed to the behavior.
     *
+    * @param array $options
+    *
     * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
         if (!empty($this->data['File']) && !empty($this->data['Files']))
         {
@@ -387,9 +446,6 @@ class Article extends AppModel
         {
             $this->data['File'] = $this->data['Files'];
         }
-
-        if (!empty($this->data['Article']['title']))
-            $this->data['Article']['slug'] = $this->slug($this->data['Article']['title']);
 
         /**
         * Add
@@ -480,10 +536,11 @@ class Article extends AppModel
      * The afterFind is primarily used to automatically decode json for Article data
      *
      * @param mixed $results
-     * @internal param $results
+     * @param boolean $primary
+     *
      * @return array of parsed results
      */
-    public function afterFind($results)
+    public function afterFind($results, $primary = false)
     {
         if (empty($results))
         {
@@ -519,7 +576,12 @@ class Article extends AppModel
         return $results;
     }
 
-    public function afterDelete()
+	/**
+	 * After Delete
+	 *
+	 * @return void
+	 */
+	public function afterDelete()
     {
         $id = $this->id;
         $related = $this->find('all', array(
@@ -545,4 +607,37 @@ class Article extends AppModel
             }
         }
     }
+
+	/**
+	 * Get Articles
+	 *
+	 * @param array $results
+	 *
+	 * @return array
+	 */
+	public function getArticles($results = array())
+	{
+		if (!empty($results))
+		{
+			$articles_list = array_unique(Set::extract('{n}.article_id', $results));
+			$find = $this->find('all', array(
+				'conditions' => array(
+					'Article.id' => $articles_list
+				)
+			));
+
+			$articles = array();
+			foreach($find as $article)
+			{
+				$articles[$article['Article']['id']] = $article;
+			}
+
+			foreach($results as $key => $row)
+			{
+				$results[$key]['Article'] = $articles[$row['article_id']]['Article'];
+			}
+		}
+
+		return $results;
+	}
 }

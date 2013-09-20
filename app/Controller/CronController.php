@@ -25,7 +25,7 @@ class CronController extends AppController
 	{
 		parent::beforeFilter();
 
-		if ($this->params->action == 'admin_add' || $this->params->action == 'admin_edit')
+		if ($this->request->action == 'admin_add' || $this->request->action == 'admin_edit')
 		{
 			$modules_list = $this->Cron->Module->find('all', array(
 				'order' => 'is_plugin ASC, title ASC'
@@ -66,19 +66,14 @@ class CronController extends AppController
 	{
 		$conditions = array();
 
-		if (!isset($this->params->named['trash'])) {
-			$conditions['Cron.deleted_time'] = '0000-00-00 00:00:00';
-		} else {
-			$conditions['Cron.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+		if (isset($this->request->named['trash']))
+			$conditions['Cron.only_deleted'] = true;
 
-		$this->paginate = array(
-            'order' => 'Cron.created DESC',
-            'limit' => $this->pageLimit,
+		$this->Paginator->settings = array(
             'conditions' => $conditions
         );
         
-		$this->request->data = $this->paginate('Cron');
+		$this->request->data = $this->Paginator->paginate('Cron');
 	}
 
     /**
@@ -92,6 +87,8 @@ class CronController extends AppController
 	{
         if (!empty($this->request->data))
         {
+	        $this->Cron->create();
+
             if ($this->Cron->save($this->request->data))
             {
                 $this->Session->setFlash('Your cron job has been added.', 'flash_success');
@@ -110,7 +107,7 @@ class CronController extends AppController
     * @param integer $id of the database job
     * @return array of cron data
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
       	$this->Cron->id = $id;
 
@@ -135,47 +132,24 @@ class CronController extends AppController
      *
      * @param integer $id of the database job, redirect to index if no permissions
      * @param string $title of this job, used for flash message
-     * @param boolean $permanent
-     * @internal $permanent not NULL, this means the item is in the trash so deletion will now be permanent
-     * @return redirect
+     * @return void
      */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
 	    $this->Cron->id = $id;
 
-	    if (!empty($permanent))
-	    {
-	    	$delete = $this->Cron->delete($id);
-	    } else {
-	    	$delete = $this->Cron->saveField('deleted_time', $this->Cron->dateTime());
-	    }
+		$data = $this->Cron->findById($id);
 
-	    if ($delete)
-	    {
-	        $this->Session->setFlash('The cron job `'.$title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash('The cron job `'.$title.'` has NOT been deleted.', 'flash_error');
-	    }
-	    
-	    if (!empty($permanent))
-	    {
-	    	$count = $this->Cron->find('count', array(
-	    		'conditions' => array(
-	    			'Cron.deleted_time !=' => '0000-00-00 00:00:00'
-	    		)
-	    	));
+		$permanent = $this->Cron->remove($data);
 
-	    	$params = array('action' => 'index');
+		$this->Session->setFlash('The cron job `'.$title.'` has been deleted.', 'flash_success');
 
-	    	if ($count > 0)
-	    	{
-	    		$params['trash'] = 1;
-	    	}
-
-	    	$this->redirect($params);
-	    } else {
-	    	$this->redirect(array('action' => 'index'));
-	    }
+		if ($permanent)
+		{
+			$this->redirect(array('action' => 'index', 'trash' => 1));
+		} else {
+			$this->redirect(array('action' => 'index'));
+		}
 	}
 
     /**
@@ -185,19 +159,44 @@ class CronController extends AppController
     *
     * @param integer $id of database job, redirect if no permissions
     * @param string $title of this job, used for flash message
-    * @return redirect
+    * @return void
     */
-	public function admin_restore($id = null, $title = null)
+	public function admin_restore($id, $title = null)
 	{
 	    $this->Cron->id = $id;
 
-	    if ($this->Cron->saveField('deleted_time', '0000-00-00 00:00:00'))
+	    if ($this->Cron->restore())
 	    {
 	        $this->Session->setFlash('The cron job `'.$title.'` has been restored.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The cron job `'.$title.'` has NOT been restored.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
 	    }
+
+        $this->redirect(array('action' => 'index'));
 	}
+
+    /**
+     * Admin Test
+     * This method will call the runCron method in the appController and attempt to run this specific cron.
+     * If it cannot find this ID, it returns false or if the method fails. It returns true otherwise.
+     *
+     * @param integer $id
+     *
+     * @return void
+     */
+    public function admin_test($id)
+    {
+        $test_cron = $this->runCron($id);
+
+        if ($test_cron)
+        {
+            $this->Session->setFlash('The cron job has run successfully.', 'flash_success');
+        }
+        else
+        {
+            $this->Session->setFlash('The cron job did not run successfully.', 'flash_error');
+        }
+
+        $this->redirect(array('action' => 'index'));
+    }
 }

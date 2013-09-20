@@ -84,13 +84,13 @@
 				<?= $this->request->data['Role']['title'] ?>
 			</dd>
 
-			<?php if (!empty($fields)): ?>
-				<?php foreach($fields as $field): ?>
+			<?php if (!empty($this->request->data['Data'])): ?>
+				<?php foreach($this->request->data['Data'] as $field => $value): ?>
 					<dt>
-						<?= Inflector::humanize($field['Field']['title']) ?>
+						<?= Inflector::humanize($field) ?>
 					</dt>
 					<dd>
-						<?= $this->Field->getData($field) ?>
+						<?= $value ?>
 					</dd>
 				<?php endforeach ?>
 			<?php endif ?>

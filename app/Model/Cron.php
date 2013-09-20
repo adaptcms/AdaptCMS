@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class Cron
+ *
+ * @property Module $Module
+ */
 class Cron extends AppModel
 {
     /**
@@ -52,11 +56,17 @@ class Cron extends AppModel
         )
     );
 
+	public $actsAs = array('Delete');
+
     /**
     * This gets the period amount and type, then calculates the first run time of this cron entry.
     * The new run time is calculated on add and edit.
+    *
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
         if (!empty($this->data['Cron']['period_amount']))
         {

@@ -108,7 +108,6 @@
         )) ?>
     </div>
 
-    <?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
     <?= $this->Form->hidden('status', array('value' => 0)) ?>
     <?= $this->Form->hidden('category_id', array('value' => $category_id)) ?>
 

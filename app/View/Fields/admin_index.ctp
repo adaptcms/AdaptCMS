@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Fields', null) ?>
 
 <div class="pull-left">
-    <h1>Fields<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Fields<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-toolbar pull-right" style="margin-bottom:10px">
     <div class="btn-group">
@@ -96,7 +96,13 @@
                 <th><?= $this->Paginator->sort('Category.title', 'Category') ?></th>
                 <th><?= $this->Paginator->sort('Module.title', 'Module') ?></th>
                 <th class="hidden-phone"><?= $this->Paginator->sort('User.username', 'Author') ?></th>
-                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone">
+                    <?php if (!empty($this->request->named['trash'])): ?>
+                        <?= $this->Paginator->sort('deleted_time', 'Deleted') ?>
+                    <?php else: ?>
+                        <?= $this->Paginator->sort('created') ?>
+                    <?php endif ?>
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -141,7 +147,11 @@
                         <?php endif ?>
                     </td>
                     <td class="hidden-phone">
-                        <?= $this->Admin->time($data['Field']['created']) ?>
+                        <?php if (!empty($this->request->named['trash'])): ?>
+                            <?= $this->Admin->time($data['Field']['deleted_time']) ?>
+                        <?php else: ?>
+                            <?= $this->Admin->time($data['Field']['created']) ?>
+                        <?php endif ?>
                     </td>
                     <td>
                         <div class="btn-group">
@@ -150,7 +160,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['fields']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -160,10 +170,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['fields']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Field']['id'],
-                                                $data['Field']['title'],
-                                                'field'
+                                                $data['Field']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -178,10 +187,10 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['fields']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Field']['id'],
                                                 $data['Field']['title'],
-                                                'field'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

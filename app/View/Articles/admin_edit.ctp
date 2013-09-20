@@ -155,23 +155,24 @@
             </div>
 
             <?= $this->Form->hidden('id') ?>
-            <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
             <?= $this->Form->hidden('status', array('value' => $this->request->data['Article']['status'])) ?>
             <?= $this->Form->hidden('category_id', array('value' => $category_id)) ?>
 
-            <?= $this->Form->button('Publish Now', array(
-                'type' => 'submit',
-                'class' => 'btn btn-primary'
-            )) ?>
-            <?= $this->Form->button( ($this->request->data['Article']['status'] == 0 ? 'Keep As' : 'Save') . ' Draft', array(
-                'type' => 'submit',
-                'class' => 'btn btn-danger draft'
-            )) ?>
-            <?= $this->Form->button('<i class="icon-calendar"></i> Publish Later', array(
-                'class' => 'btn btn-success',
-                'type' => 'button',
-                'escape' => false
-            )) ?>
+            <div class="publish_options">
+                <?= $this->Form->button('Publish Now', array(
+                    'type' => 'submit',
+                    'class' => 'btn btn-primary'
+                )) ?>
+                <?= $this->Form->button( ($this->request->data['Article']['status'] == 0 ? 'Keep As' : 'Save') . ' Draft', array(
+                    'type' => 'submit',
+                    'class' => 'btn btn-danger draft'
+                )) ?>
+                <?= $this->Form->button('<i class="icon-calendar"></i> Publish Later', array(
+                    'class' => 'btn btn-success',
+                    'type' => 'button',
+                    'escape' => false
+                )) ?>
+            </div>
 
         <?= $this->Form->end(); ?>
     </div>

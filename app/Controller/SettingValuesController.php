@@ -16,7 +16,7 @@ class SettingValuesController extends AppController
     *
     * On POST, returns error flash or success flash and redirect to category edit on success
     *
-    * @return redirect and flash message
+    * @return void and flash message
     */
 	public function admin_add()
 	{ 
@@ -46,9 +46,9 @@ class SettingValuesController extends AppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry
-    * @param redirect_id this is used when editing a user for user settings, null by default
-    * @return associative array of settings data
+    * @param integer $id ID of the database entry
+    * @param integer $redirect_id this is used when editing a user for user settings, null by default
+    * @return array Array of settings data
     */
     public function admin_edit($id, $redirect_id = null)
     {

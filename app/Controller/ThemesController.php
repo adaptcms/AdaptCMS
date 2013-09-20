@@ -38,9 +38,9 @@ class ThemesController extends AppController
     * After POST, flash error or flash success and redirect to index
     *
     * @param id ID of the database entry
-    * @return associative array of block data
+    * @return array Array of block data
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
         if (!is_numeric($id))
         {
@@ -66,8 +66,8 @@ class ThemesController extends AppController
         {
             $this->set('assets_list', $this->Theme->assetsList());
         } else {
-            $config_new = $this->getConfig($this->request->data['Theme']['title']);
-            $config_old = $this->getConfig($this->request->data['Theme']['title'], 'Old_Themed');
+            $config_new = $this->Theme->getConfig($this->request->data['Theme']['title']);
+            $config_old = $this->Theme->getConfig($this->request->data['Theme']['title'], 'Old_Themed');
 
             $this->set('assets_list', $this->Theme->assetsList($this->request->data['Theme']['title']));
             $this->set('config', array_merge($config_new, $config_old));
@@ -79,47 +79,24 @@ class ThemesController extends AppController
     *
     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
         $this->Theme->id = $id;
 
-        if (!empty($permanent))
-        {
-        	// $this->Theme->Template->deleteAll(array('Template.theme_id' => $id));
-            $delete = $this->Theme->delete($id);
+		$data = $this->Theme->findById($id);
+		$this->hasAccessToItem($data);
 
-            $this->rrmdir(VIEW_PATH . 'Themed/' . $title);
-        } else {
-        	$this->Theme->Template->updateAll(
-        		array(
-                    'Template.deleted_time' => "'" . $this->Theme->dateTime() . "'"
-                ),
-        		array(
-                    'Template.theme_id' => $id
-                )
-        	);
-            $delete = $this->Theme->saveField('deleted_time', $this->Theme->dateTime());
-        }
+		$permanent = $this->Theme->remove($data);
 
-	    if ($delete)
-        {
-	        $this->Session->setFlash('The theme `' . $title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash('The theme `' . $title.'` has NOT been deleted.', 'flash_error');
-	    }
+		$this->Session->setFlash('The theme `'.$title.'` has been deleted.', 'flash_success');
 
         if (!empty($permanent))
         {
-            $count = $this->Theme->find('count', array(
-                'conditions' => array(
-                    'Theme.deleted_time !=' => '0000-00-00 00:00:00'
-                )
-            ));
+            $count = $this->Theme->find('count');
 
             $params = array(
                 'controller' => 'templates',
@@ -145,20 +122,15 @@ class ThemesController extends AppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
-    * @return redirect
+    * @param integer $id ID of database entry, redirect if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-    public function admin_restore($id = null, $title = null)
+    public function admin_restore($id, $title = null)
     {
         $this->Theme->id = $id;
 
-		$this->Theme->Template->updateAll(
-			array('Template.deleted_time' => "'0000-00-00 00:00:00'"),
-			array('Template.theme_id' => $id)
-		);
-
-        if ($this->Theme->saveField('deleted_time', '0000-00-00 00:00:00'))
+        if ($this->Theme->restore())
         {
             $this->Session->setFlash('The theme `' . $title.'` has been restored.', 'flash_success');
             $this->redirect(array('controller' => 'templates', 'action' => 'index'));
@@ -173,8 +145,8 @@ class ThemesController extends AppController
     *
     * Before POST, displays two-step add form and after POST redirects to appropiate page with flash msg.
     *
-    * @param theme name of theme
-    * @return mixed
+    * @param string $theme name of theme
+    * @return void
     */
     public function admin_asset_add($theme)
     {
@@ -250,8 +222,6 @@ class ThemesController extends AppController
      *
      * @param string $file
      * @param string $theme
-     * @internal param \path $file and name of file
-     * @internal param \name $theme of theme
      * @return mixed
      */
     public function admin_asset_edit($file, $theme)
@@ -352,8 +322,8 @@ class ThemesController extends AppController
     *
     * Redirects to appropiate page with flash msg after attempt to delete.
     *
-    * @param file path and name of file
-    * @param theme name of theme
+    * @param string $file path and name of file
+    * @param string $theme name of theme
     * @return mixed
     */
     public function admin_asset_delete($file, $theme)
@@ -401,56 +371,5 @@ class ThemesController extends AppController
             $this->Session->setFlash('The asset `' . $ext['basename'].'` has NOT been deleted.', 'flash_error');
             $this->redirect($redirect);
         }
-    }
-
-    /**
-    * Removes files inside of a folder
-    *
-    * @param dir path to folder to loop through
-    * @return null
-    */
-	public function rrmdir($dir)
-    {
-		/** 
-		 * Source: Anonymous
-		 * http://us2.php.net/manual/en/function.rmdir.php#107233
-		**/
-        if (is_dir($dir))
-        {
-            $objects = scandir($dir);
-            foreach ($objects as $object) {
-                if ($object != "." && $object != "..")
-                {
-                    if (filetype($dir . "/" . $object) == "dir")
-                    {
-                        rmdir($dir . "/" . $object);
-                    } else {
-                        unlink($dir . "/" . $object);
-                    }
-                }
-            }
-
-            reset($objects);
-            rmdir($dir);
-        }
-	}
-
-    /**
-    * Gets config file for a theme with a JSON file
-    *
-    * @return json_encode of configuration, blank array on false
-    */
-    public function getConfig($name, $folder = 'Themed')
-    {
-        $json = VIEW_PATH . DS . $folder . DS . $name . DS . 'theme.json';
-
-        if (file_exists($json) && is_readable($json)) {
-            $handle = fopen($json, "r");
-            $json_file = fread($handle, filesize($json));
-
-            return json_decode($json_file, true);
-        }
-
-        return array();
     }
 }

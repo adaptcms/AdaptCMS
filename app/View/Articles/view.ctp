@@ -22,7 +22,7 @@
 		@ <em><?= $this->Admin->time($article['Article']['created']) ?></em>
 	</p>
 
-	<?= $this->Field->getTextAreaData($this->request->data) ?>
+	<?= $this->Field->getTextAreaData($article) ?>
 
 	<div id="post-options">
         <span class="pull-left">
@@ -33,10 +33,10 @@
         	), array('class' => 'btn btn-primary')) ?>
             <span style="margin-left: 10px">
                 <i class="icon-search icon-user"></i>&nbsp;
-                Posted by <?= $this->Html->link($this->request->data['User']['username'], array(
+                Posted by <?= $this->Html->link($article['User']['username'], array(
                 	'controller' => 'users', 
                 	'action' => 'profile', 
-                	$this->request->data['User']['username']
+                	$article['User']['username']
                 )) ?>
             </span>
         </span>
@@ -62,4 +62,4 @@
 <?= $this->element('post_comment', array('cached' => false)) ?>
 <!--/nocache-->
 
-<?= $this->element('view_all_comments', array('comments' => $this->request->data['Comments'])) ?>
+<?= $this->element('view_all_comments', array('comments' => $article['Comments'])) ?>

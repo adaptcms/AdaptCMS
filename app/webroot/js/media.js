@@ -28,7 +28,7 @@ $(document).ready(function() {
 		});
 	});
 
-	$(document).on('click', '.media-modal', function() {
+	$('.media-modal').on('click', function() {
 		var id = $(this).parent().find('input:hidden').attr('id');
 		var href = $(this).attr('href');
 

@@ -15,7 +15,7 @@ class PermissionsController extends AppController
     * On POST, returns error flash or success flash and redirect back to roles
     * edit page on success
     *
-    * @return redirect
+    * @return void
     */
 	public function admin_add()
 	{

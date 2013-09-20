@@ -1,8 +1,22 @@
 <?php
-
+App::uses('PollsAppModel', 'Polls.Model');
+/**
+ * Class Poll
+ *
+ * @property PollVotingValue $PollVotingValue
+ * @property PollValue $PollValue
+ * @property Article $Article
+ */
 class Poll extends PollsAppModel
 {
-	public $name = 'PluginPoll';
+	/**
+	 * @var string
+	 */
+	public $useTable = 'plugin_polls';
+
+	/**
+	 * @var array
+	 */
 	public $belongsTo = array(
         'Article' => array(
             'className'    => 'Article',
@@ -13,19 +27,37 @@ class Poll extends PollsAppModel
             'foreignKey' => 'user_id'
         )
 	);
+
+	/**
+	 * @var array
+	 */
 	public $hasMany = array(
 		'PollValue' => array(
             'className' => 'Polls.PollValue',
+			'foreignKey' => 'poll_id',
             'dependent' => true
         ),
         'PollVotingValue' => array(
             'className' => 'Polls.PollVotingValue',
-            'dependent' => true,
-            // 'exclusive' => true
+	        'foreignKey' => 'poll_id',
+            'dependent' => true
         )
 	);
 
-    public function getBlockData($data, $user_id)
+	/**
+	 * @var array
+	 */
+	public $actsAs = array('Delete');
+
+	/**
+	 * Get Block Data
+	 *
+	 * @param array $data
+	 * @param integer $user_id
+	 *
+	 * @return array
+	 */
+	public function getBlockData($data, $user_id)
     {
         $cond = array(
             'conditions' => array(
@@ -59,14 +91,9 @@ class Poll extends PollsAppModel
         foreach($find as $key => $row) {
             $results[$key] = $row;
             $results[$key]['Block'] = $data;
-
-            $results[$key]['Poll']['can_vote'] = $this->canVote($row['Poll']['id'], $user_id);
-            $results[$key] = $this->totalVotes($results[$key]);
-
-            foreach($row['PollValue'] as $option) {
-                $results[$key]['options'][$option['id']] = $option['title'];
-            }
         }
+
+	    $results = $this->canVote($results, $user_id);
 
         if (!empty($results) && count($results) == 1) {
             $results = $results[0];
@@ -76,32 +103,105 @@ class Poll extends PollsAppModel
         return $results;
     }
 
-    public function totalVotes($data)
+	/**
+	 * Total Votes
+	 *
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	public function totalVotes($data)
     {
         $data['Poll']['total_votes'] = 0;
-        foreach($data['PollValue'] as $key => $row) {
-            $data['Poll']['total_votes'] = $data['Poll']['total_votes'] + $row['votes'];
-        }
+
+	    if (!empty($data['PollValue']))
+	    {
+	        foreach($data['PollValue'] as $row) {
+	            $data['Poll']['total_votes'] = $data['Poll']['total_votes'] + $row['votes'];
+	        }
+	    }
 
         return $data;
     }
 
-    public function canVote($id, $user_id)
-    {
-        $count = $this->PollVotingValue->find('all', array(
-            'conditions' => array(
-                'PollVotingValue.plugin_poll_id' => $id,
-                'OR' => array(
-                    'PollVotingValue.user_id' => $user_id,
-                    'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
-                )
-            )
-        ));
-        
-        if (count($count) == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+	/**
+	 * Can Vote
+	 *
+	 * @param array $results
+	 * @param integer$user_id
+	 *
+	 * @return array
+	 */
+	public function canVote($results = array(), $user_id)
+	{
+		if (!empty($results))
+		{
+			if (empty($results[0]))
+			{
+				$single = true;
+				$results[0] = $results;
+			}
+
+			foreach($results as $key => $row)
+			{
+				$count = $this->PollVotingValue->find('count', array(
+					'conditions' => array(
+						'PollVotingValue.poll_id' => $row['Poll']['id'],
+						'OR' => array(
+							'PollVotingValue.user_id' => $user_id,
+							'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
+						)
+					)
+				));
+
+				$results[$key]['Poll']['can_vote'] = ($count == 0 ? true : false);
+			}
+
+			if (isset($single))
+			{
+				$results = $results[0];
+				unset($results[0]);
+			}
+		}
+
+		return $results;
+	}
+
+	/**
+	 * After Find
+	 *
+	 * @param mixed $results
+	 * @param bool $primary
+	 *
+	 * @return array
+	 */
+	public function afterFind($results, $primary = false)
+	{
+		if (!empty($results))
+		{
+			foreach($results as $key => $row)
+			{
+				if (empty($row['Poll']['total_votes']))
+					$results[$key] = $this->totalVotes($row);
+
+				if (!empty($row['PollValue']))
+				{
+					foreach($row['PollValue'] as $val => $option) {
+						$results[$key]['options'][$option['id']] = $option['title'];
+
+						if ($results[$key]['Poll']['total_votes'] == 0)
+						{
+							$results[$key]['PollValue'][$val]['percent'] = 0;
+						}
+						else
+						{
+							$results[$key]['PollValue'][$val]['percent'] = round($option['votes'] / $results[$key]['Poll']['total_votes'] * 100);
+						}
+					}
+				}
+			}
+		}
+
+		return $results;
+	}
 }

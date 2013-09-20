@@ -28,7 +28,7 @@ class ToolsController extends AppController
 	/**
 	* This will use Cakes built in clearCache functionality to clear all cache excluding the system. (where component and helper list is stored) 
 	*
-	* @return redirect
+	* @return void
 	*/
 	public function admin_clear_cache()
 	{
@@ -185,20 +185,20 @@ class ToolsController extends AppController
 
 							if ($this->User->save($data))
 							{
-				    //     		$email = new CakeEmail();
+				         		$email = new CakeEmail();
 
-								// $email->to($data['User']['email']);
-								// $email->from(array(
-								// 	$webmaster_email['SettingValue']['data'] => $sitename['SettingValue']['data']
-								// ));
-								// $email->subject('Reset Password Notification');
-								// $email->emailFormat('html');
-								// $email->template('forgot_password');
-								// $email->viewVars(array(
-								// 	'data' => $data['User'],
-								// 	'activate_code' => $activate_code
-								// ));
-								// $email->send();
+								 $email->to($data['User']['email']);
+								 $email->from(array(
+								 	$webmaster_email['SettingValue']['data'] => $sitename['SettingValue']['data']
+								 ));
+								 $email->subject('Reset Password Notification');
+								 $email->emailFormat('html');
+								 $email->template('forgot_password');
+								 $email->viewVars(array(
+								 	'data' => $data['User'],
+								 	'activate_code' => $activate_code
+								 ));
+								 $email->send();
 
 								$success++;
 							}
@@ -277,7 +277,7 @@ class ToolsController extends AppController
 
 							$data['Field']['user_id'] = $this->Auth->user('id');
 							$data['Field']['created'] = $this->User->dateTime();
-							$data['Field']['title'] = $this->slug($field[$prefix . 'fields']['name']);
+							$data['Field']['title'] = $this->User->slug($field[$prefix . 'fields']['name']);
 							$data['Field']['category_id'] = $section_data[$field[$prefix . 'fields']['section']];
 							$data['Field']['field_type_id'] = $field_types[$field[$prefix . 'fields']['type']]['id'];
 							$data['Field']['field_type_slug'] = $field_types[$field[$prefix . 'fields']['type']]['slug'];
@@ -453,7 +453,7 @@ class ToolsController extends AppController
 	* we then loop through each wordpress item and save it. Currently this includes pages, posts, users (password is reset with email),
 	* some site options and comments.
 	*
-	* @return redirect on success
+	* @return void on success
 	*/
 	public function admin_convert_wordpress()
 	{

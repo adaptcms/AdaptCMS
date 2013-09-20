@@ -22,7 +22,7 @@ class MessagesController extends AppController
 	* This function returns a paginated list of messages based on which box the user is viewing.
 	*
 	* @param box_slug
-	* @return associative array of messages
+	* @return array Array of messages
 	*/
 	public function index($box_slug = null)
 	{
@@ -70,7 +70,7 @@ class MessagesController extends AppController
         if (empty($box_slug))
             $box_slug = 'inbox';
 
-		$this->paginate = array(
+		$this->Paginator->settings = array(
             'order' => 'Message.created DESC',
             'limit' => 10,
             'conditions' => $conditions[$box_slug],
@@ -80,7 +80,7 @@ class MessagesController extends AppController
 			)
         );
 
-		$this->request->data = $this->paginate('Message');
+		$this->request->data = $this->Paginator->paginate('Message');
 
 		$this->set('messages', $this->request->data);
 		$this->set( 'box', $box_slug );
@@ -190,7 +190,7 @@ class MessagesController extends AppController
 	*
 	* @param action is either moving the message to archive, inbox or marking it read
 	* @param id of messages
-	* @return redirect and flash message
+	* @return void and flash message
 	*/
 	public function move($action = null, $id = null)
 	{

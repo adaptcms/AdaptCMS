@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class Block
+ *
+ * @property Module $Module
+ */
 class Block extends AppModel
 {
 	/**
@@ -20,6 +24,11 @@ class Block extends AppModel
             'foreignKey' => 'user_id'
         )
 	);
+
+	/**
+	 * @var array
+	 */
+	public $actsAs = array('Delete');
 
     /**
     * Validation Rules. Title must not be empty and must be unique, location must not be empty.

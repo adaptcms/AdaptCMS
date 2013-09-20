@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Categories', null) ?>
 
 <div class="pull-left">
-    <h1>Categories<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Categories<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -83,15 +83,14 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if ($this->Admin->hasPermission($permissions['related']['categories']['view'], $data['User']['id'])): ?>
-                                    <li>
-                                        <?= $this->Admin->view(
-                                            $data['Category']['slug']
-                                        ) ?>
-                                    </li>
-                                <?php endif ?>
-
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
+	                                <?php if ($this->Admin->hasPermission($permissions['related']['categories']['view'], $data['User']['id'])): ?>
+		                                <li>
+			                                <?= $this->Admin->view(
+				                                $data['Category']['slug']
+			                                ) ?>
+		                                </li>
+	                                <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['categories']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(

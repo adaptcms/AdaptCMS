@@ -23,7 +23,7 @@ class ForumTopicsController extends AdaptbbAppController
 	
 		$this->permissions = $this->getPermissions();
 
-        if ($this->params->action == 'add' || $this->params->action == 'edit')
+        if ($this->request->action == 'add' || $this->request->action == 'edit')
         {
             if ($this->hasPermission($this->permissions['related']['forum_topics']['add_sticky']))
                 $this->topic_type['sticky'] = 'Sticky';
@@ -45,8 +45,9 @@ class ForumTopicsController extends AdaptbbAppController
     /**
     * Returns a paginated list of topics along with forum data
     *
-    * @param slug of Forum
-    * @return associative array of topic data
+    * @param string $slug of Forum
+     *
+    * @return array of topic data
     */
     public function view($slug = null)
     {
@@ -57,7 +58,6 @@ class ForumTopicsController extends AdaptbbAppController
 
         $topic = $this->ForumTopic->find('first', array(
             'conditions' => array(
-                'ForumTopic.deleted_time' => '0000-00-00 00:00:00',
                 'ForumTopic.slug' => $slug
             ),
             'contain' => array(
@@ -82,11 +82,9 @@ class ForumTopicsController extends AdaptbbAppController
             $this->ForumTopic->save($data);
         }
 
-        $this->paginate = array(
+        $this->Paginator->settings = array(
             'conditions' => array(
-                'ForumTopic.slug' => $slug,
-                'ForumTopic.deleted_time' => '0000-00-00 00:00:00',
-                'ForumPost.deleted_time' => '0000-00-00 00:00:00'
+                'ForumTopic.slug' => $slug
             ),
             'contain' => array(
                 'ForumTopic',
@@ -96,7 +94,7 @@ class ForumTopicsController extends AdaptbbAppController
             'limit' => Configure::read('Adaptbb.num_posts_per_page_topic')
         );
 
-        $posts = $this->paginate('ForumPost');
+        $posts = $this->Paginator->paginate('ForumPost');
 
         if (empty($this->params['named']['page']) || $this->params['named']['page'] == 1)
         {
@@ -124,8 +122,9 @@ class ForumTopicsController extends AdaptbbAppController
     /**
     * Adding a topic
     *
-    * @param slug of Forum
-    * @return redirect and flash message
+    * @param string $slug of Forum
+     *
+    * @return void
     */
     public function add($slug = null)
     {
@@ -172,14 +171,19 @@ class ForumTopicsController extends AdaptbbAppController
                 $this->ForumTopic->Forum->save($data);
 
                 $this->Session->setFlash('Your topic has been posted.', 'flash_success');
-                $this->redirect(array('action' => 'view', $this->slug($this->request->data['ForumTopic']['subject']) ));
+                $this->redirect(array('action' => 'view', $this->ForumTopic->slug($this->request->data['ForumTopic']['subject']) ));
             } else {
                 $this->Session->setFlash('Unable to add your topic.', 'flash_error');
             }
         }
     }
 
-    public function edit($id)
+	/**
+	 * Edit
+	 *
+	 * @param $id
+	 */
+	public function edit($id)
     {
         $topic = $this->ForumTopic->find('first', array(
             'conditions' => array(
@@ -215,7 +219,7 @@ class ForumTopicsController extends AdaptbbAppController
             if ($this->ForumTopic->save($this->request->data))
             {
                 $this->Session->setFlash('The topic has been updated.', 'flash_success');
-                $this->redirect(array('action' => 'view', $this->slug($this->request->data['ForumTopic']['subject']) ));
+                $this->redirect(array('action' => 'view', $this->ForumTopic->slug($this->request->data['ForumTopic']['subject']) ));
             } else {
                 $this->Session->setFlash('Unable to update the topic.', 'flash_error');
             }
@@ -253,18 +257,18 @@ class ForumTopicsController extends AdaptbbAppController
         if (empty($topic['ForumTopic']))
         {
             $this->Session->setFlash('Topic could not be found.', 'flash_error');
-            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));
+            $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));
         }
 
         if ($topic['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
             $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));                
+            $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));                
         }
 
         $this->ForumTopic->id = $id;
 
-        if ($this->ForumTopic->saveField('deleted_time', $this->ForumTopic->dateTime()) )
+        if ($this->ForumTopic->remove($topic) )
         {
             $this->ForumTopic->Forum->id = $topic['Forum']['id'];
 
@@ -278,7 +282,7 @@ class ForumTopicsController extends AdaptbbAppController
             $this->redirect(array(
                 'controller' => 'forums', 
                 'action' => 'view', 
-                $this->slug($topic['Forum']['title']) 
+                $this->ForumTopic->slug($topic['Forum']['title']) 
             ));
         } else {
             $this->Session->setFlash('Unable to delete the topic.', 'flash_error');
@@ -300,13 +304,13 @@ class ForumTopicsController extends AdaptbbAppController
         if (empty($topic['ForumTopic']))
         {
             $this->Session->setFlash('Topic could not be found.', 'flash_error');
-            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));
+            $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));
         }
 
         if ($topic['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
             $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));                
+            $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));                
         }
 
         $data = array();
@@ -317,7 +321,7 @@ class ForumTopicsController extends AdaptbbAppController
         if ($this->ForumTopic->save($data))
         {
             $this->Session->setFlash('The topic has been ' . ($data['ForumTopic']['status'] == 0 ? 'Closed' : 'Opened') . '.', 'flash_success');
-            $this->redirect(array('action' => 'view', $this->slug($topic['ForumTopic']['subject']) ));
+            $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));
         } else {
             $this->Session->setFlash('Unable to update the topic.', 'flash_error');
         }

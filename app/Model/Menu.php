@@ -1,4 +1,9 @@
 <?php
+/**
+ * Class Menu
+ *
+ * @property User $User
+ */
 class Menu extends AppModel
 {
     /**
@@ -33,22 +38,29 @@ class Menu extends AppModel
     );
 
     /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
+    );
+
+    /**
     * Sets the slug
     *
-    * @return true
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
-        if (!empty($this->data['Menu']['title']))
-            $this->data['Menu']['slug'] = $this->slug($this->data['Menu']['title']);
+        parent::beforeSave();
 
         if (!empty($this->data['Menu']['settings']))
         {
             $settings = $this->data['Menu']['settings'];
             $this->data['Menu']['settings'] = json_encode($settings);
         }
-
-//        die(debug($this->data));
 
         if (!empty($this->data['Menu']['items']))
         {
@@ -123,9 +135,11 @@ class Menu extends AppModel
      * json_decodes json fields
      *
      * @param array $results
-     * @return array|mixed
+     * @param boolean $primary
+     *
+     * @return array
      */
-    public function afterFind($results = array())
+    public function afterFind($results, $primary = false)
     {
         if (!empty($results))
         {
@@ -163,9 +177,13 @@ class Menu extends AppModel
     }
 
     /**
-     * @return bool
-     */
-    public function beforeDelete()
+    * Before Delete
+    *
+    * @param boolean $cascade
+    *
+    * @return bool
+    */
+    public function beforeDelete($cascade = true)
     {
         $row = $this->findById($this->id);
 

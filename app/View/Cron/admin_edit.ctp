@@ -43,7 +43,8 @@
 		'empty' => '- choose -'
 	)) ?>
 
-	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
+    <?= $this->Form->input('active') ?>
+
 	<?= $this->Form->hidden('id') ?>
 
 <?= $this->Form->end(array(

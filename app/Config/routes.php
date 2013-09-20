@@ -21,6 +21,11 @@
 		'controller' => 'categories', 
 		'action' => 'view'
 	));
+	Router::connect('/article/:slug', array(
+		'controller' => 'articles',
+		'action' => 'view',
+		'slug' => '*'
+	));
 	Router::connect('/article/:id/:slug', array(
 		'controller' => 'articles', 
 		'action' => 'view',
@@ -66,6 +71,13 @@
 		'id' => '*',
 		'slug' => '*'
 	));
+
+    Router::connect('/page/:slug', array(
+        'controller' => 'install',
+        'action' => 'old',
+        'type' => 'page',
+        'slug' => '*'
+    ));
 
 	Router::connect('/profile/', array(
 		'controller' => 'users', 

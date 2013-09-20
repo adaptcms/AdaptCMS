@@ -1,41 +1,6 @@
-<?php
-    $this->TinyMce->editor();
-?>
+<?php $this->TinyMce->editor() ?>
 
 <?= $this->Html->script('bootstrap-typeahead.js') ?>
-
-<script type="text/javascript">
-$(document).ready(function() {
-    $('#MessageRecipient').typeahead({
-    source: function(typeahead, query) {
-            $.ajax({
-                url: "<?= $this->webroot ?>users/quick_search/",
-                dataType: "json",
-                type: "POST",
-                data: { User: { username: query } },
-                success: function(data) {
-                    if (data) {
-                        var return_list = [], i = data.length;
-                        while (i--) {
-                            return_list[i] = {
-                                id: data[i].id, 
-                                value: data[i].username
-                            };
-                        }
-                        typeahead.process(return_list);
-                    }
-                }
-            });
-        },
-        onselect: function(obj) {
-        	if (obj.id)
-        	{
-            	$('#MessageReceiverUserId').val(obj.id);
-        	}
-        }
-    });
-});
-</script>
 
 <?php $this->Html->addCrumb('Profile', array(
     'action' => 'profile',
@@ -69,9 +34,6 @@ $(document).ready(function() {
 		'style' => 'height: 100%'
 	)) ?>
 
-	<?= $this->Form->hidden('created', array(
-		'value' => $this->Admin->datetime()
-	)) ?>
 	<?= $this->Form->hidden('parent_id', array('value' => 0)) ?>
 	<?= $this->Form->hidden('receiver_user_id') ?>
 

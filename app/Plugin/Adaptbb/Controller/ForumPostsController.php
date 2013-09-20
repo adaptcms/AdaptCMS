@@ -25,13 +25,10 @@ class ForumPostsController extends AdaptbbAppController
     /**
     * Attemps to create a post record
     *
-    * @return mixed
+    * @return CakeResponse
     */
     public function ajax_post()
     {
-        $this->layout = 'ajax';
-        $this->autoRender = false;
-
         if ($html_tags = Configure::read('Adaptbb.html_tags_allowed'))
         {
             $this->request->data['ForumPost']['content'] = strip_tags(
@@ -48,56 +45,64 @@ class ForumPostsController extends AdaptbbAppController
         $forum_id = $this->request->data['ForumPost']['forum_id'];
         $topic_id = $this->request->data['ForumPost']['topic_id'];
 
+	    $result = array();
         if (!empty($this->request->data))
         {
             $replies_num = $this->ForumPost->ForumTopic->findById($topic_id);
 
             if ($replies_num['ForumTopic']['status'] == 0)
             {
-                return json_encode(array(
+                $result = array(
                     'status' => false,
                     'message' => 'This topic is closed'
-                ));
+                );
             }
+	        else
+	        {
 
-            $data = array();
+	            $data = array();
 
-            $data['ForumTopic']['id'] = $topic_id;
-            $data['ForumTopic']['num_posts'] = $replies_num['ForumTopic']['num_posts'] + 1;
+	            $data['ForumTopic']['id'] = $topic_id;
+	            $data['ForumTopic']['num_posts'] = $replies_num['ForumTopic']['num_posts'] + 1;
 
-            $this->ForumPost->ForumTopic->save($data);
+	            $this->ForumPost->ForumTopic->save($data);
 
-            $this->ForumPost->create();
+	            $this->ForumPost->create();
 
-            if ($this->ForumPost->save($this->request->data))
-            {
-                $posts_num = $this->ForumPost->ForumTopic->Forum->findById($forum_id);
+	            if ($this->ForumPost->save($this->request->data))
+	            {
+	                $posts_num = $this->ForumPost->ForumTopic->Forum->findById($forum_id);
 
-                $data = array();
+	                $data = array();
 
-                $data['Forum']['id'] = $forum_id;
-                $data['Forum']['num_posts'] = $posts_num['Forum']['num_posts'] + 1;
+	                $data['Forum']['id'] = $forum_id;
+	                $data['Forum']['num_posts'] = $posts_num['Forum']['num_posts'] + 1;
 
-                $this->ForumPost->ForumTopic->Forum->save($data);
+	                $this->ForumPost->ForumTopic->Forum->save($data);
 
-                return json_encode(array(
-                    'status' => true,
-                    'message' => 'Your post has been made'
-                ));
-            } else {
-                return json_encode(array(
-                    'status' => false,
-                    'message' => 'Your post could not be made'
-                ));
-            }
+		            $result = array(
+	                    'status' => true,
+	                    'message' => 'Your post has been made'
+	                );
+	            } else {
+		            $result = array(
+	                    'status' => false,
+	                    'message' => 'Your post could not be made'
+	                );
+	            }
+	        }
         }
+
+	    return $this->_ajaxResponse(array('body' => json_encode($result) ));
     }
 
-    public function ajax_edit()
+	/**
+	 * Ajax Edit
+	 *
+	 * @return CakeResponse
+	 */
+	public function ajax_edit()
     {
-        $this->layout = 'ajax';
-        $this->autoRender = false;
-
         $return = array(
             'status' => true,
             'message' => 'The post has been updated.'
@@ -152,10 +157,17 @@ class ForumPostsController extends AdaptbbAppController
             }
         }
 
-        return json_encode($return);
+	    return $this->_ajaxResponse(array('body' => json_encode($return) ));
     }
 
-    public function delete($id)
+	/**
+	 * Delete
+	 *
+	 * @param $id
+	 *
+	 * @return void
+	 */
+	public function delete($id)
     {
         $post = $this->ForumPost->find('first', array(
             'conditions' => array(
@@ -192,7 +204,7 @@ class ForumPostsController extends AdaptbbAppController
             $this->redirect(array(
                 'controller' => 'forum_topics',
                 'action' => 'view', 
-                $this->slug($topic['ForumTopic']['subject']) 
+                $this->ForumPost->slug($topic['ForumTopic']['subject'])
             ));               
         }
 

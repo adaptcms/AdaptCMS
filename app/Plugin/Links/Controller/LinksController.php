@@ -1,5 +1,5 @@
 <?php
-App::uses('AppController', 'Controller');
+App::uses('LinksAppController', 'Links.Controller');
 /**
  * Class LinksController
  * @property Link $Link
@@ -28,17 +28,16 @@ class LinksController extends LinksAppController
 
 		parent::beforeFilter();
 
-		if ($this->params->action == "admin_add" || $this->params->action == "admin_edit") {
+		if ($this->request->action == "admin_add" || $this->request->action == "admin_edit") {
 			$this->loadModel('File');
-			$this->paginate = array(
+			$this->Paginator->settings = array(
 				'conditions' => array(
-					'File.deleted_time' => '0000-00-00 00:00:00',
 					'File.mimetype LIKE' => '%image%'
 				),
 				'limit' => 9
 			);
 
-			$images = $this->paginate('File');
+			$images = $this->Paginator->paginate('File');
 			$image_path = WWW_ROOT;
 
 			$this->set(compact('images', 'image_path'));
@@ -56,19 +55,13 @@ class LinksController extends LinksAppController
 	{
 		$conditions = array();
 
-		if (!isset($this->params->named['trash'])) {
-	        $conditions['Link.deleted_time'] = '0000-00-00 00:00:00';
-	    } else {
-	        $conditions['Link.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+		if (isset($this->request->named['trash']))
+	        $conditions['Link.only_deleted'] = true;
 
 	    if ($this->permissions['any'] == 0)
-	    {
 	    	$conditions['User.id'] = $this->Auth->user('id');
-	    }
 
-        $this->paginate = array(
-            'order' => 'Link.created DESC',
+        $this->Paginator->settings = array(
             'limit' => $this->pageLimit,
             'conditions' => $conditions,
             'contain' => array(
@@ -76,7 +69,7 @@ class LinksController extends LinksAppController
             )
         );
 
-        $this->request->data = $this->paginate('Link');
+        $this->request->data = $this->Paginator->paginate('Link');
 	}
 
     /**
@@ -112,7 +105,7 @@ class LinksController extends LinksAppController
     * @param integer $id of the database entry, redirect to index if no permissions
     * @return array of link data
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
       	$this->Link->id = $id;
 
@@ -137,12 +130,7 @@ class LinksController extends LinksAppController
         		'User'
         	)
         ));
-
-        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+		$this->hasAccessToItem($this->request->data);
 	}
 
     /**
@@ -152,43 +140,25 @@ class LinksController extends LinksAppController
      *
      * @param integer $id of the database entry, redirect to index if no permissions
      * @param string $title of this entry, used for flash message
-     * @param string $permanent
-     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
-     * @return redirect
+     * @return void
      */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
 	    $this->Link->id = $id;
 
-        $data = $this->Link->find('first', array(
-        	'conditions' => array(
-        		'Link.id' => $id
-        	),
-        	'contain' => array(
-        		'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+		$data = $this->Link->findById($id);
+		$this->hasAccessToItem($data);
 
-        if (!empty($permanent))
-        {
-            $delete = $this->Link->delete($id);
-        } else {
-            $delete = $this->Link->saveField('deleted_time', $this->Link->dateTime());
-        }
+		$permanent = $this->Link->remove($data);
 
-	    if ($delete)
-        {
-	        $this->Session->setFlash('The link `'.$title.'` has been deleted.', 'flash_success');
-	        $this->redirect(array('action' => 'index'));
-	    } else {
-	    	$this->Session->setFlash('The link `'.$title.'` has NOT been deleted.', 'flash_error');
-	        $this->redirect(array('action' => 'index'));
-	    }
+		$this->Session->setFlash('The link `'.$title.'` has been deleted.', 'flash_success');
+
+		if ($permanent)
+		{
+			$this->redirect(array('action' => 'index', 'trash' => 1));
+		} else {
+			$this->redirect(array('action' => 'index'));
+		}
 	}
 
     /**
@@ -198,27 +168,16 @@ class LinksController extends LinksAppController
     *
     * @param integer $id of database entry, redirect if no permissions
     * @param string $title of this entry, used for flash message
-    * @return redirect
+    * @return void
     */
-    public function admin_restore($id = null, $title = null)
+    public function admin_restore($id, $title = null)
     {
         $this->Link->id = $id;
 
-        $data = $this->Link->find('first', array(
-        	'conditions' => array(
-        		'Link.id' => $id
-        	),
-        	'contain' => array(
-        		'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+	    $data = $this->Link->findById($id);
+	    $this->hasAccessToItem($data);
 
-        if ($this->Link->saveField('deleted_time', '0000-00-00 00:00:00'))
+        if ($this->Link->restore())
         {
             $this->Session->setFlash('The link `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
@@ -256,5 +215,49 @@ class LinksController extends LinksAppController
     	}
 
     	return false;
+    }
+
+    /**
+     * Apply
+     *
+     * @return void
+     */
+    public function apply()
+    {
+        if (!$this->Auth->user('id') && Configure::read('Links.captcha_for_guests_submit_page'))
+        {
+            $captcha = true;
+            $this->set(compact('captcha'));
+        }
+
+        if (!empty($this->request->data))
+        {
+            $this->request->data['Link']['user_id'] = (!$this->Auth->user('id') ? 0 : $this->Auth->user('id'));
+            $this->request->data['Link']['active'] = 0;
+
+            if (!empty($captcha))
+            {
+                include_once(APP . 'webroot/libraries/captcha/securimage.php');
+                $securimage = new Securimage();
+
+                if (!empty($securimage) &&
+                    !$securimage->check($this->request->data['captcha']))
+                {
+                    $this->Session->setFlash('Incorrect captcha entred.', 'flash_error');
+                    $error = true;
+                }
+            }
+
+            if (empty($error))
+            {
+                if ($this->Link->save($this->request->data))
+                {
+                    $this->Session->setFlash('The Link has been submitted. ' . Configure::read('Links.text_on_success_submit'), 'flash_success');
+                    $this->redirect('/');
+                } else {
+                    $this->Session->setFlash('The Link has NOT been submitted. Check errors below.', 'flash_error');
+                }
+            }
+        }
     }
 }

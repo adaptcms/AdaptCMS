@@ -1,8 +1,11 @@
 <?php
-
+App::uses('PollsAppModel', 'Polls.Model');
+/**
+ * Class PollVotingValue
+ */
 class PollVotingValue extends PollsAppModel
 {
-	public $name = 'PluginPollVotingValue';
+	public $useTable = 'plugin_poll_voting_values';
 
 	public $belongsTo = array(
         'Poll' => array(
@@ -12,6 +15,10 @@ class PollVotingValue extends PollsAppModel
         'PollValue' => array(
         	'className'	   => 'Polls.PollValue',
         	'foreignKey'   => 'value_id'
-        )
+        ),
+		'User' => array(
+			'className'    => 'User',
+			'foreignKey'   => 'user_id'
+		),
 	);
 }

@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class ArticleValue
+ */
 class ArticleValue extends AppModel
 {
     /**
@@ -35,11 +37,13 @@ class ArticleValue extends AppModel
     );
     
     /**
-     * The beforeSave manages file uploads/changes and json_encode type field data
-     * 
-     * @return boolean
-     */
-    public function beforeSave()
+    * The beforeSave manages file uploads/changes and json_encode type field data
+    * 
+    * @param array $options
+    *
+    * @return boolean
+    */
+    public function beforeSave($options = array())
     {
         if (!empty($this->data['ArticleValue']))
         {
@@ -72,8 +76,8 @@ class ArticleValue extends AppModel
                     {
                         $this->data['ArticleValue']['file_id'] = $this->File->id;
                         $this->data['ArticleValue']['data'] = $fileUpload['ArticleValue']['data'];
-                        debug($fileUpload);
-                        debug($this->data['ArticleValue']);
+//                        debug($fileUpload);
+//                        debug($this->data['ArticleValue']);
                     }
                 }
                 elseif (isset($row['data']['error']) && $row['data']['error'] == 4 && empty($row['data']['tmp_name']))

@@ -13,6 +13,13 @@ $(document).ready(function() {
                 } else {
                     $("#ForumCategoryOrd").val($("#sort-list li#0").index());
                 }
+
+                $("#ForumCategoryOrder").val(order);
+            },
+            create: function(event, ui)
+            {
+                var order = $(this).sortable("toArray");
+                $("#ForumCategoryOrder").val(order);
             }
         });
 
@@ -37,35 +44,6 @@ $(document).ready(function() {
             if (text != value)
             {
                 $("#sort-list li#" + id + " span:first").text(value);
-            }
-        });
-
-        var form = $("#ForumCategoryAdminForm");
-
-        $(form).on('submit', function(e) {
-            if ($("#pass_form").length == 0)
-            {
-                e.preventDefault();
-            }
-
-            if ($("#sort-list li").length > 0 && $(form).valid())
-            {
-                var order = [];
-
-                $("#sort-list").find('li').each(function(){ order.push(this.id); });
-
-                $.post($("#webroot").text() + "admin/adaptbb/forum_categories/ajax_order/", 
-                    {
-                        data:{
-                            ForumCategory:{
-                                category_ids: order
-                            }
-                        }
-                    }, function(data) {
-
-                    $(form).prepend('<i id="pass_form" style="display: none">1</i>');
-                    $(form).submit();
-                });
             }
         });
     }

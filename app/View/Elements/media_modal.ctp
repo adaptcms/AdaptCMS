@@ -19,7 +19,7 @@ $(document).ready(function() {
 		$("#<?= $id ?> .file:not(:disabled), #select_all").attr('checked', false);
 	});
 
-	$(".btn.btn-danger").live('click', function(e) {
+	$(".btn.remove").live('click', function(e) {
 		e.preventDefault();
 
 		$("#sort_by").val('').trigger('change');
@@ -195,7 +195,6 @@ function loadAjax(href, id)
 
     modal.load(href + '?unique=' + Math.round(Math.random()*10000) + ' #' + id, function() {
         modal.replaceWith($(this).find('.modal-body'));
-		fixPagination();
 		getImagesDefault(id);
 	});
 }
@@ -266,7 +265,7 @@ function loadAjax(href, id)
 			)) ?>
 			<?= $this->Form->button('<i class="icon icon-white icon-remove"></i>', array(
 					'escape' => false, 
-					'class' => 'btn btn-danger',
+					'class' => 'btn remove btn-danger',
 					'style' => 'display: none',
 					'title' => 'Reset Sorting'
 			)) ?>

@@ -1,1 +1,1 @@
-<?= (!empty($data['File']) ? $this->webroot . $data['File']['dir'] . $data['File']['filename'] : '') ?>
+<?= (!empty($data['File']) ? $this->Html->url('/', true) . $data['File']['dir'] . $data['File']['filename'] : '') ?>

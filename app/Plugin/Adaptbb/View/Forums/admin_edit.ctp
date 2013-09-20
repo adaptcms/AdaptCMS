@@ -7,11 +7,9 @@
 <?php $this->Html->addCrumb('Forums', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Edit Forum', null) ?>
 
-<?php
-	$this->TinyMce->editor();
-?>
+<?php $this->TinyMce->editor() ?>
 
-<?= $this->Html->script('jquery-ui-1.9.2.custom.min.js') ?>
+<?= $this->Html->script('jquery-ui.min.js') ?>
 
 <div class="pull-right admin-edit-options">
     <?= $this->Html->link(
@@ -54,14 +52,10 @@
 		'label' => 'Icon URL',
 	)) ?>
 
-	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
-	<?= $this->Form->hidden('ord') ?>
-	<?= $this->Form->hidden('id') ?>
-
     <div class="hidden-phone">
         <h4>Forum Order</h4>
 
-        <ul id="sort-list" class="unstyled span6 no-marg-left">
+        <ul id="sort-list" class="unstyled span5 col-lg-5 no-marg-left">
             <?php if (!empty($forums)): ?>
                 <?php foreach($forums as $forum): ?>
                     <li class="btn" id="<?= $forum['Forum']['id'] ?>">
@@ -84,6 +78,10 @@
 
         <div class="clearfix"></div>
     </div>
+
+	<?= $this->Form->hidden('id') ?>
+	<?= $this->Form->hidden('ord') ?>
+	<?= $this->Form->hidden('order') ?>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

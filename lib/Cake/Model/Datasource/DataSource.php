@@ -173,7 +173,7 @@ class DataSource extends Object {
 /**
  * Converts column types to basic types
  *
- * @param string $real Real  column type (i.e. "varchar(255)")
+ * @param string $real Real column type (i.e. "varchar(255)")
  * @return string Abstract column type (i.e. "string")
  */
 	public function column($real) {
@@ -415,7 +415,6 @@ class DataSource extends Object {
  * Returns the schema name. Override this in subclasses.
  *
  * @return string schema name
- * @access public
  */
 	public function getSchemaName() {
 		return null;
@@ -425,7 +424,6 @@ class DataSource extends Object {
  * Closes a connection. Override in subclasses
  *
  * @return boolean
- * @access public
  */
 	public function close() {
 		return $this->connected = false;

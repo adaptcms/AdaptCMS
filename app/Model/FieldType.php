@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class FieldType
+ *
+ * @method findById(integer $id)
+ */
 class FieldType extends AppModel
 {
     /**
@@ -42,16 +46,26 @@ class FieldType extends AppModel
     );
 
     /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
+    );
+
+    /**
     * Sets the slug
+    *
+    * @param array $options
     *
     * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
+        parent::beforeSave();
+        
         if (!empty($this->data['FieldType']['title']))
         {
-            $this->data['FieldType']['slug'] = $this->slug($this->data['FieldType']['title']);
-
             $path = VIEW_PATH . 'Elements' . DS . 'FieldTypes' . DS;
             $data_path = VIEW_PATH . 'Elements' . DS . 'FieldTypesData' . DS;
 
@@ -62,12 +76,12 @@ class FieldType extends AppModel
                 {
                     rename(
                         $path . $this->slug($this->data['FieldType']['old_title']) . '.ctp',
-                        $path . $this->slug($this->data['FieldType']['title']) . '.ctp'
+                        $path . $this->data['FieldType']['slug'] . '.ctp'
                     );
                 }
                 else
                 {
-                    $fh = fopen($path . $this->slug($this->data['FieldType']['title']) . '.ctp', 'w') or die("can't open file");
+                    $fh = fopen($path . $this->data['FieldType']['slug'] . '.ctp', 'w') or die("can't open file");
                     fwrite($fh, $this->data['FieldType']['template']);
                     fclose($fh);
                 }
@@ -80,20 +94,20 @@ class FieldType extends AppModel
                 {
                     rename(
                         $data_path . $this->slug($this->data['FieldType']['old_title']) . '.ctp',
-                        $data_path . $this->slug($this->data['FieldType']['title']) . '.ctp'
+                        $data_path . $this->data['FieldType']['slug'] . '.ctp'
                     );
                 }
                 else
                 {
-                    $fh = fopen($data_path . $this->slug($this->data['FieldType']['title']) . '.ctp', 'w') or die("can't open file");
+                    $fh = fopen($data_path . $this->data['FieldType']['slug'] . '.ctp', 'w') or die("can't open file");
                     fwrite($fh, $this->data['FieldType']['data_template']);
                     fclose($fh);
                 }
             } elseif (isset($this->data['FieldType']['data_template']) && !empty($this->data['FieldType']['title']) &&
-                      file_exists($data_path . $this->slug($this->data['FieldType']['title']) . '.ctp'))
+                      file_exists($data_path . $this->data['FieldType']['slug'] . '.ctp'))
             {
                 unlink(
-                    $data_path . $this->slug($this->data['FieldType']['title']) . '.ctp'
+                    $data_path . $this->data['FieldType']['slug'] . '.ctp'
                 );
             }
         }
@@ -101,7 +115,14 @@ class FieldType extends AppModel
         return true;
     }
 
-    public function beforeDelete()
+    /**
+    * Before Delete
+    *
+    * @param boolean $cascade
+    *
+    * @return void
+    */
+    public function beforeDelete($cascade = true)
     {
         if (!empty($this->title))
         {
@@ -121,10 +142,14 @@ class FieldType extends AppModel
     }
 
     /**
+     * After Find
+     *
      * @param array $results
-     * @return array|mixed
+     * @param boolean $primary
+     *
+     * @return array
      */
-    public function afterFind($results = array())
+    public function afterFind($results, $primary = false)
     {
         if (empty($results))
             return array();

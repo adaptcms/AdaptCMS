@@ -69,7 +69,7 @@
         <div class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-pills nav-stacked">
-              <?php if ($this->params->action == 'install_plugin'): ?>
+              <?php if ($this->request->action == 'install_plugin'): ?>
                 <li class="nav-header">Plugin Install Progress</li>
 
                 <li<?= (empty($this->request->data) ? " class='active'" : "") ?>>
@@ -78,7 +78,7 @@
                 <li<?= (!empty($this->request->data) ? " class='active'" : " class='disabled'") ?>>
                   <?= $this->Html->link('2. Finish', '#', array('class' => 'no-link')) ?>
                 </li>
-              <?php elseif ($this->params->action == 'uninstall_plugin'): ?>
+              <?php elseif ($this->request->action == 'uninstall_plugin'): ?>
                 <li class="nav-header">Plugin Uninstall Progress</li>
 
                 <li<?= (empty($this->request->data) ? " class='active'" : "") ?>>
@@ -87,7 +87,7 @@
                 <li<?= (!empty($this->request->data) ? " class='active'" : " class='disabled'") ?>>
                   <?= $this->Html->link('2. Finish', '#', array('class' => 'no-link')) ?>
                 </li>
-              <?php elseif ($this->params->action == 'upgrade_plugin'): ?>
+              <?php elseif ($this->request->action == 'upgrade_plugin'): ?>
                 <li class="nav-header">Plugin Upgrade Progress</li>
 
                 <li<?= (empty($this->request->data) ? " class='active'" : "") ?>>
@@ -96,7 +96,7 @@
                 <li<?= (!empty($this->request->data) ? " class='active'" : " class='disabled'") ?>>
                   <?= $this->Html->link('2. Finish', '#', array('class' => 'no-link')) ?>
                 </li>
-              <?php elseif ($this->params->action == 'install_theme'): ?>
+              <?php elseif ($this->request->action == 'install_theme'): ?>
                 <li class="nav-header">Theme Install Progress</li>
 
                 <li<?= (empty($this->request->data) ? " class='active'" : "") ?>>
@@ -105,7 +105,7 @@
                 <li<?= (!empty($this->request->data) ? " class='active'" : " class='disabled'") ?>>
                   <?= $this->Html->link('2. Finish', '#', array('class' => 'no-link')) ?>
                 </li>
-              <?php elseif ($this->params->action == 'uninstall_theme'): ?>
+              <?php elseif ($this->request->action == 'uninstall_theme'): ?>
                 <li class="nav-header">Theme Uninstall Progress</li>
 
                 <li<?= (empty($this->request->data) ? " class='active'" : "") ?>>
@@ -114,7 +114,7 @@
                 <li<?= (!empty($this->request->data) ? " class='active'" : " class='disabled'") ?>>
                   <?= $this->Html->link('2. Finish', '#', array('class' => 'no-link')) ?>
                 </li>
-              <?php elseif ($this->params->action == 'upgrade_theme'): ?>
+              <?php elseif ($this->request->action == 'upgrade_theme'): ?>
                 <li class="nav-header">Theme Upgrade Progress</li>
 
                 <li<?= (empty($this->request->data) ? " class='active'" : "") ?>>
@@ -123,7 +123,7 @@
                 <li<?= (!empty($this->request->data) ? " class='active'" : " class='disabled'") ?>>
                   <?= $this->Html->link('2. Finish', '#', array('class' => 'no-link')) ?>
                 </li>
-              <?php elseif ($this->params->action == 'upgrade'): ?>
+              <?php elseif ($this->request->action == 'upgrade'): ?>
                 <li class="nav-header">Upgrade Progress</li>
 
                 <li<?= (empty($this->request->data) ? " class='active'" : "") ?>>
@@ -135,22 +135,22 @@
               <?php else: ?>
                 <li class="nav-header">Install Progress</li>
 
-                <li<?= ($this->params->action == 'index' ? " class='active'" : "") ?>>
+                <li<?= ($this->request->action == 'index' ? " class='active'" : "") ?>>
                   <?= $this->Html->link('1. Requirements', array('action' => 'index')) ?>
                 </li>
-                <?php if (strstr($this->params->action, "upgrade")): ?>
+                <?php if (strstr($this->request->action, "upgrade")): ?>
 
                 <?php else: ?>
-                  <li<?= ($this->params->action == 'database' ? " class='active'" : "") ?>>
+                  <li<?= ($this->request->action == 'database' ? " class='active'" : "") ?>>
                     <?= $this->Html->link('2. Database Configuration', array('action' => 'database')) ?>
                   </li>
-                  <li<?= ($this->params->action == 'sql' ? " class='active'" : "") ?>>
+                  <li<?= ($this->request->action == 'sql' ? " class='active'" : "") ?>>
                     <?= $this->Html->link('3. Setup SQL', array('action' => 'sql')) ?>
                   </li>
-                  <li<?= ($this->params->action == 'account' ? " class='active'" : "") ?>>
+                  <li<?= ($this->request->action == 'account' ? " class='active'" : "") ?>>
                     <?= $this->Html->link('4. Create Admin Account', array('action' => 'account')) ?>
                   </li>
-                  <li<?= ($this->params->action == 'finish' ? " class='active'" : " class='disabled'") ?>>
+                  <li<?= ($this->request->action == 'finish' ? " class='active'" : " class='disabled'") ?>>
                     <?= $this->Html->link('5. Finish', array('action' => 'finish')) ?>
                   </li>
                 <?php endif ?>

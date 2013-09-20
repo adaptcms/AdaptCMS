@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class Role
+ *
+ * @property Permission $Permission
+ */
 class Role extends AppModel
 {
     /**
@@ -27,9 +31,23 @@ class Role extends AppModel
     * Many Users belong to a Role and many permissions belong to a role
     */
 	public $hasMany = array(
-		'User',
-		'Permission'
+		'User' => array(
+			'dependent' => true
+		),
+		'Permission' => array(
+			'dependent' => true
+		)
 	);
+
+    /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug' => array(
+            'slugField' => 'title'
+	    ),
+	    'Delete'
+    );
 
 	/**
 	* Before saving, we have some strict rules to adhere to. There must be:
@@ -38,12 +56,12 @@ class Role extends AppModel
 	* If a new Role is added with, say, a setting of the default member group, it removes
 	* the flag from the previous one and so on.
 	*
-	* @return boolean
-	*/
-	public function beforeSave()
+    * @param array $options
+    *
+    * @return boolean
+    */
+    public function beforeSave($options = array())
 	{
-		$this->data['Role']['title'] = $this->slug($this->data['Role']['title']);
-
 		if (empty($this->data['Role']['defaults']))
 		{
 			$this->data['Role']['defaults'] = null;
@@ -52,12 +70,6 @@ class Role extends AppModel
 		if (!isset($this->data['Role']['old_defaults']) &&
 			!empty($this->data['Role']['defaults']))
 		{
-			$find = $this->find('first', array(
-				'conditions' => array(
-					'defaults' => $this->data['Role']['defaults']
-				)
-			));
-
 			$this->updateAll(
 				array('Role.defaults' => null),
 				array('Role.defaults' => $this->data['Role']['defaults'])
@@ -114,12 +126,16 @@ class Role extends AppModel
 	}
 
 	/**
+	* Before Delete
+	*
 	* Deletion will only occur if there are two roles with a default (member and guest)
 	* and one without a default. (admin level at minimum)
 	*
+	* @param boolean $cascade
+	*
 	* @return boolean
 	*/
-	public function beforeDelete()
+	public function beforeDelete($cascade = true)
 	{
 		$data = $this->find('first', array(
 			'conditions' => array(

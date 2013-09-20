@@ -19,7 +19,6 @@
         'class' => 'required'
     )) ?>
 
-    <?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
     <?= $this->Form->hidden('last_reset_time', array('value' => $this->Admin->datetime() )) ?>
 
     <?php if (!empty($this->request->data['SecurityQuestions']['SettingValue']['data'])): ?>

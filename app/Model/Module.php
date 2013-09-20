@@ -1,5 +1,12 @@
 <?php
-
+App::uses('AppModel', 'Model');
+/**
+ * Class Module
+ *
+ * @method findById(int $id)
+ * @method findByTitle(string $title)
+ * @method findByModelTitle(string $title)
+ */
 class Module extends AppModel {
     public $name = 'Module';
 

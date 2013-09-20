@@ -4,9 +4,6 @@ App::uses('AppController', 'Controller');
 /**
  * Class FieldTypesController
  * @property FieldType $FieldType
- * @property paginate $paginate
- * @property params $params
- * @property pageLimit $pageLimit
  */
 class FieldTypesController extends AppController
 {
@@ -42,19 +39,12 @@ class FieldTypesController extends AppController
         $conditions = array();
 
         if ($this->permissions['any'] == 0)
-        {
             $conditions['User.id'] = $this->Auth->user('id');
-        }
 
-        if (!isset($this->params->named['trash'])) {
-            $conditions['FieldType.deleted_time'] = '0000-00-00 00:00:00';
-        } else {
-            $conditions['FieldType.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+        if (isset($this->request->named['trash']))
+            $conditions['FieldType.only_deleted'] = true;
 
-        $this->paginate = array(
-            'order' => 'FieldType.created DESC',
-            'limit' => $this->pageLimit,
+        $this->Paginator->settings = array(
             'conditions' => array(
                 $conditions
             ),
@@ -63,7 +53,7 @@ class FieldTypesController extends AppController
             )
         );
         
-        $this->request->data = $this->paginate('FieldType');
+        $this->request->data = $this->Paginator->paginate('FieldType');
     }
 
     /**
@@ -77,6 +67,8 @@ class FieldTypesController extends AppController
     {
         if (!empty($this->request->data))
         {
+	        $this->FieldType->create();
+
             $this->request->data['FieldType']['user_id'] = $this->Auth->user('id');
 
             if ($this->FieldType->save($this->request->data))
@@ -98,7 +90,7 @@ class FieldTypesController extends AppController
      * @internal param int $id of the database entry
      * @return array of field type data
      */
-    public function admin_edit($id = null)
+    public function admin_edit($id)
     {
         $this->FieldType->id = $id;
 
@@ -116,6 +108,7 @@ class FieldTypesController extends AppController
         }
 
         $this->request->data = $this->FieldType->read();
+	    $this->hasAccessToItem($this->request->data);
 
         $path = VIEW_PATH . 'Elements' . DS . 'FieldTypes' . DS . $this->request->data['FieldType']['slug'] . '.ctp';
         $data_path = VIEW_PATH . 'Elements' . DS . 'FieldTypesData' . DS . $this->request->data['FieldType']['slug'] . '.ctp';
@@ -134,47 +127,25 @@ class FieldTypesController extends AppController
      *
      * @param int|null $id
      * @param null|string $title
-     * @param $permanent
-     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
-     * @return redirect
+     * @return void
      */
-    public function admin_delete($id = null, $title = null, $permanent = null)
+    public function admin_delete($id, $title = null)
     {
         $this->FieldType->id = $id;
 
-        if (!empty($permanent))
-        {
-            $delete = $this->FieldType->delete($id);
-        } else {
-            $delete = $this->FieldType->saveField('deleted_time', $this->FieldType->dateTime());
-        }
+	    $data = $this->FieldType->findById($id);
+	    $this->hasAccessToItem($data);
 
-        if ($delete)
-        {
-            $this->Session->setFlash('The field type `'.$title.'` has been deleted.', 'flash_success');
-        } else {
-            $this->Session->setFlash('The field type `'.$title.'` has NOT been deleted.', 'flash_error');
-        }
-        
-        if (!empty($permanent))
-        {
-            $count = $this->FieldType->find('count', array(
-                'conditions' => array(
-                    'FieldType.deleted_time !=' => '0000-00-00 00:00:00'
-                )
-            ));
+	    $permanent = $this->FieldType->remove($data);
 
-            $params = array('action' => 'index');
+	    $this->Session->setFlash('The field type `'.$title.'` has been deleted.', 'flash_success');
 
-            if ($count > 0)
-            {
-                $params['trash'] = 1;
-            }
-
-            $this->redirect($params);
-        } else {
-            $this->redirect(array('action' => 'index'));
-        }
+	    if ($permanent)
+	    {
+		    $this->redirect(array('action' => 'index', 'trash' => 1));
+	    } else {
+		    $this->redirect(array('action' => 'index'));
+	    }
     }
 
     /**
@@ -184,15 +155,13 @@ class FieldTypesController extends AppController
      *
      * @param int|null $id
      * @param null|string $title
-     * @internal param string $title of this entry, used for flash message
-     * @internal param int $id of database entry, redirect if no permissions
-     * @return redirect
+     * @return void
      */
-    public function admin_restore($id = null, $title = null)
+    public function admin_restore($id, $title = null)
     {
         $this->FieldType->id = $id;
 
-        if ($this->FieldType->saveField('deleted_time', '0000-00-00 00:00:00'))
+        if ($this->FieldType->restore())
         {
             $this->Session->setFlash('The field type `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));

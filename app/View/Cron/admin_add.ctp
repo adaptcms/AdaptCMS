@@ -29,8 +29,7 @@
 		),
 		'empty' => '- choose -'
 	)) ?>
-
-	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
+    <?= $this->Form->input('active') ?>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

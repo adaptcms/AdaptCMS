@@ -1,6 +1,12 @@
 <?php
 App::uses('Model', 'Model');
-
+/**
+ * Class AppModel
+ *
+ * @method findById(integer $id)
+ * @method findBySlug(string $slug)
+ * @method findByTitle(string $title)
+ */
 class AppModel extends Model
 {
     /**
@@ -106,10 +112,16 @@ class AppModel extends Model
     }
 
     /**
-     *
-     */
-    public function afterSave()
+    * After Save
+    *
+    * @param boolean $created
+    *
+    * @return void
+    */
+    public function afterSave($created)
     {
+	    parent::afterSave($created);
+
         clearCache();
     }
 
@@ -118,6 +130,8 @@ class AppModel extends Model
      */
     public function afterDelete()
     {
+	    parent::afterDelete();
+
         clearCache();
     }
 
@@ -136,5 +150,75 @@ class AppModel extends Model
             };
         }
         return rmdir($dir);
+    }
+
+    /**
+     * Get Docs
+     * Looks under View_Docs folder for documentation on tips/available data. Can used by plugins, theme, admin templates and normal templates.
+     *
+     * @param string $location Full absolute path to template
+     * @param string $theme Only used if the template is in a theme
+     * @param string $type View_Docs by default, this functionality could get expanded in the future
+     *
+     * @return string
+     */
+    public function getDocs($location, $theme = null, $type = 'View_Docs')
+    {
+        $contents = null;
+
+        if ($theme)
+        {
+            $location = str_replace('Themed/' . $theme . '/', 'Themed/' . $theme . '/' . $type . '/', $location);
+        }
+        else
+        {
+            $location = str_replace('View/', $type . '/', $location);
+        }
+
+        $base_loc = basename($location);
+
+        $files = array();
+        if (strstr($location, 'app/Plugin'))
+        {
+            $files[] = $location;
+            $files[] = str_replace($base_loc, '*.md', $location);
+        }
+        elseif ($theme)
+        {
+            $files[] = $location;
+            $files[] = str_replace($base_loc, '*.md', $location);
+            $files[] = str_replace('View/Themed/' . $theme . '/', '', $location);
+            $files[] = str_replace('View/Themed/' . $theme . '/', '', str_replace($base_loc, '*.md', $location));
+
+        }
+        elseif (strstr($base_loc, 'admin_'))
+        {
+            $files[] = $location;
+            $files[] = str_replace($base_loc, 'admin_*.md', $location);
+        }
+        else
+        {
+            $files[] = $location;
+            $files[] = str_replace($base_loc, '*.md', $location);
+        }
+
+        $match = null;
+        foreach($files as $file)
+        {
+            if (empty($match))
+            {
+                $file = str_replace('ctp', 'md', $file);
+                if (file_exists($file) && is_readable($file))
+                    $match = file_get_contents($file);
+            }
+        }
+
+        if (!empty($match))
+        {
+            App::import('Vendor', 'michelf/markdown/markdown');
+            $contents = Markdown::defaultTransform($match);
+        }
+
+        return $contents;
     }
 }

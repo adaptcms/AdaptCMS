@@ -4,7 +4,7 @@ $(document).ready(function(){
         var empty = $("#TemplateLocation option[value='']");
 
         if ($(theme).val()) {
-	        $.post($("#webroot").text() + "ajax/templates/template_locations/", 
+	        $.post($("#webroot").text() + "admin/templates/ajax_template_locations/",
 	        {
 	            data:{
 	                Theme:{
@@ -12,9 +12,9 @@ $(document).ready(function(){
 	                    title: $(theme).html()
 	                }
 	            }
-	        }, function(data) {
+	        }, function(response) {
 	        	$("#TemplateLocation option").remove();
-	        	$("#TemplateLocation").append(data).prepend(empty);
+	        	$("#TemplateLocation").append(response.data).prepend(empty);
 	        });
 	    } else {
 	    	$("#TemplateLocation option").remove();

@@ -2,7 +2,7 @@
 <script>
     $(document).ready(function() {
         $("#install").live('click', function() {
-            window.location.href = "<?= $this->Html->url(array('action' => 'database')) ?>";
+            window.location.href = $("#webroot").text() + "install/database";
         });
 
         $(".upgrade").live('click', function() {
@@ -50,6 +50,18 @@
             Your core configuration file is NOT writable.<br />Please chmod 777 - <?= APP.'Config/config.php' ?>
         </div>
     <?php endif ?>
+	<?php if (is_writable(APP.'Config/configuration.php')): ?>
+		<div class="alert alert-success">
+			<strong>Success</strong>
+			Your system configuration file is writable.
+		</div>
+	<?php else: ?>
+		<?php $error = 1 ?>
+		<div class="alert alert-error">
+			<strong>Error</strong>
+			Your system configuration file is NOT writable.<br />Please chmod 777 - <?= APP.'Config/configuration.php' ?>
+		</div>
+	<?php endif ?>
     <?php if (is_writable(TMP)): ?>
         <div class="alert alert-success">
             <strong>Success</strong>
@@ -115,7 +127,7 @@
         <div class="btn-group">
             <?php if (!empty($upgrade_versions)): ?>
                 <?php foreach($upgrade_versions as $version => $info): ?>
-                    <button id="<?= $version ?>" class="btn upgrade">Upgrade from <?= ucfirst($version) ?></button>
+                    <button id="<?= Inflector::slug($version) ?>" class="btn upgrade">Upgrade from <?= ucfirst($version) ?></button>
                 <?php endforeach ?>
             <?php endif ?>
 

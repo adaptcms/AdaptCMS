@@ -1,6 +1,12 @@
 <?php
 App::uses('Sanitize', 'Utility');
-
+/**
+ * Class ForumTopic
+ *
+ * @property User $User
+ * @property ForumPost $ForumPost
+ * @property Forum $Forum
+ */
 class ForumTopic extends AdaptbbAppModel
 {
     /**
@@ -58,15 +64,22 @@ class ForumTopic extends AdaptbbAppModel
     );
 
     /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug' => array(
+	        'field' => 'subject'
+	    ),
+	    'Delete'
+    );
+
+    /**
     * Sets the slug
     *
-    * @return true
+    * @return boolean
     */
     public function beforeSave()
     {
-        if (!empty($this->data['ForumTopic']['subject']))
-            $this->data['ForumTopic']['slug'] = $this->slug($this->data['ForumTopic']['subject']);
-
         $this->data = Sanitize::clean($this->data, array(
             'encode' => false,
             'remove_html' => false
@@ -84,8 +97,8 @@ class ForumTopic extends AdaptbbAppModel
     /**
     * Function that json decodes user settings
     *
-    * @param results of topic data
-    * @return results
+    * @param array $results of topic data
+    * @return array
     */
     public function afterFind($results)
     {
@@ -109,8 +122,8 @@ class ForumTopic extends AdaptbbAppModel
     * Adds in newest post for a topic
     *
     *
-    * @param data
-    * @return data new data
+    * @param array $data
+    * @return array new data
     */
     public function getStats($data)
     {
@@ -118,13 +131,11 @@ class ForumTopic extends AdaptbbAppModel
         {
             $find = $this->ForumPost->find('first', array(
                 'conditions' => array(
-                    'ForumPost.topic_id' => $row['ForumTopic']['id'],
-                    'ForumPost.deleted_time' => '0000-00-00 00:00:00'
+                    'ForumPost.topic_id' => $row['ForumTopic']['id']
                 ),
                 'contain' => array(
                     'User'
-                ),
-                'order' => 'ForumPost.created DESC'
+                )
             ));
 
             if (!empty($find))

@@ -29,25 +29,20 @@ class RolesController extends AppController
     /**
     * Returns a paginated index of Roles
     *
-    * @return associative array of roles data
+    * @return array Array of roles data
     */
 	public function admin_index()
 	{
 		$conditions = array();
 
-		if (!isset($this->params->named['trash'])) {
-			$conditions['Role.deleted_time'] = '0000-00-00 00:00:00';
-		} else {
-			$conditions['Role.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+		if (isset($this->request->named['trash']))
+			$conditions['Role.only_deleted'] = true;
 
-		$this->paginate = array(
-            'order' => 'Role.created DESC',
-            'limit' => $this->pageLimit,
+		$this->Paginator->settings = array(
             'conditions' => $conditions
         );
 
-		$this->request->data = $this->paginate('Role');
+		$this->request->data = $this->Paginator->paginate('Role');
 	}
 
     /**
@@ -96,17 +91,15 @@ class RolesController extends AppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of block data
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @return array Array of block data
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
       	$this->Role->id = $id;
 
 	    if (!empty($this->request->data))
         {
-	    	$this->request->data['Role']['title'] = $this->slug($this->request->data['Role']['title']);
-
 	        if ($this->Role->saveAll($this->request->data, array('deep' => true)))
 	        {
 	            $this->Session->setFlash('Your role has been updated.', 'flash_success');
@@ -142,39 +135,28 @@ class RolesController extends AppController
     *
     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @param string $title Title of this entry, used for flash message
+     *
+    * @return void
     */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
 	    $this->Role->id = $id;
 
-		if (!empty($permanent))
+		$data = $this->Role->findById($id);
+		$this->hasAccessToItem($data);
+
+		$permanent = $this->Role->remove($data);
+
+		$this->Session->setFlash('The role `'.$title.'` has been deleted.', 'flash_success');
+
+		if ($permanent)
 		{
-	    	$delete = $this->Role->delete($id);
-	    } else {
-	    	$delete = $this->Role->saveField('deleted_time', $this->Role->dateTime());
-	    }
-
-	    if ($delete)
-	    {
-	        $this->Session->setFlash('The role `'.$title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash(
-	    		'The role `'.$title.'` has NOT been deleted. 
-	    		Make sure there is at least one role type of none (for admins), one active member role and one guest role.', 
-	    		'flash_error'
-	    	);
-	    }
-
-	    if (!empty($permanent))
-	    {
-	    	$this->redirect(array('action' => 'index', 'trash' => 1));
-	    } else {
-	    	$this->redirect(array('action' => 'index'));
-	    }
+			$this->redirect(array('action' => 'index', 'trash' => 1));
+		} else {
+			$this->redirect(array('action' => 'index'));
+		}
 	}
 
     /**
@@ -182,15 +164,15 @@ class RolesController extends AppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
-    * @return redirect
+    * @param integer $id ID of database entry, redirect if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-	public function admin_restore($id = null, $title = null)
+	public function admin_restore($id, $title = null)
 	{
 	    $this->Role->id = $id;
 
-	    if ($this->Role->saveField('deleted_time', '0000-00-00 00:00:00'))
+	    if ($this->Role->restore())
 	    {
 	        $this->Session->setFlash('The role `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));

@@ -3,12 +3,8 @@ App::uses('AppController', 'Controller');
 /**
  * Class PagesController
  * @property SettingValue $SettingValue
- * @property Article $Article
  * @property Page $Page
- * @property paginate $paginate
- * @property params $params
- * @property pageLimit $pageLimit
- * @property CmsApi $CmsApi
+ * @property CmsApiComponent $CmsApi
  */
 class PagesController extends AppController 
 {
@@ -52,27 +48,20 @@ class PagesController extends AppController
 	{
 		$conditions = array();
 
-		if (!isset($this->params->named['trash'])) {
-			$conditions['Page.deleted_time'] = '0000-00-00 00:00:00';
-	    } else {
-	    	$conditions['Page.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+		if (isset($this->request->named['trash']))
+			$conditions['Page.only_deleted'] = true;
 
 	    if ($this->permissions['any'] == 0)
-	    {
 	    	$conditions['User.id'] = $this->Auth->user('id');
-	    }
 
-        $this->paginate = array(
-            'order' => 'Page.created DESC',
-            'limit' => $this->pageLimit,
+        $this->Paginator->settings = array(
             'conditions' => $conditions,
             'contain' => array(
             	'User'
             )
         );
 
-        $this->request->data = $this->paginate('Page');
+        $this->request->data = $this->Paginator->paginate('Page');
 	}
 
     /**
@@ -95,7 +84,12 @@ class PagesController extends AppController
             } else {
                 $this->Session->setFlash('Unable to add your page.', 'flash_error');
             }
-        } 
+        }
+
+        $path = VIEW_PATH . 'Pages/*.ctp';
+        $docs = $this->Page->getDocs($path);
+
+        $this->set(compact('docs'));
 	}
 
     /**
@@ -103,11 +97,14 @@ class PagesController extends AppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @return array of page data
+    * @param integer $id of the database entry, redirect to index if no permissions
+    * @return mixed
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
+        if (empty($id))
+            return $this->redirect(array('action' => 'index'));
+
       	$this->Page->id = $id;
 
 	    if (!empty($this->request->data))
@@ -123,20 +120,8 @@ class PagesController extends AppController
 	        }
 	    }
 
-        $this->request->data = $this->Page->find('first', array(
-        	'conditions' => array(
-        		'Page.id' => $id
-        	),
-        	'contain' => array(
-        		'User'
-        	)
-        ));
-
-        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+        $this->request->data = $this->Page->findById($id);
+		$this->hasAccessToItem($this->request->data);
 
         $path = $this->Page->_getPath($this->request->data['Page']['slug']);
         if (is_writable($path))
@@ -149,7 +134,9 @@ class PagesController extends AppController
             $writable = $path;
         }
 
-        $this->set(compact('writable'));
+        $docs = $this->Page->getDocs($path);
+
+        $this->set(compact('writable', 'docs'));
 	}
 
     /**
@@ -157,62 +144,27 @@ class PagesController extends AppController
      *
      * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
      *
-     * @param id ID of the database entry, redirect to index if no permissions
-     * @param title Title of this entry, used for flash message
-     * @param If|null $permanent
-     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
-     * @return redirect
+     * @param integer $id id of the database entry, redirect to index if no permissions
+     * @param string $title Title of this entry, used for flash message
+     * @return mixed
      */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
 	    $this->Page->id = $id;
 
-        $data = $this->Page->find('first', array(
-        	'conditions' => array(
-        		'Page.id' => $id
-        	),
-        	'contain' => array(
-    			'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+        $data = $this->Page->findById($id);
+		$this->hasAccessToItem($data);
 
-        if (!empty($permanent)) {
-            $delete = $this->Page->delete($id);
-        } else {
-            $delete = $this->Page->saveField('deleted_time', $this->Page->dateTime());
-        }
+		$permanent = $this->Page->remove($data);
 
-	    if ($delete)
-	    {
-	        $this->Session->setFlash('The page `'.$title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash('The page `'.$title.'` has NOT been deleted.', 'flash_error');
-	    }
+		$this->Session->setFlash('The page `'.$title.'` has been deleted.', 'flash_success');
 
-	    if (!empty($permanent))
-	    {
-	    	$count = $this->Page->find('count', array(
-	    		'conditions' => array(
-	    			'Page.deleted_time !=' => '0000-00-00 00:00:00'
-	    		)
-	    	));
-
-	    	$params = array('action' => 'index');
-
-	    	if ($count > 0)
-	    	{
-	    		$params['trash'] = 1;
-	    	}
-
-	    	$this->redirect($params);
-	    } else {
-	    	$this->redirect(array('action' => 'index'));
-	    }
+		if ($permanent)
+		{
+			$this->redirect(array('action' => 'index', 'trash' => 1));
+		} else {
+			$this->redirect(array('action' => 'index'));
+		}
 	}
 
     /**
@@ -220,29 +172,18 @@ class PagesController extends AppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
-    * @return mixed|redirect
+    * @param integer $id ID of database entry, redirect if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-    public function admin_restore($id = null, $title = null)
+    public function admin_restore($id, $title = null)
     {
         $this->Page->id = $id;
 
-        $data = $this->Page->find('first', array(
-        	'conditions' => array(
-        		'Page.id' => $id
-        	),
-        	'contain' => array(
-    			'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+        $data = $this->Page->findById($id);
+	    $this->hasAccessToItem($data);
 
-        if ($this->Page->saveField('deleted_time', '0000-00-00 00:00:00')) {
+        if ($this->Page->restore()) {
             $this->Session->setFlash('The page `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
@@ -256,13 +197,17 @@ class PagesController extends AppController
     *
     * If requested page does not exist, redirect to homepage.
     *
-    * @return array or redirect
+    * @return void
     */
 	public function display()
 	{
 		$path = func_get_args();
 
-		if ($path[0] == 'home') {
+        if (empty($path[0]))
+            return $this->redirect('/');
+
+		if ($path[0] == 'home')
+        {
 			$this->loadModel('Article');
 			$this->loadModel('SettingValue');
 
@@ -293,8 +238,7 @@ class PagesController extends AppController
 
             $conditions = array(
                 'Article.status' => 1,
-                'Article.publish_time <=' => date('Y-m-d H:i:s'),
-                'Article.deleted_time' => '0000-00-00 00:00:00'
+                'Article.publish_time <=' => date('Y-m-d H:i:s')
             );
 
             if (!empty($categories))
@@ -307,25 +251,26 @@ class PagesController extends AppController
 		    	$conditions['User.id'] = $this->Auth->user('id');
 		    }
 
-			$this->paginate = array(
+			$this->Paginator->settings = array(
 				'limit' => $limit,
 				'conditions' => $conditions,
 				'order' => 'Article.created DESC'
 			);
 
 	        $this->request->data = $this->Article->getAllRelatedArticles(
-	        	$this->paginate('Article')
+	        	$this->Paginator->paginate('Article')
 	        );
 
 	        $this->set('articles', $this->request->data);
 		}
 
-		if ($path[0] == 'home' or $path[0] == 'denied') {
+		if ($path[0] == 'home' or $path[0] == 'denied')
+        {
 			$count = count($path);
-			if (!$count) {
-				$this->redirect('/');
-			}
-			$page = $subpage = $title_for_layout = null;
+			if (!$count)
+				return $this->redirect('/');
+
+            $page = $subpage = $title_for_layout = null;
 
 			if (!empty($path[0])) {
 				$page = $path[0];
@@ -338,12 +283,16 @@ class PagesController extends AppController
 			}
 			$this->set(compact('page', 'subpage', 'title_for_layout'));
 			$this->render(implode('/', $path));
-		} else {
+		}
+        else
+        {
 			$this->request->data = $this->Page->find('first', array(
 				'conditions' => array(
-					'Page.slug' => $path[0],
-					'Page.deleted_time' => '0000-00-00 00:00:00'
-				)
+					'Page.slug' => $path[0]
+				),
+                'contain' => array(
+                    'User'
+                )
 			));
 
 			if (!empty($this->request->data)) {
@@ -352,6 +301,8 @@ class PagesController extends AppController
 	            $this->Session->setFlash('This page doesnt exist.', 'flash_error');
 	            $this->redirect('/');
 			}
+
+            $this->set('page', $this->request->data);
 
 			$this->render(implode('/', $path));
 		}
@@ -379,5 +330,5 @@ class PagesController extends AppController
 		$this->set('blog', $data['site-blogs']);
 		$this->set('plugin', $data['plugins']);
 		$this->set('theme', $data['themes']);
-	}	
+	}
 }

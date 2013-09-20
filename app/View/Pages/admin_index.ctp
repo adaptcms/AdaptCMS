@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Pages', null) ?>
 
 <div class="pull-left">
-    <h1>Pages<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Pages<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group pull-right" style="margin-bottom:10px">
     <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_add'])): ?>
@@ -89,7 +89,7 @@
                                     </li>
                                 <?php endif ?>
 
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -99,10 +99,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Page']['id'],
-                                                $data['Page']['title'],
-                                                'page'
+                                                $data['Page']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -117,10 +116,10 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['pages']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Page']['id'],
                                                 $data['Page']['title'],
-                                                'page'
+	                                            true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

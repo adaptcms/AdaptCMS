@@ -2,153 +2,171 @@
 
 class Media extends AppModel
 {
-    /**
-    * Name of our Model, table will look like 'adaptcms_media'
-    */
-    public $name = 'Media';
+	/**
+	 * Name of our Model, table will look like 'adaptcms_media'
+	 */
+	public $name = 'Media';
 
-    /**
-    * Media libraries may have multiple files related to it. Setting unique to 'keepExisting' means that if
-    * file #1 belongs to media #1 and then is added to media #2, cake will keep the first record
-    * and not delete/re-add it.
-    */
-    public $hasAndBelongsToMany = array(
-        'File' => array(
-            'className' => 'File',
-            'joinTable' => 'media_files',
-            'unique' => 'keepExisting'
-        )
-    );
+	/**
+	 * Media libraries may have multiple files related to it. Setting unique to 'keepExisting' means that if
+	 * file #1 belongs to media #1 and then is added to media #2, cake will keep the first record
+	 * and not delete/re-add it.
+	 */
+	public $hasAndBelongsToMany = array(
+		'File' => array(
+			'className' => 'File',
+			'joinTable' => 'media_files',
+			'unique' => 'keepExisting'
+		)
+	);
 
-    /**
-    * All files belong to a user
-    */
-    public $belongsTo = array(
-        'User' => array(
-            'className' => 'User',
-            'foreignKey' => 'user_id'
-        )
-    );
+	/**
+	 * All files belong to a user
+	 */
+	public $belongsTo = array(
+		'User' => array(
+			'className' => 'User',
+			'foreignKey' => 'user_id'
+		)
+	);
 
-    /**
-    * Validation rules, title must have a value
-    */
-    public $validate = array(
-        'title' => array(
-            array(
-                'rule' => 'notEmpty',
-                'message' => 'You must enter in a library title.'
-            ),
-            array(
-                'rule' => 'isUnique',
-                'message' => 'Media title already in use.'
-            )
-        )
-    );
+	/**
+	 * Validation rules, title must have a value
+	 */
+	public $validate = array(
+		'title' => array(
+			array(
+				'rule' => 'notEmpty',
+				'message' => 'You must enter in a library title.'
+			),
+			array(
+				'rule' => 'isUnique',
+				'message' => 'Media title already in use.'
+			)
+		)
+	);
 
-    /**
-    * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
-    * created the block. This is customizable so you can do a contain of related data if you wish.
-    *
-    * @return associative array
-    */
-    public function getBlockData($data, $user_id)
-    {
-        $cond = array(
-            'conditions' => array(
-                'Media.deleted_time' => '0000-00-00 00:00:00'
-            ),
-            'contain' => array(
-                'File'
-            )
-        );
+	/**
+	 * @var array
+	 */
+	public $actsAs = array(
+		'Slug',
+		'Delete'
+	);
 
-        if (!empty($data['limit'])) {
-            $cond['limit'] = $data['limit'];
-        }
+	/**
+	 * Get Block Data
+	 *
+	 * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
+	 * created the block. This is customizable so you can do a contain of related data if you wish.
+	 *
+	 * @param $data
+	 * @param $user_id
+	 * @return array
+	 */
+	public function getBlockData($data, $user_id)
+	{
+		$cond = array(
+			'conditions' => array(),
+			'contain' => array(
+				'File'
+			)
+		);
 
-        if (!empty($data['order_by'])) {
-            if ($data['order_by'] == "rand") {
-                $data['order_by'] = 'RAND()';
-            }
+		if (!empty($data['limit'])) {
+			$cond['limit'] = $data['limit'];
+		}
 
-            $cond['order'] = 'Media.'.$data['order_by'].' '.$data['order_dir'];
-        }
+		if (!empty($data['order_by'])) {
+			if ($data['order_by'] == "rand") {
+				$data['order_by'] = 'RAND()';
+			}
 
-        if (!empty($data['data'])) {
-            $cond['conditions']['Media.id'] = $data['data'];
-        }
+			$cond['order'] = 'Media.' . $data['order_by'] . ' ' . $data['order_dir'];
+		}
 
-        return $this->find('all', $cond);
-    }
+		if (!empty($data['data'])) {
+			$cond['conditions']['Media.id'] = $data['data'];
+		}
 
-    /**
-    * Formats data into correct format to save
-    *
-    * @return true
-    */
-    public function beforeSave()
-    {
-        if (!empty($this->data['File']) && !empty($this->data['Files']))
-        {
-            $this->data['File'] = array_merge($this->data['File'], $this->data['Files']);
-        } elseif (!empty($this->data['Files']))
-        {
-            $this->data['File'] = $this->data['Files'];
-        }
+		return $this->find('all', $cond);
+	}
 
-        if (!empty($this->data['Media']['title']))
-        {
-            $this->data['Media']['title'] = strip_tags($this->data['Media']['title']);
-            $this->data['Media']['slug'] = $this->slug($this->data['Media']['title']);
-        }
-        
-        return true;
-    }
+	/**
+	 * Before Save
+	 * Formats data into correct format to save
+	 *
+	 * @param array $options
+	 *
+	 * @return boolean
+	 */
+	public function beforeSave($options = array())
+	{
+		if (!empty($this->data['File']) && !empty($this->data['Files'])) {
+			$this->data['File'] = array_merge($this->data['File'], $this->data['Files']);
+		} elseif (!empty($this->data['Files'])) {
+			$this->data['File'] = $this->data['Files'];
+		}
 
-    public function getLastFileAndCount($data = array())
-    {
-        $prefix = ConnectionManager::enumConnectionObjects();
+		if (!empty($this->data['Media']['title'])) {
+			$this->data['Media']['title'] = strip_tags($this->data['Media']['title']);
+		}
 
-        foreach($data as $key => $row)
-        {
-            $count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
-            $data[$key]['File']['count'] = $count[0][0]['count'];
+		return true;
+	}
 
-            $last_file = $this->find('first', array(
-                'conditions' => array(
-                    'Media.id' => $row['Media']['id']
-                ),
-                'contain' => array(
-                    'File' => array(
-                        'conditions' => array(
-                            'File.deleted_time' => '0000-00-00 00:00:00'
-                        ),
-                        'limit' => 1
-                    )
-                )
-            ));
+	/**
+	 * Get Last File And Count
+	 *
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	public function getLastFileAndCount($data = array())
+	{
+		$prefix = ConnectionManager::enumConnectionObjects();
 
-            if (!empty($last_file['File']))
-                $data[$key]['File'] = array_merge($data[$key]['File'], $last_file['File'][0]);
-        }
+		foreach ($data as $key => $row) {
+			$count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
+			$data[$key]['File']['count'] = $count[0][0]['count'];
 
-        return $data;
-    }
+			$last_file = $this->find('first', array(
+				'conditions' => array(
+					'Media.id' => $row['Media']['id']
+				),
+				'contain' => array(
+					'File' => array(
+						'limit' => 1
+					)
+				)
+			));
 
-    public function getFileCount($data = array())
-    {
-        $prefix = ConnectionManager::enumConnectionObjects();
+			if (!empty($last_file['File']))
+				$data[$key]['File'] = array_merge($data[$key]['File'], $last_file['File'][0]);
+		}
 
-        if (!empty($data))
-        {
-            foreach($data as $key => $row)
-            {
-                $count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
-                $data[$key]['Media']['file_count'] = $count[0][0]['count'];
-            }
-        }
+		return $data;
+	}
 
-        return $data;
-    }
+	/**
+	 * Get File Count
+	 * Doing this because cakephp's support for hasAndBelongsToMany sucks
+	 *
+	 * @param array $data
+	 *
+	 * @return array
+	 */
+	public function getFileCount($data = array())
+	{
+		$prefix = ConnectionManager::enumConnectionObjects();
+
+		if (!empty($data)) {
+			foreach ($data as $key => $row) {
+				$count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
+				$data[$key]['Media']['file_count'] = $count[0][0]['count'];
+			}
+		}
+
+		return $data;
+	}
 }

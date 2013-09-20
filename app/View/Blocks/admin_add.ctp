@@ -144,7 +144,6 @@
     	<div class="clearfix"></div>
 
     	<?= $this->Form->hidden('module_id') ?>
-        <?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
     </div>
 
 <?= $this->Form->end(array(

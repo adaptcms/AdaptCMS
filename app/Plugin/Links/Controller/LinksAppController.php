@@ -1,5 +1,8 @@
 <?php
-
+App::uses('AppController', 'Controller');
+/**
+ * Class LinksAppController
+ */
 class LinksAppController extends AppController
 {
 	public $name = 'LinksAppController';

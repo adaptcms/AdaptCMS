@@ -37,6 +37,9 @@
 			'_blank' => '_blank'
 		)
 	))?>
+    <?= $this->Form->input('active', array(
+        'type' => 'checkbox'
+    )) ?>
 
 	<?= $this->Form->input('type', array(
 			'options' => array(
@@ -74,7 +77,6 @@
 
 	<div class="clearfix"></div>
 
-	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
 	<?= $this->Form->hidden('id') ?>
 
 <?= $this->Form->end(array(

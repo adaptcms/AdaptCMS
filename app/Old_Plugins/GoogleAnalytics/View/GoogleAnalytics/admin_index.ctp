@@ -76,6 +76,9 @@
 				<li>
 					<a href="#browsers" data-toggle="tab">Top Used Browsers</a>
 				</li>
+				<li>
+					<a href="#tracking-status" data-toggle="tab">Tracker Status</a>
+				</li>
 			</ul>
 
 			<div id="myTabContent" class="tab-content">
@@ -220,6 +223,27 @@
 							</li>
 						<?php endforeach ?>
 					</ol>
+				</div>
+
+				<div class="tab-pane" id="tracking-status">
+					<legend>Tracker Status</legend>
+
+					<?php if (empty($tracking_status)): ?>
+						<h3>Error</h3>
+
+						<p>
+							We checked the layout file of the theme you have set as active and could not find the javascript code.
+							Please visit your
+							<?= $this->Html->link('google account', 'https://google.com/adsense', array('target' => '_blank')) ?>
+							to get the tracking code.
+						</p>
+					<?php else: ?>
+						<h3>Success!</h3>
+
+						<p>
+							We see the tracking code in your layout, assuming you copied and pasted this from google adsense, you should be good to go!
+						</p>
+					<?php endif ?>
 				</div>
 			</div>
 		</div>

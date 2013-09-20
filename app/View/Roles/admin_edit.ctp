@@ -44,6 +44,9 @@
 			<?php foreach($this->request->data['Permission'] as $key => $permission): ?>
 				<div class="span10 no-marg-left">
 					<h4>
+						<?php if (!empty($permission[0]['plugin'])): ?>
+							<?= Inflector::humanize($permission[0]['plugin']) ?> -
+						<?php endif ?>
 						<?= Inflector::humanize($key) ?>
 					</h4>
 					<table class="table">
@@ -100,7 +103,6 @@
 
 			<div class="clearfix"></div>
 
-			<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
 			<?= $this->Form->hidden('old_defaults', array('value' => $this->request->data['Role']['defaults'])) ?>
 			<?= $this->Form->hidden('id') ?>
 

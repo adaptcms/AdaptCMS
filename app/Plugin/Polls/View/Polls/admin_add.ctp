@@ -28,8 +28,6 @@
 		)) ?>
 	</div>
 
-	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
-
 	<div class="btn-group">
 		<?= $this->Form->button('Add Option', array(
 			'type' => 'button',

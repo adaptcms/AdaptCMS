@@ -7,7 +7,7 @@
 <?php $this->Html->addCrumb('Forum Categories', null) ?>
 
 <div class="pull-left">
-    <h1>Forum Categories<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Forum Categories<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -99,7 +99,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <!--nocache-->
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['forum_categories']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -109,10 +109,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['forum_categories']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['ForumCategory']['id'],
-                                                $data['ForumCategory']['title'],
-                                                'forum category'
+                                                $data['ForumCategory']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -127,10 +126,10 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['forum_categories']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['ForumCategory']['id'],
                                                 $data['ForumCategory']['title'],
-                                                'forum category'
+	                                            true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

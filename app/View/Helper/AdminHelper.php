@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Class AdminHelper
+ *
+ * @property SessionHelper $Session
+ * @property HtmlHelper $Html
+ * @property TimeHelper $Time
+ */
 class AdminHelper extends AppHelper
 {
     /**
@@ -132,14 +138,15 @@ class AdminHelper extends AppHelper
         );
     }
 
-    /**
-     * Generates view link for admin
-     * 
-     * @param integer $id
-     * @param string $action
-     * @param string $controller
-     * @return string HTML Link with icon/text
-     */
+	/**
+	 * Generates view link for admin
+	 *
+	 * @param integer $id
+	 * @param string $action
+	 * @param string $controller
+	 * @param array $params
+	 * @return string HTML Link with icon/text
+	 */
     public function view($id = null, $action = 'view', $controller = null, $params = array())
     {
         $vars = array(
@@ -245,11 +252,16 @@ class AdminHelper extends AppHelper
         }
     }
 
-    /**
-    * Convenience function checking deleted_time (if exists) and status (if exists) to see
-    * if item is allowed to be viewed on frontend of site.
-    */
-    public function isActive($data, $model)
+	/**
+	 * Is Active
+	 * Convenience function checking deleted_time (if exists) and status (if exists) to see
+	 * if item is allowed to be viewed on frontend of site.
+	 *
+	 * @param array $data
+	 * @param string $model
+	 * @return boolean
+	 */
+    public function isActive($data = array(), $model)
     {
         if (!empty($data) && !empty($model))
         {
@@ -266,6 +278,36 @@ class AdminHelper extends AppHelper
             }
         }
 
-        return;
+        return false;
+    }
+
+    /**
+    * Remove
+     * Generates delete link for admin
+     * 
+     * @param integer $id
+     * @param string $title
+     * @param boolean $permanent
+     * @param string $controller
+     * @param string $action
+     * @return string HTML Link with icon/text
+     */
+    public function remove($id, $title, $permanent = false, $controller = null, $action = null)
+    {
+        $text = ($permanent ? 'Delete Forever' : 'Delete');
+        $full_text = ($permanent ? ' This is permanent.' : '');
+
+        return $this->Html->link('<i class="icon-trash"></i> ' . $text, array(
+                'action' => (!empty($action) ? $action : 'delete'),
+                'controller' => (!empty($controller) ? $controller : $this->params->controller),
+                $id, 
+                $title
+            ),
+            array(
+                'escape' => false, 
+                'onclick' => 
+                    "return confirm('Are you sure you want to delete this item?" . $full_text . "')"
+            )
+        );
     }
 }

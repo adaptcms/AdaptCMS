@@ -1,6 +1,10 @@
 <?php
 App::uses('Sanitize', 'Utility');
-
+/**
+ * Class Comment
+ *
+ * @property Article $Article
+ */
 class Comment extends AppModel
 {
     /**
@@ -26,7 +30,8 @@ class Comment extends AppModel
     * This behaviour allows for multiple levels of comments.
     */
 	public $actsAs = array(
-		'Tree'
+		'Tree',
+		'Delete'
 	);
 
     /**
@@ -47,17 +52,19 @@ class Comment extends AppModel
         )
     );
 
-    /**
-    * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
-    * created the block. This is customizable so you can do a contain of related data if you wish.
-    *
-    * @return associative array
-    */
+	/**
+	 * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
+	 * created the block. This is customizable so you can do a contain of related data if you wish.
+	 *
+	 * @param $data
+	 * @param $user_id
+	 *
+	 * @return array
+	 */
     public function getBlockData($data, $user_id)
     {
         $cond = array(
             'conditions' => array(
-                'Comment.deleted_time' => '0000-00-00 00:00:00',
                 'Comment.active !=' => 0
             ),
             'contain' => array(
@@ -86,8 +93,12 @@ class Comment extends AppModel
 
     /**
     * Cleans out user input, html is allowed per setting and removed in controller
+    *
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
         $this->data = Sanitize::clean($this->data, array(
             'encode' => false,
@@ -96,6 +107,18 @@ class Comment extends AppModel
 
         if (!empty($this->data['Comment']['comment_text']))
             $this->data['Comment']['comment_text'] = stripslashes(str_replace('\n', '', $this->data['Comment']['comment_text']));
+
+	    $full_clean = array(
+			'author_name',
+			'author_email',
+			'author_website'
+	    );
+	    
+	    foreach($full_clean as $field)
+	    {
+		    if (!empty($this->data['Comment'][$field]))
+			    $this->data['Comment'][$field] = strip_tags(stripslashes(str_replace('\n', '', $this->data['Comment'][$field])));
+	    }
 
         return true;
     }

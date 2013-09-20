@@ -3,6 +3,8 @@ App::uses('AppController', 'Controller');
 
 /**
  * Class MediaController
+ *
+ * @property Media $Media
  */
 class MediaController extends AppController
 {
@@ -30,19 +32,16 @@ class MediaController extends AppController
 	{
 		parent::beforeFilter();
 
-		if ($this->params->action == "admin_add" || $this->params->action == "admin_edit")
+		if ($this->request->action == "admin_add" || $this->request->action == "admin_edit")
 		{
-			$this->loadModel('File');
-			$this->paginate = array(
+			$this->Paginator->settings = array(
 				'conditions' => array(
-					'File.deleted_time' => '0000-00-00 00:00:00',
 					'File.mimetype LIKE' => '%image%'
 				),
-				'order' => 'File.created DESC',
 				'limit' => 9
 			);
 
-			$images = $this->paginate('File');
+			$images = $this->Paginator->paginate('File');
 			$image_path = WWW_ROOT;
 
 			$this->set(compact('images', 'image_path'));
@@ -54,26 +53,19 @@ class MediaController extends AppController
     /**
     * Returns a paginated index of Media Libraries
     *
-    * @return associative array of media data
+    * @return array Array of media data
     */
 	public function admin_index()
 	{
 		$conditions = array();
 
-		if (!isset($this->params->named['trash'])) {
-			$conditions['Media.deleted_time'] = '0000-00-00 00:00:00';
-		} else {
-			$conditions['Media.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+		if (isset($this->request->named['trash']))
+			$conditions['Media.only_deleted'] = true;
 
 	    if ($this->permissions['any'] == 0)
-	    {
 	    	$conditions['User.id'] = $this->Auth->user('id');
-	    }
 
-		$this->paginate = array(
-            'order' => 'Media.created DESC',
-            'limit' => $this->pageLimit,
+		$this->Paginator->settings = array(
             'conditions' => $conditions,
             'contain' => array(
             	'File',
@@ -81,7 +73,7 @@ class MediaController extends AppController
             )
         );
         
-		$this->request->data = $this->Media->getFileCount($this->paginate('Media'));
+		$this->request->data = $this->Media->getFileCount($this->Paginator->paginate('Media'));
 	}
 
     /**
@@ -96,6 +88,8 @@ class MediaController extends AppController
 	{
         if (!empty($this->request->data))
         {
+	        $this->Media->create();
+
         	$this->request->data['Media']['user_id'] = $this->Auth->user('id');
         	
             if ($this->Media->saveAll($this->request->data))
@@ -113,10 +107,10 @@ class MediaController extends AppController
     *
     * After POST, flash error or flash success and redirect to index
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @return associative array of media data
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @return array Array of media data
     */
-	public function admin_edit($id = null)
+	public function admin_edit($id)
 	{
       	$this->Media->id = $id;
 
@@ -142,12 +136,7 @@ class MediaController extends AppController
         		'User'
         	)
         ));
-
-        if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+		$this->hasAccessToItem($this->request->data);
 	}
 
     /**
@@ -155,62 +144,27 @@ class MediaController extends AppController
     *
     * But if it has a deletion time, meaning it is in the trash, deleting it the second time is permanent.
     *
-    * @param id ID of the database entry, redirect to index if no permissions
-    * @param title Title of this entry, used for flash message
-    * @param permanent If not NULL, this means the item is in the trash so deletion will now be permanent
-    * @return redirect
+    * @param integer $id id of the database entry, redirect to index if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-	public function admin_delete($id = null, $title = null, $permanent = null)
+	public function admin_delete($id, $title = null)
 	{
 	    $this->Media->id = $id;
 
-        $data = $this->Media->find('first', array(
-        	'conditions' => array(
-        		'Media.id' => $id
-        	),
-        	'contain' => array(
-        		'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+		$data = $this->Media->findById($id);
+		$this->hasAccessToItem($data);
 
-	    if (!empty($permanent))
-	    {
-	    	$delete = $this->Media->delete($id);
-	    } else {
-	    	$delete = $this->Media->saveField('deleted_time', $this->Media->dateTime());
-	    }
+		$permanent = $this->Media->remove($data);
 
-	    if ($delete)
-	    {
-	        $this->Session->setFlash('The media library `'.$title.'` has been deleted.', 'flash_success');
-	    } else {
-	    	$this->Session->setFlash('The media library `'.$title.'` has NOT been deleted.', 'flash_error');
-	    }
+		$this->Session->setFlash('The media library `'.$title.'` has been deleted.', 'flash_success');
 
-	    if (!empty($permanent))
-	    {
-	    	$count = $this->Media->find('count', array(
-	    		'conditions' => array(
-	    			'Media.deleted_time !=' => '0000-00-00 00:00:00'
-	    		)
-	    	));
-
-	    	$params = array('action' => 'index');
-
-	    	if ($count > 0)
-	    	{
-	    		$params['trash'] = 1;
-	    	}
-
-	    	$this->redirect($params);
-	    } else {
-	    	$this->redirect(array('action' => 'index'));
-	    }
+		if ($permanent)
+		{
+			$this->redirect(array('action' => 'index', 'trash' => 1));
+		} else {
+			$this->redirect(array('action' => 'index'));
+		}
 	}
 
     /**
@@ -218,29 +172,18 @@ class MediaController extends AppController
     *
     * This makes it live wherever applicable
     *
-    * @param id ID of database entry, redirect if no permissions
-    * @param title Title of this entry, used for flash message
-    * @return redirect
+    * @param integer $id ID of database entry, redirect if no permissions
+    * @param string $title Title of this entry, used for flash message
+    * @return void
     */
-    public function admin_restore($id = null, $title = null)
+    public function admin_restore($id, $title = null)
     {
         $this->Media->id = $id;
 
-        $data = $this->Media->find('first', array(
-        	'conditions' => array(
-        		'Media.id' => $id
-        	),
-        	'contain' => array(
-        		'User'
-        	)
-        ));
-        if ($data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
-        {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
-            $this->redirect(array('action' => 'index'));	        	
-        }
+	    $data = $this->Media->findById($id);
+	    $this->hasAccessToItem($data);
 
-        if ($this->Media->saveField('deleted_time', '0000-00-00 00:00:00'))
+        if ($this->Media->restore())
         {
             $this->Session->setFlash('The media library `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
@@ -253,29 +196,21 @@ class MediaController extends AppController
     /**
     * Index list will return list of media albums and related files
     *
-    * TODO: Brings back ALL related files and does a count. If limit of 1 is set in the contain, it brings back the first overall
-    * file. Need to do two things - 1. Do a count in the query on the amount of files (possibly separate?) and then bring back
-    * only the newest file per each album.
-    *
-    * @return associative array of data
+    * @return array Array of data
     */
 	public function index()
 	{
 		$conditions = array();
 
-		$conditions['Media.deleted_time'] = '0000-00-00 00:00:00';
-
 	    if ($this->permissions['any'] == 0)
-	    {
 	    	$conditions['User.id'] = $this->Auth->user('id');
-	    }
 
-		$this->paginate = array(
+		$this->Paginator->settings = array(
 			'conditions' => $conditions,
 			'limit' => 9
 		);
 
-		$this->request->data = $this->Media->getLastFileAndCount($this->paginate('Media'));
+		$this->request->data = $this->Media->getLastFileAndCount($this->Paginator->paginate('Media'));
 
 		$this->set('media', $this->request->data);
 	}
@@ -284,27 +219,32 @@ class MediaController extends AppController
 	* Function finds the media album by slug and gets a paginated list of files related to it.
 	* Coding wise is a bit tricky due to using a find with a 'HABTM' relationship, but joins do the trick.
 	*
-	* @param slug of album
-	* @return associative array of data
+	* @param null $slug Slug of album
+	* @return array Array of data
 	*/
 	public function view($slug = null)
 	{
 		$media_conditions = array();
-		$file_conditions = array();
 
 		$media_conditions['Media.slug'] = $slug;
 
 	    if ($this->permissions['any'] == 0)
-	    {
 	    	$media_conditions['User.id'] = $this->Auth->user('id');
-	    }
+
+		$media = $this->Media->find('first', array(
+			'conditions' => $media_conditions
+		));
+
+		if (empty($media))
+		{
+			$this->Session->setFlash('No Library with the slug `' . $slug . '`');
+			$this->redirect('/');
+		}
 
 	    $file_conditions = 'File.id = MediaFile.file_id';
 
 	    if ($this->permissions['related']['files']['view']['any'] == 0)
-	    {
 	    	$file_conditions['User.id'] = $this->Auth->user('id');
-	    }
 
 		$joins = array(
 			array(
@@ -322,22 +262,12 @@ class MediaController extends AppController
 			)
 		);
 
-		$this->paginate = array(
+		$this->Paginator->settings = array(
 			'joins' => $joins,
 			'limit' => 9
 		);
 
-		$this->request->data = $this->paginate('File');
-
-		$media = $this->Media->find('first', array(
-			'conditions' => $media_conditions
-		));
-
-		if (empty($media))
-		{
-			$this->Session->setFlash('No Library with the slug `' . $slug . '`');
-			$this->redirect('/');
-		}
+		$this->request->data = $this->Paginator->paginate('File');
 
 		$this->set(compact('media'));
 		$this->set('files', $this->request->data);

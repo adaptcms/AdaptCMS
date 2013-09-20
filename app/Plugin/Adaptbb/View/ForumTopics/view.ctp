@@ -40,11 +40,11 @@
 <?= $this->element('flash_success', array('message' => 'Your post is live.', 'hidden' => true)) ?>
 
 <div id="posts_container">
-    <div id="posts" class="span12 no-marg-left">
+    <div id="posts" class="col-lg-12">
         <?php foreach($posts as $post): ?>
             <a name="post<?= $post['ForumPost']['id'] ?>"></a>
-            <div class="post well span12 no-marg-left" id="post-<?= $post['ForumPost']['id'] ?>">
-                <div class="post-info span3 pull-left">
+            <div class="post well col-lg-12" id="post-<?= $post['ForumPost']['id'] ?>">
+                <div class="post-info col-lg-2 pull-left">
                     <?php if (!empty($post['User']['username'])): ?>
                         <?= $this->Html->link('<h4 class="user">' . $post['User']['username'] . '</h4>', array(
                             'controller' => 'users',
@@ -78,7 +78,7 @@
                         ), array('class' => 'btn btn-primary', 'escape' => false)) ?>
 
                         <?php if ($topic['status'] == 1 && $this->Admin->hasPermission($permissions['related']['forum_posts']['ajax_post'])): ?>
-                            <div class="btn-group no-marg-left">
+                            <div class="btn-group">
                                 <?= $this->Html->link('Reply <i class="icon-reply"></i>', '#', array(
                                     'class' => 'btn btn-warning reply',
                                     'escape' => false
@@ -90,7 +90,7 @@
                             </div>
                         <?php endif ?>
 
-                        <div class="btn-group no-marg-left">
+                        <div class="btn-group">
                             <?php if ($post['type'] == 'post'): ?>
                                 <?php if ($this->Admin->hasPermission($permissions['related']['forum_posts']['ajax_edit'])): ?>
                                     <?= $this->Html->link('Edit <i class="icon-pencil"></i>',
@@ -140,7 +140,7 @@
                         <!--/nocache-->
                     </div>
                 </div>
-                <div class="post-body span9 no-marg-left">
+                <div class="post-body col-lg-10">
                     <h4 class="subject">
                         <?php if (empty($post['ForumPost']['subject'])): ?>
                             RE:

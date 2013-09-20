@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Files', null) ?>
 
 <div class="pull-left">
-    <h1>Files<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Files<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group" style="float:right;margin-bottom:10px">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -12,14 +12,14 @@
   <ul class="dropdown-menu view">
     <li>
         <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
-            'admin' => true, 
+            'admin' => true,
             'action' => 'index'
         ), array('escape' => false)) ?>
     </li>
     <li>
         <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
-            'admin' => true, 
-            'action' => 'index', 
+            'admin' => true,
+            'action' => 'index',
             'trash' => 1
         ), array('escape' => false)) ?>
     </li>
@@ -27,21 +27,29 @@
 </div>
 <div class="clearfix"></div>
 
-<?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_add'])): ?>
-    <div class="btn-group pull-right" style="margin-bottom:10px">
-        <?= $this->Html->link('Upload Multiple <i class="icon icon-list icon-white"></i>', array(
-                'action' => 'add', 
-                'multiple' => true
-            ), array(
-                'class' => 'btn btn-info', 
-                'escape' => false
-        )) ?>
-        <?= $this->Html->link('Add File <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
-            'class' => 'btn btn-info', 
-            'escape' => false
-        )) ?>
-    </div>
-<?php endif ?>
+<div class="btn-group pull-right" style="margin-bottom:10px">
+	<?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_add_folder'])): ?>
+		<?= $this->Html->link('Import Folder <i class="icon-folder-open icon-white"></i>', array(
+			'action' => 'add_folder'
+		), array(
+			'class' => 'btn btn-info',
+			'escape' => false
+		)) ?>
+	<?php endif ?>
+	<?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_add'])): ?>
+	        <?= $this->Html->link('Upload Multiple <i class="icon icon-list icon-white"></i>', array(
+	                'action' => 'add',
+	                'multiple' => true
+	            ), array(
+	                'class' => 'btn btn-info',
+	                'escape' => false
+	        )) ?>
+	        <?= $this->Html->link('Add File <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
+	            'class' => 'btn btn-info',
+	            'escape' => false
+	        )) ?>
+	<?php endif ?>
+</div>
 
 <?php if (empty($this->request->data)): ?>
     <div class="clearfix"></div>
@@ -75,7 +83,7 @@
                         <?php endif ?>
                     </td>
                     <td class="hidden-phone"><?= $data['File']['mimetype'] ?></td>
-                    <td class="hidden-phone" style="text-align: center">
+                    <td class="hidden-phone span4" style="text-align: center">
                         <?php if (strstr($data['File']['mimetype'], "image")):?>
                             <?= $this->Html->image("/".$data['File']['dir']."thumb/".$data['File']['filename']) ?>
                         <?php endif; ?>
@@ -101,7 +109,7 @@
                                     </li>
                                 <?php endif ?>
 
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -111,10 +119,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['File']['id'],
-                                                null,
-                                                'file'
+	                                            null
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -123,16 +130,16 @@
                                         <li>
                                             <?= $this->Admin->restore(
                                                 $data['File']['id'],
-                                                null
+	                                            null
                                             ) ?>
                                         </li>
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['files']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['File']['id'],
                                                 null,
-                                                'file'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

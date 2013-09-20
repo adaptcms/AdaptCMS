@@ -1,35 +1,38 @@
 $(document).ready(function(){
-    var change_status = $('#user-change-status');
+    if ($('#user-change-status').length)
+        $(".user-status").live('click', function () {
+            var el = $(this);
+            var user_id = el.attr('data-id');
+            var status = el.hasClass('icon-remove-sign');
+            var new_status = (status ? 1 : 0);
 
-    if (change_status.length)
-    {
-        $(".user-status").live('click', function() {
-            if ($(this).hasClass('icon-remove-sign')) {
-                var user_id = $(this).attr('data-id');
-                var new_status = 1;
+            $.post($('#webroot').text() + "admin/users/ajax_change_user/",
+            {
+                data: {
+                    User: {
+                        id: user_id,
+                        status: new_status
+                    }
+                }
+            }, function (response) {
+                var change = $('#user-change-status');
 
-                $.post($('#webroot').text() + "ajax/users/change_user/",
+                if (change.length != 0) {
+                    change.replaceWith(response.data);
+                } else {
+                    $(response.data).insertAfter($(".breadcrumb"));
+                }
+
+                if ($('#user-change-status').hasClass('alert-success')) {
+                    if (new_status == 1)
                     {
-                        data:
-                        {
-                            User:
-                            {
-                                id: user_id,
-                                status: new_status
-                            }
-                        }
-                    }, function(data) {
-                    if (change_status.length != 0) {
-                        change_status.replaceWith(data);
-                    } else {
-                        $(data).insertBefore($(".span9 h1"));
+                        el.removeClass('icon-remove-sign').addClass('icon-ok-sign');
                     }
-
-                    if (change_status.hasClass('alert-success')) {
-                        $("#" + user_id).removeClass('icon-remove-sign').addClass('icon-ok-sign');
+                    else
+                    {
+                        el.addClass('icon-remove-sign').removeClass('icon-ok-sign');
                     }
-                });
-            }
+                }
+            }, 'json');
         });
-    }
 });

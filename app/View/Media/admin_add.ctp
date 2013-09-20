@@ -19,8 +19,6 @@
 	<ul class="selected-images span12 thumbnails"></ul>
 	<div class="clearfix"></div>
 	
-	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
-
 <?= $this->Form->end(array(
 	'label' => 'Submit',
 	'class' => 'btn btn-primary'

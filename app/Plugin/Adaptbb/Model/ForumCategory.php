@@ -30,7 +30,8 @@ class ForumCategory extends AdaptbbAppModel
     public $hasMany = array(
         'Forum' => array(
             'className' => 'Adaptbb.Forum',
-            'foreignKey' => 'category_id'
+            'foreignKey' => 'category_id',
+	        'dependent' => true
         )
     );
 
@@ -51,17 +52,36 @@ class ForumCategory extends AdaptbbAppModel
     );
 
     /**
-    * Sets the slug
-    *
-    * @return true
-    */
-    public function beforeSave()
-    {
-        if (!empty($this->data['ForumCategory']['title']))
-        {
-            $this->data['ForumCategory']['slug'] = $this->slug($this->data['ForumCategory']['title']);
-        }
-        
-        return true;
-    }
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
+    );
+
+	/**
+	 * Save Category Order
+	 *
+	 * @param array $data
+	 * @return mixed
+	 */
+	public function saveCategoryOrder($data = array())
+	{
+		$ids = explode(',', $data['ForumCategory']['order']);
+
+		$data = array();
+		$i = 0;
+		foreach($ids as $key => $field)
+		{
+			if (!empty($field) && $field > 0)
+			{
+				$data[$i]['id'] = $field;
+				$data[$i]['ord'] = $key;
+
+				$i++;
+			}
+		}
+
+		return $this->saveMany($data);
+	}
 }

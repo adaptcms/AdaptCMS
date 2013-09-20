@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}articles` (
   `status` int(3) DEFAULT '0',
   `publish_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `settings` longtext,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`,`category_id`,`status`,`deleted_time`)
@@ -36,8 +36,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}blocks` (
   `limit` int(11),
   `settings` longtext DEFAULT NULL,
   `data` longtext NOT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `deleted_time` (`deleted_time`,`module_id`)
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}categories` (
   `title` varchar(255) DEFAULT NULL,
   `slug` varchar(100) DEFAULT NULL,
   `user_id` int(11),
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
@@ -78,8 +78,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}comments` (
   `author_website` varchar(255) DEFAULT NULL,
   `author_ip` varchar(255) DEFAULT NULL,
   `active` int(1) DEFAULT '0',
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `article_id` (`article_id`,`user_id`,`deleted_time`)
@@ -91,8 +91,10 @@ CREATE TABLE IF NOT EXISTS `{prefix}cron` (
   `module_id` int(11) NOT NULL,
   `function` varchar(255) NOT NULL,
   `run_time` datetime NOT NULL,
+  `last_run` datetime NOT NULL,
   `period_amount` int(11) NOT NULL,
   `period_type` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL,
@@ -115,8 +117,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}fields` (
   `field_limit_max` int(11) NOT NULL DEFAULT '0',
   `required` int(1) NOT NULL DEFAULT '0',
   `user_id` int(11),
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`,`field_type_id`,`user_id`,`deleted_time`)
@@ -147,8 +149,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}files` (
   `caption` varchar(255) DEFAULT NULL,
   `watermark` int(1) DEFAULT '0',
   `user_id` int(11),
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`,`deleted_time`)
@@ -172,8 +174,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}media` (
   `title` varchar(255) DEFAULT NULL,
   `slug` varchar(255) DEFAULT NULL,
   `user_id` int(11),
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`,`deleted_time`)
@@ -207,8 +209,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}messages` (
   `message` text,
   `sender_user_id` int(11) DEFAULT '0',
   `receiver_user_id` int(11) DEFAULT '0',
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `last_reply_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `sender_archived_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `receiver_archived_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -245,8 +247,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}pages` (
   `title` varchar(255) DEFAULT NULL,
   `slug` varchar(100) DEFAULT NULL,
   `user_id` int(11),
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `slug` (`slug`,`user_id`,`deleted_time`)
@@ -356,11 +358,12 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_links` (
   `link_target` varchar(255) DEFAULT NULL,
   `views` int(11) NOT NULL DEFAULT '0',
   `user_id` int(11),
+  `active` int(1),
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `file_id` (`file_id`,`user_id`,`deleted_time`)
+  KEY `file_id` (`file_id`,`user_id`,`deleted_time`,`active`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
@@ -369,8 +372,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
   `title` varchar(255) DEFAULT NULL,
   `poll_type` varchar(255) DEFAULT NULL,
   `user_id` int(11),
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `article_id` (`article_id`,`user_id`,`deleted_time`)
@@ -379,28 +382,28 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `plugin_poll_id` int(11) NOT NULL,
+  `poll_id` int(11) NOT NULL,
   `votes` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `plugin_poll_id` (`plugin_poll_id`)
+  KEY `poll_id` (`poll_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `plugin_poll_id` int(11) DEFAULT '0',
-  `plugin_value_id` int(11) DEFAULT '0',
+  `poll_id` int(11) DEFAULT '0',
+  `value_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `user_ip` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `plugin_poll_id` (`plugin_poll_id`,`plugin_value_id`,`user_id`)
+  KEY `poll_id` (`poll_id`,`value_id`,`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
   `defaults` varchar(255) DEFAULT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `defaults` (`defaults`,`deleted_time`)
@@ -409,7 +412,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}roles` (
 CREATE TABLE IF NOT EXISTS `{prefix}settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
@@ -423,8 +426,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}setting_values` (
   `setting_type` varchar(255) DEFAULT NULL,
   `setting_id` int(11) DEFAULT '0',
   `model` varchar(255) DEFAULT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `title` (`title`,`setting_id`,`deleted_time`)
@@ -436,8 +439,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}templates` (
   `label` varchar(255) DEFAULT NULL,
   `location` varchar(255) NOT NULL,
   `theme_id` int(11) DEFAULT '0',
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` varchar(255) DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `theme_id` (`theme_id`,`deleted_time`)
@@ -446,8 +449,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}templates` (
 CREATE TABLE IF NOT EXISTS `{prefix}themes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) DEFAULT NULL,
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `deleted_time` (`deleted_time`)
@@ -459,13 +462,13 @@ CREATE TABLE IF NOT EXISTS `{prefix}users` (
   `password` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `role_id` int(11) DEFAULT '0',
-  `login_time` varchar(255) DEFAULT NULL,
+  `login_time` datetime DEFAULT NULL,
   `security_answers` longtext NOT NULL,
   `settings` longtext NOT NULL,
   `status` int(3) DEFAULT '0',
   `theme_id` int(11) DEFAULT '0',
-  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `last_reset_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),

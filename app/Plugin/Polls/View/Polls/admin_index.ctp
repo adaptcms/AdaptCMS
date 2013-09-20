@@ -7,7 +7,7 @@
 <?php $this->Html->addCrumb('Polls', null) ?>
 
 <div class="pull-left">
-    <h1>Polls<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Polls<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -87,7 +87,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['polls']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -97,10 +97,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['polls']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Poll']['id'],
-                                                $data['Poll']['title'],
-                                                'poll'
+                                                $data['Poll']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -115,10 +114,10 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['polls']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Poll']['id'],
                                                 $data['Poll']['title'],
-                                                'poll'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

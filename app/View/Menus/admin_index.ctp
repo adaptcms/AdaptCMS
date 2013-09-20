@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Menu', null) ?>
 
 <div class="pull-left span7 no-marg-left">
-    <h1>Menus<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Menus<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
     <p>The menu manager allows you to create as many menus as you would like. Add custom links or link to current static pages, articles, whatever you'd like.</p>
 </div>
 <div class="btn-group pull-right">
@@ -82,7 +82,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <li>
                                         <?= $this->Html->link('<i class="icon-code"></i> Get Code',
                                         array(
@@ -101,17 +101,16 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Menu']['id'],
-                                                $data['Menu']['title'],
-                                                'menu'
+                                                $data['Menu']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
                                 <?php else: ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_restore'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->restore(
                                                 $data['Menu']['id'],
@@ -119,12 +118,12 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['menus']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Menu']['id'],
                                                 $data['Menu']['title'],
-                                                'menu'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

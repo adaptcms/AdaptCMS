@@ -3,8 +3,15 @@
 <?php $this->Html->addCrumb('Cron Jobs', null) ?>
 
 <div class="pull-left span7 no-marg-left">
-    <h1>Cron Jobs<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
-    <p>This area is for advanced users. With the Cron Job functionality, users can setup functionality to run on a specific schedule. One example is to set the database to be optimized once every week or a new sitemap to be pinged/generated once a day.</p>
+    <h1>Cron Jobs<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <p>
+        This area is for advanced users. With the Cron Job functionality, users can setup functionality to run on a specific schedule.
+        One example is to set the database to be optimized once every week or a new sitemap to be pinged/generated once a day.
+    </p>
+    <p>
+        <strong>Notice</strong> When a cron job does not run succesfully, it's active flag is set to inactive. You can try to 'Run Test' and if it runs through withour errors,
+        it will automatically re-activate itself. Otherwise, let us/the plugin manufacturer know of the issue.
+    </p>
 </div>
 <div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -48,7 +55,8 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th>Runs Every...</th>
-                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('last_run', 'Last Run') ?></th>
+                <th class="hidden-phone"><?= $this->Paginator->sort('run_time', 'Next Run') ?></th>
                 <th></th>
             </tr>
         </thead>
@@ -66,11 +74,18 @@
                         <?php endif ?>
                     </td>
                     <td>
-                        <?= $data['Cron']['period_amount'] ?>
-                        <?= $data['Cron']['period_type'] ?>(s)
+                        <?php if (empty($data['Cron']['active'])): ?>
+                            <span class="label label-important">Not Active</span>
+                        <?php else: ?>
+                            <?= $data['Cron']['period_amount'] ?>
+                            <?= $data['Cron']['period_type'] ?>(s)
+                        <?php endif ?>
                     </td>
                     <td class="hidden-phone">
-                        <?= $this->Admin->time($data['Cron']['created']) ?>
+                        <?= $this->Admin->time($data['Cron']['last_run']) ?>
+                    </td>
+                    <td class="hidden-phone">
+                        <?= $this->Admin->time($data['Cron']['run_time']) ?>
                     </td>
                     <td>
                         <div class="btn-group">
@@ -79,7 +94,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -87,17 +102,24 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_delete'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Cron']['id'],
-                                                $data['Cron']['title'],
-                                                'cron job'
+                                                $data['Cron']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_test'])): ?>
+                                        <li>
+                                            <?= $this->Html->link('<i class="icon-cog"></i> Run Test', array(
+                                                'action' => 'test',
+                                                $data['Cron']['id']
+                                            ), array('escape' => false)) ?>
+                                        </li>
+                                    <?php endif ?>
                                 <?php else: ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_restore'])): ?>
                                         <li>
                                             <?= $this->Admin->restore(
                                                 $data['Cron']['id'],
@@ -105,12 +127,12 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_edit'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['cron']['admin_delete'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Cron']['id'],
                                                 $data['Cron']['title'],
-                                                'cron job'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

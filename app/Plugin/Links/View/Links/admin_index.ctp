@@ -7,7 +7,7 @@
 <?php $this->Html->addCrumb('Links', null) ?>
 
 <div class="pull-left">
-    <h1>Links<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Links<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group pull-right">
   <a class="btn dropdown-toggle" data-toggle="dropdown">
@@ -51,6 +51,7 @@
             <tr>
                 <th><?= $this->Paginator->sort('title') ?></th>
                 <th><?= $this->Paginator->sort('views') ?></th>
+                <th><?= $this->Paginator->sort('active') ?></th>
                 <th class="hidden-phone"><?= $this->Paginator->sort('User.username', 'Author') ?></th>
                 <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
                 <th></th>
@@ -64,6 +65,13 @@
                     </td>
                     <td>
                         <?= $this->Number->format($data['Link']['views']) ?>
+                    </td>
+                    <td>
+                        <?php if ($data['Link']['active'] == 1): ?>
+                            Yes
+                        <?php else: ?>
+                            No
+                        <?php endif ?>
                     </td>
                     <td class="hidden-phone">
                         <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
@@ -84,13 +92,13 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <?= $this->Html->link('<i class="icon icon-picture"></i> View', $data['Link']['url'], array(
-                                        'target' => '_new',
-                                        'escape' => false
-                                    )) ?>
-                                </li>
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
+	                                <li>
+		                                <?= $this->Html->link('<i class="icon icon-picture"></i> View', $data['Link']['url'], array(
+			                                'target' => '_new',
+			                                'escape' => false
+		                                )) ?>
+	                                </li>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['links']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -98,17 +106,16 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['links']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['links']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Link']['id'],
-                                                $data['Link']['title'],
-                                                'link'
+                                                $data['Link']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
                                 <?php else: ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['links']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['links']['admin_restore'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->restore(
                                                 $data['Link']['id'],
@@ -116,12 +123,12 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['links']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['links']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Link']['id'],
                                                 $data['Link']['title'],
-                                                'link'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

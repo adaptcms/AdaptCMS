@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Class Permission
+ *
+ * @property Module $Module
+ * @property Role $Role
+ */
 class Permission extends AppModel
 {
     /**

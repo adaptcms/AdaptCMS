@@ -1,5 +1,7 @@
-<?php if (!empty($this->request->data)): ?>
-	<?php foreach($this->request->data as $article): ?>
+<?php if (empty($articles)): ?>
+	<p>No Articles Found</p>
+<?php else: ?>
+	<?php foreach($articles as $article): ?>
 		<div class="span8 no-marg-left">
 			<?= $this->Html->link('<h2>' . $article['Article']['title'] . '</h2>', array(
 				'controller' => 'articles', 
@@ -52,4 +54,4 @@
 	<?php endforeach ?>
 <?php endif ?>
 
-<?= $this->element('admin_pagination') ?>
+<?= $this->element('pagination') ?>

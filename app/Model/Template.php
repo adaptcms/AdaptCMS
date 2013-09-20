@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class Template
+ *
+ * @property Theme $Theme
+ */
 class Template extends AppModel
 {
     /**
@@ -31,6 +35,11 @@ class Template extends AppModel
 	);
 
 	/**
+	 * @var array
+	 */
+	public $actsAs = array('Delete');
+
+	/**
 	* Folders to ignore when fetching locations
 	*/
 	public $ignoreFolders = array(
@@ -41,24 +50,42 @@ class Template extends AppModel
 		'Helper',
         'Install',
         'theme.json',
-        'plugin.json'
+        'plugin.json',
+        'empty'
 	);
+
+    /**
+     * Files to ignore
+     *
+     * @var array
+     */
+    public $ignoreFiles = array(
+        '.',
+        '..',
+        'empty'
+    );
+	
+	public $template_extension = 'ctp';
 
     /**
     * Creates folders need for templates
     *
-    * @return true
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
+	    if (!empty($this->data['Template']['title']) && !strstr($this->data['Template']['title'], '.ctp'))
+		    $this->data['Template']['title'] = $this->data['Template']['title'] . '.ctp';
+
         if (!empty($this->data) && 
             empty($this->data['Template']['id']) && 
             !empty($this->data['Template']['title']))
         {
 			$theme = $this->Theme->find('first', array(
                 'conditions' => array(
-                	'Theme.id' => $this->data['Template']['theme_id'],
-                	'Theme.deleted_time' => '0000-00-00 00:00:00'
+                	'Theme.id' => $this->data['Template']['theme_id']
                 ),
                 'fields' => array(
                 	'title'
@@ -74,7 +101,7 @@ class Template extends AppModel
         		$path = VIEW_PATH;
         	}
 
-        	if (!strstr($this->data['Template']['location'], '.ctp'))
+        	if (!strstr($this->data['Template']['location'], $this->template_extension))
         	{
         		$file = $this->data['Template']['title'];
         		$this->data['Template']['location'] = $this->data['Template']['location'] . '/' . $file;
@@ -95,8 +122,7 @@ class Template extends AppModel
         {
 			$theme = $this->Theme->find('first', array(
                 'conditions' => array(
-                	'Theme.id' => $this->data['Template']['theme_id'],
-                	'Theme.deleted_time' => '0000-00-00 00:00:00'
+                	'Theme.id' => $this->data['Template']['theme_id']
                 ),
                 'fields' => array(
                 	'title'
@@ -145,8 +171,36 @@ class Template extends AppModel
 			}
         }
 
+	    if (empty($this->data['Template']['label']) && !empty($this->data['Template']['title']))
+		    $this->data['Template']['label'] = str_replace('.' . $this->template_extension, '', $this->data['Template']['title']);
+
         return true;
     }
+
+	/**
+	 * Before Delete
+	 *
+	 * @param bool $cascade
+	 * @return bool
+	 */
+	public function beforeDelete($cascade = true)
+	{
+		$data = $this->findById($this->id);
+
+		if (strstr($data['Template']['location'], 'Plugin'))
+		{
+			$path = APP;
+		} else {
+			$path = VIEW_PATH;
+		}
+
+		if (is_readable($path . $data['Template']['location']))
+		{
+			unlink($path . $data['Template']['location']);
+		}
+
+		return true;
+	}
 
 	/**
 	* Returns a full folder list when adding/editing a template (setting a location for it)
@@ -194,7 +248,7 @@ class Template extends AppModel
 	    {
 	        while (($file = readdir($dh)) !== false)
 	        {
-	        	if (!in_array($file, $this->ignoreFolders))
+	        	if (!in_array($file, $this->ignoreFolders) && !is_file($dir . $file))
 	        	{
 	            	$folders[$inc_dir.$file] = $prefix . $file;
 
@@ -290,30 +344,52 @@ class Template extends AppModel
 
 		if (file_exists($dir))
 		{
-		    if ($dh = opendir($dir))
+            $dh = opendir($dir);
+		    if ($dh)
 		    {
 		        while (($file = readdir($dh)) !== false)
 		        {
 		        	if (!in_array($file, $this->ignoreFolders) && !is_file($file))
 		        	{
-	        			if ($fol = opendir($dir . $file))
+                        $fol = opendir($dir . $file);
+	        			if ($fol)
 	        			{
 		        			while(($row = readdir($fol)) != false)
 		        			{
-		        				if ($row != ".." && $row != ".")
+		        				if (!in_array($row, $this->ignoreFiles))
 		        				{
-		        					if (is_file($dir . $file . "/" . $row))
+		        					if (is_file($dir . $file . DS . $row))
 		        					{
-		        						$files[$prefix . $inc_dir . $file . "/" . $row] = $prefix . $inc_dir . $file . "/" . $row;
-		        					} else {
-		        						if ($fol2 = opendir($dir.$file."/".$row))
+		        						$files[$prefix . $inc_dir . $file . DS . $row] = $prefix . $inc_dir . $file . DS . $row;
+		        					}
+                                    else
+                                    {
+                                        $fol2 = opendir($dir . $file . DS . $row);
+		        						if ($fol2)
 		        						{
 		        							while(($row2 = readdir($fol2)) != false)
 		        							{
-		        								if ($row2 != ".." && $row2 != ".")
-		        								{
-		        									$files[$prefix . $inc_dir . $file . "/" . $row . "/" . $row2] = $prefix . $inc_dir.$file."/".$row."/".$row2;
-		        								}
+                                                if (!in_array($row2, $this->ignoreFiles))
+                                                {
+                                                    if (is_file($dir . $file . DS . $row . DS . $row2))
+                                                    {
+                                                        $files[$prefix . $inc_dir . $file . DS . $row . DS . $row2] = $prefix . $inc_dir.$file.DS.$row.DS.$row2;
+                                                    }
+                                                    else
+                                                    {
+                                                        $fol3 = opendir($dir. $file. DS . $row . DS . $row2);
+                                                        if ($fol3)
+                                                        {
+                                                            while(($row3 = readdir($fol3)) != false)
+                                                            {
+                                                                if (!in_array($row3, $this->ignoreFiles) && is_file($dir . $file . DS . $row . DS . $row2 . DS . $row3))
+                                                                {
+                                                                    $files[$prefix . $inc_dir . $file . DS . $row . DS . $row2 . DS . $row3] = $prefix . $inc_dir . $file . DS . $row . DS . $row2 . DS . $row3;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
 		        							}
 		        						}
 		        						closedir($fol2);

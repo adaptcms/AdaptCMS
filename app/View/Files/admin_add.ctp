@@ -7,19 +7,19 @@ $(document).ready(function() {
 	$("#FileType").live('change', function() {
 		if ($(this).val()) {
 			if ($(this).val() == 'upload') {
-				$("#file_upload,#extra").show();
+				$("#file_upload,#extra,#libraries").show();
 				$("#file_contents").hide();
 			} else {
 				$("#file_contents").show();
-				$("#file_upload,#extra").hide();
+				$("#file_upload,#extra,#libraries").hide();
 				$("#frame_FileContent").css("height", "325px");
 			}
 		} else {
-			$("#file_upload, #file_contents, #extra").hide();
+			$("#file_upload, #file_contents, #extra, #libraries").hide();
 		}
 	});
 
-	<?php if (!empty($this->params->named['multiple'])): ?>
+	<?php if (!empty($this->request->named['multiple'])): ?>
 		$("#file_upload,#extra").show();
 		$("#file-type").hide();
 		var file_div = $("#file-0").clone().html();
@@ -55,22 +55,6 @@ $(document).ready(function() {
 			toggleRemove();
 		});
 	<?php endif ?>
-
-    $(".add-media").live('click', function() {
-        var val = $(this).parent().find(":selected");
-
-        if (val.val()) {
-            var random = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-            var id = $(this).prev().attr('id').charAt(0);
-
-            if ($(this).parent().next().find("input[value='" + val.val() + "']").length == 0) {
-            	$(this).parent().parent().find('.error').remove();
-                $(this).parent().next().prepend('<div id="data-' + random + '"><span class="label label-info">' + val.text() + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="' + id + '.Media[]" name="data[' + id + '][Media][]" value="' + val.val() + '"></div>');
-            } else {
-            	$(this).parent().next().prepend('<label class="error">Library already added!</label>');
-            }
-        }
-    });
 });
 
 function toggleRemove()
@@ -83,7 +67,7 @@ function toggleRemove()
 <?= $this->Html->css("data-tagging.css") ?>
 <?= $this->Html->script('data-tagging.js') ?>
 
-<?php if (!empty($this->params->named['multiple'])): ?>
+<?php if (!empty($this->request->named['multiple'])): ?>
 	<h1>Upload Files</h1>
 <?php else: ?>
 	<h1>Add File</h1>
@@ -97,13 +81,13 @@ function toggleRemove()
     		'edit' => 'Add File (css, js, etc.)'
     	),
     	'empty' => '- choose -',
-    	'required' => (!empty($this->params->named['multiple']) ? false : true),
+    	'required' => (!empty($this->request->named['multiple']) ? false : true),
     	'div' => array(
     		'id' => 'file-type'
     	)
     )) ?>
 
-	<?php if (empty($this->params->named['multiple'])): ?>
+	<?php if (empty($this->request->named['multiple'])): ?>
 		<div id="file_upload" style="display: none">
 			<?= $this->Form->input('0.File.filename', array('type' => 'file', 'class' => 'required')) ?>
 		    <?= $this->Form->hidden('0.File.dir', array('value' => 'uploads/')) ?>
@@ -142,6 +126,7 @@ function toggleRemove()
 		    <h4 class="image-filters">Image Filters</h4>
 
 		    <?= $this->Form->input('0.File.watermark', array('type' => 'checkbox')) ?>
+		    <?= $this->Form->input('0.File.zoom', array('options' => $zoom_levels)) ?>
 
 	        <div class="span3 no-marg-left">
 	            <?= $this->Form->input('resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
@@ -150,6 +135,25 @@ function toggleRemove()
 	        <div class="clearfix"></div>
 
 		    <?= $this->Form->input('0.File.random_filename', array('type' => 'checkbox')) ?>
+		</div>
+
+		<div id="libraries" style="display: none">
+			<h4 class="image-filters">Media Libraries</h4>
+
+			<div class="media-libraries" style="margin-bottom: 9px;">
+				<?= $this->Form->input('library', array(
+					'div' => false,
+					'style' => 'margin-bottom: 0',
+					'empty' => '- add library -',
+					'options' => $media_list
+				)) ?>
+				<?= $this->Form->button('Add', array(
+					'class' => 'btn btn-info add-media',
+					'type' => 'button'
+				)) ?>
+			</div>
+			<div class="media_libraries"></div>
+			<div class="clearfix media"></div>
 		</div>
 
 		<?= $this->Form->end(array(
@@ -175,6 +179,10 @@ function toggleRemove()
 		    <h4 class="image-filters">Image Filters</h4>
 
 		    <?= $this->Form->input('0.File.watermark', array('type' => 'checkbox')) ?>
+			<?= $this->Form->input('0.File.zoom', array(
+				'options' => $zoom_levels,
+				'label' => 'Thumbnail Crop Level'
+			)) ?>
 		    <?= $this->Form->input('0.File.resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
 		    <?= $this->Form->input('0.File.resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
 		    <div class="clearfix"></div>
@@ -199,7 +207,7 @@ function toggleRemove()
 
 		<div class="clearfix"></div>
 		<div class="btn-group">
-			<?php if (!empty($this->params->named['multiple'])): ?>
+			<?php if (!empty($this->request->named['multiple'])): ?>
 				<?= $this->Form->button('Upload Another File', array('class' => 'add-file btn btn-danger')) ?>
 			<?php endif ?>
 

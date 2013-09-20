@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Field Types', null) ?>
 
 <div class="pull-left">
-    <h1>Field Types<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Field Types<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
     <p class="span7">With this feature, you can download and install new field types.</p>
 </div>
 <div class="btn-group pull-right">
@@ -91,7 +91,7 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['field_types']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -99,17 +99,16 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['field_types']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['field_types']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['FieldType']['id'],
-                                                $data['FieldType']['title'],
-                                                'field type'
+                                                $data['FieldType']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
                                 <?php else: ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['field_types']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['field_types']['admin_restore'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->restore(
                                                 $data['FieldType']['id'],
@@ -117,12 +116,12 @@
                                             ) ?>
                                         </li>
                                     <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['field_types']['admin_edit'], $data['User']['id'])): ?>
+                                    <?php if ($this->Admin->hasPermission($permissions['related']['field_types']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['FieldType']['id'],
                                                 $data['FieldType']['title'],
-                                                'field type'
+                                                true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

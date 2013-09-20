@@ -80,7 +80,6 @@
 
 			<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 
-			<?= $this->Form->hidden('modified', array('type' => 'hidden', 'value' => $this->Admin->datetime() )) ?>
 		    <?= $this->Form->hidden('id') ?>
 
 		<?= $this->Form->end(array(
@@ -125,8 +124,7 @@
 					<?php endif; ?>
 					<?= $this->Form->input($key . '.SettingValue.description', array(
 						'value' => $row['description'], 
-						'rows' => 15, 
-						'class' => 'required'
+						'rows' => 15
 					)) ?>
 					<?= $this->Form->input($key . '.SettingValue.deleted', array(
 						'value' => 1,
@@ -137,9 +135,6 @@
 
 					<?= $this->Form->hidden($key . '.SettingValue.id', array(
 						'value' => $row['id']
-					)) ?>
-					<?= $this->Form->hidden($key . '.SettingValue.modified', array(
-						'value' => $this->Admin->datetime()
 					)) ?>
 
 					<div class="clearfix"></div><br />
@@ -194,7 +189,6 @@
                 )
 			)) ?>
 			<?= $this->Form->hidden('setting_id', array('value' => $this->request->data['Setting']['id'])) ?>
-			<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 
 		<?= $this->Form->end(array(
 				'label' => 'Submit',

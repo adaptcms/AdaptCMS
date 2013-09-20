@@ -24,6 +24,11 @@
 		)
 	)) ?>
 
+    <?= $this->Form->input('active', array(
+        'type' => 'checkbox',
+        'checked'
+    )) ?>
+
 	<?= $this->Form->input('type', array(
 			'options' => array(
 				'file' => 'Pick an Image',
@@ -51,8 +56,6 @@
 	</div>
 
 	<div class="clearfix"></div>
-
-	<?= $this->Form->hidden('created', array('value' => $this->Admin->datetime() )) ?>
 
 <?= $this->Form->end(array(
 	'label' => 'Submit',

@@ -4,7 +4,7 @@
 
 <h1>Forum Index</h1>
 
-<div class="span12 no-marg-left" id="forum-index">
+<div class="col-lg-12" id="forum-index">
 	<?php foreach($categories as $category): ?>
 		<?php if (!empty($category['Forum'])): ?>
 			<table class="table well category">

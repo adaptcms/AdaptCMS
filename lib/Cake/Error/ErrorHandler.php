@@ -32,7 +32,7 @@ App::uses('Router', 'Routing');
  *
  * ### Uncaught exceptions
  *
- * When debug < 1 a CakeException will render 404 or  500 errors. If an uncaught exception is thrown
+ * When debug < 1 a CakeException will render 404 or 500 errors. If an uncaught exception is thrown
  * and it is a type that ErrorHandler does not know about it will be treated as a 500 error.
  *
  * ### Implementing application specific exception handling
@@ -110,9 +110,8 @@ class ErrorHandler {
  */
 	public static function handleException(Exception $exception) {
 		$config = Configure::read('Exception');
-		if (!empty($config['log'])) {
-			CakeLog::write(LOG_ERR, self::_getMessage($exception));
-		}
+		self::_log($exception, $config);
+
 		$renderer = isset($config['renderer']) ? $config['renderer'] : 'ExceptionRenderer';
 		if ($renderer !== 'ExceptionRenderer') {
 			list($plugin, $renderer) = pluginSplit($renderer, true);
@@ -157,6 +156,28 @@ class ErrorHandler {
 		}
 		$message .= "\nStack Trace:\n" . $exception->getTraceAsString();
 		return $message;
+	}
+
+/**
+ * Handles exception logging
+ *
+ * @param Exception $exception
+ * @param array $config
+ * @return boolean
+ */
+	protected static function _log(Exception $exception, $config) {
+		if (empty($config['log'])) {
+			return false;
+		}
+
+		if (!empty($config['skipLog'])) {
+			foreach ((array)$config['skipLog'] as $class) {
+				if ($exception instanceof $class) {
+					return false;
+				}
+			}
+		}
+		return CakeLog::write(LOG_ERR, self::_getMessage($exception));
 	}
 
 /**

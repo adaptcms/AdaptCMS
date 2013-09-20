@@ -3,7 +3,7 @@ $numbers = $this->Paginator->numbers(array('separator' => false, 'tag' => 'li', 
 ?>
 <?php if (!empty($numbers)): ?>
     <div class="pagination">
-        <ul>
+        <ul class="pagination">
             <?php
             echo $this->Paginator->prev(__('«'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
             echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));

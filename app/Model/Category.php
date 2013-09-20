@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Class Category
+ *
+ * @property Field $Field
+ * @property Article $Article
+ */
 class Category extends AppModel
 {
     /**
@@ -46,6 +51,14 @@ class Category extends AppModel
     );
 
     /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
+    );
+
+    /**
      * This works in conjuction with the Block feature. Doing a simple find with any conditions filled in by the user that
      * created the block. This is customizable so you can do a contain of related data if you wish.
      *
@@ -56,9 +69,7 @@ class Category extends AppModel
     public function getBlockData($data, $user_id)
     {
         $cond = array(
-            'conditions' => array(
-                'Category.deleted_time' => '0000-00-00 00:00:00'
-            )
+            'conditions' => array()
         );
 
         if (!empty($data['limit'])) {
@@ -81,27 +92,13 @@ class Category extends AppModel
     }
 
     /**
-    * Sets the slug
-    *
-    * @return true
-    */
-    public function beforeSave()
-    {
-        if (!empty($this->data['Category']['title']))
-            $this->data['Category']['slug'] = $this->slug($this->data['Category']['title']);
-
-        return true;
-    }
-
-    /**
      * If a new category, creates article and category template.
      * If modified and new title, renames template files.
      *
-     * @param $model
      * @param $created
-     * @return true
+     * @return boolean
      */
-    public function afterSave($model, $created)
+    public function afterSave($created)
     {
         if (!empty($this->data['Category']['title']))
         {
@@ -153,9 +150,13 @@ class Category extends AppModel
     }
 
     /**
-     * @return bool
-     */
-    public function beforeDelete()
+    * Before Delete
+    *
+    * @param boolean $cascade
+    *
+    * @return bool
+    */
+    public function beforeDelete($cascade = true)
     {
         $row = $this->findById($this->id);
 
@@ -174,4 +175,37 @@ class Category extends AppModel
 
         return true;
     }
+
+	/**
+	 * Get categories
+	 *
+	 * @param array $results
+	 *
+	 * @return array
+	 */
+	public function getCategories($results = array())
+	{
+		if (!empty($results))
+		{
+			$categories_list = array_unique(Set::extract('{n}.category_id', $results));
+			$find = $this->find('all', array(
+				'conditions' => array(
+					'Category.id' => $categories_list
+				)
+			));
+
+			$categories = array();
+			foreach($find as $category)
+			{
+				$categories[$category['Category']['id']] = $category;
+			}
+
+			foreach($results as $key => $row)
+			{
+				$results[$key]['Category'] = $categories[$row['category_id']]['Category'];
+			}
+		}
+
+		return $results;
+	}
 }

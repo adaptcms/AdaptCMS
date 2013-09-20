@@ -56,7 +56,6 @@
             'class' => 'required'
         )) ?>
 
-        <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
         <?= $this->Form->hidden('id') ?>
 
 		<?php if (!empty($this->request->data['SecurityQuestions']['SettingValue']['data'])): ?>

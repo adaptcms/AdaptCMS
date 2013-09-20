@@ -2,7 +2,7 @@
 <?php $this->Html->addCrumb('Media', null) ?>
 
 <div class="pull-left">
-    <h1>Media Libraries<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Media Libraries<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
 </div>
 <div class="btn-group pull-right" style="margin-bottom:10px">
     <?php if ($this->Admin->hasPermission($permissions['related']['media']['admin_add'])): ?>
@@ -92,7 +92,7 @@
                                     </li>
                                 <?php endif ?>
 
-                                <?php if (empty($this->params->named['trash'])): ?>
+                                <?php if (empty($this->request->named['trash'])): ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['media']['admin_edit'], $data['User']['id'])): ?>
                                         <li>
                                             <?= $this->Admin->edit(
@@ -102,10 +102,9 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['media']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete(
+                                            <?= $this->Admin->remove(
                                                 $data['Media']['id'],
-                                                $data['Media']['title'],
-                                                'media library'
+                                                $data['Media']['title']
                                             ) ?>
                                         </li>
                                     <?php endif ?>
@@ -120,10 +119,10 @@
                                     <?php endif ?>
                                     <?php if ($this->Admin->hasPermission($permissions['related']['media']['admin_delete'], $data['User']['id'])): ?>
                                         <li>
-                                            <?= $this->Admin->delete_perm(
+                                            <?= $this->Admin->remove(
                                                 $data['Media']['id'],
                                                 $data['Media']['title'],
-                                                'media library'
+	                                            true
                                             ) ?>
                                         </li>
                                     <?php endif ?>

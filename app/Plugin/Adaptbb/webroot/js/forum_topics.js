@@ -136,40 +136,41 @@ $(document).ready(function() {
 			reload_url = $(this).find('.reload_url').html();
 
 			$.post($(this).attr('action'), 
-            	{
-            		data:
-	            	{
-	            		ForumPost:
-	            		{
-	            			topic_id: topic_id,
-	            			content: message,
-	            			forum_id: forum_id,
-	            			id: post_id
-	            		}
-	            	}
-	            }, function(data) {
+            {
+                data:
+                {
+                    ForumPost:
+                    {
+                        topic_id: topic_id,
+                        content: message,
+                        forum_id: forum_id,
+                        id: post_id
+                    }
+                }
+            }, function(response) {
+                var data = $.parseJSON(response.data);
 
-				if (data.status)
-				{
+                if (data.status)
+                {
                     var post = $("#posts #post-" + post_id);
 
-					post.load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts', function() {
+                    post.load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts', function() {
                         post.replaceWith($(this).find('#post-' + post_id));
 
-						$("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
+                        $("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
                         tinyMCE.activeEditor.setContent('');
 
                         $.unblockUI();
-						$.smoothScroll();
+                        $.smoothScroll();
 
-						setTimeout(function() {
-							$("#flashMessage.alert-success").fadeOut(2500);
-						}, 3000);
-					});
-				} else {
-					$("#flashMessage.alert-error").html('<strong>Error</strong>  ' + data.message).show();
-					$.smoothScroll({scrollTarget: $("#flashMessage.alert-error").prev() });
-				}
+                        setTimeout(function() {
+                            $("#flashMessage.alert-success").fadeOut(2500);
+                        }, 3000);
+                    });
+                } else {
+                    $("#flashMessage.alert-error").html('<strong>Error</strong>  ' + data.message).show();
+                    $.smoothScroll({scrollTarget: $("#flashMessage.alert-error").prev() });
+                }
 	        }, 'json');
 		}
 	});
@@ -193,39 +194,40 @@ $(document).ready(function() {
 			reload_url = $(this).find('.reload_url').html();
 
 			$.post($(this).attr('action'), 
-            	{
-            		data:
-	            	{
-	            		ForumPost:
-	            		{
-	            			topic_id: topic_id,
-	            			content: message,
-	            			forum_id: forum_id
-	            		}
-	            	}
-	            }, function(data) {
+            {
+                data:
+                {
+                    ForumPost:
+                    {
+                        topic_id: topic_id,
+                        content: message,
+                        forum_id: forum_id
+                    }
+                }
+            }, function(response) {
+                var data = $.parseJSON(response.data);
 
-				if (data.status)
-				{
+                if (data.status)
+                {
                     var posts = $("#posts");
 
                     posts.load(reload_url + '?unique=' + Math.round(Math.random()*10000) + ' #posts_container', function() {
                         posts.replaceWith($(this).find('#posts'));
 
-						$("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
+                        $("#flashMessage.alert-success").html('<strong>Success</strong> ' + data.message).show();
                         tinyMCE.activeEditor.setContent('');
 
                         $.unblockUI();
-						$.smoothScroll();
+                        $.smoothScroll();
 
-						setTimeout(function() {
-							$("#flashMessage.alert-success").fadeOut(2500);
-						}, 3000);
-					});
-				} else {
-					$("#flashMessage.alert-error").html('<strong>Error</strong>  ' + data.message).show();
-					$.smoothScroll({scrollTarget: $("#flashMessage.alert-error").prev() });
-				}
+                        setTimeout(function() {
+                            $("#flashMessage.alert-success").fadeOut(2500);
+                        }, 3000);
+                    });
+                } else {
+                    $("#flashMessage.alert-error").html('<strong>Error</strong>  ' + data.message).show();
+                    $.smoothScroll({scrollTarget: $("#flashMessage.alert-error").prev() });
+                }
 	        }, 'json');
 		}
 	});

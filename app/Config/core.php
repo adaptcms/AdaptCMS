@@ -1,4 +1,5 @@
 <?php
+include_once('configuration.php');
 /**
  * This is core configuration file.
  *
@@ -173,7 +174,9 @@ Configure::write('dev', 0);
  *
  */
 	Configure::write('Session', array(
-		'defaults' => 'php',
+		'timeout' => 30,
+		'cookieTimeout' => 4320,
+		'defaults' => 'cake',
 		'cookie' => 'adaptcms',
 		'checkAgent' => false
 	));
@@ -181,7 +184,7 @@ Configure::write('dev', 0);
 /**
  * The level of CakePHP security.
  */
-	Configure::write('Security.level', 'low');
+	Configure::write('Security.level', 'medium');
 
 /**
  * Apply timestamps with the last modified time to static assets (js, css, images).
@@ -287,10 +290,11 @@ Cache::config('api', array(
 
 Configure::write('Component.Api.api_url', 'http://api.adaptcms.com/');
 Configure::write('Component.Api.adaptcms_url', 'http://www.adaptcms.com/');
+Configure::write('Component.Api.adaptcms_docs_url', 'http://documentation.adaptcms.com');
 
 /**
  * Custom Defined global variables
  */
 
 define('VIEW_PATH', ROOT . '/app/View/');
-define('ADAPTCMS_VERSION', '3.0');
+define('ADAPTCMS_VERSION', '3.0.1');

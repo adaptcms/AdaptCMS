@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Class Page
+ */
 class Page extends AppModel {
     /**
     * Name of our Model, table will look like 'adaptcms_pages'
@@ -29,6 +31,14 @@ class Page extends AppModel {
     );
 
     /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug',
+	    'Delete'
+    );
+
+    /**
     * And every page belongs to a user.
     */
     public $belongsTo = array(
@@ -39,16 +49,19 @@ class Page extends AppModel {
     );
 
     /**
-    * Sets the slug
+    * After Save
     *
-    * @return true
+    * @param array $options
+    *
+    * @return boolean
     */
-    public function beforeSave()
+    public function beforeSave($options = array())
     {
-        if (!empty($this->data['Page']['title']))
+        parent::beforeSave();
+
+        if (!empty($this->data['Page']['title']) && !empty($this->data['Page']['slug']))
         {
             $this->data['Page']['title'] = strip_tags($this->data['Page']['title']);
-            $this->data['Page']['slug'] = $this->slug($this->data['Page']['title']);
 
             if (empty($this->data['Page']['id']))
             {
@@ -84,9 +97,13 @@ class Page extends AppModel {
     }
 
     /**
-     * @return bool
-     */
-    public function beforeDelete()
+    * Before Delete
+    *
+    * @param boolean $cascade
+    *
+    * @return bool
+    */
+    public function beforeDelete($cascade = true)
     {
         $row = $this->findById($this->id);
 

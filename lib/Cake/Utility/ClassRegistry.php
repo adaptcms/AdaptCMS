@@ -203,8 +203,8 @@ class ClassRegistry {
 /**
  * Add $object to the registry, associating it with the name $key.
  *
- * @param string $key		Key for the object in registry
- * @param object $object	Object to store
+ * @param string $key Key for the object in registry
+ * @param object $object Object to store
  * @return boolean True if the object was written, false if $key already exists
  */
 	public static function addObject($key, $object) {
@@ -220,7 +220,7 @@ class ClassRegistry {
 /**
  * Remove object which corresponds to given key.
  *
- * @param string $key	Key of object to remove from registry
+ * @param string $key Key of object to remove from registry
  * @return void
  */
 	public static function removeObject($key) {
@@ -289,7 +289,7 @@ class ClassRegistry {
 		if (empty($param) && is_array($type)) {
 			$param = $type;
 			$type = 'Model';
-		} elseif (is_null($param)) {
+		} elseif ($param === null) {
 			unset($_this->_config[$type]);
 		} elseif (empty($param) && is_string($type)) {
 			return isset($_this->_config[$type]) ? $_this->_config[$type] : null;

@@ -5,10 +5,6 @@ App::uses('AppController', 'Controller');
  * Class MenusController
  * @property Menu $Menu
  * @property Template $Template
- * @property params $params
- * @property paginate $paginate
- * @property redirect $redirect
- * @property pageLimit $pageLimit
  */
 class MenusController extends AppController
 {
@@ -31,7 +27,7 @@ class MenusController extends AppController
 
         $this->permissions = $this->getPermissions();
 	
-        if ($this->params->action == 'admin_add' || $this->params->action == 'admin_edit')
+        if ($this->request->action == 'admin_add' || $this->request->action == 'admin_edit')
         {
             $this->Security->validatePost = false;
             
@@ -55,28 +51,19 @@ class MenusController extends AppController
         $conditions = array();
 
 	    if ($this->permissions['any'] == 0)
-	    {
 	    	$conditions['User.id'] = $this->Auth->user('id');
-	    }
 
-		if (!isset($this->params->named['trash'])) {
-			$conditions['Menu.deleted_time'] = '0000-00-00 00:00:00';
-        } else {
-        	$conditions['Menu.deleted_time !='] = '0000-00-00 00:00:00';
-        }
+		if (isset($this->request->named['trash']))
+			$conditions['Menu.only_deleted'] = true;
 
-        $this->paginate = array(
-            'order' => 'Menu.created DESC',
-            'limit' => $this->pageLimit,
-            'conditions' => array(
-            	$conditions
-            ),
+        $this->Paginator->settings = array(
+            'conditions' => $conditions,
             'contain' => array(
             	'User'
             )
         );
         
-        $this->request->data = $this->paginate('Menu');
+        $this->request->data = $this->Paginator->paginate('Menu');
 
         $this->loadModel('Template');
 
@@ -89,8 +76,7 @@ class MenusController extends AppController
                     array('Template.location LIKE' => '%Layouts/xml%'),
                     array('Template.location LIKE' => '%Layouts/Emails%')
                 )
-            ),
-            'order' => ''
+            )
         ));
 
         $this->set(compact('templates'));
@@ -107,6 +93,8 @@ class MenusController extends AppController
     {
         if (!empty($this->request->data))
         {
+	        $this->Menu->create();
+
             $this->request->data['Menu']['user_id'] = $this->Auth->user('id');
 
             if ($this->Menu->save($this->request->data))
@@ -127,7 +115,7 @@ class MenusController extends AppController
     * @param int - ID of the database entry
     * @return array of menu data
     */
-    public function admin_edit($id = null)
+    public function admin_edit($id)
     {
         $this->Menu->id = $id;
 
@@ -145,6 +133,7 @@ class MenusController extends AppController
         }
 
         $this->request->data = $this->Menu->read();
+	    $this->hasAccessToItem($this->request->data);
 
         $path = $this->Menu->_getPath($this->request->data['Menu']['slug']);
         if (!file_exists($path) || is_writable($path))
@@ -166,47 +155,25 @@ class MenusController extends AppController
      *
      * @param int - ID of the database entry, redirect to index if no permissions
      * @param string - Title of this entry, used for flash message
-     * @param boolean $permanent
-     * @internal param \If $permanent not NULL, this means the item is in the trash so deletion will now be permanent
-     * @return redirect
+     * @return void
      */
-    public function admin_delete($id = null, $title = null, $permanent = null)
+    public function admin_delete($id, $title = null)
     {
         $this->Menu->id = $id;
 
-        if (!empty($permanent))
-        {
-            $delete = $this->Menu->delete($id);
-        } else {
-            $delete = $this->Menu->saveField('deleted_time', $this->Menu->dateTime());
-        }
+	    $data = $this->Menu->findById($id);
+	    $this->hasAccessToItem($data);
 
-        if ($delete)
-        {
-            $this->Session->setFlash('The menu `'.$title.'` has been deleted.', 'flash_success');
-        } else {
-            $this->Session->setFlash('The menu `'.$title.'` has NOT been deleted.', 'flash_error');
-        }
-        
-        if (!empty($permanent))
-        {
-            $count = $this->Menu->find('count', array(
-                'conditions' => array(
-                    'Menu.deleted_time !=' => '0000-00-00 00:00:00'
-                )
-            ));
+	    $permanent = $this->Menu->remove($data);
 
-            $params = array('action' => 'index');
+	    $this->Session->setFlash('The menu `'.$title.'` has been deleted.', 'flash_success');
 
-            if ($count > 0)
-            {
-                $params['trash'] = 1;
-            }
-
-            $this->redirect($params);
-        } else {
-            $this->redirect(array('action' => 'index'));
-        }
+	    if ($permanent)
+	    {
+		    $this->redirect(array('action' => 'index', 'trash' => 1));
+	    } else {
+		    $this->redirect(array('action' => 'index'));
+	    }
     }
 
     /**
@@ -216,13 +183,13 @@ class MenusController extends AppController
     *
     * @param int - ID of database entry, redirect if no permissions
     * @param string - Title of this entry, used for flash message
-    * @return redirect
+    * @return void
     */
-    public function admin_restore($id = null, $title = null)
+    public function admin_restore($id, $title = null)
     {
         $this->Menu->id = $id;
 
-        if ($this->Menu->saveField('deleted_time', '0000-00-00 00:00:00'))
+        if ($this->Menu->restore())
         {
             $this->Session->setFlash('The menu `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));

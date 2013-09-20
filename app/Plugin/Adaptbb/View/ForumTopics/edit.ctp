@@ -56,7 +56,6 @@ $(document).ready(function(){
     <?php endif ?>
     <!--/nocache-->
 
-	<?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
 	<?= $this->Form->hidden('id', array('value' => $topic['ForumTopic']['id'] )) ?>
 
 	<div class="clearfix"></div>

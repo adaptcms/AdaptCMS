@@ -146,7 +146,6 @@
     </div>
     <div class="clearfix"></div>
 
-    <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
     <?= $this->Form->hidden('id') ?>
 
 <?= $this->Form->end(array(

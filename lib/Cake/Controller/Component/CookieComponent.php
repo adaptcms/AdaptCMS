@@ -62,7 +62,7 @@ class CookieComponent extends Component {
  * $this->Cookie->path = '/';
  *
  * The path on the server in which the cookie will be available on.
- * If  public $cookiePath is set to '/foo/', the cookie will only be available
+ * If public $cookiePath is set to '/foo/', the cookie will only be available
  * within the /foo/ directory and all sub-directories such as /foo/bar/ of domain.
  * The default value is the entire domain.
  *
@@ -219,7 +219,7 @@ class CookieComponent extends Component {
 			$this->read();
 		}
 
-		if (is_null($encrypt)) {
+		if ($encrypt === null) {
 			$encrypt = true;
 		}
 		$this->_encrypted = $encrypt;
@@ -262,7 +262,7 @@ class CookieComponent extends Component {
 		if (empty($this->_values[$this->name])) {
 			$this->_values[$this->name] = array();
 		}
-		if (is_null($key)) {
+		if ($key === null) {
 			return $this->_values[$this->name];
 		}
 
@@ -387,7 +387,7 @@ class CookieComponent extends Component {
  * @return integer Unix timestamp
  */
 	protected function _expire($expires = null) {
-		if (is_null($expires)) {
+		if ($expires === null) {
 			return $this->_expires;
 		}
 		$this->_reset = $this->_expires;
@@ -421,7 +421,7 @@ class CookieComponent extends Component {
 			'httpOnly' => $this->httpOnly
 		));
 
-		if (!is_null($this->_reset)) {
+		if (!empty($this->_reset)) {
 			$this->_expires = $this->_reset;
 			$this->_reset = null;
 		}

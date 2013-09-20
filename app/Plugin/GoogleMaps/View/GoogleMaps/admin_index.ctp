@@ -7,7 +7,7 @@
 <?php $this->Html->addCrumb('Google Maps', null) ?>
 
 <div class="pull-left">
-    <h1>Google Maps<?php if (!empty($this->params->named['trash'])): ?> - Trash<?php endif ?></h1>
+    <h1>Google Maps<?php if (!empty($this->request->named['trash'])): ?> - Trash<?php endif ?></h1>
     <p class="span7">With this Plugin you can create a variety of maps and then get the code to display them anywhere you want on your website.</p>
 </div>
 <div class="btn-group pull-right">
@@ -61,7 +61,7 @@
         <?php foreach ($this->request->data as $data): ?>
             <tr>
                 <td>
-                    <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_edit'], $data['User']['id'])): ?>
+                    <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_edit'], $data['User']['id']) && empty($this->request->named['trash'])): ?>
                         <?= $this->Html->link($data['GoogleMap']['title'], array(
                             'action' => 'admin_edit',
                             $data['GoogleMap']['id']
@@ -92,7 +92,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <?php if (empty($this->params->named['trash'])): ?>
+                            <?php if (empty($this->request->named['trash'])): ?>
                                 <li>
                                     <?= $this->Html->link('<i class="icon-code"></i> Get Code',
                                         array(
@@ -109,17 +109,16 @@
                                         ) ?>
                                     </li>
                                 <?php endif ?>
-                                <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_edit'], $data['User']['id'])): ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_delete'], $data['User']['id'])): ?>
                                     <li>
-                                        <?= $this->Admin->delete(
+                                        <?= $this->Admin->remove(
                                             $data['GoogleMap']['id'],
-                                            $data['GoogleMap']['title'],
-                                            'map'
+                                            $data['GoogleMap']['title']
                                         ) ?>
                                     </li>
                                 <?php endif ?>
                             <?php else: ?>
-                                <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_edit'], $data['User']['id'])): ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_restore'], $data['User']['id'])): ?>
                                     <li>
                                         <?= $this->Admin->restore(
                                             $data['GoogleMap']['id'],
@@ -127,12 +126,12 @@
                                         ) ?>
                                     </li>
                                 <?php endif ?>
-                                <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_edit'], $data['User']['id'])): ?>
+                                <?php if ($this->Admin->hasPermission($permissions['related']['google_maps']['admin_delete'], $data['User']['id'])): ?>
                                     <li>
-                                        <?= $this->Admin->delete_perm(
+                                        <?= $this->Admin->remove(
                                             $data['GoogleMap']['id'],
                                             $data['GoogleMap']['title'],
-                                            'map'
+                                            true
                                         ) ?>
                                     </li>
                                 <?php endif ?>

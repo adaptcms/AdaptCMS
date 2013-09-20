@@ -13,6 +13,13 @@ $(document).ready(function() {
                 } else {
                     $("#ForumOrd").val($("#sort-list li#0").index());
                 }
+
+                $("#ForumOrder").val(order);
+            },
+            create: function(event, ui)
+            {
+                var order = $(this).sortable("toArray");
+                $("#ForumOrder").val(order);
             }
         });
 
@@ -58,55 +65,24 @@ $(document).ready(function() {
                 noTitle();
             } else {
                 $.post($("#webroot").text() + "admin/adaptbb/forums/ajax_forums/", 
-                    {
-                        data:{
-                            Forum:{
-                                id: id,
-                                category_id: category_id,
-                                title: title,
-                                description: description
-                            }
+                {
+                    data:{
+                        Forum:{
+                            id: id,
+                            category_id: category_id,
+                            title: title,
+                            description: description
                         }
-                    }, function(new_data) {
-                    var data = $.parseJSON(new_data);
-
-                    $("#sort-list").html(data.data);
+                    }
+                }, function(response) {
+                    $("#sort-list").html(response.data);
 
                     if (!id) {
                         $("#ForumOrd").val($("#sort-list li#0").index());
                     } else {
                         $("#ForumOrd").val($("#sort-list li#" + id).index());
                     }
-                });
-            }
-        });
-
-        var form = $("#ForumAdminForm");
-
-        $(form).on('submit', function(e) {
-            if ($("#pass_form").length == 0)
-            {
-                e.preventDefault();
-            }
-
-            if ($("#sort-list li").length > 0 && $(form).valid())
-            {
-                var order = [];
-
-                $("#sort-list").find('li').each(function(){ order.push(this.id); });
-
-                $.post($("#webroot").text() + "admin/adaptbb/forums/ajax_order/", 
-                    {
-                        data:{
-                            Forum:{
-                                forum_ids: order
-                            }
-                        }
-                    }, function(data) {
-
-                    $(form).prepend('<i id="pass_form" style="display: none">1</i>');
-                    $(form).submit();
-                });
+                }, 'json');
             }
         });
     }

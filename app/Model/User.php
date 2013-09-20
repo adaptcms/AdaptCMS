@@ -1,7 +1,18 @@
 <?php
 App::uses('AuthComponent', 'Controller/Component');
 App::uses('Sanitize', 'Utility');
-
+/**
+ * Class User
+ *
+ * @property Role $Role
+ * @property Category $Category
+ * @property Article $Article
+ * @property Field $Field
+ * @property Comment $Comment
+ * @property Page $Page
+ *
+ * @method findByUsername(string $username)
+ */
 class User extends AppModel
 {
     public $name = 'User';
@@ -12,9 +23,16 @@ class User extends AppModel
         'Comment' => array(
             'dependent' => true
         ),
-        'Message' => array(
-            'dependent' => true
-        ),
+	    'MessageSender' => array(
+		    'className' => 'Message',
+		    'foreignKey' => 'sender_user_id',
+		    'dependent' => true
+	    ),
+	    'MessageReceiver' => array(
+		    'className' => 'Message',
+		    'foreignKey' => 'receiver_user_id',
+		    'dependent' => true
+	    ),
         'Block',
         'Category',
         'Field',
@@ -69,6 +87,17 @@ class User extends AppModel
         )
     );
 
+    /**
+     * @var array
+     */
+    public $actsAs = array(
+	    'Slug' => array(
+	        'field' => 'username',
+	        'slugField' => 'username'
+	    ),
+	    'Delete'
+    );
+
     public function passCompare() {
         return ($this->data[$this->alias]['password'] === $this->data[$this->alias]['password_confirm']);
     }
@@ -82,8 +111,16 @@ class User extends AppModel
 
         return true;
     }
- 
-    public function beforeSave() {
+
+    /**
+    * Before Save
+    *
+    * @param array $options
+    *
+    * @return boolean
+    */
+    public function beforeSave($options = array())
+    {
         $path = WWW_ROOT . 'uploads' . DS . 'avatars' . DS;
 
         $this->data = Sanitize::clean($this->data, array(
@@ -194,7 +231,6 @@ class User extends AppModel
     {
         $cond = array(
             'conditions' => array(
-                'User.deleted_time' => '0000-00-00 00:00:00',
                 'User.status !=' => 0
             ),
             'contain' => array(

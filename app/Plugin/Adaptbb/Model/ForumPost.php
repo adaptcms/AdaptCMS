@@ -1,6 +1,10 @@
 <?php
 App::uses('Sanitize', 'Utility');
-
+/**
+ * Class ForumPost
+ *
+ * @property ForumTopic $ForumTopic
+ */
 class ForumPost extends AdaptbbAppModel
 {
     /**
@@ -41,6 +45,8 @@ class ForumPost extends AdaptbbAppModel
         )
     );
 
+	public $actsAs = array('Delete');
+
     /**
     * Cleans out user input, html is allowed per setting and removed in controller
     */
@@ -60,8 +66,8 @@ class ForumPost extends AdaptbbAppModel
     /**
     * Function that json decodes user settings
     *
-    * @param results of post data
-    * @return results
+    * @param array $results of post data
+    * @return array
     */
     public function afterFind($results)
     {

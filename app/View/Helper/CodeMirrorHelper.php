@@ -26,12 +26,10 @@ class CodeMirrorHelper extends AppHelper
      */
     public function editor($template)
     {
-        $this->Html->script('/libraries/codemirror/lib/codemirror.js', false);
+        $this->Html->script('/libraries/codemirror/lib/codemirror-compressed.js', false);
         echo $this->Html->css('/libraries/codemirror/lib/codemirror.css');
         echo $this->Html->css('/libraries/codemirror/theme/lesser-dark.css');
 
-        $this->Html->script('/libraries/codemirror/mode/javascript/javascript.js', false);
-        $this->Html->script('/libraries/codemirror/mode/scheme/scheme.js', false);
         echo "<script type='text/javascript'>$(document).ready(function() {";
         if (!is_array($template))
         {

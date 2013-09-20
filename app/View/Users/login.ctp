@@ -1,27 +1,26 @@
 <?php $this->Html->addCrumb('Login', null) ?>
 
-<div class="pull-left">
-    <h1>Login</h1>
+<h1>Login</h1>
 
-    <?php
-        echo $this->Form->create();
+<?php
+    echo $this->Form->create();
 
-        echo $this->Form->input('username');
-        echo $this->Form->input('password');
+    echo $this->Form->input('username');
+    echo $this->Form->input('password');
 
-        echo $this->Form->end('Submit');
-        echo $this->Html->link('Don\'t have an account? Register now!', array(
-            'action' => 'register'
-        ));
-        ?>
-    <br />
-    <?php
-        echo $this->Html->link('Forgot Password', array(
-            'action' => 'forgot_password'
-        ));
+    echo $this->Form->end(array('class' => 'btn', 'label' => 'Login'));
+    echo $this->Html->link("Don't have an account? Register now!", array(
+        'action' => 'register'
+    ));
     ?>
-</div>
-<div class="pull-right">
+<br />
+<?php
+    echo $this->Html->link('Forgot Password', array(
+        'action' => 'forgot_password'
+    ));
+?>
+
+<?php if (!empty($this->Facebook)): ?>
     <h1>3rd Party Login</h1>
 
     <p>
@@ -33,11 +32,6 @@
             <?php endif ?>
         <?php endif ?>
     </p>
-
-    <?= $this->Form->create('', array('style' => 'display:none')) ?>
-    <?= $this->Form->hidden('type', array('value' => 'openid')) ?>
-    <?= $this->Form->input('OpenidUrl.openid', array('label' => 'OpenID Login')) ?>
-    <?= $this->Form->end('Login') ?>
-</div>
+<?php endif ?>
 
 <div class="clearfix"></div>

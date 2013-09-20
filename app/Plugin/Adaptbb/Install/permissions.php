@@ -111,10 +111,6 @@ class PermissionsInstall
           'action' => 'admin_restore'
         ),
         array(
-          'controller' => 'forum_categories',
-          'action' => 'admin_ajax_order'
-        ),
-        array(
           'controller' => 'forums',
           'action' => 'admin_index',
           'related' => '[{"action":["admin_add"]},{"action":["admin_edit"]},{"action":["admin_delete"]},{"action":["admin_restore"]},{"action":["admin_index"],{"controller":["forum_categories"],"action":["admin_edit"]},"controller":["forum_categories"]},{"action":["profile"],"controller":["users"]}]'
@@ -138,10 +134,6 @@ class PermissionsInstall
         array(
           'controller' => 'forums',
           'action' => 'admin_ajax_forums'
-        ),
-        array(
-          'controller' => 'forums',
-          'action' => 'admin_ajax_order'
         ),
         array(
           'controller' => 'forum_topics',

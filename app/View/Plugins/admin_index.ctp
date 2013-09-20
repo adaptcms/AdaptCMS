@@ -118,7 +118,7 @@ $(document).ready(function() {
                             </a>
                             <ul class="dropdown-menu pull-right">
                                 <?php if ($plugin['status'] == 1): ?>
-                                    <?php if ($plugin['upgrade_status'] == 1): ?>
+                                    <?php if (!empty($plugin['upgrade'])): ?>
                                         <li>
                                             <?= $this->Html->link(
                                                 '<i class="icon-upload"></i> Upgrade',

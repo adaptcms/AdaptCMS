@@ -34,7 +34,6 @@ $(document).ready(function(){
 			} else {
 				$("#field_data").html('<div id="data-' + random_id + '"><span class="label label-info">' + input_val + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + input_val + '"></div>').hide().fadeIn("slow");
 			}
-			// $("#data-" + random_id + " span").effect('highlight',{},'slow');
 			$(".tag").remove();
 		} else {
 			$("<label class='tag error'>Value already entered</label>").insertAfter("#add-data");

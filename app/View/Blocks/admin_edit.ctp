@@ -182,7 +182,6 @@
 	<?= $this->Form->hidden('module_id') ?>
 
 	<div class="btn-group" style="margin-top:10px">
-	    <?= $this->Form->hidden('modified', array('value' => $this->Admin->datetime() )) ?>
         <?= $this->Form->hidden('id') ?>
 
         <?= $this->Form->end(array(
