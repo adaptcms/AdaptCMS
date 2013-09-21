@@ -24,7 +24,7 @@
     "upgrade": {
         "1.0": {
             "sql": [
-                "Install/upgrade_1-0.sql"
+                "Install/upgrade_1.0.sql"
             ]
         }
     }

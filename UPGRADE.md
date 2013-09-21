@@ -12,10 +12,10 @@ your server currently:
 
 * lib/
 * vendors/
+* app/View_Docs
 * app/Config/routes.php
 * app/Config/configuration.php
 * app/Model/
-* app/Controller/
 * app/View_Docs/
 * app/webroot/installer/
 * app/webroot/js/
@@ -24,6 +24,7 @@ your server currently:
 * app/webroot/img/
 * app/webroot/folder_upload/
 * app/webroot/libraries/
+* app/Controller/ (except - AppController.php)
 
 ####Step 3
 
@@ -38,6 +39,7 @@ At this point you can also update your plugins that reside in <strong>app/Plugin
 folder, except the <strong>Config</strong> folder, so that your configuration settings (if the plugin has them) are not reset. Then from the folders above, bring only the
 following files:
 
+* app/Controller/AppController.php
 * app/View/Articles/admin_index.ctp
 * app/View/Articles/admin_add.ctp
 * app/View/Articles/admin_edit.ctp
