@@ -27,7 +27,7 @@ class FilesController extends AppController
 
 		$this->permissions = $this->getPermissions();
 
-		if ($this->request->action == 'admin_add' || $this->request->action == 'admin_edit')
+		if ($this->request->action == 'admin_add' || $this->request->action == 'admin_edit' || strstr($this->request->action, 'add'))
 		{
 			$this->loadModel('Theme');
 
