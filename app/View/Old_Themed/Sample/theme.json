@@ -1,0 +1,16 @@
+{
+    "title": "Sample",
+    "current_version": "1.0",
+    "api_id": 3,
+    "install": {
+    	"text": "Install/install_text.md",
+        "afterInstallFilter": {
+            "file": "Install/install.php",
+            "className": "InstallFilters",
+            "functionName": "afterInstallFilter"
+        }
+    },
+    "uninstall": {
+    	"text": "Install/uninstall_text.md"
+    }
+}

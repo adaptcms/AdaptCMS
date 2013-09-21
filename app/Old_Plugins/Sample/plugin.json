@@ -1,0 +1,30 @@
+{
+    "title": "Sample",
+    "current_version": "1.0",
+    "api_id": 10,
+    "install": {
+        "block_active": 1,
+        "model_title": "Sample",
+        "text": "Install/install_text.md",
+        "sql": [
+            "Install/install_data.sql"
+        ],
+        "permissions": {
+            "file": "Install/permissions.php",
+            "className": "PermissionsInstall",
+            "functionName": "generate"
+        }
+    },
+    "uninstall": {
+        "text": "Install/uninstall_text.md",
+        "sql": [
+            "Install/uninstall_data.sql"
+        ]
+    },
+    "helpers": {
+        "Sample.Sample":null
+    },
+    "components": {
+        "Sample.Sample":null
+    }
+}

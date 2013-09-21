@@ -1,0 +1,1 @@
+Thank you for using the Sample Theme! You can re-install any time in the main Apperance area.
