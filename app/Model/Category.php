@@ -4,6 +4,7 @@
  *
  * @property Field $Field
  * @property Article $Article
+ * @property User $User
  */
 class Category extends AppModel
 {
@@ -137,7 +138,7 @@ class Category extends AppModel
      */
     public function _getCategoriesPath($slug)
     {
-        return VIEW_PATH . 'Categories' . DS . $slug . '.ctp';
+        return FRONTEND_VIEW_PATH . 'Categories' . DS . $slug . '.ctp';
     }
 
     /**
@@ -146,7 +147,7 @@ class Category extends AppModel
      */
     public function _getArticlesPath($slug)
     {
-        return VIEW_PATH . 'Articles' . DS . $slug . '.ctp';
+        return FRONTEND_VIEW_PATH . 'Articles' . DS . $slug . '.ctp';
     }
 
     /**
@@ -175,6 +176,33 @@ class Category extends AppModel
 
         return true;
     }
+
+	/**
+	 * Before Save
+	 *
+	 * @param array $options
+	 * @return bool
+	 */
+	public function beforeSave($options = array())
+	{
+		if (!empty($this->data['Category']['settings']))
+			$this->data['Category']['settings'] = json_encode($this->data['Category']['settings']);
+
+		return true;
+	}
+
+	public function afterFind($results, $primary = false)
+	{
+		if (!empty($results)) {
+			foreach($results as $key => $result)
+			{
+				if (!empty($result['Category']['settings']))
+					$results[$key]['Category']['settings'] = json_decode($result['Category']['settings'], true);
+			}
+		}
+
+		return $results;
+	}
 
 	/**
 	 * Get categories
@@ -207,5 +235,96 @@ class Category extends AppModel
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Has Category Permission Access
+	 *
+	 * @param $role
+	 * @param $action
+	 * @param $category
+	 * @param null $user_id
+	 * @param null $article_user_id
+	 * @return bool
+	 */
+	public function hasPermissionAccess($role, $action, $category, $user_id = null, $article_user_id = null)
+	{
+		if (empty($category['Category']['settings']) || !isset($category['Category']['settings']['permissions'][$role][$action]['any'])) {
+			return true;
+		} elseif (!empty($user_id) && !empty($article_user_id) && $user_id == $article_user_id && isset($category['Category']['settings']['permissions'][$role][$action]['own']) &&
+			$category['Category']['settings']['permissions'][$role][$action]['own'] != 2 && $category['Category']['settings']['permissions'][$role][$action]['any'] != 1) {
+			return $category['Category']['settings']['permissions'][$role][$action]['own'];
+		} elseif ($category['Category']['settings']['permissions'][$role][$action]['any'] == 2 || !empty($category['Category']['settings']['permissions'][$role][$action]['own']) &&
+			$category['Category']['settings']['permissions'][$role][$action]['own'] == 2) {
+			return false;
+		} else {
+			return $category['Category']['settings']['permissions'][$role][$action]['any'];
+		}
+	}
+
+	public function getPermissionAccess($role, $action, $category)
+	{
+		if (empty($category['Category']['settings']) || !isset($category['Category']['settings']['permissions'][$role][$action]['any'])) {
+			return true;
+		} elseif ($category['Category']['settings']['permissions'][$role][$action]['any'] == 0 && !empty($category['Category']['settings']['permissions'][$role][$action]['own'])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Has Any Category Permission Access
+	 *
+	 * @param $role
+	 * @param $action
+	 * @param $category
+	 * @return bool
+	 */
+	public function hasAnyPermissionAccess($role, $action, $category)
+	{
+		if (empty($category['Category']['settings']) || !isset($category['Category']['settings']['permissions'][$role][$action])) {
+			return true;
+		} elseif (isset($category['Category']['settings']['permissions'][$role][$action]['own']) && $category['Category']['settings']['permissions'][$role][$action]['own'] == 0 &&
+			isset($category['Category']['settings']['permissions'][$role][$action]['any']) && $category['Category']['settings']['permissions'][$role][$action]['any'] == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Get List Conditions
+	 *
+	 * @param $conditions
+	 * @param $categories
+	 * @param $role
+	 * @param $action
+	 * @param null $user_id
+	 * @return mixed
+	 */
+	public function getListConditions($conditions, $categories, $role, $action, $user_id = null)
+	{
+		if (!empty($categories)) {
+			$conditions['OR'] = array();
+
+			foreach($categories as $category) {
+				$settings = $category['Category']['settings'];
+
+				if ((!empty($settings['permissions'][$role][$action]['own']) && empty($settings['permissions'][$role][$action]['any']) && !empty($user_id)) || isset($conditions['User.id'])) {
+					$conditions['OR'][]['AND'] = array(
+						'Article.category_id' => $category['Category']['id'],
+						'Article.user_id' => $user_id
+					);
+
+					if (isset($conditions['User.id']))
+						unset($conditions['User.id']);
+				} elseif ((empty($settings) || !empty($settings['permissions'][$role][$action]['any'])) && !isset($conditions['User.id'])) {
+					$conditions['OR'][]['Article.category_id'] = $category['Category']['id'];
+				}
+			}
+		}
+
+		return $conditions;
 	}
 }

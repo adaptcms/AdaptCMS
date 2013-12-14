@@ -77,10 +77,10 @@ class ForumCategoriesController extends AdaptbbAppController
 			$this->request->data['ForumCategory']['user_id'] = $this->Auth->user('id');
 
 			if ($this->ForumCategory->save($this->request->data)) {
-				$this->Session->setFlash('Your forum category has been added.', 'flash_success');
+				$this->Session->setFlash('Your forum category has been added.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to add your forum category.', 'flash_error');
+				$this->Session->setFlash('Unable to add your forum category.', 'error');
 			}
 		}
 	}
@@ -103,10 +103,10 @@ class ForumCategoriesController extends AdaptbbAppController
 			$this->ForumCategory->saveCategoryOrder($this->request->data);
 
 			if ($this->ForumCategory->save($this->request->data)) {
-				$this->Session->setFlash('Your forum category has been updated.', 'flash_success');
+				$this->Session->setFlash('Your forum category has been updated.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to update your forum category.', 'flash_error');
+				$this->Session->setFlash('Unable to update your forum category.', 'error');
 			}
 		}
 
@@ -132,7 +132,7 @@ class ForumCategoriesController extends AdaptbbAppController
 
 		$permanent = $this->ForumCategory->remove($data);
 
-		$this->Session->setFlash('The forum category `' . $title . '` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The forum category `' . $title . '` has been deleted.', 'success');
 
 		if ($permanent) {
 			$this->redirect(array('action' => 'index', 'trash' => 1));
@@ -158,10 +158,10 @@ class ForumCategoriesController extends AdaptbbAppController
 		$this->hasAccessToItem($data);
 
 		if ($this->ForumCategory->restore()) {
-			$this->Session->setFlash('The forum category `' . $title . '` has been restored.', 'flash_success');
+			$this->Session->setFlash('The forum category `' . $title . '` has been restored.', 'success');
 			$this->redirect(array('action' => 'index'));
 		} else {
-			$this->Session->setFlash('The forum category `' . $title . '` has NOT been restored.', 'flash_error');
+			$this->Session->setFlash('The forum category `' . $title . '` has NOT been restored.', 'error');
 			$this->redirect(array('action' => 'index'));
 		}
 	}

@@ -23,14 +23,14 @@ class PermissionsController extends AppController
         {
     		if ($this->Permission->save($this->request->data))
             {
-                $this->Session->setFlash('Permissions have been saved.', 'flash_success');
+                $this->Session->setFlash('Permissions have been saved.', 'success');
                 $this->redirect(array(
                 	'controller' => 'roles', 
                 	'action' => 'admin_edit', 
                 	$this->request->data['Permission']['role_id']
                 ));
             } else {
-                $this->Session->setFlash('Permissions could not be saved.', 'flash_error');
+                $this->Session->setFlash('Permissions could not be saved.', 'error');
                 $this->redirect(array(
                 	'controller' => 'roles', 
                 	'action' => 'admin_edit', 

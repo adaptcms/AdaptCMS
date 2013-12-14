@@ -4,8 +4,6 @@
  *
  * The Front Controller for handling every request
  *
- * PHP 5
- *
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       app.webroot
  * @since         CakePHP(tm) v 0.2.9
@@ -80,11 +78,11 @@ if (!defined('CAKE_CORE_INCLUDE_PATH')) {
 	if (function_exists('ini_set')) {
 		ini_set('include_path', ROOT . DS . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
 	}
-	if (!include ('Cake' . DS . 'bootstrap.php')) {
+	if (!include 'Cake' . DS . 'bootstrap.php') {
 		$failed = true;
 	}
 } else {
-	if (!include (CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'bootstrap.php')) {
+	if (!include CAKE_CORE_INCLUDE_PATH . DS . 'Cake' . DS . 'bootstrap.php') {
 		$failed = true;
 	}
 }

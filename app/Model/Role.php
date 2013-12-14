@@ -62,10 +62,12 @@ class Role extends AppModel
     */
     public function beforeSave($options = array())
 	{
-		if (empty($this->data['Role']['defaults']))
-		{
-			$this->data['Role']['defaults'] = null;
+		if (!empty($this->data['Role']['title'])) {
+
 		}
+
+		if (empty($this->data['Role']['defaults']))
+			$this->data['Role']['defaults'] = null;
 
 		if (!isset($this->data['Role']['old_defaults']) &&
 			!empty($this->data['Role']['defaults']))
@@ -164,5 +166,124 @@ class Role extends AppModel
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get Category Permission Roles
+	 *
+	 * @param array $category
+	 * @param null $action
+	 * @return array
+	 */
+	public function getCategoryPermissions($category, $action = null)
+	{
+		$roles = array();
+
+		if (!empty($action)) {
+			$actions = array($action);
+		} else {
+			$actions = array(
+				'admin_index',
+				'admin_add',
+				'admin_edit',
+				'admin_delete',
+				'admin_restore',
+				'view'
+			);
+		}
+
+		$list = $this->find('all');
+		foreach($list as $role) {
+			$roles[$role['Role']['id']] = array(
+				'name' => $role['Role']['title'],
+				'id' => $role['Role']['id']
+			);
+
+			foreach($actions as $action) {
+				if (empty($category['settings']) || !isset($category['settings']['permissions'][$role['Role']['id']][$action]['any'])) {
+					$permission = $this->Permission->find('first', array(
+						'conditions' => array(
+							'Permission.controller' => 'articles',
+							'Permission.action' => $action,
+							'Permission.role_id' => $role['Role']['id']
+						)
+					));
+
+					if (empty($permission)) {
+						$roles[$role['Role']['id']][$action] = array(
+							'has_access' => false
+						);
+					} else {
+						if ($action == 'admin_add') {
+							$permission['Permission']['own'] =  $permission['Permission']['status'];
+							$permission['Permission']['any'] =  $permission['Permission']['status'];
+						} elseif($action == 'view' && $permission['Permission']['any'] == 2) {
+							$permission['Permission']['any'] = $permission['Permission']['status'];
+						}
+
+						$roles[$role['Role']['id']][$action] = array(
+							'has_access' => true,
+							'own' => $permission['Permission']['own'],
+							'any' => $permission['Permission']['any']
+						);
+					}
+				} else {
+					if (!isset($category['settings']['permissions'][$role['Role']['id']][$action]['own']))
+					{
+						$category['settings']['permissions'][$role['Role']['id']][$action]['own'] = 2;
+					}
+
+					$roles[$role['Role']['id']][$action] = array(
+						'has_access' => true,
+						'own' => $category['settings']['permissions'][$role['Role']['id']][$action]['own'],
+						'any' => $category['settings']['permissions'][$role['Role']['id']][$action]['any']
+					);
+				}
+			}
+		}
+
+		return $roles;
+	}
+
+	/**
+	 * Get Article Permissions
+	 *
+	 * @param array $article
+	 * @return array
+	 */
+	public function getArticlePermissions($article)
+	{
+		$roles = array();
+		$list = $this->find('all');
+		foreach($list as $role) {
+			$role_id = $role['Role']['id'];
+
+			if (empty($article['settings']) || !isset($article['settings']['permissions'][$role_id]['view']['status'])) {
+				$permission = $this->Permission->find('first', array(
+					'conditions' => array(
+						'Permission.controller' => 'articles',
+						'Permission.action' => 'view',
+						'Permission.role_id' => $role['Role']['id'],
+						'Permission.status' => 1
+					)
+				));
+
+				if (empty($permission)) {
+					$has_access = false;
+				} else {
+					$has_access = true;
+				}
+			} else {
+				$has_access = $article['settings']['permissions'][$role_id]['view']['status'];
+			}
+
+			$roles[$role['Role']['id']] = array(
+				'name' => $role['Role']['title'],
+				'id' => $role['Role']['id'],
+				'status' => $has_access
+			);
+		}
+
+		return $roles;
 	}
 }

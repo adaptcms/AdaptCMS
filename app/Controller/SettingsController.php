@@ -58,10 +58,10 @@ class SettingsController extends AppController
         {
             if ($this->Setting->save($this->request->data))
             {
-                $this->Session->setFlash('Your setting has been added.', 'flash_success');
+                $this->Session->setFlash('Your setting has been added.', 'success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your setting.', 'flash_error');
+                $this->Session->setFlash('Unable to add your setting.', 'error');
             }
         } 
 	}
@@ -82,10 +82,10 @@ class SettingsController extends AppController
 	    {
 	        if ($this->Setting->save($this->request->data))
 	        {
-	            $this->Session->setFlash('Your setting has been updated.', 'flash_success');
+	            $this->Session->setFlash('Your setting has been updated.', 'success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your setting.', 'flash_error');
+	            $this->Session->setFlash('Unable to update your setting.', 'error');
 	        }
 	    }
 
@@ -117,7 +117,7 @@ class SettingsController extends AppController
 
 		$permanent = $this->Setting->remove($data);
 
-		$this->Session->setFlash('The setting category `'.$title.'` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The setting category `'.$title.'` has been deleted.', 'success');
 
 		if ($permanent)
 		{
@@ -142,10 +142,10 @@ class SettingsController extends AppController
 
 	    if ($this->Setting->restore())
 	    {
-	        $this->Session->setFlash('The setting `'.$title.'` has been restored.', 'flash_success');
+	        $this->Session->setFlash('The setting `'.$title.'` has been restored.', 'success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash('The setting `'.$title.'` has NOT been restored.', 'flash_error');
+	    	$this->Session->setFlash('The setting `'.$title.'` has NOT been restored.', 'error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}

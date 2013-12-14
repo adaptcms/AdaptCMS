@@ -85,7 +85,7 @@ class Page extends AppModel {
 
     public function _getPath($slug)
     {
-        return VIEW_PATH . 'Pages' . DS . $slug . '.ctp';
+        return FRONTEND_VIEW_PATH . 'Pages' . DS . $slug . '.ctp';
     }
 
     public function getContent($slug)

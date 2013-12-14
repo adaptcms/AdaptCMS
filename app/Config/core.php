@@ -236,7 +236,7 @@ Configure::write('dev', 0);
  */
 $engine = 'File';
 if (extension_loaded('apc') && function_exists('apc_dec') && (php_sapi_name() !== 'cli' || ini_get('apc.enable_cli'))) {
-//	$engine = 'Apc';
+	$engine = 'Apc';
 }
 
 // In development mode, caches should expire quickly.
@@ -296,5 +296,5 @@ Configure::write('Component.Api.adaptcms_docs_url', 'http://documentation.adaptc
  * Custom Defined global variables
  */
 
-define('VIEW_PATH', ROOT . '/app/View/');
-define('ADAPTCMS_VERSION', '3.0.1');
+define('VIEW_PATH', APP . 'View/');
+define('ADAPTCMS_VERSION', '3.0.2');

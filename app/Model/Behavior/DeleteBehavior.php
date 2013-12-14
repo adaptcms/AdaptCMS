@@ -53,6 +53,10 @@ class DeleteBehavior extends ModelBehavior
 	 */
     public function beforeFind(Model $Model, $queryData)
     {
+	    if (get_class($Model) == 'Comment' && !empty($queryData['fields'][0]) && $queryData['fields'][0] == '`Comment`.`lft`') {
+		    return $queryData;
+	    }
+
         return $this->updateQueryData($Model, $queryData);
     }
 
@@ -99,8 +103,12 @@ class DeleteBehavior extends ModelBehavior
         }
         else
         {
-            $Model->delete();
-            $permanent = true;
+	        try {
+	            $Model->delete();
+	            $permanent = true;
+	        } catch(Exception $e) {
+		        debug($e->getMessage());
+	        }
         }
 
         return $permanent;

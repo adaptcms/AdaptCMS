@@ -6969,3 +6969,7 @@ div.input.textarea
 {
     color: #000!important;
 }
+
+.disabled {
+    color: #ccc;
+}

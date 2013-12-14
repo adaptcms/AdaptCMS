@@ -2,8 +2,6 @@
 /**
  * Library of array functions for Cake.
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -591,7 +589,7 @@ class Set {
 					}
 				}
 				return $tmp;
-			} elseif (false !== strpos($key, '{') && false !== strpos($key, '}')) {
+			} elseif (strpos($key, '{') !== false && strpos($key, '}') !== false) {
 				$pattern = substr($key, 1, -1);
 
 				foreach ($data as $j => $val) {

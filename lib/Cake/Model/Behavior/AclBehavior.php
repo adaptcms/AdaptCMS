@@ -4,8 +4,6 @@
  *
  * Enables objects to easily tie into an ACL system
  *
- * PHP 5
- *
  * CakePHP :  Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -97,9 +95,10 @@ class AclBehavior extends ModelBehavior {
  *
  * @param Model $model
  * @param boolean $created True if this is a new record
+ * @param array $options Options passed from Model::save().
  * @return void
  */
-	public function afterSave(Model $model, $created) {
+	public function afterSave(Model $model, $created, $options = array()) {
 		$types = $this->_typeMaps[$this->settings[$model->name]['type']];
 		if (!is_array($types)) {
 			$types = array($types);

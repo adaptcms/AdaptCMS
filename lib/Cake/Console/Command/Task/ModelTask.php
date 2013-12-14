@@ -2,8 +2,6 @@
 /**
  * The ModelTask handles creating and updating models files.
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -380,7 +378,7 @@ class ModelTask extends BakeTask {
 		$default = 1;
 		foreach ($options as $option) {
 			if ($option{0} !== '_') {
-				$choices[$default] = strtolower($option);
+				$choices[$default] = $option;
 				$default++;
 			}
 		}
@@ -433,10 +431,12 @@ class ModelTask extends BakeTask {
 				} elseif ($metaData['type'] === 'string' && $metaData['length'] == 36) {
 					$guess = $methods['uuid'];
 				} elseif ($metaData['type'] === 'string') {
-					$guess = $methods['notempty'];
+					$guess = $methods['notEmpty'];
 				} elseif ($metaData['type'] === 'text') {
-					$guess = $methods['notempty'];
+					$guess = $methods['notEmpty'];
 				} elseif ($metaData['type'] === 'integer') {
+					$guess = $methods['numeric'];
+				} elseif ($metaData['type'] === 'float') {
 					$guess = $methods['numeric'];
 				} elseif ($metaData['type'] === 'boolean') {
 					$guess = $methods['boolean'];
@@ -861,7 +861,7 @@ class ModelTask extends BakeTask {
  * @return array
  */
 	public function listAll($useDbConfig = null) {
-		$this->_tables = (array)$this->getAllTables($useDbConfig);
+		$this->_tables = $this->getAllTables($useDbConfig);
 
 		$this->_modelNames = array();
 		$count = count($this->_tables);
@@ -940,6 +940,7 @@ class ModelTask extends BakeTask {
 			$this->err(__d('cake_console', 'Your database does not have any tables.'));
 			return $this->_stop();
 		}
+		sort($tables);
 		return $tables;
 	}
 

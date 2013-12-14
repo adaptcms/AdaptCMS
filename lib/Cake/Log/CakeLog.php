@@ -4,8 +4,6 @@
  *
  * Log messages to text files.
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -169,6 +167,7 @@ class CakeLog {
  * {{{
  * CakeLog::config('payments', array(
  *     'engine' => 'File',
+ *     'types' => array('info', 'error', 'warning'),
  *     'scopes' => array('payment', 'order')
  * ));
  * }}}
@@ -191,7 +190,7 @@ class CakeLog {
 			throw new CakeLogException(__d('cake_dev', 'Invalid key name'));
 		}
 		if (empty($config['engine'])) {
-			throw new CakeLogException(__d('cake_dev', 'Missing logger classname'));
+			throw new CakeLogException(__d('cake_dev', 'Missing logger class name'));
 		}
 		if (empty(self::$_Collection)) {
 			self::_init();

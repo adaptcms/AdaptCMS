@@ -2,8 +2,6 @@
 /**
  * FileLogTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -117,6 +115,8 @@ class FileLogTest extends CakeTestCase {
 		$result = file_get_contents($files[1]);
 		$this->assertRegExp('/Warning: Test warning second/', $result);
 
+		file_put_contents($path . 'error.log.0000000000', "The oldest log file with over 35 bytes.\n");
+
 		sleep(1);
 		clearstatcache();
 		$log->write('warning', 'Test warning fourth');
@@ -140,6 +140,7 @@ class FileLogTest extends CakeTestCase {
 			'size' => 35,
 			'rotate' => 0
 		));
+		file_put_contents($path . 'debug.log.0000000000', "The oldest log file with over 35 bytes.\n");
 		$log->write('debug', 'Test debug');
 		$this->assertTrue(file_exists($path . 'debug.log'));
 

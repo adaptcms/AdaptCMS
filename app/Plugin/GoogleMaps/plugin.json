@@ -4,7 +4,7 @@
     "api_id": 9,
     "install": {
         "block_active": 1,
-        "model_title": "GoogleMaps",
+        "model_title": "GoogleMap",
         "permissions": {
             "file": "Install/permissions.php",
             "className": "PermissionsInstall",

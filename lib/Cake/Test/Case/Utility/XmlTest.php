@@ -2,8 +2,6 @@
 /**
  * XmlTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -84,7 +82,7 @@ class XmlTest extends CakeTestCase {
 /**
  * autoFixtures property
  *
- * @var bool false
+ * @var boolean
  */
 	public $autoFixtures = false;
 
@@ -454,7 +452,7 @@ XML;
 
 XML;
 		$xmlResponse = Xml::fromArray($xml, array('pretty' => false));
-		$this->assertEquals($expected, $xmlResponse->asXML());
+		$this->assertTextEquals($expected, $xmlResponse->asXML());
 
 		$expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -471,7 +469,7 @@ XML;
 
 XML;
 		$xmlResponse = Xml::fromArray($xml, array('pretty' => true));
-		$this->assertEquals($expected, $xmlResponse->asXML());
+		$this->assertTextEquals($expected, $xmlResponse->asXML());
 
 				$xml = array(
 			'tags' => array(
@@ -494,7 +492,7 @@ XML;
 
 XML;
 		$xmlResponse = Xml::fromArray($xml, array('pretty' => false, 'format' => 'attributes'));
-		$this->assertEquals($expected, $xmlResponse->asXML());
+		$this->assertTextEquals($expected, $xmlResponse->asXML());
 
 		$expected = <<<XML
 <?xml version="1.0" encoding="UTF-8"?>
@@ -505,7 +503,7 @@ XML;
 
 XML;
 		$xmlResponse = Xml::fromArray($xml, array('pretty' => true, 'format' => 'attributes'));
-		$this->assertEquals($expected, $xmlResponse->asXML());
+		$this->assertTextEquals($expected, $xmlResponse->asXML());
 	}
 
 /**

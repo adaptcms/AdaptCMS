@@ -162,7 +162,7 @@ class Menu extends AppModel
      */
     public function _generateMenuHtml($data = array())
     {
-        $view = new View();
+        $view = new AdaptcmsView();
 
         return $view->element('view_menu', array('data' => $data));
     }
@@ -173,7 +173,7 @@ class Menu extends AppModel
      */
     public function _getPath($slug)
     {
-        return APP . DS . 'View' . DS . 'Elements' . DS . 'Menus' . DS . $slug . '.ctp';
+        return VIEW_PATH . 'Elements' . DS . 'Menus' . DS . $slug . '.ctp';
     }
 
     /**

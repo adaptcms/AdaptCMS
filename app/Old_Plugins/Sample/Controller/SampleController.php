@@ -77,10 +77,10 @@ class SampleController extends AppController
 
             if ($this->Sample->save($this->request->data))
             {
-                $this->Session->setFlash('Your Sample item has been added.', 'flash_success');
+                $this->Session->setFlash('Your Sample item has been added.', 'success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your Sample item.', 'flash_error');
+                $this->Session->setFlash('Unable to add your Sample item.', 'error');
             }
         }
     }
@@ -103,10 +103,10 @@ class SampleController extends AppController
 
             if ($this->Sample->save($this->request->data))
             {
-                $this->Session->setFlash('Your Sample item has been updated.', 'flash_success');
+                $this->Session->setFlash('Your Sample item has been updated.', 'success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to update your Sample item.', 'flash_error');
+                $this->Session->setFlash('Unable to update your Sample item.', 'error');
             }
         }
 
@@ -137,9 +137,9 @@ class SampleController extends AppController
 
         if ($delete)
         {
-            $this->Session->setFlash('The Sample item `'.$title.'` has been deleted.', 'flash_success');
+            $this->Session->setFlash('The Sample item `'.$title.'` has been deleted.', 'success');
         } else {
-            $this->Session->setFlash('The Sample item `'.$title.'` has NOT been deleted.', 'flash_error');
+            $this->Session->setFlash('The Sample item `'.$title.'` has NOT been deleted.', 'error');
         }
 
         if (!empty($permanent))
@@ -178,10 +178,10 @@ class SampleController extends AppController
 
         if ($this->Sample->saveField('deleted_time', '0000-00-00 00:00:00'))
         {
-            $this->Session->setFlash('The Sample item `'.$title.'` has been restored.', 'flash_success');
+            $this->Session->setFlash('The Sample item `'.$title.'` has been restored.', 'success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The Sample item `'.$title.'` has NOT been restored.', 'flash_error');
+            $this->Session->setFlash('The Sample item `'.$title.'` has NOT been restored.', 'error');
             $this->redirect(array('action' => 'index'));
         }
     }

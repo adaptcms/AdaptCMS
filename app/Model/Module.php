@@ -3,6 +3,8 @@ App::uses('AppModel', 'Model');
 /**
  * Class Module
  *
+ * @property Permission $Permission
+ *
  * @method findById(int $id)
  * @method findByTitle(string $title)
  * @method findByModelTitle(string $title)

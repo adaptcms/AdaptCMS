@@ -1,60 +1,59 @@
-$(document).ready(function() {
-	if ($("#modules").length > 0 && $("#q").length > 0)
-	{
-		$("#modules,#q").hide();
-		modules = $.trim( $("#modules").text() ).split(',');
-		count = modules.length;
+var App = angular.module('search', ['ngSanitize']);
 
-		$.each(modules, function(i, val) {
-			key = i + 1;
+App.controller('SearchCtrl', function($scope, $timeout, $http, $sce) {
+    $scope.results = null;
+    $scope.modules = [];
 
-			$.ajax({
-				type: "POST",
-				url: $("#webroot").text() + "search/search", 
-	            data: {
-	                data:{
-	                    'Search':{
-	                        q: $("#q").text(),
-	                        module: val
-	                    }
-	                }
-	            },
-	            async: false
-	            }).done(function(data) {
+    if (typeof $scope.q == 'undefined') {
+        $scope.q = '';
+    }
 
-	            $(".search-container").append(data);
+    if (typeof $scope.module == 'undefined') {
+        $scope.module = '';
+    }
 
-	            if (count == key)
-	            {
-	            	$(".search-loading").hide();
-	            }
-	        });
-	    });
-	}
+    $scope.search = function(event) {
+        event.preventDefault();
 
-	$(".pagination ul li a").live('click', function(e) {
-		e.preventDefault();
+        var url = '/search/search/' + $scope.q + '/' + $scope.module + '/clear_search:1';
 
-		$(".search-loading").show();
-		id = $(this).parent().parent().parent().parent();
+        $http.get(url, { dataType: 'json' })
+        .success(function(data){
+            $scope.modules = data.data;
 
-		page = $(this).attr('href').split(':');
-		module_id = id.attr('id').split('-');
+            for(var module in $scope.modules) {
+                var module_data = $scope.modules[module];
 
-		$.post($(this).attr('href'), 
-            {
-                data:{
-                    'Search':{
-                        q: $("#q").text(),
-                        module: module_id[1],
-                        page: page[1]
-                    }
+                if (module_data.results != '') {
+                    $scope.modules[module].results = $sce.trustAsHtml(module_data.results);
                 }
-            }, function(data) {
-
-            id.html(data);
-
-            $(".search-loading").hide();
+            }
         });
-	});
+    };
+
+    $scope.paginator = function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        $http.get(event.target.href, { dataType: 'json' })
+        .success(function(data){
+            $scope.modules = data.data;
+
+            for(var module in $scope.modules) {
+                var module_data = $scope.modules[module];
+
+                if (module_data.results != '') {
+                    $scope.modules[module].results = $sce.trustAsHtml(module_data.results);
+                }
+            }
+        });
+    }
+});
+
+$(document).ready(function(e) {
+    var form = $('.search-results');
+
+    if (form.find('#SearchQ').val()) {
+        form.find('button').trigger('click');
+    }
 });
