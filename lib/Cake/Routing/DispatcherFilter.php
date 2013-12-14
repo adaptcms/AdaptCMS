@@ -1,6 +1,7 @@
 <?php
 /**
  *
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -30,7 +31,7 @@ abstract class DispatcherFilter implements CakeEventListener {
 /**
  * Default priority for all methods in this filter
  *
- * @var integer
+ * @var int
  */
 	public $priority = 10;
 

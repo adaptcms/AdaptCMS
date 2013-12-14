@@ -1,8 +1,10 @@
 <?php
 /**
- * Basic CakePHP functionality.
+ * Basic Cake functionality.
  *
  * Handles loading of core files needed on every request
+ *
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)

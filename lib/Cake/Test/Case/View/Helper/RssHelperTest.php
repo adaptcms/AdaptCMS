@@ -2,6 +2,8 @@
 /**
  * RssHelperTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -608,7 +610,7 @@ class RssHelperTest extends CakeTestCase {
 
 		$this->assertTrue($File->write('123'), 'Could not write to ' . $tmpFile);
 
-		if (PHP_VERSION_ID >= 50300) {
+		if (50300 <= PHP_VERSION_ID) {
 			clearstatcache(true, $tmpFile);
 		} else {
 			clearstatcache();
@@ -743,36 +745,36 @@ class RssHelperTest extends CakeTestCase {
 
 	public function testElementNamespaceWithPrefix() {
 		$item = array(
-			'title' => 'Title',
-			'dc:creator' => 'Alex',
-			'dc:description' => 'descriptive words'
-		);
+				'title' => 'Title',
+				'dc:creator' => 'Alex',
+				'xy:description' => 'descriptive words'
+			);
 		$attributes = array(
-			'namespace' => array(
-				'prefix' => 'dc',
-				'url' => 'http://link.com'
-			)
+				'namespace' => array(
+						'prefix' => 'dc',
+						'url' => 'http://link.com'
+				)
 		);
 		$result = $this->Rss->item($attributes, $item);
 		$expected = array(
 			'item' => array(
-				'xmlns:dc' => 'http://link.com'
+					'xmlns:dc' => 'http://link.com'
 			),
 			'title' => array(
-				'xmlns:dc' => 'http://link.com'
+					'xmlns:dc' => 'http://link.com'
 			),
 			'Title',
 			'/title',
 			'dc:creator' => array(
-				'xmlns:dc' => 'http://link.com'
+					'xmlns:dc' => 'http://link.com'
 			),
 			'Alex',
 			'/dc:creator',
-			'dc:description' => array(
-				'xmlns:dc' => 'http://link.com'
+			'description' => array(
+					'xmlns:dc' => 'http://link.com'
 			),
 			'descriptive words',
-			'/dc:description',
+			'/description',
 			'/item'
 		);
 		$this->assertTags($result, $expected, true);

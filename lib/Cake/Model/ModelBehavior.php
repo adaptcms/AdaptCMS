@@ -2,7 +2,9 @@
 /**
  * Model behaviors base class.
  *
- * Adds methods and automagic functionality to CakePHP Models.
+ * Adds methods and automagic functionality to Cake Models.
+ *
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -130,7 +132,7 @@ class ModelBehavior extends Object {
  * @param boolean $primary Whether this model is being queried directly (vs. being queried as an association)
  * @return mixed An array value will replace the value of $results - any other value will be ignored.
  */
-	public function afterFind(Model $model, $results, $primary = false) {
+	public function afterFind(Model $model, $results, $primary) {
 	}
 
 /**
@@ -139,11 +141,9 @@ class ModelBehavior extends Object {
  * will allow you to make the validation fail.
  *
  * @param Model $model Model using this behavior
- * @param array $options Options passed from Model::save().
  * @return mixed False or null will abort the operation. Any other result will continue.
- * @see Model::save()
  */
-	public function beforeValidate(Model $model, $options = array()) {
+	public function beforeValidate(Model $model) {
 		return true;
 	}
 
@@ -163,11 +163,9 @@ class ModelBehavior extends Object {
  * will abort the save operation.
  *
  * @param Model $model Model using this behavior
- * @param array $options Options passed from Model::save().
  * @return mixed False if the operation should abort. Any other result will continue.
- * @see Model::save()
  */
-	public function beforeSave(Model $model, $options = array()) {
+	public function beforeSave(Model $model) {
 		return true;
 	}
 
@@ -176,11 +174,9 @@ class ModelBehavior extends Object {
  *
  * @param Model $model Model using this behavior
  * @param boolean $created True if this save created a new record
- * @param array $options Options passed from Model::save().
  * @return boolean
- * @see Model::save()
  */
-	public function afterSave(Model $model, $created, $options = array()) {
+	public function afterSave(Model $model, $created) {
 		return true;
 	}
 

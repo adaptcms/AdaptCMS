@@ -2,6 +2,8 @@
 /**
  * Base Log Engine class
  *
+ * PHP 5
+ *
  * CakePHP(tm) :  Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -33,9 +35,10 @@ abstract class BaseLog implements CakeLogInterface {
 	protected $_config = array();
 
 /**
- * Constructor
+ * __construct method
  *
  * @param array $config Configuration array
+ * @return void
  */
 	public function __construct($config = array()) {
 		$this->config($config);

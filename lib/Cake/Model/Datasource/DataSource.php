@@ -2,6 +2,8 @@
 /**
  * DataSource base class
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -230,7 +232,7 @@ class DataSource extends Object {
  * @param mixed $conditions The conditions to use for deleting.
  * @return boolean Success
  */
-	public function delete(Model $model, $conditions = null) {
+	public function delete(Model $model, $id = null) {
 		return false;
 	}
 
@@ -429,6 +431,7 @@ class DataSource extends Object {
 
 /**
  * Closes the current datasource.
+ *
  */
 	public function __destruct() {
 		if ($this->_transactionStarted) {

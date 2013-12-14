@@ -1,44 +1,4 @@
-3.0.1 - 3.0.2
------------
-
-####Step 1
-
-After you are logged in as an admin, access the installer at <strong>http://yoursite.com/install</strong> and upload the following directories/files to your site and overwriting what is on your sever currently:
-
-* lib/
-* vendors/
-* app/Config/routes.php
-* app/Config/core.php
-* app/Config/configuration.php
-* app/Config/bootstrap.php
-* app/Routing/
-* app/Model/
-* app/Controller/
-* app/View_Docs/
-* app/webroot/installer/
-* app/webroot/js/
-* app/webroot/css/
-* app/webroot/font/
-* app/webroot/img/
-* app/webroot/libraries/
-* app/View/Elements/
-* app/View/Helper/
-* app/View/Admin/
-* app/View/Frontend/
-
-At this point you can also update your plugins that reside in <strong>app/Plugin</strong> and <strong>app/Old_Plugins</strong>. Make sure to bring in the contents of each plugins
-folder, except the <strong>Config</strong> folder, so that your configuration settings (if the plugin has them) are not reset. You can also overwrite <strong>app/View/Themed</strong> and <strong>app/View/Old_Themed</strong> if you haven't made changes to your themes.
-
-Then refresh the install page and click on "Upgrade from 3.0.1".
-
-####Step 2
-
-After SQL is inserted, the CMS will move files and folders over - including installed and non-installed themes. If you are running a theme, please check the documentation for the new folder/file structure - otherwise, the default theme will be automatically used. That's it! Please keep in mind a few template changing notes:
-
-* Your layout is now located at - app/View/Frontend/layout.ctp
-* For category view templates, the variable $article for a list of articles has changed to $articles
-
-3.0 - 3.0.2
+3.0 - 3.0.1
 -----------
 
 ####Step 1
@@ -52,10 +12,10 @@ your server currently:
 
 * lib/
 * vendors/
+* app/View_Docs
 * app/Config/routes.php
 * app/Config/configuration.php
 * app/Model/
-* app/Controller/
 * app/View_Docs/
 * app/webroot/installer/
 * app/webroot/js/
@@ -64,6 +24,7 @@ your server currently:
 * app/webroot/img/
 * app/webroot/folder_upload/
 * app/webroot/libraries/
+* app/Controller/ (except - AppController.php)
 
 ####Step 3
 
@@ -78,6 +39,7 @@ At this point you can also update your plugins that reside in <strong>app/Plugin
 folder, except the <strong>Config</strong> folder, so that your configuration settings (if the plugin has them) are not reset. Then from the folders above, bring only the
 following files:
 
+* app/Controller/AppController.php
 * app/View/Articles/admin_index.ctp
 * app/View/Articles/admin_add.ctp
 * app/View/Articles/admin_edit.ctp
@@ -95,4 +57,4 @@ following files:
 If you see an Internal Error when visiting your homepage, that means that you have the Polls and/or the Links plugin installed and they need to be updated. Go into the admin and click on
 <strong>Manage Plugins</strong>, then click on Upgrade from the actions dropdown by Polls and Links. Run through the upgrader for both and you should be all set.
 
-Now follow the steps above.
+Enjoy!

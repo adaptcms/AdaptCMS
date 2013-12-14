@@ -2,6 +2,8 @@
 /**
  * Time Helper class file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -115,7 +117,6 @@ class TimeHelper extends AppHelper {
 
 /**
  * Call methods from CakeTime utility class
- * @return mixed Whatever is returned by called method, or false on failure
  */
 	public function __call($method, $params) {
 		return call_user_func_array(array($this->_engine, $method), $params);
@@ -349,7 +350,7 @@ class TimeHelper extends AppHelper {
  * - `element` - The element to wrap the formatted time in.
  *   Has a few additional options:
  *   - `tag` - The tag to use, defaults to 'span'.
- *   - `class` - The class name to use, defaults to `time-ago-in-words`.
+ *   - `class` - The classname to use, defaults to `time-ago-in-words`.
  *   - `title` - Defaults to the $dateTime input.
  *
  * @param integer|string|DateTime $dateTime UNIX timestamp, strtotime() valid string or DateTime object

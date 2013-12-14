@@ -2,6 +2,8 @@
 /**
  * FixtureTask Test case
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -42,7 +44,7 @@ class FixtureTaskTest extends CakeTestCase {
 /**
  * Whether backup global state for each test method or not
  *
- * @var boolean
+ * @var bool false
  */
 	public $backupGlobals = false;
 

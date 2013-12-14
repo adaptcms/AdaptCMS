@@ -1,2 +1,2 @@
 default test_theme layout
-<?php echo $this->fetch('content') ?>
+<?php echo $content_for_layout ?>

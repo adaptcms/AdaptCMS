@@ -2,6 +2,8 @@
 /**
  * Schema database management for CakePHP.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -549,7 +551,7 @@ class CakeSchema extends Object {
 				continue;
 			}
 			$correspondingValue = $array2[$key];
-			if (($value === null) !== ($correspondingValue === null)) {
+			if (is_null($value) !== is_null($correspondingValue)) {
 				$difference[$key] = $value;
 				continue;
 			}

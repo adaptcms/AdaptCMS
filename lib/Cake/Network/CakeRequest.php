@@ -2,6 +2,8 @@
 /**
  * CakeRequest
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -30,7 +32,7 @@ App::uses('Hash', 'Utility');
 class CakeRequest implements ArrayAccess {
 
 /**
- * Array of parameters parsed from the URL.
+ * Array of parameters parsed from the url.
  *
  * @var array
  */
@@ -60,14 +62,14 @@ class CakeRequest implements ArrayAccess {
 	public $query = array();
 
 /**
- * The URL string used for the request.
+ * The url string used for the request.
  *
  * @var string
  */
 	public $url;
 
 /**
- * Base URL path.
+ * Base url path.
  *
  * @var string
  */
@@ -125,7 +127,7 @@ class CakeRequest implements ArrayAccess {
 /**
  * Constructor
  *
- * @param string $url Trimmed URL string to use. Should not contain the application base path.
+ * @param string $url Trimmed url string to use. Should not contain the application base path.
  * @param boolean $parseEnvironment Set to false to not auto parse the environment. ie. GET, POST and FILES.
  */
 	public function __construct($url = null, $parseEnvironment = true) {
@@ -754,7 +756,7 @@ class CakeRequest implements ArrayAccess {
  * {{{ CakeRequest::acceptLanguage('es-es'); }}}
  *
  * @param string $language The language to test.
- * @return mixed If a $language is provided, a boolean. Otherwise the array of accepted languages.
+ * @return If a $language is provided, a boolean. Otherwise the array of accepted languages.
  */
 	public static function acceptLanguage($language = null) {
 		$raw = self::_parseAcceptWithQualifier(self::header('Accept-Language'));
@@ -775,10 +777,7 @@ class CakeRequest implements ArrayAccess {
 	}
 
 /**
- * Parse Accept* headers with qualifier options.
- *
- * Only qualifiers will be extracted, any other accept extensions will be
- * discarded as they are not frequently used.
+ * Parse Accept* headers with qualifier options
  *
  * @param string $header
  * @return array
@@ -787,21 +786,14 @@ class CakeRequest implements ArrayAccess {
 		$accept = array();
 		$header = explode(',', $header);
 		foreach (array_filter($header) as $value) {
-			$prefValue = '1.0';
-			$value = trim($value);
-
-			$semiPos = strpos($value, ';');
-			if ($semiPos !== false) {
-				$params = explode(';', $value);
-				$value = trim($params[0]);
-				foreach ($params as $param) {
-					$qPos = strpos($param, 'q=');
-					if ($qPos !== false) {
-						$prefValue = substr($param, $qPos + 2);
-					}
-				}
+			$prefPos = strpos($value, ';');
+			if ($prefPos !== false) {
+				$prefValue = substr($value, strpos($value, '=') + 1);
+				$value = trim(substr($value, 0, $prefPos));
+			} else {
+				$prefValue = '1.0';
+				$value = trim($value);
 			}
-
 			if (!isset($accept[$prefValue])) {
 				$accept[$prefValue] = array();
 			}
@@ -815,7 +807,7 @@ class CakeRequest implements ArrayAccess {
 
 /**
  * Provides a read accessor for `$this->query`. Allows you
- * to use a syntax similar to `CakeSession` for reading URL query data.
+ * to use a syntax similar to `CakeSession` for reading url query data.
  *
  * @param string $name Query string variable name
  * @return mixed The value being read

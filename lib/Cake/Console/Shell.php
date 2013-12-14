@@ -2,6 +2,8 @@
 /**
  * Base class for Shells
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -199,7 +201,6 @@ class Shell extends Object {
  */
 	public function initialize() {
 		$this->_loadModels();
-		$this->loadTasks();
 	}
 
 /**

@@ -2,6 +2,8 @@
 /**
  * Acl Shell provides Acl access in the CLI environment
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -74,7 +76,7 @@ class AclShell extends AppShell {
 		App::uses($class, $plugin . 'Controller/Component/Acl');
 		if (!in_array($class, array('DbAcl', 'DB_ACL')) && !is_subclass_of($class, 'DbAcl')) {
 			$out = "--------------------------------------------------\n";
-			$out .= __d('cake_console', 'Error: Your current CakePHP configuration is set to an ACL implementation other than DB.') . "\n";
+			$out .= __d('cake_console', 'Error: Your current Cake configuration is set to an ACL implementation other than DB.') . "\n";
 			$out .= __d('cake_console', 'Please change your core config to reflect your decision to use DbAcl before attempting to use this script') . "\n";
 			$out .= "--------------------------------------------------\n";
 			$out .= __d('cake_console', 'Current ACL Classname: %s', $class) . "\n";
@@ -89,7 +91,7 @@ class AclShell extends AppShell {
 				$this->args = null;
 				return $this->DbConfig->execute();
 			}
-			require_once APP . 'Config' . DS . 'database.php';
+			require_once (APP . 'Config' . DS . 'database.php');
 
 			if (!in_array($this->command, array('initdb'))) {
 				$collection = new ComponentCollection();

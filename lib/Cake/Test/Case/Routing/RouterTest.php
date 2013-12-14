@@ -2,12 +2,13 @@
 /**
  * RouterTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ *	Licensed under The Open Group Test Suite License
+ *	Redistributions of files must retain the above copyright notice.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
@@ -77,18 +78,6 @@ class RouterTest extends CakeTestCase {
 		Router::fullBaseUrl('https://example.com');
 		$this->assertEquals('https://example.com/', Router::url('/', true));
 		$this->assertEquals('https://example.com', Configure::read('App.fullBaseUrl'));
-	}
-
-/**
- * Test that Router uses App.base to build URL's when there are no stored
- * request objects.
- *
- * @return void
- */
-	public function testBaseUrlWithBasePath() {
-		Configure::write('App.base', '/cakephp');
-		Router::fullBaseUrl('http://example.com');
-		$this->assertEquals('http://example.com/cakephp/tasks', Router::url('/tasks', true));
 	}
 
 /**
@@ -663,7 +652,7 @@ class RouterTest extends CakeTestCase {
 	}
 
 /**
- * Test URL generation with an admin prefix
+ * Test url generation with an admin prefix
  *
  * @return void
  */
@@ -1594,7 +1583,7 @@ class RouterTest extends CakeTestCase {
 	}
 
 /**
- * Test URL generation with legacy (1.2) style prefix routes.
+ * test url generation with legacy (1.2) style prefix routes.
  *
  * @return void
  * @see testUrlGenerationWithAutoPrefixes
@@ -2365,7 +2354,7 @@ class RouterTest extends CakeTestCase {
 			array('controller' => 'posts', 'action' => 'view'),
 			array('routeClass' => 'MockConnectedRoute', 'slug' => '[a-z_-]+')
 		);
-		$this->assertInstanceOf('MockConnectedRoute', $routes[0], 'Incorrect class used. %s');
+		$this->assertTrue(is_a($routes[0], 'MockConnectedRoute'), 'Incorrect class used. %s');
 		$expected = array('controller' => 'posts', 'action' => 'view', 'slug' => 'test');
 		$routes[0]->expects($this->any())
 			->method('parse')
@@ -2567,7 +2556,7 @@ class RouterTest extends CakeTestCase {
 	}
 
 /**
- * test that a route object returning a full URL is not modified.
+ * test that a route object returning a full url is not modified.
  *
  * @return void
  */
@@ -2664,7 +2653,7 @@ class RouterTest extends CakeTestCase {
 			array('action' => 'delete', 'method' => 'DELETE', 'id' => true),
 			array('action' => 'edit', 'method' => 'POST', 'id' => true)
 		);
-		$this->assertEquals($expected, $default);
+		$this->assertEquals($default, $expected);
 
 		$custom = array(
 			array('action' => 'index', 'method' => 'GET', 'id' => false),

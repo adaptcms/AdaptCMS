@@ -27,7 +27,7 @@ class TranslateBehaviorTest extends CakeTestCase {
 /**
  * autoFixtures property
  *
- * @var boolean
+ * @var bool false
  */
 	public $autoFixtures = false;
 
@@ -69,13 +69,13 @@ class TranslateBehaviorTest extends CakeTestCase {
 		$this->loadFixtures('TranslateTable', 'Tag', 'TranslatedItem', 'Translate', 'User', 'TranslatedArticle', 'TranslateArticle');
 		$TestModel = new Tag();
 		$TestModel->translateTable = 'another_i18n';
-		$TestModel->Behaviors->load('Translate', array('title'));
+		$TestModel->Behaviors->attach('Translate', array('title'));
 		$translateModel = $TestModel->Behaviors->Translate->translateModel($TestModel);
 		$this->assertEquals('I18nModel', $translateModel->name);
 		$this->assertEquals('another_i18n', $translateModel->useTable);
 
 		$TestModel = new User();
-		$TestModel->Behaviors->load('Translate', array('title'));
+		$TestModel->Behaviors->attach('Translate', array('title'));
 		$translateModel = $TestModel->Behaviors->Translate->translateModel($TestModel);
 		$this->assertEquals('I18nModel', $translateModel->name);
 		$this->assertEquals('i18n', $translateModel->useTable);
@@ -989,7 +989,7 @@ class TranslateBehaviorTest extends CakeTestCase {
 		$expected = array('Title', 'Content');
 		$this->assertEquals($expected, $result);
 
-		$TestModel->Behaviors->unload('Translate');
+		$TestModel->Behaviors->detach('Translate');
 		$result = array_keys($TestModel->hasMany);
 		$expected = array();
 		$this->assertEquals($expected, $result);
@@ -1003,7 +1003,7 @@ class TranslateBehaviorTest extends CakeTestCase {
 		$result = isset($Behavior->runtime[$TestModel->alias]);
 		$this->assertFalse($result);
 
-		$TestModel->Behaviors->load('Translate', array('title' => 'Title', 'content' => 'Content'));
+		$TestModel->Behaviors->attach('Translate', array('title' => 'Title', 'content' => 'Content'));
 		$result = array_keys($TestModel->hasMany);
 		$expected = array('Title', 'Content');
 		$this->assertEquals($expected, $result);
@@ -1185,9 +1185,9 @@ class TranslateBehaviorTest extends CakeTestCase {
 		$this->loadFixtures('Translate', 'TranslatedItem');
 
 		$TestModel = new TranslatedItem();
-		$TestModel->Behaviors->unload('Translate');
+		$TestModel->Behaviors->detach('Translate');
 		$TestModel->actsAs = array();
-		$TestModel->Behaviors->load('Translate');
+		$TestModel->Behaviors->attach('Translate');
 		$TestModel->bindTranslation(array('title', 'content'), true);
 		$result = $TestModel->unbindTranslation();
 

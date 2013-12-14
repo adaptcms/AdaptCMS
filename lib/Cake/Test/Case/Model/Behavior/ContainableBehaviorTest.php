@@ -2,6 +2,8 @@
 /**
  * ContainableBehaviorTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -59,9 +61,9 @@ class ContainableBehaviorTest extends CakeTestCase {
 			'hasAndBelongsToMany' => array('Article')
 		), false);
 
-		$this->User->Behaviors->load('Containable');
-		$this->Article->Behaviors->load('Containable');
-		$this->Tag->Behaviors->load('Containable');
+		$this->User->Behaviors->attach('Containable');
+		$this->Article->Behaviors->attach('Containable');
+		$this->Tag->Behaviors->attach('Containable');
 	}
 
 /**
@@ -160,7 +162,7 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testInvalidContainmentsNoNotices() {
-		$this->Article->Behaviors->load('Containable', array('notices' => false));
+		$this->Article->Behaviors->attach('Containable', array('notices' => false));
 		$this->_containments($this->Article, array('Comment', 'InvalidBinding'));
 	}
 
@@ -665,65 +667,6 @@ class ContainableBehaviorTest extends CakeTestCase {
 				'User' => array(
 					'id' => 1, 'user' => 'mariano', 'password' => '5f4dcc3b5aa765d61d8327deb882cf99',
 					'created' => '2007-03-17 01:16:23', 'updated' => '2007-03-17 01:18:31',
-					'ArticleFeatured' => array(
-						array(
-							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
-							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
-							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
-							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			)
-		);
-		$this->assertEquals($expected, $result);
-
-		$this->Article->contain(array('User' => array('id', 'ArticleFeatured')));
-		$result = $this->Article->find('all', array('recursive' => 2));
-		$expected = array(
-			array(
-				'Article' => array(
-					'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
-					'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-				),
-				'User' => array(
-					'id' => 1,
-					'ArticleFeatured' => array(
-						array(
-							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
-							'published' => 'Y', 'created' => '2007-03-18 10:39:23', 'updated' => '2007-03-18 10:41:31'
-						),
-						array(
-							'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
-							'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
-					'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
-					'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-				),
-				'User' => array(
-					'id' => 3,
-					'ArticleFeatured' => array(
-						array(
-						'id' => 2, 'user_id' => 3, 'title' => 'Second Article', 'body' => 'Second Article Body',
-						'published' => 'Y', 'created' => '2007-03-18 10:41:23', 'updated' => '2007-03-18 10:43:31'
-						)
-					)
-				)
-			),
-			array(
-				'Article' => array(
-					'id' => 3, 'user_id' => 1, 'title' => 'Third Article', 'body' => 'Third Article Body',
-					'published' => 'Y', 'created' => '2007-03-18 10:43:23', 'updated' => '2007-03-18 10:45:31'
-				),
-				'User' => array(
-					'id' => 1,
 					'ArticleFeatured' => array(
 						array(
 							'id' => 1, 'user_id' => 1, 'title' => 'First Article', 'body' => 'First Article Body',
@@ -3298,7 +3241,7 @@ class ContainableBehaviorTest extends CakeTestCase {
  * @return void
  */
 	public function testOriginalAssociations() {
-		$this->Article->Comment->Behaviors->load('Containable');
+		$this->Article->Comment->Behaviors->attach('Containable');
 
 		$options = array(
 			'conditions' => array(
@@ -3413,9 +3356,9 @@ class ContainableBehaviorTest extends CakeTestCase {
 		$this->JoinB = ClassRegistry::init('JoinB');
 		$this->JoinC = ClassRegistry::init('JoinC');
 
-		$this->JoinA->Behaviors->load('Containable');
-		$this->JoinB->Behaviors->load('Containable');
-		$this->JoinC->Behaviors->load('Containable');
+		$this->JoinA->Behaviors->attach('Containable');
+		$this->JoinB->Behaviors->attach('Containable');
+		$this->JoinC->Behaviors->attach('Containable');
 
 		$this->JoinA->JoinB->find('all', array('contain' => array('JoinA')));
 		$this->JoinA->bindModel(array('hasOne' => array('JoinAsJoinC' => array('joinTable' => 'as_cs'))), false);
@@ -3430,9 +3373,9 @@ class ContainableBehaviorTest extends CakeTestCase {
  *
  */
 	public function testResetAssociation() {
-		$this->Article->Behaviors->load('Containable');
-		$this->Article->Comment->Behaviors->load('Containable');
-		$this->Article->User->Behaviors->load('Containable');
+		$this->Article->Behaviors->attach('Containable');
+		$this->Article->Comment->Behaviors->attach('Containable');
+		$this->Article->User->Behaviors->attach('Containable');
 
 		$initialOptions = array(
 			'conditions' => array(
@@ -3534,7 +3477,7 @@ class ContainableBehaviorTest extends CakeTestCase {
 					'joinTable' => 'articles_tags',
 					'foreignKey' => 'article_id',
 					'associationForeignKey' => 'tag_id',
-					// LENGTH function mysql-only, using LIKE does almost the same
+					// LENGHT function mysql-only, using LIKE does almost the same
 					'conditions' => "ShortTag.tag LIKE '???'"
 				)
 			)

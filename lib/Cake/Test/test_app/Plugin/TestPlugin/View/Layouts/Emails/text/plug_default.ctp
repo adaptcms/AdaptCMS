@@ -1,4 +1,4 @@
 
-<?php echo $this->fetch('content'); ?>
+<?php echo $content_for_layout; ?>
 
 This email was sent using the TestPlugin.

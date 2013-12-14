@@ -2,6 +2,8 @@
 /**
  * Syslog logger engine for CakePHP
  *
+ * PHP 5
+ *
  * CakePHP(tm) :  Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -13,7 +15,7 @@
  * @link          http://www.cakefoundation.org/projects/info/cakephp CakePHP(tm) Project
  * @package       Cake.Log.Engine
  * @since         CakePHP(tm) v 2.4
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
+ * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
 
 App::uses('BaseLog', 'Log/Engine');
@@ -144,7 +146,7 @@ class SyslogLog extends BaseLog {
  *
  * @param integer $priority
  * @param string $message
- * @return boolean
+ * @return bool
  */
 	protected function _write($priority, $message) {
 		return syslog($priority, $message);
@@ -152,7 +154,9 @@ class SyslogLog extends BaseLog {
 
 /**
  * Closes the logger connection
- */
+ *
+ * @return void
+ **/
 	public function __destruct() {
 		closelog();
 	}

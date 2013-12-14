@@ -4,6 +4,8 @@
  *
  * Provides the Model validation logic.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -357,7 +359,7 @@ class CakeValidationSet implements ArrayAccess, IteratorAggregate, Countable {
 /**
  * Returns the number of rules in this set
  *
- * @return integer
+ * @return int
  */
 	public function count() {
 		return count($this->_rules);

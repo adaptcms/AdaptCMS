@@ -1,11 +1,13 @@
 <?php
 /**
- * Session class for CakePHP.
+ * Session class for Cake.
  *
- * CakePHP abstracts the handling of sessions.
+ * Cake abstracts the handling of sessions.
  * There are several convenient methods to access session information.
  * This class is the implementation of those methods.
  * They are mostly used by the Session Component.
+ *
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -25,9 +27,9 @@ App::uses('Hash', 'Utility');
 App::uses('Security', 'Utility');
 
 /**
- * Session class for CakePHP.
+ * Session class for Cake.
  *
- * CakePHP abstracts the handling of sessions. There are several convenient methods to access session information.
+ * Cake abstracts the handling of sessions. There are several convenient methods to access session information.
  * This class is the implementation of those methods. They are mostly used by the Session Component.
  *
  * @package       Cake.Model.Datasource
@@ -442,7 +444,7 @@ class CakeSession {
 	}
 
 /**
- * Helper method to initialize a session, based on CakePHP core settings.
+ * Helper method to initialize a session, based on Cake core settings.
  *
  * Sessions can be configured with a few shortcut names as well as have any number of ini settings declared.
  *

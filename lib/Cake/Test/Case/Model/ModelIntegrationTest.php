@@ -2,6 +2,8 @@
 /**
  * ModelIntegrationTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -155,17 +157,17 @@ class ModelIntegrationTest extends BaseModelTest {
 	}
 
 /**
- * Tests that $cacheSources is restored despite the settings on the model.
+ * Tests that $cacheSources can only be disabled in the db using model settings, not enabled
  *
  * @return void
  */
-	public function testCacheSourcesRestored() {
+	public function testCacheSourcesDisabling() {
 		$this->loadFixtures('JoinA', 'JoinB', 'JoinAB', 'JoinC', 'JoinAC');
 		$this->db->cacheSources = true;
 		$TestModel = new JoinA();
 		$TestModel->cacheSources = false;
 		$TestModel->setSource('join_as');
-		$this->assertTrue($this->db->cacheSources);
+		$this->assertFalse($this->db->cacheSources);
 
 		$this->db->cacheSources = false;
 		$TestModel = new JoinA();
@@ -210,7 +212,7 @@ class ModelIntegrationTest extends BaseModelTest {
 		$TestModel = new Apple();
 		$this->assertEquals(array(), $TestModel->Behaviors->loaded());
 
-		$TestModel->Behaviors->load('Tree', array('left' => 'left_field', 'right' => 'right_field'));
+		$TestModel->Behaviors->attach('Tree', array('left' => 'left_field', 'right' => 'right_field'));
 		$this->assertTrue(is_object($TestModel->Behaviors->Tree));
 		$this->assertEquals(array('Tree'), $TestModel->Behaviors->loaded());
 
@@ -225,11 +227,11 @@ class ModelIntegrationTest extends BaseModelTest {
 		);
 		$this->assertEquals($expected, $TestModel->Behaviors->Tree->settings['Apple']);
 
-		$TestModel->Behaviors->load('Tree', array('enabled' => false));
+		$TestModel->Behaviors->attach('Tree', array('enabled' => false));
 		$this->assertEquals($expected, $TestModel->Behaviors->Tree->settings['Apple']);
 		$this->assertEquals(array('Tree'), $TestModel->Behaviors->loaded());
 
-		$TestModel->Behaviors->unload('Tree');
+		$TestModel->Behaviors->detach('Tree');
 		$this->assertEquals(array(), $TestModel->Behaviors->loaded());
 		$this->assertFalse(isset($TestModel->Behaviors->Tree));
 	}

@@ -2,8 +2,10 @@
 /**
  * Prototype Engine Helper for JsHelper
  *
- * Provides Prototype specific JavaScript for JsHelper. Requires at least
+ * Provides Prototype specific Javascript for JsHelper. Requires at least
  * Prototype 1.6
+ *
+ * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
@@ -24,7 +26,7 @@ App::uses('JsBaseEngineHelper', 'View/Helper');
 /**
  * Prototype Engine Helper for JsHelper
  *
- * Provides Prototype specific JavaScript for JsHelper. Requires at least
+ * Provides Prototype specific Javascript for JsHelper. Requires at least
  * Prototype 1.6
  *
  * @package       Cake.View.Helper
@@ -140,7 +142,7 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
  * - `stop` - Whether you want the event to stopped. (defaults true)
  *
  * @param string $type Type of event to bind to the current 946 id
- * @param string $callback The JavaScript function you wish to trigger or the function literal
+ * @param string $callback The Javascript function you wish to trigger or the function literal
  * @param array $options Options for the event.
  * @return string completed event handler
  */

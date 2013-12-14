@@ -2,6 +2,8 @@
 /**
  * ConsoleOutput file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -284,7 +286,8 @@ class ConsoleOutput {
 	}
 
 /**
- * Clean up and close handles
+ * clean up and close handles
+ *
  */
 	public function __destruct() {
 		fclose($this->_output);

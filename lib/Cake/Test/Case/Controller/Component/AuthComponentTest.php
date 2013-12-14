@@ -2,6 +2,8 @@
 /**
  * AuthComponentTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -31,7 +33,7 @@ class TestAuthComponent extends AuthComponent {
 /**
  * testStop property
  *
- * @var boolean
+ * @var bool false
  */
 	public $testStop = false;
 
@@ -97,6 +99,7 @@ class AuthTestController extends Controller {
 /**
  * construct method
  *
+ * @return void
  */
 	public function __construct($request, $response) {
 		$request->addParams(Router::parse('/auth_test'));
@@ -268,7 +271,7 @@ class AuthComponentTest extends CakeTestCase {
 /**
  * initialized property
  *
- * @var boolean
+ * @var bool false
  */
 	public $initialized = false;
 
@@ -874,28 +877,6 @@ class AuthComponentTest extends CakeTestCase {
 	}
 
 /**
- * testNoLoginRedirectForAuthenticatedUser method
- *
- * @return void
- */
-	public function testNoLoginRedirectForAuthenticatedUser() {
-		$this->Controller->request['controller'] = 'auth_test';
-		$this->Controller->request['action'] = 'login';
-		$this->Controller->here = '/auth_test/login';
-		$this->Auth->request->url = 'auth_test/login';
-
-		$this->Auth->Session->write('Auth.User.id', '1');
-		$this->Auth->authenticate = array('Form');
-		$this->getMock('BaseAuthorize', array('authorize'), array(), 'NoLoginRedirectMockAuthorize', false);
-		$this->Auth->authorize = array('NoLoginRedirectMockAuthorize');
-		$this->Auth->loginAction = array('controller' => 'auth_test', 'action' => 'login');
-
-		$return = $this->Auth->startup($this->Controller);
-		$this->assertTrue($return);
-		$this->assertNull($this->Controller->testUrl);
-	}
-
-/**
  * Default to loginRedirect, if set, on authError.
  *
  * @return void
@@ -1202,7 +1183,7 @@ class AuthComponentTest extends CakeTestCase {
 	}
 
 /**
- * test that logout deletes the session variables. and returns the correct URL
+ * test that logout deletes the session variables. and returns the correct url
  *
  * @return void
  */

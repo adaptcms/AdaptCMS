@@ -2,6 +2,8 @@
 /**
  * ModelWriteTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -253,7 +255,7 @@ class ModelWriteTest extends BaseModelTest {
 /**
  * test that Caches are getting cleared on save().
  * ensure that both inflections of controller names are getting cleared
- * as URL for controller could be either overallFavorites/index or overall_favorites/index
+ * as url for controller could be either overallFavorites/index or overall_favorites/index
  *
  * @return void
  */
@@ -316,7 +318,7 @@ class ModelWriteTest extends BaseModelTest {
 		$TestModel2 = new Item();
 
 		$result = $TestModel->findById(1);
-		$this->assertNull($result['Syfile']['item_count']);
+		$this->assertSame($result['Syfile']['item_count'], null);
 
 		$TestModel2->save(array(
 			'name' => 'Item 7',
@@ -478,7 +480,7 @@ class ModelWriteTest extends BaseModelTest {
 		$TestModel2->belongsTo['Syfile']['counterScope'] = array('published' => true);
 
 		$result = $TestModel->findById(1);
-		$this->assertNull($result['Syfile']['item_count']);
+		$this->assertSame($result['Syfile']['item_count'], null);
 
 		$TestModel2->save(array(
 			'name' => 'Item 7',
@@ -4627,7 +4629,7 @@ class ModelWriteTest extends BaseModelTest {
 			array('validate' => 'first')
 		);
 
-		$this->assertTrue($result);
+		$this->assertSame($result, true);
 
 		$result = $model->Comment->find('all');
 		$this->assertSame(count($result), 1);
@@ -6031,7 +6033,7 @@ class ModelWriteTest extends BaseModelTest {
 			array('validate' => 'first')
 		);
 
-		$this->assertTrue($result);
+		$this->assertSame($result, true);
 
 		$result = $model->Comment->find('all');
 		$this->assertSame(count($result), 1);
@@ -6242,32 +6244,6 @@ class ModelWriteTest extends BaseModelTest {
 		$model = new ProductUpdateAll();
 		$result = $model->saveAssociated(array());
 		$this->assertFalse($result);
-	}
-
-/**
- * Test that saveAssociated will accept expression object values when saving.
- *
- * @return void
- */
-	public function testSaveAssociatedExpressionObjects() {
-		$this->loadFixtures('Post', 'Author', 'Comment', 'Attachment', 'Article', 'User');
-		$TestModel = new Post();
-		$db = $TestModel->getDataSource();
-
-		$TestModel->saveAssociated(array(
-			'Post' => array(
-				'title' => $db->expression('(SELECT "Post with Author")'),
-				'body' => 'This post will be saved with an author'
-			),
-			'Author' => array(
-				'user' => 'bob',
-				'password' => '5f4dcc3b5aa765d61d8327deb882cf90'
-		)));
-
-		$result = $TestModel->find('first', array(
-			'order' => array('Post.id ' => 'DESC')
-		));
-		$this->assertEquals('Post with Author', $result['Post']['title']);
 	}
 
 /**
@@ -7168,7 +7144,7 @@ class ModelWriteTest extends BaseModelTest {
 		$TestModel = new Item();
 
 		$result = $TestModel->save(array('published' => true, 'id' => 1));
-		$this->assertTrue((bool)$result);
+		$this->assertTrue((boolean)$result);
 		$result = $TestModel->find('first', array(
 			'fields' => array('id', 'published'),
 			'conditions' => array('Item.id' => 1)));

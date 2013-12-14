@@ -4,6 +4,8 @@
  *
  * Text manipulations: Highlight, excerpt, truncate, strip of links, convert email addresses to mailto: links...
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -81,7 +83,6 @@ class TextHelper extends AppHelper {
 
 /**
  * Call methods from String utility class
- * @return mixed Whatever is returned by called method, or false on failure
  */
 	public function __call($method, $params) {
 		return call_user_func_array(array($this->_engine, $method), $params);
@@ -104,7 +105,7 @@ class TextHelper extends AppHelper {
 		$this->_placeholders = array();
 		$options += array('escape' => true);
 
-		$pattern = '#(?<!href="|src="|">)((?:https?|ftp|nntp)://[\p{L}0-9.\-:]+(?:[/?][^\s<]*)?)#ui';
+		$pattern = '#(?<!href="|src="|">)((?:https?|ftp|nntp)://[a-z0-9.\-:]+(?:[/?][^\s<]*)?)#i';
 		$text = preg_replace_callback(
 			$pattern,
 			array(&$this, '_insertPlaceHolder'),
@@ -185,9 +186,9 @@ class TextHelper extends AppHelper {
 		$options += array('escape' => true);
 		$this->_placeholders = array();
 
-		$atom = '[\p{L}0-9!#$%&\'*+\/=?^_`{|}~-]';
+		$atom = '[a-z0-9!#$%&\'*+\/=?^_`{|}~-]';
 		$text = preg_replace_callback(
-			'/(' . $atom . '+(?:\.' . $atom . '+)*@[\p{L}0-9-]+(?:\.[\p{L}0-9-]+)+)/ui',
+			'/(' . $atom . '+(?:\.' . $atom . '+)*@[a-z0-9-]+(?:\.[a-z0-9-]+)+)/i',
 			array(&$this, '_insertPlaceholder'),
 			$text
 		);

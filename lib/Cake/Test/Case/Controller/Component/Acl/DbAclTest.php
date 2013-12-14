@@ -2,6 +2,8 @@
 /**
  * DbAclTest file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -40,7 +42,7 @@ class AclNodeTwoTestBase extends AclNode {
 /**
  * cacheSources property
  *
- * @var boolean
+ * @var bool false
  */
 	public $cacheSources = false;
 }
@@ -127,7 +129,7 @@ class PermissionTwoTest extends Permission {
 /**
  * cacheQueries property
  *
- * @var boolean
+ * @var bool false
  */
 	public $cacheQueries = false;
 
@@ -156,6 +158,7 @@ class DbAclTwoTest extends DbAcl {
 /**
  * construct method
  *
+ * @return void
  */
 	public function __construct() {
 		$this->Aro = new AroTwoTest();

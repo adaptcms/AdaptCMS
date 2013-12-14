@@ -6,7 +6,7 @@
 </head>
 
 <body>
-	<?php echo $this->fetch('content'); ?>
+	<?php echo $content_for_layout; ?>
 
 	<p>This email was sent using the CakePHP Framework</p>
 </body>

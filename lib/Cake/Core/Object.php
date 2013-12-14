@@ -31,7 +31,7 @@ App::uses('CakeLog', 'Log');
 class Object {
 
 /**
- * Constructor, no-op
+ * constructor, no-op
  *
  */
 	public function __construct() {

@@ -2,6 +2,8 @@
 /**
  * ShellDispatcher file
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -112,7 +114,7 @@ class ShellDispatcher {
 	}
 
 /**
- * Initializes the environment and loads the CakePHP core.
+ * Initializes the environment and loads the Cake core.
  *
  * @return boolean Success.
  */
@@ -204,6 +206,7 @@ class ShellDispatcher {
 
 		if ($Shell instanceof Shell) {
 			$Shell->initialize();
+			$Shell->loadTasks();
 			return $Shell->runCommand($command, $this->args);
 		}
 		$methods = array_diff(get_class_methods($Shell), get_class_methods('Shell'));

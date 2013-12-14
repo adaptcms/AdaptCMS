@@ -275,7 +275,7 @@ class TranslateBehavior extends ModelBehavior {
  * @param boolean $primary Did the find originate on $model.
  * @return array Modified results
  */
-	public function afterFind(Model $Model, $results, $primary = false) {
+	public function afterFind(Model $Model, $results, $primary) {
 		$Model->virtualFields = $this->runtime[$Model->alias]['virtualFields'];
 		$this->runtime[$Model->alias]['virtualFields'] = $this->runtime[$Model->alias]['fields'] = array();
 		$locale = $this->_getLocale($Model);
@@ -320,11 +320,9 @@ class TranslateBehavior extends ModelBehavior {
  * beforeValidate Callback
  *
  * @param Model $Model Model invalidFields was called on.
- * @param array $options Options passed from Model::save().
  * @return boolean
- * @see Model::save()
  */
-	public function beforeValidate(Model $Model, $options = array()) {
+	public function beforeValidate(Model $Model) {
 		unset($this->runtime[$Model->alias]['beforeSave']);
 		$this->_setRuntimeData($Model);
 		return true;
@@ -337,9 +335,7 @@ class TranslateBehavior extends ModelBehavior {
  * disabled. Or the runtime data hasn't been set yet.
  *
  * @param Model $Model Model save was called on.
- * @param array $options Options passed from Model::save().
  * @return boolean true.
- * @see Model::save()
  */
 	public function beforeSave(Model $Model, $options = array()) {
 		if (isset($options['validate']) && !$options['validate']) {
@@ -408,10 +404,9 @@ class TranslateBehavior extends ModelBehavior {
  *
  * @param Model $Model Model the callback is called on
  * @param boolean $created Whether or not the save created a record.
- * @param array $options Options passed from Model::save().
  * @return void
  */
-	public function afterSave(Model $Model, $created, $options = array()) {
+	public function afterSave(Model $Model, $created) {
 		if (!isset($this->runtime[$Model->alias]['beforeValidate']) && !isset($this->runtime[$Model->alias]['beforeSave'])) {
 			return true;
 		}

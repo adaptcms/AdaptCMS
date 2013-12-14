@@ -32,7 +32,7 @@ class CakeTestFixture {
 	public $name = null;
 
 /**
- * CakePHP's DBO driver (e.g: DboMysql).
+ * Cake's DBO driver (e.g: DboMysql).
  *
  * @var object
  */

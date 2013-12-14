@@ -2,6 +2,8 @@
 /**
  * SqlserverTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -116,7 +118,7 @@ class SqlserverTestModel extends CakeTestModel {
 /**
  * useTable property
  *
- * @var boolean
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -182,7 +184,7 @@ class SqlserverClientTestModel extends CakeTestModel {
 /**
  * useTable property
  *
- * @var boolean
+ * @var bool false
  */
 	public $useTable = false;
 
@@ -248,7 +250,7 @@ class SqlserverTest extends CakeTestCase {
 /**
  * autoFixtures property
  *
- * @var boolean
+ * @var bool false
  */
 	public $autoFixtures = false;
 
@@ -308,10 +310,6 @@ class SqlserverTest extends CakeTestCase {
 
 		$expected = "''";
 		$result = $this->db->value('', 'binary');
-		$this->assertSame($expected, $result);
-
-		$expected = 'NULL';
-		$result = $this->db->value(null, 'string');
 		$this->assertSame($expected, $result);
 	}
 

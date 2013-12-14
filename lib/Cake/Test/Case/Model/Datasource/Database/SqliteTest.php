@@ -2,6 +2,8 @@
 /**
  * DboSqliteTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -429,7 +431,7 @@ class SqliteTest extends CakeTestCase {
 	}
 
 /**
- * Test that records can be inserted with UUID primary keys, and
+ * Test that records can be inserted with uuid primary keys, and
  * that the primary key is not blank
  *
  * @return void
@@ -439,7 +441,7 @@ class SqliteTest extends CakeTestCase {
 		$Model = ClassRegistry::init('Uuid');
 
 		$data = array(
-			'title' => 'A UUID should work',
+			'title' => 'A uuid should work',
 			'count' => 10
 		);
 		$Model->create($data);
@@ -447,7 +449,7 @@ class SqliteTest extends CakeTestCase {
 		$result = $Model->read();
 
 		$this->assertEquals($data['title'], $result['Uuid']['title']);
-		$this->assertTrue(Validation::uuid($result['Uuid']['id']), 'Not a UUID');
+		$this->assertTrue(Validation::uuid($result['Uuid']['id']), 'Not a uuid');
 	}
 
 /**

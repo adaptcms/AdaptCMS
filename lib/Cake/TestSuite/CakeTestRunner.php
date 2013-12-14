@@ -2,6 +2,8 @@
 /**
  * TestRunner for CakePHP Test suite.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -20,17 +22,18 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 App::uses('CakeFixtureManager', 'TestSuite/Fixture');
 
 /**
- * A custom test runner for CakePHP's use of PHPUnit.
+ * A custom test runner for Cake's use of PHPUnit.
  *
  * @package       Cake.TestSuite
  */
 class CakeTestRunner extends PHPUnit_TextUI_TestRunner {
 
 /**
- * Lets us pass in some options needed for CakePHP's webrunner.
+ * Lets us pass in some options needed for cake's webrunner.
  *
  * @param mixed $loader
  * @param array $params list of options to be used for this run
+ * @return void
  */
 	public function __construct($loader, $params) {
 		parent::__construct($loader);

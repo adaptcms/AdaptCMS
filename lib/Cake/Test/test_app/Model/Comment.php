@@ -2,6 +2,10 @@
 /**
  * Test App Comment Model
  *
+ *
+ *
+ * PHP 5
+ *
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -29,5 +33,12 @@ class Comment extends AppModel {
  * @var string
  */
 	public $useTable = 'comments';
+
+/**
+ * Model name
+ *
+ * @var string
+ */
+	public $name = 'Comment';
 
 }

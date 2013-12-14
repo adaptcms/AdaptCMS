@@ -2,6 +2,8 @@
 /**
  * HTTP Socket connection class.
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -21,7 +23,7 @@ App::uses('Router', 'Routing');
 App::uses('Hash', 'Utility');
 
 /**
- * CakePHP network socket connection class.
+ * Cake network socket connection class.
  *
  * Core base class for HTTP network communication. HttpSocket can be used as an
  * Object Oriented replacement for cURL in many places.
@@ -76,7 +78,7 @@ class HttpSocket extends CakeSocket {
 	public $response = null;
 
 /**
- * Response class name
+ * Response classname
  *
  * @var string
  */
@@ -132,7 +134,7 @@ class HttpSocket extends CakeSocket {
 /**
  * Build an HTTP Socket using the specified configuration.
  *
- * You can use a URL string to set the URL and use default configurations for
+ * You can use an URL string to set the URL and use default configurations for
  * all other options:
  *
  * `$http = new HttpSocket('http://cakephp.org/');`
@@ -462,7 +464,7 @@ class HttpSocket extends CakeSocket {
 /**
  * Issues a POST request to the specified URI, query, and request.
  *
- * `post()` can be used to post simple data arrays to a URL:
+ * `post()` can be used to post simple data arrays to an URL:
  *
  * {{{
  * $response = $http->post('http://example.com', array(
@@ -472,7 +474,7 @@ class HttpSocket extends CakeSocket {
  * }}}
  *
  * @param string|array $uri URI to request. See HttpSocket::_parseUri()
- * @param array $data Array of request body data keys and values.
+ * @param array $data Array of POST data keys and values.
  * @param array $request An indexed array with indexes such as 'method' or uri
  * @return mixed Result of request, either false on failure or the response to the request.
  */
@@ -485,7 +487,7 @@ class HttpSocket extends CakeSocket {
  * Issues a PUT request to the specified URI, query, and request.
  *
  * @param string|array $uri URI to request, See HttpSocket::_parseUri()
- * @param array $data Array of request body data keys and values.
+ * @param array $data Array of PUT data keys and values.
  * @param array $request An indexed array with indexes such as 'method' or uri
  * @return mixed Result of request
  */
@@ -498,7 +500,7 @@ class HttpSocket extends CakeSocket {
  * Issues a PATCH request to the specified URI, query, and request.
  *
  * @param string|array $uri URI to request, See HttpSocket::_parseUri()
- * @param array $data Array of request body data keys and values.
+ * @param array $data Array of PATCH data keys and values.
  * @param array $request An indexed array with indexes such as 'method' or uri
  * @return mixed Result of request
  */
@@ -511,7 +513,7 @@ class HttpSocket extends CakeSocket {
  * Issues a DELETE request to the specified URI, query, and request.
  *
  * @param string|array $uri URI to request (see {@link _parseUri()})
- * @param array $data Array of request body data keys and values.
+ * @param array $data Query to append to URI
  * @param array $request An indexed array with indexes such as 'method' or uri
  * @return mixed Result of request
  */
@@ -543,7 +545,7 @@ class HttpSocket extends CakeSocket {
  *
  * Would return `/search?q=socket`.
  *
- * @param string|array Either a string or array of URL options to create a URL with.
+ * @param string|array Either a string or array of URL options to create an URL with.
  * @param string $uriTemplate A template string to use for URL formatting.
  * @return mixed Either false on failure or a string containing the composed URL.
  */
@@ -689,8 +691,8 @@ class HttpSocket extends CakeSocket {
 		}
 		if (!empty($this->config['context']['ssl']['verify_host'])) {
 			$this->config['context']['ssl']['CN_match'] = $host;
+			unset($this->config['context']['ssl']['verify_host']);
 		}
-		unset($this->config['context']['ssl']['verify_host']);
 	}
 
 /**

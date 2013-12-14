@@ -3,7 +3,7 @@
 	<?php echo microtime(); ?>
 <!--/nocache-->
 
-<?php echo $this->fetch('content'); ?>
+<?php echo $content_for_layout; ?>
 
 <?php echo $superman; ?>
 

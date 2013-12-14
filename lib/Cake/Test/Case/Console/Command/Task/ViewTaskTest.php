@@ -4,6 +4,8 @@
  *
  * Test Case for view generation shell task
  *
+ * PHP 5
+ *
  * CakePHP : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -29,7 +31,6 @@ App::uses('ProjectTask', 'Console/Command/Task');
 App::uses('DbConfigTask', 'Console/Command/Task');
 App::uses('Model', 'Model');
 App::uses('Controller', 'Controller');
-App::uses('AppController', 'Controller');
 
 /**
  * Test View Task Comment Model

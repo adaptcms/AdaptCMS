@@ -5,6 +5,8 @@
  * This file is application-wide controller file. You can put all
  * application-wide controller-related methods here.
  *
+ * PHP 5
+ *
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       app.Controller
  * @since         CakePHP(tm) v 0.2.9

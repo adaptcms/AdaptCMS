@@ -6,6 +6,8 @@
  *
  * You can configure a FileEngine cache, using Cache::config()
  *
+ * PHP 5
+ *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -42,7 +44,7 @@ class FileEngine extends CacheEngine {
  *
  * - path = absolute path to cache directory, default => CACHE
  * - prefix = string prefix for filename, default => cake_
- * - lock = enable file locking on write, default => true
+ * - lock = enable file locking on write, default => false
  * - serialize = serialize the data, default => true
  *
  * @var array
@@ -208,10 +210,7 @@ class FileEngine extends CacheEngine {
 		}
 		$path = $this->_File->getRealPath();
 		$this->_File = null;
-
-		//@codingStandardsIgnoreStart
-		return @unlink($path);
-		//@codingStandardsIgnoreEnd
+		return unlink($path);
 	}
 
 /**
@@ -290,12 +289,9 @@ class FileEngine extends CacheEngine {
 				}
 			}
 			if ($file->isFile()) {
-				$filePath = $file->getRealPath();
+				$_path = $file->getRealPath();
 				$file = null;
-
-				//@codingStandardsIgnoreStart
-				@unlink($filePath);
-				//@codingStandardsIgnoreEnd
+				unlink($_path);
 			}
 		}
 	}
@@ -413,16 +409,9 @@ class FileEngine extends CacheEngine {
 		$contents = new RecursiveIteratorIterator($directoryIterator, RecursiveIteratorIterator::CHILD_FIRST);
 		foreach ($contents as $object) {
 			$containsGroup = strpos($object->getPathName(), DS . $group . DS) !== false;
-			$hasPrefix = true;
-			if (strlen($this->settings['prefix']) !== 0) {
-				$hasPrefix = strpos($object->getBaseName(), $this->settings['prefix']) === 0;
-			}
+			$hasPrefix = strpos($object->getBaseName(), $this->settings['prefix']) === 0;
 			if ($object->isFile() && $containsGroup && $hasPrefix) {
-				$path = $object->getPathName();
-				$object = null;
-				//@codingStandardsIgnoreStart
-				@unlink($path);
-				//@codingStandardsIgnoreEnd
+				unlink($object->getPathName());
 			}
 		}
 		return true;

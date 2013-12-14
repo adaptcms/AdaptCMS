@@ -2,12 +2,13 @@
 /**
  * DboSourceTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
+ *	Licensed under The Open Group Test Suite License
+ *	Redistributions of files must retain the above copyright notice.
  *
  * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
@@ -115,7 +116,7 @@ class DboSourceTest extends CakeTestCase {
 /**
  * autoFixtures property
  *
- * @var boolean
+ * @var bool false
  */
 	public $autoFixtures = false;
 
@@ -683,22 +684,6 @@ class DboSourceTest extends CakeTestCase {
 	}
 
 /**
- * Test that flushMethodCache works as expected
- *
- * @return void
- */
-	public function testFlushMethodCache() {
-		$this->testDb->cacheMethods = true;
-		$this->testDb->cacheMethod('name', 'some-key', 'stuff');
-
-		Cache::write('method_cache', DboTestSource::$methodCache, '_cake_core_');
-
-		$this->testDb->flushMethodCache();
-		$result = $this->testDb->cacheMethod('name', 'some-key');
-		$this->assertNull($result);
-	}
-
-/**
  * testLog method
  *
  * @outputBuffering enabled
@@ -961,31 +946,6 @@ class DboSourceTest extends CakeTestCase {
 	}
 
 /**
- * test that fields() method cache detects schema name changes
- *
- * @return void
- */
-	public function testFieldsCacheKeyWithSchemanameChange() {
-		if ($this->db instanceof Postgres || $this->db instanceof Sqlserver) {
-			$this->markTestSkipped('Cannot run this test with SqlServer or Postgres');
-		}
-		Cache::delete('method_cache', '_cake_core_');
-		DboSource::$methodCache = array();
-		$Article = ClassRegistry::init('Article');
-
-		$ds = $Article->getDataSource();
-		$ds->cacheMethods = true;
-		$first = $ds->fields($Article);
-
-		$Article->schemaName = 'secondSchema';
-		$ds = $Article->getDataSource();
-		$ds->cacheMethods = true;
-		$second = $ds->fields($Article);
-
-		$this->assertEquals(2, count(DboSource::$methodCache['fields']));
-	}
-
-/**
  * Test that group works without a model
  *
  * @return void
@@ -1142,7 +1102,7 @@ class DboSourceTest extends CakeTestCase {
 			),
 			$this->Model
 		);
-		$expected = 'SELECT DISTINCT(AssetsTag.asset_id) FROM assets_tags AS AssetsTag   WHERE Tag.name = foo bar  GROUP BY AssetsTag.asset_id';
+		$expected = 'SELECT DISTINCT(AssetsTag.asset_id) FROM assets_tags AS AssetsTag   WHERE Tag.name = foo bar  GROUP BY AssetsTag.asset_id  ';
 		$this->assertEquals($expected, $subQuery);
 	}
 
@@ -1151,14 +1111,8 @@ class DboSourceTest extends CakeTestCase {
  *
  * @return array
  */
-	public static function joinStatements() {
+	public static function joinStatements($schema) {
 		return array(
-			array(array(
-				'type' => 'CROSS',
-				'alias' => 'PostsTag',
-				'table' => 'posts_tags',
-				'conditions' => array('1 = 1')
-			), 'CROSS JOIN cakephp.posts_tags AS PostsTag'),
 			array(array(
 				'type' => 'LEFT',
 				'alias' => 'PostsTag',
@@ -1320,61 +1274,4 @@ class DboSourceTest extends CakeTestCase {
 		$this->assertNotContains($scientificNotation, $result);
 	}
 
-/**
- * Test insertMulti with id position.
- *
- * @return void
- */
-	public function testInsertMultiId() {
-		$this->loadFixtures('Article');
-		$Article = ClassRegistry::init('Article');
-		$db = $Article->getDatasource();
-		$datetime = date('Y-m-d H:i:s');
-		$data = array(
-			array(
-				'user_id' => 1,
-				'title' => 'test',
-				'body' => 'test',
-				'published' => 'N',
-				'created' => $datetime,
-				'updated' => $datetime,
-				'id' => 100,
-			),
-			array(
-				'user_id' => 1,
-				'title' => 'test 101',
-				'body' => 'test 101',
-				'published' => 'N',
-				'created' => $datetime,
-				'updated' => $datetime,
-				'id' => 101,
-			)
-		);
-		$result = $db->insertMulti('articles', array_keys($data[0]), $data);
-		$this->assertTrue($result, 'Data was saved');
-
-		$data = array(
-			array(
-				'id' => 102,
-				'user_id' => 1,
-				'title' => 'test',
-				'body' => 'test',
-				'published' => 'N',
-				'created' => $datetime,
-				'updated' => $datetime,
-			),
-			array(
-				'id' => 103,
-				'user_id' => 1,
-				'title' => 'test 101',
-				'body' => 'test 101',
-				'published' => 'N',
-				'created' => $datetime,
-				'updated' => $datetime,
-			)
-		);
-
-		$result = $db->insertMulti('articles', array_keys($data[0]), $data);
-		$this->assertTrue($result, 'Data was saved');
-	}
 }

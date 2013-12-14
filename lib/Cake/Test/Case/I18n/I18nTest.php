@@ -2,6 +2,8 @@
 /**
  * I18nTest file
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -1860,18 +1862,6 @@ class I18nTest extends CakeTestCase {
  */
 	public function testTranslateEmptyDomain() {
 		I18n::translate('Plural Rule 1', null, '');
-	}
-
-/**
- * testLoadLocaleDefinition method
- *
- * @return void
- */
-	public function testLoadLocaleDefinition() {
-		$path = current(App::path('locales'));
-		$result = I18n::loadLocaleDefinition($path . 'nld' . DS . 'LC_TIME');
-		$expected = array('zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag');
-		$this->assertSame($expected, $result['day']);
 	}
 
 /**

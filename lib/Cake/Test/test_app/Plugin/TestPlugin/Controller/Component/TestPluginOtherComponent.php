@@ -2,6 +2,8 @@
 /**
  * Short description for file.
  *
+ * PHP 5
+ *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -17,9 +19,9 @@
  */
 
 /**
- * Class TestPluginOtherComponent
+ * Class TestPluginOtherComponentComponent
  *
  * @package       Cake.Test.TestApp.Plugin.TestPlugin.Controller.Component
  */
-class TestPluginOtherComponent extends Component {
+class TestPluginOtherComponentComponent extends Object {
 }

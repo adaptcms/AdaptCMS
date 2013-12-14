@@ -253,7 +253,7 @@ class HtmlHelper extends AppHelper {
 			);
 
 			if ($type === 'icon' && $url === null) {
-				$types['icon']['link'] = 'favicon.ico';
+				$types['icon']['link'] = $this->webroot('favicon.ico');
 			}
 
 			if (isset($types[$type])) {
@@ -276,10 +276,11 @@ class HtmlHelper extends AppHelper {
 		$out = null;
 
 		if (isset($options['link'])) {
-			$options['link'] = $this->assetUrl($options['link']);
 			if (isset($options['rel']) && $options['rel'] === 'icon') {
 				$out = sprintf($this->_tags['metalink'], $options['link'], $this->_parseAttributes($options, array('block', 'link'), ' ', ' '));
 				$options['rel'] = 'shortcut icon';
+			} else {
+				$options['link'] = $this->url($options['link'], true);
 			}
 			$out .= sprintf($this->_tags['metalink'], $options['link'], $this->_parseAttributes($options, array('block', 'link'), ' ', ' '));
 		} else {
@@ -400,7 +401,7 @@ class HtmlHelper extends AppHelper {
  *   This overrides the `inline` option.
  * - `plugin` False value will prevent parsing path as a plugin
  * - `rel` Defaults to 'stylesheet'. If equal to 'import' the stylesheet will be imported.
- * - `fullBase` If true the URL will get a full address for the css file.
+ * - `fullBase` If true the url will get a full address for the css file.
  *
  * @param string|array $path The name of a CSS style sheet or an array containing names of
  *   CSS stylesheets. If `$path` is prefixed with '/', the path will be relative to the webroot
@@ -617,7 +618,7 @@ class HtmlHelper extends AppHelper {
 	}
 
 /**
- * End a Buffered section of JavaScript capturing.
+ * End a Buffered section of Javascript capturing.
  * Generates a script tag inline or in `$scripts_for_layout` depending on the settings
  * used when the scriptBlock was started
  *
