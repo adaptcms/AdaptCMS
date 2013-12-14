@@ -65,9 +65,11 @@ class Blocks
 				{
 					$settings = json_decode($data['settings']);
 
-					foreach($settings as $key => $val)
-					{
-						$data[$key] = $val;
+					if (!empty($settings)) {
+						foreach($settings as $key => $val)
+						{
+							$data[$key] = $val;
+						}
 					}
 
 					unset($data['settings']);
