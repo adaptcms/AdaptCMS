@@ -19,6 +19,6 @@ class PollVotingValue extends PollsAppModel
 		'User' => array(
 			'className'    => 'User',
 			'foreignKey'   => 'user_id'
-		)
+		),
 	);
 }

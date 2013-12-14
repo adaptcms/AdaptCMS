@@ -99,10 +99,10 @@ class MenusController extends AppController
 
             if ($this->Menu->save($this->request->data))
             {
-                $this->Session->setFlash('Your menu has been added.', 'success');
+                $this->Session->setFlash('Your menu has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your menu.', 'error');
+                $this->Session->setFlash('Unable to add your menu.', 'flash_error');
             }
         } 
     }
@@ -125,10 +125,10 @@ class MenusController extends AppController
             
             if ($this->Menu->save($this->request->data))
             {
-                $this->Session->setFlash('Your menu has been updated.', 'success');
+                $this->Session->setFlash('Your menu has been updated.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to update your menu.', 'error');
+                $this->Session->setFlash('Unable to update your menu.', 'flash_error');
             }
         }
 
@@ -166,7 +166,7 @@ class MenusController extends AppController
 
 	    $permanent = $this->Menu->remove($data);
 
-	    $this->Session->setFlash('The menu `'.$title.'` has been deleted.', 'success');
+	    $this->Session->setFlash('The menu `'.$title.'` has been deleted.', 'flash_success');
 
 	    if ($permanent)
 	    {
@@ -191,10 +191,10 @@ class MenusController extends AppController
 
         if ($this->Menu->restore())
         {
-            $this->Session->setFlash('The menu `'.$title.'` has been restored.', 'success');
+            $this->Session->setFlash('The menu `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The menu `'.$title.'` has NOT been restored.', 'error');
+            $this->Session->setFlash('The menu `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }

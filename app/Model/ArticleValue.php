@@ -1,9 +1,6 @@
 <?php
 /**
  * Class ArticleValue
- *
- * @property Field $Field
- * @property File $File
  */
 class ArticleValue extends AppModel
 {

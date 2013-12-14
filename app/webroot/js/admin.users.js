@@ -1,6 +1,19 @@
 $(document).ready(function() {
     if ($('.admin-validate').length)
     {
+        $("#UserPasswordConfirm").rules("add", {
+            required: false,
+            equalTo: "#UserPassword",
+            messages: {
+                equalTo: "Passwords do not match"
+            }
+        });
+
+        $("#UserEmail").rules("add", {
+            required: true,
+            email: true
+        });
+
         $(".security-question").on('change', function() {
             var id = $(this).attr('id');
 

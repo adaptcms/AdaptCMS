@@ -110,15 +110,12 @@ Cache::config('default', array('engine' => 'File'));
  * ));
  *
  */
-define('ADMIN_VIEW_PATH', APP . DS . 'View' . DS . 'Admin' . DS);
-define('FRONTEND_VIEW_PATH', APP . DS . 'View' . DS . 'Frontend' . DS);
-
 App::build(
 	array(
-		'View' => array(
-			APP . 'View' . DS,
-			WWW_ROOT . 'installer' . DS
-		)
+		'View' => array(WWW_ROOT.'installer'.DS)
+	),
+	array(
+		'View' => array(ROOT.'View'.DS)
 	)
 );
 
@@ -140,8 +137,7 @@ App::build(
  */
 Configure::write('Dispatcher.filters', array(
 	'AssetDispatcher',
-//	'CacheDispatcher'
-	'AdaptcmsCacheDispatcher'
+	'CacheDispatcher'
 ));
 
 CakePlugin::loadAll();

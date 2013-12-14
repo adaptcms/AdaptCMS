@@ -4,8 +4,6 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_polls` (
   `title` varchar(255) DEFAULT NULL,
   `poll_type` varchar(255) DEFAULT NULL,
   `user_id` int(11),
-  `start_date` DATE NULL,
-  `end_date` DATE NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL,
   `deleted_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

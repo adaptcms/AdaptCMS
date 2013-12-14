@@ -2,11 +2,6 @@
 App::uses('Folder', 'Utility');
 App::uses('File', 'Utility');
 
-/**
- * Class AutoLoadJSHelper
- *
- * @property HtmlHelper $Html
- */
 class AutoLoadJSHelper extends AppHelper
 {
     /**
@@ -27,21 +22,35 @@ class AutoLoadJSHelper extends AppHelper
     );
 
     /**
+     * Injects the location to the main webroot, used primarily in external JS files for AJAX calls.
+     * 
+     * @param string $viewFile
+     * @param string $content
+     * @return string
+     */
+    public function afterRenderFile($viewFile, $content)
+    {
+        $var = '<div id="webroot" style="display:none">'. $this->params->webroot . '</div></body>';
+
+        return str_replace('</body>', $var, $content);
+    }
+
+    /**
      * Function that looks for any CSS or JS files that should be loaded from plugins or based on URL parameters.
      * An example would be when editing an article in the admin, it will look for and load the 'admin.articles.js' file.
      * 
      * Any css or JS with the name 'global' will also be loaded from plugins.
      * 
      * @param string $ext
-     * @return void
+     * @return none
      */
     public function getFiles($ext)
     {
-        $controller = strtolower($this->request->controller);
+        $controller = strtolower($this->params->controller);
         $action = str_replace("admin_", "", strtolower($this->request->action));
 
-        if (!empty($this->request->prefix)) {
-            $controller = $this->request->prefix . '.' . $controller;
+        if (!empty($this->params->prefix)) {
+            $controller = $this->params->prefix . '.' . $controller;
         }
 
         $files = array(
@@ -59,9 +68,9 @@ class AutoLoadJSHelper extends AppHelper
             )
         );
 
-        if (!empty($this->request->plugin))
+        if (!empty($this->params['plugin']))
         {
-            $plugin = Inflector::camelize($this->request->plugin);
+            $plugin = Inflector::camelize($this->params['plugin']);
 
             $files['controller']['path'] = APP . 'Plugin' . DS . $plugin . DS . 'webroot' . DS . $ext . DS;
             $files['action']['path'] = $files['controller']['path'];
@@ -80,7 +89,7 @@ class AutoLoadJSHelper extends AppHelper
             }
         }
 
-        $path = APP . 'Plugin';
+        $path = APP . DS . 'Plugin';
         $plugins = new Folder($path);
         $plugin_list = $plugins->read(true);
 
@@ -93,22 +102,8 @@ class AutoLoadJSHelper extends AppHelper
                 $file_path = $path . DS . $folder . DS . 'webroot' . DS . $ext . DS . 'global.' . $ext;
 
                 if (file_exists($file_path)) {
-	                if ($ext == 'js') {
                         echo $this->Html->script($folder . '.global.' . $ext);
-	                } else {
-		                echo $this->Html->css($folder . '.global.' . $ext);
-	                }
                 }
-
-	            $file_path = $path . DS . $folder . DS . 'webroot' . DS . $ext . DS . $controller . '.' . $action .'.' . $ext;
-
-	            if (file_exists($file_path)) {
-		            if ($ext == 'js') {
-			            echo $this->Html->script($folder . '.' . $controller . '.' . $action);
-		            } else {
-			            echo $this->Html->css($folder . '.' . $controller . '.' . $action);
-		            }
-	            }
             }
         }
     }
@@ -116,7 +111,7 @@ class AutoLoadJSHelper extends AppHelper
     /**
      * Runs the getFiles function for JS files
      * 
-     * @return void
+     * @return none
      */
     public function getJS()
     {
@@ -126,7 +121,7 @@ class AutoLoadJSHelper extends AppHelper
     /**
      * Runs the getFiles function for CSS files
      * 
-     * @return void
+     * @return none
      */
     public function getCss()
     {

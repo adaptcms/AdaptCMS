@@ -188,39 +188,16 @@ class AdminHelper extends AppHelper
         }
     }
 
-	public function recursive_array_search($needle,$haystack) {
-		foreach($haystack as $key => $value) {
-			if ($key == $needle) {
-				return $value;
-			} elseif (is_array($value)) {
-				$return = $this->recursive_array_search($needle, $value);
-
-				if ($return) {
-					return $return;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * If user is logged in and has timezone, uses that to calculate time. Otherwise returns it based on
-	 * server time.
-	 *
-	 * @param mixed $time
-	 * @param string $format
-	 * @param null $field
-	 * @return string
-	 */
-    public function time($time, $format = 'F jS, Y h:i A', $field = null)
+    /**
+     * If user is logged in and has timezone, uses that to calculate time. Otherwise returns it based on
+     * server time.
+     * 
+     * @param integer $time
+     * @param string $format
+     * @return string
+     */
+    public function time($time, $format = 'F jS, Y h:i A')
     {
-	    if (!is_string($time) && !empty($field)) {
-		    $time = $this->recursive_array_search($field, $time);
-	    }
-
-	    if (empty($format))
-		    $format = 'F jS, Y h:i A';
-
         if ($this->isLoggedIn())
         {
             $settings = json_decode(

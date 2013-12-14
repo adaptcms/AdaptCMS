@@ -1,26 +1,26 @@
 $(document).ready(function() {
-    if ($("#FieldFieldOrder").length) {
+    if ($("#FieldFieldOrder").length > 0) {
         $( "#sort-list" ).sortable({
             cursor: 'move',
+            update: function(event, ui)
+            {
+                var order = $(this).sortable("toArray");
+                var ul = $(this).parent();
+                var id = $("#FieldId").val();
+
+                if (id) {
+                    $("#FieldFieldOrder").val($("#sort-list li#" + id).index());
+                } else {
+                    $("#FieldFieldOrder").val($("#sort-list li#0").index());
+                }
+
+                $("#FieldOrder").val(order);
+            },
             create: function(event, ui)
             {
                 var order = $(this).sortable("toArray");
                 $("#FieldOrder").val(order);
             }
-        });
-
-        $( "#sort-list").on('sortupdate', function(event, ui) {
-            var order = $(this).sortable("toArray");
-            var ul = $(this).parent();
-            var id = $("#FieldId").val();
-
-            if (id) {
-                $("#FieldFieldOrder").val($("#sort-list li#" + id).index());
-            } else {
-                $("#FieldFieldOrder").val($("#sort-list li#0").index());
-            }
-
-            $("#FieldOrder").val(order);
         });
 
         $( "#sort-list" ).disableSelection();
@@ -64,23 +64,29 @@ $(document).ready(function() {
                 noTitle();
             } else {
                 $.post($("#webroot").text() + "admin/fields/ajax_fields/", 
-                {
-                    data:{
-                        Field:{
-                            id: id,
-                            category_id: category_id,
-                            title: title,
-                            description: description
+                    {
+                        data:{
+                            Field:{
+                                id: id,
+                                category_id: category_id,
+                                title: title,
+                                description: description
+                            }
                         }
-                    }
-                }, function(response) {
+                    }, function(response) {
                     $("#sort-list").html(response.data);
-                    $("#sort-list").trigger('sortupdate');
+
+                    if (!id) {
+                        $("#FieldFieldOrder").val($("#sort-list li#0").index());
+                    } else {
+                        $("#FieldFieldOrder").val($("#sort-list li#" + id).index());
+                    }
 
                     enablePopovers();
                 }, 'json');
             }
         });
+
 
         fieldTypeToggle($("#FieldFieldTypeId").val(), false);
 
@@ -110,12 +116,6 @@ $(document).ready(function() {
                         $("#FieldFieldTypeId").val(data.Field.field_type_id).trigger('change');
                         $("#FieldFieldLimitMin").val(data.Field.field_limit_min);
                         $("#FieldFieldLimitMax").val(data.Field.field_limit_max);
-
-                        if (data.Field.description == '') {
-                            tinyMCE.activeEditor.setContent('');
-                        } else {
-                            tinyMCE.activeEditor.setContent(data.Field.description);
-                        }
                         
                         if (data.Field.required == 1) {
                             $("#FieldRequired").attr('checked', 'checked');
@@ -129,8 +129,6 @@ $(document).ready(function() {
                                 $("#add-data").trigger('click');
                             });
                         }
-
-                        $("#sort-list").trigger('sortupdate');
                     }
                 }, 'json');
             } else {

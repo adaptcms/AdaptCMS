@@ -73,10 +73,10 @@ class FieldTypesController extends AppController
 
             if ($this->FieldType->save($this->request->data))
             {
-                $this->Session->setFlash('Your field type has been added.', 'success');
+                $this->Session->setFlash('Your field type has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your field type.', 'error');
+                $this->Session->setFlash('Unable to add your field type.', 'flash_error');
             }
         } 
     }
@@ -100,10 +100,10 @@ class FieldTypesController extends AppController
             
             if ($this->FieldType->save($this->request->data))
             {
-                $this->Session->setFlash('Your field type has been updated.', 'success');
+                $this->Session->setFlash('Your field type has been updated.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to update your field type.', 'error');
+                $this->Session->setFlash('Unable to update your field type.', 'flash_error');
             }
         }
 
@@ -138,7 +138,7 @@ class FieldTypesController extends AppController
 
 	    $permanent = $this->FieldType->remove($data);
 
-	    $this->Session->setFlash('The field type `'.$title.'` has been deleted.', 'success');
+	    $this->Session->setFlash('The field type `'.$title.'` has been deleted.', 'flash_success');
 
 	    if ($permanent)
 	    {
@@ -163,10 +163,10 @@ class FieldTypesController extends AppController
 
         if ($this->FieldType->restore())
         {
-            $this->Session->setFlash('The field type `'.$title.'` has been restored.', 'success');
+            $this->Session->setFlash('The field type `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The field type `'.$title.'` has NOT been restored.', 'error');
+            $this->Session->setFlash('The field type `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }

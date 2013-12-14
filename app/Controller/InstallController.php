@@ -23,44 +23,34 @@ class InstallController extends Controller
     public $components = array('Session');
 
     private $upgrade_versions = array(
-//        'beta' => array(
-//            'sql' => array(
-//                'beta',
-//                'beta2',
-//                'beta3',
-//                '3-0',
-//	            '3-0-1'
-//            ),
-//            'upgrade_text' => 'upgrade-beta.md'
-//        ),
-//        'beta2' => array(
-//            'sql' => array(
-//                'beta2',
-//                'beta3',
-//                '3-0',
-//	            '3-0-1'
-//            )
-//        ),
-//        'beta3' => array(
-//            'sql' => array(
-//                'beta3',
-//                '3-0',
-//	            '3-0-1'
-//            )
-//        ),
+        'beta' => array(
+            'sql' => array(
+                'beta',
+                'beta2',
+                'beta3',
+                '3-0'
+            ),
+            'upgrade_text' => 'upgrade-beta.md'
+        ),
+        'beta2' => array(
+            'sql' => array(
+                'beta2',
+                'beta3',
+                '3-0'
+            )
+        ),
+        'beta3' => array(
+            'sql' => array(
+                'beta3',
+                '3-0'
+            )
+        ),
         '3.0' => array(
             'sql' => array(
-                '3-0',
-	            '3-0-1'
+                '3-0'
             ),
             'upgrade_text' => 'upgrade-3-0.md'
-        ),
-	    '3.0.1' => array(
-		    'sql' => array(
-			    '3-0-1'
-		    ),
-		    'afterUpgrade' => 'afterUpgrade301'
-	    )
+        )
     );
 
     public function beforeFilter()
@@ -217,13 +207,13 @@ class InstallController extends Controller
             try {
                 $db = ConnectionManager::getDataSource('default');
                 if ($db->isConnected()) {
-                    $this->Session->setFlash('You made a successfull connection to the database.', 'success');
+                    $this->Session->setFlash('You made a successfull connection to the database.', 'flash_success');
                     $this->redirect(array('action' => 'sql'));
                 }
             } catch (Exception $e) {
                 copy(APP.'Config/database.default.php', $file);
 
-                $this->Session->setFlash('Cannot make connection with the database options you entered.', 'error');
+                $this->Session->setFlash('Cannot make connection with the database options you entered.', 'flash_error');
             }
         }
     }
@@ -260,10 +250,10 @@ class InstallController extends Controller
             $this->request->data['User']['status'] = 1;
 
             if ($this->User->save($this->request->data)) {
-                $this->Session->setFlash('Your admin account was created.', 'success');
+                $this->Session->setFlash('Your admin account was created.', 'flash_success');
                 $this->redirect(array('action' => 'finish'));
             } else {
-                $this->Session->setFlash('Your admin account could nto be created.', 'error');
+                $this->Session->setFlash('Your admin account could nto be created.', 'flash_error');
             }
         }
     }
@@ -286,13 +276,6 @@ class InstallController extends Controller
         {
             $this->redirect(array('action' => 'index'));
         }
-
-	    if (!empty($this->upgrade_versions[$version]['afterUpgrade']) && method_exists($this, $this->upgrade_versions[$version]['afterUpgrade'])) {
-		    $method = $this->upgrade_versions[$version]['afterUpgrade'];
-
-		    if (!$this->$method())
-			    $error = true;
-	    }
 
         $notes_path = WWW_ROOT.'installer'.DS.'notes'.DS;
 
@@ -320,13 +303,6 @@ class InstallController extends Controller
 
                 $this->set( compact('sql_results') );
             }
-
-	        if (!empty($this->upgrade_versions[$version]['afterUpgrade']) && method_exists($this, $this->upgrade_versions[$version]['afterUpgrade'])) {
-		        $method = $this->upgrade_versions[$version]['afterUpgrade'];
-
-		        if (!$this->$method())
-			        $error = true;
-	        }
 
             if (!isset($error))
                 $this->_updateInstallFile();
@@ -716,12 +692,12 @@ class InstallController extends Controller
                     if (!empty($update_config))
                         $this->_updateSystemConfiguration($system, Configure::read('internal.system'));
 
-                    $this->clearTmpCache();
-					$this->_refreshThemes();
+                    clearCache(null, 'views');
+                    clearCache(null, 'persistent');
 
-                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'success' );
+                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
                 } else {
-                    $this->Session->setFlash( 'SQL could not be inserted.', 'error' );
+                    $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
                 }
             }
         }
@@ -835,12 +811,12 @@ class InstallController extends Controller
                 if (!empty($update_config))
                     $this->_updateSystemConfiguration($system, Configure::read('internal.system'));
 
-	            $this->clearTmpCache();
-	            $this->_refreshThemes(null, $plugin);
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
 
-                $this->Session->setFlash( 'SQL has been removed successfully.', 'success' );
+                $this->Session->setFlash( 'SQL has been removed successfully.', 'flash_success' );
             } else {
-                $this->Session->setFlash( 'SQL could not be removed.', 'error' );
+                $this->Session->setFlash( 'SQL could not be removed.', 'flash_error' );
             }
         }
     }
@@ -896,9 +872,10 @@ class InstallController extends Controller
             $this->set( compact( 'sql' ) );
 
             if ( empty( $sql['error'] ) ) {
-	            $this->clearTmpCache();
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
 
-                $this->Session->setFlash( 'SQL has been inserted successfully.', 'success' );
+                $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
             } else {
                 $error = 'SQL Error';
             }
@@ -906,7 +883,7 @@ class InstallController extends Controller
             if ( !empty($error) )
             {
                 $this->set( compact( 'error' ) );
-                $this->Session->setFlash( 'SQL could not be inserted.', 'error' );
+                $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
             }
         }
 
@@ -975,18 +952,12 @@ class InstallController extends Controller
                         rename( $path, $new_path );
                     }
 
-	                $this->loadModel('Theme');
+                    clearCache(null, 'views');
+                    clearCache(null, 'persistent');
 
-	                $find_theme = $this->Theme->findByTitle($theme);
-	                if (!empty($find_theme)) {
-		                $this->Theme->refreshTheme($find_theme['Theme']['id'], $find_theme['Theme']['title']);
-	                }
-
-	                $this->clearTmpCache();
-
-                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'success' );
+                    $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
                 } else {
-                    $this->Session->setFlash( 'SQL could not be inserted.', 'error' );
+                    $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
                 }
             }
         }
@@ -1034,34 +1005,16 @@ class InstallController extends Controller
             $this->set( compact( 'sql' ) );
 
             if ( empty( $sql['error'] ) ) {
-	            if ( !file_exists($new_path) ) {
-		            mkdir( $new_path, 0775 );
-	            } else {
-		            $this->loadModel('User');
-		            $this->User->recursiveDelete($new_path);
-		            rename( $path, $new_path );
-	            }
+                if ( mkdir( $new_path, 0775 ) ) {
+                    rename( $path, $new_path );
+                }
 
-	            rename( $path, $new_path );
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
 
-	            $this->loadModel('Theme');
-
-	            $data = $this->Theme->findByTitle( $settings['title'] );
-		        $this->Theme->delete( $data['Theme']['id'] );
-
-	            $this->loadModel('SettingValue');
-	            $default_theme = $this->SettingValue->findByTitle('default-theme');
-
-	            if (!empty($default_theme) && $default_theme['SettingValue']['data'] == $settings['title']) {
-		            $this->SettingValue->id = $default_theme['SettingValue']['id'];
-		            $this->SettingValue->saveField('data', 'Default');
-	            }
-
-	            $this->clearTmpCache();
-
-                $this->Session->setFlash( 'SQL has been removed successfully.', 'success' );
+                $this->Session->setFlash( 'SQL has been removed successfully.', 'flash_success' );
             } else {
-                $this->Session->setFlash( 'SQL could not be removed.', 'error' );
+                $this->Session->setFlash( 'SQL could not be removed.', 'flash_error' );
             }
         }
     }
@@ -1117,9 +1070,10 @@ class InstallController extends Controller
             $this->set( compact( 'sql' ) );
 
             if ( empty( $sql['error'] ) ) {
-	            $this->clearTmpCache();
+                clearCache(null, 'views');
+                clearCache(null, 'persistent');
 
-                $this->Session->setFlash( 'SQL has been inserted successfully.', 'success' );
+                $this->Session->setFlash( 'SQL has been inserted successfully.', 'flash_success' );
             } else {
                 $error = 'SQL Error';
             }
@@ -1127,7 +1081,7 @@ class InstallController extends Controller
             if ( !empty($error) )
             {
                 $this->set( compact( 'error' ) );
-                $this->Session->setFlash( 'SQL could not be inserted.', 'error' );
+                $this->Session->setFlash( 'SQL could not be inserted.', 'flash_error' );
             }
         }
 
@@ -1144,8 +1098,7 @@ class InstallController extends Controller
         if ( $type == 'install' && !empty( $settings['title'] ) ) {
             $this->loadModel('Theme');
 
-	        $find_theme = $this->Theme->findByTitle($settings['title']);
-            if (empty($find_theme)) {
+            if ( !$this->Theme->findByTitle( $settings['title'] ) ) {
                 $this->Theme->create();
 
                 $data['Theme']['title'] = $settings['title'];
@@ -1308,6 +1261,12 @@ class InstallController extends Controller
         } elseif ( $type = 'uninstall' && !empty( $settings['title'] ) ) {
             $this->loadModel('Theme');
 
+            if ( $data = $this->Theme->findByTitle( $settings['title'] ) ) {
+                if ( !$this->Theme->delete( $data['Theme']['id'] ) ) {
+                    $error = 1;
+                }
+            }
+
             if (!empty( $settings['afterUninstallFilter']['file'] ) &&
                 !empty( $settings['afterUninstallFilter']['className'] ) &&
                 !empty( $settings['afterUninstallFilter']['functionName'] ) &&
@@ -1368,7 +1327,7 @@ class InstallController extends Controller
         return array(
             'sql' => $counts,
             'error' => $error
-        );
+            );
     }
 
     public function old()
@@ -1452,181 +1411,9 @@ class InstallController extends Controller
             }
             else
             {
-                $this->Session->setFlash('The ' . $this->request->params['type'] . ' does not exist.', 'error');
+                $this->Session->setFlash('The ' . $this->request->params['type'] . ' does not exist.', 'flash_error');
                 $this->redirect('/');
             }
         }
     }
-
-	/**
-	 * After Upgrade 301
-	 *
-	 * @return boolean
-	 */
-	public function afterUpgrade301()
-	{
-		$this->loadModel('Theme');
-
-		$error = false;
-
-		$folder_avail = array(
-			'Articles',
-			'Categories',
-			'Layouts',
-			'Pages'
-		);
-
-		$folders = scandir(VIEW_PATH);
-		foreach($folders as $folder) {
-			if (in_array($folder, $folder_avail)) {
-				$scan = scandir(VIEW_PATH . $folder);
-
-				foreach($scan as $file) {
-					if ($folder == 'Layouts' && $file == 'default.ctp' || $folder != 'Layouts' && strstr($file, '.ctp') && !strstr($file, 'admin') && !strstr($file, 'rss')) {
-						$path = VIEW_PATH . $folder . DS . $file;
-
-						if ($folder == 'Layouts' && $file == 'default.ctp') {
-							$new_path = VIEW_PATH . 'Frontend/layout.ctp';
-						} else {
-							$new_path = VIEW_PATH . 'Frontend' . DS . $folder . DS . $file;
-						}
-
-						$contents = file_get_contents($path);
-						file_put_contents($new_path, $contents);
-					}
-				}
-			}
-		}
-
-		$keep_folders = array(
-			'Admin',
-			'Frontend',
-			'Elements',
-			'Emails',
-			'Errors',
-			'Helper',
-			'Layouts',
-			'Old_Themed',
-			'Themed',
-			'.',
-			'..',
-			'empty',
-			'AdaptcmsView.php'
-		);
-
-		foreach($folders as $folder) {
-			if (!in_array($folder, $keep_folders)) {
-				if (file_exists(VIEW_PATH . $folder))
-					$this->Theme->rrmdir(VIEW_PATH . $folder);
-			}
-		}
-
-		$themes_array = array('Themed', 'Old_Themed');
-		foreach($themes_array as $theme) {
-			$themed = scandir(VIEW_PATH . $theme);
-			foreach($themed as $folder) {
-				if (!in_array($folder, $keep_folders)) {
-					if (!file_exists(VIEW_PATH . $theme . DS . $folder . DS . 'Frontend'))
-						mkdir(VIEW_PATH . $theme . DS . $folder . DS . 'Frontend');
-	
-					$theme_files = scandir(VIEW_PATH . $theme . DS . $folder);
-					foreach($theme_files as $file) {
-						if (in_array($file, $folder_avail)) {
-							$theme_folder = scandir(VIEW_PATH . $theme . DS . $folder . DS . $file);
-							foreach($theme_folder as $theme_file) {
-								if ($file == 'Layouts' && $theme_file == 'default.ctp' || $file != 'Layouts' && strstr($theme_file, '.ctp')) {
-									$path = VIEW_PATH . $theme . DS . $folder . DS . $file . DS . $theme_file;
-	
-									if ($file == 'Layouts' && $theme_file == 'default.ctp') {
-										$new_path = VIEW_PATH . $theme . DS . $folder . DS . 'Frontend/layout.ctp';
-									} else {
-										$new_path =  VIEW_PATH . $theme . DS . $folder . DS . 'Frontend' . DS . $file . DS . $theme_file;
-									}
-	
-									if ($file != 'Layouts' && !file_exists(VIEW_PATH . $theme . DS . $folder . DS . 'Frontend' . DS . $file))
-										mkdir(VIEW_PATH . $theme . DS . $folder . DS . 'Frontend' . DS . $file);
-	
-									$contents = file_get_contents($path);
-									file_put_contents($new_path, $contents);
-								}
-							}
-
-							$this->Theme->rrmdir(VIEW_PATH . $theme . DS . $folder . DS . $file);
-						}
-					}
-				}
-			}
-		}
-
-		if (file_exists(VIEW_PATH . 'Layouts/default.ctp'))
-			unlink(VIEW_PATH . 'Layouts/default.ctp');
-
-		$this->Theme->Template->deleteAll(array('Template.id > ' => 0));
-		$this->clearTmpCache();
-		$this->_refreshThemes();
-
-		return $error;
-	}
-
-	/**
-	 * Clear Tmp Cache
-	 *
-	 * @return void
-	 */
-	public function clearTmpCache()
-	{
-		clearCache(null, 'models');
-		clearCache(null, 'persistent');
-		clearCache(null, 'views');
-		clearCache(null, '/../templates');
-
-		if (function_exists('apc_clear_cache'))
-		{
-			apc_clear_cache();
-			apc_clear_cache('user');
-			apc_clear_cache('opcode');
-		}
-	}
-
-	/**
-	 * Refresh Themes
-	 *
-	 * @param Theme $Theme
-	 * @param null $plugin
-	 * @return void
-	 */
-	public function _refreshThemes(Theme $Theme = null, $plugin = null)
-	{
-		if (empty($Theme)) {
-			$this->loadModel('Theme');
-		} else {
-			$this->Theme = $Theme;
-		}
-
-		$themes = $this->Theme->find('all');
-		$themes[] = array(
-			'Theme' => array(
-				'id' => 1,
-				'title' => null
-			)
-		);
-
-		foreach($themes as $theme) {
-			$this->Theme->refreshTheme($theme['Theme']['id'], $theme['Theme']['title']);
-		}
-
-		if (!empty($plugin)) {
-			$templates = $this->Theme->Template->find('all', array(
-				'conditions' => array(
-					'Template.location LIKE' => '%Plugin/' . $plugin . '/%'
-				)
-			));
-
-			if (!empty($templates)) {
-				foreach($templates as $template) {
-					$this->Theme->Template->delete($template['Template']['id']);
-				}
-			}
-		}
-	}
 }

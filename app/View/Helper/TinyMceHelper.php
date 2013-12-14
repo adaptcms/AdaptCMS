@@ -14,9 +14,8 @@
  *
  * @package tiny_m_c_e
  * @subpackage tiny_m_c_e.views.helpers
- *
- * @property HtmlHelper $Html
  */
+
 class TinyMceHelper extends AppHelper {
 
 /**
@@ -44,7 +43,7 @@ class TinyMceHelper extends AppHelper {
  * Adds a new editor to the script block in the head
  *
  * @see http://wiki.moxiecode.com/index.php/TinyMCE:Configuration for a list of keys
- * @param array $options If array camel cased TinyMce Init config keys, if string it checks if a config with that name exists
+ * @param mixed If array camel cased TinyMce Init config keys, if string it checks if a config with that name exists
  * @return void
  */
 	public function editor($options = array()) {
@@ -60,13 +59,9 @@ class TinyMceHelper extends AppHelper {
 			$elements = 'abshosturls';
 		}
 
-		$plugins = '';
-		if (!empty($options['bbcode'])) {
-			$buttons1 = 'bold,italic,underline,|,formatselect,|,bullist,numlist,|,replace,preview,link,unlink,|,image,emoticons,bbcode';
-			$buttons2 = '';
-			$plugins = ' bbcode';
-		} elseif (!empty($options['simple'])) {
-			$buttons1 = 'bold,italic,underline,|,formatselect,|,bullist,numlist,|,replace,preview,link,unlink,|,image,emoticons';
+		if (!empty($options['simple']))
+		{
+			$buttons1 = 'bold,italic,underline,|,formatselect,|,bullist,numlist,|,replace,preview,link,unlink,|,image,emoticons,';
 			$buttons2 = '';
 		} else {
 			$buttons1 = 'undo redo | styleselect | forecolor backcolor | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image';
@@ -85,7 +80,7 @@ class TinyMceHelper extends AppHelper {
 		        'autosave advlist autolink lists link image charmap print preview hr anchor pagebreak',
 		        'searchreplace wordcount visualblocks visualchars code fullscreen',
 		        'insertdatetime media nonbreaking save table contextmenu directionality',
-		        'emoticons template paste code textcolor" . $plugins . "'
+		        'emoticons template paste code textcolor'
 			],
 
 			toolbar1 : '" . $buttons1 . "',

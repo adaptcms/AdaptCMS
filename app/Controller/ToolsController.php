@@ -16,12 +16,10 @@ class ToolsController extends AppController
 	*/
 	public $uses = array();
 
-	public $disable_parsing = true;
-
 	/**
 	* Our Admin Index is a listing to our tools, so no data passed to the view.
 	*
-	* @return void
+	* @return none
 	*/
 	public function admin_index()
 	{
@@ -36,7 +34,7 @@ class ToolsController extends AppController
 	{
 		$total_count = 0;
 		$success_count = 0;
-		$folders = array('persistent', 'persistent/api', 'models', 'views', '/../templates');
+		$folders = array('persistent', 'persistent/api', 'models', 'views');
 
 		foreach($folders as $folder) {
 			if (clearCache(null, $folder)) {
@@ -54,9 +52,9 @@ class ToolsController extends AppController
         }
 
 		if ($success_count == $total_count && $success_count > 0) {
-			$this->Session->setFlash('Cache has been cleared.', 'success');
+			$this->Session->setFlash('Cache has been cleared.', 'flash_success');
 		} else {
-			$this->Session->setFlash('Cache could not be cleared.', 'error');
+			$this->Session->setFlash('Cache could not be cleared.', 'flash_error');
 		}
 
 		$this->redirect(
@@ -135,7 +133,7 @@ class ToolsController extends AppController
 			{
 				$this->Session->setFlash(
 					'Cannot detect AdaptCMS 2.x install. Ensure DB Prefix is correct and is in same database as AdaptCMS ' . ADAPTCMS_VERSION, 
-					'error'
+					'flash_error'
 				);
 			}
 			else
@@ -147,11 +145,6 @@ class ToolsController extends AppController
 				$success = 0;
 				$total = 0;
 				$users = $this->User->query('SELECT * FROM ' . $prefix . 'users');
-
-				$this->loadModel('SettingValue');
-
-				$sitename = $this->SettingValue->findByTitle('Site Name');
-				$webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
 
 				if (!empty($users))
 				{
@@ -442,14 +435,14 @@ class ToolsController extends AppController
 
 				if ($success == $total)
 				{
-					$this->Session->setFlash('AdaptCMS 2.x data has been converted.', 'success');
+					$this->Session->setFlash('AdaptCMS 2.x data has been converted.', 'flash_success');
 					$this->redirect(
 						array(
 							'action' => 'index'
 						)
 					);
 				} else {
-					$this->Session->setFlash('AdaptCMS 2.x data could not be converted.', 'error');
+					$this->Session->setFlash('AdaptCMS 2.x data could not be converted.', 'flash_error');
 				}
 			}
 		}
@@ -493,7 +486,7 @@ class ToolsController extends AppController
 
 			if ($check[0][0]['Msg_text'] != 'OK')
 			{
-				$this->Session->setFlash('Cannot detect wordpress install. Ensure DB Prefix is correct and wordpress is in same database as AdaptCMS.', 'error');
+				$this->Session->setFlash('Cannot detect wordpress install. Ensure DB Prefix is correct and wordpress is in same database as AdaptCMS.', 'flash_error');
 			} else {
 				$user_data = array();
 				$success = 0;
@@ -784,554 +777,16 @@ class ToolsController extends AppController
 
 				if ($success == $total)
 				{
-					$this->Session->setFlash('Wordpress data has been converted.', 'success');
+					$this->Session->setFlash('Wordpress data has been converted.', 'flash_success');
 					$this->redirect(
 						array(
 							'action' => 'index'
 						)
 					);
 				} else {
-					$this->Session->setFlash('Wordpress data could not be converted.', 'error');
+					$this->Session->setFlash('Wordpress data could not be converted.', 'flash_error');
 				}
 			}
 		}
-	}
-
-	/**
-	 * Admin Convert Onecms
-	 *
-	 * @return void
-	 */
-	public function admin_convert_onecms()
-	{
-		$this->loadModel('User');
-
-		if (!empty($this->request->data['Convert']['prefix']))
-		{
-			$prefix = $this->request->data['Convert']['prefix'];
-
-			$check = $this->User->query('CHECK TABLE ' . $prefix . 'games');
-
-			if ($check[0][0]['Msg_text'] != 'OK')
-			{
-				$this->Session->setFlash('Cannot detect onecms install. Ensure DB Prefix is correct and onecms is in same database as AdaptCMS.', 'error');
-			} else {
-				$success = 0;
-				$total = 0;
-
-				// Users
-				$user_data = array();
-				$users = $this->User->query('SELECT * FROM ' . $prefix . 'users');
-
-				$this->loadModel('SettingValue');
-
-				$roles = array();
-				if (!empty($users))
-				{
-					$sitename = $this->SettingValue->findByTitle('Site Name');
-					$webmaster_email = $this->SettingValue->findByTitle('Webmaster Email');
-
-					foreach($users as $user)
-					{
-						if (!empty($user[$prefix . 'users']['username'])) {
-							$user_check = $this->User->findByUsername($user[$prefix . 'users']['username']);
-
-							if (empty($user_check))
-							{
-								if (empty($roles[$user[$prefix . 'users']['level']])) {
-									$conditions = array();
-									switch($user[$prefix . 'users']['level']) {
-										case 'Super Admin':
-											$conditions['Role.defaults'] = 'default-admin';
-											break;
-										case 'Super Staff':
-											$conditions['OR']['Role.title LIKE'] = '%staff%';
-											$conditions['OR']['Role.defaults IS NULL'];
-											break;
-										case 'Staff':
-											$conditions['OR']['Role.title LIKE'] = '%staff%';
-											$conditions['OR']['Role.defaults IS NULL'];
-											break;
-										case 'Member':
-											$conditions['Role.defaults'] = 'default-member';
-											break;
-
-									}
-
-									$role = $this->User->Role->find('first', array('conditions' => $conditions));
-
-									if (!empty($role)) {
-										$roles[$user[$prefix . 'users']['level']] = $role['Role']['id'];
-									}
-								}
-
-
-								$data = array();
-								$this->User->create();
-
-								$activate_code = md5(time());
-
-								$data['User']['username'] = $user[$prefix . 'users']['username'];
-								$data['User']['password'] = rand() * time();
-								$data['User']['password_confirm'] = $data['User']['password'];
-								$data['User']['email'] = $user[$prefix . 'users']['email'];
-								$data['User']['status'] = 1;
-								$data['User']['role_id'] = $roles[$user[$prefix . 'users']['level']];
-								$data['Security'] = array(
-									0 => array(
-										'question' => 'What was your mothers maiden name?',
-										'answer' => 'Mother'
-									),
-									1 => array(
-										'question' => 'Your favorite sport?',
-										'answer' => 'Sport'
-									)
-								);
-								$data['User']['settings'] = array(
-									'activate_code' => $activate_code
-								);
-								$data['User']['theme_id'] = 1;
-
-								if ($this->User->save($data))
-								{
-									/*
-									$email = new CakeEmail();
-
-									$email->to($data['User']['email']);
-									$email->from(array(
-										$webmaster_email['SettingValue']['data'] => $sitename['SettingValue']['data']
-									));
-									$email->subject('Reset Password Notification');
-									$email->emailFormat('html');
-									$email->template('forgot_password');
-									$email->viewVars(array(
-										'data' => $data['User'],
-										'activate_code' => $activate_code
-									));
-									$email->send();
-									*/
-
-									$success++;
-								}
-
-								$total++;
-								$user_data[$user[$prefix . 'users']['username']] = $this->User->id;
-							} else {
-								$user_data[$user[$prefix . 'users']['username']] = $user_check['User']['id'];
-							}
-						}
-					}
-				}
-
-				// Systems
-				$category_system_check = $this->User->Category->find('first', array(
-					'conditions' => array(
-						'Category.title LIKE' => '%System%'
-					)
-				));
-
-				if (!empty($category_system_check)) {
-					$category_systems = $category_system_check['Category']['id'];
-				} else {
-					$this->User->Category->create();
-
-					$category['Category']['title'] = 'Systems';
-					$category['Category']['user_id'] = $this->Auth->user('id');
-
-					if ($this->User->Category->save($category)) {
-						$category_systems = $this->User->Category->id;
-					}
-				}
-
-				$game_systems = $this->User->query('SELECT * FROM ' . $prefix . 'systems');
-
-				$systems = array();
-				if (!empty($game_systems) && !empty($category_systems))
-				{
-					foreach($game_systems as $system)
-					{
-						if (!empty($system[$prefix . 'systems']['name'])) {
-							$system_check = $this->User->Article->find('first', array(
-								'conditions' => array(
-									'Article.title' => $system[$prefix . 'systems']['name'],
-									'Article.category_id' => $category_systems
-								)
-							));
-
-							if (empty($system_check))
-							{
-								$data = array();
-								$this->User->Article->create();
-
-								$data['Article']['user_id'] = $this->Auth->user('id');
-								$data['Article']['category_id'] = $category_systems;
-								$data['Article']['title'] = $system[$prefix . 'systems']['name'];
-								$data['Article']['status'] = 1;
-
-								if ($this->User->Article->save($data))
-								{
-									$systems[$system[$prefix . 'systems']['id']] = $this->User->Article->id;
-									$success++;
-								}
-
-								$total++;
-							}
-						}
-					}
-				}
-
-				// Games
-				$category_game_check = $this->User->Category->find('first', array(
-					'conditions' => array(
-						'Category.title LIKE' => '%Game%'
-					)
-				));
-
-				if (!empty($category_game_check)) {
-					$category_games = $category_game_check['Category']['id'];
-				} else {
-					$this->User->Category->create();
-
-					$category['Category']['title'] = 'Games';
-					$category['Category']['user_id'] = $this->Auth->user('id');
-
-					if ($this->User->Category->save($category)) {
-						$category_games = $this->User->Category->id;
-					}
-				}
-
-				$field_types = array();
-				$textfield = $this->User->Field->FieldType->findByTitle('text');
-				$textarea = $this->User->Field->FieldType->findByTitle('textarea');
-
-				$field_types['textfield'] = $textfield['FieldType'];
-				$field_types['textarea'] = $textarea['FieldType'];
-
-				$game_fields_check = array(
-					'publisher' => 'publisher',
-					'developer' => 'developer',
-					'genre' => 'genre',
-					'esrb' => 'esrb',
-					'des' => 'description'
-				);
-				$game_fields = array();
-				foreach($game_fields_check as $key => $field) {
-					$find = $this->User->Field->find('first', array(
-						'conditions' => array(
-							'Field.title' => $field,
-							'Field.category_id' => $category_games
-						)
-					));
-
-					if (!empty($find)) {
-						$find['Field']['key'] = $key;
-						$game_fields[] = $find['Field'];
-					} else {
-						$this->User->Field->create();
-
-						$data['Field']['title'] = $field;
-						$data['Field']['category_id'] = $category_games;
-
-						if ($key == 'des') {
-							$data['Field']['field_type_id'] = $field_types['textarea']['id'];
-							$data['Field']['field_type_slug'] = $field_types['textarea']['slug'];
-						} else {
-							$data['Field']['field_type_id'] = $field_types['textfield']['id'];
-							$data['Field']['field_type_slug'] = $field_types['textfield']['slug'];
-						}
-
-						$data['Field']['user_id'] = $this->Auth->user('id');
-
-						if ($this->User->Field->save($data)) {
-							$data['Field']['id'] = $this->User->Field->id;
-							$data['Field']['key'] = $key;
-							$game_fields[] = $data['Field'];
-						}
-					}
-				}
-
-				$games = $this->User->query('SELECT * FROM ' . $prefix . 'games');
-
-				$games_data = array();
-				if (!empty($games) && !empty($category_games))
-				{
-					foreach($games as $game)
-					{
-						if (!empty($game[$prefix . 'games']['name'])) {
-							$game_check = $this->User->Article->find('first', array(
-								'conditions' => array(
-									'Article.title' => $game[$prefix . 'games']['name'],
-									'Article.category_id' => $category_games
-								)
-							));
-
-							if (empty($game_check))
-							{
-								$data = array();
-								$this->User->Article->create();
-
-								if (!empty($user_data[$game[$prefix . 'games']['username']])) {
-									$data['Article']['user_id'] = $user_data[$game[$prefix . 'games']['username']];
-								} else {
-									$data['Article']['user_id'] = $this->Auth->user('id');
-								}
-
-								$data['Article']['category_id'] = $category_games;
-								$data['Article']['title'] = $game[$prefix . 'games']['name'];
-								$data['Article']['status'] = 1;
-
-								if (!empty($game_fields)) {
-									foreach($game_fields as $key => $field) {
-										$data['ArticleValue'][$key]['field_id'] = $field['id'];
-										$data['ArticleValue'][$key]['data'] = $game[$prefix . 'games'][$field['key']];
-									}
-								}
-
-								if (!empty($systems[$game[$prefix . 'games']['system']])) {
-									$data['RelatedData'] = array($systems[$game[$prefix . 'games']['system']]);
-								}
-
-								if ($this->User->Article->saveAssociated($data))
-								{
-									$games_data[$game[$prefix . 'games']['id']] = $this->User->Article->id;
-									$success++;
-								}
-
-								$total++;
-							} else {
-								$games_data[$game[$prefix . 'games']['id']] = $game_check['Article']['id'];
-							}
-						}
-					}
-				}
-
-				// Categories
-				$categories = $this->User->query('SELECT * FROM ' . $prefix . 'cat');
-
-				$categories_data = array();
-				if (!empty($categories))
-				{
-					foreach($categories as $category)
-					{
-						if (!empty($category[$prefix . 'cat']['name'])) {
-							$category_check = $this->User->Category->findBySlug($category[$prefix . 'cat']['name']);
-
-							if (empty($category_check))
-							{
-								$data = array();
-								$this->User->Category->create();
-
-								$data['Category']['user_id'] = $this->Auth->user('id');
-								$data['Category']['title'] = $category[$prefix . 'cat']['name'];
-
-								if ($this->User->Category->save($data))
-								{
-									$categories_data[$category[$prefix . 'cat']['name']] = $this->User->Category->id;
-									$success++;
-								}
-
-								$total++;
-							} else {
-								$categories_data[$category[$prefix . 'cat']['name']] = $category_check['Category']['id'];
-							}
-						}
-					}
-				}
-
-				// Fields
-				$fields = $this->User->query('SELECT * FROM ' . $prefix . 'fields');
-
-				$fields_data = array();
-				$invalid_field_types = array(
-					'games',
-					'system',
-					'systems',
-					'company',
-					'album'
-				);
-				if (!empty($fields))
-				{
-					foreach($fields as $field)
-					{
-						if (!empty($field[$prefix . 'fields']['name'])) {
-							$field_check = $this->User->Field->findByTitle($field[$prefix . 'fields']['name']);
-
-							if (empty($field_check) && !in_array($field[$prefix . 'fields']['type'], $invalid_field_types))
-							{
-								$data = array();
-								$this->User->Field->create();
-
-								$data['Field']['user_id'] = $this->Auth->user('id');
-								$data['Field']['title'] = $field[$prefix . 'fields']['name'];
-								$data['Field']['label'] = $field[$prefix . 'fields']['name'];
-								$data['Field']['description'] = $field[$prefix . 'fields']['des'];
-
-								if (!empty($categories_data[$field[$prefix . 'fields']['cat']])) {
-									$data['Field']['category_id'] = $categories_data[$field[$prefix . 'fields']['cat']];
-								} else {
-									$category = $this->User->Category->find('first');
-
-									$data['Field']['category_id'] = $category['Category']['id'];
-								}
-
-								if (empty($field_types[$field[$prefix . 'fields']['type']])) {
-									if ($field[$prefix . 'fields']['type'] == 'textarea') {
-										$field_type_name = 'textarea';
-									} else {
-										$field_type_name = 'text';
-									}
-
-									$field_type = $this->User->Field->FieldType->findBySlug($field_type_name);
-									$field_types[$field[$prefix . 'fields']['type']] = $field_type['FieldType'];
-								}
-
-								$data['Field']['field_type_id'] = $field_types[$field[$prefix . 'fields']['type']]['id'];
-								$data['Field']['field_type_slug'] = $field_types[$field[$prefix . 'fields']['type']]['slug'];
-
-								if ($this->User->Field->save($data))
-								{
-									$fields_data[$field[$prefix . 'fields']['name']] = $this->User->Field->id;
-									$success++;
-								}
-
-								$total++;
-							} elseif (!empty($field_check)) {
-								$fields_data[$field[$prefix . 'fields']['name']] = $field_check['Field']['id'];
-							}
-						}
-					}
-				}
-
-				// Articles
-				$articles = $this->User->query('SELECT * FROM ' . $prefix . 'content');
-
-				$articles_data = array();
-				if (!empty($articles))
-				{
-					foreach($articles as $article)
-					{
-						if (!empty($article[$prefix . 'content']['name'])) {
-							$article_check = $this->User->Article->findByTitle($article[$prefix . 'content']['name']);
-
-							if (empty($article_check))
-							{
-								$data = array();
-								$this->User->Article->create();
-
-								$data['Article']['user_id'] = $user_data[$article[$prefix . 'content']['username']];
-								$data['Article']['title'] = $article[$prefix . 'content']['name'];
-								$data['Article']['status'] = 1;
-								$data['Article']['category_id'] = $categories_data[$article[$prefix . 'content']['cat']];
-								$data['Article']['created'] = date('Y-m-d H:i:s', $article[$prefix . 'content']['date']);
-
-								if ($this->User->Article->save($data))
-								{
-									$articles_data[$article[$prefix . 'content']['id']] = $this->User->Article->id;
-									$success++;
-								}
-
-								$total++;
-							} else {
-								$articles_data[$article[$prefix . 'content']['id']] = $article_check['Article']['id'];
-							}
-						}
-					}
-				}
-
-				// Field Data
-				$fielddata = $this->User->query('SELECT * FROM ' . $prefix . 'fielddata');
-
-				if (!empty($fielddata))
-				{
-					foreach($fielddata as $row)
-					{
-						if (!empty($fields_data[$row[$prefix . 'fielddata']['name']])) {
-							$data = array();
-							$this->User->Article->ArticleValue->create();
-
-							if ($row[$prefix . 'fielddata']['cat'] == 'games') {
-								$data['ArticleValue']['article_id'] = $games_data[$row[$prefix . 'fielddata']['id2']];
-							} else {
-								$data['ArticleValue']['article_id'] = $articles_data[$row[$prefix . 'fielddata']['id2']];
-							}
-
-							$data['ArticleValue']['data'] = $row[$prefix . 'fielddata']['data'];
-							$data['ArticleValue']['field_id'] = $fields_data[$row[$prefix . 'fielddata']['name']];
-
-							if ($this->User->Article->ArticleValue->save($data))
-							{
-								$success++;
-							}
-
-							$total++;
-						}
-					}
-				}
-
-				// Pages
-				$pages = $this->User->query('SELECT * FROM ' . $prefix . 'pages');
-
-				if (!empty($pages))
-				{
-					foreach($pages as $page)
-					{
-						if (!empty($page[$prefix . 'pages']['name'])) {
-							$page_check = $this->User->Page->findByTitle($page[$prefix . 'pages']['name']);
-
-							if (empty($page_check))
-							{
-								$data = array();
-								$this->User->Page->create();
-
-								$data['Page']['content'] = $page[$prefix . 'pages']['content'];
-								$data['Page']['title'] = $page[$prefix . 'pages']['name'];
-								$data['Page']['user_id'] = $this->Auth->user('id');
-
-								if ($this->User->Page->save($data))
-								{
-									$success++;
-								}
-
-								$total++;
-							}
-						}
-					}
-				}
-
-				if ($success == $total)
-				{
-					$this->Session->setFlash('OneCMS data has been converted.', 'success');
-					$this->redirect(
-						array(
-							'action' => 'index'
-						)
-					);
-				} else {
-					$this->Session->setFlash('OneCMS data could not be converted.', 'error');
-				}
-			}
-		}
-	}
-
-	/**
-	 * Admin Routes List
-	 *
-	 * @return void
-	 */
-	public function admin_routes_list()
-	{
-		$find = array(
-			'{ {',
-			'} }',
-			'url ('
-		);
-		$replace = array(
-			'{{',
-			'}}',
-			'url('
-		);
-
-		$this->set(compact('find', 'replace'));
-		$this->set('routes', Configure::read('current_routes'));
 	}
 }

@@ -94,10 +94,10 @@ class MediaController extends AppController
         	
             if ($this->Media->saveAll($this->request->data))
             {
-                $this->Session->setFlash('Your media library has been added.', 'success');
+                $this->Session->setFlash('Your media library has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your media library.', 'error');
+                $this->Session->setFlash('Unable to add your media library.', 'flash_error');
             }
         }
 	}
@@ -120,10 +120,10 @@ class MediaController extends AppController
 
 	        if ($this->Media->saveAll($this->request->data))
 	        {
-	            $this->Session->setFlash('Your media library has been updated.', 'success');
+	            $this->Session->setFlash('Your media library has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your media library.', 'error');
+	            $this->Session->setFlash('Unable to update your media library.', 'flash_error');
 	        }
 	    }
 
@@ -157,7 +157,7 @@ class MediaController extends AppController
 
 		$permanent = $this->Media->remove($data);
 
-		$this->Session->setFlash('The media library `'.$title.'` has been deleted.', 'success');
+		$this->Session->setFlash('The media library `'.$title.'` has been deleted.', 'flash_success');
 
 		if ($permanent)
 		{
@@ -185,10 +185,10 @@ class MediaController extends AppController
 
         if ($this->Media->restore())
         {
-            $this->Session->setFlash('The media library `'.$title.'` has been restored.', 'success');
+            $this->Session->setFlash('The media library `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The media library `'.$title.'` has NOT been restored.', 'error');
+            $this->Session->setFlash('The media library `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }

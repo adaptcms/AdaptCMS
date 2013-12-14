@@ -84,10 +84,10 @@ class FilesController extends AppController
 
             if ($this->File->saveAll( $this->File->beforeAdd($this->request->data) ))
             {
-                $this->Session->setFlash('Your file has been upload.', 'success');
+                $this->Session->setFlash('Your file has been upload.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to upload your file.', 'error');
+                $this->Session->setFlash('Unable to upload your file.', 'flash_error');
             }
         }
 	}
@@ -106,10 +106,10 @@ class FilesController extends AppController
 
 			if ($this->File->saveAll( $files ))
 			{
-				$this->Session->setFlash('Your folder of files has been imported.', 'success');
+				$this->Session->setFlash('Your folder of files has been imported.', 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to import your folder of files.', 'error');
+				$this->Session->setFlash('Unable to import your folder of files.', 'flash_error');
 			}
 		}
 
@@ -137,10 +137,10 @@ class FilesController extends AppController
 
             if ($this->File->saveAll($this->request->data))
             {
-                $this->Session->setFlash('Your file has been updated.', 'success');
+                $this->Session->setFlash('Your file has been updated.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to update your file.', 'error');
+                $this->Session->setFlash('Unable to update your file.', 'flash_error');
             }
         }
 
@@ -189,7 +189,7 @@ class FilesController extends AppController
 
 	    $permanent = $this->File->remove($data);
 
-	    $this->Session->setFlash('The file `' . $data['File']['filename'] . '` has been deleted.', 'success');
+	    $this->Session->setFlash('The file `' . $data['File']['filename'] . '` has been deleted.', 'flash_success');
 
 	    if ($permanent)
 	    {
@@ -217,9 +217,9 @@ class FilesController extends AppController
 
         if ($this->File->restore())
         {
-            $this->Session->setFlash('The file `' . $data['File']['filename'] . '` has been restored.', 'success');
+            $this->Session->setFlash('The file `' . $data['File']['filename'] . '` has been restored.', 'flash_success');
         } else {
-            $this->Session->setFlash('The file `' . $data['File']['filename'] . '` has NOT been restored.', 'error');
+            $this->Session->setFlash('The file `' . $data['File']['filename'] . '` has NOT been restored.', 'flash_error');
         }
 
         $this->redirect(array('action' => 'index'));

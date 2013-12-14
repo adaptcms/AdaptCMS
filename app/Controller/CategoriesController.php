@@ -74,14 +74,14 @@ class CategoriesController extends AppController
 
             if ($this->Category->save($this->request->data))
             {
-                $this->Session->setFlash('Your category has been added. Now you may want to add some fields to the category.', 'success');
+                $this->Session->setFlash('Your category has been added. Now you may want to add some fields to the category.', 'flash_success');
                 $this->redirect(array(
                     'controller' => 'fields',
                     'action' => 'add',
                     $this->Category->id
                 ));
             } else {
-                $this->Session->setFlash('Unable to add your category.', 'error');
+                $this->Session->setFlash('Unable to add your category.', 'flash_error');
             }
         } 
 	}
@@ -113,11 +113,10 @@ class CategoriesController extends AppController
       	$fields = $this->Category->Field->find('all', array(
       		'conditions' => array(
       			'Field.category_id' => $id
-      		),
-	        'contain' => array(
-		        'FieldType'
-	        )
+      		)
       	));
+
+      	$this->set(compact('fields', 'articles'));
 
 	    if (!empty($this->request->data))
 	    {
@@ -125,19 +124,14 @@ class CategoriesController extends AppController
 
 	        if ($this->Category->save($this->request->data))
 	        {
-	            $this->Session->setFlash('Your category has been updated.', 'success');
+	            $this->Session->setFlash('Your category has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your category.', 'error');
+	            $this->Session->setFlash('Unable to update your category.', 'flash_error');
 	        }
 	    }
 
         $this->request->data = $this->Category->findById($id);
-
-		$roles = $this->Category->User->Role->getCategoryPermissions($this->request->data['Category']);
-
-		$this->set(compact('fields', 'articles', 'roles'));
-
 		$this->hasAccessToItem($this->request->data);
 	}
 
@@ -159,7 +153,7 @@ class CategoriesController extends AppController
 
 		$permanent = $this->Category->remove($data);
 
-		$this->Session->setFlash('The category `'.$title.'` has been deleted.', 'success');
+		$this->Session->setFlash('The category `'.$title.'` has been deleted.', 'flash_success');
 
 		if ($permanent)
 		{
@@ -187,10 +181,10 @@ class CategoriesController extends AppController
 
 	    if ($this->Category->restore())
 	    {
-	        $this->Session->setFlash('The category `'.$title.'` has been restored.', 'success');
+	        $this->Session->setFlash('The category `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash('The category `'.$title.'` has NOT been restored.', 'error');
+	    	$this->Session->setFlash('The category `'.$title.'` has NOT been restored.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -213,16 +207,13 @@ class CategoriesController extends AppController
 
         if (empty($category))
         {
-            $this->Session->setFlash('Invalid Category', 'error');
+            $this->Session->setFlash('Invalid Category', 'flash_error');
             return $this->redirect(array(
                 'controller' => 'pages',
                 'action' => 'display',
                 'home'
             ));
         }
-
-		if (!$this->Category->hasAnyPermissionAccess($this->getRole(), 'view', $category))
-			return $this->denyRedirect();
 
 		$this->loadModel('SettingValue');
 		
@@ -239,8 +230,8 @@ class CategoriesController extends AppController
             'Article.publish_time <=' => date('Y-m-d H:i:s')
 		);
 
-	    if ($this->permissions['any'] == 0 && $this->Auth->user('id') || $this->Category->getPermissionAccess($this->getRole(), 'view', $category))
-	    	$conditions['Article.user_id'] = $this->Auth->user('id');
+	    if ($this->permissions['any'] == 0 && $this->Auth->user('id'))
+	    	$conditions['User.id'] = $this->Auth->user('id');
 
 		$this->Paginator->settings = array(
 			'order' => 'Article.created DESC',
@@ -255,13 +246,13 @@ class CategoriesController extends AppController
 		);
 
 		$this->set('category', $category['Category']);
-		$this->set('articles', $this->request->data);
+		$this->set('article', $this->request->data);
 
 		if ($this->theme != "Default" &&
-			file_exists(VIEW_PATH . 'Themed/'. $this->theme . '/Frontend/Categories/' . $slug . '.ctp') ||
-			file_exists(FRONTEND_VIEW_PATH . 'Categories/' . $slug . '.ctp'))
+			file_exists(VIEW_PATH.'Themed/'.$this->theme.'/Categories/'.$slug.'.ctp') ||
+			file_exists(VIEW_PATH.'Categories/'.$slug.'.ctp'))
 		{
-			$this->view = implode('/', array($slug));
+			$this->render(implode('/', array($slug)));
 		}
 	}
 

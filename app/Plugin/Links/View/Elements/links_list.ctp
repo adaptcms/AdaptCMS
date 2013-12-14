@@ -1,27 +1,36 @@
-{% loop link in data %}
-	<li>
-		{% if not empty(link['Link']['file_id']) %}
-			{{ set title = $this->Html->image('/' . $link['File']['dir'].$link['File']['filename'], array(
-				'class' => 'span6',
-				'style' => 'max-width: 300px;'
-			)) }}
-		{% elseif not empty(link['Link']['image_url']) %}
-			{{ set title = $this->Html->image('/' . $link['Link']['image_url'], array(
-				'class' => 'span6',
-				'style' => 'max-width: 300px;'
-			)) }}
-		{% else %}
-			{{ set title = $link['Link']['link_title'] }}
-		{% endif %}
+<?php foreach($data as $row): ?>
+    <li>
+        <?php if (!empty($row['Link']['file_id'])): ?>
+            <?php
+            $title = $this->Html->image('/' . $row['File']['dir'].$row['File']['filename'], array(
+                'class' => 'span6',
+	            'style' => 'max-width: 300px;'
+            ));
+            ?>
+        <?php elseif (!empty($row['Link']['image_url'])): ?>
+            <?php
+            $title = $this->Html->image('/' . $row['Link']['image_url'], array(
+                'class' => 'span6',
+	            'style' => 'max-width: 300px;'
+            ));
+            ?>
+        <?php else: ?>
+            <?php $title = $row['Link']['link_title'] ?>
+        <?php endif ?>
 
-		<a href="{{ link['Link']['url'] }}" target="{{ link['Link']['link_target'] }}" class="track clearfix" id="{{ link['Link']['id'] }}">
-			{{ title }}
-		</a>
-	</li>
-{% endloop %}
+        <?= $this->Html->link($title, $row['Link']['url'], array(
+            'target' => $row['Link']['link_target'],
+            'escape' => false,
+            'class' => 'track clearfix',
+            'id' => $row['Link']['id']
+        )) ?>
+    </li>
+<?php endforeach ?>
 
 <div class="clearfix"></div>
 
-<a href="{{ url('links_apply') }}" class="btn btn-info">
-	Submit Link <i class="icon-plus"></i>
-</a>
+<?= $this->Html->link('Submit Link <i class="icon-plus"></i>', array(
+    'plugin' => 'links',
+    'controller' => 'links',
+    'action' => 'apply'
+), array('class' => 'btn btn-info', 'escape' => false)) ?>

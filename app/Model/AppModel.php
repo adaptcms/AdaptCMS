@@ -181,25 +181,25 @@ class AppModel extends Model
         if (strstr($location, 'app/Plugin'))
         {
             $files[] = $location;
-            $files[] = str_replace($base_loc, 'glob.md', $location);
+            $files[] = str_replace($base_loc, '*.md', $location);
         }
         elseif ($theme)
         {
             $files[] = $location;
-            $files[] = str_replace($base_loc, 'glob.md', $location);
+            $files[] = str_replace($base_loc, '*.md', $location);
             $files[] = str_replace('View/Themed/' . $theme . '/', '', $location);
-            $files[] = str_replace('View/Themed/' . $theme . '/', '', str_replace($base_loc, 'glob.md', $location));
+            $files[] = str_replace('View/Themed/' . $theme . '/', '', str_replace($base_loc, '*.md', $location));
 
         }
         elseif (strstr($base_loc, 'admin_'))
         {
             $files[] = $location;
-            $files[] = str_replace($base_loc, 'admin_glob.md', $location);
+            $files[] = str_replace($base_loc, 'admin_*.md', $location);
         }
         else
         {
             $files[] = $location;
-            $files[] = str_replace($base_loc, 'glob.md', $location);
+            $files[] = str_replace($base_loc, '*.md', $location);
         }
 
         $match = null;
@@ -221,15 +221,4 @@ class AppModel extends Model
 
         return $contents;
     }
-
-	/**
-	 * Safe Html
-	 *
-	 * @param $string
-	 * @return string
-	 */
-	public function safeHtml($string)
-	{
-		return strip_tags($string, '<p><br><b><strong><span><sup><sub><em><i><u><ul><li><ol><h1><h2><h3><h4>');
-	}
 }

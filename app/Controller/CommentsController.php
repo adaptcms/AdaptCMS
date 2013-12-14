@@ -71,10 +71,10 @@ class CommentsController extends AppController
 				        $this->ModuleValue->saveMany($this->request->data['ModuleValue']);
 			        }
 
-			        $this->Session->setFlash('The comment has been updated.', 'success');
+			        $this->Session->setFlash('The comment has been updated.', 'flash_success');
 			        $this->redirect(array('action' => 'index'));
 		        } else {
-			        $this->Session->setFlash('Unable to update the comment.', 'error');
+			        $this->Session->setFlash('Unable to update the comment.', 'flash_error');
 		        }
 	        }
 	        else
@@ -82,7 +82,7 @@ class CommentsController extends AppController
 	            unset($this->request->data['Comment']);
 
 	            if ($this->Comment->saveAll($this->request->data)) {
-	                $this->Session->setFlash('Comments have been updated.', 'success');
+	                $this->Session->setFlash('Comments have been updated.', 'flash_success');
 	                $this->redirect(
 	                    array(
 	                        'controller' => 'articles',
@@ -92,7 +92,7 @@ class CommentsController extends AppController
 	                    )
 	                );
 	            } else {
-	                $this->Session->setFlash('Unable to update comments.', 'error');
+	                $this->Session->setFlash('Unable to update comments.', 'flash_error');
 	            }
 	        }
         }
@@ -130,7 +130,7 @@ class CommentsController extends AppController
 
 		$permanent = $this->Comment->remove($data);
 
-		$this->Session->setFlash('The comment has been deleted.', 'success');
+		$this->Session->setFlash('The comment has been deleted.', 'flash_success');
 
 		if ($permanent)
 		{
@@ -157,10 +157,10 @@ class CommentsController extends AppController
 
 		if ($this->Comment->restore())
 		{
-			$this->Session->setFlash('The comment has been restored.', 'success');
+			$this->Session->setFlash('The comment has been restored.', 'flash_success');
 			$this->redirect(array('action' => 'index'));
 		} else {
-			$this->Session->setFlash('The comment has NOT been restored.', 'error');
+			$this->Session->setFlash('The comment has NOT been restored.', 'flash_error');
 			$this->redirect(array('action' => 'index'));
 		}
 	}

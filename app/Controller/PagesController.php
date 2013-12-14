@@ -79,10 +79,10 @@ class PagesController extends AppController
 
             if ($this->Page->save($this->request->data))
             {
-                $this->Session->setFlash('Your page has been added.', 'success');
+                $this->Session->setFlash('Your page has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your page.', 'error');
+                $this->Session->setFlash('Unable to add your page.', 'flash_error');
             }
         }
 
@@ -113,10 +113,10 @@ class PagesController extends AppController
 
 	        if ($this->Page->save($this->request->data))
 	        {
-	            $this->Session->setFlash('Your page has been updated.', 'success');
+	            $this->Session->setFlash('Your page has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your page.', 'error');
+	            $this->Session->setFlash('Unable to update your page.', 'flash_error');
 	        }
 	    }
 
@@ -157,7 +157,7 @@ class PagesController extends AppController
 
 		$permanent = $this->Page->remove($data);
 
-		$this->Session->setFlash('The page `'.$title.'` has been deleted.', 'success');
+		$this->Session->setFlash('The page `'.$title.'` has been deleted.', 'flash_success');
 
 		if ($permanent)
 		{
@@ -184,10 +184,10 @@ class PagesController extends AppController
 	    $this->hasAccessToItem($data);
 
         if ($this->Page->restore()) {
-            $this->Session->setFlash('The page `'.$title.'` has been restored.', 'success');
+            $this->Session->setFlash('The page `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The page `'.$title.'` has NOT been restored.', 'error');
+            $this->Session->setFlash('The page `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }
@@ -223,29 +223,33 @@ class PagesController extends AppController
 				$limit = $num_articles['SettingValue']['data'];
 			}
 
-			if (!empty($categories_home['SettingValue']['data']))
+			if (!empty($categories_home))
 			{
-                $categories = $this->Article->Category->find('all', array(
+                $categories_find = $this->Article->Category->find('all', array(
                     'conditions' => array(
                         'Category.title' => explode(",", $categories_home['SettingValue']['data'])
-                    )
+                    ),
+                    'fields' => 'id'
                 ));
-			}
 
-	        if (empty($categories))
-		        $categories = $this->Article->Category->find('all');
+                if (!empty($categories_find))
+                    $categories = Set::extract('{n}.Category.id', $categories_find);
+			}
 
             $conditions = array(
                 'Article.status' => 1,
                 'Article.publish_time <=' => date('Y-m-d H:i:s')
             );
 
+            if (!empty($categories))
+                $conditions['Article.category_id'] = $categories;
+
 			$permissions = $this->getRelatedPermissions($this->permissionLookup(array('show' => true)));
 
 		    if ($permissions['related']['articles']['view']['any'] == 0 && $this->Auth->user('id'))
+		    {
 		    	$conditions['User.id'] = $this->Auth->user('id');
-
-	        $conditions = $this->Article->Category->getListConditions($conditions, $categories, $this->getRole(), 'view', $this->Auth->user('id'));
+		    }
 
 			$this->Paginator->settings = array(
 				'limit' => $limit,
@@ -254,9 +258,7 @@ class PagesController extends AppController
 			);
 
 	        $this->request->data = $this->Article->getAllRelatedArticles(
-	        	$this->Paginator->paginate('Article'),
-		        false,
-		        $categories
+	        	$this->Paginator->paginate('Article')
 	        );
 
 	        $this->set('articles', $this->request->data);
@@ -280,6 +282,7 @@ class PagesController extends AppController
 				$title_for_layout = Inflector::humanize($path[$count - 1]);
 			}
 			$this->set(compact('page', 'subpage', 'title_for_layout'));
+			$this->render(implode('/', $path));
 		}
         else
         {
@@ -295,14 +298,14 @@ class PagesController extends AppController
 			if (!empty($this->request->data)) {
 				$this->set('title_for_layout', $this->request->data['Page']['title']);
 			} else {
-	            $this->Session->setFlash('This page doesnt exist.', 'error');
+	            $this->Session->setFlash('This page doesnt exist.', 'flash_error');
 	            $this->redirect('/');
 			}
 
             $this->set('page', $this->request->data);
-		}
 
-		$this->view = implode('/', $path);
+			$this->render(implode('/', $path));
+		}
 	}
 
     /**

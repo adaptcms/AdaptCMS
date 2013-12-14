@@ -26,13 +26,13 @@ class SettingValuesController extends AppController
 
     		if ($this->SettingValue->save($this->request->data))
             {
-                $this->Session->setFlash('Setting has been saved.', 'success');
+                $this->Session->setFlash('Setting has been saved.', 'flash_success');
                 $this->redirect(array(
                 	'controller' => 'settings', 
                 	'action' => 'admin_edit', 
                 	$this->request->data['SettingValue']['setting_id']));
             } else {
-                $this->Session->setFlash('Setting could not be saved.', 'error');
+                $this->Session->setFlash('Setting could not be saved.', 'flash_error');
                 $this->redirect(array(
                 	'controller' => 'settings', 
                 	'action' => 'admin_edit', 
@@ -54,9 +54,9 @@ class SettingValuesController extends AppController
     {
         if ($this->SettingValue->saveMany($this->request->data))
         {
-            $this->Session->setFlash('Settings have been saved.', 'success');
+            $this->Session->setFlash('Settings have been saved.', 'flash_success');
         } else {
-            $this->Session->setFlash('Settings could not be saved.', 'error');
+            $this->Session->setFlash('Settings could not be saved.', 'flash_error');
         }
 
         if (!empty($redirect_id))

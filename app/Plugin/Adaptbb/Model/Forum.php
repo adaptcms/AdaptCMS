@@ -100,7 +100,6 @@ class Forum extends AdaptbbAppModel
 
                     if (!empty($find))
                     {
-	                    $find['ForumTopic']['forum_slug'] = $forum['slug'];
                         $data[$key]['Forum'][$i]['NewestPost'] = $find;
                     }
                 }

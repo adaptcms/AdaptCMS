@@ -25,8 +25,6 @@ class TemplatesController extends AppController
 		'CmsApi'
 	);
 
-	public $disable_parsing = true;
-
 	/**
 	 * Gets list of themes, passed to only add and edit views
 	 */
@@ -72,7 +70,6 @@ class TemplatesController extends AppController
 		));
 
 		$themes_dropdown = $this->Template->Theme->getThemesList();
-		$default_theme_options = $this->Template->Theme->getThemesByName($themes_dropdown);
 
 		$this->loadModel('SettingValue');
 
@@ -88,7 +85,7 @@ class TemplatesController extends AppController
 		);
 
 		$this->set('current_theme', $current_theme['SettingValue']);
-		$this->set(compact('themes', 'themes_dropdown', 'default_theme_options'));
+		$this->set(compact('themes', 'themes_dropdown'));
 
 		$active_path = VIEW_PATH . 'Themed';
 		$active_themes = $this->Template->Theme->getThemes($active_path);
@@ -143,10 +140,10 @@ class TemplatesController extends AppController
 	{
 		if (!empty($this->request->data)) {
 			if ($this->Template->save($this->request->data)) {
-				$this->Session->setFlash('Your template has been added.', 'success');
+				$this->Session->setFlash('Your template has been added.', 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to add your template.', 'error');
+				$this->Session->setFlash('Unable to add your template.', 'flash_error');
 			}
 		}
 
@@ -181,10 +178,10 @@ class TemplatesController extends AppController
 
 		if (!empty($this->request->data)) {
 			if ($this->Template->save($this->request->data)) {
-				$this->Session->setFlash('Your template has been updated.', 'success');
+				$this->Session->setFlash('Your template has been updated.', 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to update your template.', 'error');
+				$this->Session->setFlash('Unable to update your template.', 'flash_error');
 			}
 		}
 
@@ -270,7 +267,7 @@ class TemplatesController extends AppController
 
 		$permanent = $this->Template->remove($data);
 
-		$this->Session->setFlash('The template `' . $title . '` has been deleted.', 'success');
+		$this->Session->setFlash('The template `' . $title . '` has been deleted.', 'flash_success');
 
 		if ($permanent) {
 			$this->redirect(array('action' => 'index', 'trash' => 1));
@@ -293,10 +290,10 @@ class TemplatesController extends AppController
 		$this->Template->id = $id;
 
 		if ($this->Template->restore()) {
-			$this->Session->setFlash('The template `' . $title . '` has been restored.', 'success');
+			$this->Session->setFlash('The template `' . $title . '` has been restored.', 'flash_success');
 			$this->redirect(array('action' => 'index'));
 		} else {
-			$this->Session->setFlash('The template `' . $title . '` has NOT been restored.', 'error');
+			$this->Session->setFlash('The template `' . $title . '` has NOT been restored.', 'flash_error');
 			$this->redirect(array('action' => 'index'));
 		}
 	}
@@ -325,7 +322,7 @@ class TemplatesController extends AppController
 			}
 		}
 
-		return $this->_ajaxResponse('flash_php_' . $type, array(
+		return $this->_ajaxResponse('flash_' . $type, array(
 			'message' => $message,
 			'id' => 'theme-update-div'
 		));
@@ -386,16 +383,66 @@ class TemplatesController extends AppController
 	 */
 	public function admin_ajax_theme_refresh()
 	{
-		$response = $this->Template->Theme->refreshTheme($this->request->data['Theme']['id'], $this->request->data['Theme']['name']);
+		if (!empty($this->request->data['Theme']['name'])) {
+			$files = $this->Template->folderAndFilesList($this->request->data['Theme']['name']);
+		} else {
+			$files = $this->Template->folderAndFilesList();
+		}
 
-		return $this->_ajaxResponse('flash_php_' . $response['type'], array(
-			'message' => $response['message'],
+		try {
+			if (!empty($files)) {
+				$data = $this->Template->find("all", array(
+					'conditions' => array(
+						'Template.theme_id' => $this->request->data['Theme']['id']
+					),
+					'fields' => array(
+						'Template.location'
+					)
+				));
+
+				$key = 0;
+				$templates = array();
+
+				$this->Template->create();
+
+				if (!empty($data))
+					$data = Set::extract('{n}.Template.location', $data);
+
+				foreach ($files as $file) {
+					if (empty($data) || !empty($data) && !in_array($file, $data)) {
+						$title = explode('/', $file);
+
+						$templates[$key]['Template']['title'] = end($title);
+						$templates[$key]['Template']['label'] =
+							str_replace('Plugin View', 'Plugin', str_replace('.ctp', '', Inflector::humanize(str_replace("/", " ", $file))));
+						$templates[$key]['Template']['location'] = $file;
+						$templates[$key]['Template']['theme_id'] = $this->request->data['Theme']['id'];
+						$templates[$key]['Template']['created'] = $this->Template->dateTime();
+						$templates[$key]['Template']['nowrite'] = true;
+
+						$key++;
+					}
+				}
+
+				if (!empty($templates))
+					$this->Template->saveAll($templates);
+			}
+
+			$type = 'success';
+			$message = 'The theme has been refreshed.';
+		} catch(Exception $e) {
+			$type = 'error';
+			$message = 'The Theme could not be refreshed.';
+		}
+
+		return $this->_ajaxResponse('flash_' . $type, array(
+			'message' => $message,
 			'id' => 'theme-update-div'
 		));
 	}
 
 	/**
-	 * Admin Ajax Template Locations
+	 * Admin AJax Template Locations
 	 * Function that gets all folders and returns them as options for a select
 	 *
 	 * @return CakeResponse
@@ -414,25 +461,5 @@ class TemplatesController extends AppController
 		}
 
 		return $this->_ajaxResponse(array('body' => $list));
-	}
-
-	/**
-	 * Admin Global Tags
-	 *
-	 * @return CakeResponse
-	 */
-	public function admin_global_tags()
-	{
-		if (!empty($this->request->data)) {
-			$this->layout = false;
-
-			$status = $this->Template->updateGlobalVars($this->request->data);
-
-			return $this->_ajaxResponse(array('body' => $status));
-		} elseif (!empty($this->request->params['named']['get_tags'])) {
-			$tags = $this->Template->getGlobalVars();
-
-			return $this->_ajaxResponse(array('body' => $tags));
-		}
 	}
 }

@@ -1,0 +1,14 @@
+{
+    "title": "Disqus",
+    "current_version": "1.0",
+    "api_id": 8,
+    "install": {
+        "text": "Install/install_text.md"
+    },
+    "uninstall": {
+        "text": "Install/uninstall_text.md"
+    },
+    "helpers": {
+        "Disqus.Disqus":null
+    }
+}

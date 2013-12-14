@@ -60,21 +60,16 @@ class Poll extends PollsAppModel
 	public function getBlockData($data, $user_id)
     {
         $cond = array(
+            'conditions' => array(
+                'Poll.deleted_time' => '0000-00-00 00:00:00'
+            ),
             'contain' => array(
                 'PollValue'
             )
         );
 
-	    $schema = $this->schema();
-	    if (!empty($schema['start_date']) && !empty($schema['end_date'])) {
-		    $cond['conditions']['OR']['Poll.start_date'] = null;
-		    $cond['conditions']['OR']['Poll.end_date'] = null;
-		    $cond['conditions']['OR']['AND']['Poll.start_date <='] = date('Y-m-d');
-		    $cond['conditions']['OR']['AND']['Poll.end_date >='] = date('Y-m-d');
-	    }
-
         if (!empty($data['limit'])) {
-            $cond['limit'] = $data['limit'];
+//            $cond['limit'] = $data['limit'];
         }
 
         if (!empty($data['order_by'])) {
@@ -85,11 +80,9 @@ class Poll extends PollsAppModel
             $cond['order'] = 'Poll.'.$data['order_by'].' '.$data['order_dir'];
         }
 
-        if (!empty($data['data']))
+        if (!empty($data['data'])) {
             $cond['conditions']['Poll.id'] = $data['data'];
-
-	    if (!empty($data['article_id']))
-		    $cond['conditions']['Poll.article_id'] = $data['article_id'];
+        }
 
         $find = $this->find('all', $cond);
 
@@ -149,21 +142,16 @@ class Poll extends PollsAppModel
 				$results[0] = $results;
 			}
 
-			$ip = $_SERVER['REMOTE_ADDR'];
 			foreach($results as $key => $row)
 			{
-				$conditions['PollVotingValue.poll_id'] = $row['Poll']['id'];
-				if (!empty($user_id)) {
-					$conditions['OR'] = array(
-						'PollVotingValue.user_id' => $user_id,
-						'PollVotingValue.user_ip' => $ip
-					);
-				} else {
-					$conditions['PollVotingValue.user_ip'] = $ip;
-				}
-
 				$count = $this->PollVotingValue->find('count', array(
-					'conditions' => $conditions
+					'conditions' => array(
+						'PollVotingValue.poll_id' => $row['Poll']['id'],
+						'OR' => array(
+							'PollVotingValue.user_id' => $user_id,
+							'PollVotingValue.user_ip' => $_SERVER['REMOTE_ADDR']
+						)
+					)
 				));
 
 				$results[$key]['Poll']['can_vote'] = ($count == 0 ? true : false);
@@ -215,24 +203,5 @@ class Poll extends PollsAppModel
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Before Save
-	 *
-	 * @param array $options
-	 * @return bool
-	 */
-	public function beforeSave($options = array())
-	{
-		if (!empty($this->data['Poll']['title'])) {
-			if (empty($this->data['Poll']['start_date']))
-				$this->data['Poll']['start_date'] = date('Y-m-d');
-
-			if (empty($this->data['Poll']['end_date']))
-				$this->data['Poll']['end_date'] = date('Y-m-d', strtotime('+100 year'));
-		}
-
-		return true;
 	}
 }

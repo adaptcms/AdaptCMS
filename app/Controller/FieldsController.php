@@ -121,10 +121,10 @@ class FieldsController extends AppController
 
             if ($this->Field->save($this->request->data))
             {
-                $this->Session->setFlash('Your field has been added.', 'success');
+                $this->Session->setFlash('Your field has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your field.', 'error');
+                $this->Session->setFlash('Unable to add your field.', 'flash_error');
             }
         } 
 	}
@@ -147,10 +147,10 @@ class FieldsController extends AppController
 
 	        if ($this->Field->save($this->request->data))
             {
-	            $this->Session->setFlash('Your field has been updated.', 'success');
+	            $this->Session->setFlash('Your field has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your field.', 'error');
+	            $this->Session->setFlash('Unable to update your field.', 'flash_error');
 	        }
 	    }
 
@@ -192,7 +192,7 @@ class FieldsController extends AppController
 
         $permanent = $this->Field->remove($data);
 
-        $this->Session->setFlash('The field `'.$title.'` has been deleted.', 'success');
+        $this->Session->setFlash('The field `'.$title.'` has been deleted.', 'flash_success');
 
         if ($permanent)
         {
@@ -219,10 +219,10 @@ class FieldsController extends AppController
 	    $this->hasAccessToItem($data);
 
         if ($this->Field->restore()) {
-            $this->Session->setFlash('The field `'.$title.'` has been restored.', 'success');
+            $this->Session->setFlash('The field `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The field `'.$title.'` has NOT been restored.', 'error');
+            $this->Session->setFlash('The field `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }

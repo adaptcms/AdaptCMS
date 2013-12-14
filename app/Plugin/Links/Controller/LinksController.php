@@ -89,10 +89,10 @@ class LinksController extends LinksAppController
 
             if ($this->Link->save($this->request->data))
             {
-                $this->Session->setFlash('Your link has been added.', 'success');
+                $this->Session->setFlash('Your link has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your link.', 'error');
+                $this->Session->setFlash('Unable to add your link.', 'flash_error');
             }
         } 
 	}
@@ -114,10 +114,10 @@ class LinksController extends LinksAppController
 	    	$this->request->data['Link']['user_id'] = $this->Auth->user('id');
 
 	        if ($this->Link->save($this->request->data)) {
-	            $this->Session->setFlash('Your link has been updated.', 'success');
+	            $this->Session->setFlash('Your link has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your link.', 'error');
+	            $this->Session->setFlash('Unable to update your link.', 'flash_error');
 	        }
 	    }
 
@@ -151,7 +151,7 @@ class LinksController extends LinksAppController
 
 		$permanent = $this->Link->remove($data);
 
-		$this->Session->setFlash('The link `'.$title.'` has been deleted.', 'success');
+		$this->Session->setFlash('The link `'.$title.'` has been deleted.', 'flash_success');
 
 		if ($permanent)
 		{
@@ -179,10 +179,10 @@ class LinksController extends LinksAppController
 
         if ($this->Link->restore())
         {
-            $this->Session->setFlash('The link `'.$title.'` has been restored.', 'success');
+            $this->Session->setFlash('The link `'.$title.'` has been restored.', 'flash_success');
             $this->redirect(array('action' => 'index'));
         } else {
-            $this->Session->setFlash('The link `'.$title.'` has NOT been restored.', 'error');
+            $this->Session->setFlash('The link `'.$title.'` has NOT been restored.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
     }
@@ -243,7 +243,7 @@ class LinksController extends LinksAppController
                 if (!empty($securimage) &&
                     !$securimage->check($this->request->data['captcha']))
                 {
-                    $this->Session->setFlash('Incorrect captcha entred.', 'error');
+                    $this->Session->setFlash('Incorrect captcha entred.', 'flash_error');
                     $error = true;
                 }
             }
@@ -252,10 +252,10 @@ class LinksController extends LinksAppController
             {
                 if ($this->Link->save($this->request->data))
                 {
-                    $this->Session->setFlash('The Link has been submitted. ' . Configure::read('Links.text_on_success_submit'), 'success');
+                    $this->Session->setFlash('The Link has been submitted. ' . Configure::read('Links.text_on_success_submit'), 'flash_success');
                     $this->redirect('/');
                 } else {
-                    $this->Session->setFlash('The Link has NOT been submitted. Check errors below.', 'error');
+                    $this->Session->setFlash('The Link has NOT been submitted. Check errors below.', 'flash_error');
                 }
             }
         }

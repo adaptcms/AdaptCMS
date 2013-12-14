@@ -222,7 +222,7 @@ class GoogleMap extends AppModel
      */
     public function _generateMap($data = array())
     {
-        $view = new AdaptcmsView();
+        $view = new View();
 
         return $view->element('GoogleMaps.render_map', array('data' => $data));
     }

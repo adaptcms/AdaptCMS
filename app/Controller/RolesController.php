@@ -75,10 +75,10 @@ class RolesController extends AppController
 
             	$this->Role->Permission->saveAll($permissions);
 
-                $this->Session->setFlash('Your role has been added.', 'success');
+                $this->Session->setFlash('Your role has been added.', 'flash_success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your role.', 'error');
+                $this->Session->setFlash('Unable to add your role.', 'flash_error');
             }
         }
 
@@ -100,14 +100,12 @@ class RolesController extends AppController
 
 	    if (!empty($this->request->data))
         {
-	        $this->request->data['Role']['id'] = $id;
-
 	        if ($this->Role->saveAll($this->request->data, array('deep' => true)))
 	        {
-	            $this->Session->setFlash('Your role has been updated.', 'success');
+	            $this->Session->setFlash('Your role has been updated.', 'flash_success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your role.', 'error');
+	            $this->Session->setFlash('Unable to update your role.', 'flash_error');
 	        }
 	    }
 
@@ -151,7 +149,7 @@ class RolesController extends AppController
 
 		$permanent = $this->Role->remove($data);
 
-		$this->Session->setFlash('The role `'.$title.'` has been deleted.', 'success');
+		$this->Session->setFlash('The role `'.$title.'` has been deleted.', 'flash_success');
 
 		if ($permanent)
 		{
@@ -176,10 +174,10 @@ class RolesController extends AppController
 
 	    if ($this->Role->restore())
 	    {
-	        $this->Session->setFlash('The role `'.$title.'` has been restored.', 'success');
+	        $this->Session->setFlash('The role `'.$title.'` has been restored.', 'flash_success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash('The role `'.$title.'` has NOT been restored.', 'error');
+	    	$this->Session->setFlash('The role `'.$title.'` has NOT been restored.', 'flash_error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}

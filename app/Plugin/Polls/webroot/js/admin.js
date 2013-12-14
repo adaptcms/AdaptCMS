@@ -36,6 +36,4 @@ $(document).ready(function(){
     	del.val('0');
     	$(this).replaceWith('<button class="btn btn-danger poll-remove pull-right"><i class="icon-trash icon-white poll-delete"></i> Delete</button>');
     });
-
-    $('.datepicker').datepicker();
 });

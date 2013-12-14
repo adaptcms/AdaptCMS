@@ -1,7 +1,7 @@
-<div id="{% if not empty(id) %}{{ id }}{% else %}flashMessage{% endif %}" class="alert alert-success"{% if not empty(hidden) %} style="display: none;"{% endif %}>
+<div id="<?= !empty($id) ? $id : 'flashMessage' ?>" class="alert alert-success"<?= !empty($hidden) ? ' style="display: none;"' : '' ?>>
 	<button class="close" data-dismiss="alert">×</button>
-	<strong>Success</strong>
-	{% if not empty(message) %}
-		{{ message }}
-	{% endif %}
+	<strong>Success</strong> 
+	<?php if (!empty($message)): ?>
+		<?= $message ?>
+	<?php endif ?>
 </div>

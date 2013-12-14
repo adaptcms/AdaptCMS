@@ -68,7 +68,7 @@ class ForumTopicsController extends AdaptbbAppController
 
         if (empty($topic))
         {
-            $this->Session->setFlash('The Topic `' . $slug . '` could not be found.', 'error');
+            $this->Session->setFlash('The Topic `' . $slug . '` could not be found.', 'flash_error');
             $this->redirect(array('action' => 'index', 'controller' => 'forums'));
         }
 
@@ -139,7 +139,7 @@ class ForumTopicsController extends AdaptbbAppController
 
         if (empty($forum['Forum']))
         {
-            $this->Session->setFlash('Forum `' . $slug . '` could not be found.', 'error');
+            $this->Session->setFlash('Forum `' . $slug . '` could not be found.', 'flash_error');
             $this->redirect(array('action' => 'index'));
         }
 
@@ -170,10 +170,10 @@ class ForumTopicsController extends AdaptbbAppController
 
                 $this->ForumTopic->Forum->save($data);
 
-                $this->Session->setFlash('Your topic has been posted.', 'success');
+                $this->Session->setFlash('Your topic has been posted.', 'flash_success');
                 $this->redirect(array('action' => 'view', $this->ForumTopic->slug($this->request->data['ForumTopic']['subject']) ));
             } else {
-                $this->Session->setFlash('Unable to add your topic.', 'error');
+                $this->Session->setFlash('Unable to add your topic.', 'flash_error');
             }
         }
     }
@@ -218,10 +218,10 @@ class ForumTopicsController extends AdaptbbAppController
 
             if ($this->ForumTopic->save($this->request->data))
             {
-                $this->Session->setFlash('The topic has been updated.', 'success');
+                $this->Session->setFlash('The topic has been updated.', 'flash_success');
                 $this->redirect(array('action' => 'view', $this->ForumTopic->slug($this->request->data['ForumTopic']['subject']) ));
             } else {
-                $this->Session->setFlash('Unable to update the topic.', 'error');
+                $this->Session->setFlash('Unable to update the topic.', 'flash_error');
             }
         }
 
@@ -231,13 +231,13 @@ class ForumTopicsController extends AdaptbbAppController
 
         if (empty($topic['ForumTopic']))
         {
-            $this->Session->setFlash('Topic could not be found.', 'error');
+            $this->Session->setFlash('Topic could not be found.', 'flash_error');
             $this->redirect(array('action' => 'index', 'controller' => 'forums'));
         }
 
         if ($this->request->data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
-            $this->Session->setFlash('You cannot access another users item.', 'error');
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
             $this->redirect(array('action' => 'index'));                
         }
     }
@@ -256,13 +256,13 @@ class ForumTopicsController extends AdaptbbAppController
 
         if (empty($topic['ForumTopic']))
         {
-            $this->Session->setFlash('Topic could not be found.', 'error');
+            $this->Session->setFlash('Topic could not be found.', 'flash_error');
             $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));
         }
 
         if ($topic['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
-            $this->Session->setFlash('You cannot access another users item.', 'error');
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
             $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));                
         }
 
@@ -278,14 +278,14 @@ class ForumTopicsController extends AdaptbbAppController
 
             $this->ForumTopic->Forum->save($data);
 
-            $this->Session->setFlash('The topic has been deleted.', 'success');
+            $this->Session->setFlash('The topic has been deleted.', 'flash_success');
             $this->redirect(array(
                 'controller' => 'forums', 
                 'action' => 'view', 
                 $this->ForumTopic->slug($topic['Forum']['title']) 
             ));
         } else {
-            $this->Session->setFlash('Unable to delete the topic.', 'error');
+            $this->Session->setFlash('Unable to delete the topic.', 'flash_error');
         }
     }
 
@@ -303,13 +303,13 @@ class ForumTopicsController extends AdaptbbAppController
 
         if (empty($topic['ForumTopic']))
         {
-            $this->Session->setFlash('Topic could not be found.', 'error');
+            $this->Session->setFlash('Topic could not be found.', 'flash_error');
             $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));
         }
 
         if ($topic['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
-            $this->Session->setFlash('You cannot access another users item.', 'error');
+            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
             $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));                
         }
 
@@ -320,10 +320,10 @@ class ForumTopicsController extends AdaptbbAppController
 
         if ($this->ForumTopic->save($data))
         {
-            $this->Session->setFlash('The topic has been ' . ($data['ForumTopic']['status'] == 0 ? 'Closed' : 'Opened') . '.', 'success');
+            $this->Session->setFlash('The topic has been ' . ($data['ForumTopic']['status'] == 0 ? 'Closed' : 'Opened') . '.', 'flash_success');
             $this->redirect(array('action' => 'view', $this->ForumTopic->slug($topic['ForumTopic']['subject']) ));
         } else {
-            $this->Session->setFlash('Unable to update the topic.', 'error');
+            $this->Session->setFlash('Unable to update the topic.', 'flash_error');
         }
     }
 }

@@ -1,6 +1,6 @@
 <?= $this->Form->create('Search', array(
 	'url' => array(
-		'action' => 'index',
+		'action' => 'search',
 		'controller' => 'search',
 		'plugin' => false,
 		'admin' => false

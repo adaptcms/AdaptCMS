@@ -7,7 +7,7 @@ class Sitemap extends AppModel
 
 	public function generateSitemap()
 	{
-		$view = new AdaptcmsView();
+		$view = new View();
 		
 		$path = APP . '/Plugin/SitemapGenerator' . DS . 'webroot' . DS;
 		$sitemap_path = $path . 'sitemap.xml';

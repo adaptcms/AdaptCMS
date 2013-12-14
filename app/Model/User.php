@@ -270,7 +270,7 @@ class User extends AppModel
             return $data;
         }
 
-        $view = new AdaptcmsView();
+        $view = new View();
         $view->autoRender = false;
 
         $user_data = array();

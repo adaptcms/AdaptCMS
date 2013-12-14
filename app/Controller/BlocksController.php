@@ -96,10 +96,10 @@ class BlocksController extends AppController
 			$this->request->data['Block']['user_id'] = $this->Auth->user('id');
 
 			if ($this->Block->save($this->request->data)) {
-				$this->Session->setFlash('Your block has been added.', 'success');
+				$this->Session->setFlash('Your block has been added.', 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to add block. Make sure you entered in all required fields.', 'error');
+				$this->Session->setFlash('Unable to add block. Make sure you entered in all required fields.', 'flash_error');
 			}
 		}
 	}
@@ -120,10 +120,10 @@ class BlocksController extends AppController
 			$this->request->data['Block']['user_id'] = $this->Auth->user('id');
 
 			if ($this->Block->save($this->request->data)) {
-				$this->Session->setFlash('Your Block has been updated.', 'success');
+				$this->Session->setFlash('Your Block has been updated.', 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to update your Block.', 'error');
+				$this->Session->setFlash('Unable to update your Block.', 'flash_error');
 			}
 		}
 
@@ -157,7 +157,7 @@ class BlocksController extends AppController
 
 		$permanent = $this->Block->remove($data);
 
-		$this->Session->setFlash('The block `' . $title . '` has been deleted.', 'success');
+		$this->Session->setFlash('The block `' . $title . '` has been deleted.', 'flash_success');
 
 		if ($permanent) {
 			$this->redirect(array('action' => 'index', 'trash' => 1));
@@ -183,10 +183,10 @@ class BlocksController extends AppController
 		$this->hasAccessToItem($data);
 
 		if ($this->Block->restore()) {
-			$this->Session->setFlash('The block `' . $title . '` has been restored.', 'success');
+			$this->Session->setFlash('The block `' . $title . '` has been restored.', 'flash_success');
 			$this->redirect(array('action' => 'index'));
 		} else {
-			$this->Session->setFlash('The block `' . $title . '` has NOT been restored.', 'error');
+			$this->Session->setFlash('The block `' . $title . '` has NOT been restored.', 'flash_error');
 			$this->redirect(array('action' => 'index'));
 		}
 	}
@@ -203,49 +203,46 @@ class BlocksController extends AppController
 	public function admin_ajax_get_model()
 	{
 		$custom = array();
-		$order_by = array(
-			'id' => 'ID',
-			'title' => 'Title',
-			'created' => 'Created',
-			'modified' => 'Modified',
-			'rand' => 'Random'
-		);
 
-		$model = str_replace(' ', '', $this->request->data['Block']['module_id']);
+		if ($this->request->data['Block']['type'] == "action") {
+			$find = $this->Block->Module->findByTitle($this->request->data['Block']['module_id']);
+			$model = $find['Module']['model_title'];
 
-		if (strstr($model, '.')) {
-			$ex = explode('.', $model);
-			$model_name = Inflector::singularize($ex[1]);
+			$this->loadModel(
+				$this->Block->loadModelName($find)
+			);
 
-			$this->loadModel($ex[0] . '.' . $model_name);
-			$data = $this->$model_name->find('all');
-		} else {
 			$model_name = $model;
 
-			$this->loadModel($model);
 			$data = $this->$model->find('all');
-		}
+		} else {
+			$model = $this->request->data['Block']['module_id'];
+			$this->loadModel($model);
 
-		if (method_exists($this->$model_name, 'getBlockCustomOptions')) {
-			$custom = $this->$model_name->getBlockCustomOptions(
-				json_decode(
-					$this->request->data['Block']['custom'],
-					true
-				)
-			);
-		}
+			if (strstr($model, '.')) {
+				$ex = explode('.', $model);
+				$model_name = $ex[1];
+				$data = $this->$ex[1]->find('all');
+			} else {
+				$model_name = $model;
+				$data = $this->$model->find('all');
+			}
 
-		if (method_exists($this->$model_name, 'getBlockOrderByOptions')) {
-			$order_by = $this->$model_name->getBlockOrderByOptions();
+			if (method_exists($this->$model, 'getBlockCustomOptions')) {
+				$custom = $this->$model->getBlockCustomOptions(
+					json_decode(
+						$this->request->data['Block']['custom'],
+						true
+					)
+				);
+			}
 		}
 
 		$list_data = array();
 
-		foreach ($data as $key => $row) {
+		foreach ($data as $row) {
 			if (!empty($row[$model_name]['slug'])) {
 				$list_data[$row[$model_name]['slug']] = $row[$model_name]['title'];
-			} elseif (empty($row[$model_name]['title'])) {
-				$list_data[$row[$model_name]['id']] = 'Item #' . $key;
 			} else {
 				$list_data[$row[$model_name]['id']] = $row[$model_name]['title'];
 			}
@@ -253,10 +250,9 @@ class BlocksController extends AppController
 
 		$body = array(
 			'custom' => $custom,
-			'data' => $list_data,
-			'order_by' => $order_by
+			'data' => $list_data
 		);
 
-		return $this->_ajaxResponse(array('body' => $body));
+		return $this->_ajaxResponse(array('body' => json_encode($body)));
 	}
 }

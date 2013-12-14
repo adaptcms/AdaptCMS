@@ -1,7 +1,5 @@
 <?php
-/**
- * Class Plugin
- */
+
 class Plugin extends AppModel
 {
     public $name = 'Plugin';

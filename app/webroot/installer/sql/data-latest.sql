@@ -1,17 +1,17 @@
 INSERT INTO `{prefix}articles` (`id`, `title`, `slug`, `tags`, `related_articles`, `user_id`, `category_id`, `status`, `publish_time`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'Welcome to AdaptCMS 3.0.2!', 'welcome-to-adaptcms-3-0-2', NULL, '', 1, 1, 1, '{date}', '{date}', '{date}', '0000-00-00 00:00:00');
+(1, 'Welcome to AdaptCMS 3.0.1!', 'welcome-to-adaptcms-3-0-1', NULL, '', 1, 1, 1, '{date}', '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}article_values` (`id`, `article_id`, `field_id`, `file_id`, `data`) VALUES
 (1, 1, 1, 0, '<p>We hope you enjoy your newly installed copy of AdaptCMS. Be sure to check the <a href="http://www.adaptcms.com" target="_blank">official website</a> for documentation on the CMS and you can get support <a href="http://www.adaptcms.com/support" target="_blank">here</a>. Enjoy!</p>\r\n<p>Thank you,<br />AdaptCMS Team</p>');
 -- --------------------------------------------------------
-INSERT INTO `{prefix}blocks` (`id`, `title`, `type`, `module_id`, `user_id`, `limit`, `settings`, `data`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'show-poll', 'dynamic', 8, 1,  1, '{"order_by":"created","order_dir:"desc"}', null, '{date}', '{date}', '0000-00-00 00:00:00'),
-(2, 'latest-links', 'dynamic', 17, 1, 3, '{"order_by":"created","order_dir":"asc"}', null, '{date}', '{date}', '0000-00-00 00:00:00'),
-(3, 'admin-main-articles-newest', 'dynamic', 1, 1, 5, '{"category_id":"","order_by":"created","order_dir":"desc"}', null, '{date}', '{date}', '0000-00-00 00:00:00'),
-(4, 'admin-main-users-newest', 'dynamic', 9, 1, 5, '{"order_by":"created","order_dir":"desc"}', null, '{date}', '{date}', '0000-00-00 00:00:00');
+INSERT INTO `{prefix}blocks` (`id`, `title`, `type`, `module_id`, `user_id`, `location`, `limit`, `settings`, `data`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'show-poll', 'dynamic', 8, 1, '["*"]', 1, '{"data":"1"}', null, '{date}', '{date}', '0000-00-00 00:00:00'),
+(2, 'latest-links', 'dynamic', 17, 1, '["*"]', 3, '{"order_by":"created","order_dir":"asc"}', null, '{date}', '{date}', '0000-00-00 00:00:00'),
+(3, 'admin-main-articles-newest', 'dynamic', 1, 1, '["Pages|admin"]', 5, '{"category_id":"","order_by":"created","order_dir":"desc"}', null, '{date}', '{date}', '0000-00-00 00:00:00'),
+(4, 'admin-main-users-newest', 'dynamic', 9, 1, '["Pages|admin"]', 5, '{"order_by":"created","order_dir":"desc"}', null, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
-INSERT INTO `{prefix}categories` (`id`, `title`, `slug`, `settings`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'News', 'news', null, 1, '{date}', '{date}', '0000-00-00 00:00:00');
+INSERT INTO `{prefix}categories` (`id`, `title`, `slug`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
+(1, 'News', 'news', 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}fields` (`id`, `title`, `label`, `field_order`, `category_id`, `module_id`, `field_type_id`, `field_type_slug`, `description`, `field_options`, `field_limit_min`, `field_limit_max`, `required`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'summary', 'summary', 0, 1, 0, 11, 'textarea', 'You ought to enter a short summary of the news article.', '', 0, 0, 1, 1, '{date}', '{date}', '0000-00-00 00:00:00');
@@ -130,8 +130,6 @@ INSERT INTO `{prefix}permissions` (`id`, `label`, `module_id`, `role_id`, `actio
 (null, null, 9, 1, 0, '', 'users', 'edit', 1, NULL, 1, 2),
 (null, null, 9, 1, 0, '', 'users', 'profile', 1, NULL, 1, 1),
 (null, null, 20, 1, 0, '', 'comments', 'admin_edit', 1, '[{"action":["admin_edit"],"controller":["articles"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
-(null, null, 20, 1, 0, '', 'comments', 'admin_delete', 1, NULL, 1, 1),
-(null, null, 20, 1, 0, '', 'comments', 'admin_restore', 1, NULL, 1, 1),
 (null, null, 5, 1, 0, '', 'fields', 'admin_delete', 1, NULL, 1, 1),
 (null, null, 21, 1, 0, '', 'messages', 'index', 1, NULL, 1, 1),
 (null, null, 21, 1, 0, '', 'messages', 'view', 1, NULL, 1, 1),
@@ -155,7 +153,7 @@ INSERT INTO `{prefix}permissions` (`id`, `label`, `module_id`, `role_id`, `actio
 (null, null, 5, 1, 0, '', 'fields', 'admin_ajax_fields', 1, '', 2, 2),
 (null, null, 20, 1, 0, '', 'comments', 'ajax_post', 1, '', 1, 1),
 (null, null, 2, 1, 0, '', 'blocks', 'admin_ajax_get_model', 1, '', 2, 2),
-(null, null, 1, 1, 0, '', 'articles', 'admin_ajax_related_update', 1, '', 2, 2),
+(null, null, 1, 1, 0, '', 'articles', 'admin_ajax_related_add', 1, '', 2, 2),
 (null, null, 1, 1, 0, '', 'articles', 'admin_ajax_related_search', 1, '', 1, 1),
 (null, null, 1, 1, 0, '', 'articles', 'admin_delete', 1, '', 1, 1),
 (null, null, 2, 1, 0, '', 'blocks', 'admin_edit', 1, '', 1, 0),
@@ -275,8 +273,6 @@ INSERT INTO `{prefix}permissions` (`id`, `label`, `module_id`, `role_id`, `actio
 (null, null, 9, 4, 0, '', 'users', 'edit', 1, NULL, 1, 2),
 (null, null, 9, 4, 0, '', 'users', 'profile', 1, NULL, 1, 1),
 (null, null, 20, 4, 0, '', 'comments', 'admin_edit', 1, '[{"action":["admin_edit"],"controller":["articles"]},{"action":["profile"],"controller":["users"]}]', 1, 1),
-(null, null, 20, 4, 0, '', 'comments', 'admin_delete', 1, NULL, 1, 1),
-(null, null, 20, 4, 0, '', 'comments', 'admin_restore', 1, NULL, 1, 1),
 (null, null, 5, 4, 0, '', 'fields', 'admin_delete', 1, NULL, 1, 0),
 (null, null, 21, 4, 0, '', 'messages', 'index', 1, NULL, 1, 1),
 (null, null, 21, 4, 0, '', 'messages', 'view', 1, NULL, 1, 1),
@@ -300,7 +296,7 @@ INSERT INTO `{prefix}permissions` (`id`, `label`, `module_id`, `role_id`, `actio
 (null, null, 5, 4, 0, '', 'fields', 'admin_ajax_fields', 1, '', 2, 2),
 (null, null, 20, 4, 0, '', 'comments', 'ajax_post', 1, '', 1, 1),
 (null, null, 2, 4, 0, '', 'blocks', 'admin_ajax_get_model', 1, '', 2, 2),
-(null, null, 1, 4, 0, '', 'articles', 'admin_ajax_related_update', 1, '', 2, 2),
+(null, null, 1, 4, 0, '', 'articles', 'admin_ajax_related_add', 1, '', 2, 2),
 (null, null, 1, 4, 0, '', 'articles', 'admin_ajax_related_search', 1, '', 1, 1),
 (null, null, 1, 4, 0, '', 'articles', 'admin_delete', 1, '', 1, 0),
 (null, null, 2, 4, 0, '', 'blocks', 'admin_edit', 1, '', 1, 0),
@@ -457,11 +453,7 @@ INSERT INTO `{prefix}permissions` (`id`, `label`, `module_id`, `role_id`, `actio
 (null, NULL, 4, 4, 0, '', 'files', 'admin_add_folder', 1, '[{"action":["admin_index"]}]', 2, 2),
 (null, NULL, 9, 1, 0, '', 'users', 'ajax_quick_search', 1, null, 2, 2),
 (null, NULL, 9, 2, 0, '', 'users', 'ajax_quick_search', 1, null, 2, 2),
-(null, NULL, 9, 4, 0, '', 'users', 'ajax_quick_search', 1, null, 2, 2),
-(null, NULL, 6, 1, 0, '', 'templates', 'admin_global_tags', 1, '', 2, 2),
-(null, NULL, 6, 4, 0, '', 'templates', 'admin_global_tags', 0, '', 2, 2),
-(null, null, 0, 1, 0, '', 'tools', 'admin_convert_onecms', 1, '', 2, 2),
-(null, null, 0, 4, 0, '', 'tools', 'admin_convert_onecms', 0, '', 2, 2);
+(null, NULL, 9, 4, 0, '', 'users', 'ajax_quick_search', 1, null, 2, 2);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_adaptbb_forums` (`id`, `title`, `slug`, `category_id`, `description`, `status`, `num_posts`, `num_topics`, `ord`, `user_id`, `icon_url`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Off Topic', 'off-topic', 1, '<p>All discussions go here.</p>', 1, 0, 0, 0, 1, '', '{date}', '{date}', '0000-00-00 00:00:00');
@@ -483,8 +475,8 @@ INSERT INTO `{prefix}plugin_poll_values` (`id`, `title`, `poll_id`, `votes`) VAL
 (4, 'NFL', 1, 0),
 (5, 'MLB', 1, 0);
 -- --------------------------------------------------------
-INSERT INTO `{prefix}plugin_polls` (`id`, `article_id`, `title`, `poll_type`, `user_id`, `start_date`, `end_date`, `created`, `modified`, `deleted_time`) VALUES
-(1, NULL, 'What is your favorite sport?', NULL, 1, NULL, NULL, '{date}', '{date}', '0000-00-00 00:00:00');
+INSERT INTO `{prefix}plugin_polls` (`id`, `article_id`, `title`, `poll_type`, `user_id`, `created`, `modified`, `deleted_time`) VALUES
+(1, NULL, 'What is your favorite sport?', NULL, 1, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}roles` (`id`, `title`, `defaults`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'admin', 'default-admin', '0000-00-00 00:00:00', '{date}', '0000-00-00 00:00:00'),
