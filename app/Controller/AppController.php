@@ -2,6 +2,7 @@
 App::uses('Controller', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
 App::import('Model', 'ConnectionManager');
+App::uses('AdaptcmsView', 'View');
 /**
  * Class AppController
  * @property Cron $Cron
@@ -64,9 +65,12 @@ class AppController extends Controller
         'Html', 
         'Form', 
         'Time', 
-        'Cache', 
+        'Cache' => array('className' => 'AdaptcmsCache'),
         'AutoLoadJS',
-        'Admin'
+        'Admin',
+	    'AdaptHtml',
+	    'View',
+	    'Session'
     );
 
     /**
@@ -103,9 +107,26 @@ class AppController extends Controller
 
 	private $_elementView;
 
+	/**
+	 * @var bool
+	 */
+	private $is_admin = false;
+
+	/**
+	 * @var array
+	 */
+	private $blocks = array();
+
+	/**
+	 * If set to true, disables parsing of template tags - used for angular templates.
+	 *
+	 * @var bool
+	 */
+	private $disable_parsing = false;
+
     /**
      * A whole lot is going on in this one. We look for and attempt to load components/helpers, call Auth/Authorize,
-     * load the layout, run the accessCheck, run the cron, blocks lookup, 
+     * load the layout, run the accessCheck, run the cron.
      * 
      * @return null
      */
@@ -161,6 +182,10 @@ class AppController extends Controller
             }
         }
 
+	    if (!empty($this->request->prefix) && $this->request->prefix == 'admin') {
+		    $this->is_admin = true;
+	    }
+
         parent::beforeFilter();
 
         $this->Security->blackHoleCallback = 'blackhole';
@@ -179,17 +204,10 @@ class AppController extends Controller
 
         $this->loadModel('Permission');
 
-//        debug($this->Permission->find('all'));
-
         if (!$this->getRole())
             $this->setRole();
 
-//        echo '#2: ' . microtime() . '<br />';
-
-        $this->blocksLookup();
-//        echo '#3: ' . microtime() . '<br />';
         $this->accessCheck();
-//        echo '#4: ' . microtime() . '<br />';
         $this->runCron();
 
         $this->loadModel('SettingValue');
@@ -210,6 +228,8 @@ class AppController extends Controller
         }
 
         if ($this->Auth->user('id')) {
+	        Configure::write('User.id', $this->Auth->user('id'));
+
             $current_user = $this->Auth->user();
 
             if (!empty($current_user['settings']))
@@ -234,7 +254,8 @@ class AppController extends Controller
         $this->Paginator->settings = array(
             'limit' => $this->pageLimit
         );
-//        echo '#5: ' . microtime() . '<br />';
+
+        $this->viewClass = 'Adaptcms';
     }
 
     /**
@@ -254,7 +275,7 @@ class AppController extends Controller
                 $this->set('prefix', 'admin');
             }
         } else {
-            if (!empty($this->request->prefix) && $this->request->prefix == "admin" or 
+            if (!empty($this->request->prefix) && $this->is_admin or
                 $this->request->action == "admin" && strtolower($this->request->controller) != "users") {
                 $this->layout = "admin";
                 $this->set('prefix', 'admin');
@@ -290,7 +311,7 @@ class AppController extends Controller
             || !empty($this->request->prefix) && $this->request->prefix == "rss" || $this->request->controller == 'install' && !strstr($this->request->action, 'plugin') ||
             !empty($this->request->ext) && in_array($this->request->ext, $webroot_exts)) {
                         $this->Auth->allow($this->request->action);
-        } elseif (!empty($this->request->prefix) && $this->request->prefix == "admin" && !$this->Auth->User('id')
+        } elseif (!empty($this->request->prefix) && $this->is_admin && !$this->Auth->User('id')
             || $this->request->action == "admin" && !$this->Auth->User('id')
             && strtolower($this->request->controller) != "users"
             ) {
@@ -310,6 +331,7 @@ class AppController extends Controller
                 ));
             } else {
                 if (!empty($this->request->pass[0]) && is_numeric($this->request->pass[0])) {
+//	                debug($this->request);
                     $permission = $this->Permission->find('first', array(
                         'conditions' => array(
                             'Permission.role_id' => $this->getRole(),
@@ -354,6 +376,7 @@ class AppController extends Controller
                 $this->Auth->allow($this->request->action);
             }
         }
+
     }
 
     /**
@@ -388,6 +411,8 @@ class AppController extends Controller
                 $this->role = null;
             }
         }
+
+	    Configure::write('User.role', $this->role);
 
         return $this->role;
     }
@@ -530,7 +555,7 @@ class AppController extends Controller
      * @return boolean
      */
     public function isAuthorized($user = NULL) {
-        if ($this->params['prefix'] === 'admin') {
+        if ($this->is_admin) {
             return true;
         }
         return true;
@@ -550,14 +575,14 @@ class AppController extends Controller
 			    'status' => 401
 		    ));
     	} else {
-            if (Configure::read('dev') == 1)
+            if (Configure::read('dev') == 4)
             {
 //                die(debug($this->params));
 	            return true;
             }
             else
             {
-                $this->Session->setFlash('You do not have access to this page.', 'flash_error');
+                $this->Session->setFlash('You do not have access to this page.', 'error');
 
                 if (Controller::referer() && !strstr(Controller::referer(), $this->here))
                 {
@@ -581,7 +606,6 @@ class AppController extends Controller
 	 * Blackhole
 	 *
 	 * @param $type
-	 *
 	 * @return void
 	 */
 	public function blackhole($type) {
@@ -589,7 +613,7 @@ class AppController extends Controller
         {
             $this->Session->setFlash(
                 'We have encountered an ' . $type . ' error. Please ensure you are logged in and for forms - try and submit again.',
-                'flash_error'
+                'error'
             );
             return $this->redirect( Controller::referer() );
         }
@@ -620,117 +644,141 @@ class AppController extends Controller
         );
         $this->Log->save($log_insert);
     }
-    
-    /**
-     * Blocks Lookup
-     * Looks up any blocks that should run on page and loads them
-     * 
-     * @return void
-     */
-    public function blocksLookup()
+
+	/**
+	 * Block Lookup
+	 * Looks up any blocks that should run on page and loads them
+	 *
+	 * @param string $block
+	 * @param string $type
+	 * @return array
+	 */
+    public function blockLookup($block, $type = 'data')
     {
-        if ($this->request->prefix != "admin") {
+	    $block_lookup = $this->getBlock($block);
+        if (empty($block_lookup[$type])) {
             $this->loadModel('Block');
 
-            if (!empty($this->params['pass'][0])) {
-                $location = $this->request->controller.'|'.$this->request->action.'|'.$this->params['pass'][0];
-                $location2 = $this->request->controller.'|'.$this->request->action;
+	        if (empty($block_lookup['block'])) {
+	            $data = $this->Block->find('first', array(
+		            'conditions' => array(
+			            'Block.title' => $block
+		            ),
+		            'contain' => array(
+			            'Module'
+		            )
+	            ));
+		        $block_data['block'] = $data['Block'];
+		        $block_data['block']['Module'] = $data['Module'];
+		        $data = $block_data['block'];
+	        } else {
+		        $data = $block_lookup['block'];
+	        }
 
-                $block_cond = array(
-                    'conditions' => array(
-                        'OR' => array(
-                            array('Block.location LIKE' => '%"*"%'),
-                            array('Block.location LIKE' => '%"' . $location . '"%'),
-                            array('Block.location LIKE' => '%"' . $location2 . '"%')
-                        )
-                    ),
-                    'contain' => array(
-                        'Module'
-                    )
-                );
-            } else {
-                $location = $this->request->controller.'|'.$this->request->action;
-                $block_cond = array(
-                    'conditions' => array(
-                        'OR' => array(
-                            array('Block.location LIKE' => '%"*"%'),
-                            array('Block.location LIKE' => '%"' . $location . '"%')
-                        )
-                    ),
-                    'contain' => array(
-                        'Module'
-                    )
-                );
-            }
-
-            $data = $this->Block->find('all', $block_cond);
-
+	        $block_data = array();
+	        $block_permissions = array();
             if (!empty($data))
             {
-                $block_data = array();
-                $block_permissions = array();
-
-                foreach($data as $row)
+                if (!empty($data['settings']))
                 {
-                    if (!empty($row['Block']['settings']))
-                    {
-                        $settings = json_decode($row['Block']['settings']);
+                    $settings = json_decode($data['settings']);
 
-                        foreach($settings as $key => $val)
-                        {
-                            $row['Block'][$key] = $val;
-                        }
-
-                        unset($row['Block']['settings']);
+	                if (!empty($settings)) {
+	                    foreach($settings as $key => $val)
+	                    {
+	                        $data[$key] = $val;
+	                    }
                     }
 
-                    if ($row['Block']['type'] == "dynamic")
-                    {
-                        if ($row['Module']['is_plugin'] == 1)
-                        {
-                            $model = $row['Module']['model_title'];
-                            $this->loadModel(
-                                str_replace(' ','',$row['Module']['title']).'.'.$model
-                                );
-                        } else {
-                            $model = $row['Module']['model_title'];
-                            $this->loadModel($model);
-                        }
+                    unset($data['settings']);
+                }
 
-                        $permissions = $this->Block->Module->Permission->find('first', array(
-                            'conditions' => array(
-                                'Permission.module_id' => $row['Module']['id'],
-                                'Permission.action NOT LIKE' => '%admin%',
-                                'Permission.role_id' => $this->getRole()
-                            ),
-                            'order' => 'Permission.related DESC',
-                            'limit' => 1
-                        ));
+                if ($data['type'] == "dynamic")
+                {
+	                if ($type == 'permissions') {
+	                    $permissions = $this->Block->Module->Permission->find('first', array(
+	                        'conditions' => array(
+	                            'Permission.module_id' => $data['Module']['id'],
+	                            'Permission.action NOT LIKE' => '%admin%',
+	                            'Permission.role_id' => $this->getRole()
+	                        ),
+	                        'order' => 'Permission.related DESC',
+	                        'limit' => 1
+	                    ));
 
-                        if (!empty($permissions))
-                        {
-                            $block_permissions
-                            [$row['Block']['title']] =
-                            $this->getRelatedPermissions($permissions);
-                        }
+	                    if (!empty($permissions))
+	                        $block_permissions = $this->getRelatedPermissions($permissions);
+	                } else {
+		                if ($data['Module']['is_plugin'] == 1)
+		                {
+			                $model = $data['Module']['model_title'];
+			                $this->loadModel(
+				                str_replace(' ','',$data['Module']['title']).'.'.$model
+			                );
+		                } else {
+			                $model = $data['Module']['model_title'];
+			                $this->loadModel($model);
+		                }
 
-                        if (method_exists($this->$model, 'getBlockData'))
-                        {
-                            $block_data
-                            [$row['Block']['title']] = $this->$model->getBlockData(
-                                $row['Block'], 
-                                $this->Auth->user('id')
-                                );
-                        }
-                    } elseif (!empty($row['Block']['data'])) {
-                        $block_data[$row['Block']['title']] = $row['Block']['data'];
-                    }
+	                    if (method_exists($this->$model, 'getBlockData'))
+	                    {
+	                        $block_data = $this->$model->getBlockData(
+	                            $data,
+	                            $this->Auth->user('id')
+	                        );
+	                    }
+	                }
+                } elseif (!empty($data['data'])) {
+                    $block_data = $data['data'];
                 }
             }
 
-            $this->set(compact('block_data', 'block_permissions'));
+            $this->setBlock($block, array(
+	            'block' => $data,
+	            'data' => $block_data,
+	            'permissions' => $block_permissions
+            ));
         }
+
+	    return $this->getBlock($block);
     }
+
+	/**
+	 * Set Block
+	 *
+	 * @param $block
+	 * @param $data
+	 * @return void
+	 */
+	public function setBlock($block, $data)
+	{
+		$this->blocks[$block] = $data;
+	}
+
+	/**
+	 * Get Block
+	 *
+	 * @param $block
+	 * @return array
+	 */
+	public function getBlock($block)
+	{
+		if (!empty($this->blocks[$block])) {
+			return $this->blocks[$block];
+		} else {
+			return array();
+		}
+	}
+
+	/**
+	 * Get Blocks
+	 *
+	 * @return array
+	 */
+	public function getBlocks()
+	{
+		return $this->blocks;
+	}
 
     /**
      * Looks up any cron entries that need to run and run the model function
@@ -884,7 +932,7 @@ class AppController extends Controller
     public function afterFacebookLogin()
     {
     	$this->Session->write('login_type', 'facebook');
-    	$this->Session->setFlash('Welcome back '.$this->Auth->User('username').'!', 'flash_success');
+    	$this->Session->setFlash('Welcome back '.$this->Auth->User('username').'!', 'success');
         return $this->redirect('/');
     }
 
@@ -964,13 +1012,13 @@ class AppController extends Controller
 	{
 		if (empty($data))
 		{
-			$this->Session->setFlash('Item does not exist.', 'flash_error');
+			$this->Session->setFlash('Item does not exist.', 'error');
 			$redirect = true;
 		}
 
 		if (!empty($data['User']['id']) && $data['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
 		{
-			$this->Session->setFlash('You cannot access another users item.', 'flash_error');
+			$this->Session->setFlash('You cannot access another users item.', 'error');
 			$redirect = true;
 		}
 
@@ -1054,9 +1102,14 @@ class AppController extends Controller
 	{
 		if (!$this->_elementView)
 		{
-			$this->_elementView = new View($this, false);
+			$this->_elementView = new AdaptcmsView($this);
 		}
 
 		return $this->_elementView->element($element, $params);
+	}
+
+	public function beforeRender()
+	{
+
 	}
 }

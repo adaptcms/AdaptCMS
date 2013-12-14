@@ -91,10 +91,10 @@ class CronController extends AppController
 
             if ($this->Cron->save($this->request->data))
             {
-                $this->Session->setFlash('Your cron job has been added.', 'flash_success');
+                $this->Session->setFlash('Your cron job has been added.', 'success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your cron job.', 'flash_error');
+                $this->Session->setFlash('Unable to add your cron job.', 'error');
             }
         } 
 	}
@@ -115,10 +115,10 @@ class CronController extends AppController
 		{        	
 	        if ($this->Cron->save($this->request->data))
 	        {
-	            $this->Session->setFlash('Your cron job has been updated.', 'flash_success');
+	            $this->Session->setFlash('Your cron job has been updated.', 'success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your cron job.', 'flash_error');
+	            $this->Session->setFlash('Unable to update your cron job.', 'error');
 	        }
 	    }
 
@@ -142,7 +142,7 @@ class CronController extends AppController
 
 		$permanent = $this->Cron->remove($data);
 
-		$this->Session->setFlash('The cron job `'.$title.'` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The cron job `'.$title.'` has been deleted.', 'success');
 
 		if ($permanent)
 		{
@@ -167,9 +167,9 @@ class CronController extends AppController
 
 	    if ($this->Cron->restore())
 	    {
-	        $this->Session->setFlash('The cron job `'.$title.'` has been restored.', 'flash_success');
+	        $this->Session->setFlash('The cron job `'.$title.'` has been restored.', 'success');
 	    } else {
-	    	$this->Session->setFlash('The cron job `'.$title.'` has NOT been restored.', 'flash_error');
+	    	$this->Session->setFlash('The cron job `'.$title.'` has NOT been restored.', 'error');
 	    }
 
         $this->redirect(array('action' => 'index'));
@@ -190,11 +190,11 @@ class CronController extends AppController
 
         if ($test_cron)
         {
-            $this->Session->setFlash('The cron job has run successfully.', 'flash_success');
+            $this->Session->setFlash('The cron job has run successfully.', 'success');
         }
         else
         {
-            $this->Session->setFlash('The cron job did not run successfully.', 'flash_error');
+            $this->Session->setFlash('The cron job did not run successfully.', 'error');
         }
 
         $this->redirect(array('action' => 'index'));

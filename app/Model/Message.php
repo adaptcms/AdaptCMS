@@ -38,6 +38,13 @@ class Message extends AppModel
         )
     );
 
+	/**
+	 * @var array
+	 */
+	public $actsAs = array(
+		'Slug'
+	);
+
     /**
     * Cleans out user input
     *

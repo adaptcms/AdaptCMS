@@ -75,6 +75,7 @@ class Article extends AppModel
     public function getRelatedArticles($id, $related, $categories = array(), $users = array(), $fields = array(), $files = array())
     {
         $data = array();
+	    $find = array();
 
         if (!empty($related))
         {
@@ -90,82 +91,86 @@ class Article extends AppModel
             }
         }
 
-        $find = $this->find('all', array(
-            'conditions' => array(
-                'OR' => array(
-                    'Article.id' => $related,
-                    'Article.related_articles LIKE' => '%"'.$id.'"%'
-                )
-            )
-        ));
+	    if (!empty($related)) {
+	        $find = $this->find('all', array(
+	            'conditions' => array(
+	                'OR' => array(
+	                    'Article.id' => $related,
+	                    'Article.related_articles LIKE' => '%"'.$id.'"%'
+	                )
+	            )
+	        ));
 
-        if (!empty($find))
-            $find = $this->getAllRelatedArticles(
-                $find,
-                true,
-                $categories,
-                $users,
-                $fields,
-                $files
-            );
+	        if (!empty($find))
+	            $find = $this->getAllRelatedArticles(
+	                $find,
+	                true,
+	                $categories,
+	                $users,
+	                $fields,
+	                $files
+	            );
 
-        if (!empty($find))
-        {
-            if (!empty($fields))
-            {
-                $new_fields = Set::extract('{n}.ArticleValue.{n}.field_id', $find);
+	        if (!empty($find))
+	        {
+	            if (!empty($fields))
+	            {
+	                $new_fields = Set::extract('{n}.ArticleValue.{n}.field_id', $find);
 
-                if (!empty($new_fields))
-                {
-                    $temp_fields = array();
-                    foreach($new_fields as $val)
-                    {
-                        foreach($val as $value)
-                        {
-                            $temp_fields[$value] = $value;
-                        }
-                    }
+	                if (!empty($new_fields))
+	                {
+	                    $temp_fields = array();
+	                    foreach($new_fields as $val)
+	                    {
+		                    if (!empty($val) && is_array($val)) {
+		                        foreach($val as $value)
+		                        {
+		                            $temp_fields[$value] = $value;
+		                        }
+		                    }
+	                    }
 
-                    $fields = array_unique(array_merge(
-                        $fields,
-                        $temp_fields
-                    ));
-                }
+	                    $fields = array_unique(array_merge(
+	                        $fields,
+	                        $temp_fields
+	                    ));
+	                }
 
-                $field_data = $this->ArticleValue->Field->find('all', array(
-                    'conditions' => array(
-                        'Field.id' => $fields
-                    )
-                ));
+	                $field_data = $this->ArticleValue->Field->find('all', array(
+	                    'conditions' => array(
+	                        'Field.id' => $fields
+	                    )
+	                ));
 
-                $field_data = $this->arrayKeyById($field_data, 'Field');
-            }
+	                $field_data = $this->arrayKeyById($field_data, 'Field');
+	            }
 
-            if (!empty($field_data))
-            {
-                foreach($find as $key => $row)
-                {
-                    if (!empty($row['ArticleValue']))
-                    {
-                        foreach($row['ArticleValue'] as $i => $value)
-                        {
-                            $field_id = $value['field_id'];
+	            if (!empty($field_data))
+	            {
+	                foreach($find as $key => $row)
+	                {
+	                    if (!empty($row['ArticleValue']))
+	                    {
+	                        foreach($row['ArticleValue'] as $i => $value)
+	                        {
+	                            $field_id = $value['field_id'];
 
-                            if (!empty($field_data[$field_id]))
-                                $find[$key]['ArticleValue'][$i]['Field'] = $field_data[$field_id];
-                        }
-                    }
-                }
-            }
+	                            if (!empty($field_data[$field_id]))
+	                                $find[$key]['ArticleValue'][$i]['Field'] = $field_data[$field_id];
+	                        }
+	                    }
+	                }
+	            }
 
-            $find = $this->convertFieldData($find);
+	            $find = $this->convertFieldData($find);
 
 
-            foreach($find as $row)
-            {
-                $data[$row['Category']['slug']][] = $row;
-            }
-        }
+	            foreach($find as $row)
+	            {
+	                $data[$row['Category']['slug']][] = $row;
+	            }
+	        }
+	    }
 
         return array(
             'all' => $find,
@@ -374,7 +379,7 @@ class Article extends AppModel
     */
     public function getBlockCustomOptions($data)
     {
-        $view = new View();
+        $view = new AdaptcmsView();
         $categories = $this->Category->find('list');
 
         $data = $view->element('article_custom_options', array(
@@ -501,7 +506,7 @@ class Article extends AppModel
      */
     public function convertFieldData($results = array())
     {
-        $view = new View();
+        $view = new AdaptcmsView();
         $view->autoRender = false;
 
         $data_path = VIEW_PATH . 'Elements' . DS . 'FieldTypesData' . DS;
@@ -542,6 +547,8 @@ class Article extends AppModel
      */
     public function afterFind($results, $primary = false)
     {
+	    $role = Configure::read('User.role');
+
         if (empty($results))
         {
             return false;
@@ -568,10 +575,23 @@ class Article extends AppModel
                     $results[$key]['Article']['tags_list'] = implode(', ', $results[$key]['Article']['tags']);
                 }
 
-                if (!empty($result['Article']['settings']))
-                    $results[$key]['Article']['settings'] = json_decode($result['Article']['settings'], true);
+                if (!empty($result['Article']['settings'])) {
+                    $settings = json_decode($result['Article']['settings'], true);
+	                $results[$key]['Article']['settings'] = $settings;
+
+	                if (!empty($role) && isset($settings['permissions'][$role]['view']['status']) && $settings['permissions'][$role]['view']['status'] == 0) {
+	                    unset($results[$key]);
+	                }
+                }
             }
         }
+
+	    $event = new CakeEvent('Model.Article.afterFind', $this, array('results' => $results, 'model' => $this));
+	    $this->getEventManager()->dispatch($event);
+
+	    if (!empty($event->result)) {
+			$results = $event->result;
+	    }
 
         return $results;
     }
@@ -639,5 +659,33 @@ class Article extends AppModel
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Check Permissions
+	 *
+	 * @param $user_id
+	 * @param $role
+	 * @param array $articles
+	 * @return array
+	 */
+	public function checkPermissions($user_id, $role, $articles)
+	{
+		$actions = array(
+			'admin_edit',
+			'admin_delete',
+			'admin_restore',
+			'view'
+		);
+
+		if (!empty($articles)) {
+			foreach($articles as $key => $article) {
+				foreach($actions as $action) {
+					$articles[$key]['Permissions'][$action] = $this->Category->hasPermissionAccess($role, $action, $article, $user_id, $article['User']['id']);
+	            }
+			}
+		}
+
+		return $articles;
 	}
 }

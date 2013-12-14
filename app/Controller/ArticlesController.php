@@ -29,6 +29,8 @@ class ArticlesController extends AppController
 		'view' => 86400
 	);
 
+	private $categories = array();
+
 	/**
 	 * In this beforeFilter we will get the permissions to be used in the view files
 	 *
@@ -40,11 +42,22 @@ class ArticlesController extends AppController
 		parent::beforeFilter();
 
 		if (strstr($this->request->action, 'admin_')) {
-			$categories = $this->Article->Category->find('list');
+			$categories_list = $this->Article->Category->find('all');
 
-			if (empty($categories)) {
-				$this->Session->setFlash('Please add a category in order to manage articles.', 'flash_error');
+			if (empty($categories_list)) {
+				$this->Session->setFlash('Please add a category in order to manage articles.', 'error');
 				$this->redirect(array('action' => 'add', 'controller' => 'categories'));
+			}
+
+			$categories = array();
+			foreach($categories_list as $category) {
+				if ($this->Article->Category->hasPermissionAccess($this->getRole(), 'admin_add', $category)) {
+					$categories[$category['Category']['id']] = $category['Category']['title'];
+				}
+
+				if ($this->Article->Category->hasAnyPermissionAccess($this->getRole(), 'admin_index', $category)) {
+					$this->categories[] = $category;
+				}
 			}
 
 			$this->set(compact('categories'));
@@ -87,6 +100,8 @@ class ArticlesController extends AppController
 		if ($this->permissions['any'] == 0)
 			$conditions['User.id'] = $this->Auth->user('id');
 
+		$conditions = $this->Article->Category->getListConditions($conditions, $this->categories, $this->getRole(), 'admin_index', $this->Auth->user('id'));
+
 		$this->Paginator->settings = array(
 			'contain' => array(
 				'User',
@@ -96,7 +111,7 @@ class ArticlesController extends AppController
 		);
 
 		$this->request->data = $this->Article->Comment->getCommentsCount(
-			$this->Paginator->paginate('Article')
+			$this->Article->checkPermissions($this->Auth->user('id'), $this->getRole(), $this->Paginator->paginate('Article'))
 		);
 	}
 
@@ -111,17 +126,23 @@ class ArticlesController extends AppController
 	public function admin_add($category_id = null)
 	{
 		$fields = $this->Article->Category->Field->getFields($category_id);
+		$category = $this->Article->Category->findById($category_id);
+		$roles = $this->Article->User->Role->getArticlePermissions(array());
 
-		$this->set(compact('fields', 'category_id'));
+		if (!$this->Article->Category->hasPermissionAccess($this->getRole(), 'admin_add', $category))
+			return $this->denyRedirect();
+
+		$this->set(compact('fields', 'category_id', 'roles'));
 
 		if (!empty($this->request->data)) {
 			$this->request->data['Article']['user_id'] = $this->Auth->user('id');
 
 			if ($this->Article->saveAssociated($this->request->data)) {
-				$this->Session->setFlash('Your article has been added.', 'flash_success');
+
+				$this->Session->setFlash('Your article has been added.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to add your article.', 'flash_error');
+				$this->Session->setFlash('Unable to add your article.', 'error');
 			}
 		}
 	}
@@ -142,10 +163,11 @@ class ArticlesController extends AppController
 			$this->request->data['Article']['user_id'] = $this->Auth->user('id');
 
 			if ($this->Article->saveAssociated($this->Article->ArticleValue->checkOnEdit($this->request->data))) {
-				$this->Session->setFlash('Your article has been updated.', 'flash_success');
+
+				$this->Session->setFlash('Your article has been updated.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to update your article.', 'flash_error');
+				$this->Session->setFlash('Unable to update your article.', 'error');
 			}
 		}
 
@@ -159,6 +181,15 @@ class ArticlesController extends AppController
 			)
 		));
 		$this->hasAccessToItem($this->request->data);
+
+		if (!$this->Article->Category->hasPermissionAccess(
+			$this->getRole(),
+			'admin_edit',
+			$this->request->data,
+			$this->Auth->user('id'),
+			$this->request->data['User']['id'])) {
+			return $this->denyRedirect();
+		}
 
 		$category_id = $this->request->data['Category']['id'];
 
@@ -201,6 +232,7 @@ class ArticlesController extends AppController
 		}
 
 		$fields = $this->Article->Category->Field->getFields($category_id, $id);
+		$roles = $this->Article->User->Role->getArticlePermissions($this->request->data['Article']);
 
 		$this->set(compact(
 			'fields',
@@ -209,7 +241,8 @@ class ArticlesController extends AppController
 			'comments_count',
 			'new_comments_limit',
 			'new_comments_amount',
-			'cur_limit'
+			'cur_limit',
+			'roles'
 		));
 	}
 
@@ -229,9 +262,19 @@ class ArticlesController extends AppController
 		$data = $this->Article->findById($id);
 		$this->hasAccessToItem($data);
 
+		$category = $this->Article->Category->findById($data['Article']['category_id']);
+		if (!$this->Article->Category->hasPermissionAccess(
+			$this->getRole(),
+			'admin_delete',
+			$category,
+			$this->Auth->user('id'),
+			$data['Article']['user_id'])) {
+			return $this->denyRedirect();
+		}
+
 		$permanent = $this->Article->remove($data);
 
-		$this->Session->setFlash('The article `' . $title . '` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The article `' . $title . '` has been deleted.', 'success');
 
 		if ($permanent) {
 			$this->redirect(array('action' => 'index', 'trash' => 1));
@@ -256,11 +299,21 @@ class ArticlesController extends AppController
 		$data = $this->Article->findById($id);
 		$this->hasAccessToItem($data);
 
+		$category = $this->Article->Category->findById($data['Article']['category_id']);
+		if (!$this->Article->Category->hasPermissionAccess(
+			$this->getRole(),
+			'admin_restore',
+			$category,
+			$this->Auth->user('id'),
+			$data['Article']['user_id'])) {
+			return $this->denyRedirect();
+		}
+
 		if ($this->Article->restore()) {
-			$this->Session->setFlash('The article `' . $title . '` has been restored.', 'flash_success');
+			$this->Session->setFlash('The article `' . $title . '` has been restored.', 'success');
 			$this->redirect(array('action' => 'index'));
 		} else {
-			$this->Session->setFlash('The article `' . $title . '` has NOT been restored.', 'flash_error');
+			$this->Session->setFlash('The article `' . $title . '` has NOT been restored.', 'error');
 			$this->redirect(array('action' => 'index'));
 		}
 	}
@@ -309,25 +362,41 @@ class ArticlesController extends AppController
 	}
 
 	/**
-	 * Admin Ajax Related Add
+	 * Admin Ajax Related Update
 	 *
 	 * AJAX Function that attempts to update the related articles in the admin.
 	 * An array of ids are parsed to JSON and attempted to be saved.
 	 *
 	 * @return string html message on success or error
 	 */
-	public function admin_ajax_related_add()
+	public function admin_ajax_related_update()
 	{
-		$this->layout = 'ajax';
-		$this->autoRender = false;
+		$article = $this->Article->findById($this->request->data['Article']['id']);
+		$article['Article']['related_articles'] = json_decode($article['Article']['related_articles'], true);
 
-		$this->request->data['Article']['related_articles'] = json_encode(
-			$this->request->data['Article']['ids']
-		);
+		if ($this->request->data['Article']['action'] == 'add') {
+			if (!empty($article['Article']['related_articles'])) {
+				$article['Article']['related_articles'][] = $this->request->data['Article']['related_id'];
+				$this->request->data['Article']['related_articles'] = $article['Article']['related_articles'];
+			} else {
+				$this->request->data['Article']['related_articles'] = array($this->request->data['Article']['related_id']);
+			}
+		} elseif ($this->request->data['Article']['action'] == 'delete') {
+			foreach($article['Article']['related_articles'] as $key => $id) {
+				if ($this->request->data['Article']['related_id'] == $id) {
+					unset($article['Article']['related_articles'][$key]);
+					break;
+				}
+			}
+
+			$this->request->data['Article']['related_articles'] = $article['Article']['related_articles'];
+		}
+
+		$this->request->data['Article']['related_articles'] = json_encode($this->request->data['Article']['related_articles']);
 
 		$success = $this->Article->save($this->request->data);
 
-		return $this->_ajaxResponse('Articles/admin_ajax_related_add', array('success' => $success));
+		return $this->_ajaxResponse('Articles/admin_ajax_related_update', array('success' => $success));
 	}
 
 	/**
@@ -367,7 +436,7 @@ class ArticlesController extends AppController
 		$this->request->data = $this->Article->find('first', $conditions);
 
 		if (empty($slug) || empty($this->request->data)) {
-			$this->Session->setFlash('Invalid Article', 'flash_error');
+			$this->Session->setFlash('We could not find that article, we have redirected you back to the home page.', 'error');
 			$this->redirect(array(
 				'controller' => 'pages',
 				'action' => 'display',
@@ -379,6 +448,14 @@ class ArticlesController extends AppController
 		$this->request->data = $article[0];
 
 		$this->hasAccessToItem($this->request->data);
+		if (!$this->Article->Category->hasPermissionAccess(
+			$this->getRole(),
+			'view',
+			$this->request->data,
+			$this->Auth->user('id'),
+			$this->request->data['Article']['user_id'])) {
+			return $this->denyRedirect();
+		}
 
 		$this->request->data['Comments'] = $this->Article->Comment->find('threaded', array(
 			'conditions' => array(
@@ -408,7 +485,7 @@ class ArticlesController extends AppController
 		}
 
 		if (empty($this->request->data['Article']['id'])) {
-			$this->Session->setFlash('Invalid Article', 'flash_error');
+			$this->Session->setFlash('Invalid Article', 'error');
 			$this->redirect(array(
 				'controller' => 'pages',
 				'action' => 'display',
@@ -425,17 +502,28 @@ class ArticlesController extends AppController
 		$fields = $this->Article->Category->Field->getFields('Comment');
 		$this->request->data['Comments'] = $this->Article->Category->Field->getAllModuleData('Comment', $fields, $this->request->data['Comments']);
 
+		$event = new CakeEvent('Controller.Articles.view.beforeRender', $this, array('data' => $this->request->data, 'controller' => $this));
+		$this->getEventManager()->dispatch($event);
+
+		if (!empty($event->result)) {
+			$this->request->data = $event->result;
+		}
+
 		$this->set(compact('related_articles', 'fields'));
 		$this->set('article', $this->request->data);
+		$this->set('comments', $this->request->data['Comments']);
+		$this->set('user', $this->request->data['User']);
+		$this->set('category', $this->request->data['Category']);
+		$this->set('tags', $this->request->data['Article']['tags']);
 
 		if (!empty($this->request->data['Category']['slug'])) {
 			$slug = $this->request->data['Category']['slug'];
 
 			if ($this->theme != "Default" &&
-				file_exists(VIEW_PATH . 'Themed/' . $this->theme . '/Articles/' . $slug . '.ctp') ||
-				file_exists(VIEW_PATH . 'Articles/' . $slug . '.ctp')
+				file_exists(VIEW_PATH . 'Themed/' . $this->theme . '/Frontend/Articles/' . $slug . '.ctp') ||
+				file_exists(FRONTEND_VIEW_PATH . 'Articles/' . $slug . '.ctp')
 			) {
-				$this->render(implode('/', array($slug)));
+				$this->view = implode('/', array($slug));
 			}
 		}
 	}
@@ -483,7 +571,7 @@ class ArticlesController extends AppController
 			$this->Paginator->paginate('Article')
 		);
 
-		$this->set('article', $this->request->data);
+		$this->set('articles', $this->request->data);
 		$this->set('tag', $slug);
 	}
 

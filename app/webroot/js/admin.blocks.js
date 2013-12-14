@@ -17,26 +17,13 @@ $(document).ready(function(){
         if ($(this).val() == 1) {
             $("#data").show();
             $("#next-step div").first().hide();
-            $(".dynamic .order").hide();
         } else {
             $("#data").hide();
             $("#BlockData").val('');
             $("#next-step div").first().show();
-            $(".dynamic .order").show();
         }
-    });
 
-    $("input[name='data[Block][location_type]']").on('change', function() {
-        if ($(this).val() == "view") {
-            if ($("#BlockLocationController option").length == 1) {
-            	get_data('controllers');
-        	} else {
-        		$("#location").show();
-        	}
-        } else {
-            $("#location").hide();
-            $("#BlockLocation").val("");
-        }
+        $(".dynamic .order").show();
     });
 
     $("#BlockModel").on('change', function() {
@@ -45,8 +32,16 @@ $(document).ready(function(){
     		$("#BlockAdminAddForm").reset();
     		$("#BlockData option").remove();
     	} else {
-    		get_model_data("model_field");
+    		get_model_data();
     	}
+    });
+
+    $('#BlockData').on('change', function() {
+        if ($(this).val()) {
+            $(".order").hide();
+        } else {
+            $(".order").show();
+        }
     });
 
     $("#BlockOrderBy").on('change', function() {
@@ -58,7 +53,13 @@ $(document).ready(function(){
     });
 
     if ($("#BlockType").val() == 'dynamic') {
-        get_model_data("model_field");
+        get_model_data();
+    }
+
+    if ($('#BlockDataHidden').length) {
+        $(".order").hide();
+    } else {
+        $(".order").show();
     }
 
     if ($("#BlockLimit").val() == 1) {
@@ -66,67 +67,14 @@ $(document).ready(function(){
     } else {
         $("#next-step div").first().show();
 
-        if ($("#BlockOrderBy").val() && $("#BlockOrderBy").val() != "rand") {
+        if ($("#BlockOrderBy").val() != "rand") {
             $("#next-step div").first().next().show();
-            $(".order").show();
         }
     }
 
 	if ($("#BlockModel").val()) {
 		$("#next-step").show();
 	}
-
-	if ($("#BlockLocationAction").val()) {
-		$("#location_action").show();
-	}
-
-	if ($("#BlockLocationId").val()) {
-		$("#location_id").show();
-	}
-
-	if ($("#BlockLocationTypeView").is(':checked')) {
-		$("#location").show();
-        $("#BlockLocationController,#BlockLocationAction").removeClass('required').removeAttr('required');
-        get_data('controllers');
-    }
-
-    /*
-	* add block 
-	if ($("#BlockModel").val()) {
-		$("#next-step").show();
-	}
-
-	if ($("#BlockLocationAction").val()) {
-		$("#location_action").show();
-	}
-
-	if ($("#BlockLocationId").val()) {
-		$("#location_id").show();
-	}
-
-	if ($("#BlockLocationTypeView").is(':checked')) {
-		$("#location").show();
-	}
-    */
-
-	$("#BlockLocationController").on('change', function() {
-		if ($("#BlockLocationTypeView").is(':checked')) {
-			if ($(this).val()) {
-				get_data("actions");
-			}
-
-			$("#location_id").hide();
-		}
-        $("#BlockLocationController,#BlockLocationAction").addClass('required').attr('required');
-	});
-
-	$("#BlockLocationAction").on('change', function() {
-		if ($("#BlockLocationTypeView").is(':checked')) {
-			if ($(this).val() == 'view' || $(this).val() == 'display') {
-				get_model_data("action");
-			}
-		}
-	});
 
     $("#BlockType").on('change', function() {
         var val = $(this).val();
@@ -167,116 +115,74 @@ $(document).ready(function(){
     }
 });
 
-function get_data(get)
-{
-	var controller = $("#BlockLocationController").val();
-	var action = $("#BlockLocationAction").val();
-
-    $.post($("#webroot").text() + "admin/permissions/ajax_location_list/", 
-    	{
-    		data:{
-    			Block:{
-    				controller: controller,
-    				action: action,
-    				get: get
-    			}
-    		}
-    	}, function(new_data) {
-    		var data_list = '';
-
-    		if (get == 'controllers') {
-    			var empty = $("#BlockLocationController option[value='']");
-	    		for (var row in new_data) {
-    				if (new_data[row].plugin) {
-	    				data_list += '<option value="' + new_data[row].plugin_id + '">' + new_data[row].plugin + '</option>';
-	    			} else {
-	    				data_list += '<option value="' + new_data[row].controller_id + '">' + new_data[row].controller + '</option>';
-	    			}
-	    		}
-
-	    		$("#BlockLocationController option").remove();
-	    		$("#BlockLocationController").append(data_list).prepend(empty);
-				$("#BlockLocationController option:first").attr('selected', 'selected');
-	    	} else if(get == 'actions') {
-    			var empty = $("#BlockLocationAction option[value='']");
-	    		for (var row in new_data) {
-	    			data_list += '<option value="' + new_data[row].action_id + '">' + new_data[row].action + '</option>';
-	    		}
-
-	    		$("#BlockLocationAction option").remove();
-	    		$("#BlockLocationAction").append(data_list).prepend(empty);
-	    		$("#BlockLocationAction option:first").attr('selected', 'selected');
-
-	    		$("#location_action").show();
-	    	}
-
-	    	$("#location").show();
-    }, 'json');
-}
-
-function get_model_data(type)
+function get_model_data()
 {
     $(".btn-group").show();
 
-	if (type == 'model_field') {
-		var empty = $("#BlockData option[value='']");
-		var text = $("#BlockModel :selected").text().replace('Plugin - ', '');
-		var component = $("#BlockModel").val();
-        if (type != 'action' && $("#custom-data").length > 0) {
-            var custom = $.trim($("#custom-data").html());
-        }
-	} else if(type == 'action') {
-		var empty = $("#BlockLocationId option[value='']");
-		var component = $("#BlockLocationController").val();
-	}
+    var empty = $("#BlockData option[value='']");
+    var text = $("#BlockModel :selected").text().replace('Plugin - ', '');
+    var component = $("#BlockModel").val();
+    if ($("#custom-data").length > 0) {
+        var custom = $.trim($("#custom-data").html());
+    }
+    if ($('#BlockOrderByHide').val()) {
+        var order_by = $('#BlockOrderByHide').val();
+    }
 
-    $.post($("#webroot").text() + "admin/blocks/ajax_get_model/", 
+    $.post($("#webroot").text() + "admin/blocks/ajax_get_model/",
     {
         data:{
             Block:{
                 module_id: component,
-                type: type,
                 custom: custom
             }
         }
     }, function(response) {
-        var new_data = $.parseJSON(response.data);
+        var new_data = response.data;
 
-        var data_list = '';
+        if (new_data.order_by) {
+            $('#BlockOrderBy option[value!=""]').remove();
 
-        if (type != 'action' && new_data.custom) {
+            var data_list = '';
+            for (var row in new_data.order_by) {
+                data_list += '<option value="' + row + '">' + new_data.order_by[row] + '</option>';
+            }
+
+            $('#BlockOrderBy').append(data_list);
+
+            if (order_by) {
+                $('#BlockOrderBy option:selected').removeAttr('selected');
+                $('#BlockOrderBy option[value="' + order_by + '"]').attr('selected', 'selected');
+                $('#BlockOrderByHide').val('');
+            }
+        }
+
+        if (new_data.custom) {
             $("#custom-data").html(new_data.custom).show();
         }
 
+        var data_list = '';
         for (var row in new_data.data) {
             data_list += '<option value="' + row + '">' + new_data.data[row] + '</option>';
         }
 
-        if (type == 'model_field') {
-            $("#BlockData option").remove();
-            $("#BlockData").append(data_list).prepend(empty);
+        $("#BlockData option").remove();
+        $("#BlockData").append(data_list).prepend(empty);
 
-            var length = Number(text.length) - 1;
+        var length = Number(text.length) - 1;
 
-            if (text.substr(-3) == 'ies') {
-                var new_text = text.substr(0, text.length-3) + 'y';
-            } else if (text[length] == 's') {
-                var new_text = text.substring(0, text.length-1);
-            } else {
-                var new_text = text;
-            }
-
-            $("label[for='BlockData']").html(new_text + ' <i>*</i>');
-            $("label[for='BlockLimit'] strong").html(text);
-
-            $("#next-step").show();
-        } else if(type == 'action') {
-            $("#BlockLocationId option").remove();
-            $("#BlockLocationId").append(data_list).prepend(empty);
-            $("#BlockLocationId option:first").attr('selected', 'selected');
-
-            $("#location_id").show();
+        if (text.substr(-3) == 'ies') {
+            var new_text = text.substr(0, text.length-3) + 'y';
+        } else if (text[length] == 's') {
+            var new_text = text.substring(0, text.length-1);
+        } else {
+            var new_text = text;
         }
+
+        $("label[for='BlockData']").html(new_text + ' <i>*</i>');
+        $("label[for='BlockLimit'] strong").html(text);
+
+        $("#next-step").show();
 
         if ($("#BlockDataHidden").length == 1) {
             var val = $("#BlockDataHidden").text();
@@ -285,34 +191,4 @@ function get_model_data(type)
             $("#BlockDataHidden").remove();
         }
     }, 'json');
-
-    $("#location_add").live('click', function() {
-		var controller = $("#BlockLocationController :selected").val();
-		var action = $("#BlockLocationAction :selected").val();
-
-    	if (controller && action) {
-    		var random = (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-    		var id = $("#BlockLocationId :selected").val();
-
-    		var value = controller + '/' + action
-
-    		if (id) {
-    			var text = value + '/' + $("#BlockLocationId :selected").text();
-    			value += '/' + id;
-    		} else {
-    			var text = value;
-    		}
-
-    		if ($("#locations input[value='" + value + "']").length == 0) {
-                $('#locations .error').remove();
-				$("#locations").prepend('<div id="data-' + random + '"><span class="label label-info">' + text + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="LocationData[]" name="LocationData[]" value="' + value + '"></div>');
-            } else {
-                $("#locations").prepend('<label class="error">Location already added!</label>');
-            }
-
-            $("#BlockLocationController option:first").attr('selected', 'selected').trigger('change');
-			$("#BlockLocationController,#BlockLocationAction").removeClass('required').removeAttr('required');
-			$("#location_action").hide();
-		}
-    });
 }

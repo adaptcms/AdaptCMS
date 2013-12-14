@@ -1,6 +1,11 @@
 <?php
 App::uses('AppController', 'Controller');
 
+/**
+ * Class MessagesController
+ *
+ * @property Message $Message
+ */
 class MessagesController extends AppController
 {
     /**
@@ -84,6 +89,7 @@ class MessagesController extends AppController
 
 		$this->set('messages', $this->request->data);
 		$this->set( 'box', $box_slug );
+		$this->set( 'current_box', ucfirst($box_slug) );
 		$this->set( compact('box_count') );
 	}
 
@@ -129,6 +135,7 @@ class MessagesController extends AppController
 
 		$this->set('subject', $messages[0]['Message']['title']);
 		$this->set('sender', $messages[0]['Sender']['id']);
+		$this->set('receiver', $messages[0]['Receiver']['id']);
 		$this->set(compact('messages'));
 	}
 
@@ -169,7 +176,7 @@ class MessagesController extends AppController
             			'status' => true
             		));
             	} else {
-	                $this->Session->setFlash('Your message has been sent.', 'flash_success');
+	                $this->Session->setFlash('Your message has been sent.', 'success');
 	                $this->redirect(array('action' => 'index', 'outbox'));
 	            }
             } else {
@@ -179,19 +186,19 @@ class MessagesController extends AppController
             			'status' => false
             		));
             	} else {
-                	$this->Session->setFlash('Unable to send message. Fix the errors below.', 'flash_error');
+                	$this->Session->setFlash('Unable to send message. Fix the errors below.', 'error');
                	}
             }
 		}
 	}
 
 	/**
-	* This function handles changing the current box of a message, marking it read and related functionality.
-	*
-	* @param action is either moving the message to archive, inbox or marking it read
-	* @param id of messages
-	* @return void and flash message
-	*/
+	 * This function handles changing the current box of a message, marking it read and related functionality.
+	 *
+	 * @param is|null $action
+	 * @param null|of $id
+	 * @return void and flash message
+	 */
 	public function move($action = null, $id = null)
 	{
 		$this->request->data = $this->Message->findById($id);
@@ -236,10 +243,10 @@ class MessagesController extends AppController
 		}
 
         if ($save) {
-            $this->Session->setFlash('The message has been ' . $msg . '.', 'flash_success');
+            $this->Session->setFlash('The message has been ' . $msg . '.', 'success');
             $this->redirect(array('action' => 'index', $box));
         } else {
-            $this->Session->setFlash('The message could not be ' . $msg . '.', 'flash_error');
+            $this->Session->setFlash('The message could not be ' . $msg . '.', 'error');
             $this->redirect(array('action' => 'index', $box));
         }
 	}

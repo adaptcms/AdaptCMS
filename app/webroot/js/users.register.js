@@ -1,17 +1,4 @@
 $(document).ready(function() {
-    $("#UserPasswordConfirm").rules("add", {
-        required: true,
-        equalTo: "#UserPassword",
-        messages: {
-            equalTo: "Passwords do not match"
-        }
-    });
-
-    $("#UserEmail").rules("add", {
-        required: true,
-        email: true
-    });
-
     $("#UserUsername").live('change', function() {
         var username = $("#UserUsername").val();
         if (username.length > 0) {

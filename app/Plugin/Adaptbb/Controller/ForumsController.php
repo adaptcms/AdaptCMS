@@ -80,10 +80,10 @@ class ForumsController extends AdaptbbAppController
 
             if ($this->Forum->save($this->request->data))
             {
-                $this->Session->setFlash('Your forum has been added.', 'flash_success');
+                $this->Session->setFlash('Your forum has been added.', 'success');
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your forum.', 'flash_error');
+                $this->Session->setFlash('Unable to add your forum.', 'error');
             }
         }
 	}
@@ -108,10 +108,10 @@ class ForumsController extends AdaptbbAppController
 
 	        if ($this->Forum->save($this->request->data))
 	        {
-	            $this->Session->setFlash('Your forum has been updated.', 'flash_success');
+	            $this->Session->setFlash('Your forum has been updated.', 'success');
 	            $this->redirect(array('action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your forum.', 'flash_error');
+	            $this->Session->setFlash('Unable to update your forum.', 'error');
 	        }
 	    }
 
@@ -137,7 +137,7 @@ class ForumsController extends AdaptbbAppController
 
 		$permanent = $this->Forum->remove($data);
 
-		$this->Session->setFlash('The forum `'.$title.'` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The forum `'.$title.'` has been deleted.', 'success');
 
 		if ($permanent)
 		{
@@ -165,10 +165,10 @@ class ForumsController extends AdaptbbAppController
 
 	    if ($this->Forum->restore())
 	    {
-	        $this->Session->setFlash('The forum `'.$title.'` has been restored.', 'flash_success');
+	        $this->Session->setFlash('The forum `'.$title.'` has been restored.', 'success');
 	        $this->redirect(array('action' => 'index'));
 	    } else {
-	    	$this->Session->setFlash('The forum `'.$title.'` has NOT been restored.', 'flash_error');
+	    	$this->Session->setFlash('The forum `'.$title.'` has NOT been restored.', 'error');
 	        $this->redirect(array('action' => 'index'));
 	    }
 	}
@@ -229,7 +229,7 @@ class ForumsController extends AdaptbbAppController
 
         if (empty($forum['Forum']))
         {
-            $this->Session->setFlash('Forum `' . $slug . '` could not be found.', 'flash_error');
+            $this->Session->setFlash('Forum `' . $slug . '` could not be found.', 'error');
             $this->redirect(array('action' => 'index'));
         }
 

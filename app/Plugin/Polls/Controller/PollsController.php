@@ -69,10 +69,10 @@ class PollsController extends PollsAppController
 			$this->request->data['Poll']['user_id'] = $this->Auth->user('id');
 
 			if ($this->Poll->saveAssociated($this->request->data)) {
-				$this->Session->setFlash('Your poll has been added.', 'flash_success');
+				$this->Session->setFlash('Your poll has been added.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to add your poll.', 'flash_error');
+				$this->Session->setFlash('Unable to add your poll.', 'error');
 			}
 		}
 	}
@@ -100,10 +100,10 @@ class PollsController extends PollsAppController
 			$this->request->data['Poll']['user_id'] = $this->Auth->user('id');
 
 			if ($this->Poll->saveAssociated($this->request->data)) {
-				$this->Session->setFlash('Your poll has been updated.', 'flash_success');
+				$this->Session->setFlash('Your poll has been updated.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to update your poll.', 'flash_error');
+				$this->Session->setFlash('Unable to update your poll.', 'error');
 			}
 		}
 
@@ -141,7 +141,7 @@ class PollsController extends PollsAppController
 
 		$permanent = $this->Poll->remove($data);
 
-		$this->Session->setFlash('The poll `' . $title . '` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The poll `' . $title . '` has been deleted.', 'success');
 
 		if ($permanent) {
 			$this->redirect(array('action' => 'index', 'trash' => 1));
@@ -167,10 +167,10 @@ class PollsController extends PollsAppController
 		$this->hasAccessToItem($data);
 
 		if ($this->Poll->restore()) {
-			$this->Session->setFlash('Your poll `' . $title . '` has been restored.', 'flash_success');
+			$this->Session->setFlash('Your poll `' . $title . '` has been restored.', 'success');
 			$this->redirect(array('action' => 'index'));
 		} else {
-			$this->Session->setFlash('Unable to restore your poll.', 'flash_error');
+			$this->Session->setFlash('Unable to restore your poll.', 'error');
 		}
 	}
 
@@ -345,11 +345,14 @@ class PollsController extends PollsAppController
 	{
 		$conditions = array();
 
-		$conditions['Poll.deleted_time'] = '0000-00-00 00:00:00';
-
-		if ($this->permissions['any'] == 0) {
-			$conditions['User.id'] = $this->Auth->user('id');
+		$schema = $this->Poll->schema();
+		if (!empty($schema['start_date']) && !empty($schema['end_date'])) {
+			$conditions['Poll.start_date <='] = date('Y-m-d');
+			$conditions['Poll.end_date >='] = date('Y-m-d');
 		}
+
+		if ($this->permissions['any'] == 0)
+			$conditions['User.id'] = $this->Auth->user('id');
 
 		$this->Paginator->settings = array(
 			'order' => 'Poll.created DESC',
@@ -364,6 +367,6 @@ class PollsController extends PollsAppController
 
 		$this->set(compact('polls'));
 
-		return $this->render('list');
+		$this->view = 'list';
 	}
 }

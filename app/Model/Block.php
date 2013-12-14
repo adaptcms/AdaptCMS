@@ -31,7 +31,7 @@ class Block extends AppModel
 	public $actsAs = array('Delete');
 
     /**
-    * Validation Rules. Title must not be empty and must be unique, location must not be empty.
+    * Validation Rules. Title must not be empty and must be unique.
     */
     public $validate = array(
     	'title' => array(
@@ -43,12 +43,6 @@ class Block extends AppModel
 				'rule' => 'isUnique',
 				'message' => 'Block title is already in use.'
 			)
-        ),
-        'location' => array(
-        	array(
-        		'rule' => 'notEmpty',
-        		'message' => 'Please select a location for this block'
-        	)
         )
     );
 
@@ -80,16 +74,6 @@ class Block extends AppModel
                 $data['Block']['model'] = $data['Module']['model_title'];
             }
         }
-
-        $type = json_decode($data['Block']['location']);
-
-        if ($type[0] == "*") {
-            $data['Block']['location_type'] = "*";
-        } elseif ($type[0] == "#") {
-            $data['Block']['location_type'] = "#";
-        } else {
-            $data['Block']['location_type'] = "view";
-        }
         
         if (!empty($data['Block']['settings'])) {
             $settings = json_decode($data['Block']['settings']);
@@ -114,8 +98,7 @@ class Block extends AppModel
     }
 
     /**
-    * Before Saving, we slug the title, format the locations into a json_encoded array
-    * and format any extra options and miscelaneous options.
+    * Before Saving, we slug the title and format any extra options and miscelaneous options.
     *
     * @param $options array
     * @return boolean
@@ -128,20 +111,6 @@ class Block extends AppModel
 
             $this->data['Block']['title'] = $this->slug($this->data['Block']['title']);
             
-            if ($this->data['Block']['location_type'] == "*") {
-                $this->data['Block']['location'] = json_encode(array("*"));
-            } elseif ($this->data['Block']['location_type'] == "#") {
-                $this->data['Block']['location'] = json_encode(array("#"));
-            } else {
-                $location_data = array();
-                foreach($this->data['LocationData'] as $row) {
-                    $location_data[] = str_replace('/', '|', $row);
-                }
-
-                $this->data['Block']['location'] = json_encode($location_data);
-                unset($this->data['LocationData']);
-            }
-
             if (!empty($this->data['Block']['order_by'])) {
                 $this->data['Block']['settings']['order_by'] = $this->data['Block']['order_by'];
             }

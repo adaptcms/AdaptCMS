@@ -1,1 +1,0 @@
-<p>Be sure to chmod this new folder to 755. Simply click 'Install Plugin' below to install Disqus and then go to plugins - from there you will need to go to the Disqus plugin settings and enter in your Disqus site name (on the top left part of the menu in your dashboard when logged in at disqus). That's it!</p>

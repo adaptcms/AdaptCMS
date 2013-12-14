@@ -359,7 +359,7 @@ class Field extends AppModel
 	 */
 	public function parseModuleData($data = array(), $fields = array())
 	{
-		$view = new View();
+		$view = new AdaptcmsView();
 		$view->autoRender = false;
 
 		$data_path = VIEW_PATH . 'Elements' . DS . 'FieldTypesData' . DS;
@@ -369,24 +369,26 @@ class Field extends AppModel
 		{
 			foreach($data as $row)
 			{
-				$field = $fields[$row['ModuleValue']['field_id']];
-				$slug = $field['Field']['field_type_slug'];
+				if (!empty($fields[$row['ModuleValue']['field_id']])) {
+					$field = $fields[$row['ModuleValue']['field_id']];
+					$slug = $field['Field']['field_type_slug'];
 
-				if (!empty($row['ModuleValue']['file_id']))
-				{
-					$row['ModuleValue'] = array_merge(
-						$row['ModuleValue'],
-						$this->ModuleValue->File->findById($row['ModuleValue']['file_id'])
-					);
-				}
+					if (!empty($row['ModuleValue']['file_id']))
+					{
+						$row['ModuleValue'] = array_merge(
+							$row['ModuleValue'],
+							$this->ModuleValue->File->findById($row['ModuleValue']['file_id'])
+						);
+					}
 
-				if (file_exists($data_path . $slug . '.ctp'))
-				{
-					$value[$field['Field']['title']] = $view->element('FieldTypesData/' . $slug, array('data' => $row['ModuleValue']));
-				}
-				else
-				{
-					$value[$field['Field']['title']] = $view->element('FieldTypesData/default', array('data' => $row['ModuleValue']));
+					if (file_exists($data_path . $slug . '.ctp'))
+					{
+						$value[$field['Field']['title']] = $view->element('FieldTypesData/' . $slug, array('data' => $row['ModuleValue']));
+					}
+					else
+					{
+						$value[$field['Field']['title']] = $view->element('FieldTypesData/default', array('data' => $row['ModuleValue']));
+					}
 				}
 			}
 		}
@@ -398,7 +400,7 @@ class Field extends AppModel
 	 * Save Field Order
 	 *
 	 * @param array $data
-	 * @return mixed
+	 * @return void
 	 */
 	public function saveFieldOrder($data = array())
 	{
@@ -417,6 +419,7 @@ class Field extends AppModel
 			}
 		}
 
-		return $this->saveMany($data);
+		if (!empty($data))
+			$this->saveMany($data);
 	}
 }

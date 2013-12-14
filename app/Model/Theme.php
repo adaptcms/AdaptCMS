@@ -79,26 +79,44 @@ class Theme extends AppModel
                 !empty($this->data['Theme']['title']))
             {
                 $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
+	            $path = VIEW_PATH . 'Themed/' . $this->data['Theme']['title'];
 
-                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title']))
-                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title']);
+                if (!file_exists($path))
+                    mkdir($path);
 
-                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot'))
-                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot');
+                if (!file_exists($path . '/webroot'))
+                    mkdir($path . '/webroot');
 
-                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css'))
-                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/css');
+                if (!file_exists($path . '/webroot/css'))
+                    mkdir($path . '/webroot/css');
 
-                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js'))
-                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/js');
+                if (!file_exists($path . '/webroot/js'))
+                    mkdir($path . '/webroot/js');
 
-                if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img'))
-                    mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/webroot/img');
+                if (!file_exists($path . '/webroot/img'))
+                    mkdir($path . '/webroot/img');
 
                 foreach($this->Template->folderList() as $folder)
                 {
-                    if (!file_exists(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/' . $folder))
-                        mkdir(VIEW_PATH . 'Themed/' . $this->data['Theme']['title'] . '/' . $folder);
+                    if (!file_exists($path . '/' . $folder))
+                        mkdir($path . '/' . $folder);
+
+					$folders = $this->Template->folderList(VIEW_PATH . $folder);
+	                if (!empty($folders)) {
+		                foreach($folders as $sub) {
+			                if (!file_exists($path . '/' . $folder . DS . $sub))
+				                mkdir($path . '/' . $folder . DS . $sub);
+
+			                $list = $this->Template->folderList(VIEW_PATH . $folder . DS . $sub);
+
+			                if (!empty($list)) {
+				                foreach($list as $lvl3) {
+					                if (!file_exists($path . '/' . $folder . DS . $sub . DS . $lvl3))
+						                mkdir($path . '/' . $folder . DS . $sub . DS . $lvl3);
+				                }
+			                }
+		                }
+	                }
                 }
             } elseif (!empty($this->data) && !empty($this->data['Theme']['old_title']))
             {
@@ -132,7 +150,8 @@ class Theme extends AppModel
 	{
 		$theme = $this->findById($this->id);
 
-		$this->recursiveDelete(VIEW_PATH . 'Themed/' . $theme['Theme']['title']);
+		if (file_exists(VIEW_PATH . 'Themed/' . $theme['Theme']['title']))
+			$this->recursiveDelete(VIEW_PATH . 'Themed/' . $theme['Theme']['title']);
 
 		return true;
 	}
@@ -269,7 +288,7 @@ class Theme extends AppModel
 				{
 					if (filetype($dir . "/" . $object) == "dir")
 					{
-						rmdir($dir . "/" . $object);
+						$this->rrmdir($dir . "/" . $object);
 					} else {
 						unlink($dir . "/" . $object);
 					}
@@ -366,5 +385,90 @@ class Theme extends AppModel
 		));
 
 		return $themes;
+	}
+
+	/**
+	 * Get Themes By Name
+	 *
+	 * @param $themes
+	 * @return mixed
+	 */
+	public function getThemesByName($themes)
+	{
+		if (!empty($themes)) {
+			foreach($themes as $key => $theme) {
+				$themes[$theme] = $theme;
+				unset($themes[$key]);
+			}
+		}
+
+		return $themes;
+	}
+
+	/**
+	 * Refresh Theme
+	 *
+	 * @param $id
+	 * @param null $name
+	 * @return array
+	 */
+	public function refreshTheme($id, $name = null)
+	{
+		if (!empty($name)) {
+			$files = $this->Template->folderAndFilesList($name);
+		} else {
+			$files = $this->Template->folderAndFilesList();
+		}
+
+		try {
+			if (!empty($files)) {
+				$data = $this->Template->find('all', array(
+					'conditions' => array(
+						'Template.theme_id' => $id
+					),
+					'fields' => array(
+						'Template.location'
+					)
+				));
+
+				$key = 0;
+				$templates = array();
+
+				$this->Template->create();
+
+				if (!empty($data))
+					$data = Set::extract('{n}.Template.location', $data);
+
+				foreach ($files as $file) {
+					if (empty($data) || !empty($data) && !in_array($file, $data)) {
+						$title = explode('/', $file);
+
+						$templates[$key]['Template']['title'] = end($title);
+						$templates[$key]['Template']['label'] =
+							str_replace('Plugin View', 'Plugin', str_replace('.ctp', '', Inflector::humanize(str_replace("/", " ", $file))));
+						$templates[$key]['Template']['location'] = $file;
+						$templates[$key]['Template']['theme_id'] = $id;
+						$templates[$key]['Template']['created'] = $this->dateTime();
+						$templates[$key]['Template']['nowrite'] = true;
+
+						$key++;
+					}
+				}
+
+				if (!empty($templates))
+					$this->Template->saveAll($templates);
+			}
+
+			$type = 'success';
+			$message = 'The theme has been refreshed.';
+		} catch(Exception $e) {
+			$type = 'error';
+			$message = 'The Theme could not be refreshed.';
+		}
+
+		return array(
+			'type' => $type,
+			'message' => $message
+		);
 	}
 }

@@ -92,21 +92,6 @@ class Link extends LinksAppModel
     }
 
     /**
-     * This works in conjuction with the Search feature. With links, we just confirm that the Search can use this.
-     * For a more detailed example, checkout the 'Article' model. You can specify conditions, contain, order, etc.
-     *
-     * @param string $q
-     * @internal param string $q containing search parameter
-     * @return array
-     */
-    public function getSearchParams( $q )
-    {
-        return array(
-            true
-        );
-    }
-
-    /**
     * We get any files and format them accordingly to ensure that any file uploaded is attached to this link.
     * If a link title is not specified, then the title of the link is set. Also any file picked, is attached to the link. (non-uploaded files)
     * 

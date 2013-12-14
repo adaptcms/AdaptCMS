@@ -3,6 +3,8 @@ App::uses('AppController', 'Controller');
 
 /**
  * Class PluginsController
+ *
+ * @property Plugin $Plugin
  */
 class PluginsController extends AppController
 {
@@ -117,10 +119,10 @@ class PluginsController extends AppController
         			}
         		}
 
-        		$this->Session->setFlash('The Plugin ' . $plugin . ' settings have been updated.', 'flash_success');
+        		$this->Session->setFlash('The Plugin ' . $plugin . ' settings have been updated.', 'success');
         		$params = $contents;
         	} else {
-        		$this->Session->setFlash('The Plugin ' . $plugin . ' settings could not be updated.', 'flash_error');
+        		$this->Session->setFlash('The Plugin ' . $plugin . ' settings could not be updated.', 'error');
         	}
 
         	fclose($fh);
@@ -155,13 +157,14 @@ class PluginsController extends AppController
 
         if (!empty($this->request->data))
         {
+	        debug($this->request->data);
             if ($this->Role->Permission->saveMany($this->request->data))
             {
-                $this->Session->setFlash('Plugin permissions have been updated.', 'flash_success');
+                $this->Session->setFlash('Plugin permissions have been updated.', 'success');
             }
             else
             {
-                $this->Session->setFlash('Unable to update plugin permissions.', 'flash_error');
+                $this->Session->setFlash('Unable to update plugin permissions.', 'error');
             }
         }
     }

@@ -104,6 +104,9 @@ class ForumTopic extends AdaptbbAppModel
     {
         foreach($results as $key => $result)
         {
+	        if (!empty($result['Forum']['slug']))
+		        $results[$key]['ForumTopic']['forum_slug'] = $result['Forum']['slug'];
+
             if (!empty($result['User']) && isset($result['User']['settings']))
             {
                 $results[$key]['User']['settings'] = json_decode(

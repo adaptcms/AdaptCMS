@@ -1,53 +1,8 @@
-<script>
-$(document).ready(function() {
-	$("#UserAccountForm").validate();
-
-    $("#UserPasswordConfirm").rules("add", {
-        required: true,
-        equalTo: "#UserPassword",
-        messages: {
-            equalTo: "Passwords do not match"
-        }
-    });
-
-    $("#UserEmail").rules("add", {
-        required: true,
-        email: true
-    });
-
-	$(".security-question").live('change', function() {
-        var id = $(this).attr('id');
-
-        if ($(this).val()) {
-            $("div#" + id).show();
-        } else {
-            $("div#" + id).hide();
-        }
-
-        $.each($(".security-question"), function(i, row) {
-            if ($(this).attr('id') != id) {
-                var new_id = $(this).attr('id');
-                
-                $.each($("#UserSecurityQuestionHidden option"), function(key, val) {
-                    var find = $("form").find($(".security-question option[value='" + $(this).val() + "']:selected")).val();
-                    
-                    if ($(this).val() == find && find) {
-                        $("#" + new_id + " option[value='" + $(this).val() + "']:not(:selected)").remove();
-                    } else {
-                        if ($("#" + new_id + " option[value='" + $(this).val() + "']").length == 0) {
-                            $("#" + new_id).append("<option value='" + $(this).val() + "'>" + $(this).html() + "</option>");
-                        }
-                    }
-                });
-            }
-        });
-    });
-});
-</script>
+<?= $this->Html->script('admin.users.js') ?>
 
 <h2>Admin Account</h2>
 
-<?= $this->Form->create('User', array('class' => 'well')) ?>
+<?= $this->Form->create('User', array('class' => 'well admin-validate')) ?>
 	<?= $this->Form->input('username', array(
 		'class' => 'required'
 	)) ?>
@@ -60,7 +15,7 @@ $(document).ready(function() {
 		'label' => 'Confirm Password'
 	)) ?>
 	<?= $this->Form->input('email', array(
-		'class' => 'required'
+		'class' => 'required email'
 	)) ?>
 
 	<?php if (!empty($this->request->data['SecurityQuestions']['SettingValue']['data'])): ?>

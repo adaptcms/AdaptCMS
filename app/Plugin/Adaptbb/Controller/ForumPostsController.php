@@ -189,7 +189,7 @@ class ForumPostsController extends AdaptbbAppController
 
         if (empty($post['ForumPost']))
         {
-            $this->Session->setFlash('Post could not be found.', 'flash_error');
+            $this->Session->setFlash('Post could not be found.', 'error');
             $this->redirect(array(
                 'controller' => 'forum_topics',
                 'action' => 'view', 
@@ -200,7 +200,7 @@ class ForumPostsController extends AdaptbbAppController
 
         if ($post['User']['id'] != $this->Auth->user('id') && $this->permissions['any'] == 0)
         {
-            $this->Session->setFlash('You cannot access another users item.', 'flash_error');
+            $this->Session->setFlash('You cannot access another users item.', 'error');
             $this->redirect(array(
                 'controller' => 'forum_topics',
                 'action' => 'view', 
@@ -228,7 +228,7 @@ class ForumPostsController extends AdaptbbAppController
 
             $this->ForumPost->ForumTopic->save($data);
 
-            $this->Session->setFlash('The post has been deleted.', 'flash_success');
+            $this->Session->setFlash('The post has been deleted.', 'success');
             $this->redirect(array(
                 'controller' => 'forum_topics',
                 'action' => 'view', 
@@ -236,7 +236,7 @@ class ForumPostsController extends AdaptbbAppController
 				'forum_slug' => $topic['Forum']['slug']
             )); 
         } else {
-            $this->Session->setFlash('Unable to delete the post.', 'flash_error');
+            $this->Session->setFlash('Unable to delete the post.', 'error');
         }
     }
 }

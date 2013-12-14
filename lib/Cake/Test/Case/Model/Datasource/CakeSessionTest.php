@@ -2,8 +2,6 @@
 /**
  * SessionTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -124,12 +122,12 @@ class CakeSessionTest extends CakeTestCase {
  *
  * @return void
  */
-	public function teardown() {
+	public function tearDown() {
 		if (TestCakeSession::started()) {
 			session_write_close();
 		}
 		unset($_SESSION);
-		parent::teardown();
+		parent::tearDown();
 	}
 
 /**

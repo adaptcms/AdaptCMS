@@ -97,10 +97,10 @@ class GoogleMapsController extends AppController
 			$this->request->data['GoogleMap']['user_id'] = $this->Auth->user('id');
 
 			if ($this->GoogleMap->save($this->request->data)) {
-				$this->Session->setFlash('Your Map has been added.', 'flash_success');
+				$this->Session->setFlash('Your Map has been added.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to add your Map.', 'flash_error');
+				$this->Session->setFlash('Unable to add your Map.', 'error');
 			}
 		}
 	}
@@ -121,10 +121,10 @@ class GoogleMapsController extends AppController
 			$this->request->data['GoogleMap']['user_id'] = $this->Auth->user('id');
 
 			if ($this->GoogleMap->save($this->request->data)) {
-				$this->Session->setFlash('Your Map has been updated.', 'flash_success');
+				$this->Session->setFlash('Your Map has been updated.', 'success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('Unable to update your Map.', 'flash_error');
+				$this->Session->setFlash('Unable to update your Map.', 'error');
 			}
 		}
 
@@ -158,7 +158,7 @@ class GoogleMapsController extends AppController
 
 		$permanent = $this->GoogleMap->remove($data);
 
-		$this->Session->setFlash('The map `' . $title . '` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The map `' . $title . '` has been deleted.', 'success');
 
 		if ($permanent) {
 			$this->redirect(array('action' => 'index', 'trash' => 1));
@@ -181,10 +181,10 @@ class GoogleMapsController extends AppController
 		$this->GoogleMap->id = $id;
 
 		if ($this->GoogleMap->restore()) {
-			$this->Session->setFlash('The map `' . $title . '` has been restored.', 'flash_success');
+			$this->Session->setFlash('The map `' . $title . '` has been restored.', 'success');
 			$this->redirect(array('action' => 'index'));
 		} else {
-			$this->Session->setFlash('The map `' . $title . '` has NOT been restored.', 'flash_error');
+			$this->Session->setFlash('The map `' . $title . '` has NOT been restored.', 'error');
 			$this->redirect(array('action' => 'index'));
 		}
 	}

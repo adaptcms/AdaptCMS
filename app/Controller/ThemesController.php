@@ -24,10 +24,10 @@ class ThemesController extends AppController
         {
             if ($this->Theme->save($this->request->data))
             {
-                $this->Session->setFlash('Your theme has been added.', 'flash_success');
+                $this->Session->setFlash('Your theme has been added.', 'success');
                 $this->redirect(array('controller' => 'templates', 'action' => 'index'));
             } else {
-                $this->Session->setFlash('Unable to add your theme.', 'flash_error');
+                $this->Session->setFlash('Unable to add your theme.', 'error');
             }
         }
 	}
@@ -53,10 +53,10 @@ class ThemesController extends AppController
         if (!empty($this->request->data))
         {
 	        if ($this->Theme->save($this->request->data)) {
-	            $this->Session->setFlash('Your theme has been updated.', 'flash_success');
+	            $this->Session->setFlash('Your theme has been updated.', 'success');
 	            $this->redirect(array('controller' => 'templates', 'action' => 'index'));
 	        } else {
-	            $this->Session->setFlash('Unable to update your theme.', 'flash_error');
+	            $this->Session->setFlash('Unable to update your theme.', 'error');
 	        }
 	    }
 
@@ -92,7 +92,7 @@ class ThemesController extends AppController
 
 		$permanent = $this->Theme->remove($data);
 
-		$this->Session->setFlash('The theme `'.$title.'` has been deleted.', 'flash_success');
+		$this->Session->setFlash('The theme `'.$title.'` has been deleted.', 'success');
 
         if (!empty($permanent))
         {
@@ -105,7 +105,7 @@ class ThemesController extends AppController
 
             if ($count > 0)
             {
-                $params['trash'] = 1;
+                $params['trash_theme'] = 1;
             }
 
             $this->redirect($params);
@@ -132,10 +132,10 @@ class ThemesController extends AppController
 
         if ($this->Theme->restore())
         {
-            $this->Session->setFlash('The theme `' . $title.'` has been restored.', 'flash_success');
+            $this->Session->setFlash('The theme `' . $title.'` has been restored.', 'success');
             $this->redirect(array('controller' => 'templates', 'action' => 'index'));
         } else {
-            $this->Session->setFlash('The theme `' . $title.'` has NOT been restored.', 'flash_error');
+            $this->Session->setFlash('The theme `' . $title.'` has NOT been restored.', 'error');
             $this->redirect(array('controller' => 'templates', 'action' => 'index'));
         }
     }
@@ -206,10 +206,10 @@ class ThemesController extends AppController
 
             if (empty($save))
             {
-                $this->Session->setFlash('The asset `' . $filename.'` has been added.', 'flash_success');
+                $this->Session->setFlash('The asset `' . $filename.'` has been added.', 'success');
                 $this->redirect($redirect);
             } else {
-                $this->Session->setFlash('The asset `' . $filename.'` has NOT been added.', 'flash_error');
+                $this->Session->setFlash('The asset `' . $filename.'` has NOT been added.', 'error');
                 $this->redirect($redirect);
             }
         }
@@ -308,10 +308,10 @@ class ThemesController extends AppController
 
             if (empty($save))
             {
-                $this->Session->setFlash('The asset `' . $filename.'` has been saved.', 'flash_success');
+                $this->Session->setFlash('The asset `' . $filename.'` has been saved.', 'success');
                 $this->redirect($redirect);
             } else {
-                $this->Session->setFlash('The asset `' . $filename.'` has NOT been saved.', 'flash_error');
+                $this->Session->setFlash('The asset `' . $filename.'` has NOT been saved.', 'error');
                 $this->redirect($redirect);
             }
         }
@@ -365,10 +365,10 @@ class ThemesController extends AppController
 
         if (empty($save))
         {
-            $this->Session->setFlash('The asset `' . $ext['basename'].'` has been deleted.', 'flash_success');
+            $this->Session->setFlash('The asset `' . $ext['basename'].'` has been deleted.', 'success');
             $this->redirect($redirect);
         } else {
-            $this->Session->setFlash('The asset `' . $ext['basename'].'` has NOT been deleted.', 'flash_error');
+            $this->Session->setFlash('The asset `' . $ext['basename'].'` has NOT been deleted.', 'error');
             $this->redirect($redirect);
         }
     }
