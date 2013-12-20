@@ -2,8 +2,6 @@
 /**
  * File Storage stream for Logging
  *
- * PHP 5
- *
  * CakePHP(tm) :  Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -201,17 +199,21 @@ class FileLog extends BaseLog {
 		}
 
 		if ($this->_config['rotate'] === 0) {
-			return unlink($filepath);
+			$result = unlink($filepath);
+		} else {
+			$result = rename($filepath, $filepath . '.' . time());
 		}
 
-		if ($this->_config['rotate']) {
-			$files = glob($filepath . '.*');
-			if (count($files) === $this->_config['rotate']) {
+		$files = glob($filepath . '.*');
+		if ($files) {
+			$filesToDelete = count($files) - $this->_config['rotate'];
+			while ($filesToDelete > 0) {
 				unlink(array_shift($files));
+				$filesToDelete--;
 			}
 		}
 
-		return rename($filepath, $filepath . '.' . time());
+		return $result;
 	}
 
 }

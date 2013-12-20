@@ -2,8 +2,6 @@
 /**
  * CakeResponse
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -250,9 +248,9 @@ class CakeResponse {
 		'f4b' => 'audio/mp4',
 		'gif' => 'image/gif',
 		'ief' => 'image/ief',
-		'jpe' => 'image/jpeg',
-		'jpeg' => 'image/jpeg',
 		'jpg' => 'image/jpeg',
+		'jpeg' => 'image/jpeg',
+		'jpe' => 'image/jpeg',
 		'pbm' => 'image/x-portable-bitmap',
 		'pgm' => 'image/x-portable-graymap',
 		'png' => 'image/png',
@@ -300,6 +298,7 @@ class CakeResponse {
 		'webapp' => 'application/x-web-app-manifest+json',
 		'vcf' => 'text/x-vcard',
 		'vtt' => 'text/vtt',
+		'mkv' => 'video/x-matroska',
 	);
 
 /**
@@ -375,7 +374,7 @@ class CakeResponse {
 	protected $_cookies = array();
 
 /**
- * Class constructor
+ * Constructor
  *
  * @param array $options list of parameters to setup the response. Possible values are:
  *	- body: the response text that should be sent to the client
@@ -570,7 +569,7 @@ class CakeResponse {
 			if (is_numeric($header)) {
 				list($header, $value) = array($value, null);
 			}
-			if (is_null($value)) {
+			if ($value === null) {
 				list($header, $value) = explode(':', $header, 2);
 			}
 			$this->_headers[$header] = is_array($value) ? array_map('trim', $value) : trim($value);
@@ -629,12 +628,12 @@ class CakeResponse {
 /**
  * Queries & sets valid HTTP response codes & messages.
  *
- * @param integer|array $code If $code is an integer, then the corresponding code/message is 
- *        returned if it exists, null if it does not exist. If $code is an array, then the 
- *        keys are used as codes and the values as messages to add to the default HTTP 
- *        codes. The codes must be integers greater than 99 and less than 1000. Keep in 
- *        mind that the HTTP specification outlines that status codes begin with a digit 
- *        between 1 and 5, which defines the class of response the client is to expect. 
+ * @param integer|array $code If $code is an integer, then the corresponding code/message is
+ *        returned if it exists, null if it does not exist. If $code is an array, then the
+ *        keys are used as codes and the values as messages to add to the default HTTP
+ *        codes. The codes must be integers greater than 99 and less than 1000. Keep in
+ *        mind that the HTTP specification outlines that status codes begin with a digit
+ *        between 1 and 5, which defines the class of response the client is to expect.
  *        Example:
  *
  *        httpCodes(404); // returns array(404 => 'Not Found')
@@ -848,7 +847,7 @@ class CakeResponse {
  * If called with no parameters, this function will return the current max-age value if any
  *
  * @param integer $seconds if null, the method will return the current s-maxage value
- * @return int
+ * @return integer
  */
 	public function sharedMaxAge($seconds = null) {
 		if ($seconds !== null) {
@@ -868,7 +867,7 @@ class CakeResponse {
  * If called with no parameters, this function will return the current max-age value if any
  *
  * @param integer $seconds if null, the method will return the current max-age value
- * @return int
+ * @return integer
  */
 	public function maxAge($seconds = null) {
 		if ($seconds !== null) {
@@ -1281,7 +1280,7 @@ class CakeResponse {
 			$agent = env('HTTP_USER_AGENT');
 
 			if (preg_match('%Opera(/| )([0-9].[0-9]{1,2})%', $agent)) {
-				$contentType = 'application/octetstream';
+				$contentType = 'application/octet-stream';
 			} elseif (preg_match('/MSIE ([0-9].[0-9]{1,2})/', $agent)) {
 				$contentType = 'application/force-download';
 			}
@@ -1296,6 +1295,7 @@ class CakeResponse {
 			}
 			$this->download($name);
 			$this->header('Accept-Ranges', 'bytes');
+			$this->header('Content-Transfer-Encoding', 'binary');
 
 			$httpRange = env('HTTP_RANGE');
 			if (isset($httpRange)) {
@@ -1373,6 +1373,7 @@ class CakeResponse {
 
 		$bufferSize = 8192;
 		set_time_limit(0);
+		session_write_close();
 		while (!feof($file->handle)) {
 			if (!$this->_isActive()) {
 				$file->close();

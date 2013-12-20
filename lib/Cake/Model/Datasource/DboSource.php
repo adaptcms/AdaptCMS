@@ -2,8 +2,6 @@
 /**
  * Dbo Source
  *
- * PHP 5
- *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -663,7 +661,8 @@ class DboSource extends DataSource {
 		if ($cache && ($cached = $this->getQueryCache($sql, $params)) !== false) {
 			return $cached;
 		}
-		if ($result = $this->execute($sql, array(), $params)) {
+		$result = $this->execute($sql, array(), $params);
+		if ($result) {
 			$out = array();
 
 			if ($this->hasResult()) {
@@ -771,7 +770,7 @@ class DboSource extends DataSource {
 		if ($this->cacheMethods === false) {
 			return $value;
 		}
-		if (empty(self::$methodCache)) {
+		if (!$this->_methodCacheChange && empty(self::$methodCache)) {
 			self::$methodCache = Cache::read('method_cache', '_cake_core_');
 		}
 		if ($value === null) {
@@ -861,7 +860,7 @@ class DboSource extends DataSource {
  * @return boolean True if the result is valid else false
  */
 	public function hasResult() {
-		return is_a($this->_result, 'PDOStatement');
+		return $this->_result instanceof PDOStatement;
 	}
 
 /**
@@ -952,14 +951,14 @@ class DboSource extends DataSource {
 
 		if ($quote) {
 			if ($schema && !empty($schemaName)) {
-				if (false == strstr($table, '.')) {
+				if (strstr($table, '.') === false) {
 					return $this->name($schemaName) . '.' . $this->name($table);
 				}
 			}
 			return $this->name($table);
 		}
 		if ($schema && !empty($schemaName)) {
-			if (false == strstr($table, '.')) {
+			if (strstr($table, '.') === false) {
 				return $schemaName . '.' . $table;
 			}
 		}
@@ -1065,14 +1064,14 @@ class DboSource extends DataSource {
 					if ($bypass) {
 						$assocData['fields'] = false;
 					}
-					if (true === $this->generateAssociationQuery($model, $linkModel, $type, $assoc, $assocData, $queryData, $external, $null)) {
+					if ($this->generateAssociationQuery($model, $linkModel, $type, $assoc, $assocData, $queryData, $external, $null) === true) {
 						$linkedModels[$type . '/' . $assoc] = true;
 					}
 				}
 			}
 		}
 
-		$query = trim($this->generateAssociationQuery($model, null, null, null, null, $queryData, false, $null));
+		$query = $this->generateAssociationQuery($model, null, null, null, null, $queryData, false, $null);
 
 		$resultSet = $this->fetchAll($query, $model->cacheQueries);
 
@@ -1398,7 +1397,7 @@ class DboSource extends DataSource {
 			if (isset($merge[$association])) {
 				$data[$association] = $merge[$association][0];
 			} else {
-				if (count($merge[0][$association]) > 1) {
+				if (!empty($merge[0][$association])) {
 					foreach ($merge[0] as $assoc => $data2) {
 						if ($assoc !== $association) {
 							$merge[0][$association][$assoc] = $data2;
@@ -1730,8 +1729,10 @@ class DboSource extends DataSource {
  * @return string
  */
 	public function renderJoinStatement($data) {
-		extract($data);
-		return trim("{$type} JOIN {$table} {$alias} ON ({$conditions})");
+		if (strtoupper($data['type']) === 'CROSS') {
+			return "{$data['type']} JOIN {$data['table']} {$data['alias']}";
+		}
+		return trim("{$data['type']} JOIN {$data['table']} {$data['alias']} ON ({$data['conditions']})");
 	}
 
 /**
@@ -1747,19 +1748,19 @@ class DboSource extends DataSource {
 
 		switch (strtolower($type)) {
 			case 'select':
-				return "SELECT {$fields} FROM {$table} {$alias} {$joins} {$conditions} {$group} {$order} {$limit}";
+				return trim("SELECT {$fields} FROM {$table} {$alias} {$joins} {$conditions} {$group} {$order} {$limit}");
 			case 'create':
 				return "INSERT INTO {$table} ({$fields}) VALUES ({$values})";
 			case 'update':
 				if (!empty($alias)) {
 					$aliases = "{$this->alias}{$alias} {$joins} ";
 				}
-				return "UPDATE {$table} {$aliases}SET {$fields} {$conditions}";
+				return trim("UPDATE {$table} {$aliases}SET {$fields} {$conditions}");
 			case 'delete':
 				if (!empty($alias)) {
 					$aliases = "{$this->alias}{$alias} {$joins} ";
 				}
-				return "DELETE {$alias} FROM {$table} {$aliases}{$conditions}";
+				return trim("DELETE {$alias} FROM {$table} {$aliases}{$conditions}");
 			case 'schema':
 				foreach (array('columns', 'indexes', 'tableParameters') as $var) {
 					if (is_array(${$var})) {
@@ -2279,6 +2280,7 @@ class DboSource extends DataSource {
 			$fields,
 			$quote,
 			ConnectionManager::getSourceName($this),
+			$model->schemaName,
 			$model->table
 		);
 		$cacheKey = md5(serialize($cacheKey));
@@ -2959,7 +2961,7 @@ class DboSource extends DataSource {
  * @return string
  */
 	public function createSchema($schema, $tableName = null) {
-		if (!is_a($schema, 'CakeSchema')) {
+		if (!$schema instanceof CakeSchema) {
 			trigger_error(__d('cake_dev', 'Invalid schema object'), E_USER_WARNING);
 			return null;
 		}
@@ -3302,7 +3304,6 @@ class DboSource extends DataSource {
 
 /**
  * Used for storing in cache the results of the in-memory methodCache
- *
  */
 	public function __destruct() {
 		if ($this->_methodCacheChange) {

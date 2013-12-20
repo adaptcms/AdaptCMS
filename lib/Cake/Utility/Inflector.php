@@ -18,7 +18,7 @@
  * Pluralize and singularize English words.
  *
  * Inflector pluralizes and singularizes English nouns.
- * Used by Cake's naming conventions throughout the framework.
+ * Used by CakePHP's naming conventions throughout the framework.
  *
  * @package       Cake.Utility
  * @link          http://book.cakephp.org/2.0/en/core-utility-libraries/inflector.html
@@ -61,6 +61,7 @@ class Inflector {
 		'irregular' => array(
 			'atlas' => 'atlases',
 			'beef' => 'beefs',
+			'brief' => 'briefs',
 			'brother' => 'brothers',
 			'cafe' => 'cafes',
 			'child' => 'children',
@@ -126,10 +127,10 @@ class Inflector {
 			'/(s)eries$/i' => '\1\2eries',
 			'/([^aeiouy]|qu)ies$/i' => '\1y',
 			'/(tive)s$/i' => '\1',
-			'/([lre])ves$/i' => '\1f',
-			'/([^fo])ves$/i' => '\1fe',
 			'/(hive)s$/i' => '\1',
 			'/(drive)s$/i' => '\1',
+			'/([le])ves$/i' => '\1f',
+			'/([^rfo])ves$/i' => '\1fe',
 			'/(^analy)ses$/i' => '\1sis',
 			'/(analy|diagno|^ba|(p)arenthe|(p)rogno|(s)ynop|(t)he)ses$/i' => '\1\2sis',
 			'/([ti])a$/i' => '\1um',
@@ -147,7 +148,6 @@ class Inflector {
 		'irregular' => array(
 			'foes' => 'foe',
 			'waves' => 'wave',
-			'curves' => 'curve'
 		)
 	);
 
@@ -163,7 +163,7 @@ class Inflector {
 		'Foochowese', 'gallows', 'Genevese', 'Genoese', 'Gilbertese', 'graffiti',
 		'headquarters', 'herpes', 'hijinks', 'Hottentotese', 'information', 'innings',
 		'jackanapes', 'Kiplingese', 'Kongoese', 'Lucchese', 'mackerel', 'Maltese', '.*?media',
-		'mews', 'moose', 'mumps', 'Nankingese', 'news', 'nexus', 'Niasese',
+		'metadata', 'mews', 'moose', 'mumps', 'Nankingese', 'news', 'nexus', 'Niasese',
 		'Pekingese', 'Piedmontese', 'pincers', 'Pistoiese', 'pliers', 'Portuguese',
 		'proceedings', 'rabies', 'rice', 'rhinoceros', 'salmon', 'Sarawakese', 'scissors',
 		'sea[- ]bass', 'series', 'Shavese', 'shears', 'siemens', 'species', 'swine', 'testes',
@@ -542,8 +542,8 @@ class Inflector {
 		$quotedReplacement = preg_quote($replacement, '/');
 
 		$merge = array(
-			'/[^\s\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]/mu' => ' ',
-			'/\\s+/' => $replacement,
+			'/[^\s\p{Zs}\p{Ll}\p{Lm}\p{Lo}\p{Lt}\p{Lu}\p{Nd}]/mu' => ' ',
+			'/[\s\p{Zs}]+/mu' => $replacement,
 			sprintf('/^[%s]+|[%s]+$/', $quotedReplacement, $quotedReplacement) => '',
 		);
 

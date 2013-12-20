@@ -2,8 +2,6 @@
 /**
  * FileTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -310,11 +308,11 @@ class FileTest extends CakeTestCase {
 		} else {
 			$expected = "some\nvery\ncool\nteststring here\n\n\nfor\n\n\n\n\nhere";
 		}
-		$this->assertSame(File::prepare($string), $expected);
+		$this->assertSame($expected, File::prepare($string));
 
 		$expected = "some\r\nvery\r\ncool\r\nteststring here\r\n\r\n\r\n";
 		$expected .= "for\r\n\r\n\r\n\r\n\r\nhere";
-		$this->assertSame(File::prepare($string, true), $expected);
+		$this->assertSame($expected, File::prepare($string, true));
 	}
 
 /**
@@ -396,7 +394,7 @@ class FileTest extends CakeTestCase {
 	public function testWrite() {
 		if (!$tmpFile = $this->_getTmpFile()) {
 			return false;
-		};
+		}
 		if (file_exists($tmpFile)) {
 			unlink($tmpFile);
 		}
@@ -426,7 +424,7 @@ class FileTest extends CakeTestCase {
 	public function testAppend() {
 		if (!$tmpFile = $this->_getTmpFile()) {
 			return false;
-		};
+		}
 		if (file_exists($tmpFile)) {
 			unlink($tmpFile);
 		}

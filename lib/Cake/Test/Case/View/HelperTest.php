@@ -2,8 +2,6 @@
 /**
  * HelperTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -33,7 +31,7 @@ class HelperTestPost extends Model {
 /**
  * useTable property
  *
- * @var bool false
+ * @var boolean
  */
 	public $useTable = false;
 
@@ -73,7 +71,7 @@ class HelperTestComment extends Model {
 /**
  * useTable property
  *
- * @var bool false
+ * @var boolean
  */
 	public $useTable = false;
 
@@ -107,7 +105,7 @@ class HelperTestTag extends Model {
 /**
  * useTable property
  *
- * @var bool false
+ * @var boolean
  */
 	public $useTable = false;
 
@@ -138,7 +136,7 @@ class HelperTestPostsTag extends Model {
 /**
  * useTable property
  *
- * @var bool false
+ * @var boolean
  */
 	public $useTable = false;
 
@@ -557,7 +555,7 @@ class HelperTest extends CakeTestCase {
 	}
 
 /**
- * Ensure HTML escaping of url params. So link addresses are valid and not exploited
+ * Ensure HTML escaping of URL params. So link addresses are valid and not exploited
  *
  * @return void
  */
@@ -975,8 +973,7 @@ class HelperTest extends CakeTestCase {
 		$Helper->OtherHelper;
 
 		$result = $this->View->Helpers->enabled();
-		$expected = array('Html');
-		$this->assertEquals($expected, $result, 'Helper helpers were attached to the collection.');
+		$this->assertEquals(array(), $result, 'Helper helpers were attached to the collection.');
 	}
 
 /**

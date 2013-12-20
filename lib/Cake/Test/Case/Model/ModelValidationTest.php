@@ -2,8 +2,6 @@
 /**
  * ModelValidationTest file
  *
- * PHP 5
- *
  * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
  * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
@@ -1720,7 +1718,7 @@ class ModelValidationTest extends BaseModelTest {
 		$expected = array_map('strtolower', get_class_methods('Article'));
 		$this->assertEquals($expected, array_keys($result));
 
-		$TestModel->Behaviors->attach('Containable');
+		$TestModel->Behaviors->load('Containable');
 		$newList = array(
 			'contain',
 			'resetbindings',
@@ -1730,7 +1728,7 @@ class ModelValidationTest extends BaseModelTest {
 		);
 		$this->assertEquals(array_merge($expected, $newList), array_keys($Validator->getMethods()));
 
-		$TestModel->Behaviors->detach('Containable');
+		$TestModel->Behaviors->unload('Containable');
 		$this->assertEquals($expected, array_keys($Validator->getMethods()));
 	}
 
