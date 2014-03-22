@@ -24,28 +24,12 @@ class MediaController extends AppController
 
     /**
     * In this beforeFilter we will get the permissions to be used in the view files
-    * If this is an admin add or edit action, an array of images and the image path is set to the view
     */
 	private $permissions;
 
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
-
-		if ($this->request->action == "admin_add" || $this->request->action == "admin_edit")
-		{
-			$this->Paginator->settings = array(
-				'conditions' => array(
-					'File.mimetype LIKE' => '%image%'
-				),
-				'limit' => 9
-			);
-
-			$images = $this->Paginator->paginate('File');
-			$image_path = WWW_ROOT;
-
-			$this->set(compact('images', 'image_path'));
-		}
 
 		$this->permissions = $this->getPermissions();
 	}
@@ -86,6 +70,8 @@ class MediaController extends AppController
     */
 	public function admin_add()
 	{
+		$this->disable_parsing = true;
+
         if (!empty($this->request->data))
         {
 	        $this->Media->create();
@@ -112,6 +98,8 @@ class MediaController extends AppController
     */
 	public function admin_edit($id)
 	{
+		$this->disable_parsing = true;
+
       	$this->Media->id = $id;
 
 	    if (!empty($this->request->data))
@@ -136,6 +124,7 @@ class MediaController extends AppController
         		'User'
         	)
         ));
+		$this->request->data['File'] = $this->Media->File->parseMediaModal($this->request->data['File']);
 		$this->hasAccessToItem($this->request->data);
 	}
 
@@ -237,7 +226,7 @@ class MediaController extends AppController
 
 		if (empty($media))
 		{
-			$this->Session->setFlash('No Library with the slug `' . $slug . '`');
+			$this->Session->setFlash('No Library with the slug `' . $slug . '`', 'error');
 			$this->redirect('/');
 		}
 

@@ -39,7 +39,8 @@ class User extends AppModel
         'FieldType',
         'Page',
         'File',
-        'Media'
+        'Media',
+	    'ArticleRevision'
     );
     public $belongsTo = array(
         'Role'
@@ -188,7 +189,13 @@ class User extends AppModel
         return true;
     }
 
-    public function getSecurityAnswers($data)
+	/**
+	 * Get Security Answers
+	 *
+	 * @param $data
+	 * @return array
+	 */
+	public function getSecurityAnswers($data)
     {
         $results = array();
         if (!empty($data['User']['security_answers'])) {
@@ -212,6 +219,59 @@ class User extends AppModel
 
         return $results;
     }
+
+	/**
+	 * Get Security Question
+	 * This enables getting a random security question/answer or a specific one to match the user supplied answer.
+	 *
+	 * @param $data
+	 * @param bool $rand
+	 * @param null $id
+	 * @return array
+	 */
+	public function getSecurityQuestion($data, $rand = true, $id = null)
+	{
+		$question = '';
+		$question_key = '';
+		$answer = '';
+		if (!empty($data['User']['security_answers'])) {
+			$settings = json_decode(stripslashes($data['User']['security_answers']), true);
+
+			if (!empty($settings)) {
+				$security = array();
+				foreach($settings as $key => $row) {
+					if (is_array($row)) {
+						if ($rand || $id == $key)
+							$security[$key] = $row;
+					}
+				}
+
+				if (!empty($security)) {
+					if ($rand) {
+						reset($security);
+						$first_key = key($security);
+
+						end($security);
+						$last_key = key($security);
+						reset($security);
+
+						$question_key = rand($first_key, $last_key);
+					} else {
+						$question_key = $id;
+					}
+
+					$question = $security[$question_key]['question'];
+					$answer = $security[$question_key]['answer'];
+				}
+			}
+		}
+
+		return array(
+			'question' => $question,
+			'question_key' => $question_key,
+			'answer' => $answer
+		);
+	}
 
     public function getSecurityOptions($data)
     {
@@ -294,4 +354,27 @@ class User extends AppModel
 
         return $data;
     }
+
+	/**
+	 * Merge Module Data
+	 *
+	 * @param $request_data
+	 * @param $fields
+	 *
+	 * @return mixed
+	 */
+	public function mergeModuleData($request_data, $fields)
+	{
+		if (!empty($fields)) {
+			foreach($fields as $key => $field) {
+				foreach($request_data as $row) {
+					if ($row['field_id'] == $field['Field']['id']) {
+						$fields[$key]['ModuleValue'][0]['data'] = $row['data'];
+					}
+				}
+			}
+		}
+
+		return $fields;
+	}
 }

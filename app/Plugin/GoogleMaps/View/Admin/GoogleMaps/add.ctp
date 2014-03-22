@@ -21,46 +21,51 @@
         'class' => 'required map_type'
     )) ?>
 
-    <div class="pull-left span6 no-marg-left" id="map-parameters">
+    <div class="pull-left col-lg-5 no-pad-l no-pad-r" id="map-parameters">
         <legend>Map Options</legend>
 
-        <div class="btn-group">
+        <div class="btn-group input-group col-lg-11 no-pad-l clearfix">
+	        <?= $this->Form->label('GoogleMap.options.center.address', 'Center on Address') ?>
+	        <div class="clearfix"></div>
+
             <?= $this->Form->input('GoogleMap.options.center.address', array(
-                'class' => 'input-xlarge required center-address',
+                'class' => 'form-control form-control-inline pull-left required center-address',
                 'placeholder' => $defaults['address'],
                 'value' => $defaults['address'],
-                'label' => 'Center on Address',
+                'label' => false,
                 'div' => false
             )) ?>
 
             <?= $this->Form->button('Update', array(
                 'type' => 'button',
-                'class' => 'btn btn-info pull-right',
-                'style' => 'margin-left: 10px',
+                'class' => 'btn btn-info',
                 'id' => 'update-center-address'
             )) ?>
         </div>
 
         <?= $this->Form->input('GoogleMap.options.zoom', array(
-            'class' => 'input-small required zoom',
+            'class' => 'required zoom',
             'options' => $zoom,
             'value' => $defaults['zoom'],
             'label' => 'Zoom Level'
         )) ?>
 
-        <div class="btn-group pull-left clearfix">
+        <div class="btn-group pull-left">
             <?= $this->Form->input('GoogleMap.options.width', array(
-                'class' => 'input-small required width',
+                'class' => 'required width',
                 'value' => $defaults['width'],
-                'label' => 'Map Width'
+                'label' => 'Map Width',
+	            'div' => array('class' => 'pull-left')
             )) ?>
 
             <?= $this->Form->input('GoogleMap.options.height', array(
-                'class' => 'input-small required height',
+                'class' => 'required height',
                 'value' => $defaults['height'],
-                'label' => 'Map Height'
+                'label' => 'Map Height',
+	            'div' => array('class' => 'pull-right')
             )) ?>
         </div>
+	    <div class="clearfix"></div>
 
         <?= $this->Form->hidden('GoogleMap.options.center.latitude', array(
             'value' => $defaults['latitude'],
@@ -71,11 +76,11 @@
             'class' => 'center-longitude'
         )) ?>
 
-        <div class="route span6 no-marg-left" style="clear: left">
+        <div class="route col-lg-6 no-pad-l" style="clear: left">
             <legend>Route</legend>
 
             <?= $this->Form->input('GoogleMap.locations.from.address', array(
-                'class' => 'required input-xlarge from-address',
+                'class' => 'required form-control from-address',
                 'label' => 'From Address'
             )) ?>
 
@@ -87,7 +92,7 @@
             )) ?>
 
             <?= $this->Form->input('GoogleMap.locations.to.address', array(
-                'class' => 'required input-xlarge to-address',
+                'class' => 'required form-control to-address',
                 'label' => 'Destination Address'
             )) ?>
 
@@ -99,7 +104,7 @@
             )) ?>
 
             <?= $this->Form->input('GoogleMap.locations.type', array(
-                'class' => 'required travel-type',
+                'class' => 'form-control required travel-type',
                 'label' => 'Travel Type',
                 'value' => $defaults['travel-type'],
                 'options' => array(
@@ -109,22 +114,24 @@
                 )
             )) ?>
 
-
             <?= $this->Form->button('Update', array(
                 'type' => 'button',
-                'class' => 'btn btn-info pull-right update-map'
+                'class' => 'btn btn-info pull-left update-map',
+	            'style' => 'margin-top: 10px;'
             )) ?>
         </div>
+	    <div class="clearfix"></div>
 
         <div class="markers">
             <legend>Markers (optional)</legend>
 
-            <div class="locations span6 no-marg-left">
+            <div class="locations col-lg-11 no-pad-l">
                 <?= $this->Element('marker', array('key' => 0)) ?>
             </div>
         </div>
+	    <div class="clearfix"></div>
     </div>
-    <div class="pull-right span6 no-marg-left map" style="margin-right: 22px;">
+    <div class="pull-right col-lg-6 no-pad-l map">
         <div id="map"></div>
         <div id="directions" style="display: none">
             <h2>Directions</h2>

@@ -1,4 +1,4 @@
-{{ addCrumb('Media Index', null) }}ste
+{{ addCrumb('Media Index', null) }}
 
 <h1>Media Libraries</h1>
 
@@ -26,8 +26,7 @@
 				{% endif %}
 				<div class="caption">
 					<em>
-						Posted @
-						{{ time(library['Media']['created'], 'words') }}
+						Posted {{ time(library['Media']['created'], 'words') }}
 					</em>
 				</div>
 			</li>

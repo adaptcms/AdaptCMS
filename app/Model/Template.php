@@ -426,25 +426,27 @@ class Template extends AppModel
 	}
 
 	/**
-	* Same as folderList(), but looks for theme folders and returns list of files
-	*
-	* @param folder
-	* @return array of folders and files
-	*/
-	public function folderAndFilesList($folder = null)
+	 * Same as folderList(), but looks for theme folders and returns list of files
+	 *
+	 * @param null $folder
+	 * @param null $path
+	 *
+	 * @return array of folders and files
+	 */
+	public function folderAndFilesList($folder = null, $path = null)
 	{
-		if ($folder) {
+		if (!empty($path)) {
+			$dir = $path;
+		} elseif ($folder) {
 			$dir = ROOT . '/app/View/Themed/' . $folder . '/';
-//			$inc_dir = "Themed/".$folder."/";
 		} else {
 			$dir = ROOT . '/app/View/';
-//			$inc_dir = null;
 		}
 		$plugin_dir = APP . DS . 'Plugin' . DS;
 
 		$files = $this->getFolderAndFilesList($dir);
 
-        if (empty($folder))
+        if (empty($folder) && empty($path))
         {
             foreach(Configure::read('Plugins.list') as $plugin)
             {
@@ -501,7 +503,7 @@ class Template extends AppModel
 	 */
 	public function getGlobalVars()
 	{
-		$data = Configure::read('global_vars');
+		$data = Configure::read('standard_global_vars');
 
 		if (!empty($data)) {
 			$find = array(
@@ -530,15 +532,18 @@ class Template extends AppModel
 
 		$path = APP . 'Config' . DS . 'configuration.php';
 
-		$old = Configure::read('global_vars');
+		$old = Configure::read('standard_global_vars');
 
 		$orig_contents = file_get_contents($path);
+
 		$new_contents = str_replace( "'" . json_encode($old) . "'", "'" . json_encode($vars) . "'", $orig_contents );
 		$fh = fopen($path, 'w') or die("can't open file");
 
 		$status = 'error';
 		if (fwrite($fh, $new_contents)) {
 			$status = 'success';
+			clearCache(null, '/../templates');
+			clearCache(null, 'views');
 		}
 
 		return $status;

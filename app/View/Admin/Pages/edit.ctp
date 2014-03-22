@@ -15,14 +15,14 @@
             <a href="#docs" data-toggle="tab">Documentation</a>
         </li>
     <?php endif ?>
-    <div class="pull-right hidden-phone">
+    <div class="pull-right hidden-xs">
         <?= $this->Html->link(
-            '<i class="icon-chevron-left"></i> Return to Index',
+            '<i class="fa fa-chevron-left"></i> Return to Index',
             array('action' => 'index'),
-            array('class' => 'btn', 'escape' => false
+            array('class' => 'btn btn-info', 'escape' => false
             )) ?>
         <?= $this->Html->link(
-            '<i class="icon-trash icon-white"></i> Delete',
+            '<i class="fa fa-trash-o"></i> Delete',
             array('action' => 'delete', $this->request->data['Page']['id'], $this->request->data['Page']['title']),
             array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this page?')"));
         ?>

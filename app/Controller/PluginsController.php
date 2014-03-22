@@ -5,6 +5,7 @@ App::uses('AppController', 'Controller');
  * Class PluginsController
  *
  * @property Plugin $Plugin
+ * @property CmsApiComponent $CmsApi
  */
 class PluginsController extends AppController
 {
@@ -31,8 +32,8 @@ class PluginsController extends AppController
         $plugins = array();
         $api_lookup = array();
 
-		$active_plugins = $this->getPlugins( $this->Plugin->getActivePath() );
-		$inactive_plugins = $this->getPlugins( $this->Plugin->getInactivePath() );
+		$active_plugins = $this->Plugin->getPlugins( $this->Plugin->getActivePath() );
+		$inactive_plugins = $this->Plugin->getPlugins( $this->Plugin->getInactivePath() );
 
         if (!empty($active_plugins['plugins']) || !empty($inactive_plugins['plugins']))
 		    $plugins = array_merge($active_plugins['plugins'], $inactive_plugins['plugins']);
@@ -157,7 +158,6 @@ class PluginsController extends AppController
 
         if (!empty($this->request->data))
         {
-	        debug($this->request->data);
             if ($this->Role->Permission->saveMany($this->request->data))
             {
                 $this->Session->setFlash('Plugin permissions have been updated.', 'success');
@@ -181,104 +181,8 @@ class PluginsController extends AppController
 
         $this->set('assets_list', $this->Theme->assetsList(null, $plugin));
         $this->set('assets_list_path', APP);
-        $this->set('webroot_path', $this->webroot);
+        $this->set('webroot_path', $this->request->webroot);
 
         $this->set(compact('plugin'));
-	}
-
-    /**
-     * Convienence method, need to get plugin JSON file contents several times in this controller.
-     *
-     * @param string $path
-     * @internal param \of $path plugin JSON file
-     * @return array|boolean of data, false if it can't get file contents
-     */
-	private function getPluginJson($path)
-	{
-		if (file_exists($path) && is_readable($path))
-		{
-			$handle = fopen($path, "r");
-			$file = fread($handle, filesize($path));
-
-			return json_decode($file, true);
-		}
-
-		return false;
-	}
-
-	/**
-	* Convienence method
-	* Goes through folder of Plugins, setting all data needed on plugin listing.
-	*
-	* @param string $path of specified Plugin folder
-	* @return array plugin data with api information
-	*/
-	private function getPlugins($path)
-	{
-		$exclude = array(
-			'DebugKit',
-            'empty'
-		);
-		$plugins = array();
-		$api_lookup = array();
-
-		if ($dh = opendir($path))
-        {
-			while (($file = readdir($dh)) !== false)
-            {
-                if (!in_array($file, $exclude) && $file != ".." && $file != ".")
-                {
-                	$json = $path . DS . $file . DS . 'plugin.json';
-
-		 			if ($plugin = $this->getPluginJson($json))
-		 			{
-		 				$plugins[$file] = $plugin;
-
-		 				if (!empty($plugins[$file]['api_id'])) {
-		 					$api_lookup[] = $plugins[$file]['api_id'];
-						}
-		 			} else {
-		 				$plugins[$file]['title'] = $file;
-		 			}
-
-		 			$upgrade = $path . DS . $file . DS . 'Install' . DS . 'upgrade.json';
-
-		 			if (file_exists($upgrade) && is_readable($upgrade))
-		 			{
-		 				$plugins[$file]['upgrade_status'] = 1;
-		 			} else {
-		 				$plugins[$file]['upgrade_status'] = 0;
-		 			}
-
-		 			if (strstr($path, 'Old')) {
-		 				$plugins[$file]['status'] = 0;
-		 			} else {
-		 				$plugins[$file]['status'] = 1;
-		 			}
-
-		 			$config = $path . DS . $file . DS . 'Config' . DS . 'config.php';
-
-		 			if (file_exists($config) && is_readable($config))
-		 			{
-                        $params = array();
-
-                        require($config);
-
-                        $param_check = json_decode($params);
-
-                        if (!empty($param_check))
-		 				    $plugins[$file]['config'] = 1;
-		 			}
-
-                    if (!isset($plugins[$file]['config']))
-                        $plugins[$file]['config'] = 0;
-                }
-            }
-		}
-
-		return array(
-			'plugins' => $plugins,
-			'api_lookup' => $api_lookup
-		);
 	}
 }

@@ -4,14 +4,14 @@
 
 <?php $this->TinyMce->editor() ?>
 
-<div class="right hidden-phone">
+<div class="right hidden-xs">
 	<?= $this->Html->link(
-		'<i class="icon-chevron-left"></i> Return to Index',
+		'<i class="fa fa-chevron-left"></i> Return to Index',
 		array('action' => 'index'),
-		array('class' => 'btn', 'escape' => false
+		array('class' => 'btn btn-info', 'escape' => false
 		)) ?>
 	<?= $this->Html->link(
-		'<i class="icon-trash icon-white"></i> Delete',
+		'<i class="fa fa-trash-o"></i> Delete',
 		array('action' => 'delete', $this->request->data['Comment']['id'], ''),
 		array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this comment?')"));
 	?>
@@ -33,7 +33,7 @@
 				'key' => $key,
 				'field' => $field,
 				'icon' => !empty($field['Field']['description']) ?
-					"<i class='icon icon-question-sign field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
+					"<i class='fa fa-question field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
 			)) ?>
 			<?= $this->Form->hidden('ModuleValue.' . $key . '.field_id', array('value' => $field['Field']['id'])) ?>
 			<?= $this->Form->hidden('ModuleValue.' . $key . '.module_id', array('value' => $this->request->data['Comment']['id'])) ?>

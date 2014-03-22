@@ -1,21 +1,50 @@
 <?php $this->Html->addCrumb('Admin', '/admin') ?>
 <?php $this->Html->addCrumb('Articles', array('action' => 'index')) ?>
-<?php $this->Html->addCrumb('Edit Article', null) ?>
+<?php $this->Html->addCrumb('Edit Article - ' . $this->request->data['Category']['title'], null) ?>
 
 <?php $this->TinyMce->editor() ?>
 <?php if ($this->request->data['Article']['publish_time'] > date('Y-m-d H:i:s')): ?>
     <?php $time = strtotime($this->request->data['Article']['publish_time']) ?>
 <?php endif ?>
 
-<?= $this->Html->script('data-tagging.js') ?>
-<?= $this->Html->css("data-tagging.css") ?>
+<?= $this->Html->css("data-tagging") ?>
+<?= $this->Html->css("datepicker") ?>
 
-<?= $this->Html->css("datepicker.css") ?>
-<?= $this->Html->script('bootstrap-datepicker.js') ?>
-<?= $this->Html->script('bootstrap-typeahead.js') ?>
+<?= $this->Html->script('data-tagging') ?>
+<?= $this->Html->script('bootstrap-datepicker') ?>
+<?= $this->Html->script('bootstrap-typeahead') ?>
 
-<?= $this->Html->script('jquery.blockui.min.js') ?>
-<?= $this->Html->script('jquery.smooth-scroll.min.js') ?>
+<?= $this->Html->script('jquery.blockui.min') ?>
+<?= $this->Html->script('jquery.smooth-scroll.min') ?>
+<?= $this->Html->script('admin.files') ?>
+
+<?php $this->AdaptHtml->script('vendor/angular.min') ?>
+<?php $this->AdaptHtml->script('media_modal') ?>
+
+<?php $this->start('admin_header_top_right') ?>
+	<div class="pull-left">
+		<div class="pull-left quick-save-date">
+			Last Saved: <span class="last-saved"><?php echo $this->request->data['Article']['last_saved'] ?></span>
+		</div>
+		<?= $this->Form->button('Quick Save <i class="fa fa-refresh"></i>', array(
+			'type' => 'button',
+			'escape' => false,
+			'class' => 'btn btn-info navbar-btn pull-left quick-save'
+		)) ?>
+		<?= $this->Form->input('auto_save', array(
+			'div' => false,
+			'class' => 'col-xs-3 navbar-btn',
+			'label' => false,
+			'empty' => 'auto',
+			'options' => array(
+				'60000' => '1 Min',
+				'120000' => '2 Mins',
+				'300000' => '5 Mins',
+				'600000' => '10 Mins'
+			)
+		)) ?>
+	</div>
+<?php $this->end() ?>
 
 <ul id="admin-tab" class="nav nav-tabs left" style="margin-bottom:0">
 	<li<?= (empty($this->params['pass'][1]) ? " class='active'" : "") ?>>
@@ -24,19 +53,22 @@
 	<li>
 		<a href="#relate" data-toggle="tab">Relate Articles</a>
 	</li>
+	<li>
+		<a href="#revisions" data-toggle="tab">Revisions</a>
+	</li>
 	<?php if (!empty($comments)): ?>
 		<li<?= (!empty($this->params['pass'][1]) ? " class='active'" : "") ?>>
 			<a href="#comments-container" data-toggle="tab">Comments</a>
 		</li>
 	<?php endif ?>
-	<div class="pull-right hidden-phone">
+	<div class="pull-right hidden-xs">
 	    <?= $this->Html->link(
-	        '<i class="icon-chevron-left"></i> Return to Index',
+	        '<i class="fa fa-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),
-	        array('class' => 'btn', 'escape' => false
+	        array('class' => 'btn btn-default', 'escape' => false
 	    )) ?>
 	    <?= $this->Html->link(
-	        '<i class="icon-trash icon-white"></i> Delete',
+	        '<i class="fa fa-trash-o"></i> Delete',
 	        array('action' => 'delete', $this->request->data['Article']['id'], $this->request->data['Article']['title']),
 	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this article?')"));
 	    ?>
@@ -46,8 +78,7 @@
 
 <div id="myTabContent" class="tab-content">
     <div class="tab-pane<?= (empty($this->params['pass'][1]) ? " fade active in" : "") ?>" id="main">
-        <?= $this->Form->create('Article', array('type' => 'file', 'class' => 'well admin-validate-article')) ?>
-
+        <?= $this->Form->create('Article', array('type' => 'file', 'class' => 'well admin-validate-article', 'ng-app' => 'images')) ?>
             <h2>
                 Edit Article -
                 <?= $this->request->data['Category']['title'] ?>
@@ -57,36 +88,43 @@
                 'type' => 'text', 
                 'class' => 'required',
                 'label' => 
-                "<i class='icon icon-question-sign field-desc' data-content='This is the Title of your article, the name is also what its called.' data-title='Title'></i>&nbsp;Title"
+                "<i class='fa fa-question-circle field-desc' data-content='This is the Title of your article, the name is also what its called.' data-title='Title'></i>&nbsp;Title"
             )) ?>
-            
-            <?php foreach($fields as $key => $field): ?>
-                <?= $this->Element('FieldTypes/' . $field['FieldType']['slug'], array(
-                    'key' => $key,
-                    'field' => $field,
-                    'icon' => !empty($field['Field']['description']) ? 
-                    "<i class='icon icon-question-sign field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
-                )) ?>
-                <?= $this->Form->hidden('ArticleValue.' . $key . '.field_id', array('value' => $field['Field']['id'])) ?>
-            
-                <?php if (!empty($field['ArticleValue'][0]['id'])): ?>
-                    <?= $this->Form->hidden('ArticleValue.' . $key . '.id', array('value' => $field['ArticleValue'][0]['id'])) ?>
-                <?php endif ?>
-            <?php endforeach ?>
+
+            <div ng-controller="ImageModalCtrl">
+	            <?php foreach($fields as $key => $field): ?>
+	                <?= $this->Element('FieldTypes/' . $field['FieldType']['slug'], array(
+	                    'key' => $key,
+	                    'field' => $field,
+	                    'icon' => !empty($field['Field']['description']) ?
+	                    "<i class='fa fa-question-circle field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
+	                )) ?>
+	                <?= $this->Form->hidden('ArticleValue.' . $key . '.field_id', array('value' => $field['Field']['id'])) ?>
+	                <?= $this->Form->hidden('ArticleValue.' . $key . '.required', array('value' => $field['Field']['required'])) ?>
+
+	                <?php if (!empty($field['ArticleValue'][0]['id'])): ?>
+	                    <?= $this->Form->hidden('ArticleValue.' . $key . '.id', array('value' => $field['ArticleValue'][0]['id'])) ?>
+	                <?php endif ?>
+	            <?php endforeach ?>
+	            <?= $this->element('media_modal', array('disable_parsing' => true)) ?>
+            </div>
 
             <div id="text"></div>
-            <div class="field_options">
-                <?= $this->Form->input('field_options', array(
-                    'div' => false, 
-                    'type' => 'text',
-                    'label' => "<i class='icon icon-question-sign field-desc' data-content='Tagging an article with a keyword, will let you see a list of those articles. So if you tag 3 articles with <strong>xbox</strong>, you can then go to site.com/tag/xbox and see all articles with the xbox tag.' data-title='Tags'></i>&nbsp;Tags"
-                )) ?>
-                <?= $this->Form->button('Add', array(
-                    'class' => 'btn btn-info', 
-                    'type' => 'button',
-                    'id' => 'add-data'
-                )) ?>
-            </div>
+		    <div class="field_options input-group col-lg-5">
+			    <?= $this->Form->label('field_options', "<i class='fa fa-question-circle field-desc' data-content='Tagging an article with a keyword, will let you see a list of those articles. So if you tag 3 articles with <strong>xbox</strong>, you can then go to site.com/tag/xbox and see all articles with the xbox tag.' data-title='Tags'></i>&nbsp;Tags") ?>
+			    <div class="clearfix"></div>
+
+			    <?= $this->Form->input('field_options', array(
+				    'label' => false,
+				    'div' => false,
+				    'class' => 'form-control form-control-inline'
+			    )) ?>
+			    <?= $this->Form->button('Add', array(
+				    'type' => 'button',
+				    'class' => 'btn btn-info',
+				    'id' => 'add-data'
+			    )) ?>
+		    </div>
             <div id="field_data"></div>
             <div id="field_existing_data">
                 <?php if (!empty($this->request->data['Article']['tags'])): ?>
@@ -106,7 +144,7 @@
                 'value' => (!empty($this->request->data['Article']['settings']['comments_status']) ? $this->request->data['Article']['settings']['comments_status'] : '')
             )) ?>
 
-            <div id="current-status">
+            <div id="current-status" class="col-lg-12 no-pad-l clearfix">
                 <label>Current Status</label>
 
                 <?php if ($this->request->data['Article']['status'] == 0): ?>
@@ -126,41 +164,47 @@
             </div>
 
 	        <?= $this->Element('Articles/admin_permissions') ?>
+	        <?= $this->Element('Articles/admin_media') ?>
 
-            <div class="input text publish_time">
-                <?= $this->Form->input('publishing_date', array(
-                    'label' => 'Publish Time',
-                    'div' => false,
-                    'class' => 'input-small datepicker',
-                    'value' => date('Y-m-d', !empty($time) ? $time : time()),
-                    'data-date-format' => 'yyyy-mm-dd'
-                )) ?>
+            <div class="input text publish_time col-lg-8 no-pad-l">
+	            <?= $this->Form->label('publishing_date', 'Publish Time') ?>
 
-                <?= $this->Form->input('publishing_time', array(
-                    'label' => false,
-                    'div' => false,
-                    'class' => 'input-mini',
-                    'value' => date('g:i A', !empty($time) ? $time : time())
-                )) ?>
-                
-                <span class="hidden date_ymd"><?= date('Y-m-d') ?></span>
-                <span class="hidden time_gia"><?= date('g:i A') ?></span>
-                
-                <?php if (!empty($time)): ?>
-                    <span class="hidden show_publish_time">1</span>
-                <?php endif ?>
+	            <div>
+	                <?= $this->Form->input('publishing_date', array(
+	                    'label' => false,
+	                    'div' => false,
+	                    'class' => 'col-xs-2 datepicker',
+	                    'value' => date('Y-m-d', !empty($time) ? $time : time()),
+	                    'data-date-format' => 'yyyy-mm-dd'
+	                )) ?>
 
-                <?= $this->Form->button('Submit', array(
-                    'type' => 'submit',
-                    'class' => 'btn btn-primary'
-                )) ?>
+	                <?= $this->Form->input('publishing_time', array(
+	                    'label' => false,
+	                    'div' => false,
+	                    'class' => 'col-xs-2',
+	                    'value' => date('g:i A', !empty($time) ? $time : time())
+	                )) ?>
+
+	                <span class="hidden date_ymd"><?= date('Y-m-d') ?></span>
+	                <span class="hidden time_gia"><?= date('g:i A') ?></span>
+
+	                <?php if (!empty($time)): ?>
+	                    <span class="hidden show_publish_time">1</span>
+	                <?php endif ?>
+
+	                <?= $this->Form->button('Submit', array(
+	                    'type' => 'submit',
+	                    'class' => 'btn btn-primary'
+	                )) ?>
+	            </div>
             </div>
 
             <?= $this->Form->hidden('id') ?>
+            <?= $this->Form->hidden('old_data') ?>
             <?= $this->Form->hidden('status', array('value' => $this->request->data['Article']['status'])) ?>
             <?= $this->Form->hidden('category_id', array('value' => $category_id)) ?>
 
-            <div class="publish_options">
+            <div class="publish_options col-lg-11 no-pad-l">
                 <?= $this->Form->button('Publish Now', array(
                     'type' => 'submit',
                     'class' => 'btn btn-primary'
@@ -169,14 +213,19 @@
                     'type' => 'submit',
                     'class' => 'btn btn-danger draft'
                 )) ?>
-                <?= $this->Form->button('<i class="icon-calendar"></i> Publish Later', array(
+                <?= $this->Form->button('<i class="fa fa-calendar"></i> Publish Later', array(
                     'class' => 'btn btn-success',
                     'type' => 'button',
                     'escape' => false
                 )) ?>
+                <?= $this->Form->button('Preview <i class="fa fa-picture-o"></i>', array(
+	                'type' => 'button',
+	                'escape' => false,
+	                'class' => 'btn btn-primary pull-right preview-modal'
+                )) ?>
             </div>
-
-        <?= $this->Form->end(); ?>
+	        <div class="clearfix"></div>
+        <?= $this->Form->end() ?>
     </div>
 
     <div class="tab-pane" id="relate">
@@ -187,16 +236,16 @@
                 Relate Articles
             </h2>
             <h4 class="pull-left">
-                <i class="icon icon-question-sign field-desc" data-content="Linking another article to this one will allow you to show its data on this Articles page. Ex. Halo 5 Game linking to your Halo 5 preview, you can then show Halo 5 Game Details on the preview page." data-title="Related Articles" data-placement="right"></i>
+                <i class="fa fa-question-circle field-desc" data-content="Linking another article to this one will allow you to show its data on this Articles page. Ex. Halo 5 Game linking to your Halo 5 preview, you can then show Halo 5 Game Details on the preview page." data-title="Related Articles" data-placement="right"></i>
             </h4>
             <div class="clearfix"></div>
 
-            <div class="pull-left" style="margin-bottom: 20px">
+            <div class="pull-left col-lg-8 no-pad-l" style="margin-bottom: 20px">
                 <?= $this->Form->input('category', array(
                     'id' => 'category',
                     'div' => false,
                     'label' => false,
-                    'class' => 'input-medium',
+                    'class' => 'col-xs-3',
                     'empty' => '- Category -',
                     'options' => $categories
                 )) ?>
@@ -216,7 +265,7 @@
                         <?php foreach($related_articles['all'] as $row): ?>
                             <div id="data-<?= $row['Article']['id'] ?>">
                                 <span class="label label-info">
-                                    <?= $row['Article']['title'] ?> (<?= $row['Category']['title'] ?>) <a href="#" class="icon-white icon-remove-sign"></a>
+                                    <?= $row['Article']['title'] ?> (<?= $row['Category']['title'] ?>) <a href="#" class="fa fa-times fa-white"></a>
                                 </span>
 
                                 <input type="hidden" id="RelatedData[]" class="related" name="RelatedData[]" value="<?= $row['Article']['id'] ?>">
@@ -227,6 +276,60 @@
             </div>
             <div class="clearfix"></div>
         <?= $this->Form->end() ?>
+    </div>
+    <div class="tab-pane well" id="revisions">
+		<h2>Revisions</h2>
+
+		<?php if (empty($this->request->data['ArticleRevision'])): ?>
+	        <p>There are no saved revisions for this article.</p>
+	    <?php else: ?>
+	        <table class="table">
+		        <thead>
+		            <th>Date</th>
+		            <th>Type</th>
+		            <th>By</th>
+		            <th>Most Recent?</th>
+		            <th></th>
+		        </thead>
+		        <tbody>
+		            <?php foreach($this->request->data['ArticleRevision'] as $revision): ?>
+						<tr>
+							<td><?php echo $this->Admin->time($revision['created']) ?></td>
+							<td><?php echo $revision_types[$revision['type']] ?></td>
+							<td>
+								<?php echo $this->Html->link($revision['User']['username'], array(
+										'controller' => 'users',
+										'action' => 'edit',
+										$revision['User']['id']
+									), array('target' => '_blank')
+								) ?>
+							</td>
+							<td>
+								<?php if ($revision['active'] == 1): ?>
+				                    <strong>Yes</strong>
+			                    <?php else: ?>
+				                    No
+				                <?php endif ?>
+							</td>
+							<td>
+								<?= $this->Html->link('Restore <i class="fa fa-undo"></i>', array(
+									$this->request->data['Article']['id'],
+									'#' => 'revisions',
+									'?' => array('restore_revision' => $revision['id'])
+								), array('escape' => false, 'class' => 'btn btn-info btn-confirm', 'data-new-title' => 'Are you sure you wish to restore this revision?')) ?>
+								<?= $this->Form->button('Preview <i class="fa fa-picture-o"></i>', array(
+									'type' => 'button',
+									'escape' => false,
+									'class' => 'btn btn-primary pull-right preview-modal',
+									'data-query' => 'revision-' . $revision['id']
+								)) ?>
+								<span class="hidden" id="revision-<?php echo $revision['id'] ?>"><?php echo htmlentities($revision['data']) ?></span>
+							</td>
+						</tr>
+					<?php endforeach ?>
+		        </tbody>
+	        </table>
+	    <?php endif ?>
     </div>
 
     <?php if (!empty($comments)): ?>
@@ -267,7 +370,7 @@
                                         'action' => 'edit',
                                         $comment['User']['id']
                                         ), array('target' => '_blank')
-                                ) ?>
+	                                ) ?>
                                 <?php else: ?>
                                     <span class="field-desc" data-content="
                                     IP: <?= $comment['Comment']['author_ip'] ?><br />
@@ -323,3 +426,5 @@
         </div>
     <?php endif ?>
 </div>
+
+<?= $this->Element('Articles/admin_preview') ?>

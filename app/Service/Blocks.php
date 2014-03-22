@@ -50,24 +50,35 @@ class Blocks
 						'Module'
 					)
 				));
-				$block_data['block'] = $data['Block'];
-				$block_data['block']['Module'] = $data['Module'];
-				$data = $block_data['block'];
+
+				if (!empty($data['Block']))
+					$block_data['block'] = $data['Block'];
+
+				if (!empty($data['Module']))
+					$block_data['block']['Module'] = $data['Module'];
+
+				if (!empty($block_data['block'])) {
+					$data = $block_data['block'];
+				} else {
+					$data = array();
+				}
 			} else {
 				$data = $block_lookup['block'];
 			}
 
 			$block_data = array();
 			$block_permissions = array();
-			if (!empty($data))
+			if (!empty($data['type']))
 			{
 				if (!empty($data['settings']))
 				{
 					$settings = json_decode($data['settings']);
 
-					foreach($settings as $key => $val)
-					{
-						$data[$key] = $val;
+					if (!empty($settings)) {
+						foreach($settings as $key => $val)
+						{
+							$data[$key] = $val;
+						}
 					}
 
 					unset($data['settings']);
@@ -75,9 +86,6 @@ class Blocks
 
 				if ($data['type'] == "dynamic")
 				{
-//					echo $data['Module']['id'] . '<br />';
-//					echo $this->getRole() . '!<br />';
-
 					if ($type == 'permissions') {
 						$permissions = $this->Block->Module->Permission->find('first', array(
 							'conditions' => array(

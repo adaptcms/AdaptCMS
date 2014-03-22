@@ -1,0 +1,40 @@
+<div>
+    <h2>Versions</h2>
+
+    <form ng-submit="saveProgress($event)">
+        <p></p>
+
+        <form>
+            <div class="input text clearfix">
+                <label>Add Version</label>
+                <div class="clearfix"></div>
+
+                <div class="field_options input-group col-lg-5">
+                    <input type="text" id="version" name="version" class="form-control form-control-inline">
+                    <button class="btn btn-info" ng-click="addVersion($event)">Add</button>
+                </div>
+            </div>
+            <div class="input text">
+                <label>Current Version</label>
+                <select name="current_version" ng-model="current_version" ng-change="updateCurrentVersion()" ng-options="obj for obj in getVersions('versions')"></select>
+            </div>
+        </form>
+
+        <h3>Versions</h3>
+
+        <ul class="list-unstyled versions">
+            <li ng-repeat="version in getVersions('versions')">
+                {{ version }}
+
+                <label ng-show="getVersions('current_version') == version" class="label label-info">Current</label>
+                <label ng-show="getVersions('versions').length > 1" class="label label-danger pointer" ng-click="removeVersion($event, version)"><i class="fa fa-white fa-trash-o"></i></label>
+            </li>
+        </ul>
+
+        <div class="input submit">
+            <button type="submit" ng-click="saveProgress($event)" class="btn btn-primary">Save <i class="fa fa-floppy-o"></i></button>
+            <a href="#" ng-click="prevStep($event)" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+            <a href="#" ng-click="nextStep($event)" class="btn btn-info">Continue <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </form>
+</div>

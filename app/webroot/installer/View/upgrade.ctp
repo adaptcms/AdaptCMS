@@ -7,7 +7,7 @@
 		<?php endif ?>
 
 		<?= $this->Form->hidden('upgrade') ?>
-	<?= $this->Form->end('Upgrade to ' . Inflector::humanize($version)) ?>
+	<?= $this->Form->end('Upgrade from ' . Inflector::humanize($version)) ?>
 <?php else: ?>
 	<div class="well">
 		<?php if (!empty($sql_results)): ?>

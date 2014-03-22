@@ -99,20 +99,14 @@ class Link extends LinksAppModel
     */
     public function beforeSave()
     {
-        if (!empty($this->data['File']) && !empty($this->data['Files']))
-        {
-            $this->data['File'] = array_merge($this->data['File'], $this->data['Files']);
-        } elseif (!empty($this->data['Files']))
-        {
-            $this->data['File'] = $this->data['Files'];
-        }
-
         if (!empty($this->data['File']))
         {
             foreach($this->data['File'] as $file)
             {
                 $this->data['Link']['file_id'] = $file;
             }
+        } else {
+	        $this->data['Link']['file_id'] = 0;
         }
 
         if (empty($this->data['Link']['link_title']) && !empty($this->data['Link']['title']))

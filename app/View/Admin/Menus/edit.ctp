@@ -19,7 +19,7 @@
         'options' => $separator_types
     )) ?>
 
-	<div class="pull-left" style="margin-bottom: 15px;">
+	<div class="pull-left col-lg-5 no-pad-l">
 		<h3>Add Menu Item</h3>
 
 		<legend>Custom Link</legend>
@@ -29,48 +29,65 @@
 			'label' => 'Website URL',
             'placeholder' => 'http://'
 		)) ?>
-		<?= $this->Form->input('url_text', array(
-			'class' => 'link-url-text',
-			'label' => 'Text to Display'
-		)) ?>
-		<?= $this->Form->button('Add Link', array(
-			'type' => 'button',
-			'class' => 'btn btn-info pull-right add-item link'
-		)) ?>
+		<div class="input-group col-lg-12 no-pad-l clearfix">
+			<?= $this->Form->label('url_text', 'Text to Display') ?>
+			<div class="clearfix"></div>
+			<?= $this->Form->input('url_text', array(
+				'class' => 'link-url-text form-control form-control-inline',
+				'label' => false,
+				'div' => false
+			)) ?>
+			<?= $this->Form->button('Add', array(
+				'type' => 'button',
+				'class' => 'btn btn-info add-item link'
+			)) ?>
+		</div>
 
 		<legend>Page</legend>
 
-		<?= $this->Form->input('page_id', array(
-			'class' => 'page-id',
-			'label' => 'Pick a Static Page',
-			'empty' => '- choose -'
-		)) ?>
-		<?= $this->Form->button('Add Page', array(
-			'type' => 'button',
-			'class' => 'btn btn-info pull-right add-item page'
-		)) ?>
+		<div class="input-group col-lg-12 no-pad-l clearfix">
+			<?= $this->Form->label('page_id', 'Pick a Static Page') ?>
+			<div class="clearfix"></div>
+
+			<?= $this->Form->input('page_id', array(
+				'class' => 'page-id form-control form-control-inline',
+				'label' => false,
+				'div' => false,
+				'empty' => '- choose -'
+			)) ?>
+			<?= $this->Form->button('Add', array(
+				'type' => 'button',
+				'class' => 'btn btn-info add-item page'
+			)) ?>
+		</div>
 
 		<legend>Category</legend>
 
-		<?= $this->Form->input('category_id', array(
-			'class' => 'category-id',
-			'label' => 'Pick a Category',
-			'empty' => '- choose -'
-		)) ?>
-		<?= $this->Form->button('Add Category', array(
-			'type' => 'button',
-			'class' => 'btn btn-info pull-right add-item category'
-		)) ?>
+		<div class="input-group col-lg-12 no-pad-l clearfix">
+			<?= $this->Form->label('category_id', 'Pick a Category') ?>
+			<div class="clearfix"></div>
+
+			<?= $this->Form->input('category_id', array(
+				'class' => 'category-id form-control form-control-inline',
+				'label' => false,
+				'div' => false,
+				'empty' => '- choose -'
+			)) ?>
+			<?= $this->Form->button('Add', array(
+				'type' => 'button',
+				'class' => 'btn btn-info add-item category'
+			)) ?>
+		</div>
 	</div>
-	<div class="pull-right span6">
+	<div class="pull-right col-lg-6 no-pad-l">
 		<h2>Menu Items</h2>
 
 		<div class="menu-items">
-			<ul id="sort-list" class="unstyled span6">
+			<ul id="sort-list" class="unstyled col-lg-6">
 				<?php if (!empty($this->request->data['Menu']['menu_items'])): ?>
 					<?php foreach($this->request->data['Menu']['menu_items'] as $key => $item): ?>
-						<li class="btn no-marg-left clearfix" id="<?= $key ?>">
-							<i class="icon icon-move"></i> 
+						<li class="btn btn-success no-marg-left clearfix" id="<?= $key ?>">
+							<i class="fa fa-arrows"></i>
 
 							<?= $item['text'] ?>
 
@@ -99,7 +116,7 @@
 								'class' => 'ord'
 							)) ?>
 
-							<i class="icon icon-trash remove-item"></i>
+							<i class="fa fa-trash-o remove-item"></i>
 						</li>
 					<?php endforeach ?>
 				<?php endif ?>

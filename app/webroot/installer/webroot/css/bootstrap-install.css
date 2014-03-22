@@ -2180,11 +2180,11 @@ table [class*=span],
   background-position: -24px 0;
 }
 
-.icon-search {
+.fa fa-search {
   background-position: -48px 0;
 }
 
-.icon-envelope {
+.fa fa-envelope {
   background-position: -72px 0;
 }
 
@@ -2200,7 +2200,7 @@ table [class*=span],
   background-position: -144px 0;
 }
 
-.icon-user {
+.fa fa-user {
   background-position: -168px 0;
 }
 
@@ -2224,7 +2224,7 @@ table [class*=span],
   background-position: -288px 0;
 }
 
-.icon-remove {
+.fa fa-times {
   background-position: -312px 0;
 }
 
@@ -2244,11 +2244,11 @@ table [class*=span],
   background-position: -408px 0;
 }
 
-.icon-cog {
+.fa fa-cog {
   background-position: -432px 0;
 }
 
-.icon-trash {
+.fa fa-trash {
   background-position: -456px 0;
 }
 
@@ -2268,7 +2268,7 @@ table [class*=span],
   background-position: -72px -24px;
 }
 
-.icon-download-alt {
+.fa fa-download {
   background-position: -96px -24px;
 }
 
@@ -2276,7 +2276,7 @@ table [class*=span],
   background-position: -120px -24px;
 }
 
-.icon-upload {
+.fa fa-upload {
   background-position: -144px -24px;
 }
 
@@ -2292,15 +2292,15 @@ table [class*=span],
   background-position: -216px -24px;
 }
 
-.icon-refresh {
+.fa fa-refresh {
   background-position: -240px -24px;
 }
 
-.icon-list-alt {
+.fa fa-list-alt {
   background-position: -264px -24px;
 }
 
-.icon-lock {
+.fa fa-lock {
   background-position: -287px -24px;
 }
 
@@ -2392,7 +2392,7 @@ table [class*=span],
   background-position: -336px -48px;
 }
 
-.icon-list {
+.fa fa-list {
   background-position: -360px -48px;
 }
 
@@ -2436,7 +2436,7 @@ table [class*=span],
   background-position: -120px -72px;
 }
 
-.icon-check {
+.fa fa-check {
   background-position: -144px -72px;
 }
 
@@ -2492,23 +2492,23 @@ table [class*=span],
   background-position: -456px -72px;
 }
 
-.icon-plus-sign {
+.fa fa-plus-sign {
   background-position: 0 -96px;
 }
 
-.icon-minus-sign {
+.fa fa-minus-sign {
   background-position: -24px -96px;
 }
 
-.icon-remove-sign {
+.fa fa-times-sign {
   background-position: -48px -96px;
 }
 
-.icon-ok-sign {
+.fa fa-check-circle {
   background-position: -72px -96px;
 }
 
-.icon-question-sign {
+.fa fa-question {
   background-position: -96px -96px;
 }
 
@@ -2520,7 +2520,7 @@ table [class*=span],
   background-position: -144px -96px;
 }
 
-.icon-remove-circle {
+.fa fa-times-circle {
   background-position: -168px -96px;
 }
 
@@ -2532,7 +2532,7 @@ table [class*=span],
   background-position: -216px -96px;
 }
 
-.icon-arrow-left {
+.fa fa-arrow-left {
   background-position: -240px -96px;
 }
 
@@ -2548,7 +2548,7 @@ table [class*=span],
   background-position: -312px -96px;
 }
 
-.icon-share-alt {
+.fa fa-undo {
   background-position: -336px -96px;
 }
 
@@ -2560,15 +2560,15 @@ table [class*=span],
   background-position: -384px -96px;
 }
 
-.icon-plus {
+.fa fa-plus {
   background-position: -408px -96px;
 }
 
-.icon-minus {
+.fa fa-minus {
   background-position: -433px -96px;
 }
 
-.icon-asterisk {
+.fa fa-asterisk {
   background-position: -456px -96px;
 }
 
@@ -2584,7 +2584,7 @@ table [class*=span],
   background-position: -48px -120px;
 }
 
-.icon-fire {
+.fa fa-fire {
   background-position: -72px -120px;
 }
 
@@ -2596,7 +2596,7 @@ table [class*=span],
   background-position: -120px -120px;
 }
 
-.icon-warning-sign {
+.fa fa-exclamation-triangle {
   background-position: -144px -120px;
 }
 
@@ -2604,7 +2604,7 @@ table [class*=span],
   background-position: -168px -120px;
 }
 
-.icon-calendar {
+.fa fa-calendar {
   background-position: -192px -120px;
 }
 
@@ -2641,7 +2641,7 @@ table [class*=span],
   background-position: -384px -120px;
 }
 
-.icon-folder-open {
+.fa fa-folder-open {
   width: 16px;
   background-position: -408px -120px;
 }
@@ -2710,7 +2710,7 @@ table [class*=span],
   background-position: -312px -144px;
 }
 
-.icon-globe {
+.fa fa-globe {
   background-position: -336px -144px;
 }
 

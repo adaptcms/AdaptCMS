@@ -3,6 +3,8 @@ App::uses('AppController', 'Controller');
 
 /**
  * Class ToolsController
+ *
+ * @property Plugin $Plugin
  */
 class ToolsController extends AppController
 {
@@ -17,6 +19,18 @@ class ToolsController extends AppController
 	public $uses = array();
 
 	public $disable_parsing = true;
+
+	/**
+	 * Before Filter
+	 *
+	 * @return null|void
+	 */
+	public function beforeFilter()
+	{
+		$this->Security->unlockedActions = array('admin_create_plugin', 'admin_create_theme');
+
+		parent::beforeFilter();
+	}
 
 	/**
 	* Our Admin Index is a listing to our tools, so no data passed to the view.
@@ -250,24 +264,10 @@ class ToolsController extends AppController
 					}
 				}
 
-				$field_types = array(
-					'file' => array(
-                        'slug' => 'file',
-                        'id' => 6
-                    ),
-					'select' => array(
-                        'slug' => 'dropdown',
-                        'id' => 4
-                    ),
-					'textfield' => array(
-                        'slug' => 'text',
-                        'id' => 1
-                    ),
-					'textarea' => array(
-                        'slug' => 'textarea',
-                        'id' => 11
-                    )
-				);
+				$field_types['file'] = $this->User->Field->FieldType->findBySlug('file');
+				$field_types['select'] = $this->User->Field->FieldType->findBySlug('dropdown');
+				$field_types['textfield'] = $this->User->Field->FieldType->findBySlug('text');
+				$field_types['textarea'] = $this->User->Field->FieldType->findBySlug('textarea');
 
 				$fields = $this->User->query('SELECT * FROM ' . $prefix . 'fields');
 
@@ -286,8 +286,8 @@ class ToolsController extends AppController
 							$data['Field']['created'] = $this->User->dateTime();
 							$data['Field']['title'] = $this->User->slug($field[$prefix . 'fields']['name']);
 							$data['Field']['category_id'] = $section_data[$field[$prefix . 'fields']['section']];
-							$data['Field']['field_type_id'] = $field_types[$field[$prefix . 'fields']['type']]['id'];
-							$data['Field']['field_type_slug'] = $field_types[$field[$prefix . 'fields']['type']]['slug'];
+							$data['Field']['field_type_id'] = $field_types[$field[$prefix . 'fields']['type']]['FieldType']['id'];
+							$data['Field']['field_type_slug'] = $field_types[$field[$prefix . 'fields']['type']]['FieldType']['slug'];
 							$data['Field']['description'] = $field[$prefix . 'fields']['description'];
 
 							if (!empty($field[$prefix . 'fields']['data']))
@@ -466,9 +466,11 @@ class ToolsController extends AppController
 	{
 		$this->loadModel('User');
 
+		$textarea = $this->User->Field->FieldType->findBySlug('textarea');
+
 		$content_fields = $this->User->Article->Category->Field->find('all', array(
 			'conditions' => array(
-				'Field.field_type' => 'textarea'
+				'Field.field_type_id' => $textarea['FieldType']['id']
 			),
 			'contain' => array(
 				'Category'
@@ -1001,8 +1003,8 @@ class ToolsController extends AppController
 				}
 
 				$field_types = array();
-				$textfield = $this->User->Field->FieldType->findByTitle('text');
-				$textarea = $this->User->Field->FieldType->findByTitle('textarea');
+				$textfield = $this->User->Field->FieldType->findBySlug('text');
+				$textarea = $this->User->Field->FieldType->findBySlug('textarea');
 
 				$field_types['textfield'] = $textfield['FieldType'];
 				$field_types['textarea'] = $textarea['FieldType'];
@@ -1333,5 +1335,149 @@ class ToolsController extends AppController
 
 		$this->set(compact('find', 'replace'));
 		$this->set('routes', Configure::read('current_routes'));
+	}
+
+	/**
+	 * Admin Feeds
+	 *
+	 * @return void
+	 */
+	public function admin_feeds()
+	{
+		$categories = $this->Permission->Role->User->Category->find('slugList');
+
+		$limits = array();
+		for($i = 0; $i <= 50; $i++) {
+			$limits[$i] = $i;
+		}
+
+		$this->set(compact('categories', 'limits'));
+	}
+
+	/**
+	 * Admin Create Plugin
+	 *
+	 * @return CakeResponse
+	 */
+	public function admin_create_plugin()
+	{
+		$this->disable_parsing = true;
+		$path = CACHE . 'persistent' . DS . 'create_plugin_' . $this->Auth->user('id') . '.tmp';
+
+		if ($this->request->is('post')) {
+			$this->layout = false;
+
+			$data = file_get_contents("php://input");
+			$status = true;
+			$msg = 'true';
+
+			if (empty($this->request->query['finish'])) {
+				file_put_contents($path, $data);
+			} else {
+				$this->loadModel('Plugin');
+
+				$data = json_decode($data, true);
+
+				$active_plugins = $this->Plugin->getPlugins( $this->Plugin->getActivePath() );
+				$inactive_plugins = $this->Plugin->getPlugins( $this->Plugin->getInactivePath() );
+
+				$active_plugins = array_keys($active_plugins['plugins']);
+				$inactive_plugins = array_keys($inactive_plugins['plugins']);
+
+				if (in_array($data['basicInfo']['name'], $active_plugins)) {
+					$msg = 'This name is already used by an existing installed plugin. Please choose a different name.';
+					$status = false;
+				} elseif (in_array($data['basicInfo']['name'], $inactive_plugins)) {
+					$msg = 'This name is already used by an existing inactive plugin. Please choose a different name.';
+					$status = false;
+				}
+
+				if ($status) {
+					$url = Configure::read('Component.Api.api_url') . 'v1/plugins?limit=999';
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$response = json_decode(curl_exec($ch), true);
+					curl_close($ch);
+
+					if (in_array($data['basicInfo']['name'], Set::extract('{n}.title', $response['data']))) {
+						$msg = 'This name is already used by a plugin on the official website. Please choose a different name.';
+						$status = false;
+					}
+				}
+
+				if ($status) {
+					$this->Plugin->createPlugin($data);
+
+					$msg = 'Your plugin has been created and set to inactive.';
+					$this->Session->setFlash($msg, 'success');
+				}
+			}
+
+			return $this->_ajaxResponse(array('body' => $msg), array(), 'json', $status);
+		}
+	}
+
+	/**
+	 * Admin Create Theme
+	 *
+	 * @return CakeResponse
+	 */
+	public function admin_create_theme()
+	{
+		$this->disable_parsing = true;
+		$path = CACHE . 'persistent' . DS . 'create_theme_' . $this->Auth->user('id') . '.tmp';
+
+		if ($this->request->is('post')) {
+			$this->layout = false;
+
+			$data = file_get_contents("php://input");
+			$status = true;
+			$msg = 'true';
+
+			if (empty($this->request->query['finish'])) {
+				file_put_contents($path, $data);
+			} else {
+				$this->loadModel('Theme');
+
+				$data = json_decode($data, true);
+
+				$active_themes = $this->Theme->getThemes( $this->Theme->getActivePath() );
+				$inactive_themes = $this->Theme->getThemes( $this->Theme->getInactivePath() );
+
+				$active_themes = array_keys($active_themes['themes']);
+				$inactive_themes = array_keys($inactive_themes['themes']);
+
+				if (in_array($data['basicInfo']['name'], $active_themes)) {
+					$msg = 'This name is already used by an existing installed theme. Please choose a different name.';
+					$status = false;
+				} elseif (in_array($data['basicInfo']['name'], $inactive_themes)) {
+					$msg = 'This name is already used by an existing inactive theme. Please choose a different name.';
+					$status = false;
+				}
+
+				if ($status) {
+					$url = Configure::read('Component.Api.api_url') . 'v1/themes?limit=999';
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $url);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$response = json_decode(curl_exec($ch), true);
+					curl_close($ch);
+
+					if (in_array($data['basicInfo']['name'], Set::extract('{n}.title', $response['data']))) {
+						$msg = 'This name is already used by a theme on the official website. Please choose a different name.';
+						$status = false;
+					}
+				}
+
+				if ($status) {
+					$msg = $this->Theme->createTheme($data);
+
+					$this->Session->setFlash('Your theme has been created and set to inactive.', 'success');
+				}
+			}
+
+			return $this->_ajaxResponse(array('body' => $msg), array(), 'json', $status);
+		}
 	}
 }

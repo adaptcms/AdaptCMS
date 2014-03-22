@@ -11,7 +11,7 @@
 
 <div class="btn-toolbar pull-right" style="margin-bottom:10px">
     <div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown">
+        <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             Filter by Role
             <span class="caret"></span>
         </a>
@@ -26,7 +26,7 @@
         </ul>
     </div>
     <div class="btn-group">
-        <a class="btn dropdown-toggle" data-toggle="dropdown">
+        <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             Filter by Status
             <span class="caret"></span>
         </a>
@@ -44,19 +44,19 @@
         </ul>
     </div>
     <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-        View <i class="icon-picture"></i>
+            <a class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+        View <i class="fa fa-picture-o"></i>
         <span class="caret"></span>
       </a>
       <ul class="dropdown-menu view">
         <li>
-            <?= $this->Html->link('<i class="icon-ok"></i> Active', array(
+            <?= $this->Html->link('<i class="fa fa-check"></i> Active', array(
                 'admin' => true, 
                 'action' => 'index'
             ), array('escape' => false)) ?>
         </li>
         <li>
-            <?= $this->Html->link('<i class="icon-trash"></i> Trash', array(
+            <?= $this->Html->link('<i class="fa fa-trash-o"></i> Trash', array(
                 'admin' => true, 
                 'action' => 'index', 
                 'trash' => 1
@@ -64,123 +64,125 @@
         </li>
       </ul>
     </div>
+	<div class="btn-group">
+		<?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_add'])): ?>
+			<?= $this->Html->link('Add User <i class="fa fa-plus"></i>', array('action' => 'add'), array(
+				'class' => 'btn btn-info ',
+				'escape' => false
+			)) ?>
+		<?php endif ?>
+	</div>
 </div>
+
 <div class="clearfix"></div>
 
-<?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_add'])): ?>
-    <?= $this->Html->link('Add User <i class="icon icon-plus icon-white"></i>', array('action' => 'add'), array(
-        'class' => 'btn btn-info pull-right', 
-        'style' => 'margin-bottom:10px',
-        'escape' => false
-    )) ?>
-<?php endif ?>
-
 <?php if (empty($this->request->data)): ?>
-    <div class="clearfix"></div>
     <div class="well">
         No Items Found
     </div>
 <?php else: ?>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><?= $this->Paginator->sort('username') ?></th>
-                <th class="hidden-phone"><?= $this->Paginator->sort('status') ?></th>
-                <th class="hidden-phone"><?= $this->Paginator->sort('email', 'E-Mail') ?></th>
-                <th><?= $this->Paginator->sort('Role.title', 'Role') ?></th>
-                <th class="hidden-phone"><?= $this->Paginator->sort('created') ?></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($this->request->data as $data): ?>
-                <tr>
-                    <td>
-                        <?php if (empty($this->request->named['trash']) && $this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
-                            <?= $this->Html->link(
-                                    $data['User']['username'], array(
-                                        'admin' => false,
-                                        'action' => 'profile',
-                                        $data['User']['username']
-                                    )
-                            ) ?>
-                        <?php else: ?>
-                            <?= $data['User']['username'] ?>
-                        <?php endif ?>
-                    </td>
-                    <td class="hidden-phone" style="text-align: center">
-                        <?php if ($data['User']['status'] == 0): ?>
-                            <i class="icon-remove-sign user-status" data-id="<?= $data['User']['id'] ?>" title="Click to activate User" alt="Click to activate User"></i>
-                        <?php else: ?>
-	                        <i class="icon-ok-sign user-status" data-id="<?= $data['User']['id'] ?>" title="Click to de-activate User" alt="Click to de-activate User"></i>
-                        <?php endif ?>
-                    </td>
-                    <td class="hidden-phone">
-                        <?= $data['User']['email'] ?>
-                    </td>
-                    <td>
-                        <?= $data['Role']['title'] ?>
-                    </td>
-                    <td class="hidden-phone">
-                        <?= $this->Admin->time($data['User']['created']) ?>
-                    </td>
-                    <td>
-                        <div class="btn-group">
-                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-                                Actions
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <?php if (empty($this->request->named['trash'])): ?>
-	                                <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
-		                                <li>
-			                                <?= $this->Admin->view(
-				                                $data['User']['username'],
-				                                'profile'
-			                                ) ?>
-		                                </li>
+	<div class="table-responsive">
+	    <table class="table table-striped">
+	        <thead>
+	            <tr>
+	                <th><?= $this->Paginator->sort('username') ?></th>
+	                <th class="hidden-xs"><?= $this->Paginator->sort('status') ?></th>
+	                <th class="hidden-xs"><?= $this->Paginator->sort('email', 'E-Mail') ?></th>
+	                <th><?= $this->Paginator->sort('Role.title', 'Role') ?></th>
+	                <th class="hidden-xs"><?= $this->Paginator->sort('created') ?></th>
+	                <th></th>
+	            </tr>
+	        </thead>
+	        <tbody>
+	            <?php foreach ($this->request->data as $data): ?>
+	                <tr>
+	                    <td>
+	                        <?php if (empty($this->request->named['trash']) && $this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
+	                            <?= $this->Html->link(
+	                                    $data['User']['username'], array(
+	                                        'admin' => false,
+	                                        'action' => 'profile',
+	                                        $data['User']['username']
+	                                    )
+	                            ) ?>
+	                        <?php else: ?>
+	                            <?= $data['User']['username'] ?>
+	                        <?php endif ?>
+	                    </td>
+	                    <td class="hidden-xs" style="text-align: center">
+	                        <?php if ($data['User']['status'] == 0): ?>
+	                            <i class="fa fa-times-circle user-status" data-id="<?= $data['User']['id'] ?>" title="Click to activate User" alt="Click to activate User"></i>
+	                        <?php else: ?>
+		                        <i class="fa fa-check-circle user-status" data-id="<?= $data['User']['id'] ?>" title="Click to de-activate User" alt="Click to de-activate User"></i>
+	                        <?php endif ?>
+	                    </td>
+	                    <td class="hidden-xs">
+	                        <?= $data['User']['email'] ?>
+	                    </td>
+	                    <td>
+	                        <?= $data['Role']['title'] ?>
+	                    </td>
+	                    <td class="hidden-xs">
+	                        <?= $this->Admin->time($data['User']['created']) ?>
+	                    </td>
+	                    <td>
+	                        <div class="btn-group">
+	                            <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
+	                                Actions
+	                                <span class="caret"></span>
+	                            </a>
+	                            <ul class="dropdown-menu">
+	                                <?php if (empty($this->request->named['trash'])): ?>
+		                                <?php if ($this->Admin->hasPermission($permissions['related']['users']['profile'], $data['User']['id'])): ?>
+			                                <li>
+				                                <?= $this->Admin->view(
+					                                $data['User']['username'],
+					                                'profile'
+				                                ) ?>
+			                                </li>
+		                                <?php endif ?>
+	                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_edit'], $data['User']['id'])): ?>
+	                                        <li>
+	                                            <?= $this->Admin->edit(
+	                                                $data['User']['id']
+	                                            ) ?>
+	                                        </li>
+	                                    <?php endif ?>
+	                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_delete'], $data['User']['id'])): ?>
+	                                        <li>
+	                                            <?= $this->Admin->remove(
+	                                                $data['User']['id'],
+	                                                $data['User']['username']
+	                                            ) ?>
+	                                        </li>
+	                                    <?php endif ?>
+	                                <?php else: ?>
+	                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_restore'], $data['User']['id'])): ?>
+	                                        <li>
+	                                            <?= $this->Admin->restore(
+	                                                $data['User']['id'],
+	                                                $data['User']['username']
+	                                            ) ?>
+	                                        </li>
+	                                    <?php endif ?>
+	                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_delete'], $data['User']['id'])): ?>
+	                                        <li>
+	                                            <?= $this->Admin->remove(
+	                                                $data['User']['id'],
+	                                                $data['User']['username'],
+	                                                true
+	                                            ) ?>
+	                                        </li>
+	                                    <?php endif ?>
 	                                <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_edit'], $data['User']['id'])): ?>
-                                        <li>
-                                            <?= $this->Admin->edit(
-                                                $data['User']['id']
-                                            ) ?>
-                                        </li>
-                                    <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_delete'], $data['User']['id'])): ?>
-                                        <li>
-                                            <?= $this->Admin->remove(
-                                                $data['User']['id'],
-                                                $data['User']['username']
-                                            ) ?>
-                                        </li>
-                                    <?php endif ?>
-                                <?php else: ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_restore'], $data['User']['id'])): ?>
-                                        <li>
-                                            <?= $this->Admin->restore(
-                                                $data['User']['id'],
-                                                $data['User']['username']
-                                            ) ?>
-                                        </li>
-                                    <?php endif ?>
-                                    <?php if ($this->Admin->hasPermission($permissions['related']['users']['admin_delete'], $data['User']['id'])): ?>
-                                        <li>
-                                            <?= $this->Admin->remove(
-                                                $data['User']['id'],
-                                                $data['User']['username'],
-                                                true
-                                            ) ?>
-                                        </li>
-                                    <?php endif ?>
-                                <?php endif ?>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            <?php endforeach ?>
-        </tbody>
-    </table>
+	                            </ul>
+	                        </div>
+	                    </td>
+	                </tr>
+	            <?php endforeach ?>
+	        </tbody>
+	    </table>
+	</div>
 <?php endif ?>
 
 <?= $this->element('admin_pagination') ?>

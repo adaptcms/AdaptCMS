@@ -32,6 +32,7 @@ $(document).ready(function(){
     		$("#BlockAdminAddForm").reset();
     		$("#BlockData option").remove();
     	} else {
+            $('#next-step .dynamic,#next-step .name').show();
     		get_model_data();
     	}
     });
@@ -80,8 +81,12 @@ $(document).ready(function(){
         var val = $(this).val();
 
         if (val == 'dynamic') {
-            $("#next-step .code-block,#next-step .text-block").hide();
-            $("#dynamic,#next-step .dynamic").show();
+            $("#next-step .code-block,#next-step .text-block,#next-step .name").hide();
+            $("#dynamic").show();
+
+            if ($('#BlockModel').val()) {
+                $("#next-step .dynamic,#next-step .name").show();
+            }
 
             $("#BlockCode,#BlockText").removeClass('required');
             $("#BlockModel").addClass('required');

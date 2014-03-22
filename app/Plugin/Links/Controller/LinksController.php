@@ -41,6 +41,8 @@ class LinksController extends LinksAppController
 			$image_path = WWW_ROOT;
 
 			$this->set(compact('images', 'image_path'));
+
+			$this->disable_parsing = true;
 		}
 
 		$this->permissions = $this->getPermissions();
@@ -237,11 +239,7 @@ class LinksController extends LinksAppController
 
             if (!empty($captcha))
             {
-                include_once(APP . 'webroot/libraries/captcha/securimage.php');
-                $securimage = new Securimage();
-
-                if (!empty($securimage) &&
-                    !$securimage->check($this->request->data['captcha']))
+                if (!$this->request->data('captcha') || !$this->checkCaptcha($this->request->data['captcha']))
                 {
                     $this->Session->setFlash('Incorrect captcha entred.', 'error');
                     $error = true;

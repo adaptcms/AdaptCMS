@@ -1,0 +1,25 @@
+<div>
+    <h2>Startup Files</h2>
+
+    <form ng-submit="saveProgress($event)">
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="Selecting this option, we will setup a skeleton layout based off of the Sample theme to help you get started." data-title="Layout"></i>
+                Layout
+            </label>
+            <input type="checkbox" name="layout" ng-model="skeleton.layout" ng-change="setSkeleton('layout')" ng-checked="getSkeleton('layout') == true">
+        </div>
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="Selecting to create views, like the layout option, we will setup some skeleton templates that are slightly different from the default theme." data-title="Views"></i>
+                Views
+            </label>
+            <input type="checkbox" name="views" ng-model="skeleton.views" ng-change="setSkeleton('views')" ng-checked="getSkeleton('views') == true">
+        </div>
+        <div class="input submit">
+            <button type="submit" ng-click="saveProgress($event)" class="btn btn-primary">Save <i class="fa fa-floppy-o"></i></button>
+            <a href="#" ng-click="prevStep($event)" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+            <a href="#" ng-click="nextStep($event)" class="btn btn-info">Continue <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </form>
+</div>

@@ -19,7 +19,6 @@ $(document).ready(function() {
 
             $.post($("#webroot").text() + "ajax/comments/post/", fields_data, function(response) {
                 var data = $.parseJSON(response.data);
-                console.log(data);
 
                 $.unblockUI();
 

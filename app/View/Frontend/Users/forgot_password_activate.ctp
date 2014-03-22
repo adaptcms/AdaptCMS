@@ -32,9 +32,19 @@
         'class' => 'required'
     )) }}
 
+	{% if not empty(security['question']) %}
+		<legend>Security Question</legend>
+
+		{{ form.input('security_answer', array(
+		'class' => 'required security-answer',
+		'label' => $security['question']
+		)) }}
+		{{ form.hidden('security_question', array('value' => $security['question_key'])) }}
+	{% endif %}
+
     <label>Captcha</label>
 
     <div id="captcha">
         {{ captcha.form('data[User][captcha]') }}
     </div>
-{{ form.end('Submit') }}
+{{ form.end(array('label' => 'Submit', 'class' => 'btn btn-primary')) }}

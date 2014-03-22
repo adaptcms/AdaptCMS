@@ -153,9 +153,9 @@ class ApiHelper extends AppHelper
     {
         $cache_file = CACHE . DS.  'persistent' . DS . 'version-check.tmp';
         $icon = array(
-            1 => ADAPTCMS_VERSION . " <i class='icon icon-ok' title='Your version is current'></i>",
-            0 => ADAPTCMS_VERSION . " <a href='http://www.adaptcms.com/update' target='_new'> <i class='icon icon-ban-circle' title='You need to upgrade, click for details.'></i></a>",
-            'error' => ADAPTCMS_VERSION . " <i class='icon icon-question-sign' title='Could not connect to server'></i>"
+            1 => ADAPTCMS_VERSION . " <i class='fa fa-check' title='Your version is current'></i>",
+            0 => ADAPTCMS_VERSION . " <a href='http://www.adaptcms.com/update' target='_new'> <i class='fa fa-ban' title='You need to upgrade, click for details.'></i></a>",
+            'error' => ADAPTCMS_VERSION . " <i class='fa fa-question' title='Could not connect to server'></i>"
         );
 
         if (file_exists($cache_file))

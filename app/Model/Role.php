@@ -3,6 +3,7 @@
  * Class Role
  *
  * @property Permission $Permission
+ * @property User $User
  */
 class Role extends AppModel
 {

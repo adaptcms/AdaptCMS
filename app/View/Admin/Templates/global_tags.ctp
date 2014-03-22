@@ -14,45 +14,56 @@
 		Keep in mind, to call a template tag - {{ tag_name }}
 	</p>
 
-	<h4>Current Tags</h4>
+	<?= $this->Form->create('', array('ng-controller' => 'FormCtrl', 'ng-submit' => 'updateTags($event)')) ?>
+		<h4 class="pull-left">Current Tags</h4>
 
-	<?= $this->Form->create('', array('ng-controller' => 'FormCtrl')) ?>
-		<?= $this->Form->button('<i class="icon-plus"></i> Add Tag', array(
-			'escape' => false,
-			'class' => 'btn btn-info pull-right',
-			'ng-click' => 'addTag($event)'
-		)) ?>
+		<div class="btn-group pull-right">
+			<?= $this->Form->button('Update <i class="fa fa-save"></i>', array(
+				'class' => 'btn btn-primary',
+				'div' => false,
+				'ng-click' => 'updateTags($event)',
+				'ng-hide' => "tags == ''"
+			)) ?>
+			<?= $this->Form->button('Add Tag <i class="fa fa-plus"></i>', array(
+				'escape' => false,
+				'class' => 'btn btn-info',
+				'ng-click' => 'addTag($event)'
+			)) ?>
+		</div>
+		<div class="clearfix"></div>
 
-		<table class="table" ng-hide="tags == ''">
-			<thead>
-				<th></th>
-				<th></th>
-				<th></th>
-			</thead>
-			<tbody>
-				<tr ng-repeat="tag in tags" ng-hide="tag.enabled == false">
-					<td>
-						<label>Tag Name</label>
-						<input type="text" name="tags[$index][tag]" ng-model="tags[$index].tag">
-					</td>
-					<td>
-						<label>Value</label>
-						<textarea name="tags[$index][value]" ng-model="tags[$index].value" class="span10 col-lg-10" rows="8"></textarea>
-					</td>
-					<td>
-						<?= $this->Form->button('<i class="icon-trash"></i> Remove Tag', array(
-							'escape' => false,
-							'class' => 'btn btn-danger',
-							'ng-click' => 'removeTag($event, $index)'
-						)) ?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="table-responsive">
+			<table class="table" ng-hide="tags == ''">
+				<thead>
+					<th></th>
+					<th></th>
+					<th></th>
+				</thead>
+				<tbody>
+					<tr ng-repeat="tag in tags" ng-hide="tag.enabled == false">
+						<td>
+							<label>Tag Name</label>
+							<input type="text" class="form-control" name="tags[$index][tag]" ng-model="tags[$index].tag">
+						</td>
+						<td>
+							<label>Value</label>
+							<textarea name="tags[$index][value]" ng-model="tags[$index].value" class="col-lg-10 form-control" rows="8"></textarea>
+						</td>
+						<td>
+							<?= $this->Form->button('<i class="fa fa-trash-o"></i> Remove Tag', array(
+								'escape' => false,
+								'class' => 'btn btn-danger pull-right',
+								'ng-click' => 'removeTag($event, $index)'
+							)) ?>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 		<div ng-show="tags == ''">
 			No Tags are Currently added
 		</div>
-		<?= $this->Form->button('Update', array(
+		<?= $this->Form->button('Update <i class="fa fa-save"></i>', array(
 			'class' => 'btn btn-primary',
 			'div' => false,
 			'ng-click' => 'updateTags($event)',

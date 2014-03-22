@@ -6,6 +6,45 @@
 <div class="well">
 	<div class="span7">
 		<h4>
+			<?= $this->Html->link('Create a Plugin', array(
+				'action' => 'create_plugin'
+			)) ?> <span class="badge badge-important">NEW IN 3.0.3</span>
+		</h4>
+
+		<p>
+			With this interactive page, you can easily create a plugin and configure it without having to leave the admin panel. Skeleton files are provided to help getting started quick and easy.
+		</p>
+	</div>
+	<div class="clearfix"></div>
+
+	<div class="span7 no-marg-left">
+		<h4>
+			<?= $this->Html->link('Create a Theme', array(
+				'action' => 'create_theme'
+			)) ?> <span class="badge badge-important">NEW IN 3.0.3</span>
+		</h4>
+
+		<p>
+			With this interactive page, you can easily create a theme and configure it without having to leave the admin panel. A base theme is provided by default, to help getting started quick and easy.
+		</p>
+	</div>
+	<div class="clearfix"></div>
+
+	<div class="span7 no-marg-left">
+		<h4>
+			<?= $this->Html->link('Feeds', array(
+				'action' => 'feeds'
+			)) ?> <span class="badge badge-important">NEW IN 3.0.3</span>
+		</h4>
+
+		<p>
+			You can see a list of RSS feeds by category on this page.
+		</p>
+	</div>
+	<div class="clearfix"></div>
+
+	<div class="span7 no-marg-left">
+		<h4>
 			<?= $this->Html->link('Routes List', array(
 				'action' => 'routes_list'
 			)) ?>
@@ -79,7 +118,7 @@
 			<li>
 				<?= $this->Html->link('OneCMS 2.6.4', array(
 					'action' => 'convert_onecms'
-				)) ?> <span class="badge badge-important">NEW</span>
+				)) ?>
 			</li>
 		</ul>
 	</div>

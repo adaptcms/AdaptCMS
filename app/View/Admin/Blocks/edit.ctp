@@ -10,12 +10,12 @@
 
 <div class="pull-right admin-edit-options">
     <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
+        '<i class="fa fa-chevron-left"></i> Return to Index',
         array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
+        array('class' => 'btn btn-info', 'escape' => false
     )) ?>
     <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
+        '<i class="fa fa-trash-o"></i> Delete',
         array('action' => 'delete', $this->request->data['Block']['id'], $this->request->data['Block']['title']),
         array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this block?')"));
     ?>
@@ -51,11 +51,13 @@
         )) ?>
     </div>
 
-<div id="next-step">
-    <?= $this->Form->input('title', array(
-        'label' => 'Name of Block',
-        'class' => 'required'
-    )) ?>
+	<div id="next-step">
+	<div class="name">
+	    <?= $this->Form->input('title', array(
+	        'label' => 'Name of Block',
+	        'class' => 'required'
+	    )) ?>
+	</div>
 
     <div class="dynamic">
 	    <?= $this->Form->hidden('order_by_hide', array('value' => (!empty($this->request->data['Block']['order_by']) ? $this->request->data['Block']['order_by'] : '') )) ?>

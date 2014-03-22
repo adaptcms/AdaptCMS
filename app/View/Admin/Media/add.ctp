@@ -2,7 +2,10 @@
 <?php $this->Html->addCrumb('Media Libraries', array('action' => 'index')) ?>
 <?php $this->Html->addCrumb('Add Library', null) ?>
 
-<?= $this->Form->create('Media', array('class' => 'well admin-validate')) ?>
+<?php $this->AdaptHtml->script('vendor/angular.min') ?>
+<?php $this->AdaptHtml->script('media_modal') ?>
+
+<?= $this->Form->create('Media', array('class' => 'well admin-validate', 'ng-app' => 'images')) ?>
 	<h2>Add Media Library</h2>
 
 	<?= $this->Form->input('title', array(
@@ -10,18 +13,18 @@
 		'class' => 'required'
 	)) ?>
 
-	<?= $this->Html->link('Attach Images <i class="icon icon-white icon-upload"></i>', '#media-modal', array(
-		'class' => 'btn btn-primary', 
-		'escape' => false, 
-		'data-toggle' => 'modal'
-	)) ?>
+	<div  ng-controller="ImageModalCtrl">
+		<?= stripslashes($this->Html->link('Attach Images <i class="fa fa-upload"></i>', '#', array(
+			'class' => 'btn btn-primary',
+			'escape' => false,
+			'ng-click' => 'toggleModal($event, \'open\', \'primary\')'
+		))) ?>
 
-	<ul class="selected-images span12 thumbnails"></ul>
-	<div class="clearfix"></div>
+		<?= $this->element('media_modal', array('disable_parsing' => true)) ?>
+		<?= $this->element('media_modal_image', array('disable_parsing' => true)) ?>
+	</div>
 	
 <?= $this->Form->end(array(
 	'label' => 'Submit',
 	'class' => 'btn btn-primary'
 )) ?>
-
-<?= $this->element('media_modal') ?>

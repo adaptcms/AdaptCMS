@@ -11,18 +11,14 @@
 	<!--[if lt IE 9]>
 	<?= $this->Html->script('html5.min.js') ?>
 	<![endif]-->
-	<!--[if IE 7]>
-	<?= $this->Html->css("font-awesome-ie7.min.css") ?>
-	<![endif]-->
 
-	<?= $this->Html->meta('favicon.ico', $this->webroot . 'img/favicon.ico', array('type' => 'icon')) ?>
+	<?= $this->Html->meta('favicon.ico', '/img/favicon.ico', array('type' => 'icon')) ?>
 	<link rel="apple-touch-icon" href="<?= $this->webroot ?>img/apple-touch-icon.png" />
 
 	<?php echo $this->Html->script("jquery.min") ?>
 	<?php echo $this->Html->script("jquery.validate.min") ?>
 	<?php echo $this->Html->script("bootstrap.min") ?>
-	<?= $this->Html->script("vendor/noty/jquery.noty.js") ?>
-	<?= $this->Html->script("vendor/noty/layouts/bottomRight.js") ?>
+	<?= $this->Html->script("vendor/noty/jquery.noty.packaged.min.js") ?>
 	<?= $this->Html->script("vendor/noty/themes/default.js") ?>
 	<?php echo $this->Html->script("global") ?>
 
@@ -33,34 +29,55 @@
 	<?php echo $this->AutoLoadJS->getJs() ?>
 	<?php echo $this->AutoLoadJS->getCss() ?>
 
-	<?= $this->Html->css("bootstrap-admin") ?>
-	<?= $this->Html->css("bootstrap-responsive.min.css") ?>
-	<?= $this->Html->css("font-awesome.min.css") ?>
+	<?= $this->Html->css("bootstrap-admin.min") ?>
+	<?= $this->Html->css("bootstrap-responsive.min") ?>
+	<?= $this->Html->css("font-awesome.min") ?>
+
+	<div class="hidden">{{ headers }}</div>
 </head>
 
 <body>
 
-<div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container-fluid">
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<div class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
-			</a>
-			<a class="brand" href="#">AdaptCMS</a>
-
-			<div class="btn-group pull-right">
-				<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="icon-user"></i> <?= $username ?>
+			</button>
+			<a class="navbar-brand" href="#">AdaptCMS</a>
+		</div>
+		<div class="navbar-collapse collapse navbar-responsive-collapse">
+			<ul class="nav navbar-nav">
+				<li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
+				<li><a href="<?= $this->webroot ?>admin">Admin</a></li>
+				<li>
+					<?=
+					$this->Html->link('Documentation', Configure::read('Component.Api.adaptcms_docs_url'), array(
+						'target' => '_blank'
+					)) ?>
+				</li>
+				<li>
+					<?=
+					$this->Html->link('Help', Configure::read('Component.Api.adaptcms_url') . 'support', array(
+							'target' => '_blank'
+						)) ?>
+				</li>
+			</ul>
+			<div class="nav navbar-nav btn-group pull-right">
+				<?php echo $this->fetch('admin_header_top_right') ?>
+				<a class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="fa fa-user"></i> <?= $username ?>
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
 					<li>
 						<?=
-						$this->Html->link('<i class="icon-user"></i> Profile',
+						$this->Html->link('<i class="fa fa-user"></i> Profile',
 							array(
 								'admin' => false,
+								'plugin' => false,
 								'controller' => 'users',
 								'action' => 'profile',
 								$username
@@ -69,31 +86,13 @@
 					</li>
 					<li class="divider"></li>
 					<li><?=
-						$this->Html->link('<i class="icon-signout"></i> Sign Out', array(
-								'controller' => 'Users',
-								'action' => 'logout',
+						$this->Html->link('<i class="fa fa-sign-out"></i> Sign Out', array(
 								'plugin' => false,
-								'admin' => false
+								'admin' => false,
+								'controller' => 'users',
+								'action' => 'logout'
 							), array('escape' => false)
 						) ?></li>
-				</ul>
-			</div>
-			<div class="nav-collapse">
-				<ul class="nav">
-					<li class="active"><a href="<?= $this->webroot ?>">Home</a></li>
-					<li><a href="<?= $this->webroot ?>admin">Admin</a></li>
-					<li>
-						<?=
-						$this->Html->link('Documentation', Configure::read('Component.Api.adaptcms_docs_url'), array(
-							'target' => '_blank'
-						)) ?>
-					</li>
-					<li>
-						<?=
-						$this->Html->link('Help', Configure::read('Component.Api.adaptcms_url') . 'support', array(
-							'target' => '_blank'
-						)) ?>
-					</li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
@@ -103,7 +102,7 @@
 
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span3">
+		<div class="col-lg-3 left-menu">
 			<div class="well sidebar-nav" style="padding:0">
 				<div class="panel-group" id="admin-sidebar-accordion">
 					<div class="panel">
@@ -111,7 +110,7 @@
 							<a class="accordion-toggle" data-toggle="collapse"
 							   data-parent="#admin-sidebar-accordion" href="#content">
 								<h3 class="success panel-title">
-									<i class="icon-pencil icon-large"></i> Content
+									<i class="fa fa-pencil fa-lg"></i> Content
 								</h3>
 							</a>
 						</div>
@@ -134,7 +133,7 @@
 							<a class="accordion-toggle" data-toggle="collapse"
 							   data-parent="#admin-sidebar-accordion" href="#users">
 								<h3 class="primary">
-									<i class="icon-group icon-large"></i> Users
+									<i class="fa fa-group fa-lg"></i> Users
 								</h3>
 							</a>
 						</div>
@@ -151,7 +150,7 @@
 							<a class="accordion-toggle" data-toggle="collapse"
 							   data-parent="#admin-sidebar-accordion" href="#media">
 								<h3 class="warning">
-									<i class="icon-picture icon-large"></i> Media
+									<i class="fa fa-picture-o fa-lg"></i> Media
 								</h3>
 							</a>
 						</div>
@@ -168,7 +167,7 @@
 							<a class="accordion-toggle" data-toggle="collapse"
 							   data-parent="#admin-sidebar-accordion" href="#system">
 								<h3 class="inverse">
-									<i class="icon-cogs icon-large"></i> System
+									<i class="fa fa-cogs fa-lg"></i> System
 								</h3>
 							</a>
 						</div>
@@ -176,6 +175,7 @@
 						<div id="system" class="panel-collapse collapse<?= (in_array($this->params->controller, $options) ? ' in' : '') ?>">
 							<ul class="nav nav-list panel-body">
 								<li><?= $this->Html->link('Appearance', array('admin' => true, 'plugin' => false, 'controller' => 'templates', 'action' => 'index')) ?></li>
+								<li><?= $this->Html->link('Create a Theme', array('admin' => true, 'plugin' => false, 'controller' => 'tools', 'action' => 'create_theme')) ?></li>
 								<li><?= $this->Html->link('Global Template Tags', array('admin' => true, 'plugin' => false, 'controller' => 'templates', 'action' => 'global_tags')) ?></li>
 								<li><?= $this->Html->link('Blocks', array('admin' => true, 'plugin' => false, 'controller' => 'blocks', 'action' => 'index')) ?></li>
 								<li><?= $this->Html->link('Menus', array('admin' => true, 'plugin' => false, 'controller' => 'menus', 'action' => 'index')) ?></li>
@@ -189,13 +189,14 @@
 							<a class="accordion-toggle" data-toggle="collapse"
 							   data-parent="#admin-sidebar-accordion" href="#plugins">
 								<h3 class="danger">
-									<i class="icon-cloud icon-large"></i> Plugins
+									<i class="fa fa-cloud fa-lg"></i> Plugins
 								</h3>
 							</a>
 						</div>
 						<div id="plugins" class="panel-collapse collapse<?= ($this->params->controller == 'plugins' || !empty($this->params->plugin) ? ' in' : '') ?>">
 							<ul class="nav nav-list panel-body">
 								<li><?= $this->Html->link('Manage Plugins', array('admin' => true, 'plugin' => false, 'controller' => 'plugins', 'action' => 'index')) ?></li>
+								<li><?= $this->Html->link('Create a Plugin', array('admin' => true, 'plugin' => false, 'controller' => 'tools', 'action' => 'create_plugin')) ?></li>
 								<?php foreach (Configure::read('Plugins.list') as $plugin): ?>
 									<?php if (Configure::read($plugin . '.admin_menu')): ?>
 										<li><?=
@@ -213,10 +214,9 @@
 			<!--/.well -->
 		</div>
 		<!--/span-->
-		<div class="span9">
+		<div class="col-lg-9 content-area">
 			<?=
 			$this->Html->getCrumbList(array(
-				'separator' => '<span class="divider"> / </span>',
 				'class' => 'breadcrumb',
 				'escape' => false,
 				'lastClass' => 'active'
@@ -240,18 +240,12 @@
 			<?= $this->Api->version_check() ?>
 		</p>
 
-		<p class="pull-right">&copy; <a href="http://www.adaptcms.com" target="_blank">AdaptCMS</a> 2006-<?= date('Y') ?> <?=
-			$this->Html->link(
-				$this->Html->image('cake.power.gif'),
-				'http://www.cakephp.org/',
-				array('target' => '_blank', 'escape' => false)
-			)
-			?><br/>
-			Cosmo theme
-			by <?= $this->Html->link('Bootswatch', 'http://bootswatch.com/cosmo/', array('target' => '_blank')) ?>
+		<p class="pull-right">&copy; <a href="http://www.adaptcms.com" target="_blank">AdaptCMS</a> 2006-<?= date('Y') ?>
+			<span class="hidden-xs">
+				Cosmo theme
+				by <?= $this->Html->link('Bootswatch', 'http://bootswatch.com/cosmo/', array('target' => '_blank')) ?>
+			</span>
 		</p>
-
-		<div class="clearfix"></div>
 	</footer>
 
 </div>

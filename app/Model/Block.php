@@ -3,6 +3,7 @@
  * Class Block
  *
  * @property Module $Module
+ * @property User $User
  */
 class Block extends AppModel
 {
@@ -78,12 +79,14 @@ class Block extends AppModel
         if (!empty($data['Block']['settings'])) {
             $settings = json_decode($data['Block']['settings']);
 
-            foreach($settings as $key => $row) {
-                $data['Block'][$key] = $row;
-                if ($key != "order_by" && $key != "order_dir") {
-                    $data['Block']['settings_keys'][] = $key;
-                }
-            }
+	        if (!empty($settings)) {
+	            foreach($settings as $key => $row) {
+	                $data['Block'][$key] = $row;
+	                if ($key != "order_by" && $key != "order_dir") {
+	                    $data['Block']['settings_keys'][] = $key;
+	                }
+	            }
+	        }
         }
 
         if ($data['Block']['type'] == "code")

@@ -50,7 +50,7 @@ $(document).ready(function() {
 
 			var hidden = hidden + hidden_ord + hidden_text;
 
-			var div = '<li class="btn no-marg-left clearfix" id="' + count + '"><i class="icon icon-move hidden-phone"></i> ' + text + hidden + ' <i class="icon icon-trash remove-item"></i></li>';
+			var div = '<li class="btn btn-success no-marg-left clearfix" id="' + count + '"><i class="fa fa-arrows hidden-phone"></i> ' + text + hidden + ' <i class="fa fa-trash-o remove-item"></i></li>';
 
 			$('.menu-items ul').append(div);
 			$.smoothScroll({
@@ -92,7 +92,7 @@ $(document).ready(function() {
         if ($(this).attr('data-slug'))
         {
             var default_val = $('.element').html();
-            var value = '<' + default_val.replace('[slug]', $(this).attr('data-slug')).replace('&gt;', '>') + '>';
+            var value = default_val.replace('[slug]', $(this).attr('data-slug')).replace('&gt;', '>');
 
             $('textarea.code').val(value);
         }

@@ -201,16 +201,9 @@ class CommentsController extends AppController
             );
         }
 
-        if (!$this->Auth->user('id'))
-        {
-            include_once(APP . 'webroot/libraries/captcha/securimage.php');
-            $securimage = new Securimage();
-        }
-
         if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes' && 
             !$this->Auth->user('id') && 
-            !empty($securimage) && 
-            !$securimage->check($this->request->data['captcha']))
+            !$this->checkCaptcha($this->request->data['captcha']))
         {
             $message = 'Invalid Captcha Answer. Please try again.';
         }

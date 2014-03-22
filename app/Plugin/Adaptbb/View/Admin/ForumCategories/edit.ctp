@@ -11,12 +11,12 @@
 
 <div class="pull-right admin-edit-options">
     <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
+        '<i class="fa fa-chevron-left"></i> Return to Index',
         array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
+        array('class' => 'btn btn-info', 'escape' => false
     )) ?>
     <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
+        '<i class="fa fa-trash-o"></i> Delete',
         array('action' => 'delete', $this->request->data['ForumCategory']['id'], $this->request->data['ForumCategory']['title']),
         array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this forum category?')"))
     ?>
@@ -29,14 +29,14 @@
 
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 
-    <div class="hidden-phone">
+    <div class="hidden-xs">
         <h4>Category Order</h4>
 
-        <ul id="sort-list" class="unstyled span5 col-lg-5 no-marg-left">
+        <ul id="sort-list" class="unstyled col-lg-5 no-pad-l">
             <?php if (!empty($categories)): ?>
                 <?php foreach($categories as $category): ?>
-                    <li class="btn" id="<?= $category['ForumCategory']['id'] ?>">
-                        <i class="icon icon-move"></i>
+                    <li class="btn btn-success" id="<?= $category['ForumCategory']['id'] ?>">
+                        <i class="fa fa-arrows"></i>
                         <span>
                             <?= $category['ForumCategory']['title'] ?>
                         </span>

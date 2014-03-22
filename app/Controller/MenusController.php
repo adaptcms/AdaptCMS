@@ -48,6 +48,8 @@ class MenusController extends AppController
     */
 	public function admin_index()
 	{
+		$this->disable_parsing = true;
+
         $conditions = array();
 
 	    if ($this->permissions['any'] == 0)

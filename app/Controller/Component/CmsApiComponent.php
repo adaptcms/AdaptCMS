@@ -161,32 +161,6 @@ class CmsApiComponent extends Object
         }
     }
 
-    /*
-    public function pluginsLookup($ids = array())
-    {
-        $cache_file = 'plugin-version-check-' . implode("-",$ids);
-
-        if ($data = Cache::read($cache_file))
-        {
-            return json_decode($data, true);
-        }
-        else
-        {
-            $data = $this->curlRequest(
-                $this->url() . 'v1/plugin-version-check?ids=' . implode(",",$ids)
-            );
-
-            if (!empty($data)) {
-                Cache::write($cache_file, $data, 'api');
-
-                return json_decode($data, true);
-            } else {
-                return false;
-            }
-        }
-    }
-    */
-
     /**
      * Takes array of Theme IDS and does lookup on API website, returns back data and writes to file
      *
@@ -217,32 +191,6 @@ class CmsApiComponent extends Object
             );
         }
     }
-
-    /*
-    public function themesLookup($ids = array())
-    {
-        $cache_file = 'theme-version-check-' . implode("-",$ids);
-
-        if ($data = Cache::read($cache_file))
-        {
-            return json_decode($data, true);
-        }
-        else
-        {
-            $data = $this->curlRequest(
-                $this->url() . 'v1/theme-version-check?ids=' . implode(",",$ids)
-            );
-
-            if (!empty($data)) {
-                Cache::write($cache_file, $data, 'api');
-
-                return json_decode($data, true);
-            } else {
-                return false;
-            }
-        }
-    }
-    */
 
     /**
      * Looks up AdaptCMS.com articles

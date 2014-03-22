@@ -1,0 +1,39 @@
+<div ng-init="initOverview()">
+    <h2>Overview</h2>
+
+    <form>
+        <h3>Basic Info</h3>
+
+        <dl class="dl-horizontal">
+            <dt>Name</dt>
+            <dd>{{ getBasicInfo('name') }}</dd>
+        </dl>
+
+        <h3>Startup Files</h3>
+
+        <dl class="dl-horizontal">
+            <dt>Layout</dt>
+            <dd>{{ (getSkeleton('layout') == true ? 'Yes' : 'No') }}</dd>
+
+            <dt>Views</dt>
+            <dd>{{ (getSkeleton('views') == true ? 'Yes' : 'No') }}</dd>
+        </dl>
+
+        <h3>Versions</h3>
+
+        <dl class="dl-horizontal">
+            <span ng-repeat="version in getVersions('versions')">
+                <dt>Version</dt>
+                <dd>{{ version }}</dd>
+
+                <dt>Current Version</dt>
+                <dd>{{ (getVersions('current_version') == version ? 'Yes' : 'No') }}</dd>
+            </span>
+        </dl>
+
+        <div class="input submit">
+            <a href="#" ng-click="prevStep($event)" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+            <button type="submit" ng-click="createTheme($event)" class="btn btn-success">Finish <i class="fa fa-check"></i></button>
+        </div>
+    </form>
+</div>

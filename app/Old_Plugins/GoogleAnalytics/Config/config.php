@@ -13,4 +13,3 @@ $system_config = array(
 
 $config = json_decode($params, true);
 Configure::write('GoogleAnalytics', array_merge($config, $system_config) );
-?>

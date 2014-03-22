@@ -30,7 +30,7 @@ $(document).ready(function() {
 
 			var length = Number($(".upload-file").length);
 			var h4 = length;
-			var file_divs = '<div class="upload-file span4 no-marg-left" id="file-0">' + file_div + '</div>';
+			var file_divs = '<div class="upload-file col-lg-4 no-pad-l" id="file-0">' + file_div + '</div>';
 			var contents = file_divs.replace(/0/g, length).replace('#0', '#' + h4);
 			var contents = contents.replace('File #1', 'File #' + (length + 1));
 			var contents = contents.replace('FileWatermark_" value="' + length, 'FileWatermark_" value="0');
@@ -101,7 +101,7 @@ function toggleRemove()
 
 		    <?= $this->Form->input('content', array(
 		        'label' => 'File Contents',
-		        'rows' => 20, 
+		        'rows' => 20,
 		        'style' => 'width: 90%'
 		    )) ?>
 
@@ -126,23 +126,31 @@ function toggleRemove()
 		    <h4 class="image-filters">Image Filters</h4>
 
 		    <?= $this->Form->input('0.File.watermark', array('type' => 'checkbox')) ?>
-		    <?= $this->Form->input('0.File.zoom', array('options' => $zoom_levels)) ?>
+		    <?= $this->Form->input('0.File.zoom', array(
+			    'options' => $zoom_levels,
+			    'label' => 'Thumbnail Crop Level'
+		    )) ?>
 
-	        <div class="span3 no-marg-left">
-	            <?= $this->Form->input('resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
-	            <?= $this->Form->input('resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
+	        <div class="col-lg-5 no-pad-l">
+	            <?= $this->Form->input('resize_width', array('class' => '', 'div' => array('class' => 'pull-left'))) ?>
+	            <?= $this->Form->input('resize_height', array('class' => '', 'div' => array('class' => 'pull-right'))) ?>
 	        </div>
 	        <div class="clearfix"></div>
 
 		    <?= $this->Form->input('0.File.random_filename', array('type' => 'checkbox')) ?>
 		</div>
 
-		<div id="libraries" style="display: none">
+		<div id="libraries" class="clearfix" style="display: none">
 			<h4 class="image-filters">Media Libraries</h4>
 
-			<div class="media-libraries" style="margin-bottom: 9px;">
+			<div class="media-libraries input-group col-lg-5" style="margin-bottom: 9px;">
+				<?= $this->Form->label('library', 'Library') ?>
+				<div class="clearfix"></div>
+
 				<?= $this->Form->input('library', array(
 					'div' => false,
+					'label' => false,
+					'class' => 'form-control form-control-inline',
 					'style' => 'margin-bottom: 0',
 					'empty' => '- add library -',
 					'options' => $media_list
@@ -161,8 +169,8 @@ function toggleRemove()
 			'class' => 'btn btn-primary'
 		)) ?>
 	<?php else: ?>
-		<div class="upload-file span4 no-marg-left" id="file-0">
-			<?= $this->Form->button('<i class="icon icon-remove icon-white"></i>', array(
+		<div class="upload-file col-lg-4 no-pad-l" id="file-0">
+			<?= $this->Form->button('<i class="fa fa-times"></i>', array(
 				'class' => 'btn btn-danger pull-right remove', 
 				'escape' => false
 			)) ?>
@@ -174,25 +182,40 @@ function toggleRemove()
 		    <?= $this->Form->hidden('0.File.mimetype') ?>
 		    <?= $this->Form->hidden('0.File.filesize') ?>
 
-		    <?= $this->Form->input('0.File.caption') ?>
+		    <?= $this->Form->input('0.File.caption', array('class' => 'form-control')) ?>
 
 		    <h4 class="image-filters">Image Filters</h4>
 
 		    <?= $this->Form->input('0.File.watermark', array('type' => 'checkbox')) ?>
 			<?= $this->Form->input('0.File.zoom', array(
 				'options' => $zoom_levels,
+				'class' => 'form-control',
 				'label' => 'Thumbnail Crop Level'
 			)) ?>
-		    <?= $this->Form->input('0.File.resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
-		    <?= $this->Form->input('0.File.resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
+
+			<div class="col-lg-11 no-pad-l">
+			    <?= $this->Form->input('0.File.resize_width', array(
+				    'class' => 'form-control col-xs-7',
+				    'div' => array('class' => 'pull-left col-lg-5 no-pad-l')
+			    )) ?>
+			    <?= $this->Form->input('0.File.resize_height', array(
+				    'class' => 'form-control col-xs-7',
+				    'div' => array('class' => 'pull-right col-lg-5 no-pad-l')
+			    )) ?>
+			</div>
 		    <div class="clearfix"></div>
 		    <?= $this->Form->input('0.File.random_filename', array('type' => 'checkbox')) ?>
 
 		    <h4 class="image-filters">Media Libraries</h4>
 
-		    <div class="media-libraries">
+		    <div class="media-libraries input-group col-lg-11 no-pad-l">
+			    <?= $this->Form->label('0.File.library', 'Library') ?>
+			    <div class="clearfix"></div>
+
 		        <?= $this->Form->input('0.File.library', array(
-		            'div' => false, 
+		            'div' => false,
+			        'label' => false,
+			        'class' => 'form-control form-control-inline',
 		            'empty' => '- add library -',
 		            'options' => $media_list
 		        )) ?>
@@ -206,7 +229,7 @@ function toggleRemove()
 		</div>
 
 		<div class="clearfix"></div>
-		<div class="btn-group">
+		<div class="btn-group" style="margin-top: 10px;">
 			<?php if (!empty($this->request->named['multiple'])): ?>
 				<?= $this->Form->button('Upload Another File', array('class' => 'add-file btn btn-danger')) ?>
 			<?php endif ?>

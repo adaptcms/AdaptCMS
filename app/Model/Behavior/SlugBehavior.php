@@ -42,6 +42,8 @@ class SlugBehavior extends ModelBehavior
         if (!$Model->hasField($this->_defaults[$Model->alias]['slugField']) || !$Model->hasField($this->_defaults[$Model->alias]['field']))
         {
             $Model->Behaviors->disable($this->name);
+        } else {
+	        $Model->findMethods['slugList'] = true;
         }
     }
 

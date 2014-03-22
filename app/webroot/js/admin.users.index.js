@@ -3,7 +3,7 @@ $(document).ready(function(){
         $(".user-status").live('click', function () {
             var el = $(this);
             var user_id = el.attr('data-id');
-            var status = el.hasClass('icon-remove-sign');
+            var status = el.hasClass('fa-times-circle');
             var new_status = (status ? 1 : 0);
 
             $.post($('#webroot').text() + "admin/users/ajax_change_user/",
@@ -26,11 +26,11 @@ $(document).ready(function(){
                 if ($('#user-change-status').hasClass('alert-success')) {
                     if (new_status == 1)
                     {
-                        el.removeClass('icon-remove-sign').addClass('icon-ok-sign');
+                        el.removeClass('fa-times-circle').addClass('fa-check-circle');
                     }
                     else
                     {
-                        el.addClass('icon-remove-sign').removeClass('icon-ok-sign');
+                        el.addClass('fa-times-circle').removeClass('fa-check-circle');
                     }
                 }
             }, 'json');

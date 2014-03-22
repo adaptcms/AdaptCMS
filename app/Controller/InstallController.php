@@ -23,43 +23,25 @@ class InstallController extends Controller
     public $components = array('Session');
 
     private $upgrade_versions = array(
-//        'beta' => array(
-//            'sql' => array(
-//                'beta',
-//                'beta2',
-//                'beta3',
-//                '3-0',
-//	            '3-0-1'
-//            ),
-//            'upgrade_text' => 'upgrade-beta.md'
-//        ),
-//        'beta2' => array(
-//            'sql' => array(
-//                'beta2',
-//                'beta3',
-//                '3-0',
-//	            '3-0-1'
-//            )
-//        ),
-//        'beta3' => array(
-//            'sql' => array(
-//                'beta3',
-//                '3-0',
-//	            '3-0-1'
-//            )
-//        ),
         '3.0' => array(
             'sql' => array(
                 '3-0',
-	            '3-0-1'
+	            '3-0-1',
+	            '3-0-2'
             ),
             'upgrade_text' => 'upgrade-3-0.md'
         ),
 	    '3.0.1' => array(
 		    'sql' => array(
-			    '3-0-1'
+			    '3-0-1',
+			    '3-0-2'
 		    ),
 		    'afterUpgrade' => 'afterUpgrade301'
+	    ),
+	    '3.0.2' => array(
+		    'sql' => array(
+			    '3-0-2'
+		    )
 	    )
     );
 
@@ -165,7 +147,7 @@ class InstallController extends Controller
         $this->set('title_for_layout', 'Install AdaptCMS');
         $this->set('upgrade_versions', $this->upgrade_versions);
 
-        $this->Session->setFlash('If you have already installed AdaptCMS, then please proceed to your main page.', 'flash_notice');
+        $this->Session->setFlash('If you have already installed AdaptCMS, then please proceed to your main page.', 'notice');
     }
 
     public function database()
@@ -328,8 +310,10 @@ class InstallController extends Controller
 			        $error = true;
 	        }
 
-            if (!isset($error))
+            if (!isset($error)) {
                 $this->_updateInstallFile();
+                $this->clearTmpCache();
+            }
         }
     }
 
@@ -585,9 +569,16 @@ class InstallController extends Controller
         return $string;
     }
 
-    public function install_plugin( $plugin )
+	/**
+	 * Install Plugin
+	 *
+	 * @param $plugin
+	 * @return void
+	 */
+	public function install_plugin( $plugin )
     {
-        $this->set('title_for_layout', 'AdaptCMS :: Plugin Install');
+	    $this->set(compact('plugin'));
+        $this->set('title_for_layout', 'AdaptCMS :: ' . $plugin . ' Plugin Install');
 
         $new_path = APP . 'Plugin' . DS . $plugin . DS;
         $path = APP . 'Old_Plugins' . DS . $plugin . DS;
@@ -719,6 +710,26 @@ class InstallController extends Controller
                     $this->clearTmpCache();
 					$this->_refreshThemes();
 
+					// check for settings and if so, redirect to settings page
+	                $config_path = $new_path . 'Config' . DS . 'config.php';
+	                if (file_exists($config_path) && is_readable($config_path)) {
+		                include_once($config_path);
+
+		                if (!empty($params))
+		                    $param_check = json_decode($params);
+
+		                if (!empty($param_check)) {
+			                $this->Session->setFlash( 'The `' . $plugin . '` plugin has been successfully installed and you can edit its settings below.', 'success' );
+
+			                return $this->redirect(array(
+				                'admin' => true,
+								'controller' => 'plugins',
+				                'action' => 'settings',
+				                $plugin
+			                ));
+		                }
+	                }
+
                     $this->Session->setFlash( 'SQL has been inserted successfully.', 'success' );
                 } else {
                     $this->Session->setFlash( 'SQL could not be inserted.', 'error' );
@@ -727,9 +738,16 @@ class InstallController extends Controller
         }
     }
 
-    public function uninstall_plugin( $plugin )
+	/**
+	 * Uninstall Plugin
+	 *
+	 * @param $plugin
+	 * @return void
+	 */
+	public function uninstall_plugin( $plugin )
     {
-        $this->set('title_for_layout', 'AdaptCMS :: Plugin Un-Install');
+	    $this->set(compact('plugin'));
+        $this->set('title_for_layout', 'AdaptCMS :: ' . $plugin . ' Plugin Un-Install');
 
         $new_path = APP . 'Old_Plugins' . DS . $plugin . DS;
         $path = APP . 'Plugin' . DS . $plugin . DS;
@@ -913,9 +931,16 @@ class InstallController extends Controller
         $this->set(compact('plugin'));
     }
 
-    public function install_theme( $theme )
+	/**
+	 * Install Theme
+	 *
+	 * @param $theme
+	 * @return void
+	 */
+	public function install_theme( $theme )
     {
-        $this->set('title_for_layout', 'AdaptCMS :: Theme Install');
+	    $this->set(compact('theme'));
+        $this->set('title_for_layout', 'AdaptCMS :: ' . $theme . ' Theme Install');
 
         $new_path = VIEW_PATH . 'Themed' . DS . $theme . DS;
         $path = VIEW_PATH . 'Old_Themed' . DS . $theme . DS;
@@ -982,6 +1007,17 @@ class InstallController extends Controller
 		                $this->Theme->refreshTheme($find_theme['Theme']['id'], $find_theme['Theme']['title']);
 	                }
 
+	                if (!empty($this->request->data['Install']['default'])) {
+		                $this->loadModel('SettingValue');
+
+		                $default = $this->SettingValue->findByTitle('default-theme');
+
+		                if (!empty($default)) {
+			                $this->SettingValue->id = $default['SettingValue']['id'];
+			                $this->SettingValue->saveField('data', $theme);
+		                }
+	                }
+
 	                $this->clearTmpCache();
 
                     $this->Session->setFlash( 'SQL has been inserted successfully.', 'success' );
@@ -992,9 +1028,16 @@ class InstallController extends Controller
         }
     }
 
-    public function uninstall_theme( $theme )
+	/**
+	 * Uninstall Theme
+	 *
+	 * @param $theme
+	 * @return void
+	 */
+	public function uninstall_theme( $theme )
     {
-        $this->set('title_for_layout', 'AdaptCMS :: Theme Un-Install');
+	    $this->set(compact('theme'));
+        $this->set('title_for_layout', 'AdaptCMS :: ' . $theme . ' Theme Un-Install');
 
         $new_path = VIEW_PATH . 'Old_Themed' . DS . $theme . DS;
         $path = VIEW_PATH . 'Themed' . DS . $theme . DS;

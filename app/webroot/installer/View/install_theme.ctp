@@ -1,5 +1,7 @@
 <?php if (empty($this->request->data) && empty($sql['error'])): ?>
 	<?= $this->Form->create('Install', array('class' => 'well')) ?>
+		<h1>Installing <?php echo $theme ?> Theme</h1>
+
 		<?php if (!empty($install_text)): ?>
 			<h2 class="no-bg">From Manufacturer</h2>
 
@@ -13,6 +15,11 @@
             We advise all users to review information on the official page of the Theme and to ensure the best and safest chance of getting a theme, to use the
             <?= $this->Html->link('official website', Configure::read('Component.Api.api_url'), array('target' => '_blank')) ?>.
 		</p>
+
+		<?= $this->Form->input('default', array(
+			'label' => 'Set to Default Theme?',
+			'type' => 'checkbox'
+		)) ?>
 
 		<?= $this->Form->hidden('install') ?>
 	<?= $this->Form->end('Install Theme') ?>

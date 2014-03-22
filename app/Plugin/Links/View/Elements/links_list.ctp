@@ -23,5 +23,5 @@
 <div class="clearfix"></div>
 
 <a href="{{ url('links_apply') }}" class="btn btn-info">
-	Submit Link <i class="icon-plus"></i>
+	Submit Link <i class="fa fa-plus"></i>
 </a>

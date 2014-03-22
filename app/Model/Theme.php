@@ -79,7 +79,14 @@ class Theme extends AppModel
                 !empty($this->data['Theme']['title']))
             {
                 $this->data['Theme']['title'] = $this->camelCase($this->data['Theme']['title']);
-	            $path = VIEW_PATH . 'Themed/' . $this->data['Theme']['title'];
+
+	            if (empty($this->data['Theme']['path'])) {
+		            $path = $this->getActivePath();
+	            } else {
+		            $path = $this->data['Theme']['path'];
+	            }
+
+	            $path = $path . $this->data['Theme']['title'];
 
                 if (!file_exists($path))
                     mkdir($path);
@@ -150,8 +157,13 @@ class Theme extends AppModel
 	{
 		$theme = $this->findById($this->id);
 
-		if (file_exists(VIEW_PATH . 'Themed/' . $theme['Theme']['title']))
-			$this->recursiveDelete(VIEW_PATH . 'Themed/' . $theme['Theme']['title']);
+		if (file_exists($this->getActivePath() . $theme['Theme']['title']))
+			$this->recursiveDelete($this->getActivePath() . $theme['Theme']['title']);
+
+		/*
+		if (file_exists($this->getInactivePath() . $theme['Theme']['title']))
+			$this->recursiveDelete($this->getInactivePath() . $theme['Theme']['title']);
+		*/
 
 		return true;
 	}
@@ -222,8 +234,8 @@ class Theme extends AppModel
 
         $rel_path = urlencode( str_replace('/', '__', $rel_path) );
 
-        $exclude = array('.', 'themes', '.htaccess', 'index.php', 'uploads', 'libraries', 'font', 'installer');
-        $exclude2 = array('..', 'fancybox', 'tiny_mce');
+        $exclude = array('.', 'themes', '.htaccess', 'index.php', 'test.php', 'uploads', 'libraries', 'fonts', 'installer', 'angular', 'folder_upload');
+        $exclude2 = array('..', 'fancybox', 'tinymce', 'vendor');
 
         if (!file_exists($path))
         {
@@ -266,38 +278,6 @@ class Theme extends AppModel
             'path' => $path,
             'view_path' => $view_path
         );
-	}
-
-	/**
-	 * Removes files inside of a folder
-	 *
-	 * @param string $dir path to folder to loop through
-	 * @return null
-	 */
-	public function rrmdir($dir)
-	{
-		/**
-		 * Source: Anonymous
-		 * http://us2.php.net/manual/en/function.rmdir.php#107233
-		 **/
-		if (is_dir($dir))
-		{
-			$objects = scandir($dir);
-			foreach ($objects as $object) {
-				if ($object != "." && $object != "..")
-				{
-					if (filetype($dir . "/" . $object) == "dir")
-					{
-						$this->rrmdir($dir . "/" . $object);
-					} else {
-						unlink($dir . "/" . $object);
-					}
-				}
-			}
-
-			reset($objects);
-			rmdir($dir);
-		}
 	}
 
 	/**
@@ -410,14 +390,18 @@ class Theme extends AppModel
 	 *
 	 * @param $id
 	 * @param null $name
+	 * @param array $files
+	 *
 	 * @return array
 	 */
-	public function refreshTheme($id, $name = null)
+	public function refreshTheme($id, $name = null, $files = array())
 	{
-		if (!empty($name)) {
-			$files = $this->Template->folderAndFilesList($name);
-		} else {
-			$files = $this->Template->folderAndFilesList();
+		if (empty($files)) {
+			if (!empty($name)) {
+				$files = $this->Template->folderAndFilesList($name);
+			} else {
+				$files = $this->Template->folderAndFilesList();
+			}
 		}
 
 		try {
@@ -470,5 +454,254 @@ class Theme extends AppModel
 			'type' => $type,
 			'message' => $message
 		);
+	}
+
+	/**
+	 * Get Active Path
+	 *
+	 * @return string
+	 */
+	public function getActivePath()
+	{
+		return VIEW_PATH . 'Themed' . DS;
+	}
+
+	/**
+	 * Get Inactive Path
+	 *
+	 * @return string
+	 */
+	public function getInactivePath()
+	{
+		return VIEW_PATH . 'Old_Themed' . DS;
+	}
+
+	/**
+	 * Create Theme
+	 *
+	 * @param $data
+	 *
+	 * @return integer
+	 */
+	public function createTheme($data)
+	{
+		$this->create();
+
+		$data['basicInfo']['name'] = Inflector::camelize($data['basicInfo']['name']);
+
+		$theme['Theme']['title'] = $data['basicInfo']['name'];
+		$theme['Theme']['path'] = $this->getInactivePath();
+
+		$this->save($theme);
+
+		$path = $this->getInactivePath() . $data['basicInfo']['name'] . DS;
+
+		$defaults = array(
+			'Views' => array(
+				'Categories' => array(
+					'view.ctp' => '{{ addCrumb($category[\'title\'], null) }}
+
+{{ setTitle($category[\'title\']) }}
+
+<h1>{{ category[\'title\'] }}</h1>
+
+{% if empty(articles) %}
+	<p>No Articles Found</p>
+{% else %}
+	{% loop article in articles %}
+		<div class="span8 no-marg-left clearfix">
+			<a href="{{ url(\'article_view\', $article) }}"><h2>{{ article[\'Article\'][\'title\'] }}</h2></a>
+			<p class="lead">
+				@ <em>{{ time(article[\'Article\'][\'created\']) }}</em>
+			</p>
+
+			<blockquote>
+				{{ getTextAreaData(article) }}
+			</blockquote>
+
+			<div id="post-options">
+		        <span class="pull-left">
+			        <a href="{{ url(\'article_view\', $article) }}" class="btn btn-primary">Read More</a>
+			        <span style="margin-left: 10px">
+		                <i class="fa fa-comment"></i>&nbsp;
+				        <a href="{{ url(\'article_view\', $article) }}#comments">{{ article[\'Comments\'] }} Comments</a>
+		            </span>
+		            <span style="margin-left: 10px">
+		                <i class="fa fa-user"></i>&nbsp;
+		                Posted by <a href="{{ url(\'user_profile\', $article) }}">{{ article[\'User\'][\'username\'] }}</a>
+		            </span>
+		        </span>
+		        <span class="pull-right">
+			        {% if not empty(article[\'Article\'][\'tags\']) %}
+						{% loop tag in article[\'Article\'][\'tags\'] %}
+			                <a href="{{ url(\'article_tag\', $tag) }}" class="tags">
+				                <span class="btn btn-success">{{ tag }}</span>
+			                </a>
+		                {% endloop %}
+			        {% endif %}
+		        </span>
+			</div>
+		</div>
+		<hr>
+	{% endloop %}
+{% endif %}
+
+{{ partial(\'pagination\') }}'
+				),
+				'Articles' => array(
+					'view.ctp' => '{{ addCrumb($article[\'Category\'][\'title\'], url(\'category_view\', $article[\'Category\'][\'slug\'])) }}
+{{ addCrumb($article[\'Article\'][\'title\'], null) }}
+
+{{ setTitle($article[\'Article\'][\'title\']) }}
+
+{% if not empty(wysiwyg) %}
+	{{ tinymce.simple }}
+{% endif %}
+
+{{ js(\'jquery.blockui.min.js\') }}
+{{ js(\'jquery.smooth-scroll.min.js\') }}
+{{ js(\'comments.js\') }}
+
+<div class="span8 no-marg-left">
+	<h1>{{ article[\'Article\'][\'title\'] }}</h1>
+
+	<p class="lead">
+		@ <em>{{ time(article[\'Article\'][\'created\']) }}</em>
+	</p>
+
+	{{ getTextAreaData(article) }}
+
+	<div id="post-options">
+        <span class="pull-left">
+	        <a href="{{ url(\'category_view\', $category[\'slug\']) }}" class="btn btn-primary">
+		        {{ category[\'title\'] }}
+	        </a>
+            <span style="margin-left: 10px">
+                <i class="fa fa-search fa fa-user"></i>&nbsp;
+                Posted by <a href="{{ url(\'user_profile\', $user[\'username\']) }}">{{ user[\'username\'] }}</a>
+            </span>
+        </span>
+        <span class="pull-right">
+	        {% if not empty(tags) %}
+	            {% loop tag in tags %}
+	                <a href="{{ url(\'article_tag\', $tag) }}" class="tags">
+		                <span class="btn btn-success">{{ tag }}</span>
+	                </a>
+	            {% endloop %}
+        	{% endif %}
+        </span>
+    </div>
+</div>
+
+<div class="clearfix"></div>'
+				),
+				'Pages' => array(
+					'home.ctp' => '{{ setTitle(\'Home Page\') }}
+
+<h1>Newest Articles</h1>
+
+{% if empty(articles) %}
+	<p>No Articles Found</p>
+{% else %}
+	{% loop article in articles %}
+		<div class="span8 no-marg-left clearfix">
+			<a href="{{ url(\'article_view\', $article) }}"><h2>{{ article[\'Article\'][\'title\'] }}</h2></a>
+			<p class="lead">
+				@ <em>{{ time(article, \'\', \'created\') }}</em>
+			</p>
+
+			<blockquote>
+				{{ getTextAreaData(article) }}
+			</blockquote>
+
+			<div id="post-options">
+		        <span class="pull-left">
+			        <a href="{{ url(\'article_view\', $article) }}" class="btn btn-primary">Read More</a>
+			        <span style="margin-left: 10px">
+		                <i class="fa fa-comment"></i>&nbsp;
+				        <a href="{{ url(\'article_view\', $article) }}#comments">{{ article[\'CommentsCount\'] }} Comments</a>
+		            </span>
+		            <span style="margin-left: 10px">
+		                <i class="fa fa-user"></i>&nbsp;
+		                Posted by <a href="{{ url(\'user_profile\', $article) }}">{{ article[\'User\'][\'username\'] }}</a>
+		            </span>
+		        </span>
+		        <span class="pull-right">
+			        {% if not empty(article[\'Article\'][\'tags\']) %}
+						{% loop tag in article[\'Article\'][\'tags\'] %}
+			                <a href="{{ url(\'article_tag\', $tag) }}" class="tags">
+				                <span class="btn btn-success">{{ tag }}</span>
+			                </a>
+		                {% endloop %}
+			        {% endif %}
+		        </span>
+			</div>
+		</div>
+		<hr>
+	{% endloop %}
+{% endif %}
+
+{{ partial(\'pagination\') }}'
+				)
+			),
+			'json' => array(
+				'header' => '{
+    "title": "{full_name}",
+    "api_id": "",
+    "current_version": "{current_version}",'
+			)
+		);
+
+		if (!empty($data['skeleton']['layout'])) {
+			$layout_path = CACHE . 'persistent' . DS . 'create_theme_layout.tmp';
+
+			if (file_exists($layout_path) && (time() - filemtime($layout_path) < 1209600) ) {
+				$response = file_get_contents($layout_path);
+			} else {
+				$url = 'https://raw.github.com/adaptcms/sample-theme/master/Sample/Frontend/layout.ctp';
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$response = curl_exec($ch);
+				curl_close($ch);
+
+				file_put_contents($layout_path, $response);
+			}
+
+			file_put_contents($path . 'Frontend' . DS . 'layout.ctp', $response);
+		}
+
+		if (!empty($data['skeleton']['views'])) {
+			file_put_contents($path . 'Frontend' . DS . 'Categories' . DS . 'view.ctp', stripslashes($defaults['Views']['Categories']['view.ctp']));
+			file_put_contents($path . 'Frontend' . DS . 'Articles' . DS . 'view.ctp', stripslashes($defaults['Views']['Articles']['view.ctp']));
+			file_put_contents($path . 'Frontend' . DS . 'Pages' . DS . 'home.ctp', stripslashes($defaults['Views']['Pages']['home.ctp']));
+		}
+
+		$find = array(
+			'{full_name}',
+			'{current_version}'
+		);
+		$replace = array(
+			$data['basicInfo']['name'],
+			$data['versions']['current_version']
+		);
+
+		$json = str_replace($find, $replace, $defaults['json']['header']);
+
+		$json .= '
+	"versions": [';
+
+		foreach($data['versions']['versions'] as $version) {
+			$json .= '
+		"' . $version . '"' . (end($data['versions']['versions']) != $version ? ',' : '');
+		}
+
+		$json .= '
+	]
+}';
+
+		file_put_contents($path . 'theme.json', $json);
+
+		return $this->id;
 	}
 }

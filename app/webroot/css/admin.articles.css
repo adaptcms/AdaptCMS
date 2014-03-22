@@ -82,3 +82,8 @@
 {
     display: none;
 }
+
+.related-articles {
+    clear: left;
+    padding-left: 0!important;
+}

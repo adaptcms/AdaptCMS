@@ -3,7 +3,7 @@
  * Class File
  *
  * @property Media $Media
- *
+ * @property MediaFile $MediaFile
  * @method findById(integer $id)
  */
 class File extends AppModel
@@ -184,7 +184,7 @@ class File extends AppModel
 				$unset_file = true;
 
 				if ($key == 0 && !empty($data['File']['filename']['name'])) {
-					$data[$key]['File'] = array_merge($data[$key]['File'], $data['File']);
+					$data[$key]['File'] = array_merge($data['File'], $data[$key]['File']);
 				}
 
 				if (!isset($row['File']['user_id']) && !empty($data['File']['user_id'])) {
@@ -342,5 +342,95 @@ class File extends AppModel
 		}
 
 		return true;
+	}
+
+	/**
+	 * Parse Media Modal
+	 *
+	 * @param $images
+	 * @param bool $fields
+	 * @return mixed
+	 */
+	public function parseMediaModal($images, $fields = false)
+	{
+		if (!empty($images)) {
+			if (!empty($fields)) {
+				foreach($images as $key => $field) {
+					if (!empty($field['ArticleValue'][0]['File'])) {
+						$image = $field['ArticleValue'][0]['File'];
+
+						$images[$key]['ArticleValue'][0]['File']['timestamp'] = date('c', strtotime($image['created']));
+						$images[$key]['ArticleValue'][0]['File']['exists'] = file_exists(WWW_ROOT . $image['dir'] . $image['filename']);
+						$images[$key]['ArticleValue'][0]['File']['label'] = substr($image['filename'], 0, 65);
+					}
+				}
+			} else {
+
+				foreach($images as $key => $image) {
+					if (!empty($image['File']))
+						$image = $image['File'];
+
+					$images[$key] = $image;
+				}
+			}
+
+		}
+
+		return $images;
+	}
+
+	/**
+	 * Find Files
+	 *
+	 * @param $data
+	 * @return array
+	 */
+	public function findFiles($data)
+	{
+		if (!empty($data)) {
+			foreach($data as $key => $row) {
+				if (!empty($row['file_id'])) {
+					$find = $this->findById($row['file_id']);
+
+					if (!empty($find)) {
+						$data[$key]['File'] = $find['File'];
+						$data[$key]['File']['timestamp'] = date('c', strtotime($find['File']['created']));
+						$data[$key]['File']['exists'] = file_exists(WWW_ROOT . $find['File']['dir'] . $find['File']['filename']);
+						$data[$key]['File']['label'] = substr($find['File']['filename'], 0, 65);
+					}
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * After Find
+	 *
+	 * @param mixed $results
+	 * @param bool $primary
+	 * @return mixed
+	 */
+	public function afterFind($results, $primary = false)
+	{
+		if (!empty($results)) {
+			foreach($results as $key => $result)
+			{
+				if (!empty($result['File'][0])) {
+					foreach($result['File'] as $i => $file) {
+						$results[$key]['File'][$i]['timestamp'] = date('c', strtotime($file['created']));
+						$results[$key]['File'][$i]['exists'] = file_exists(WWW_ROOT . $file['dir'] . $file['filename']);
+						$results[$key]['File'][$i]['label'] = substr($file['filename'], 0, 45);
+					}
+				} elseif(!empty($result['File']['id']) && !empty($result['File']['dir'])) {
+					$results[$key]['File']['timestamp'] = date('c', strtotime($result['File']['created']));
+					$results[$key]['File']['exists'] = file_exists(WWW_ROOT . $result['File']['dir'] . $result['File']['filename']);
+					$results[$key]['File']['label'] = substr($result['File']['filename'], 0, 45);
+				}
+			}
+		}
+
+		return $results;
 	}
 }

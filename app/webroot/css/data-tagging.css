@@ -4,7 +4,7 @@
 	margin-top: 15px;
 	font-size: 18px;
 }
-a.icon-white.icon-remove-sign:hover {
+a.icon-white.fa fa-times-sign:hover {
 	display: none;
 }
 div[id^="data"] {

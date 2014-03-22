@@ -39,6 +39,8 @@ class ArticlesController extends AppController
 	 */
 	public function beforeFilter()
 	{
+		$this->Security->unlockedActions = array('admin_edit');
+
 		parent::beforeFilter();
 
 		if (strstr($this->request->action, 'admin_')) {
@@ -46,7 +48,7 @@ class ArticlesController extends AppController
 
 			if (empty($categories_list)) {
 				$this->Session->setFlash('Please add a category in order to manage articles.', 'error');
-				$this->redirect(array('action' => 'add', 'controller' => 'categories'));
+				return $this->redirect(array('action' => 'add', 'controller' => 'categories'));
 			}
 
 			$categories = array();
@@ -64,19 +66,10 @@ class ArticlesController extends AppController
 		}
 
 		if ($this->request->action == "admin_add" || $this->request->action == "admin_edit") {
-			$this->loadModel('File');
+			$this->disable_parsing = true;
 
-			$this->Paginator->settings = array(
-				'conditions' => array(
-					'File.mimetype LIKE' => '%image%'
-				),
-				'limit' => 9
-			);
-
-			$images = $this->Paginator->paginate('File');
-			$image_path = WWW_ROOT;
-
-			$this->set(compact('images', 'image_path'));
+			$media_list = $this->Article->Media->find('list');
+			$this->set(compact('media_list'));
 		}
 
 		$this->permissions = $this->getPermissions();
@@ -125,23 +118,39 @@ class ArticlesController extends AppController
 	 */
 	public function admin_add($category_id = null)
 	{
-		$fields = $this->Article->Category->Field->getFields($category_id);
+		$fields = $this->Article->Category->Field->getFields($category_id, null, $this->request->data);
 		$category = $this->Article->Category->findById($category_id);
 		$roles = $this->Article->User->Role->getArticlePermissions(array());
 
 		if (!$this->Article->Category->hasPermissionAccess($this->getRole(), 'admin_add', $category))
 			return $this->denyRedirect();
 
-		$this->set(compact('fields', 'category_id', 'roles'));
+		if (!empty($this->request->data['ArticleValue'])) {
+			$this->request->data['ArticleValue'] = $this->Article->ArticleValue->File->findFiles($this->request->data['ArticleValue']);
+			$fields = $this->Article->ArticleValue->articleAddAdjust($fields);
+		}
+
+		$this->set(compact('fields', 'category_id', 'roles', 'category'));
+
+		if (!empty($this->request->data['Article']['Media']))
+			$this->request->data['Media'] = $this->request->data['Article']['Media'];
 
 		if (!empty($this->request->data)) {
 			$this->request->data['Article']['user_id'] = $this->Auth->user('id');
+			$newest_id = $this->Article->getLastInsertID();
 
 			if ($this->Article->saveAssociated($this->request->data)) {
 
 				$this->Session->setFlash('Your article has been added.', 'success');
-				$this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'index'));
 			} else {
+				$newest_id_compare = $this->Article->getLastInsertID();
+
+				// This is due to a bug in saveAssociated validate first, if validation fails then we need to remove the article.
+				if (!empty($newest_id_compare) && (empty($newest_id) || $newest_id != $newest_id_compare) ) {
+					$this->Article->delete($newest_id_compare);
+				}
+
 				$this->Session->setFlash('Unable to add your article.', 'error');
 			}
 		}
@@ -153,7 +162,7 @@ class ArticlesController extends AppController
 	 * After POST, flash error or flash success and redirect to index
 	 *
 	 * @param integer $id id of the database entry, redirect to index if no permissions
-	 * @return array Array of category data
+	 * @return void
 	 */
 	public function admin_edit($id)
 	{
@@ -163,9 +172,16 @@ class ArticlesController extends AppController
 			$this->request->data['Article']['user_id'] = $this->Auth->user('id');
 
 			if ($this->Article->saveAssociated($this->Article->ArticleValue->checkOnEdit($this->request->data))) {
+				if (!empty($this->request->query['revision'])) {
+					$this->Article->ArticleRevision->saveRevision($this->request->data, $this->Auth->user('id'), $this->request->query['type']);
+
+					return $this->_ajaxResponse(array('body' => $this->Article->getLastSavedDate(date('Y-m-d H:i:s')) ));
+				} else {
+					$this->Article->ArticleRevision->saveRevision($this->request->data, $this->Auth->user('id'));
+				}
 
 				$this->Session->setFlash('Your article has been updated.', 'success');
-				$this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash('Unable to update your article.', 'error');
 			}
@@ -177,7 +193,12 @@ class ArticlesController extends AppController
 			),
 			'contain' => array(
 				'Category',
-				'User'
+				'User',
+				'ArticleRevision' => array(
+					'User',
+					'order' => 'ArticleRevision.active DESC,ArticleRevision.created DESC'
+				),
+				'Media'
 			)
 		));
 		$this->hasAccessToItem($this->request->data);
@@ -189,6 +210,12 @@ class ArticlesController extends AppController
 			$this->Auth->user('id'),
 			$this->request->data['User']['id'])) {
 			return $this->denyRedirect();
+		}
+
+		if (!empty($this->request->query['restore_revision'])) {
+			$this->request->data = $this->Article->ArticleRevision->restore($this->request->query['restore_revision'], $this->request->data);
+
+			$this->Session->setFlash('The revision has been restored.', 'success');
 		}
 
 		$category_id = $this->request->data['Category']['id'];
@@ -231,8 +258,17 @@ class ArticlesController extends AppController
 			$comments = $this->Article->Comment->find('all', $conditions);
 		}
 
-		$fields = $this->Article->Category->Field->getFields($category_id, $id);
+		$fields = $this->Article->ArticleValue->File->parseMediaModal($this->Article->Category->Field->getFields($category_id, $id), true);
 		$roles = $this->Article->User->Role->getArticlePermissions($this->request->data['Article']);
+
+		if (empty($this->request->data['ArticleRevision'])) {
+			$this->request->data['Article']['old_data'] = json_encode(array(
+				'Article' => $this->request->data['Article'],
+				'ArticleValue' => Set::extract('{n}.ArticleValue.0', $fields)
+			));
+		}
+
+		$revision_types = $this->Article->ArticleRevision->getTypes();
 
 		$this->set(compact(
 			'fields',
@@ -242,7 +278,8 @@ class ArticlesController extends AppController
 			'new_comments_limit',
 			'new_comments_amount',
 			'cur_limit',
-			'roles'
+			'roles',
+			'revision_types'
 		));
 	}
 
@@ -277,9 +314,9 @@ class ArticlesController extends AppController
 		$this->Session->setFlash('The article `' . $title . '` has been deleted.', 'success');
 
 		if ($permanent) {
-			$this->redirect(array('action' => 'index', 'trash' => 1));
+			return $this->redirect(array('action' => 'index', 'trash' => 1));
 		} else {
-			$this->redirect(array('action' => 'index'));
+			return $this->redirect(array('action' => 'index'));
 		}
 	}
 
@@ -311,10 +348,10 @@ class ArticlesController extends AppController
 
 		if ($this->Article->restore()) {
 			$this->Session->setFlash('The article `' . $title . '` has been restored.', 'success');
-			$this->redirect(array('action' => 'index'));
+			return $this->redirect(array('action' => 'index'));
 		} else {
 			$this->Session->setFlash('The article `' . $title . '` has NOT been restored.', 'error');
-			$this->redirect(array('action' => 'index'));
+			return $this->redirect(array('action' => 'index'));
 		}
 	}
 
@@ -400,6 +437,109 @@ class ArticlesController extends AppController
 	}
 
 	/**
+	 * Admin Preview
+	 *
+	 * @return void
+	 */
+	public function admin_preview()
+	{
+		if (!empty($this->request->query['preview'])) {
+			$this->Session->write('post_data', $this->request->data);
+
+			return $this->_ajaxResponse(array('body' => array() ));
+		} elseif($this->Session->check('post_data')) {
+			$this->helpers[] = 'Admin';
+
+			$this->request->data = $this->Session->read('post_data');
+
+			if (!empty($this->request->data['FieldData'])) {
+				$this->request->data['Article']['tags'] = $this->request->data['FieldData'];
+			} else {
+				$this->request->data['Article']['tags'] = array();
+			}
+
+			if (!empty($this->request->data['ArticleValue']))
+				$this->request->data['ArticleValue'] = $this->Article->ArticleValue->getFields($this->request->data['ArticleValue']);
+
+			if (!empty($this->request->data['Article']['Media'])) {
+				$this->request->data['Media'] = $this->Article->getMedia($this->request->data['Article']['id'], $this->request->webroot, $this->request->data['Article']['Media']);
+			} else {
+				$this->request->data['Media'] = array();
+			}
+
+			if (!empty($this->request->data['Article']['id'])) {
+				$orig_article = $this->Article->findById($this->request->data['Article']['id']);
+
+				$this->request->data['Article']['created'] = $orig_article['Article']['created'];
+				$this->request->data['Article']['modified'] = $orig_article['Article']['modified'];
+
+				$this->request->data = $this->Article->viewArticle($this->request);
+
+				if (!$this->Auth->user('id')) {
+					$captcha = $this->SettingValue->findByTitle('Comment Post Captcha Non-Logged In');
+
+					if (!empty($captcha['SettingValue']['data']) && $captcha['SettingValue']['data'] == 'Yes') {
+						$this->set('captcha_setting', true);
+					}
+				}
+
+				$wysiwyg = $this->SettingValue->findByTitle('Comment Post WYSIWYG Editor');
+
+				if (!empty($wysiwyg['SettingValue']['data']) && $wysiwyg['SettingValue']['data'] == 'Yes') {
+					$this->set(compact('wysiwyg'));
+				}
+			} else {
+				$this->request->data['Article']['created'] = $this->Article->dateTime();
+				$this->request->data['Article']['modified'] = $this->Article->dateTime();
+			}
+
+			$category = $this->Article->Category->findById($this->request->data['Article']['category_id']);
+			$this->request->data['Category'] = $category['Category'];
+
+			$user = $this->Article->User->findById($this->Auth->user('id'));
+			$this->request->data['User'] = $user['User'];
+
+			$event = new CakeEvent('Controller.Articles.view.beforeRender', $this, array('data' => $this->request->data, 'controller' => $this));
+			$this->getEventManager()->dispatch($event);
+
+			if (!empty($event->result))
+				$this->request->data = $event->result;
+
+			$cond = array(
+				'controller' => 'articles',
+				'action' => 'view',
+				'show' => true
+			);
+			$permissions = $this->getRelatedPermissions($this->permissionLookup($cond));
+
+			$this->set('permissions', $permissions);
+			$this->set('media', $this->request->data['Media']);
+			$this->set('fields', $this->request->data['Fields']);
+			$this->set('related_articles', $this->request->data['RelatedArticles']);
+			$this->set('article', $this->request->data);
+			$this->set('comments', $this->request->data['Comments']);
+			$this->set('comments_count', $this->request->data['CommentsCount']);
+			$this->set('user', $this->request->data['User']);
+			$this->set('category', $this->request->data['Category']);
+			$this->set('tags', $this->request->data['Article']['tags']);
+
+			if (!empty($this->request->data['Category']['slug'])) {
+				$slug = $this->request->data['Category']['slug'];
+
+				if ($this->theme != "Default" &&
+					file_exists(VIEW_PATH . 'Themed/' . $this->theme . '/Frontend/Articles/' . $slug . '.ctp') ||
+					file_exists(FRONTEND_VIEW_PATH . 'Articles/' . $slug . '.ctp')
+				) {
+					$this->view = 'Frontend/' . implode('/', array($slug));
+				}
+			}
+
+			if ($this->view == 'admin_preview')
+				$this->view = 'Frontend/view';
+		}
+	}
+
+	/**
 	 * View
 	 *
 	 * View action for an article. Permissions are checked, core article data is retrieved, threaded
@@ -436,16 +576,13 @@ class ArticlesController extends AppController
 		$this->request->data = $this->Article->find('first', $conditions);
 
 		if (empty($slug) || empty($this->request->data)) {
-			$this->Session->setFlash('We could not find that article, we have redirected you back to the home page.', 'error');
-			$this->redirect(array(
+			$this->Session->setFlash('We could not find that article, it may no longer be available or could be a bad link.', 'error');
+			return $this->redirect(array(
 				'controller' => 'pages',
 				'action' => 'display',
 				'home'
 			));
 		}
-
-		$article = $this->Article->getAllRelatedArticles(array($this->request->data));
-		$this->request->data = $article[0];
 
 		$this->hasAccessToItem($this->request->data);
 		if (!$this->Article->Category->hasPermissionAccess(
@@ -457,18 +594,7 @@ class ArticlesController extends AppController
 			return $this->denyRedirect();
 		}
 
-		$this->request->data['Comments'] = $this->Article->Comment->find('threaded', array(
-			'conditions' => array(
-				'Comment.article_id' => $this->request->data['Article']['id'],
-				'Comment.active' => 1
-			),
-			'contain' => array(
-				'User'
-			),
-			'order' => 'Comment.created DESC'
-		));
-
-		$this->loadModel('SettingValue');
+		$this->request->data = $this->Article->viewArticle($this->request);
 
 		if (!$this->Auth->user('id')) {
 			$captcha = $this->SettingValue->findByTitle('Comment Post Captcha Non-Logged In');
@@ -486,32 +612,25 @@ class ArticlesController extends AppController
 
 		if (empty($this->request->data['Article']['id'])) {
 			$this->Session->setFlash('Invalid Article', 'error');
-			$this->redirect(array(
+			return $this->redirect(array(
 				'controller' => 'pages',
 				'action' => 'display',
 				'home'
 			));
 		}
 
-		if (!empty($this->request->data['RelatedArticles']['all'])) {
-			$related_articles = $this->request->data['RelatedArticles'];
-		} else {
-			$related_articles = array();
-		}
-
-		$fields = $this->Article->Category->Field->getFields('Comment');
-		$this->request->data['Comments'] = $this->Article->Category->Field->getAllModuleData('Comment', $fields, $this->request->data['Comments']);
-
 		$event = new CakeEvent('Controller.Articles.view.beforeRender', $this, array('data' => $this->request->data, 'controller' => $this));
 		$this->getEventManager()->dispatch($event);
 
-		if (!empty($event->result)) {
+		if (!empty($event->result))
 			$this->request->data = $event->result;
-		}
 
-		$this->set(compact('related_articles', 'fields'));
+		$this->set('fields', $this->request->data['Fields']);
+		$this->set('media', $this->request->data['Media']);
+		$this->set('related_articles', $this->request->data['RelatedArticles']);
 		$this->set('article', $this->request->data);
 		$this->set('comments', $this->request->data['Comments']);
+		$this->set('comments_count', $this->request->data['CommentsCount']);
 		$this->set('user', $this->request->data['User']);
 		$this->set('category', $this->request->data['Category']);
 		$this->set('tags', $this->request->data['Article']['tags']);
@@ -540,7 +659,7 @@ class ArticlesController extends AppController
 	public function tag($tag, $limit = 10)
 	{
 		if (empty($tag))
-			$this->redirect('/');
+			return $this->redirect('/');
 
 		$slug = $this->Article->slug($tag);
 
@@ -591,6 +710,8 @@ class ArticlesController extends AppController
 
 		if (!empty($category))
 			$cond['Category.slug'] = $category;
+
+		$limit = (int) $limit;
 
 		$this->Paginator->settings = array(
 			'contain' => array(

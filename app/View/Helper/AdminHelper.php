@@ -50,7 +50,7 @@ class AdminHelper extends AppHelper
     {
         if (empty($title))
         {
-            $title = '<i class="icon-pencil"></i> Edit';
+            $title = '<i class="fa fa-pencil"></i> Edit';
         }
 
         return $this->Html->link($title, array(
@@ -77,7 +77,7 @@ class AdminHelper extends AppHelper
      */
     public function delete($id, $title, $text, $controller = null, $action = null)
     {
-        return $this->Html->link('<i class="icon-trash"></i> Delete', array(
+        return $this->Html->link('<i class="fa fa-trash-o"></i> Delete', array(
                 'action' => (!empty($action) ? $action : 'delete'),
                 'controller' => (!empty($controller) ? $controller : $this->params->controller),
                 $id, 
@@ -101,7 +101,7 @@ class AdminHelper extends AppHelper
      */
     public function restore($id, $title, $controller = null)
     {
-        return $this->Html->link('<i class="icon-share-alt"></i> Restore', array(
+        return $this->Html->link('<i class="fa fa-undo"></i> Restore', array(
                 'action' => 'restore', 
                 'controller' => (!empty($controller) ? $controller : $this->params->controller),
                 $id, 
@@ -124,7 +124,7 @@ class AdminHelper extends AppHelper
      */
     public function delete_perm($id, $title, $text, $controller = null)
     {
-        return $this->Html->link('<i class="icon-trash"></i> Delete Forever', array(
+        return $this->Html->link('<i class="fa fa-trash-o"></i> Delete Forever', array(
                 'action' => 'delete',
                 'controller' => (!empty($controller) ? $controller : $this->params->controller), 
                 $id, 
@@ -164,7 +164,7 @@ class AdminHelper extends AppHelper
             $vars = array_merge($vars, $params);
         }
 
-        return $this->Html->link('<i class="icon-picture"></i> View', $vars,
+        return $this->Html->link('<i class="fa fa-picture-o"></i> View', $vars,
             array(
                 'escape' => false
             )
@@ -320,7 +320,7 @@ class AdminHelper extends AppHelper
         $text = ($permanent ? 'Delete Forever' : 'Delete');
         $full_text = ($permanent ? ' This is permanent.' : '');
 
-        return $this->Html->link('<i class="icon-trash"></i> ' . $text, array(
+        return $this->Html->link('<i class="fa fa-trash-o"></i> ' . $text, array(
                 'action' => (!empty($action) ? $action : 'delete'),
                 'controller' => (!empty($controller) ? $controller : $this->params->controller),
                 $id, 

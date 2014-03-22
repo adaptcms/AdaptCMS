@@ -25,11 +25,6 @@ $(document).ready(function() {
 
         $( "#sort-list" ).disableSelection();
 
-        $(".icon-question-sign").popover({
-            trigger: 'hover',
-            placement: 'left'
-        });
-
         $("#ForumTitle").on('change', function() {
             var value = $(this).val();
 
@@ -82,6 +77,8 @@ $(document).ready(function() {
                     } else {
                         $("#ForumOrd").val($("#sort-list li#" + id).index());
                     }
+
+                    enablePopovers();
                 }, 'json');
             }
         });

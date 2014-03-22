@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
   `value_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `user_ip` varchar(50) NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `poll_id` (`poll_id`,`value_id`,`user_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;

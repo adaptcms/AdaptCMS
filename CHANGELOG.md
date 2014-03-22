@@ -1,50 +1,51 @@
-* Bug :: Admin > Categories > Edit > Related Fields - Not showing field type.
-* Bug :: Admin > Templates > Default Theme - Setting ID instead of name, fixed.
-* New Template Engine
-* Template Re-Organization
-* Search re-code in Angular
-* Elements (most) switched to new template engine
-* Finished plugin frontend templates/elements transferred to new engine
-* Routes List in Admin Tools
-* Admin Ajax Related add changed to update. (handles adding and removing single related articles) JS side of things updated so as soon as you click on one or click to delete one, the article is updated.
-* Added disabled status for plugin index - easier to see what are active and what aren’t based on name of plugin.
-* Refresh Themes callback after installing/un-installing plugin.
-* New Plugin > Contact Form
-* New Plugin > Article Ratings
-* Bug :: Plugin permissions > not saving correctly
-* Bug :: Plugin - Polls > Can vote method should not include user_id where condition if user is not logged in.
-* Bugs :: Misc admin add/edit block fixes, removed old code.
-* Blocks > Order By Options > New functionality to have a “getBlockOrderByOptions” in your model and return a key/value pair of order by options.
-* Bug :: Get Block Data - needed proper setter/getters, was running too many queries.
-* Plugin > Article Ratings - Added “Your Rating” functionality.
-* Plugin > Polls - Start/end date.
-* Plugin > Polls - Attach to article. Now inserted in main article data on article view page. (just call $article[‘Polls’] and loop through the polls or if there is one poll attached, call - {{ article['Polls'][0] }} to render the form/results)
-* Model > Article > Bug Fix
-* Search > XSS Security Bug fixed - http://packetstormsecurity.com/files/123585/adaptcms301-xss.txt
-* View Docs > Renamed *.md to glob.md, due to windows issue.
-* Tools > OneCMS Converter
-* Upgrade After Method option (3.0.2 moves non-theme templates)
-* CakePHP, TinyMCE, CodeMirror, jQuery BlockUI, html5, jQuery Smooth Scroll updated to newest versions.
-* Upgrade After Method for 3.0.2 - now moves files/folders for installed/non-installed themes as well.
-* Bug :: 5 min/2min timer - when i click on 5 min timer notice, it should also reset 2 min timer.
-* Model > Behavior > Delete Behavior - Updated beforeFind to exclude Comment model when deleting, was throwing error.
-* Admin Bug Hunting - Categories, Fields, Articles, Comments, Pages, Blocks
-* Frontend Bug Hunting - Edit Profile, View Profile, Homepage, Category View, Article View, Comment Post/View, View Page
-* Caching Views - The cached views from cake are not rendering the tags from adaptcmsview - added cachedispatcher and cachehelper to get block data and parse for tags, before writing cache.
-* Events - Bug fixed in ArticleRatings/Polls, have to make sure plugin is loaded before attaching event.
-* Templates - Fixed issue when deleting a template for a theme. (path was wrong)
-* Uninstall Plugin - Templates are removed now upon uninstalling a plugin.
-* Bug Fix :: Flash message response when refreshing theme or updating default.
-* Fix :: Adjusted redirect, model update.
-* Fix :: When uninstalling theme, it checks to see if the current theme is the same and if so, re-sets back to default.
-* Theme Update :: Gaming layout updated to new template system/routing.
-* BUG FIX :: Flash messages - not appearing in admin with cache enabled.
-* BUG FIX :: Flash messages not appearing on frontend, nocache areas being cached. (session flash problem was strictly with logout, fixed...fixed view helper not getting routes)
-* DONE :: Frontend Bug Hunting - Registration/login/logout
-* DONE :: Plugin Bug Hunting (add/edit/delete/view asset, install/uninstall all plugins, settings, permissions)
-* DONE :: Theme Bug Hunting - 
-* DONE :: Admin Bug Hunting - Templates (mess around with adding/editing templates to default theme and custom theme), Themes (add/edit/delete theme files for custom and created themes)
-* DONE :: Documentation - Plugins (creating a plugin, advanced configuration, basic management), Roles, Users, System (dev setting in core - miscellaneous, events)
-* DONE :: Theme Bug Hunting - Test installation/uninstall of custom themes and any areas they affect, are working correctly. (already know templates are deleted upon uninstall correctly)
-* DONE :: View Docs - Update with new template system tags.
-* Bug :: Major caching issue, block data was being cached (for everyone).
+* Admin > Media Modal - recoded into angularJS - updates to articles add/edit and media add/edit made.
+* Admin > Articles > validation - model validation added for required fields.
+* Admin > Articles > Revisions - Ability to save up to x amount of revisions per articles. Whenever you update an article a new revision is added (or if a max of x amount, the oldest is replaced). Additionally, there is now a “Quick Save” button on the top right nav bar and an “Auto Save” to save every 1, 2, 5 or 10 minutes. You can preview what a revision looked like (see below) and restore it.
+* Admin Articles > Preview - Ability to preview the article changes, can also see what previous revisions looked like.
+* Admin > Themes - When installing a theme, option to mark it as the default theme.
+* Admin > Plugins - After installing a plugin, redirect to the settings page for it. (if it has settings)
+* Admin > Tools - Feeds (a simple page to see a list of RSS feeds for all content and by category and/or limit)
+* Admin > Fields - A few minor bugs fixed with hiding/showing elements based on field type.
+* Admin > Articles > Custom Fields - Fixed an issue with checkboxes, added an afterFind json_decode so it decodes automatically.
+* Admin > Users > Forgot Password - When activating forgot password, security question/answer is on the page.
+* Admin > Articles > Media Libraries - Functionality to add libraries to article and retrieve on frontend. (view doc for article view pages also updated to include full usage)
+* Model > Media > Optimized - Wasn’t aware I could have a MediaFile model to query off of for counts and getting newest file - queries updated to use this.
+* BUG :: Media Index/Admin Media Index - Counts were incorrect if files were deleted.
+* Admin - Boostrap 3 full integrated
+* Plugins > Links - Updated to support new media modal.
+* Admin > Fields - Filter by type bug fixed.
+* Admin > Media Modal - Misc minor css fixes.
+* Admin - Misc css fixes.
+* Admin > Users > Add Users - If validation fails, on post, module data values are not retained.
+* Admin > Users > Add Users - Module values not created correctly.
+* Admin > Templates > Global Tags - Deletes cached templates and views upon update.
+* Admin > Menus - Index - Updated php tag to new template format.
+* Plugin > AdaptBB > Index - Reworked query so deleted forums do not show.
+* CakePHP 2.4.3 - 2.4.6
+* fontAwesome 4.0.3
+* Bootstrap JS 3.0.3/2.x - 3.1.1
+* jqueryUI 1.10.3 - 1.10.4
+* tinyMCE 4.0.10 - 4.0.19
+* Angular JS Core/Route/Sanitize 1.2.8 - 1.2.14
+* Noty 2.1.0 - 2.2.2
+* Secureimage 3.5.1 - 3.5.2
+* Codemirror 3.19 - 3.22
+* Markdown 1.3 - 1.4
+* Firefox Bug - /adaptcms/admin/articles/edit/1 :: revisions,  json.parse error when clicking preview on a revision
+* Firefox Bug - /adaptcms/admin/articles/edit/1 :: is auto save working? set it to 1 minute and it only saved once. (did this on ie and went to another page, CSRF error - add it to unlocked actions)
+* Firefox Bug - Remove hover blue color from “Content”, “Users”, etc. (visible in at least firefox)
+* Bug - /adaptcms/admin/users/edit/1 :: Change class of submit.
+* Firefox Bug - /adaptcms/admin/roles :: Add clearfix after add role. Remove div clear before the add button.
+* Firefox Bug - /adaptcms/admin/tools/create_theme#/versions :: Add margin-bottom of 5-10px between versions for some space.
+* FF Bug - /adaptcms/admin/templates/global_tags :: Add clearfix after right nav items. (update/add) However, then when clicking to add it actually saves it instead - use linux ff to investigate.
+* FF Bug - /adaptcms/admin/menus/add(edit) :: Instead of “Add Category”, “Add Page” - just rename to “Add”.
+* FF Bug - /adaptcms/admin/settings :: clearfix
+* FF Bug - /adaptcms/admin/settings/edit/1 :: class btn on update
+* FF Bug - /adaptcms/admin/plugins :: clearfix
+* Bug - Routes list permissions by default for admin.
+* FF Bug - /adaptcms/admin/google_maps :: clearfix...also when adding/editing, move map to pull-left instead of right.
+* FF Bug - /adaptcms/admin/links(polls) :: clearfix
+* Bug - /adaptcms/js/admin.articles.js :: line 317 getContent() on tinyMCE
+* Bug - /adaptcms/admin/fields/edit/2 :: remove hidden-xs class.
+* TODO Bug - Issues with including JS repeatedly on an angularJS admin page. Clearing cache fixes it, but need a better solution.
+* Bug - Adjust datepicker so after selecting date, it hides. Good way to see how this gets annoying as is, is on the polls add page.

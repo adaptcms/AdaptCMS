@@ -41,9 +41,9 @@
 		)) ?> and do a search for 'Layouts/default.ctp' and by default, that's the file you can enter it into. After that, no action is necessary! This text will be replaced by the plugins reporting tool. Enjoy!
 	</p>
 <?php else: ?>
-	<?= $this->Html->script('bootstrap-datepicker.js') ?>
-	<?= $this->Html->script('jquery.blockui.min.js') ?>
-	<?= $this->Html->css('datepicker.css') ?>
+	<?= $this->Html->script('bootstrap-datepicker') ?>
+	<?= $this->Html->script('jquery.blockui.min') ?>
+	<?= $this->Html->css('datepicker') ?>
 
 	<?= $this->Html->script('https://www.google.com/jsapi') ?>
 	<script type="text/javascript">
@@ -56,7 +56,7 @@
 
 	<div class="google-analytics-container">
 		<div class="inner">
-			<div id="chart" class="hidden-phone" style="height:250px"></div>
+			<div id="chart" class="hidden-xs" style="height:250px"></div>
 
 			<div id="chart-data" class="hidden">
 				<?php foreach($views as $view): ?>
@@ -83,7 +83,7 @@
 
 			<div id="myTabContent" class="tab-content">
 				<div class="tab-pane fade active in" id="main">
-					<div class="span11 no-marg-left clearfix">
+					<div class="col-lg-11 no-pad-l clearfix">
 						<h2 class="pull-left">
 							Overview
 						</h2>
@@ -95,7 +95,7 @@
 					        <?= $this->Form->input('start_date', array(
 					            'label' => false,
 					            'div' => false,
-					            'class' => 'input-small datepicker',
+					            'class' => 'col-xs-1 datepicker',
 					            'value' => date('m-d-Y', strtotime($start_date)),
 					            'data-date-format' => 'mm-dd-yyyy'
 					        )) ?> 
@@ -103,7 +103,7 @@
 					        <?= $this->Form->input('end_date', array(
 					            'label' => false,
 					            'div' => false,
-					            'class' => 'input-small datepicker',
+					            'class' => 'col-xs-1 datepicker',
 					            'value' => date('m-d-Y', strtotime($end_date)),
 					            'data-date-format' => 'mm-dd-yyyy'
 					        )) ?> 
@@ -115,7 +115,7 @@
 					    <?= $this->Form->end() ?>
 					    <div class="clearfix"></div>
 
-						<dl class="dl-horizontal pull-left span3 no-marg-left">
+						<dl class="dl-horizontal pull-left col-lg-3 no-pad-l">
 							<dt>Total Visitors</dt>
 							<dd>
 								<?= $stats['visitors'] ?>
@@ -132,7 +132,7 @@
 							</dd>
 
 						</dl>
-						<dl class="dl-horizontal pull-left span5">
+						<dl class="dl-horizontal pull-left col-lg-5">
 							<dt>Page Views / Visit</dt>
 							<dd>
 								<?= $stats['pageViewsPerVisit'] ?>
@@ -148,7 +148,7 @@
 								<?= $stats['pageLoadTime'] ?> seconds
 							</dd>
 						</dl>
-						<dl class="dl-horizontal pull-left span3">
+						<dl class="dl-horizontal pull-left col-lg-3">
 							<dt>New Visitors</dt>
 							<dd>
 								<?= $stats['percentNewVisits'] ?>%
@@ -167,7 +167,7 @@
 						<div class="clearfix"></div>
 					</div>
 
-					<div class="span6 pull-left no-marg-left">
+					<div class="col-lg-6 pull-left no-pad-l">
 						<legend>Top Referrals</legend>
 
 						<ol>
@@ -187,7 +187,7 @@
 						</ol>
 					</div>
 
-					<div class="span6 pull-right">
+					<div class="col-lg-6 pull-right">
 						<legend>Top Searches</legend>
 
 						<ol>

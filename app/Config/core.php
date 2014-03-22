@@ -288,7 +288,7 @@ Cache::config('api', array(
     'groups' => array('api')
 ));
 
-Configure::write('Component.Api.api_url', 'http://api.adaptcms.com/');
+Configure::write('Component.Api.api_url', 'http://addons.adaptcms.com/');
 Configure::write('Component.Api.adaptcms_url', 'http://www.adaptcms.com/');
 Configure::write('Component.Api.adaptcms_docs_url', 'http://documentation.adaptcms.com');
 
@@ -297,4 +297,4 @@ Configure::write('Component.Api.adaptcms_docs_url', 'http://documentation.adaptc
  */
 
 define('VIEW_PATH', APP . 'View/');
-define('ADAPTCMS_VERSION', '3.0.2');
+define('ADAPTCMS_VERSION', '3.0.3');

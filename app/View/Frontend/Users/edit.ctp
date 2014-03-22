@@ -6,7 +6,7 @@
 <h1 class="pull-left">Edit Account</h1>
 
 <a class="pull-right btn btn-info" href="{{ url('user_profile', current_user('username')) }}">
-	<i class="icon-chevron-left"></i> Return to Profile
+	<i class="fa fa-chevron-left"></i> Return to Profile
 </a>
 <div class="clearfix"></div>
 
@@ -93,7 +93,7 @@
 		        'key' => $index,
 		        'field' => $field,
 		        'icon' => !empty($field['Field']['description']) ?
-		        "<i class='icon icon-question-sign field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
+		        "<i class='fa fa-question field-desc' data-content='".$field['Field']['description']."' data-title='".$field['Field']['label']."'></i>&nbsp;" : ''
 		    )) }}
 		    {{ form.hidden('ModuleValue.' . $index . '.field_id', array('value' => $field['Field']['id'])) }}
 		    {{ form.hidden('ModuleValue.' . $index . '.module_id', array('value' => $this->request->data['User']['id'])) }}

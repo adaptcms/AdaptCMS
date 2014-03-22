@@ -16,11 +16,11 @@
 		        <span class="pull-left">
 			        <a href="{{ url('article_view', $article) }}" class="btn btn-primary">Read More</a>
 			        <span style="margin-left: 10px">
-		                <i class="icon icon-comment"></i>&nbsp;
-				        <a href="{{ url('article_view', $article) }}#comments">{{ article['Comments'] }} Comments</a>
+		                <i class="fa fa-comment"></i>&nbsp;
+				        <a href="{{ url('article_view', $article) }}#comments">{{ article['CommentsCount'] }} Comments</a>
 		            </span>
 		            <span style="margin-left: 10px">
-		                <i class="icon-user"></i>&nbsp;
+		                <i class="fa fa-user"></i>&nbsp;
 		                Posted by <a href="{{ url('user_profile', $article) }}">{{ article['User']['username'] }}</a>
 		            </span>
 		        </span>

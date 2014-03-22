@@ -34,10 +34,12 @@
     </div>
 
     <div id="next-step" style="display:none">
-        <?= $this->Form->input('title', array(
-            'label' => 'Name of Block',
-            'class' => 'required'
-        )) ?>
+	    <div class="name">
+	        <?= $this->Form->input('title', array(
+	            'label' => 'Name of Block',
+	            'class' => 'required'
+	        )) ?>
+	    </div>
 
         <div class="dynamic">
             <?= $this->Form->input('order_by', array(

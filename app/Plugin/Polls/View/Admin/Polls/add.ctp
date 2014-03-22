@@ -43,15 +43,15 @@
 		)) ?>
 	</div>
 
-	<div class="btn-group">
-		<?= $this->Form->button('Add Option', array(
-			'type' => 'button',
-			'id' => 'poll-option-add',
-			'class' => 'btn btn-warning'
-		)) ?>
-		<?= $this->Form->end(array(
-			'label' => 'Submit',
-			'class' => 'btn btn-primary',
-			'div' => false
-		)) ?>
-	</div>
+<div class="btn-group options">
+	<?= $this->Form->button('Add Option', array(
+		'type' => 'button',
+		'id' => 'poll-option-add',
+		'class' => 'btn btn-warning'
+	)) ?>
+	<?= $this->Form->end(array(
+		'label' => 'Submit',
+		'class' => 'btn btn-primary',
+		'div' => false
+	)) ?>
+</div>

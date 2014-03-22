@@ -1,1 +1,0 @@
-Thank you for using the Facebook Plugin! You can re-install any time in the main Plugins area.

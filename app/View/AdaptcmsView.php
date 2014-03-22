@@ -40,7 +40,9 @@ class AdaptcmsView extends View
 
 			$this->viewFile = $Controller->view;
 
-			if (strstr($this->request->action, 'admin')) {
+			if (strstr($this->viewFile, 'Frontend')) {
+				$this->viewFile = str_replace('Frontend/', '', $this->viewFile);
+			} elseif (strstr($this->request->action, 'admin')) {
 				$this->admin = true;
 			}
 
@@ -246,13 +248,12 @@ class AdaptcmsView extends View
 			$replace[] = $var;
 		}
 
-		if ($is_layout) {
+		if ($is_layout && !$this->disable_parsing) {
 			$headers = '
 <?php echo $this->Html->script("jquery.min") ?>
 <?php echo $this->Html->script("jquery.validate.min") ?>
 <?php echo $this->Html->script("bootstrap.min") ?>
-<?= $this->Html->script("vendor/noty/jquery.noty.js") ?>
-<?= $this->Html->script("vendor/noty/layouts/bottomRight.js") ?>
+<?= $this->Html->script("vendor/noty/jquery.noty.packaged.min.js") ?>
 <?= $this->Html->script("vendor/noty/themes/default.js") ?>
 <?php echo $this->Html->script("global") ?>
 
@@ -559,6 +560,11 @@ class AdaptcmsView extends View
 		$blocks = array();
 		if (!empty($matches[1])) {
 			foreach($matches[1] as $match) {
+				$ex = explode(']', $match);
+
+				if (!empty($ex[0]))
+					$match = $ex[0];
+
 				$find[] = '"';
 				$find[] = "'";
 
@@ -574,12 +580,17 @@ class AdaptcmsView extends View
 
 			if (!empty($perm_matches[1])) {
 				foreach($perm_matches[1] as $perm) {
+					$ex = explode(']', $perm);
+
+					if (!empty($ex[0]))
+						$perm = $ex[0];
+
 					$find[] = '"';
 					$find[] = "'";
 
 					$perm = str_replace($find, '', $perm);
 
-					if (!empty($match))
+					if (!empty($perm))
 						$blocks[] = array('block' => $perm, 'type' => 'permissions');
 				}
 			}

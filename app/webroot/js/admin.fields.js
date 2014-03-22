@@ -25,7 +25,7 @@ $(document).ready(function() {
 
         $( "#sort-list" ).disableSelection();
 
-        $(".icon-question-sign").popover({
+        $(".fa fa-question-circle").popover({
             trigger: 'hover',
             placement: 'left'
         });
@@ -156,43 +156,18 @@ function noCategory()
 
 function fieldTypeToggle(val,trigger_show) 
 {
-    /*
-    if (val == "date") {
-        fieldLimitToggle('hide');
-    } else if(val == "file") {
-        fieldLimitToggle('hide');
-    } else if(val == "dropdown") {
-        fieldLimitToggle('hide');
-    } else if(val == "multi-dropdown") {
-        fieldLimitToggle('hide');
-    } else if(val == "radio") {
-        fieldLimitToggle('hide');
-    } else if(val == "check") {
-        fieldLimitToggle('hide');
-    } else if(trigger_show === true) {
-        fieldLimitToggle('show');
-    }
-
-    if ($('#field-rules .field').length)
-    {
-        $.each($('#field-rules .field'), function() {
-            console.log($(this).attr('data-slug'));
-            console.log($(this).html());
-        });
-    }
-    */
-
     var field = $('.field[data-id="' + val + '"]');
 
     if (val)
     {
         if (val == 2 || val == 4 || val == 8 || val == 10)
         {
+            $('.field_options,#field_data').show();
             $('.field_options').show();
         }
         else
         {
-            $('.field_options').hide();
+            $('.field_options,#field_data').hide();
         }
 
         if (field.length)

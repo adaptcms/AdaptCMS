@@ -20,9 +20,9 @@
 {% if $this->Admin->hasPermission($permissions['related']['forum_topics']['change_status']) %}
 	<a href="{{ url('adaptbb_topic_change_status', $topic['id']) }}" class="btn btn-info pull-right marg-btm">
 		{% if $topic['status'] == 0 %}
-			Open Topic <i class="icon-unlock"></i>
+			Open Topic <i class="fa fa-unlock"></i>
 		{% else %}
-			Close Topic <i class="icon-lock"></i>
+			Close Topic <i class="fa fa-lock"></i>
 		{% endif %}
 	</a>
 {% endif %}
@@ -62,16 +62,16 @@
                     <div class="actions">
                         <!--nocache-->
 	                    <a href="{{ url('messages_send') }}/{{ post['User']['username'] }}" class="btn btn-primary">
-		                    Send Message <i class="icon-envelope icon-white"></i>
+		                    Send Message <i class="fa fa-envelope"></i>
 	                    </a>
 
                         {% if $topic['status'] == 1 && $this->Admin->hasPermission($permissions['related']['forum_posts']['ajax_post']) %}
                             <div class="btn-group">
 	                            <a href="#" class="btn btn-warning reply">
-		                            Reply <i class="icon-reply"></i>
+		                            Reply <i class="fa fa-reply"></i>
 	                            </a>
 	                            <a href="#" class="btn btn-success quote">
-		                            Quote <i class="icon-quote-right"></i>
+		                            Quote <i class="fa fa-quote-right"></i>
 	                            </a>
                             </div>
                         {% endif %}
@@ -80,13 +80,13 @@
                             {% if $post['type'] == 'post' %}
                                 {% if $this->Admin->hasPermission($permissions['related']['forum_posts']['ajax_edit']) %}
 			                        <a href="{{ url('adaptbb_post_edit', $post) }}" data-id="edit_post_{{ post['ForumPost']['id'] }}" class="btn btn-primary edit-post">
-				                        Edit <i class="icon-pencil"></i>
+				                        Edit <i class="fa fa-pencil"></i>
 			                        </a>
                                 {% endif %}
                             {% else %}
                                 {% if $this->Admin->hasPermission($permissions['related']['forum_topics']['edit']) %}
 	                                <a href="{{ url('adaptbb_topic_edit', $post['ForumPost']['id']) }}" class="btn btn-primary">
-		                                Edit <i class="icon-pencil"></i>
+		                                Edit <i class="fa fa-pencil"></i>
 	                                </a>
                                 {% endif %}
                             {% endif %}
@@ -94,11 +94,11 @@
                             {% if $this->Admin->hasPermission($permissions['related']['forum_' . $post['type'] . 's']['delete']) %}
 	                            {% if $post['type'] == 'post' %}
 			                        <a href="{{ url('adaptbb_post_delete', $post) }}" class="btn btn-danger btn-confirm" title="this post">
-				                        Delete <i class="icon-minus"></i>
+				                        Delete <i class="fa fa-minus"></i>
 			                        </a>
 	                            {% else %}
 			                        <a href="{{ url('adaptbb_topic_delete', $post) }}" class="btn btn-danger btn-confirm" title="this topic">
-				                        Delete <i class="icon-minus"></i>
+				                        Delete <i class="fa fa-minus"></i>
 			                        </a>
 	                            {% endif %}
                             {% endif %}

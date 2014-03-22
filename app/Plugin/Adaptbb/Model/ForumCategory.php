@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Class ForumCategory
+ *
+ * @property Forum $Forum
+ */
 class ForumCategory extends AdaptbbAppModel
 {
     /**
@@ -83,5 +87,31 @@ class ForumCategory extends AdaptbbAppModel
 		}
 
 		return $this->saveMany($data);
+	}
+
+	public function getIndexList()
+	{
+		$results = $this->find('all', array(
+			'order' => 'ForumCategory.ord ASC'
+		));
+
+		if (!empty($results)) {
+			foreach($results as $key => $row) {
+				$forums = $this->Forum->find('all', array(
+					'conditions' => array(
+						'Forum.category_id' => $row['ForumCategory']['id']
+					),
+					'order' => 'Forum.ord ASC'
+				));
+
+				if (!empty($forums)) {
+					foreach($forums as $i => $forum) {
+						$results[$key]['Forum'][$i] = $forum['Forum'];
+					}
+				}
+			}
+		}
+
+		return $results;
 	}
 }

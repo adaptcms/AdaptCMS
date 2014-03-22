@@ -1415,14 +1415,16 @@ class ValidationTest extends CakeTestCase {
  * @return void
  */
 	public function testDateMyNumeric() {
-		$this->assertTrue(Validation::date('12/2006', array('my')));
+		$this->assertTrue(Validation::date('01/2006', array('my')));
 		$this->assertTrue(Validation::date('12-2006', array('my')));
 		$this->assertTrue(Validation::date('12.2006', array('my')));
 		$this->assertTrue(Validation::date('12 2006', array('my')));
-		$this->assertFalse(Validation::date('12/06', array('my')));
-		$this->assertFalse(Validation::date('12-06', array('my')));
-		$this->assertFalse(Validation::date('12.06', array('my')));
-		$this->assertFalse(Validation::date('12 06', array('my')));
+		$this->assertTrue(Validation::date('01/06', array('my')));
+		$this->assertTrue(Validation::date('12-06', array('my')));
+		$this->assertTrue(Validation::date('12.06', array('my')));
+		$this->assertTrue(Validation::date('12 06', array('my')));
+		$this->assertFalse(Validation::date('13 06', array('my')));
+		$this->assertFalse(Validation::date('13 2006', array('my')));
 	}
 
 /**
@@ -1438,12 +1440,14 @@ class ValidationTest extends CakeTestCase {
 		$this->assertTrue(Validation::date('2006 12', array('ym')));
 		$this->assertTrue(Validation::date('1900-01', array('ym')));
 		$this->assertTrue(Validation::date('2153-01', array('ym')));
+		$this->assertTrue(Validation::date('06/12', array('ym')));
+		$this->assertTrue(Validation::date('06-12', array('ym')));
+		$this->assertTrue(Validation::date('06-12', array('ym')));
+		$this->assertTrue(Validation::date('06 12', array('ym')));
 		$this->assertFalse(Validation::date('2006/12 ', array('ym')));
 		$this->assertFalse(Validation::date('2006/12/', array('ym')));
-		$this->assertFalse(Validation::date('06/12', array('ym')));
-		$this->assertFalse(Validation::date('06-12', array('ym')));
-		$this->assertFalse(Validation::date('06-12', array('ym')));
-		$this->assertFalse(Validation::date('06 12', array('ym')));
+		$this->assertFalse(Validation::date('06/12 ', array('ym')));
+		$this->assertFalse(Validation::date('06/13 ', array('ym')));
 	}
 
 /**
@@ -1648,6 +1652,25 @@ class ValidationTest extends CakeTestCase {
 	public function testDecimalCustomRegex() {
 		$this->assertTrue(Validation::decimal('1.54321', null, '/^[-+]?[0-9]+(\\.[0-9]+)?$/s'));
 		$this->assertFalse(Validation::decimal('.54321', null, '/^[-+]?[0-9]+(\\.[0-9]+)?$/s'));
+	}
+
+/**
+ * Test localized floats with decimal.
+ *
+ * @return void
+ */
+	public function testDecimalLocaleSet() {
+		$this->skipIf(DS === '\\', 'The locale is not supported in Windows and affects other tests.');
+		$restore = setlocale(LC_NUMERIC, 0);
+		$this->skipIf(setlocale(LC_NUMERIC, 'de_DE') === false, "The German locale isn't available.");
+
+		$this->assertTrue(Validation::decimal(1.54), '1.54 should be considered a valid float');
+		$this->assertTrue(Validation::decimal('1.54'), '"1.54" should be considered a valid float');
+
+		$this->assertTrue(Validation::decimal(12345.67), '12345.67 should be considered a valid float');
+		$this->assertTrue(Validation::decimal('12,345.67'), '"12,345.67" should be considered a valid float');
+
+		setlocale(LC_NUMERIC, $restore);
 	}
 
 /**
@@ -2364,9 +2387,11 @@ class ValidationTest extends CakeTestCase {
 	public function testUploadError() {
 		$this->assertTrue(Validation::uploadError(0));
 		$this->assertTrue(Validation::uploadError(array('error' => 0)));
+		$this->assertTrue(Validation::uploadError(array('error' => '0')));
 
 		$this->assertFalse(Validation::uploadError(2));
 		$this->assertFalse(Validation::uploadError(array('error' => 2)));
+		$this->assertFalse(Validation::uploadError(array('error' => '2')));
 	}
 
 /**

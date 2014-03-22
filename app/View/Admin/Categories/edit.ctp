@@ -19,14 +19,14 @@
 			<a href="#fields" data-toggle="tab">Related Fields</a>
 		</li>
 	<?php endif ?>
-	<div class="right hidden-phone">
+	<div class="right hidden-xs">
 	    <?= $this->Html->link(
-	        '<i class="icon-chevron-left"></i> Return to Index',
+	        '<i class="fa fa-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),
-	        array('class' => 'btn', 'escape' => false
+	        array('class' => 'btn btn-info', 'escape' => false
 	    )) ?>
 	    <?= $this->Html->link(
-	        '<i class="icon-trash icon-white"></i> Delete',
+	        '<i class="fa fa-trash-o"></i> Delete',
 	        array('action' => 'delete', $this->request->data['Category']['id'], $this->request->data['Category']['title']),
 	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this category?')"));
 	    ?>
@@ -220,7 +220,7 @@
 				<?= $this->element('admin_pagination') ?>
 			</div>
 			<div class="pull-right" style="margin-top:18px">
-				<?= $this->Html->link('Add Article <i class="icon-plus"></i>', array(
+				<?= $this->Html->link('Add Article <i class="fa fa-plus"></i>', array(
 					'controller' => 'articles', 
 					'action' => 'add', 
 					$this->request->data['Category']['id']
@@ -266,7 +266,7 @@
 			</table>
 
 			<div class="pull-right" style="margin-top:18px">
-				<?= $this->Html->link('Add Field <i class="icon-plus"></i>', array(
+				<?= $this->Html->link('Add Field <i class="fa fa-plus"></i>', array(
 					'controller' => 'fields', 
 					'action' => 'add', 
 					$this->request->data['Category']['id']

@@ -15,13 +15,13 @@ $(document).ready(function() {
 
 <div class="pull-right admin-edit-options">
     <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
+        '<i class="fa fa-chevron-left"></i> Return to Index',
         array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
+        array('class' => 'btn btn-info', 'escape' => false
     )) ?>
 
     <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
+        '<i class="fa fa-trash-o"></i> Delete',
         array('action' => 'delete', $this->request->data['File']['id']),
         array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this file?')"));
     ?>
@@ -95,41 +95,49 @@ $(document).ready(function() {
 			'label' => 'Thumbnail Crop Level'
 		)) ?>
         
-        <div class="span3 no-marg-left">
-            <?= $this->Form->input('resize_width', array('class' => 'input-mini', 'div' => array('class' => 'pull-left'))) ?>
-            <?= $this->Form->input('resize_height', array('class' => 'input-mini', 'div' => array('class' => 'pull-right'))) ?>
+        <div class="col-lg-5 no-pad-l">
+            <?= $this->Form->input('resize_width', array('class' => '', 'div' => array('class' => 'pull-left'))) ?>
+            <?= $this->Form->input('resize_height', array('class' => '', 'div' => array('class' => 'pull-right'))) ?>
         </div>
         <div class="clearfix"></div>
 
         <?= $this->Form->input('random_filename', array('type' => 'checkbox')) ?>
 
-        <h4 class="image-filters">Media Libraries</h4>
+		<div id="libraries" class="clearfix" style="margin-bottom: 9px">
+	        <h4 class="image-filters">Media Libraries</h4>
 
-        <div class="media-libraries" style="margin-bottom: 9px">
-            <?= $this->Form->input('library', array(
-                'div' => false, 
-                'style' => 'margin-bottom: 0',
-                'empty' => '- add library -',
-                'options' => $media_list
-            )) ?>
-            <?= $this->Form->button('Add', array(
-                'class' => 'btn btn-info add-media',
-                'type' => 'button'
-            )) ?>
-        </div>
-        <div class="media_libraries">
-            <?php if (!empty($this->request->data['Media'])): ?>
-                <?php foreach($this->request->data['Media'] as $key => $media): ?>
-                    <div id="data-<?= $key ?>">
-                        <span class="label label-info">
-                            <?= $media['title'] ?> <a href="#" class="icon-white icon-remove-sign"></a>
-                        </span>
-                        <input type="hidden" id="Media[]" name="Media[]" value="<?= $media['id'] ?>">
-                    </div>
-                <?php endforeach ?>
-            <?php endif ?>
-        </div>
-        <div class="clearfix media"></div>
-    <?php endif ?>
+	        <div class="media-libraries input-group col-lg-5" style="margin-bottom: 9px">
+		        <?= $this->Form->label('library', 'Library') ?>
+		        <div class="clearfix"></div>
 
-<?= $this->Form->end('Submit') ?>
+	            <?= $this->Form->input('library', array(
+	                'div' => false,
+		            'label' => false,
+		            'class' => 'form-control form-control-inline',
+	                'style' => 'margin-bottom: 0',
+	                'empty' => '- add library -',
+	                'options' => $media_list
+	            )) ?>
+	            <?= $this->Form->button('Add', array(
+	                'class' => 'btn btn-info add-media',
+	                'type' => 'button'
+	            )) ?>
+	        </div>
+	        <div class="media_libraries">
+	            <?php if (!empty($this->request->data['Media'])): ?>
+	                <?php foreach($this->request->data['Media'] as $key => $media): ?>
+	                    <div id="data-<?= $key ?>">
+	                        <span class="label label-info">
+	                            <?= $media['title'] ?> <a href="#" class="fa fa-times fa-white"></a>
+	                        </span>
+	                        <input type="hidden" id="Media[]" name="Media[]" value="<?= $media['id'] ?>">
+	                    </div>
+	                <?php endforeach ?>
+	            <?php endif ?>
+	        </div>
+	        <div class="clearfix media"></div>
+		</div>
+	<?php endif ?>
+
+	<?= $this->Form->button('Submit', array('type' => 'submit', 'class' => 'btn btn-primary')) ?>
+<?= $this->Form->end() ?>

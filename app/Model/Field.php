@@ -178,14 +178,15 @@ class Field extends AppModel
         return true;
     }
 
-    /**
-    * Small function that retrieves fields for a specified category
-    *
-    * @param category_id
-    * @param article_id
-    * @return array of fields
-    */
-    public function getFields($category_id, $article_id = null)
+	/**
+	 * Small function that retrieves fields for a specified category
+	 *
+	 * @param $category_id
+	 * @param article_id
+	 * @param array $merged_with
+	 * @return array of fields
+	 */
+    public function getFields($category_id, $article_id = null, $merged_with = array())
     {
         $conditions = array();
 
@@ -226,6 +227,16 @@ class Field extends AppModel
         $conditions['contain'][] = 'FieldType';
 
         $fields = $this->find('all', $conditions);
+
+	    if (!empty($merged_with['ArticleValue'])) {
+		    foreach($fields as $key => $field) {
+			    foreach($merged_with['ArticleValue'] as $value) {
+				    if (!empty($value['field_id']) && $value['field_id'] == $field['Field']['id']) {
+					    $fields[$key]['ArticleValue'] = $value;
+				    }
+			    }
+		    }
+	    }
 
         return $fields;
     }

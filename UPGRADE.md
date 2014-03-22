@@ -1,5 +1,67 @@
+3.0.2 - 3.0.3
+-------------
+
+####Step 1
+
+After you are logged in as an admin, access the installer at <strong>http://yoursite.com/install</strong> and upload the following directories/files to your site and overwriting what is on your server currently:
+
+* lib/
+* vendors/
+* app/Config/routes.php
+* app/Config/bootstrap.php
+* app/Config/core.php
+* app/Routing/
+* app/Service/
+* app/Model/
+* app/Controller/
+* app/View_Docs/
+* app/webroot/installer/
+* app/webroot/js/
+* app/webroot/css/
+* app/webroot/fonts/
+* app/webroot/img/
+* app/webroot/libraries/
+* app/webroot/angular/
+* app/View/AdaptcmsView.php
+* app/View/Elements/
+* app/View/Helper/
+* app/View/Admin/
+* app/View/Frontend/Media/
+* app/View/Frontend/Messages/
+* app/View/Frontend/Search/
+* app/View/Frontend/Users/
+
+At this point you can also update your plugins that reside in <strong>app/Plugin</strong> and <strong>app/Old_Plugins</strong>. Make sure to bring in the contents of each plugins
+folder, except the <strong>Config/config.php</strong> file, so that your configuration settings (if the plugin has them) are not reset. You can also overwrite <strong>app/View/Themed</strong> and <strong>app/View/Old_Themed</strong> if you haven't made changes to your themes.
+
+Then refresh the install page and click on "Upgrade from 3.0.2".
+
+####Step 2
+
+After SQL is inserted, go into your admin panel and clear the cache. You should be set!
+
+####Issues?
+
+If you encounter a white page, enter in the following code on line 146 of <strong>app/Config/bootstrap.php</strong>:
+
+`
+clearCache(null, 'models');
+clearCache(null, 'persistent');
+clearCache(null, 'views');
+clearCache(null, '/../templates');
+
+if (function_exists('apc_clear_cache'))
+{
+    apc_clear_cache();
+    apc_clear_cache('user');
+    apc_clear_cache('opcode');
+}
+`
+
+Save and then load your site once and you should see it load normally. Remove that code and reload, everything should be resolved.
+
 3.0.1 - 3.0.2
------------
+-------------
 
 ####Step 1
 

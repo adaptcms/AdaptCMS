@@ -39,7 +39,7 @@
  * @link http://www.phpcaptcha.org/Securimage_Docs/ Online Documentation
  * @copyright 2013 Drew Phillips
  * @author Drew Phillips <drew@drew-phillips.com>
-  * @version 3.5.1 (June 21, 2013)
+ * @version 3.5.2 (Feb 15, 2014)
  * @package Securimage
  *
  */
@@ -49,7 +49,23 @@
 
 require_once dirname(__FILE__) . '/securimage.php';
 
-$img = new Securimage();
+if (!class_exists('DATABASE_CONFIG'))
+	include_once(realpath('./../../../') . '/Config/database.php');
+
+$db = new DATABASE_CONFIG();
+
+$options = array(
+	'use_database'    => true,
+	'database_host'   => $db->default['host'],
+	'database_name'   => $db->default['database'],
+	'database_user'   => $db->default['login'],
+	'database_pass'   => $db->default['password'],
+	'database_table'   => $db->default['prefix'] . 'captcha_codes',
+	'skip_table_check' => true,
+	'database_driver' => Securimage::SI_DRIVER_MYSQL
+);
+
+$img = new Securimage($options);
 
 // You can customize the image by making changes below, some examples are included - remove the "//" to uncomment
 
@@ -70,6 +86,8 @@ $img->captcha_type    = Securimage::SI_CAPTCHA_MATHEMATIC; // show a simple math
 
 // see securimage.php for more options that can be set
 
+// set namespace if supplied to script via HTTP GET
+if (!empty($_GET['namespace'])) $img->setNamespace($_GET['namespace']);
 
 
 $img->show();  // outputs the image and content headers to the browser

@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Class Media
+ *
+ * @property File $File
+ * @property Article $Article
+ * @property MediaArticle $MediaArticle
+ * @property MediaFile $MediaFile
+ */
 class Media extends AppModel
 {
 	/**
@@ -16,7 +23,14 @@ class Media extends AppModel
 		'File' => array(
 			'className' => 'File',
 			'joinTable' => 'media_files',
-			'unique' => 'keepExisting'
+			'unique' => 'keepExisting',
+			'with' => 'MediaFile'
+		),
+		'Article' => array(
+			'className' => 'Article',
+			'joinTable' => 'media_articles',
+			'unique' => 'keepExisting',
+			'with' => 'MediaArticle'
 		)
 	);
 
@@ -102,47 +116,46 @@ class Media extends AppModel
 	 */
 	public function beforeSave($options = array())
 	{
-		if (!empty($this->data['File']) && !empty($this->data['Files'])) {
-			$this->data['File'] = array_merge($this->data['File'], $this->data['Files']);
-		} elseif (!empty($this->data['Files'])) {
-			$this->data['File'] = $this->data['Files'];
-		}
-
-		if (!empty($this->data['Media']['title'])) {
+		if (!empty($this->data['Media']['title']))
 			$this->data['Media']['title'] = strip_tags($this->data['Media']['title']);
-		}
 
 		return true;
 	}
 
 	/**
 	 * Get Last File And Count
+	 * Optimized with MediaFile model.
 	 *
 	 * @param array $data
-	 *
 	 * @return array
 	 */
 	public function getLastFileAndCount($data = array())
 	{
-		$prefix = ConnectionManager::enumConnectionObjects();
-
 		foreach ($data as $key => $row) {
-			$count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
-			$data[$key]['File']['count'] = $count[0][0]['count'];
-
-			$last_file = $this->find('first', array(
+			$count = $this->MediaFile->find('count', array(
 				'conditions' => array(
-					'Media.id' => $row['Media']['id']
+					'MediaFile.media_id' => $row['Media']['id']
 				),
 				'contain' => array(
-					'File' => array(
-						'limit' => 1
-					)
+					'File'
 				)
 			));
 
-			if (!empty($last_file['File']))
-				$data[$key]['File'] = array_merge($data[$key]['File'], $last_file['File'][0]);
+			$file = $this->MediaFile->find('first', array(
+				'conditions' => array(
+					'MediaFile.media_id' => $row['Media']['id']
+				),
+				'contain' => array(
+					'File'
+				),
+				'fields' => 'File.*',
+				'order' => 'File.created DESC'
+			));
+
+			if (!empty($file)) {
+				$file['File']['count'] = $count;
+				$data[$key]['File'] = $file['File'];
+			}
 		}
 
 		return $data;
@@ -150,7 +163,7 @@ class Media extends AppModel
 
 	/**
 	 * Get File Count
-	 * Doing this because cakephp's support for hasAndBelongsToMany sucks
+	 * Optimized with MediaFile model.
 	 *
 	 * @param array $data
 	 *
@@ -158,12 +171,17 @@ class Media extends AppModel
 	 */
 	public function getFileCount($data = array())
 	{
-		$prefix = ConnectionManager::enumConnectionObjects();
-
 		if (!empty($data)) {
 			foreach ($data as $key => $row) {
-				$count = $this->query('SELECT COUNT(*) as count FROM ' . $prefix['default']['prefix'] . 'media_files WHERE media_id = ' . $row['Media']['id']);
-				$data[$key]['Media']['file_count'] = $count[0][0]['count'];
+				$count = $this->MediaFile->find('count', array(
+					'conditions' => array(
+						'MediaFile.media_id' => $row['Media']['id']
+					),
+					'contain' => array(
+						'File'
+					)
+				));
+				$data[$key]['Media']['file_count'] = $count;
 			}
 		}
 

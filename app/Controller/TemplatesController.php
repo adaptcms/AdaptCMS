@@ -90,11 +90,8 @@ class TemplatesController extends AppController
 		$this->set('current_theme', $current_theme['SettingValue']);
 		$this->set(compact('themes', 'themes_dropdown', 'default_theme_options'));
 
-		$active_path = VIEW_PATH . 'Themed';
-		$active_themes = $this->Template->Theme->getThemes($active_path);
-
-		$inactive_path = VIEW_PATH . 'Old_Themed';
-		$inactive_themes = $this->Template->Theme->getThemes($inactive_path);
+		$active_themes = $this->Template->Theme->getThemes( $this->Template->Theme->getActivePath() );
+		$inactive_themes = $this->Template->Theme->getThemes( $this->Template->Theme->getInactivePath() );
 
 		$themes = array_merge($active_themes['themes'], $inactive_themes['themes']);
 		$api_lookup = array_merge($active_themes['api_lookup'], $inactive_themes['api_lookup']);
@@ -325,7 +322,7 @@ class TemplatesController extends AppController
 			}
 		}
 
-		return $this->_ajaxResponse('flash_php_' . $type, array(
+		return $this->_ajaxResponse($type, array(
 			'message' => $message,
 			'id' => 'theme-update-div'
 		));
@@ -388,7 +385,7 @@ class TemplatesController extends AppController
 	{
 		$response = $this->Template->Theme->refreshTheme($this->request->data['Theme']['id'], $this->request->data['Theme']['name']);
 
-		return $this->_ajaxResponse('flash_php_' . $response['type'], array(
+		return $this->_ajaxResponse($response['type'], array(
 			'message' => $response['message'],
 			'id' => 'theme-update-div'
 		));

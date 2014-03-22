@@ -1,5 +1,7 @@
 <?php if (empty($this->request->data) && empty($sql['error'])): ?>
 	<?= $this->Form->create('Install', array('class' => 'well')) ?>
+		<h1>Installing <?php echo $plugin ?> Plugin</h1>
+
 		<?php if (!empty($install_text)): ?>
 			<h2 class="no-bg">From Manufacturer</h2>
 

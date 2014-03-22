@@ -13,6 +13,11 @@ class GoogleAnalyticsController extends AppController
 		'GoogleAnalytics.GoogleAnalytics'
 	);
 
+	/**
+	 * Admin Index
+	 *
+	 * @return void
+	 */
 	public function admin_index()
 	{
 		if (!Configure::read('GoogleAnalytics.email') || !Configure::read('GoogleAnalytics.password') ||

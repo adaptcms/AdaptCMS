@@ -12,14 +12,14 @@
 	<li>
 		<a href="#assets" data-toggle="tab">Theme Files</a>
 	</li>
-	<div class="right hidden-phone">
+	<div class="right hidden-xs">
 	    <?= $this->Html->link(
-	        '<i class="icon-chevron-left"></i> Return to Index',
+	        '<i class="fa fa-chevron-left"></i> Return to Index',
 	        array('action' => 'index', 'controller' => 'templates'),
-	        array('class' => 'btn', 'escape' => false
+	        array('class' => 'btn btn-info', 'escape' => false
 	    )) ?>
 	    <?= $this->Html->link(
-	        '<i class="icon-trash icon-white"></i> Delete',
+	        '<i class="fa fa-trash-o"></i> Delete',
 	        array('action' => 'delete', $this->request->data['Theme']['id'], $this->request->data['Theme']['title']),
 	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this theme?')"));
 	    ?>
@@ -55,7 +55,7 @@
 	<div class="tab-pane" id="assets">
 		<h2 class="pull-left">Files</h2>
 
-		<?= $this->Html->link('Add New File <i class="icon icon-plus icon-white"></i>', array(
+		<?= $this->Html->link('Add New File <i class="fa fa-plus"></i>', array(
 				'action' => 'admin_asset_add', 
 				$this->request->data['Theme']['title']
 			), array(
@@ -74,7 +74,7 @@
 				<thead>
 					<tr>
 						<th>File</th>
-						<th class="hidden-phone">Type</th>
+						<th class="hidden-xs">Type</th>
 						<th>Size</th>
 						<th></th>
 					</tr>
@@ -89,12 +89,12 @@
 										$this->request->data['Theme']['title']
 								)) ?>
 		                        <?= $this->Html->link(
-		                            '<i class="icon-globe" title="View File"></i>', 
+		                            '<i class="fa fa-globe" title="View File"></i>',
 		                            $assets_list['view_path'] . $row,
 		                            array('class' => 'pull-right', 'target' => '_blank', 'escape' => false));
 		                        ?>
 							</td>
-							<td class="hidden-phone">
+							<td class="hidden-xs">
 								<?= pathinfo($assets_list['path']  . $row, PATHINFO_EXTENSION) ?>
 							</td>
 							<td>
@@ -126,7 +126,7 @@
                                             ) ?>
                                         </li>
                                         <li>
-											<?= $this->Html->link('<i class="icon-picture"></i> View', 
+											<?= $this->Html->link('<i class="fa fa-picture-o"></i> View',
 												$assets_list['view_path'] . $row,
 												array(
 													'escape' => false,

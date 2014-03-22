@@ -8,6 +8,7 @@ Fields you can use in this template are also dependant on what custom fields you
 * Category Slug `{{ article['Category']['slug'] }}`
 * Article Author Username `{{ article['User']['username'] }}`
 * Article Author Email `{{ article['User']['email'] }}`
+* Number of Comments `{{ comments_count }}`
 
 Custom Fields
 -------------
@@ -87,3 +88,45 @@ relationships, you can list them out:
 
 For the above two examples, the platforms is the slug of the category, replace that with whatever category of related items you wish to show or if you want to list all related items -
 replace `['category']['platforms']` with `['all']`.
+
+Media Libraries <span class="label label-info">NEW IN 3.0.3</span>
+---------------
+
+With 3.0.3, attaching media libraries to articles has been introduced. When adding or editing an article, you can add/delete libraries from being linked to the article. When editing this template, you
+can then link to media libraries or show the first image in a library.
+
+There are three ways you can access the library data. If you want to loop through all the libraries, you can do so like this:
+
+    {% if not empty(media['all']) %}
+        {% loop library in media['all'] %}
+            {{ library['title'] }}
+        {% endloop %}
+    {% endif %}
+
+Or if you just one image you can do the below:
+
+    {% if not empty(media['first']) %}
+        {{ media['first']['file'] }}
+    {% endif %}
+
+This would output the web path to the file. Lastly, you can get a list of all the files from the attached libraries in that array as well:
+
+    {% if not empty(media['first']['files']) %}
+        {% loop file in media['first']['files'] %}
+            {{ file['file'] }}
+        {% endloop %}
+    {% endif %}
+
+For a full list of data you can access (whether you are looping through media items and accessing through there, through the whole files list or just the first file) see below:
+
+* Media ID `{{ item['id'] }}`
+* Media Slug `{{ item['slug'] }}`
+* Media Title `{{ item['title'] }}`
+* Media Count of Files `{{ item['count'] }}`
+* Media File ID `{{ item['file_id'] }}`
+* Media File Label `{{ item['file_label'] }}`
+* Media File Web Path `{{ item['file'] }}`
+* Media File - true/false on whether it exists `{{ item['file_exists'] }}`
+* Media File Caption `{{ item['file_caption'] }}`
+* Media File Size `{{ item['file_size'] }}`
+* Media File Created `{{ item['file_created'] }}`

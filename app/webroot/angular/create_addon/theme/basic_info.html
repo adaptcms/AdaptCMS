@@ -1,0 +1,17 @@
+<div>
+    <h2>Basic Info</h2>
+
+    <form ng-submit="saveProgress($event)">
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="You must enter in a name that is not already being used by another theme you have on your site. Later on, we can do a check on the AdaptCMS website if you are interested in submitting it to the official repository." data-title="Name"></i>
+                Name
+            </label>
+            <input type="text" name="name" ng-model="name" ng-change="setBasicInfo('name')" ng-value="getBasicInfo('name')">
+        </div>
+        <div class="input submit">
+            <button type="submit" ng-click="saveProgress($event)" class="btn btn-primary">Save <i class="fa fa-floppy-o"></i></button>
+            <a href="#" ng-click="nextStep($event)" class="btn btn-info">Continue <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </form>
+</div>

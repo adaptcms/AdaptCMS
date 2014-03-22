@@ -1,5 +1,5 @@
 INSERT INTO `{prefix}articles` (`id`, `title`, `slug`, `tags`, `related_articles`, `user_id`, `category_id`, `status`, `publish_time`, `created`, `modified`, `deleted_time`) VALUES
-(1, 'Welcome to AdaptCMS 3.0.2!', 'welcome-to-adaptcms-3-0-2', NULL, '', 1, 1, 1, '{date}', '{date}', '{date}', '0000-00-00 00:00:00');
+(1, 'Welcome to AdaptCMS 3.0.3!', 'welcome-to-adaptcms-3-0-3', NULL, '', 1, 1, 1, '{date}', '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}article_values` (`id`, `article_id`, `field_id`, `file_id`, `data`) VALUES
 (1, 1, 1, 0, '<p>We hope you enjoy your newly installed copy of AdaptCMS. Be sure to check the <a href="http://www.adaptcms.com" target="_blank">official website</a> for documentation on the CMS and you can get support <a href="http://www.adaptcms.com/support" target="_blank">here</a>. Enjoy!</p>\r\n<p>Thank you,<br />AdaptCMS Team</p>');
@@ -461,7 +461,19 @@ INSERT INTO `{prefix}permissions` (`id`, `label`, `module_id`, `role_id`, `actio
 (null, NULL, 6, 1, 0, '', 'templates', 'admin_global_tags', 1, '', 2, 2),
 (null, NULL, 6, 4, 0, '', 'templates', 'admin_global_tags', 0, '', 2, 2),
 (null, null, 0, 1, 0, '', 'tools', 'admin_convert_onecms', 1, '', 2, 2),
-(null, null, 0, 4, 0, '', 'tools', 'admin_convert_onecms', 0, '', 2, 2);
+(null, null, 0, 4, 0, '', 'tools', 'admin_convert_onecms', 0, '', 2, 2),
+(null, NULL, 4, 1, 0, '', 'files', 'admin_json_list', 1, '', 1, 1),
+(null, NULL, 4, 4, 0, '', 'files', 'admin_json_list', 1, '', 1, 1),
+(null, NULL, 1, 1, 0, '', 'articles', 'admin_preview', 1, '', 1, 1),
+(null, NULL, 1, 4, 0, '', 'articles', 'admin_preview', 1, '', 1, 1),
+(null, NULL, NULL, 1, 0, '', 'tools', 'admin_feeds', 1, '', 1, 1),
+(null, NULL, NULL, 4, 0, '', 'tools', 'admin_feeds', 1, '', 1, 1),
+(null, NULL, NULL, 1, 0, '', 'tools', 'admin_create_plugin', 1, '', 1, 1),
+(null, NULL, NULL, 4, 0, '', 'tools', 'admin_create_plugin', 1, '', 1, 1),
+(null, NULL, NULL, 1, 0, '', 'tools', 'admin_create_theme', 1, '', 1, 1),
+(null, NULL, NULL, 4, 0, '', 'tools', 'admin_create_theme', 1, '', 1, 1),
+(null, NULL, NULL, 1, 0, '', 'tools', 'admin_routes_list', 1, '', 1, 1),
+(null, NULL, NULL, 4, 0, '', 'tools', 'admin_routes_list', 1, '', 1, 1);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_adaptbb_forums` (`id`, `title`, `slug`, `category_id`, `description`, `status`, `num_posts`, `num_topics`, `ord`, `user_id`, `icon_url`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'Off Topic', 'off-topic', 1, '<p>All discussions go here.</p>', 1, 0, 0, 0, 1, '', '{date}', '{date}', '0000-00-00 00:00:00');
@@ -484,7 +496,7 @@ INSERT INTO `{prefix}plugin_poll_values` (`id`, `title`, `poll_id`, `votes`) VAL
 (5, 'MLB', 1, 0);
 -- --------------------------------------------------------
 INSERT INTO `{prefix}plugin_polls` (`id`, `article_id`, `title`, `poll_type`, `user_id`, `start_date`, `end_date`, `created`, `modified`, `deleted_time`) VALUES
-(1, NULL, 'What is your favorite sport?', NULL, 1, NULL, NULL, '{date}', '{date}', '0000-00-00 00:00:00');
+(1, NULL, 'What is your favorite sport?', NULL, 1, '2013-01-01', NULL, '{date}', '{date}', '0000-00-00 00:00:00');
 -- --------------------------------------------------------
 INSERT INTO `{prefix}roles` (`id`, `title`, `defaults`, `created`, `modified`, `deleted_time`) VALUES
 (1, 'admin', 'default-admin', '0000-00-00 00:00:00', '{date}', '0000-00-00 00:00:00'),

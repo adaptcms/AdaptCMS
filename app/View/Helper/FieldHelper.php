@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Class FieldHelper
+ *
+ * @property HtmlHelper $Html
+ * @property TextHelper $Text
+ */
 class FieldHelper extends AppHelper
 {
     /**
@@ -36,7 +41,7 @@ class FieldHelper extends AppHelper
             }
         }
         
-        return;
+        return false;
     }
 
     /**
@@ -59,7 +64,7 @@ class FieldHelper extends AppHelper
             }
         }
         
-        return;
+        return false;
     }
 
     /**
@@ -116,7 +121,7 @@ class FieldHelper extends AppHelper
             }
         }
 
-        return;
+        return false;
     }
 
     public function getFirstParagraph($data, $length = 150)

@@ -86,11 +86,12 @@ class UsersController extends AppController
 				if (!empty($this->request->data['ModuleValue']))
 				{
 					$this->loadModel('ModuleValue');
-					$this->ModuleValue->saveMany($this->request->data['ModuleValue']);
+
+					$this->ModuleValue->setModuleId($this->request->data['ModuleValue'], $this->User->id);
 				}
 
                 $this->Session->setFlash('Your user has been added.', 'success');
-                $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash('Unable to add your user.', 'error');
             }
@@ -107,6 +108,10 @@ class UsersController extends AppController
 		$timezones = $this->getTimeZones();
 
 		$fields = $this->User->Field->getFields('User');
+
+		if (!empty($this->request->data['ModuleValue'])) {
+			$fields = $this->User->mergeModuleData($this->request->data['ModuleValue'], $fields);
+		}
 
 		$this->set(compact('security_options', 'themes', 'timezones', 'fields'));
 	}
@@ -132,11 +137,12 @@ class UsersController extends AppController
 				if (!empty($this->request->data['ModuleValue']))
 				{
 					$this->loadModel('ModuleValue');
+
 					$this->ModuleValue->saveMany($this->request->data['ModuleValue']);
 				}
 
 	            $this->Session->setFlash('Your user has been updated.', 'success');
-	            $this->redirect(array('action' => 'index'));
+	            return $this->redirect(array('action' => 'index'));
 	        } else {
 	            $this->Session->setFlash('Unable to update your user.', 'error');
 	        }
@@ -207,9 +213,9 @@ class UsersController extends AppController
 
 		if ($permanent)
 		{
-			$this->redirect(array('action' => 'index', 'trash' => 1));
+			return $this->redirect(array('action' => 'index', 'trash' => 1));
 		} else {
-			$this->redirect(array('action' => 'index'));
+			return $this->redirect(array('action' => 'index'));
 		}
 	}
 
@@ -230,10 +236,10 @@ class UsersController extends AppController
 
 	    if ($this->User->restore()) {
 	        $this->Session->setFlash('The user `'.$title.'` has been restored.', 'success');
-	        $this->redirect(array('action' => 'index'));
+	        return $this->redirect(array('action' => 'index'));
 	    } else {
 	    	$this->Session->setFlash('The user `'.$title.'` has NOT been restored.', 'error');
-	        $this->redirect(array('action' => 'index'));
+	        return $this->redirect(array('action' => 'index'));
 	    }
 	}
 
@@ -281,7 +287,7 @@ class UsersController extends AppController
 
                         if ($user['User']['last_reset_time'] == '0000-00-00 00:00:00' ||
                             $math > $password_reset['SettingValue']['data']) {
-                            $this->redirect(array(
+                            return $this->redirect(array(
                                 'action' => 'reset_password',
                                 $this->request->data['User']['username']
                             ));
@@ -298,11 +304,11 @@ class UsersController extends AppController
 
                     if (!$this->hasAccessToAdmin( $this->Auth->User('Role.id') ))
                     {
-                        $this->redirect('/');
+                        return $this->redirect('/');
                     }
                     else
                     {
-                        $this->redirect('/admin');
+                        return $this->redirect('/admin');
                     }
                 } else {
                     $this->Session->setFlash('Username or password is incorrect', 'error');
@@ -321,7 +327,7 @@ class UsersController extends AppController
 
 		$this->Session->setFlash('You have successfully logged out.', 'success');
 
-        $this->redirect($this->Auth->logout());
+        return $this->redirect($this->Auth->logout());
     }
 
 	/**
@@ -351,7 +357,7 @@ class UsersController extends AppController
 
 			$this->Session->setFlash($msg, 'error');
 
-			$this->redirect('/');
+			return $this->redirect('/');
 		}
 
 		$user_status = $this->SettingValue->findByTitle('User Status');
@@ -361,11 +367,8 @@ class UsersController extends AppController
         {
             if (!empty($captcha['SettingValue']['data']))
             {
-                include_once(APP . 'webroot/libraries/captcha/securimage.php');
-                $securimage = new Securimage();
-
 	            if ($captcha['SettingValue']['data'] == 'Yes' && empty($this->request->data['captcha']) ||
-		            $captcha['SettingValue']['data'] == 'Yes' && !$securimage->check($this->request->data['captcha'])) {
+		            $captcha['SettingValue']['data'] == 'Yes' && !$this->checkCaptcha($this->request->data['captcha'])) {
 		            $message = 'Invalid Captcha Answer. Please try again.';
 	            }
             }
@@ -541,10 +544,7 @@ class UsersController extends AppController
 
 		if (!empty($this->request->data))
 		{
-            include_once(APP . 'webroot/libraries/captcha/securimage.php');
-        	$securimage = new Securimage();
-
-	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
+	        if (empty($this->request->data['User']['captcha']) || !$this->checkCaptcha($this->request->data['User']['captcha']))
 	        {
 	            $error = 'Invalid Captcha Answer. Please try again.';
 	        }
@@ -638,20 +638,35 @@ class UsersController extends AppController
 			return $this->redirect('/');
 		}
 
-		if (!empty($this->request->data))
-		{
-            include_once(APP . 'webroot/libraries/captcha/securimage.php');
-        	$securimage = new Securimage();
+	    if (!empty($this->request->params['named']['username']))
+		    $this->request->data['User']['username'] = $this->request->params['named']['username'];
 
-	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
+	    if (!empty($this->request->data['User']['username'])) {
+	        $user = $this->User->findByUsername($this->request->data['User']['username']);
+
+		    $security = $this->User->getSecurityQuestion($user);
+
+	        $this->set(compact('security'));
+	    }
+
+		if ($this->request->is('post'))
+		{
+	        if (empty($this->request->data['User']['captcha']) || !$this->checkCaptcha($this->request->data['User']['captcha']))
 	        {
 	            $error = 'Invalid Captcha Answer. Please try again.';
 	        }
 
+			if (!empty($this->request->data['User']['security_question']) && !empty($this->request->data['User']['security_answer'])) {
+				$security = $this->User->getSecurityQuestion($user, false, $this->request->data['User']['security_question']);
+
+				if ($security['answer'] != $this->request->data['User']['security_answer']) {
+					$error = 'You entered the incorrect security answer. Please try again.';
+					$this->request->data['User']['security_answer'] = '';
+				}
+			}
+
 			if (empty($error))
 			{
-				$user = $this->User->findByUsername($this->request->data['User']['username']);
-
 				if (empty($user))
 				{
 					$error = 'Could not find user by that username.';
@@ -686,19 +701,13 @@ class UsersController extends AppController
 
 	        if (!empty($error))
 	        {
+		        $this->request->data['User']['captcha'] = '';
 	        	$this->Session->setFlash($error, 'error');
 	        }
 		}
 
-		if (!empty($this->request->params['named']['username']))
-		{
-			$this->request->data['User']['username'] = $this->request->params['named']['username'];
-		}
-
 		if (!empty($this->request->params['named']['code']))
-		{
 			$this->request->data['User']['activate_code'] = $this->request->params['named']['code'];
-		}
 	}
 
     public function reset_password($username = null)
@@ -716,10 +725,7 @@ class UsersController extends AppController
 
     	if (!empty($this->request->data))
     	{
-            include_once(APP . 'webroot/libraries/captcha/securimage.php');
-        	$securimage = new Securimage();
-
-	        if (empty($this->request->data['User']['captcha']) || !$securimage->check($this->request->data['User']['captcha']))
+	        if (empty($this->request->data['User']['captcha']) || !$this->checkCaptcha($this->request->data['User']['captcha']))
 	        {
 	            $error = 'Invalid Captcha Answer. Please try again.';
 	        }
@@ -779,7 +785,7 @@ class UsersController extends AppController
     		$username = $this->Auth->user('username');
     	} elseif (empty($username)) {
         	$this->Session->setFlash('No username supplied', 'error');
-        	$this->redirect(array(
+        	return $this->redirect(array(
         		'controller' => 'pages',
         		'action' => 'display',
         		'home'
@@ -789,7 +795,7 @@ class UsersController extends AppController
         if ($username != $this->Auth->user('username') && $this->permissions['any'] == 0)
         {
             $this->Session->setFlash('You cannot access another users item.', 'error');
-            $this->redirect('/');
+            return $this->redirect('/');
         }
 
     	$this->request->data = $this->User->find('first', array(
@@ -815,7 +821,7 @@ class UsersController extends AppController
         if (empty($this->request->data))
         {
             $this->Session->setFlash('User does not exist.', 'error');
-            $this->redirect('/');
+            return $this->redirect('/');
         }
 
         $this->loadModel('Field');
@@ -841,7 +847,7 @@ class UsersController extends AppController
     	if (!$this->Auth->user('id'))
     	{
     		$this->Session->setFlash('You must be logged in to access this page.', 'error');
-    		$this->redirect(array(
+    		return $this->redirect(array(
     			'action' => 'login'
     		));
     	}

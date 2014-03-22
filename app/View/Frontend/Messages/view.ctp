@@ -87,14 +87,14 @@
 	{% endloop %}
 </div>
 
-{{ partial('flash_error', array('message' => 'Please enter in a message')) }}
+{{ partial('error', array('message' => 'Please enter in a message')) }}
 {{ partial('success', array('message' => 'Your message has been sent.')) }}
 
 {% if $receiver == current_user('id') && $messages[0]['Message']['receiver_archived_time'] != '0000-00-00 00:00:00' || $sender == current_user('id') && $messages[0]['Message']['sender_archived_time'] != '0000-00-00 00:00:00' %}
 	<p>
 		This message has been archived, you can no longer reply to it unless you decide to move it back to your inbox.
 		<a href="{{ url('messages_move', array('inbox', $messages[0]['Message']['id'])) }}" class="btn btn-success">
-			<i class="icon-check icon-white"></i> Move to Inbox
+			<i class="fa fa-check"></i> Move to Inbox
 		</a>
 	</p>
 {% else %}

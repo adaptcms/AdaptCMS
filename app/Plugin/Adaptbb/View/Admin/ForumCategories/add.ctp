@@ -14,14 +14,14 @@
 
 	<?= $this->Form->input('title', array('type' => 'text', 'class' => 'required')) ?>
 
-    <div class="hidden-phone">
+    <div class="hidden-xs">
         <h4>Category Order</h4>
 
-        <ul id="sort-list" class="unstyled span5 col-lg-5 no-marg-left">
+        <ul id="sort-list" class="unstyled col-lg-5 no-pad-l">
             <?php if (!empty($categories)): ?>
                 <?php foreach($categories as $category): ?>
-                    <li class="btn" id="<?= $category['ForumCategory']['id'] ?>">
-                        <i class="icon icon-move"></i>
+                    <li class="btn btn-success" id="<?= $category['ForumCategory']['id'] ?>">
+                        <i class="fa fa-arrows"></i>
                         <span>
                             <?= $category['ForumCategory']['title'] ?>
                         </span>
@@ -30,8 +30,8 @@
                     </li>
                 <?php endforeach ?>
             <?php endif ?>
-            <li class="btn" id="0">
-                <i class="icon icon-move"></i>
+            <li class="btn btn-success" id="0">
+                <i class="fa fa-arrows"></i>
                 <span>
                     Category
                 </span>

@@ -15,7 +15,7 @@ App.controller('SearchCtrl', function($scope, $timeout, $http, $sce) {
     $scope.search = function(event) {
         event.preventDefault();
 
-        var url = '/search/search/' + $scope.q + '/' + $scope.module + '/clear_search:1';
+        var url = $('#webroot').text() + 'search/search/' + $scope.q + '/' + $scope.module + '/clear_search:1';
 
         $http.get(url, { dataType: 'json' })
         .success(function(data){

@@ -40,11 +40,8 @@ class ContactController extends AppController
 
 				if (!empty($captcha))
 				{
-					include_once(APP . 'webroot/libraries/captcha/securimage.php');
-					$securimage = new Securimage();
 
-					if (!empty($securimage) &&
-						!$securimage->check($this->request->data['captcha']))
+					if (empty($this->request->data['captcha']) || !$this->checkCaptcha($this->request->data['captcha']))
 					{
 						$this->Session->setFlash('Incorrect captcha entred. Please try again.', 'error');
 						$error = true;

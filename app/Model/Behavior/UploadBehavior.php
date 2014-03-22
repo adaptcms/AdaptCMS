@@ -349,7 +349,7 @@ class UploadBehavior extends ModelBehavior
 				}
 
 				if (!empty($model->data[$model->name]['watermark'])) {
-					$watermark = $this->createWatermark(
+					$this->createWatermark(
 						$path . $model->data[$model->name]['filename'],
 						$ext,
 						$resize

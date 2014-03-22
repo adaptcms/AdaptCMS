@@ -1,0 +1,38 @@
+<div>
+    <h2>Basic Info</h2>
+
+    <form ng-submit="saveProgress($event)">
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="You must enter in a name that is not already being used by another plugin you have on your site. Later on, we can do a check on the AdaptCMS website if you are interested in submitting it to the official repository." data-title="Name"></i>
+                Name
+            </label>
+            <input type="text" name="name" ng-model="name" ng-change="setBasicInfo('name')" ng-value="getBasicInfo('name')">
+        </div>
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="Marking this as true, will enable users to use this plugin when creating a block data. See the Polls plugin model 'Poll' for details on what functions you need in your model to support this." data-title="Block Active"></i>
+                Block Active
+            </label>
+            <input type="checkbox" name="block_active" ng-model="block_active" ng-change="setBasicInfo('block_active')" ng-checked="getBasicInfo('block_active') == true">
+        </div>
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="Marking this as true, will enable users to add custom fields that are assigned to your plugin. You can then retrieve and show the custom field data along with showing the fields. See the AdaptBB plugin for example uses." data-title="Custom Fields"></i>
+                Custom Fields
+            </label>
+            <input type="checkbox" name="is_fields" ng-model="is_fields" ng-change="setBasicInfo('is_fields')" ng-checked="getBasicInfo('is_fields') == true">
+        </div>
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="Marking this as true, will enable users to search through your plugin data from the search tool. You must add an element file in your plugins view folder like so - Elements/Search/ModelName.ctp See the Links plugin for examples." data-title="Search Support"></i>
+                Search Support
+            </label>
+            <input type="checkbox" name="is_searchable" ng-model="is_searchable" ng-change="setBasicInfo('is_searchable')" ng-checked="getBasicInfo('is_searchable') == true">
+        </div>
+        <div class="input submit">
+            <button type="submit" ng-click="saveProgress($event)" class="btn btn-primary">Save <i class="fa fa-floppy-o"></i></button>
+            <a href="#" ng-click="nextStep($event)" class="btn btn-info">Continue <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </form>
+</div>

@@ -5,12 +5,12 @@
 
 <div class="pull-right admin-edit-options clearfix">
     <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Index',
+        '<i class="fa fa-chevron-left"></i> Return to Index',
         array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
+        array('class' => 'btn btn-info', 'escape' => false
     )) ?>
     <?= $this->Html->link(
-        '<i class="icon-trash icon-white"></i> Delete',
+        '<i class="fa fa-trash-o"></i> Delete',
         array('action' => 'delete', $this->request->data['Cron']['id'], $this->request->data['Cron']['title']),
         array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this cron entry?')"));
     ?>

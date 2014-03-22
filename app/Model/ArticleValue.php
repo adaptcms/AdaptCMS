@@ -51,11 +51,17 @@ class ArticleValue extends AppModel
         if (!empty($this->data['ArticleValue']))
         {
             $row = $this->data['ArticleValue'];
-            
-            if (!empty($row['delete']) && $row['delete'] == 1 && !empty($row['id']))
+
+	        $empty_value = false;
+	        if (!empty($row['type']) && $row['type'] == 'img' && !isset($row['file_id']))
+	        {
+		        $this->data['ArticleValue']['file_id'] = '';
+		        $empty_value = true;
+		        $field = 'file_id';
+	        }
+            elseif (!empty($row['delete']) && $row['delete'] == 1 && !empty($row['id']))
             {
                 $this->data['ArticleValue']['data'] = $row['filename'];
-//                $this->delete($row['id']);
             }
             elseif (isset($row['data']) && is_array($row['data']))
             {
@@ -79,8 +85,6 @@ class ArticleValue extends AppModel
                     {
                         $this->data['ArticleValue']['file_id'] = $this->File->id;
                         $this->data['ArticleValue']['data'] = $fileUpload['ArticleValue']['data'];
-//                        debug($fileUpload);
-//                        debug($this->data['ArticleValue']);
                     }
                 }
                 elseif (isset($row['data']['error']) && $row['data']['error'] == 4 && empty($row['data']['tmp_name']))
@@ -92,15 +96,26 @@ class ArticleValue extends AppModel
                     else
                     {
                         $this->data['ArticleValue']['data'] = '';
+
+                        $empty_value = true;
+                        $field = 'file_id';
                     }
                 }
                 else
                 {
                     $this->data['ArticleValue']['data'] = json_encode($row['data']);
                 }
-            }
+            } elseif((empty($row['type']) || $row['type'] != 'img') && (empty($row['data']) || (isset($row['data']) && $row['data'] == '0') )) {
+		        $empty_value = true;
+		        $field = 'data';
+	        }
+
+	        if (!empty($row['required']) && !empty($empty_value)) {
+		        $this->invalidate($field, 'This field is required');
+		        return false;
+	        }
         }
-        
+
         return true;
     }
     
@@ -129,4 +144,79 @@ class ArticleValue extends AppModel
                 
         return $data;
     }
+
+	/**
+	 * Get Fields
+	 *
+	 * @param $data
+	 * @return array
+	 */
+	public function getFields($data)
+	{
+		if (!empty($data)) {
+			foreach($data as $key => $row) {
+				if (empty($row['Field'])) {
+					$field = $this->Field->findById($row['field_id']);
+
+					$data[$key]['Field'] = $field['Field'];
+				}
+
+				if (!empty($row['file_id'])) {
+					$file = $this->File->findById($row['file_id']);
+
+					$data[$key]['File'] = $file['File'];
+				}
+
+				if (!empty($row['data']) && !is_array($row['data'])) {
+					$data[$key]['data'] = html_entity_decode($row['data']);
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * After Find
+	 * Attempts to json_decode json data automatically.
+	 *
+	 * @param mixed $results
+	 * @return mixed
+	 */
+	public function afterFind($results)
+	{
+		if (!empty($results)) {
+			foreach($results as $key => $row) {
+				if (!empty($row['ArticleValue']['data'])) {
+					$result = json_decode($row['ArticleValue']['data'], true);
+
+					if (!empty($result))
+						$results[$key]['ArticleValue']['data'] = $result;
+				}
+			}
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Article Add Adjust
+	 *
+	 * @param $fields
+	 * @return mixed
+	 */
+	public function articleAddAdjust($fields)
+	{
+		if (!empty($fields)) {
+			foreach($fields as $key => $field) {
+				if (!empty($field['ArticleValue']['field_id'])) {
+					unset($fields[$key]['ArticleValue']);
+
+					$fields[$key]['ArticleValue'][0] = $field['ArticleValue'];
+				}
+			}
+		}
+
+		return $fields;
+	}
 }

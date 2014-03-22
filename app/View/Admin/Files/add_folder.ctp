@@ -17,10 +17,10 @@
 		'empty' => '- pick folder -',
 		'options' => $folders,
 		'label' => 'Folder',
-		'class' => 'required span6 col-lg-6'
+		'class' => 'required col-xs-6 form-control'
 	)) ?>
 
-	<small class="span6 no-marg-left col-lg-6">
+	<small class="col-lg-6 no-pad-l">
 		Note: To get a folder to show up, please upload the folder via FTP/other method to the folder:
 		<strong><?= WWW_ROOT . 'folder_upload' . DS ?></strong>
 	</small>
@@ -36,21 +36,28 @@
 	<div class="clearfix"></div>
 	<?= $this->Form->input('random_filename', array('type' => 'checkbox')) ?>
 
-	<h4 class="image-filters">Media Libraries</h4>
+	<div id="libraries" class="clearfix">
+		<h4 class="image-filters">Media Libraries</h4>
 
-	<div class="media-libraries">
-		<?= $this->Form->input('library', array(
-			'div' => false,
-			'empty' => '- add library -',
-			'options' => $media_list
-		)) ?>
-		<?= $this->Form->button('Add', array(
-			'class' => 'btn btn-info add-media',
-			'type' => 'button'
-		)) ?>
+		<div class="media-libraries input-group col-lg-5">
+			<?= $this->Form->label('library', 'Library') ?>
+			<div class="clearfix"></div>
+
+			<?= $this->Form->input('library', array(
+				'div' => false,
+				'label' => false,
+				'class' => 'form-control form-control-inline',
+				'empty' => '- add library -',
+				'options' => $media_list
+			)) ?>
+			<?= $this->Form->button('Add', array(
+				'class' => 'btn btn-info add-media',
+				'type' => 'button'
+			)) ?>
+		</div>
+		<div class="media_libraries"></div>
+		<div class="clearfix media"></div>
 	</div>
-	<div class="media_libraries"></div>
-	<div class="clearfix media"></div>
 
 	<?= $this->Form->button('Submit', array('type' => 'submit', 'class' => 'btn btn-primary')) ?>
 <?= $this->Form->end() ?>

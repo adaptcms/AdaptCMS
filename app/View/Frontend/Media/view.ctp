@@ -12,7 +12,7 @@
 </h1>
 
 <a href="{{ url('media_index') }}" class="btn btn-primary pull-right">
-	<i class="icon-arrow-left icon-white"></i> Library List
+	<i class="fa fa-arrow-left"></i> Library List
 </a>
 <div class="clearfix"></div>
 

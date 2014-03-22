@@ -199,9 +199,7 @@ class DeleteBehavior extends ModelBehavior
 			foreach($queryData['contain'] as $key => $row) {
 				if (is_numeric($key) && is_string($row) && !empty($Model->$row->actsAs) && in_array('Delete', $Model->$row->actsAs)) {
 					$queryData['contain'][$row]['conditions'][$row . '.deleted_time'] = '0000-00-00 00:00:00';
-				}
-				elseif (!is_numeric($key))
-				{
+				} elseif (!is_numeric($key)) {
 					if (isset($row['conditions'][$key . '.only_deleted'])) {
 						unset($queryData['contain'][$key]['conditions'][$key . '.only_deleted']);
 						$queryData['contain'][$key]['conditions'][$key . '.deleted_time !='] = '0000-00-00 00:00:00';

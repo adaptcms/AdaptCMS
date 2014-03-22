@@ -5,7 +5,7 @@
 <h2><?= $plugin ?> Files</h2>
 
 <div class="btn-toolbar pull-right">
-	<?= $this->Html->link('Add File <i class="icon-plus icon-white"></i>', array(
+	<?= $this->Html->link('Add File <i class="fa fa-plus"></i>', array(
 			'controller' => 'themes',
 			'action' => 'admin_asset_add', 
 			null,
@@ -15,7 +15,7 @@
 			'escape' => false
 	)) ?>
 	<?= $this->Html->link(
-	    '<i class="icon-list icon-white"></i> Back to Plugins',
+	    '<i class="fa fa-list"></i> Back to Plugins',
 	    array('action' => 'index'),
 	    array('class' => 'btn btn-info', 'escape' => false)
 	) ?>
@@ -31,7 +31,7 @@
 		<thead>
 			<tr>
 				<th>File</th>
-				<th class="hidden-phone">Type</th>
+				<th class="hidden-xs">Type</th>
 				<th>Size</th>
 				<th>Options</th>
 			</tr>
@@ -48,12 +48,12 @@
 							'Plugin' . $plugin
 						)) ?>
                         <?= $this->Html->link(
-                            '<i class="icon-globe" title="View File"></i>', 
+                            '<i class="fa fa-globe" title="View File"></i>',
                             $assets_list['view_path'] . $row,
                             array('class' => 'pull-right', 'target' => '_blank', 'escape' => false));
                         ?>
 					</td>
-					<td class="hidden-phone">
+					<td class="hidden-xs">
 						<?= pathinfo($assets_list['path'] . $row, PATHINFO_EXTENSION) ?>
 					</td>
 					<td>
@@ -85,7 +85,7 @@
                                     ) ?>
                                 </li>
                                 <li>
-									<?= $this->Html->link('<i class="icon-picture"></i> View', 
+									<?= $this->Html->link('<i class="fa fa-picture-o"></i> View',
 										$assets_list['view_path'] . $row,
 										array(
 											'escape' => false,

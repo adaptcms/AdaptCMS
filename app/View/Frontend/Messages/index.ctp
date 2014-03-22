@@ -9,7 +9,7 @@
 		Send Message
 	</a>
     <a class="btn dropdown-toggle btn-success" data-toggle="dropdown">
-    View <i class="icon-picture"></i>
+    View <i class="fa fa-picture-o"></i>
     <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" style="min-width: 0px">
@@ -40,8 +40,8 @@
                 <th>{{ paginator.sort('title', 'Subject') }}</th>
                 <th>{{ paginator.sort('Sender.username', 'From') }}
                 <th>{{ paginator.sort('Receiver.username', 'To') }}
-                <th class="hidden-phone">{{ paginator.sort('created') }}</th>
-                <th class="hidden-phone">{{ paginator.sort('last_reply_time', 'Last Reply') }}</th>
+                <th class="hidden-xs">{{ paginator.sort('created') }}</th>
+                <th class="hidden-xs">{{ paginator.sort('last_reply_time', 'Last Reply') }}</th>
                 {% if $box != 'outbox' %}
                     <th></th>
 	            {% endif %}
@@ -53,9 +53,9 @@
             <tr>
                 <td>
                     {% if $message['Message']['is_read'] == 1 %}
-                        <i class="icon icon-ok"></i>
+                        <i class="fa fa-check"></i>
                     {% else %}
-                        <i class="icon icon-remove"></i>
+                        <i class="fa fa-minus"></i>
                     {% endif %}
                 </td>
                 {% if $box == 'archive' %}
@@ -86,10 +86,10 @@
 		                {{ message['Receiver']['username'] }}
 	                </a>
                 </td>
-                <td class="hidden-phone">
+                <td class="hidden-xs">
                     {{ time(message['Message']['created'], 'words') }}
                 </td>
-                <td class="hidden-phone">
+                <td class="hidden-xs">
                     {% if $message['Message']['last_reply_time'] == '0000-00-00 00:00:00' %}
                         No Replies
                     {% else %}
@@ -100,16 +100,16 @@
                     <td>
                         {% if $box != 'archive' && $message['Message']['is_read'] == 0 && $message['Message']['receiver_user_id'] == $this->Session->read('Auth.User.id') %}
                             <a href="{{ url('messages_move', array('mark_read', $message['Message']['id'])) }}" class="btn btn-primary">
-	                            <i class="icon-check icon-white"></i> Mark Read
+	                            <i class="fa fa-check"></i> Mark Read
                             </a>
                         {% endif %}
                         {% if $box != 'archive' %}
 		                    <a href="{{ url('messages_move', array('archive', $message['Message']['id'])) }}" class="btn btn-info">
-			                    <i class="icon-check icon-white"></i> Archive Message
+			                    <i class="fa fa-check"></i> Archive Message
 		                    </a>
                         {% elseif $box == 'archive' %}
 		                    <a href="{{ url('messages_move', array('inbox', $message['Message']['id'])) }}" class="btn btn-success">
-			                    <i class="icon-check icon-white"></i> Move to Inbox
+			                    <i class="fa fa-check"></i> Move to Inbox
 		                    </a>
                         {% endif %}
                     </td>

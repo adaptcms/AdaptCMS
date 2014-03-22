@@ -1,40 +1,41 @@
 <?php
 $model = !empty($model) ? $model : 'ArticleValue';
 ?>
-<div>
-    <?= $this->Form->hidden($model . '.' . $key . '.data', array(
-        'value' => !empty($field[$model][0]['File']) ? $field[$model][0]['File']['id'] : ''
-    )) ?>
-    <?= $this->Form->hidden($model . '.' . $key . '.file_id', array(
-        'value' => !empty($field[$model][0]['File']) ? $field[$model][0]['File']['id'] : ''
-    )) ?>
+<div class="input img<?php echo !empty($field['Field']['required']) ? ' required' : '' ?>">
+	<?= $this->Form->hidden($model . '.' . $key . '.type', array(
+	    'value' => 'img'
+	)) ?>
     <?= $this->Form->label($model . '.' . $key . 'data', $icon . $field['Field']['label'], array('escape' => false)) ?>
 
-    <?= $this->Html->link(
-            'Attach Image <i class="icon icon-white icon-upload"></i>', 
-            '#media-modal' . $field['Field']['id'], 
-            array(
-                'class' => 'btn btn-primary media-modal', 
-                'escape' => false, 
-                'data-toggle' => 'modal'
-            )
-    ) ?>
+	<?= stripslashes($this->Html->link('Attach Image <i class="fa fa-upload"></i>', '#', array(
+		'class' => 'btn btn-primary',
+		'escape' => false,
+		'ng-click' => 'toggleModal($event, \'open\', \'modal-' . $field['Field']['id'] . '\')'
+	))) ?>
 
-    <p>&nbsp;</p>
-    <ul class="selected-images col-lg-12 thumbnails">
-        <?php if (!empty($field[$model][0]['File'])): ?>
-            <?= $this->element('media_modal_image', array(
-                    'image' => $field[$model][0]['File'], 
-                    'key' => 0,
-                    'check' => true
-            )) ?>
-        <?php endif ?>
-    </ul>
+	<?= $this->element('media_modal_image', array(
+		'disable_parsing' => true,
+		'id' => 'modal-' . $field['Field']['id'],
+		'limit' => 1,
+		'name' => 'data[' . $model . '][' . $key . '][file_id]'
+	)) ?>
+
+	<?php if (!empty($field[$model][0]['File'])): ?>
+		<div class="existing-images hidden" data-id="modal-<?php echo $field['Field']['id'] ?>">
+			<span><?php echo json_encode($field[$model][0]['File']) ?></span>
+		</div>
+	<?php endif ?>
+
+	<?php if (!empty($this->request->data['ArticleValue'][$key]['File'])): ?>
+		<div class="existing-images hidden" data-id="modal-<?php echo $field['Field']['id'] ?>">
+			<span><?php echo json_encode($this->request->data['ArticleValue'][$key]['File']) ?></span>
+		</div>
+	<?php endif ?>
+
+	<?php if (!empty($this->validationErrors['ArticleValue'][$key])): ?>
+		<div class="error-message">
+			This field is required
+		</div>
+	<?php endif ?>
 </div>
 <div class="clearfix"></div>
-
-<?= $this->element('media_modal', array(
-    'limit' => 1, 
-    'ids' => $model . '.' . $key . '.data', 
-    'id' => $field['Field']['id']
-)) ?>

@@ -29,6 +29,40 @@ if (typeof $.noty != 'undefined') {
     };
 }
 
+Timers = new function() {
+    var interval_ids = [];
+    var notifications = [];
+
+    this.create = function(id, method, time) {
+        var time = 60000 * parseInt(time);
+        var interval_id = setInterval(method, time);
+
+        this.setIntervalId(id, interval_id);
+    };
+
+    this.reset = function(timer) {
+        var interval_id = this.getIntervalId(timer);
+
+        clearInterval(interval_id);
+    };
+
+    this.getIntervalId = function(timer) {
+        return interval_ids[timer];
+    };
+
+    this.setIntervalId = function(timer, id) {
+        interval_ids[timer] = id;
+    };
+
+    this.getNotification = function(key) {
+        return typeof notifications[key] != 'undefined' ? notifications[key] : '';
+    };
+
+    this.setNotification = function(key, value) {
+        notifications[key] = value;
+    };
+};
+
 login_notice = [];
 
 $(document).ajaxError(function(e, jqXHR, ajaxSettings, thrownError) {
@@ -62,6 +96,12 @@ $(document).ajaxError(function(e, jqXHR, ajaxSettings, thrownError) {
 
 function triggerTimeoutWarning5Min()
 {
+    var existing = Timers.getNotification('5min');
+
+    if (existing) {
+        existing.close();
+    }
+
     var n = noty({
         text     : "<strong>Note</strong> <br /> Your session will expire in less than 5 minutes. Please click on this box to continue your session so you won't lose your progress.",
         type     : 'information',
@@ -69,6 +109,8 @@ function triggerTimeoutWarning5Min()
         callback : {
             afterClose: function () {
                 $.get($("#webroot").text() + "admin/articles", [], function() {
+                    $.noty.closeAll();
+
                     noty({
                         text     : '<strong>Success</strong> <br /> Your session has been kept alive.',
                         type     : 'success',
@@ -76,19 +118,24 @@ function triggerTimeoutWarning5Min()
                         closeWith: ['click']
                     });
 
-                    clearTimeout(setTimeout("triggerTimeoutWarning5Min()", 60000 * 25));
-                    setTimeout("triggerTimeoutWarning5Min()", 60000 * 25);
-
-                    clearTimeout(setTimeout("triggerTimeoutWarning2Min()", 60000 * 28));
-                    setTimeout("triggerTimeoutWarning2Min()", 60000 * 28);
+                    Timers.reset('5min');
+                    Timers.reset('2min');
                 });
             }
         }
     });
+
+    Timers.setNotification('5min', n);
 }
 
 function triggerTimeoutWarning2Min()
 {
+    var existing = Timers.getNotification('2min');
+
+    if (existing) {
+        existing.close();
+    }
+
     var n = noty({
         text     : "<strong>Note</strong> <br /> Your session will expire in less than 2 minutes! Please click on this box to continue your session so you won't lose your progress.",
         type     : 'alert',
@@ -96,6 +143,8 @@ function triggerTimeoutWarning2Min()
         callback : {
             afterClose: function () {
                 $.get($("#webroot").text() + "admin/articles", [], function() {
+                    $.noty.closeAll();
+
                     noty({
                         text     : '<strong>Success</strong> <br /> Your session has been kept alive.',
                         type     : 'success',
@@ -103,15 +152,14 @@ function triggerTimeoutWarning2Min()
                         closeWith: ['click']
                     });
 
-                    clearTimeout(setTimeout("triggerTimeoutWarning2Min()", 60000 * 28));
-                    setTimeout("triggerTimeoutWarning2Min()", 60000 * 28);
-
-                    clearTimeout(setTimeout("triggerTimeoutWarning5Min()", 60000 * 25));
-                    setTimeout("triggerTimeoutWarning5Min()", 60000 * 25);
+                    Timers.reset('5min');
+                    Timers.reset('2min');
                 });
             }
         }
     });
+
+    Timers.setNotification('2min', n);
 }
 
 function successMessage(message)
@@ -138,9 +186,9 @@ $(document).ready(function() {
 	changeRequiredFields();
 
     var page = window.location.pathname;
-    if (page.match(/admin/) && page.match(/add/) || page.match(/admin/) && page.match(/edit/)) {
-        setTimeout("triggerTimeoutWarning5Min()", 60000 * 25);
-        setTimeout("triggerTimeoutWarning2Min()", 60000 * 28);
+    if (page.match(/admin/)) {
+        Timers.create('5min', "triggerTimeoutWarning5Min()", 25);
+        Timers.create('2min', "triggerTimeoutWarning2Min()", 28);
     }
 
 	/**
@@ -206,14 +254,17 @@ $(document).ready(function() {
 	$('.btn-confirm').on('click', function(e) {
 		if ($(this).attr('title'))
 		{
-			var text = $(this).attr('title');
+            var text = 'Are you sure you wish to delete ' + $(this).attr('title') + '?';
+        } else if($(this).attr('data-new-title'))
+        {
+            var text = $(this).attr('data-new-title');
 		}
 		else
 		{
-			var text = 'this item';
+			var text = 'Are you sure you wish to delete this item?';
 		}
 
-		return confirm('Are you sure you wish to delete ' + text + '?');
+		return confirm(text);
 	});
 
 	$("#captcha .refresh").live('click', function(e) {
@@ -264,16 +315,16 @@ function changeRequiredFields()
 		var label = $(this).parent().find('label').first();
 
 		// For the article page, this function is called so want to make sure to not have more than one *
-		if ($(label).find('i:not(.icon)').length == 0) {
+		if ($(label).find('i:not(.fa)').length == 0) {
 			$(label).append(' <i>*</i>');
 		}
 	});
 }
 
-function getBlockUI()
+function getBlockUI(msg)
 {
     $.blockUI({
-        message: 'Loading, Please Wait...',
+        message: (msg ? msg : 'Loading, Please Wait...'),
         css: {
             border: 'none',
             padding: '15px',
@@ -299,6 +350,8 @@ function ajaxLogin(event)
 
     if (user_form.valid()) {
         $.post($("#webroot").text() + "login", user_form.serialize(), function(response) {
+            $.noty.closeAll();
+
             if (response.match(/UserLoginForm/)) {
                 var data = response.replace('<h1>Login</h1>', '');
 
@@ -306,7 +359,6 @@ function ajaxLogin(event)
             }
             else
             {
-                login_notice.close();
                 noty({
                     text     : '<strong>Success</strong> <br /> You have been logged in and your progress will be saved.',
                     type     : 'success',
@@ -482,3 +534,40 @@ function changeLetters(string) {
 
     return currentString;
 }
+
+/**
+ * Required Fields
+ * This is due to cake not handling required fields for checkboxes.
+ *
+ * @param form
+ */
+function requiredFields(form)
+{
+    var checkboxes = form.find('.input.checkbox.required');
+
+    if (checkboxes.length) {
+        $.each(checkboxes, function() {
+            if ($(this).find(':checkbox').attr('name').length) {
+                $('input[name="' + $(this).find(':checkbox').attr('name') + '"]').rules("add", {
+                    required: true
+                });
+            }
+
+            $(this).find('label:first').append(' <i>*</i>');
+        });
+    }
+
+    var images = form.find('.input.img.required');
+
+    if (images.length) {
+        $.each(images, function() {
+            $(this).find('label:first').append(' <i>*</i>');
+        });
+    }
+}
+
+Array.prototype.remove = function(from, to) {
+    var rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
+};

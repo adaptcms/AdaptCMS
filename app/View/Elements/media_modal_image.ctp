@@ -1,30 +1,17 @@
-<?php if ($key != 0 && $key % 3 === 0): ?>
-	<!-- <div class="clearfix"></div> -->
-<?php endif ?>
+<ul class="selected-images thumbnails" data-id="<?php echo !empty($id) ? $id : 'primary' ?>" data-limit="<?php echo !empty($limit) ? $limit : '' ?>">
+	<li class="img-container file_info col-lg-4 center" ng-repeat="image in getSelectedImages('<?php echo !empty($id) ? $id : 'primary' ?>')">
+		<img ng-src="{{ path }}{{ image.dir }}{{ image.filename }}" ng-show="image.exists" class="thumbnail" ng-click="addImage('<?php echo !empty($id) ? $id : 'primary' ?>', image)">
+		<img ng-src="{{ path }}img/no_file.png" ng-show="!image.exists" class="thumbnail" ng-click="addImage(image)">
 
-<li id="file-<?= $image['id'] ?>" class="file_info span4 center">
-	<?php if (file_exists($image_path.$image['dir'].$image['filename'])): ?>
-		<?= $this->Html->image('/'.$image['dir'].$image['filename'], array(
-			'style' => 'cursor: pointer;width: 250px;height: 175px;display: inline',
-			'class' => 'thumbnail'
-		)) ?>
-	<?php else: ?>
-		<?= $this->Html->image('http://placehold.it/250x175', array('style' => 'cursor: pointer', 'class' => 'thumbnail')) ?>
-	<?php endif ?>
+		<h4>
+			{{ image.label }}
 
-	<h4 style="margin-top: 10px">
-		<?= wordwrap($image['filename'], 35, "<br />", true) ?>
-		<?= $this->Form->input((empty($modal) ? 'File.' . $key : 'Files.' . $key), array(
-				'type' => 'checkbox', 
-				'value' => $image['id'], 
-				'div' => false,
-				'label' => false,
-				'class' => 'file',
-				'checked' => (!empty($check) ? 'checked' : '')
-		)) ?>
-	</h4>
+			<input name="<?php echo !empty($name) ? $name : 'data[File][{{ $index }}]' ?>" type="checkbox" ng-checked="isSelectedImage('<?php echo !empty($id) ? $id : 'primary' ?>', image.id)" ng-click="addImage('<?php echo !empty($id) ? $id : 'primary' ?>', image)" class="file" ng-value="image.id">
+		</h4>
 
-	<em>
-		Uploaded <?= $this->Time->format('F d, Y', $image['created']) ?>
-	</em>
-</li>
+		<em>
+			Uploaded {{ image.timestamp | date:'MMMM d yyyy' }}
+		</em>
+	</li>
+</ul>
+<div class="clearfix"></div>

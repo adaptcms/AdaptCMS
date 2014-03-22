@@ -5,7 +5,7 @@
 <h1><?= $plugin ?> Settings</h1>
 
 <?= $this->Html->link(
-    '<i class="icon-list icon-white"></i> Back to Plugins',
+    '<i class="fa fa-list"></i> Back to Plugins',
     array('action' => 'index'),
     array('class' => 'btn btn-info pull-right admin-edit-options', 'escape' => false)
 ) ?>

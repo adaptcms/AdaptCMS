@@ -6,6 +6,8 @@
  * @property Category $Category
  * @property User $User
  * @property Comment $Comment
+ * @property ArticleRevision $ArticleRevision
+ * @property Media $Media
  */
 class Article extends AppModel
 {
@@ -35,10 +37,29 @@ class Article extends AppModel
         'ArticleValue' => array(
             'dependent' => true
         ),
+	    'ArticleRevision' => array(
+		    'dependent' => true
+	    ),
         'Comment' => array(
             'dependent' => true
         )
     );
+
+	/**
+	 * Articles may belong to many media albums. Setting unique to 'keepExisting' means that if
+	 * article #1 belongs to media #1 and then is added to media #2, cake will keep the first record
+	 * and not delete/re-add it.
+	 *
+	 * @var array
+	 */
+	public $hasAndBelongsToMany = array(
+		'Media' => array(
+			'className' => 'Media',
+			'joinTable' => 'media_articles',
+			'unique' => 'keepExisting',
+			'with' => 'MediaArticle'
+		)
+	);
 
     /**
     * Articles must have a title
@@ -68,8 +89,6 @@ class Article extends AppModel
      * @param array $users
      * @param array $fields
      * @param array $files
-     * @internal param \of $id article
-     * @internal param \json_encoded $related array of related articles
      * @return array of related articles
      */
     public function getRelatedArticles($id, $related, $categories = array(), $users = array(), $fields = array(), $files = array())
@@ -265,7 +284,7 @@ class Article extends AppModel
                 }
             }
 
-            $data[$key]['Comments'] = $this->Comment->find('count', array(
+            $data[$key]['CommentsCount'] = $this->Comment->find('count', array(
                 'conditions' => array(
                     'Comment.article_id' => $article_id,
                     'Comment.active' => 1
@@ -444,13 +463,8 @@ class Article extends AppModel
     */
     public function beforeSave($options = array())
     {
-        if (!empty($this->data['File']) && !empty($this->data['Files']))
-        {
-            $this->data['File'] = array_merge($this->data['File'], $this->data['Files']);
-        } elseif (!empty($this->data['Files']))
-        {
-            $this->data['File'] = $this->data['Files'];
-        }
+	    if (!empty($this->data['Article']['Media']) && empty($this->data['Media']))
+		    $this->data['Media'] = $this->data['Article']['Media'];
 
         /**
         * Add
@@ -556,14 +570,18 @@ class Article extends AppModel
 
         if (!empty($results['id']))
         {
-            if (!empty($results['Article']['tags']))
+            if (!empty($results['tags']))
             {
-                $results['Article']['tags'] = json_decode($results['Article']['tags'], true);
-                $results['Article']['tags_list'] = implode(', ', $results['Article']['tags']);
+                $results['tags'] = json_decode($results['tags'], true);
+                $results['tags_list'] = implode(', ', $results['tags']);
             }
 
-            if (!empty($results['Article']['settings']))
-                $results['Article']['settings'] = json_decode($results['Article']['settings'], true);
+            if (!empty($results['settings']))
+                $results['settings'] = json_decode($results['settings'], true);
+	        
+	        if (!empty($results['modified'])) {
+		        echo 1;
+	        }
         }
         else
         {
@@ -583,6 +601,9 @@ class Article extends AppModel
 	                    unset($results[$key]);
 	                }
                 }
+
+	            if (!empty($result['Article']['modified']))
+		            $results[$key]['Article']['last_saved'] = $this->getLastSavedDate($result['Article']['modified']);
             }
         }
 
@@ -687,5 +708,133 @@ class Article extends AppModel
 		}
 
 		return $articles;
+	}
+
+	/**
+	 * Get Last Saved Date
+	 *
+	 * @param $modified
+	 * @return bool|string
+	 */
+	public function getLastSavedDate($modified)
+	{
+		$diff = time() - date('U', strtotime($modified));
+
+		if ($diff < 86400) {
+			$time = 'g:i A';
+		} else {
+			$time = 'M jS, Y';
+		}
+
+		return date($time, strtotime($modified));
+	}
+
+	/**
+	 * View Article
+	 *
+	 * @param CakeRequest $request
+	 * @return mixed
+	 */
+	public function viewArticle($request)
+	{
+		$data = $request->data;
+		$webroot = $request->webroot;
+		$id = $data['Article']['id'];
+
+		$data['Comments'] = $this->Comment->find('threaded', array(
+			'conditions' => array(
+				'Comment.article_id' => $id,
+				'Comment.active' => 1
+			),
+			'contain' => array(
+				'User'
+			),
+			'order' => 'Comment.created DESC'
+		));
+
+		if (!empty($data['RelatedArticles']['all'])) {
+			$related_articles = $data['RelatedArticles'];
+		} else {
+			$related_articles = array();
+		}
+
+		$data['RelatedArticles'] = $related_articles;
+
+		$data['Fields'] = $this->Category->Field->getFields('Comment');
+		$data['Comments'] = $this->Category->Field->getAllModuleData('Comment', $data['Fields'], $data['Comments']);
+
+		$article = $this->getAllRelatedArticles(array($data));
+		$data = $article[0];
+
+		if (!isset($data['Media']))
+			$data['Media'] = $this->getMedia($id, $webroot);
+		
+		return $data;
+	}
+
+	/**
+	 * Get Media
+	 *
+	 * @param $id
+	 * @param $webroot
+	 * @param $joins
+	 * @return array
+	 */
+	public function getMedia($id, $webroot, $joins = array())
+	{
+		if (empty($joins)) {
+			$joins = $this->Media->MediaArticle->find('all', array(
+				'conditions' => array(
+					'MediaArticle.article_id' => $id
+				),
+				'fields' => array('media_id')
+			));
+		}
+
+		$media = array();
+		if (!empty($joins)) {
+			$count = 0;
+			$files = array();
+			foreach($joins as $join) {
+				$find = $this->Media->find('first', array(
+					'conditions' => array(
+						'Media.id' => (!empty($join['MediaArticle']['media_id']) ? $join['MediaArticle']['media_id'] : $join)
+					)
+				));
+
+				if (!empty($find)) {
+					$result = $this->Media->getLastFileAndCount(array($find));
+					$result = $result[0];
+
+					$file_count = (isset($result['File']['count']) ? $result['File']['count'] : 0);
+					$count = $count + $file_count;
+
+					$media['all'][$find['Media']['slug']] = array(
+						'id' => $find['Media']['id'],
+						'slug' => $find['Media']['slug'],
+						'title' => $find['Media']['title'],
+						'count' => $file_count
+					);
+					
+					if (!empty($result['File']['id'])) {
+						$media['all'][$find['Media']['slug']]['file'] = $webroot . $result['File']['dir'] . $result['File']['filename'];
+						$media['all'][$find['Media']['slug']]['file_id'] = $result['File']['id'];
+						$media['all'][$find['Media']['slug']]['file_label'] = $result['File']['label'];
+						$media['all'][$find['Media']['slug']]['file_exists'] = $result['File']['exists'];
+						$media['all'][$find['Media']['slug']]['file_caption'] = $result['File']['caption'];
+						$media['all'][$find['Media']['slug']]['file_size'] = $result['File']['filesize'];
+						$media['all'][$find['Media']['slug']]['file_created'] = $result['File']['created'];
+
+						$files[] = $media['all'][$find['Media']['slug']];
+						$media['first'] = $media['all'][$find['Media']['slug']];
+					}
+				}
+			}
+
+			$media['first']['count'] = $count;
+			$media['first']['files'] = $files;
+		}
+
+		return $media;
 	}
 }

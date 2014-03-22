@@ -1,11 +1,4 @@
 $(document).ready(function(){
-	if ($("#FieldFieldType").val() == "dropdown" || $("#FieldFieldType").val() == "multi-dropdown" ||
-			$("#FieldFieldType").val() == "radio" || $("#FieldFieldType").val() == "check" || $('#ArticleFieldOptions').length) {
-		$(".field_options").show();
-	} else {
-		$(".field_options").hide();
-	}
-
 	$("#FieldFieldType").live('change', function() {
 		if ($(this).val() == "dropdown" || $(this).val() == "multi-dropdown" ||
 			$(this).val() == "radio" || $(this).val() == "check") {
@@ -30,9 +23,9 @@ $(document).ready(function(){
 
 		if (is_exists == 0) {
 			if (last_id) {
-				$('<div id="data-' + random_id + '"><span class="label label-info">' + input_val + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + input_val + '"></div>').insertAfter("#" + last_id).hide().fadeIn("slow");
+				$('<div id="data-' + random_id + '"><span class="label label-info">' + input_val + ' <a href="#" class="fa fa-times fa-white"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + input_val + '"></div>').insertAfter("#" + last_id).hide().fadeIn("slow");
 			} else {
-				$("#field_data").html('<div id="data-' + random_id + '"><span class="label label-info">' + input_val + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + input_val + '"></div>').hide().fadeIn("slow");
+				$("#field_data").html('<div id="data-' + random_id + '"><span class="label label-info">' + input_val + ' <a href="#" class="fa fa-times fa-white"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + input_val + '"></div>').hide().fadeIn("slow");
 			}
 			$(".tag").remove();
 		} else {
@@ -45,7 +38,7 @@ $(document).ready(function(){
 		$(".input.text.clear").css("padding-top", "9px");
 	});
 
-	$(".icon-remove-sign").live('click', function(e) {
+	$(".fa-times").live('click', function(e) {
 		e.preventDefault();
 		var id = $(this).parent().parent().attr('id');
 
@@ -63,9 +56,9 @@ $(document).ready(function(){
 			var last_id = $("#field_data div:last").attr('id');
 
 			if (i == 0) {
-				$("#field_data").html('<div id="data-' + random_id + '"><span class="label label-info">' + data + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + data + '"></div>');
+				$("#field_data").html('<div id="data-' + random_id + '"><span class="label label-info">' + data + ' <a href="#" class="fa fa-times fa-white"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + data + '"></div>');
 			} else {
-				$('<div id="data-' + random_id + '"><span class="label label-info">' + data + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + data + '"></div>').insertAfter("#" + last_id);
+				$('<div id="data-' + random_id + '"><span class="label label-info">' + data + ' <a href="#" class="fa fa-times fa-white"></a></span><input type="hidden" id="FieldData[]" name="FieldData[]" value="' + data + '"></div>').insertAfter("#" + last_id);
 			}
 		});
 	}

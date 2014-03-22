@@ -75,7 +75,7 @@ class FieldsController extends AppController
             $conditions['Module.id'] = $this->request->named['module_id'];
 
         if (isset($this->request->named['field_type']))
-            $conditions['Field.field_type'] = $this->request->named['field_type'];
+            $conditions['FieldType.id'] = $this->request->named['field_type'];
 
         if ($this->permissions['any'] == 0)
             $conditions['User.id'] = $this->Auth->user('id');

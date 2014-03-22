@@ -1,8 +1,7 @@
 <?php
 	Router::mapResources(array('categories', 'articles'));
 	Router::parseExtensions();
-	// Router::parseExtensions('rss');
-	
+
 	Router::connect('/', array('controller' => 'pages', 'action' => 'display', 'home'));
 /**
  * ...and connect the rest of 'Pages' controller's urls.
@@ -44,6 +43,17 @@
 	Router::connect('/register', array('controller' => 'users', 'action' => 'register'));
 	Router::connect('/login', array('controller' => 'users', 'action' => 'login'));
 	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
+
+	Router::connect('/rss/articles/*', array(
+		'rss' => true,
+		'controller' => 'articles',
+		'action' => 'index'
+	));
+	Router::connect('/rss/articles/*/*', array(
+		'rss' => true,
+		'controller' => 'articles',
+		'action' => 'index'
+	));
 
 	/**
 	* AdaptCMS 2.0.x Routing

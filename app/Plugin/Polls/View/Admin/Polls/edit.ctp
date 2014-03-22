@@ -25,14 +25,14 @@
 			<a href="#vote-breakdown" data-toggle="tab">Vote Breakdown</a>
 		</li>
 	<?php endif ?>
-	<div class="right hidden-phone">
+	<div class="right hidden-xs">
 		<?= $this->Html->link(
-			'<i class="icon-chevron-left"></i> Return to Index',
+			'<i class="fa fa-chevron-left"></i> Return to Index',
 			array('action' => 'index'),
-			array('class' => 'btn', 'escape' => false
+			array('class' => 'btn btn-info', 'escape' => false
 			)) ?>
 		<?= $this->Html->link(
-			'<i class="icon-trash icon-white"></i> Delete',
+			'<i class="fa fa-trash-o"></i> Delete',
 			array('action' => 'delete', $this->request->data['Poll']['id'], $this->request->data['Poll']['title']),
 			array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this poll?')"));
 		?>
@@ -68,17 +68,20 @@
 		    <div id="options">
 		        <?php foreach($this->request->data['PollValue'] as $key => $data): ?>
 		            <div id='option<?= $key ?>'>
-		                <div class='input text'>
+		                <div class='input-group col-lg-6 no-pad-l clearfix'>
+			                <?= $this->Form->label('PollValue.' . $key . '.title', 'Option '.$key) ?>
+			                <div class="clearfix"></div>
+
 		                    <?= $this->Form->input('PollValue.' . $key . '.title', array(
-		                        'label' => 'Option '.$key,
 		                        'value' => $data['title'],
-		                        'class' => 'required option pull-left',
-		                        'div' => false
+		                        'class' => 'required option form-control form-control-inline pull-left',
+			                    'label' => false,
+			                    'div' => false
 		                    )) ?>
 
-		                  <?= $this->Form->button('<i class="icon-trash icon-white poll-delete"></i> Delete', array(
+		                  <?= $this->Form->button('<i class="fa fa-trash-o poll-delete"></i> Delete', array(
 		                     'type' => 'button',
-		                     'class' => 'btn btn-danger poll-remove pull-right',
+		                     'class' => 'btn btn-danger poll-remove',
 		                     'div' => false
 		                  )) ?>
 		               </div>
@@ -115,7 +118,7 @@
 		<div class="tab-pane well" id="votes">
 			<h2>Vote Totals</h2>
 
-			<div class="span5 lg-col-5 no-marg-left">
+			<div class="col-lg-5 no-pad-l">
 				<?php foreach($this->request->data['PollValue'] as $row): ?>
 					<?= $row['title'] ?> - <?= $row['votes'] ?> Votes
 					<div class="progress">
@@ -145,7 +148,9 @@
 										$vote['User']['id']
 									)) ?> (<em><?= $vote['user_ip'] ?></em>)
 								<?php endif ?>
-								@ <?= $this->Admin->time($vote['created']) ?>
+								<?php if (!empty($vote['created'])): ?>
+									@ <?= $this->Admin->time($vote['created']) ?>
+								<?php endif ?>
 							</li>
 						<?php endforeach ?>
 					</ul>

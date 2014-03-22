@@ -40,13 +40,13 @@
 	<div class="reload_url hidden">{{ this->here }}</div>
 
 
-	{{ form.button('Cancel <i class="icon-remove"></i>', array(
+	{{ form.button('Cancel <i class="fa fa-times"></i>', array(
 		'type' => 'button',
 		'class' => 'btn btn-warning cancel-edit-post',
 		'style' => 'margin-top: 10px;margin-bottom: 10px',
 		'escape' => false
 	)) }}
-	{{ form.button('Post Reply <i class="icon-ok"></i>', array(
+	{{ form.button('Post Reply <i class="fa fa-check"></i>', array(
 		'type' => 'submit',
 		'class' => 'btn btn-info',
 		'style' => 'margin-top: 10px;margin-bottom: 10px',

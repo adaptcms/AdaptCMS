@@ -1,0 +1,25 @@
+<div>
+    <h2>Startup Files</h2>
+
+    <form ng-submit="saveProgress($event)">
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="Selecting to create a controller, based on the Sample plugin controller, we will fill in the name of your controller, setup admin actions, index actions, templates and permissions." data-title="Controller"></i>
+                Controller
+            </label>
+            <input type="checkbox" name="controller" ng-model="skeleton.controller" ng-change="setSkeleton('controller')" ng-checked="getSkeleton('controller') == true">
+        </div>
+        <div class="input text">
+            <label>
+                <i class="fa fa-question-circle field-desc" data-content="Especially if you select to create a controller, we highly recommend letting his add a default model along with a database table." data-title="Model"></i>
+                Model
+            </label>
+            <input type="checkbox" name="model" ng-model="skeleton.model" ng-change="setSkeleton('model')" ng-checked="getSkeleton('model') == true">
+        </div>
+        <div class="input submit">
+            <button type="submit" ng-click="saveProgress($event)" class="btn btn-primary">Save <i class="fa fa-floppy-o"></i></button>
+            <a href="#" ng-click="prevStep($event)" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Back</a>
+            <a href="#" ng-click="nextStep($event)" class="btn btn-info">Continue <i class="fa fa-arrow-right"></i></a>
+        </div>
+    </form>
+</div>

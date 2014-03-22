@@ -7,9 +7,9 @@
 </div>
 <div class="pull-right">
     <?= $this->Html->link(
-        '<i class="icon-chevron-left"></i> Return to Tools',
+        '<i class="fa fa-chevron-left"></i> Return to Tools',
         array('action' => 'index'),
-        array('class' => 'btn', 'escape' => false
+        array('class' => 'btn btn-info', 'escape' => false
     )) ?>
 </div>
 <div class="clearfix"></div>
@@ -17,7 +17,7 @@
 <div class="well">
 	<?php if (!empty($messages)): ?>
 		<?php foreach($messages as $table => $message): ?>
-			<div class="span2 no-marg-left">
+			<div class="col-lg-2 no-pad-l">
 				<h4>
 					<?= $table ?>
 				</h4>
@@ -25,21 +25,21 @@
 			<div class="clearfix"></div>
 
 			<?php if ($message['check'] == 1): ?>
-				<div class="span5 alert alert-success pull-left">
+				<div class="col-lg-5 alert alert-success pull-left">
 					Table `<?= $table ?>` Checked - is Okay
 				</div>
 			<?php else: ?>
-				<div class="span5 alert alert-error">
+				<div class="col-lg-5 alert alert-error">
 					Table `<?= $table ?>` Checked - NOT Okay<br />
 					<?= $message['check'] ?>
 				</div>
 
 				<?php if ($message['repair'] == 1): ?>
-					<div class="span5 alert alert-success">
+					<div class="col-lg-5 alert alert-success">
 						Table `<?= $table ?>` Repaired Successfully
 					</div>
 				<?php else: ?>
-					<div class="span5 alert alert-error">
+					<div class="col-lg-5 alert alert-error">
 						Table `<?= $table ?>` NOT Repaired<br />
 						<?= $message['repair'] ?>
 					</div>
@@ -47,26 +47,26 @@
 			<?php endif ?>
 
 			<?php if ($message['analyze'] == 1): ?>
-				<div class="span5 alert alert-success pull-right">
+				<div class="col-lg-5 alert alert-success pull-right">
 					Table `<?= $table ?>` Up to Date, already Optimized
 				</div>
 			<?php else: ?>
-				<div class="span5 alert alert-error">
+				<div class="col-lg-5 alert alert-error">
 					Table `<?= $table ?>` NOT Optimized<br />
 					<?= $message['analyze'] ?>
 				</div>
 
 				<?php if ($message['optimize'] == 1): ?>
-					<div class="span5 alert alert-success">
+					<div class="col-lg-5 alert alert-success">
 						Table `<?= $table ?>` Optimized Successfully
 					</div>
 				<?php else: ?>
-					<div class="span5 alert alert-error">
+					<div class="col-lg-5 alert alert-error">
 						Table `<?= $table ?>` NOT Optimized<br />
 						<?= $message['optimize'] ?>
 					</div>
 				<?php endif ?>
-			<?php endif ?>			
+			<?php endif ?>
 
 			<div class="clearfix"></div>
 		<?php endforeach ?>

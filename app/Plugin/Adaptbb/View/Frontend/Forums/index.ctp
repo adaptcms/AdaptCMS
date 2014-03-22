@@ -7,58 +7,60 @@
 <div class="col-lg-12" id="forum-index">
 	{% loop category in categories %}
 		{% if not empty(category['Forum']) %}
-			<table class="table well category">
-				<thead>
-					<tr class="btn-success">
-						<th>
-							<h3>{{ category['ForumCategory']['title'] }}</h3>
-						</th>
-						<th>
-							Topics
-						</th>
-						<th>
-							Posts
-						</th>
-						<th>
-							Newest Post
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% if not empty(category['Forum']) %}
-						{% loop forum in category['Forum'] %}
-							<tr>
-								<td>
-									<a href="{{ url('adaptbb_view_forum', $forum['slug']) }}">
-										{{ forum['title'] }}
-									</a>
-
-									{% if not empty(forum['description']) %}
-										{{ forum['description'] }}
-									{% endif %}
-								</td>
-								<td>
-									{{ forum['num_topics'] }}
-								</td>
-								<td>
-									{{ forum['num_posts'] }}
-								</td>
-								<td>
-									{% if empty(forum['NewestPost']) %}
-										No Posts Made
-									{% else %}
-										by <a href="{{ url('user_profile', $forum['NewestPost']) }}">{{ forum['NewestPost']['User']['username'] }}</a>
-										<a href="{{ url('adaptbb_view_topic', $forum['NewestPost']) }}#post{{ forum['NewestPost']['ForumPost']['id'] }}">
-											<i class="icon-external-link icon-white"></i>
+			<div class="table-responsive">
+				<table class="table well category">
+					<thead>
+						<tr class="btn-success">
+							<th>
+								<h3>{{ category['ForumCategory']['title'] }}</h3>
+							</th>
+							<th>
+								Topics
+							</th>
+							<th>
+								Posts
+							</th>
+							<th>
+								Newest Post
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% if not empty(category['Forum']) %}
+							{% loop forum in category['Forum'] %}
+								<tr>
+									<td>
+										<a href="{{ url('adaptbb_view_forum', $forum['slug']) }}">
+											{{ forum['title'] }}
 										</a>
-										<em>{{ time(forum, 'words', 'created') }}</em>
-									{% endif %}
-								</td>
-							</tr>
-						{% endloop %}
-					{% endif %}
-				</tbody>
-			</table>
+
+										{% if not empty(forum['description']) %}
+											{{ forum['description'] }}
+										{% endif %}
+									</td>
+									<td>
+										{{ forum['num_topics'] }}
+									</td>
+									<td>
+										{{ forum['num_posts'] }}
+									</td>
+									<td>
+										{% if empty(forum['NewestPost']) %}
+											No Posts Made
+										{% else %}
+											by <a href="{{ url('user_profile', $forum['NewestPost']) }}">{{ forum['NewestPost']['User']['username'] }}</a>
+											<a href="{{ url('adaptbb_view_topic', $forum['NewestPost']) }}#post{{ forum['NewestPost']['ForumPost']['id'] }}">
+												<i class="fa fa-external-link"></i>
+											</a>
+											<em>{{ time(forum, 'words', 'created') }}</em>
+										{% endif %}
+									</td>
+								</tr>
+							{% endloop %}
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
 			<div class="clearfix"></div>
 		{% endif %}
 	{% endloop %}

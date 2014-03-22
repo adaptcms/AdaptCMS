@@ -200,14 +200,7 @@ class ForumsController extends AdaptbbAppController
     */
     public function index()
     {
-        $this->request->data = $this->Forum->ForumCategory->find('all', array(
-            'contain' => array(
-                'Forum' => array(
-                    'order' => 'Forum.ord ASC'
-                )
-            ),
-            'order' => 'ForumCategory.ord ASC'
-        ));
+        $this->request->data = $this->Forum->ForumCategory->getIndexList();
 
         $this->set('categories', $this->Forum->getIndexStats($this->request->data));
     }

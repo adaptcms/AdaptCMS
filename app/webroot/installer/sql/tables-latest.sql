@@ -16,6 +16,18 @@ CREATE TABLE IF NOT EXISTS `{prefix}articles` (
   KEY `user_id` (`user_id`,`category_id`,`status`,`deleted_time`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 -- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}article_revisions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `article_id` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `data` longtext NOT NULL,
+  `active` tinyint(1) NOT NULL,
+  `created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`,`article_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+-- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}article_values` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) DEFAULT '0',
@@ -180,6 +192,14 @@ CREATE TABLE IF NOT EXISTS `{prefix}media` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`,`deleted_time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `{prefix}media_articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) NOT NULL,
+  `media_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `article_id` (`article_id`,`media_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}media_files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -396,9 +416,10 @@ CREATE TABLE IF NOT EXISTS `{prefix}plugin_poll_voting_values` (
   `value_id` int(11) DEFAULT '0',
   `user_id` int(11) DEFAULT '0',
   `user_ip` varchar(50) NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `poll_id` (`poll_id`,`value_id`,`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 -- --------------------------------------------------------
 CREATE TABLE IF NOT EXISTS `{prefix}roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('Sanitize', 'Utility');
 
 /**
  * Class FilesController
@@ -224,4 +225,77 @@ class FilesController extends AppController
 
         $this->redirect(array('action' => 'index'));
     }
+
+	/**
+	 * Admin Json List
+	 *
+	 * @return CakeResponse
+	 */
+	public function admin_json_list()
+	{
+		$this->view = null;
+		$this->disable_parsing = true;
+
+		if (!empty($this->request->data['q'])) {
+			$q = Sanitize::clean($this->request->data['q'], array(
+				'encode' => true,
+				'remove_html' => true
+			));
+		} else {
+			$q = '';
+		}
+
+		$conditions = array();
+		$conditions['File.mimetype LIKE'] = '%image%';
+
+		if (!empty($this->request->data['q'])) {
+			$conditions['File.filename LIKE'] = '%' . $q . '%';
+		}
+
+		if (!empty($this->request->data['order_by'])) {
+			$order_by = $this->request->data['order_by'];
+		} else {
+			$order_by = 'created DESC';
+		}
+
+		$this->Paginator->settings = array(
+			'conditions' => $conditions,
+			'order' => $order_by,
+			'limit' => 9
+		);
+
+		$images = $this->File->parseMediaModal($this->Paginator->paginate('File'));
+
+		$paginator_data = $this->request['paging']['File'];
+
+		$start = 0;
+
+		if ($paginator_data['count'] > 1)
+			$start = (($paginator_data['page'] - 1) * $paginator_data['limit'] + 1);
+
+		$end = $start + $paginator_data['limit'] - 1;
+		if ($paginator_data['count'] < $end) {
+			$end = $paginator_data['count'];
+		}
+
+		$pages = array();
+		if (!empty($paginator_data['pageCount'])) {
+			for($i = 1; $i <= $paginator_data['pageCount']; $i++) {
+				$pages[$i] = $i;
+			}
+		}
+
+		$body = array(
+			'results' => $images,
+			'count' => $paginator_data['count'],
+			'q' => $q,
+			'paginator' => $paginator_data,
+			'start' => $start,
+			'end' => $end,
+			'pages' => $pages,
+			'images_path' => WWW_ROOT
+		);
+
+		return $this->_ajaxResponse(array('body' => $body), array(), 'json');
+	}
 }

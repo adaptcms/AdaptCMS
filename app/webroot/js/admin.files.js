@@ -9,6 +9,9 @@ $(document).ready(function() {
             if (prev.attr('id') == 'FileLibrary')
             {
                 var id = 'File';
+            } else if(prev.attr('id') == 'ArticleLibrary')
+            {
+                var id = 'Article';
             }
             else
             {
@@ -17,7 +20,7 @@ $(document).ready(function() {
 
             if ($(this).parent().next().find("input[value='" + val.val() + "']").length == 0) {
                 $(this).parent().parent().find('.error').remove();
-                $(this).parent().next().prepend('<div id="data-' + random + '"><span class="label label-info">' + val.text() + ' <a href="#" class="icon-white icon-remove-sign"></a></span><input type="hidden" id="' + id + '.Media[]" name="data[' + id + '][Media][]" value="' + val.val() + '"></div>').hide().fadeIn('slow');
+                $(this).parent().next().prepend('<div id="data-' + random + '"><span class="label label-info">' + val.text() + ' <a href="#" class="fa fa-times fa-white"></a></span><input type="hidden" id="' + id + '.Media[]" name="data[' + id + '][Media][]" value="' + val.val() + '"></div>').hide().fadeIn('slow');
             } else {
                 $(this).parent().next().prepend('<label class="error">Library already added!</label>').hide().fadeIn('slow');
             }

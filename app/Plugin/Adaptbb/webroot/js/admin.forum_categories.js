@@ -25,7 +25,7 @@ $(document).ready(function() {
 
         $( "#sort-list" ).disableSelection();
 
-        $(".icon-question-sign").popover({
+        $(".fa fa-question").popover({
             trigger: 'hover',
             placement: 'left'
         });

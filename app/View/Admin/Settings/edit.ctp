@@ -57,14 +57,14 @@
 	<li>
 		<a href="#add-setting" data-toggle="tab">Add Setting</a>
 	</li>
-	<div class="right hidden-phone">
+	<div class="right hidden-xs">
 	    <?= $this->Html->link(
-	        '<i class="icon-chevron-left"></i> Return to Index',
+	        '<i class="fa fa-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),
-	        array('class' => 'btn', 'escape' => false
+	        array('class' => 'btn btn-info', 'escape' => false
 	    )) ?>
 	    <?= $this->Html->link(
-	        '<i class="icon-trash icon-white"></i> Delete Category',
+	        '<i class="fa fa-trash-o"></i> Delete Category',
 	        array('action' => 'delete', $this->request->data['Setting']['id'], $this->request->data['Setting']['title']),
 	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this settings category?')"));
 	    ?>
@@ -142,7 +142,7 @@
 				
 			<?= $this->Form->end(array(
 					'label' => 'Submit',
-					'class' => 'btn'
+					'class' => 'btn btn-primary'
 			)) ?>
 		</div>
 	<?php endif ?>
@@ -165,17 +165,21 @@
 			)) ?>
 
 			<div id="text"></div>
-			<div class="field_options" style="margin-bottom: 9px">
-					<?= $this->Form->input('field_options', array(
-						'div' => false, 
-						'style' => 'margin-bottom: 0',
-						'type' => 'text'
-					)) ?>
-					<?= $this->Form->button('Add', array(
-						'class' => 'btn btn-info', 
-						'type' => 'button',
-						'id' => 'add-data'
-					)) ?>
+			<div class="field_options input-group col-lg-5">
+				<?= $this->Form->label('field_options', "Field Options") ?>
+				<div class="clearfix"></div>
+
+				<?= $this->Form->input('field_options', array(
+					'label' => false,
+					'div' => false,
+					'class' => 'form-control form-control-inline',
+					'type' => 'text'
+				)) ?>
+				<?= $this->Form->button('Add', array(
+					'class' => 'btn btn-info',
+					'type' => 'button',
+					'id' => 'add-data'
+				)) ?>
 			</div>
 			<div id="field_data" class="clearfix" style="width: 30%;margin-bottom: 15px"></div>
 			<div class="clearfix"></div>
@@ -191,8 +195,8 @@
 			<?= $this->Form->hidden('setting_id', array('value' => $this->request->data['Setting']['id'])) ?>
 
 		<?= $this->Form->end(array(
-				'label' => 'Submit',
-				'class' => 'btn'
+			'label' => 'Submit',
+			'class' => 'btn btn-primary'
 		)) ?>
 	</div>
 </div>

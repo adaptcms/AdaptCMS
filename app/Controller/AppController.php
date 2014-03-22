@@ -27,7 +27,7 @@ class AppController extends Controller
      * @var array 
      */
     public $components = array(
-//        'DebugKit.Toolbar',
+        //'DebugKit.Toolbar',
         'Auth' => array(
             'loginAction' => array(
                 'controller' => 'users',
@@ -122,7 +122,7 @@ class AppController extends Controller
 	 *
 	 * @var bool
 	 */
-	private $disable_parsing = false;
+	public $disable_parsing = false;
 
     /**
      * A whole lot is going on in this one. We look for and attempt to load components/helpers, call Auth/Authorize,
@@ -1108,8 +1108,40 @@ class AppController extends Controller
 		return $this->_elementView->element($element, $params);
 	}
 
-	public function beforeRender()
+	/**
+	 * Check Captcha
+	 *
+	 * @param string $captcha
+	 *
+	 * @return bool
+	 */
+	public function checkCaptcha($captcha)
 	{
+		include_once(WWW_ROOT . 'libraries/captcha/securimage.php');
 
+		if (!class_exists('DATABASE_CONFIG'))
+			include_once(realpath('./../') . '/Config/database.php');
+
+		$db = new DATABASE_CONFIG();
+
+		$options = array(
+			'use_database'    => true,
+			'database_host'   => $db->default['host'],
+			'database_name'   => $db->default['database'],
+			'database_user'   => $db->default['login'],
+			'database_pass'   => $db->default['password'],
+			'database_table'   => $db->default['prefix'] . 'captcha_codes',
+			'skip_table_check' => true,
+			'no_session' => true,
+			'database_driver' => Securimage::SI_DRIVER_MYSQL
+		);
+
+		$securimage = new Securimage($options);
+
+		if (!empty($securimage) && !$securimage->check($captcha)) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

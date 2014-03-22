@@ -43,10 +43,14 @@
                 'class' => 'required'
 			)) ?>
 
-			<div class="field_options" style="margin-bottom: 9px">
+			<div class="field_options input-group col-lg-5">
+				<?= $this->Form->label('field_options', "Field Options") ?>
+				<div class="clearfix"></div>
+
 				<?= $this->Form->input('field_options', array(
+					'label' => false,
 					'div' => false,
-					'style' => 'margin-bottom: 0',
+					'class' => 'form-control form-control-inline',
 					'type' => 'text'
 				)) ?>
 				<?= $this->Form->button('Add', array(
@@ -63,8 +67,8 @@
 					'class' => 'input text'
 				)
 			)) ?>
-			<?= $this->Form->input('field_limit_min', array('value' => 0, 'label' => 'Field Limit Minimum')) ?>
-			<?= $this->Form->input('field_limit_max', array('value' => 0, 'label' => 'Field Limit Maximum')) ?>
+			<?= $this->Form->input('field_limit_min', array('type' => 'text', 'value' => 0, 'label' => 'Field Limit Minimum')) ?>
+			<?= $this->Form->input('field_limit_max', array('type' => 'text', 'value' => 0, 'label' => 'Field Limit Maximum')) ?>
 			<?= $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?')) ?>
 
 			<?= $this->Form->hidden('field_order', array('value' => 0)) ?>
@@ -89,9 +93,9 @@
 )) ?>
 
 <div class="hidden" id="field-rules">
-    <?php if (!empty($field_rules)): ?>
-        <?php foreach($field_rules as $field => $rule): ?>
-            <div class="field" data-id="field-<?= $field ?>"><?= $rule ?></div>
-        <?php endforeach ?>
-    <?php endif ?>
+	<?php if (!empty($field_rules)): ?>
+		<?php foreach($field_rules as $field => $rule): ?>
+			<div class="field" data-id="<?= $field ?>"><?= $rule ?></div>
+		<?php endforeach ?>
+	<?php endif ?>
 </div>

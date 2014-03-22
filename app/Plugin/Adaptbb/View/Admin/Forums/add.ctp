@@ -9,7 +9,7 @@
 
 <?php $this->TinyMce->editor() ?>
 
-<?= $this->Html->script('jquery-ui.min.js') ?>
+<?= $this->Html->script('jquery-ui.min') ?>
 
 <?= $this->Form->create('Forum', array('class' => 'well admin-validate')) ?>
 	<h2>Add Forum</h2>
@@ -37,14 +37,14 @@
 		'label' => 'Icon URL',
 	)) ?>
 
-    <div class="hidden-phone">
+    <div class="hidden-xs">
         <h4>Forum Order</h4>
 
-        <ul id="sort-list" class="unstyled span5 col-lg-5 no-marg-left">
+        <ul id="sort-list" class="unstyled col-lg-5 no-pad-l">
             <?php if (!empty($forums)): ?>
                 <?php foreach($forums as $forum): ?>
-                    <li class="btn" id="<?= $forum['Forum']['id'] ?>">
-                        <i class="icon icon-move"></i>
+                    <li class="btn btn-success" id="<?= $forum['Forum']['id'] ?>">
+                        <i class="fa fa-arrows"></i>
                         <span>
                             <?= $forum['Forum']['title'] ?>
                         </span>
@@ -53,8 +53,8 @@
                     </li>
                 <?php endforeach ?>
             <?php endif ?>
-            <li class="btn" id="0">
-                <i class="icon icon-move"></i>
+            <li class="btn btn-success" id="0">
+                <i class="fa fa-arrows"></i>
                 <span>
                     Forum
                 </span>

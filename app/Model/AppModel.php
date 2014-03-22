@@ -25,6 +25,49 @@ class AppModel extends Model
      */
     public $recursive = -1;
 
+	/**
+	 * Find Slug List
+	 *
+	 * @param $state
+	 * @param $query
+	 * @param array $results
+	 * @return array
+	 */
+	protected function _findSlugList($state, $query, $results = array())
+	{
+		$model = get_class($this);
+		$sluggable = $this->actsAs['Slug'];
+
+		if (!empty($sluggable['field'])) {
+			$field = $sluggable['field'];
+		} else {
+			$field = 'title';
+		}
+
+		if (!empty($sluggable['slugField'])) {
+			$slug = $sluggable['slugField'];
+		} else {
+			$slug = 'slug';
+		}
+
+		if ($state == 'before') {
+			$query['fields'] = array($model . '.' . $field, $model . '.' . $slug);
+
+			return $query;
+		} else {
+			if (!empty($results)) {
+				$new_results = array();
+				foreach($results as $row) {
+					$new_results[$row[$model][$slug]] = $row[$model][$field];
+				}
+
+				$results = $new_results;
+			}
+		}
+
+		return $results;
+	}
+
     /*
      * Source: Snipplr
      * http://snipplr.com/view/51108/nested-array-search-by-value-or-key/
@@ -215,7 +258,8 @@ class AppModel extends Model
 
         if (!empty($match))
         {
-            App::import('Vendor', 'michelf/markdown/markdown');
+            App::import('Vendor', 'michelf/markdown/Markdown');
+
             $contents = Markdown::defaultTransform($match);
         }
 
@@ -231,5 +275,37 @@ class AppModel extends Model
 	public function safeHtml($string)
 	{
 		return strip_tags($string, '<p><br><b><strong><span><sup><sub><em><i><u><ul><li><ol><h1><h2><h3><h4>');
+	}
+
+	/**
+	 * Removes files inside of a folder
+	 *
+	 * @param string $dir path to folder to loop through
+	 * @return null
+	 */
+	public function rrmdir($dir)
+	{
+		/**
+		 * Source: Anonymous
+		 * http://us2.php.net/manual/en/function.rmdir.php#107233
+		 **/
+		if (is_dir($dir))
+		{
+			$objects = scandir($dir);
+			foreach ($objects as $object) {
+				if ($object != "." && $object != "..")
+				{
+					if (filetype($dir . "/" . $object) == "dir")
+					{
+						$this->rrmdir($dir . "/" . $object);
+					} else {
+						unlink($dir . "/" . $object);
+					}
+				}
+			}
+
+			reset($objects);
+			rmdir($dir);
+		}
 	}
 }

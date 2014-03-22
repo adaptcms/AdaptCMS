@@ -13,18 +13,18 @@
 		<a href="#main" data-toggle="tab">Edit Field</a>
 	</li>
 	<?php if (!empty($fields)): ?>
-		<li class="hidden-phone">
+		<li class="hidden-xs">
 			<a href="#order" data-toggle="tab">Field Order</a>
 		</li>
 	<?php endif ?>
-	<div class="pull-right hidden-phone">
+	<div class="pull-right hidden-xs">
 	    <?= $this->Html->link(
-	        '<i class="icon-chevron-left"></i> Return to Index',
+	        '<i class="fa fa-chevron-left"></i> Return to Index',
 	        array('action' => 'index'),
-	        array('class' => 'btn', 'escape' => false
+	        array('class' => 'btn btn-info', 'escape' => false
 	    )) ?>
 	    <?= $this->Html->link(
-	        '<i class="icon-trash icon-white"></i> Delete',
+	        '<i class="fa fa-trash-o"></i> Delete',
 	        array('action' => 'delete', $this->request->data['Field']['id'], $this->request->data['Field']['title']),
 	        array('class' => 'btn btn-danger', 'escape' => false, 'onclick' => "return confirm('Are you sure you want to delete this field?')"))
         ?>
@@ -54,10 +54,14 @@
 				'class' => 'required'
 			)) ?>
 
-			<div class="field_options" style="margin-bottom: 9px">
+			<div class="field_options input-group col-lg-5">
+				<?= $this->Form->label('field_options', "Field Options") ?>
+				<div class="clearfix"></div>
+
 				<?= $this->Form->input('field_options', array(
+					'label' => false,
 					'div' => false,
-					'style' => 'margin-bottom: 0',
+					'class' => 'form-control form-control-inline',
 					'type' => 'text',
 					'value' => ''
 				)) ?>
@@ -84,8 +88,8 @@
 					'class' => 'input text clear'
 				)
 			)) ?>
-			<?= $this->Form->input('field_limit_min', array('label' => 'Field Limit Minimum')) ?>
-			<?= $this->Form->input('field_limit_max', array('label' => 'Field Limit Maximum')) ?>
+			<?= $this->Form->input('field_limit_min', array('type' => 'text', 'label' => 'Field Limit Minimum')) ?>
+			<?= $this->Form->input('field_limit_max', array('type' => 'text', 'label' => 'Field Limit Maximum')) ?>
 			<?= $this->Form->input('required', array('type' => 'checkbox', 'value' => 1, 'label' => 'Required Field?')) ?>
 
 			<?= $this->Form->hidden('field_order') ?>
@@ -93,7 +97,7 @@
 		    <?= $this->Form->hidden('id') ?>
 		</div>
 
-		<div class="tab-pane hidden-phone" id="order">
+		<div class="tab-pane" id="order">
 			<div class="well">
 				<h2>Field Order</h2>
 

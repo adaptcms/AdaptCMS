@@ -22,11 +22,6 @@ h4.image-filters {
 	margin-bottom: 35px;
 }
 
-.upload-file:nth-child(4n) {
-	/*clear: both;*/
-}
-
-.upload-file
-{
-	margin-right: 14px;
+#libraries {
+    margin-bottom: 9px;
 }

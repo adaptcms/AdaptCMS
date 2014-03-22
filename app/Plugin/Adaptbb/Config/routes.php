@@ -55,8 +55,8 @@ Router::connect('/forums/:forum_slug/:slug/*', array(
 $routes = array(
 	'adaptbb_forums' => array(
 		'route' => array(
-			'plugin' => 'adaptbb',
 			'controller' => 'forums',
+			'plugin' => 'adaptbb',
 			'action' => 'index'
 		)
 	),
@@ -67,19 +67,19 @@ $routes = array(
 			'action' => 'view'
 		),
 		'params' => array(
-			'slug',
-			'forum_slug'
+			'slug' => 'slug',
+			'forum_slug' => 'forum_slug'
 		),
 		'key' => 'ForumTopic'
 	),
 	'adaptbb_view_forum' => array(
 		'route' => array(
-			'plugin' => 'adaptbb',
 			'controller' => 'forums',
+			'plugin' => 'adaptbb',
 			'action' => 'view'
 		),
 		'params' => array(
-			'slug'
+			'slug' => 'slug'
 		),
 		'key' => 'Forum'
 	),
@@ -90,7 +90,7 @@ $routes = array(
 			'action' => 'add'
 		),
 		'params' => array(
-			'slug'
+			'slug' => 'slug'
 		),
 		'key' => 'Forum'
 	),
@@ -101,7 +101,7 @@ $routes = array(
 			'action' => 'change_status'
 		),
 		'params' => array(
-			'id'
+			'id' => 'id'
 		),
 		'key' => 'ForumTopic'
 	),
@@ -112,7 +112,7 @@ $routes = array(
 			'action' => 'edit'
 		),
 		'params' => array(
-			'id'
+			'id' => 'id'
 		),
 		'key' => 'ForumTopic'
 	),
@@ -123,7 +123,7 @@ $routes = array(
 			'action' => 'ajax_edit'
 		),
 		'params' => array(
-			'id'
+			'id' => 'id'
 		),
 		'key' => 'ForumPost'
 	),
@@ -134,7 +134,7 @@ $routes = array(
 			'action' => 'delete'
 		),
 		'params' => array(
-			'id'
+			'id' => 'id'
 		),
 		'key' => 'ForumPost'
 	),
@@ -145,7 +145,7 @@ $routes = array(
 			'action' => 'delete'
 		),
 		'params' => array(
-			'id'
+			'id' => 'id'
 		),
 		'key' => 'ForumPost'
 	)

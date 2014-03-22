@@ -23,12 +23,12 @@
 	<div class="btn-group pull-right">
 		{% if not empty(permissions['related']['comments']['admin_edit']) && $this->Admin->hasPermission($permissions['related']['comments']['admin_edit'], $data['User']['id']) %}
 			<a href="{{ url('comment_edit', $data) }}">
-				edit <i class="icon-pencil"></i>
+				edit <i class="fa fa-pencil"></i>
 			</a>
 		{% endif %}
 		{% if not empty(permissions['related']['comments']['admin_delete']) && $this->Admin->hasPermission($permissions['related']['comments']['admin_delete'], $data['User']['id']) %}
 			<a href="{{ url('comment_delete', $data) }}" class="btn-confirm">
-				delete <i class="icon-trash"></i>
+				delete <i class="fa fa-trash-o"></i>
 			</a>
 		{% endif %}
 	</div>
@@ -51,7 +51,7 @@
 
 	{% if $level != 3 %}
 		<div class="footer">
-			{{ html.link('reply <i class="icon-reply"></i>', '#reply', array('class' => 'pull-right', 'escape' => false)) }}
+			{{ html.link('reply <i class="fa fa-reply"></i>', '#reply', array('class' => 'pull-right', 'escape' => false)) }}
 		</div>
 		<div class="clearfix"></div>
 	{% endif %}
