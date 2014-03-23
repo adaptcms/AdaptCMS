@@ -144,7 +144,21 @@ Configure::write('Dispatcher.filters', array(
 	'AdaptcmsCacheDispatcher'
 ));
 
-CakePlugin::loadAll();
+try {
+	CakePlugin::loadAll();
+} catch(Exception $e) {
+	clearCache(null, 'models');
+	clearCache(null, 'persistent');
+	clearCache(null, 'views');
+	clearCache(null, '/../templates');
+
+	if (function_exists('apc_clear_cache'))
+	{
+		apc_clear_cache();
+		apc_clear_cache('user');
+		apc_clear_cache('opcode');
+	}
+}
 
 require_once("config.php");
 

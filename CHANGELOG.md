@@ -47,5 +47,7 @@
 * FF Bug - /adaptcms/admin/links(polls) :: clearfix
 * Bug - /adaptcms/js/admin.articles.js :: line 317 getContent() on tinyMCE
 * Bug - /adaptcms/admin/fields/edit/2 :: remove hidden-xs class.
-* TODO Bug - Issues with including JS repeatedly on an angularJS admin page. Clearing cache fixes it, but need a better solution.
+* Bug - Issues with including JS repeatedly on an angularJS admin page. Clearing cache fixes it, but need a better solution.
 * Bug - Adjust datepicker so after selecting date, it hides. Good way to see how this gets annoying as is, is on the polls add page.
+* Bug - If an error is found when loading plugins in bootstrap, all cache is wiped.
+* Bug - Related to the previous one, major issue with opcache and multiple adapt sites - changed it so there is a prefix with a md5 hash of the script path, so cache is unique.

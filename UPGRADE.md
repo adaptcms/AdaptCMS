@@ -42,23 +42,9 @@ After SQL is inserted, go into your admin panel and clear the cache. You should 
 
 ####Issues?
 
-If you encounter a white page, enter in the following code on line 146 of <strong>app/Config/bootstrap.php</strong>:
+If you encounter any issues, such as a blank white page or an internal server error - please submit a ticket:
 
-`
-clearCache(null, 'models');
-clearCache(null, 'persistent');
-clearCache(null, 'views');
-clearCache(null, '/../templates');
-
-if (function_exists('apc_clear_cache'))
-{
-    apc_clear_cache();
-    apc_clear_cache('user');
-    apc_clear_cache('opcode');
-}
-`
-
-Save and then load your site once and you should see it load normally. Remove that code and reload, everything should be resolved.
+http://www.adaptcms.com/support
 
 3.0.1 - 3.0.2
 -------------

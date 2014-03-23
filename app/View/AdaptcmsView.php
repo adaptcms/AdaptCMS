@@ -135,7 +135,18 @@ class AdaptcmsView extends View
 	protected function _evaluate($viewFile, $dataForView) {
 		$viewFileModified = filemtime($viewFile);
 		$tempFile = str_replace(APP, '', $viewFile);
-		$tmpFile = strtolower(Inflector::slug($tempFile)) . '.tmp';
+
+		if (strstr(basename($tempFile), 'layout')) {
+			if ($this->disable_parsing) {
+				$append = '_1';
+			} else {
+				$append = '_0';
+			}
+		} else {
+			$append = '';
+		}
+
+		$tmpFile = strtolower(Inflector::slug($tempFile)) . $append . '.tmp';
 
 		$cache = TMP . 'templates' . DS;
 
@@ -248,7 +259,7 @@ class AdaptcmsView extends View
 			$replace[] = $var;
 		}
 
-		if ($is_layout && !$this->disable_parsing) {
+		if ($is_layout) {
 			$headers = '
 <?php echo $this->Html->script("jquery.min") ?>
 <?php echo $this->Html->script("jquery.validate.min") ?>
