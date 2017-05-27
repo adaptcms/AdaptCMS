@@ -1,0 +1,8 @@
+title: AdaptCMS
+description: AdaptCMS is a modern Content Management System, adaptable to any type of content website. In existence for now 6 years, the AdaptCMS 3.x line uses the latest web technology. jQuery, Bootstrap, PHP 5.3, cakePHP Framework.
+google_analytics: UA-442680-10
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
