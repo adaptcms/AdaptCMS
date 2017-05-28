@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  
+
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <!-- Site Properties -->
@@ -15,9 +15,9 @@
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
   <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   <link rel="stylesheet" type="text/css" href="/css/semantic-ui-calendar.min.css">
-  
+
   <link rel="stylesheet" type="text/css" href="/themes/default/assets/css/main.compiled.min.css">
-  
+
   @stack('css')
 </head>
 <body>
@@ -29,7 +29,7 @@
 		  <div class="header item">
 			  AdaptCMS
 		  </div>
-	    
+
 	    @foreach(Core::getData('pages') as $page)
 	    	@if($page->slug == 'home')
 	    		<a href="{{ route('home') }}" class="{{ Request::url() == route('home') ? 'active' : '' }} item">
@@ -41,13 +41,13 @@
 		    	</a>
 	    	@endif
 	    @endforeach
-	    
+
 	    @foreach(Core::getData('categories', 'all', [], [ 'ord', 'asc' ]) as $category)
 	    	<a href="{{ route('categories.view', [ 'slug' => $category->slug ]) }}" class="{{ Request::url() == route('categories.view', [ 'slug' => $category->slug ]) ? 'active' : '' }} item">
 		    	{{ $category->name }}
 	    	</a>
 	    @endforeach
-	
+
 	    <div class="right menu">
 		  @if(!Auth::user())
 		      <div class="item">
@@ -65,7 +65,7 @@
 	    </div>
 	  </div>
 	</div>
-	
+
 	<!-- Sidebar Menu -->
 	<div class="ui vertical inverted sidebar menu">
 	  <a class="active item">Home</a>
@@ -75,13 +75,13 @@
 	  <a class="item">Login</a>
 	  <a class="item">Signup</a>
 	</div>
-	
-	
+
+
 	<!-- Page Contents -->
 	<div class="pusher">
       @include('partials/flash')
 	  @yield('content')
-	
+
 	  <div class="ui inverted vertical footer segment">
 	    <div class="ui container">
 	      <div class="ui stackable inverted divided equal height stackable grid">
@@ -118,17 +118,27 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   <script src="//cdn.jsdelivr.net/ace/1.2.6/min/ace.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js"></script>
-  
+
   <script src="/js/vendor/jquery.tagsinput.min.js"></script>
   <script src="/js/vendor/semantic-ui-calendar.min.js"></script>
   <script src="/js/vendor/jquery-sortable.min.js"></script>
-  
+
   <script src="/js/vendor/vue.min.js"></script>
   <script src="/js/vendor/vue-router.min.js"></script>
-  
+
   @stack('js')
   
   <script src="/themes/default/assets/js/main.compiled.min.js"></script>
 
+  <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-99970500-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
 </body>
 </html>
