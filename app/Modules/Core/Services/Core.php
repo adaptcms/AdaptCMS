@@ -153,78 +153,89 @@ class Core
 
 	public function syncWebsiteInit($step, $params = [])
 	{
-			$client = new Client();
+		// if we can't collect data, we ain't doin' nothin'
+		if (!Cache::get('cms_collect_data', true)) {
+			return false;
+		}
 
-			$data = [
-					'version' => $this->getVersion(),
-					'url' => route('home'),
-					'install_process' => $step,
-					'cms_collect_data' => Cache::get('cms_collect_data'),
-					'webhost' => Cache::get('webhost')
-			];
+		$client = new Client();
 
-			if (!empty($params)) {
-					foreach($params as $key => $val) {
-							$data[$key] = $val;
-					}
+		$data = [
+			'version' => $this->getVersion(),
+			'url' => route('home'),
+			'install_process' => $step,
+			'cms_collect_data' => Cache::get('cms_collect_data', true),
+			'webhost' => Cache::get('webhost')
+		];
+
+		if (!empty($params)) {
+			foreach($params as $key => $val) {
+				$data[$key] = $val;
 			}
+		}
 
-			$res = $client->post(
-				$this->getMarketplaceApiUrl() . '/sync/website/init',
-				[
-						'form_params' => $data,
-						'http_errors' => false
-				]
-			);
+		$res = $client->post(
+			$this->getMarketplaceApiUrl() . '/sync/website/init',
+			[
+				'form_params' => $data,
+				'http_errors' => false
+			]
+		);
 
-			$body = (string) $res->getBody();
+		$body = (string) $res->getBody();
 
-			if ($res->getStatusCode() == 200) {
-					Cache::forever('api_cms_website', json_encode($body));
-			}
+		if ($res->getStatusCode() == 200) {
+			Cache::forever('api_cms_website', $body);
+		}
 	}
 
 	public function syncWebsite()
 	{
-			$client = new Client();
+		// if we can't collect data, we ain't doin' nothin'
+		if (!Cache::get('cms_collect_data', true)) {
+			return false;
+		}
 
-			$meta_data = [
-					'posts_count' => Post::count(),
-					'users_count' => User::count(),
-					'plugins_count' => Module::count(),
-					'pages_count' => Page::count(),
-					'categories_count' => Category::count(),
-					'files_count' => File::count(),
-					'albums_count' => Album::count(),
-					'themes_count' => Theme::count()
-			];
+		$client = new Client();
 
-			$data = [
-					'version' => $this->getVersion(),
-					'url' => route('home'),
-					'cms_collect_data' => Cache::get('cms_collect_data'),
-					'metadata' => $meta_data
-			];
+		$meta_data = [
+				'posts_count' => Post::count(),
+				'users_count' => User::count(),
+				'plugins_count' => Module::count(),
+				'pages_count' => Page::count(),
+				'categories_count' => Category::count(),
+				'files_count' => File::count(),
+				'albums_count' => Album::count(),
+				'themes_count' => Theme::count(),
+				'plugins' => Module::all()->toArray()
+		];
 
-			if (!empty($params)) {
-					foreach($params as $key => $val) {
-							$data[$key] = $val;
-					}
-			}
+		$data = [
+				'version' => $this->getVersion(),
+				'url' => route('home'),
+				'cms_collect_data' => Cache::get('cms_collect_data', true),
+				'metadata' => $meta_data
+		];
 
-			$res = $client->post(
-				$this->getMarketplaceApiUrl() . '/sync/website/init',
-				[
-						'form_params' => $data,
-						'http_errors' => false
-				]
-			);
+		if (!empty($params)) {
+				foreach($params as $key => $val) {
+						$data[$key] = $val;
+				}
+		}
 
-			$body = (string) $res->getBody();
+		$res = $client->post(
+			$this->getMarketplaceApiUrl() . '/sync/website',
+			[
+					'form_params' => $data,
+					'http_errors' => false
+			]
+		);
 
-			if ($res->getStatusCode() == 200) {
-					Cache::forever('api_cms_website', json_encode($body));
-			}
+		$body = (string) $res->getBody();
+
+		if ($res->getStatusCode() == 200) {
+			Cache::forever('api_cms_website', $body);
+		}
 	}
 
 	public function getMarketplaceApiUrl()

@@ -183,11 +183,13 @@ class Controller extends BaseController
 
     public function syncWebsite()
     {
-      // every 3 days
-      $minutes = (1440 * 3);
-      Cache::remember('theme_updates', $minutes, function() {
-          Core::syncWebsite();
-      });
+          // every 3 days
+          $minutes = (1440 * 3);
+          Cache::remember('sync_website', $minutes, function() {
+              Core::syncWebsite();
+
+              return true;
+          });
     }
 
     public function fireEvent($module, $class = '', $arg = '')
