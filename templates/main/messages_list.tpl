@@ -1,1 +1,0 @@
-<tr{class}><td align='center'>{icon}</td><td>{subject}<br />From: {sender} @ {date}</td><td align='center' style='padding-right:10px'>{options}</td></tr>

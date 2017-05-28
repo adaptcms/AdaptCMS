@@ -1,0 +1,65 @@
+body.dragging, body.dragging * {
+  cursor: move !important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+ol.sortable li {
+	display: block;
+	cursor: pointer;
+}
+
+ol.sortable li.placeholder {
+  position: relative;
+  /** More li styles **/
+}
+ol.sortable li.placeholder:before {
+  position: absolute;
+  /** Define arrowhead **/
+}
+
+.chosen-container {
+	width: 200px!important;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+  
+  select.filtering {
+	  display: block!important;
+	  margin-top: 30px;
+	  width: 20%!important;
+  }
+  
+  .btn.filtering {
+	  margin-top: 30px;
+  }
+  
+  #code-editor {
+        position: absolute;
+        width: 65%;
+        height: 400px;
+    }
+    
+    select {
+	    display: block!important;
+    }
+    
+    .multi {
+	    display: none!important;
+    }
+    
+    [v-cloak] {
+	    display: none;
+    }

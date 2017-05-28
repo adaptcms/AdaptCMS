@@ -1,0 +1,16 @@
+{
+    "name": "Adaptbb",
+    "slug": "adaptbb",
+    "version": "1.0",
+    "description": "This is the description for the Adaptbb module.",
+    "admin_menu": [
+        {
+            "route": "plugin.adaptbb.admin.forum_categories.index",
+            "name": "Categories"
+        },
+        {
+            "route": "plugin.adaptbb.admin.forums.index",
+            "name": "Forums"
+        }
+    ]
+}

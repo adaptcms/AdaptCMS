@@ -1,0 +1,35 @@
+{
+    "name": "adaptcms-marketplace",
+    "version": "1.0.0",
+    "description": "automating tasks with gulp test",
+    "main": "gulpfile.js",
+    "scripts": {
+	"test": "gulp is running"
+    },
+    "repository": {
+	"type": "git",
+	"url": "none"
+    },
+    "keywords": [
+	"gulp",
+	"sass"
+    ],
+    "author": "AirTight Design",
+    "license": "MIT",
+    "devDependencies": {
+	"es6-promise": "^4.0.5",
+	"gulp": "^3.9.0",
+	"gulp-autoprefixer": "^3.0.2",
+	"gulp-clean-css": "^2.0.9",
+	"gulp-concat": "^2.6.0",
+	"gulp-jshint": "^1.11.2",
+	"gulp-livereload": "^3.8.1",
+	"gulp-notify": "^2.2.0",
+	"gulp-rename": "^1.2.2",
+	"gulp-sass": "^2.0.4",
+	"gulp-sourcemaps": "^1.6.0",
+	"gulp-uglify": "^1.5.1",
+	"gulp-util": "^3.0.6",
+	"jshint-stylish": "^2.0.1"
+    }
+}

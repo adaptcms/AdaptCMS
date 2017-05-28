@@ -1,0 +1,12 @@
+{
+    "name": "Example",
+    "slug": "example",
+    "version": "1.0",
+    "description": "This is the description for the Example module.",
+    "admin_menu": [
+        {
+            "route": "home",
+            "name": "Example Admin Link"
+        }
+    ]
+}

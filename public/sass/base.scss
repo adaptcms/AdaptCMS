@@ -1,0 +1,273 @@
+body {
+	background-color: #ddd!important;
+}
+
+body.install {
+		margin-top: 30px;
+}
+
+.hidden {
+	display: none!important;
+}
+
+template {
+	display: block!important;
+}
+
+.full.width {
+	width: 100%;
+}
+
+#code-editor {
+    width: 650px;
+		height: 250px;
+}
+
+.code-editor-container {
+	height: 300px;
+}
+
+.font-size-normal {
+	font-size: 1rem;
+}
+
+.text-align-center {
+	text-align: center;
+}
+
+.clear {
+		clear: both;
+}
+
+.install .ui.red.segment {
+		padding-bottom: 70px;
+}
+
+.install .ui.form {
+		padding-bottom: 25px;
+}
+
+html.ios {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+html.ios,
+html.ios body {
+  height: initial !important;
+}
+
+.collapsible.item {
+	 :hover {
+		 	cursor: pointer;
+	 }
+}
+
+.ui.pointing.menu .item:after {
+		content: none!important;
+}
+
+.left.pointing.menu .toc.item {
+  display: none;
+}
+
+.main-menu {
+		margin-bottom: 15px!important;
+}
+
+body.pushable {
+		background: #fff!important;
+}
+
+.ui.buttons {
+		&.center.aligned {
+				margin: 0 auto!important;
+		}
+
+		.ui.button {
+				margin-left: 5px!important;
+		}
+}
+
+.footer {
+		margin-top: 15px!important;
+}
+
+.ui.buttons .ui.button:not(:first-child) {
+    margin-left: 5px;
+}
+
+// MOBILE
+@media only screen and (max-width: 700px) {
+  .ui.main-menu.menu {
+    display: none !important;
+  }
+  .left.pointing.menu .item,
+  .left.pointing.menu .menu {
+    display: none;
+  }
+  .left.pointing.menu .toc.item {
+    display: block;
+  }
+
+	.left-container {
+			padding-top: 0!important;
+
+			.menu {
+					width: 100%!important;
+					min-height: 3rem;
+			}
+	}
+
+	.sidebar.icon {
+			float: left!important;
+			display: block!important;
+	}
+
+	#main-container {
+			width: 100%!important;
+			margin-left: auto!important;
+			margin-right: auto!important;
+	}
+
+	.tagsinput {
+			width: 267px!important;
+	}
+
+	.index-nav {
+			text-align: center!important;
+
+			span {
+					display: block;
+				 text-align: center;
+			}
+
+			.ui.dropdown {
+					width: 100%!important;
+					padding: 5px;
+					text-align: center;
+			}
+	}
+
+	.ace_editor {
+			width: 300px!important;
+	}
+}
+
+// tablet ONLY
+@media only screen and (min-width: 700px) and (max-width: 1100px) {
+		#main-container {
+				margin-left: 15px!important;
+		}
+
+		.left-container {
+			.menu {
+				font-size: .85714286rem!important;
+				width: auto!important;
+			}
+		}
+
+		.main-menu {
+				span {
+						display: none!important;
+				}
+		}
+
+		.index-nav {
+				width: 100%!important;
+
+				span {
+						display: none!important;
+				}
+		}
+
+		.ace_editor {
+				width: 518px!important;
+		}
+}
+
+// tablet and desktop
+@media only screen and (min-width: 700px) {
+		#main-container {
+				min-width: 94%!important;
+		}
+}
+
+// MEDIA QUERIES
+
+// MOBILE
+@media only screen and (max-width: 700px) {
+    .mobile.only:not(table) {
+        display: block!important;
+    }
+
+		table.mobile.only {
+        display: table!important;
+    }
+
+    .tablet.only {
+        display: none!important;
+    }
+
+    .computer.only {
+        display: none!important;
+    }
+
+		h4.mobile.clear-left {
+				clear: left!important;
+		}
+}
+
+// TABLET
+@media only screen and (min-width: 700px) and (max-width: 1100px) {
+    .tablet.only:not(table) {
+        display: block!important;
+    }
+
+		table.tablet.only {
+        display: table!important;
+    }
+
+    .mobile.only {
+        display: none!important;
+    }
+
+    .computer.only {
+        display: none!important;
+    }
+}
+
+// DESKTOP
+@media only screen and (min-width: 1100px) {
+    .computer.only:not(table) {
+        display: block!important;
+    }
+
+		table.computer.only {
+        display: table!important;
+    }
+
+    .mobile.only {
+        display: none!important;
+    }
+
+    .tablet.only {
+        display: none!important;
+    }
+
+		.ui.two.cards {
+		  	.card {
+						width: calc(33.33333333% - 2em);
+				}
+		}
+}
+
+// TABLET AND DESKTOP
+@media only screen and (min-width: 700px) {
+    .computer.only.tablet.only:not(table) {
+        display: block!important;
+    }
+
+		table.computer.only.tablet.only {
+        display: table!important;
+    }
+}

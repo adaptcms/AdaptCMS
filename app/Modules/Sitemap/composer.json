@@ -1,0 +1,8 @@
+{
+    "name": "adaptcms/plugin-sitemap",
+    "description": "Sitemap generator plugin for AdaptCMS.",
+    "require": {
+      	"php": ">=5.6.4",
+        "watson/sitemap": "^2.0"
+    }
+}

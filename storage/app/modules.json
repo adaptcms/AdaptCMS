@@ -1,0 +1,102 @@
+{
+    "Redirection": {
+        "basename": "Redirection",
+        "name": "Redirection",
+        "slug": "redirection",
+        "version": "1.0",
+        "description": "This is the description for the Redirection module.",
+        "id": 574902519,
+        "enabled": false,
+        "order": 9001
+    },
+    "Users": {
+        "basename": "Users",
+        "name": "Users",
+        "slug": "users",
+        "version": "1.0",
+        "description": "This is the description for the Users module.",
+        "id": 344172009,
+        "enabled": true,
+        "order": 9001
+    },
+    "Posts": {
+        "basename": "Posts",
+        "name": "Posts",
+        "slug": "posts",
+        "version": "1.0",
+        "description": "This is the description for the Posts module.",
+        "id": 2287844090,
+        "enabled": true,
+        "order": 9001
+    },
+    "Files": {
+        "basename": "Files",
+        "name": "Files",
+        "slug": "files",
+        "version": "1.0",
+        "description": "This is the description for the Files module.",
+        "id": 104153177,
+        "enabled": true,
+        "order": 9001
+    },
+    "Sitemap": {
+        "basename": "Sitemap",
+        "name": "Sitemap",
+        "slug": "sitemap",
+        "version": "1.0",
+        "description": "This is the description for the Sitemap module.",
+        "id": 55671245,
+        "enabled": false,
+        "order": 9001
+    },
+    "Adaptbb": {
+        "basename": "Adaptbb",
+        "name": "Adaptbb",
+        "slug": "adaptbb",
+        "version": "1.0",
+        "description": "This is the description for the Adaptbb module.",
+        "id": 1261101791,
+        "enabled": true,
+        "order": 9001,
+        "admin_menu": [
+            {
+                "route": "plugin.adaptbb.admin.forum_categories.index",
+                "name": "Categories"
+            },
+            {
+                "route": "plugin.adaptbb.admin.forums.index",
+                "name": "Forums"
+            }
+        ]
+    },
+    "Plugins": {
+        "basename": "Plugins",
+        "name": "Plugins",
+        "slug": "plugins",
+        "version": "1.0",
+        "description": "This is the description for the Plugins module.",
+        "id": 3968202353,
+        "enabled": true,
+        "order": 9001
+    },
+    "Themes": {
+        "basename": "Themes",
+        "name": "Themes",
+        "slug": "themes",
+        "version": "1.0",
+        "description": "This is the description for the Themes module.",
+        "id": 356659934,
+        "enabled": true,
+        "order": 9001
+    },
+    "Core": {
+        "basename": "Core",
+        "name": "Core",
+        "slug": "core",
+        "version": "1.0",
+        "description": "This is the description for the Core module.",
+        "id": 1804436815,
+        "enabled": true,
+        "order": 9001
+    }
+}
