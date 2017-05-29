@@ -1,14 +1,4 @@
 {
-    "Redirection": {
-        "basename": "Redirection",
-        "name": "Redirection",
-        "slug": "redirection",
-        "version": "1.0",
-        "description": "This is the description for the Redirection module.",
-        "id": 574902519,
-        "enabled": false,
-        "order": 9001
-    },
     "Users": {
         "basename": "Users",
         "name": "Users",

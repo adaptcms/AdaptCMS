@@ -34,7 +34,7 @@
 							<a href="{{ route('admin.plugins.install', [ 'slug' => ucfirst($item['slug']) ]) }}" class="ui right labeled icon button primary">
 								Install <i class="plus icon"></i>
 							</a>
-						@elseif(empty($permanent_plugins[$item['name']]))
+						@elseif(!in_array($item['name'], $core_modules))
 							<a href="{{ route('admin.plugins.uninstall', [ 'slug' => ucfirst($item['slug']) ]) }}" class="ui right labeled icon button red">
 								Uninstall <i class="trash icon"></i>
 							</a>

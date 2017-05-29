@@ -11,24 +11,18 @@ use App\Modules\Plugins\Models\Plugin;
 
 use Storage;
 use Module;
+use Cache;
 
 class PluginsEngineController extends Controller
 {
     public function index()
     {
-	    $permanent_plugins = [
-    			'Articles' => 'Articles',
-    			'Categories' => 'Categories',
-    			'Files' => 'Files',
-    			'Users' => 'Users',
-    			'Plugins' => 'Plugins',
-    			'Themes' => 'Themes'
-	    ];
-
 	    // current plugins
 	    $items = Module::all();
 
-	    return view('plugins::PluginsEngine/index', [  'items' => $items, 'permanent_plugins' => $permanent_plugins ]);
+        $core_modules = Plugin::getCoreModules();
+
+	    return view('plugins::PluginsEngine/index', compact('items', 'core_modules'));
     }
 
     public function install($slug)

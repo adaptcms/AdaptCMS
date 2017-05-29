@@ -7,6 +7,16 @@ use Cache;
 
 class Plugin
 {
+    public static $core_modules = [
+        'Core' => 'Core',
+        'Files' => 'Files',
+        'Modules' => 'Modules',
+        'Plugins' => 'Plugins',
+        'Posts' => 'Posts',
+        'Themes' => 'Themes',
+        'Users' => 'Users'
+    ];
+
     public static $plugins_json;
     public static $modules = [];
 
@@ -82,5 +92,23 @@ class Plugin
 
             Storage::disk('local')->put('modules.json', json_encode(self::$modules), 'public');
         }
+    }
+
+    public static function getCoreModules()
+    {
+        // 1 day
+        $minutes = (60 * 24);
+
+        return Cache::remember('core_modules', $minutes, function() {
+            if (Cache::get('cms_current_version')) {
+                $current_version = json_decode(Cache::get('cms_current_version'), true);
+
+                $core_modules = $current_version['core_modules'];
+            } else {
+                $core_modules = self::$core_modules;
+            }
+
+            return $core_modules;
+        });
     }
 }
