@@ -62,7 +62,7 @@
 								@include('partials/flash')
 
 								<div id="main-container" class="ui fluid red left aligned raised padded text container segment pull-left">
-									<a href="{{ request()->headers->get('referer') }}" class="ui left labeled icon button large violet margin-bottom-10 pull-right">
+									<a href="{{ request()->headers->get('referer') }}" class="ui left labeled icon button large violet margin-bottom-10 right floated">
 								    	Back
 										<i class="reply icon"></i>
 									</a>
