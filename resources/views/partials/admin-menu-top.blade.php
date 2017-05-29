@@ -1,8 +1,7 @@
 <a href="{{ route('admin.updates.index') }}" class="{{ Route::currentRouteName() == 'admin.updates.index' ? 'active' : '' }} item">
-  <span>Updates</span>
-  <i class="warning icon"></i>
-  @if(Cache::get('cms_updates'))
-    <i class="ui circular blue left label">{{ Cache::get('cms_updates') }}</i>
+  <span>Updates <i class="warning icon"></i></span>
+  @if(Core::getUpdatesCount())
+    <i class="ui circular blue left label">{{ Core::getUpdatesCount() }}</i>
   @endif
 </a>
 <a href="{{ route('admin.updates.browse') }}" class="item">
@@ -27,9 +26,12 @@
 </a>
 <div class="right menu">
   <div class="item">
-    <div class="ui transparent icon input">
-      <input type="text" placeholder="Search...">
-      <i class="inverted search link icon"></i>
+    <div class="ui fluid posts search">
+        <div class="ui transparent icon input">
+          <input type="text" placeholder="Search posts..." class="prompt font-color-white">
+          <i class="inverted search link icon"></i>
+        </div>
+        <div class="results"></div>
     </div>
   </div>
 </div>

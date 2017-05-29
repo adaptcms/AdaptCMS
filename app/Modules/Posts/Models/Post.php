@@ -158,8 +158,6 @@ class Post extends Model
         if (!empty($postArray['related_posts'])) {
             $related_posts = $postArray['related_posts'];
 
-            PostRelated::where('from_post_id', '=', $this->id)->delete();
-
             if (!empty($related_posts)) {
                 foreach ($related_posts as $row) {
                     $related = new PostRelated;
@@ -207,11 +205,13 @@ class Post extends Model
         $revision->save();
 
         // save post tags
-            if (!empty($postArray['tags'])) {
-                $tags = explode(',', $postArray['tags']);
+        if (!empty($postArray['tags'])) {
+            $tags = explode(',', $postArray['tags']);
 
-                foreach ($tags as $tag) {
-                    $tagFetch = Tag::where('name', '=', $tag)->first();
+            foreach ($tags as $tag) {
+                $slug = str_slug($tag, '-');
+
+                $tagFetch = Tag::where('slug', '=', $slug)->first();
 
                 // tag exists
                 if (!$tagFetch) {
@@ -219,20 +219,20 @@ class Post extends Model
                     $newTag = new Tag;
 
                     $newTag->name = $tag;
-                    $newTag->slug = str_slug($tag, '-');
+                    $newTag->slug = $slug;
                     $newTag->user_id = $postArray['user_id'];
 
                     $newTag->save();
                 }
 
-                    $pTag = new PostTag;
+                $pTag = new PostTag;
 
-                    $pTag->post_id = $this->id;
-                    $pTag->tag_id = !empty($newTag) ? $newTag->id : $tagFetch->id;
+                $pTag->post_id = $this->id;
+                $pTag->tag_id = !empty($newTag) ? $newTag->id : $tagFetch->id;
 
-                    $pTag->save();
-                }
+                $pTag->save();
             }
+        }
 
         return $this;
     }
@@ -323,7 +323,9 @@ class Post extends Model
             $tags = explode(',', $postArray['tags']);
 
             foreach ($tags as $tag) {
-                $tagFetch = Tag::where('name', '=', $tag)->first();
+                $slug = str_slug($tag, '-');
+
+                $tagFetch = Tag::where('slug', '=', $slug)->first();
 
                 // tag exists
                 if ($tagFetch) {
@@ -338,7 +340,7 @@ class Post extends Model
                     $newTag = new Tag;
 
                     $newTag->name = $tag;
-                    $newTag->slug = str_slug($tag, '-');
+                    $newTag->slug = $slug;
                     $newTag->user_id = $postArray['user_id'];
 
                     $newTag->save();

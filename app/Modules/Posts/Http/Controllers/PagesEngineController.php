@@ -18,7 +18,6 @@ class PagesEngineController extends Controller
 {
 	public function dashboard()
 	{
-
 		return view('posts::PagesEngine/dashboard');
 	}
 
@@ -87,6 +86,8 @@ class PagesEngineController extends Controller
 		        $errors = $validator->errors()->getMessages();
 	        }
         }
+
+		$model->body = Storage::disk('themes')->get('default/views/pages/' . $model->slug . '.blade.php');
 
         return view('posts::PagesEngine/edit', [ 'model' => $model, 'errors' => $errors ]);
     }

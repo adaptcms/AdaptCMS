@@ -1,9 +1,23 @@
 $(document).ready(function() {
-	if ($('.ui.dropdown').length) {
-		$('.ui.dropdown').dropdown({
-	        on: 'hover',
-					transition: 'drop'
+	if ($('.ui.dropdown:not(.cms)').length) {
+		$('.ui.dropdown:not(.cms)').dropdown({
+	        on: 'hover'
 	      });
+	}
+
+	if ($('.ui.dropdown.cms').length) {
+		$('.ui.dropdown.cms').on('click', function() {
+			$(this).find('.menu').toggleClass('active');
+		});
+	}
+
+	var closeMenu = $('.ui.close-menu');
+	if (closeMenu.length) {
+		closeMenu.on('click', function(e) {
+			e.preventDefault();
+
+			$('body').trigger('click');
+		});
 	}
 
       $('.activate.popup').popup({

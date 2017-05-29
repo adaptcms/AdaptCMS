@@ -216,6 +216,8 @@ class AdminUpdatesController extends Controller
 				// lets run the upgrade event with the version #, if it exists
 				$this->fireEvent($slug, $slug . 'Update', $module['latest_version']['version']);
 
+				Cache::decrement('theme_updates');
+
 				// we'll return to the themes index on success
 				return redirect()->route('admin.themes.index')->with('success', $module['name'] . ' theme has been updated!');
 		}
@@ -256,6 +258,8 @@ class AdminUpdatesController extends Controller
 				// lets run the upgrade event with the version #, if it exists
 				$this->fireEvent($slug, $slug . 'Update', $module['latest_version']['version']);
 
+				Cache::decrement('plugin_updates');
+
 				// we'll return to the plugins index on success
 				return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been updated!');
 		}
@@ -269,7 +273,6 @@ class AdminUpdatesController extends Controller
 						$this->checkForCmsUpdates();
 				}
 
-				$updates_count = Cache::get('cms_updates');
 				if ($type == 'normal') {
 						$upgrade_version = json_decode(Cache::get('cms_latest_version'), true);
 				} else {
@@ -402,15 +405,8 @@ class AdminUpdatesController extends Controller
 				$this->setCommitHash($upgrade_version['commit_hash']);
 				Cache::forever('cms_current_version', json_encode($upgrade_version));
 
-				if ($type == 'bleeding_edge') {
-						$updates_count--;
-				}
-
 				Cache::forget('cms_latest_version');
 				Cache::forget('cms_latest_version_name');
-
-				// decrement update notifications
-				$updates_count--;
 
 				// clear the cache
 				Core::clearCache();
@@ -418,11 +414,9 @@ class AdminUpdatesController extends Controller
 				// reset bleeding edge
 				if ($type == 'bleeding_edge') {
 						Cache::forever('bleedinge_edge_update', 0);
-
-						$updates_count--;
 				}
 
-				Cache::forever('cms_updates', $updates_count);
+				Cache::forever('cms_updates', 0);
 
 				$current_version = $upgrade_version;
 

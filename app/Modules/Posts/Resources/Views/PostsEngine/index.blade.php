@@ -14,7 +14,7 @@
 
 	  <div class="ui right floated right aligned float right ten wide column index-nav">
 		  <span>Show me posts by</span>
-	  <div class="ui inline dropdown">
+	  <div class="ui cms dropdown">
 	    <div class="text">
 	      Category
 	    </div>
@@ -32,7 +32,7 @@
 	    </div>
 	  </div>
 
-		  <div class="ui inline dropdown">
+		  <div class="ui cms dropdown">
 		    <div class="text">
 		      Status
 		    </div>
@@ -51,7 +51,7 @@
 		    </div>
 		  </div>
 
-		  <div class="ui inline dropdown">
+		  <div class="ui cms dropdown">
 		    <button class="ui right labeled icon small primary button">
 		    	Add
 		    	<i class="plus icon"></i>

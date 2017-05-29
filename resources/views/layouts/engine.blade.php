@@ -35,7 +35,7 @@
       </div>
 
 			<div class="ui vertical inverted sidebar menu">
-			  	@include('partials/admin-menu-left')
+			  	@include('partials/admin-menu-left-mobile')
 
 					<div class="divider item"></div>
 

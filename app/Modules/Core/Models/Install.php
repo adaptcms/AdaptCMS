@@ -2,6 +2,7 @@
 
 namespace App\Modules\Core\Models;
 
+use App\Events\InstallSeedEvent;
 use App\Modules\Users\Models\User;
 
 use Settings;
@@ -142,7 +143,7 @@ class Install
         }
 
         try {
-            $status = Artisan::call('module:seed');
+            event(new InstallSeedEvent());
         } catch(\Exception $e) {
             abort(500, 'Unable to install SQL. Go back and ensure database credentials are accurate.');
         }

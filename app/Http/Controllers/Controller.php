@@ -44,7 +44,7 @@ class Controller extends BaseController
         $apiUrl = $this->apiUrl;
 
         Cache::remember('core_cms_updates', Settings::get('check_for_updates_every_x_minutes', 15), function() use($apiUrl) {
-            Cache::forever('cms_updates', 0);
+            $cms_updates = 0;
 
             $client = new Client();
 
@@ -72,10 +72,10 @@ class Controller extends BaseController
             }));
             $latest_version = reset($latest_version);
 
-    				// if empty somehow, 404
-    				if (empty($current_version) || empty($latest_version)) {
-    						return false;
-    				}
+			// if empty somehow, 404
+			if (empty($current_version) || empty($latest_version)) {
+					return false;
+			}
 
             Cache::forever('bleedinge_edge_update', 0);
 
@@ -89,7 +89,7 @@ class Controller extends BaseController
                 // increment the notification value for bleeding edge
 
                 if (env('APP_DEBUG')) {
-                    Cache::increment('cms_updates');
+                    $cms_updates++;
                     Cache::forever('bleedinge_edge_update', 1);
 
                     Cache::forever('cms_current_version', json_encode($current_version));
@@ -98,11 +98,13 @@ class Controller extends BaseController
 
             // check for normal upgrades
             if ($current_version['id'] != $latest_version['id']) {
-                Cache::increment('cms_updates');
+                $cms_updates++;
 
                 Cache::forever('cms_latest_version_name', $latest_version['version']);
                 Cache::forever('cms_latest_version', json_encode($latest_version));
             }
+
+            Cache::forever('cms_updates', $cms_updates);
 
             return true;
         });
@@ -118,6 +120,8 @@ class Controller extends BaseController
 
             $plugins = Module::all();
 
+            $plugin_updates = 0;
+
             // empty out module updates data
             $modules_updates_list = [];
             foreach($plugins as $plugin) {
@@ -131,12 +135,14 @@ class Controller extends BaseController
                 }
 
                 if ($module['latest_version']['version'] != Module::get($plugin['slug'] . '::version')) {
-                    Cache::increment('cms_updates');
+                    $plugin_updates++;
 
                     // add module for updates index
                     $modules_updates_list[] = $module;
                 }
             }
+
+            Cache::forever('plugin_updates', $plugin_updates);
 
             Cache::forever('plugins_updates_list', json_encode($modules_updates_list));
 
@@ -154,6 +160,7 @@ class Controller extends BaseController
 
             $themes = Theme::all();
 
+            $theme_updates = 0;
             $modules_updates_list = [];
             foreach($themes as $theme) {
                 // get the module
@@ -166,7 +173,7 @@ class Controller extends BaseController
                 }
 
                 if ($module['latest_version']['version'] != $theme->getConfig('version')) {
-                    Cache::increment('cms_updates');
+                    $theme_updates++;
 
                     $module['theme'] = $theme;
 
@@ -175,6 +182,7 @@ class Controller extends BaseController
                 }
             }
 
+            Cache::forever('theme_updates', $theme_updates);
             Cache::forever('themes_updates_list', json_encode($modules_updates_list));
 
             return true;

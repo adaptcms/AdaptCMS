@@ -13,6 +13,7 @@ use App\Modules\Posts\Models\Post;
 
 use Theme;
 use Cache;
+use Storage;
 
 class PagesController extends Controller
 {
@@ -22,6 +23,8 @@ class PagesController extends Controller
 
         try {
             $page = Page::where('slug', '=', 'home')->firstOrFail();
+
+            $page->body = Storage::disk('themes')->get('default/views/pages/' . $page->slug . '.blade.php');
 
             $theme->set('meta_keywords', $page->meta_keywords);
             $theme->set('meta_description', $page->meta_description);
@@ -40,6 +43,7 @@ class PagesController extends Controller
     {
 	    try {
 		    $page = Page::where('slug', '=', $slug)->firstOrFail();
+            $page->body = Storage::disk('themes')->get('default/views/pages/' . $page->slug . '.blade.php');
 
 		    $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
 

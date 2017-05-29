@@ -14,7 +14,7 @@
 
 	  <div class="ui right floated right aligned ten wide column index-nav">
 		  <span>Show me files by</span>
-		  <div class="ui inline dropdown">
+		  <div class="ui cms dropdown">
 		    <div class="text">
 		      File Type
 		    </div>
@@ -30,10 +30,10 @@
 				@endforeach
 		    </div>
 		  </div>
-      <a href="{{ route('admin.files.add') }}" class="ui right labeled icon button small primary">
+      	<a href="{{ route('admin.files.add') }}" class="ui right labeled icon button small primary">
           Upload
           <i class="upload icon"></i>
-      </a>
+      	</a>
 	  </div>
 	</div>
 

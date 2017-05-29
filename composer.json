@@ -10,7 +10,6 @@
         "caffeinated/modules": "^4.1",
         "laravelcollective/html": "^5.4.0",
         "barryvdh/laravel-debugbar": "^2.3",
-        "adaptcms/laravel-theme": "dev-master",
         "jeremeamia/superclosure": "dev-master",
         "laravel/scout": "^3.0",
         "teamtnt/laravel-scout-tntsearch-driver": "^2.0",
@@ -24,7 +23,8 @@
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~5.7",
         "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*"
+        "symfony/dom-crawler": "3.1.*",
+	"adaptcms/laravel-theme": "master"
     },
     "autoload": {
         "classmap": [

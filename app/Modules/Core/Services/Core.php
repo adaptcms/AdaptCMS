@@ -275,4 +275,9 @@ class Core
 
 			return $links;
 	}
+
+	public function getUpdatesCount()
+	{
+		return Cache::get('cms_updates', 0) + Cache::get('plugin_updates', 0) + Cache::get('theme_updates', 0);
+	}
 }

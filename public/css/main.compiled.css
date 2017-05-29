@@ -93,6 +93,10 @@ body.pushable {
   margin-left: 5px;
 }
 
+.center.aligned.item {
+  text-align: center !important;
+}
+
 @media only screen and (max-width: 700px) {
   .ui.main-menu.menu {
     display: none !important;
@@ -138,6 +142,22 @@ body.pushable {
   .ace_editor {
     width: 300px !important;
   }
+  .ui.message {
+    font-size: 1.3rem;
+  }
+  .left.pointing.menu {
+    font-size: 1.3rem !important;
+  }
+  .left.pointing.menu .toc.item {
+    padding: 1rem !important;
+  }
+  .sidebar.menu.left {
+    width: 100% !important;
+    font-size: 1.3rem !important;
+  }
+  .pusher.dimmed {
+    display: none !important;
+  }
 }
 
 @media only screen and (min-width: 700px) and (max-width: 1100px) {
@@ -148,8 +168,17 @@ body.pushable {
     font-size: 0.85714rem !important;
     width: auto !important;
   }
+  .main-menu {
+    font-size: 1rem !important;
+  }
   .main-menu span {
     display: none !important;
+  }
+  .left.pointing.menu {
+    font-size: 1.3rem !important;
+  }
+  .left.pointing.menu .collapsible.item .menu .item {
+    font-size: 0.9rem !important;
   }
   .index-nav {
     width: 100% !important;
@@ -1616,6 +1645,83 @@ body.pushable {
 
 .padding-bottom-25 {
   padding-bottom: 25px !important;
+}
+
+.ui.cms.dropdown {
+  text-align: left;
+  display: inline;
+  list-style: none;
+}
+
+.ui.cms.dropdown:not(:last-child) {
+  margin-right: 7px;
+}
+
+.ui.cms.dropdown .text {
+  font-weight: bold;
+  margin-right: -10px !important;
+  display: inline-block;
+  transition: none;
+}
+
+.ui.cms.dropdown .text:hover .menu {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.ui.cms.dropdown .menu .item {
+  position: relative;
+  padding: 15px 20px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ui.cms.dropdown .menu .item.active {
+  font-weight: bold;
+}
+
+.ui.cms.dropdown .menu .item:not(.active) {
+  font-weight: normal;
+}
+
+.ui.cms.dropdown .menu .item:hover {
+  background: #ddd;
+}
+
+.ui.cms.dropdown .menu {
+  padding: 0;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 150px;
+  box-shadow: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transiton: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -transition: opacity 0.2s;
+}
+
+.ui.cms.dropdown .menu.active {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.ui.cms.dropdown .menu .item .ui.cms.dropdown .menu .item {
+  background: #555;
+  display: block;
+  color: #fff;
+  text-shadow: 0 -1px 0 #000;
+}
+
+.font-color-white {
+  color: #fff !important;
 }
 
 .spinner-overlay {

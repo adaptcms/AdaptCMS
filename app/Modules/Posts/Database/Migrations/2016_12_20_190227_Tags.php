@@ -17,7 +17,7 @@ class Tags extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('slug')->index();
-            $table->text('body');
+            $table->text('body')->nullable();
             $table->integer('user_id')->index();
             $table->string('meta_keywords')->nullable();
             $table->text('meta_description')->nullable();

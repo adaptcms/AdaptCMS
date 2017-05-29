@@ -14,7 +14,7 @@
 
       <div class="ui right floated right aligned ten wide column index-nav">
               <span>Show me pages by</span>
-          <div class="ui inline dropdown">
+          <div class="ui cms dropdown">
             <div class="text">
               Status
             </div>

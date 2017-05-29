@@ -16,9 +16,7 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    protected $listen = [
-
-    ];
+    protected $listen = [];
 
     /**
      * Register any events for your application.
@@ -34,9 +32,15 @@ class EventServiceProvider extends ServiceProvider
             // build listen list
             $modules = Module::all();
 
+            // array to return, containaing
+            // keys of event class paths and
+            // listener class paths
             $listen = [];
 
+            // aray of events
             $events = [];
+
+            // array of listeners
             $listeners = [];
             foreach($modules as $module) {
                 // find all events

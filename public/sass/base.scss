@@ -96,6 +96,10 @@ body.pushable {
     margin-left: 5px;
 }
 
+.center.aligned.item {
+	text-align: center!important;
+}
+
 // MOBILE
 @media only screen and (max-width: 700px) {
   .ui.main-menu.menu {
@@ -151,6 +155,27 @@ body.pushable {
 	.ace_editor {
 			width: 300px!important;
 	}
+
+	.ui.message {
+		font-size: 1.3rem;
+	}
+
+	.left.pointing.menu {
+		font-size: 1.3rem!important;
+
+		.toc.item {
+			padding: 1rem!important;
+		}
+	}
+
+	.sidebar.menu.left {
+		width: 100%!important;
+		font-size: 1.3rem!important;
+	}
+
+	.pusher.dimmed {
+		display: none!important;
+	}
 }
 
 // tablet ONLY
@@ -167,9 +192,19 @@ body.pushable {
 		}
 
 		.main-menu {
+			font-size: 1rem!important;
+
 				span {
 						display: none!important;
 				}
+		}
+
+		.left.pointing.menu {
+			font-size: 1.3rem!important;
+
+			.collapsible.item .menu .item {
+				font-size: 0.9rem!important;
+			}
 		}
 
 		.index-nav {
@@ -200,7 +235,7 @@ body.pushable {
         display: block!important;
     }
 
-		table.mobile.only {
+	table.mobile.only {
         display: table!important;
     }
 
@@ -212,9 +247,9 @@ body.pushable {
         display: none!important;
     }
 
-		h4.mobile.clear-left {
-				clear: left!important;
-		}
+	h4.mobile.clear-left {
+			clear: left!important;
+	}
 }
 
 // TABLET
