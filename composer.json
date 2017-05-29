@@ -10,7 +10,7 @@
         "caffeinated/modules": "^4.1",
         "laravelcollective/html": "^5.4.0",
         "barryvdh/laravel-debugbar": "^2.3",
-        "jeremeamia/superclosure": "dev-master",
+	"jeremeamia/superclosure": "^2.0",
         "laravel/scout": "^3.0",
         "teamtnt/laravel-scout-tntsearch-driver": "^2.0",
         "offline/persistent-settings": "~1.0.0",
