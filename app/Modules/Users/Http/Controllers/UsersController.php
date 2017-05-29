@@ -46,7 +46,7 @@ class UsersController extends Controller
 
                 return redirect()->route($user->getRedirectTo())->with('success', 'You have been logged in.');
             } else {
-                $existing_attempts = Redis::get($throttling_key);
+                $existing_attempts = Cache::get($throttling_key, 0);
 
                 if ($existing_attempts) {
                     $existing_attempts++;
