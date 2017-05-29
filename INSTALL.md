@@ -8,10 +8,10 @@ Newest version of installation documentation can be found below:
 
 ### With SSH Access \(Cloud Server/SSH for Shared Hositng\)
 
-There's a few options here. First, you can always use [**Composer**](https://getcomposer.org/download/) via the command line:
+There's a few options here. First, you can always use [**Github**](https://github.com/adaptcms/adaptcms) via the command line:
 
 ```
-composer require adaptcms/adaptcms
+git clone git@github.com:adaptcms/AdaptCMS.git
 ```
 
 You can also grab the latest version, at any time below:
@@ -76,7 +76,20 @@ whoami
 
 ### No SSH Access
 
+Through your FTP editor, please edit the permissions of the folders by right-clicking on a folder. The following folders need the permissions **755**:
 
+* app/Modules
+* bootstrap/cache
+* public/storage
+* public/themes
+* public/uploads
+* storage
+
+Secondly, please change the permissions for the following files in the root directory to **644**:
+
+* .commit\_hash
+* .env
+* .version
 
 ## Running the Installer
 
