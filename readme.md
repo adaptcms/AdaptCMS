@@ -1,27 +1,43 @@
-# Laravel PHP Framework
+# AdaptCMS
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## About
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+The dream of AdaptCMS is a content management system that is like a sandbox. To be able to build any type of site you want and if you're a developer, to be able to create additional functionality easily.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+We try to do this by first, creating a solid "framework" of sorts. You can install/upgrade/update plugins, themes and the CMS itself, in the admin. The latest and best software is used, including the Laravel PHP framework, Semantic UI CSS framework, VueJS 2 framework and others.
+
+This first Alpha version is early on and we have a lot of exciting things planned. So stay tuned and see at the bottom of this page for contact info, feel free to ask for help or give us feedback any time!
+
+## Requirements
+
+Below you will find the requirements necessary to run AdaptCMS Alpha. Since the CMS is using modern technologies, the versions of software required are newer than normal. The good news is, outside of the ZIP PHP extension, all the requirements are based on L[**aravel**](https://laravel.com/docs/5.4#server-requirements).
+
+* PHP &gt;= 5.6.4
+* OpenSSL PHP Extension
+* XML PHP Extension
+* PDO PHP Extension
+* Tokenizer PHP Extension
+* Mbstring PHP Extension
+* ZIP PHP Extension \(for installation of plugins/themes and upgrades inside the Admin\)
+* MySQL Server/Client \(support for more database types coming soon\)
+* Apache, NGINX
+* URL Rewriting enabled \(mod\_rewrite, try\_files, etc\)
 
 ## Official Documentation
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+Documentation for AdaptCMS can be found [here](https://learn.adaptcms.com).
 
-## Contributing
+## Get Involved
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+Happy to hear you're interested! We try to make it as easy as possible, so feel free to reach out to any of the following contact methods:
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+* [**Community Forums**](https://www.adaptcms.com/community)
+* [**Slack**](mailto:charliepage88@gmail.com?subject=Add me to AdaptCMS Slack)
+* [**Twitter**](https://twitter.com/adaptcms)
+* [**GitHub Issues**](https://github.com/adaptcms/AdaptCMS/issues)
+* [**Facebook**](https://www.facebook.com/AdaptCMS-104913829614704/)
+* [**AdaptCMS.com**](https://www.adaptcms.com)
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+AdaptCMS is open-sourced software licensed under [3-Clause BSD](https://opensource.org/licenses/BSD-3-Clause).
