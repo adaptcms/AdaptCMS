@@ -1724,6 +1724,10 @@ body.pushable {
   color: #fff !important;
 }
 
+.ui.card {
+  font-size: 1rem !important;
+}
+
 .spinner-overlay {
   position: fixed;
   width: 100%;

@@ -30,7 +30,6 @@ class PluginsEngineController extends Controller
         $this->fireEvent($slug, $slug . 'Install');
 
         Plugin::enable($slug);
-        Module::enable($slug);
 
 	    return redirect()->route('admin.plugins.index')->with('status', 'Plugin has been enabled.');
     }
@@ -40,7 +39,6 @@ class PluginsEngineController extends Controller
         $this->fireEvent($slug, $slug . 'Uninstall');
 
         Plugin::disable($slug);
-        Module::disable($slug);
 
         return redirect()->route('admin.plugins.index')->with('status', 'Plugin has been disabled.');
     }

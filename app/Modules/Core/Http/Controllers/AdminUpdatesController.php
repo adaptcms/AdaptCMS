@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
 use App\Modules\Themes\Models\Theme;
+use App\Modules\Plugins\Models\Plugin;
 
 use Storage;
 use Core;
@@ -93,10 +94,21 @@ class AdminUpdatesController extends Controller
 					abort(404);
 				}
 
+				// make the folder
+				if (!Storage::disk('themes')->exists($module['slug'])) {
+					Storage::disk('themes')->makeDirectory($module['slug']);
+				}
+
 				// then attempt to extract contents
 				$path = public_path() . '/themes/' . $filename;
+				$zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
 
-				Zipper::make($path)->extractTo(public_path() . '/themes');
+				Zipper::make($path)->folder($zip_folder)->extractTo(public_path() . '/themes');
+
+				// delete the ZIP
+				if (Storage::disk('themes')->exists($filename)) {
+					Storage::disk('themes')->delete($filename);
+				}
 
 				// once we've gotten the files all setup
 				// lets run the install event, if it exists
@@ -112,6 +124,9 @@ class AdminUpdatesController extends Controller
 				$theme->user_id = Auth::user()->id;
 
 				$theme->save();
+
+				// enable
+				$theme->enable();
 
 				// we'll return to the themes index on success
 				return redirect()->route('admin.themes.index')->with('success', $module['name'] . ' theme has been installed!');
@@ -144,37 +159,27 @@ class AdminUpdatesController extends Controller
 					abort(404);
 				}
 
+				// make the folder
+				if (!Storage::disk('plugins')->exists($slug)) {
+					Storage::disk('plugins')->makeDirectory($slug);
+				}
+
 				// then attempt to extract contents
 				$path = base_path() . '/app/Modules/' . $filename;
+				$zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
 
-				Zipper::make($path)->extractTo(base_path() . '/app/Modules');
+				Zipper::make($path)->folder($zip_folder)->extractTo(base_path() . '/app/Modules/');
+
+				// delete the ZIP
+				if (Storage::disk('plugins')->exists($filename)) {
+					Storage::disk('plugins')->delete($filename);
+				}
 
 				// once we've gotten the files all setup
 				// lets run the install event, if it exists
 				$this->fireEvent($slug, $slug . 'Install');
 
 				Plugin::enable($slug);
-
-				// grab the modules json file
-				$file = json_decode(Storage::disk('local')->get('modules.json'), true);
-
-				// create the new entry
-				$file[$slug] = [
-					'basename' => $slug,
-					'name' => $module['name'],
-					'slug' => $module['slug'],
-					'version' => $module['latest_version']['version'],
-					'description' => $module['description'],
-					'id' => $module['id'],
-					'enabled' => true,
-					'order' => 9001
-				];
-
-				// write to module.json
-				Storage::disk('plugins')->put($slug . '/module.json', json_encode($file[$slug]), 'public');
-
-				// save the global modules.json
-				Storage::disk('local')->put('modules.json', json_encode($file), 'public');
 
 				// we'll return to the plugins index on success
 				return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been installed!');
@@ -207,14 +212,28 @@ class AdminUpdatesController extends Controller
 					abort(404);
 				}
 
+				// make the folder
+				if (!Storage::disk('themes')->exists($module['slug'])) {
+					Storage::disk('themes')->makeDirectory($module['slug']);
+				}
+
 				// then attempt to extract contents
 				$path = public_path() . '/themes/' . $filename;
+				$zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
 
-				Zipper::make($path)->extractTo(public_path() . '/themes');
+				Zipper::make($path)->folder($zip_folder)->extractTo(public_path() . '/themes');
+
+				// delete the ZIP
+				if (Storage::disk('themes')->exists($filename)) {
+					Storage::disk('themes')->delete($filename);
+				}
 
 				// once we've gotten the files all setup
 				// lets run the upgrade event with the version #, if it exists
 				$this->fireEvent($slug, $slug . 'Update', $module['latest_version']['version']);
+
+				// enable
+				$theme->enable();
 
 				Cache::decrement('theme_updates');
 
@@ -249,14 +268,27 @@ class AdminUpdatesController extends Controller
 					abort(404);
 				}
 
+				// make the folder
+				if (!Storage::disk('plugins')->exists($slug)) {
+					Storage::disk('plugins')->makeDirectory($slug);
+				}
+
 				// then attempt to extract contents
 				$path = base_path() . '/app/Modules/' . $filename;
+				$zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
 
-				Zipper::make($path)->extractTo(base_path() . '/app/Modules');
+				Zipper::make($path)->folder($zip_folder)->extractTo(base_path() . '/app/Modules/');
+
+				// delete the ZIP
+				if (Storage::disk('plugins')->exists($filename)) {
+					Storage::disk('plugins')->delete($filename);
+				}
 
 				// once we've gotten the files all setup
 				// lets run the upgrade event with the version #, if it exists
 				$this->fireEvent($slug, $slug . 'Update', $module['latest_version']['version']);
+
+				Plugin::enable($slug);
 
 				Cache::decrement('plugin_updates');
 
@@ -422,10 +454,22 @@ class AdminUpdatesController extends Controller
 
 				// run artisan
 				try {
-            $status = Artisan::call('vendor:publish');
-        } catch(\Exception $e) {
-            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
-        }
+		            $status = Artisan::call('vendor:publish');
+		        } catch(\Exception $e) {
+		            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
+		        }
+
+				try {
+					$status = Artisan::call('migrate');
+				} catch(\Exception $e) {
+					abort(500, 'Unable to migrate new database changes.');
+				}
+
+				try {
+					$status = Artisan::call('module:migrate');
+				} catch(\Exception $e) {
+					abort(500, 'Unable to migrate new plugin database changes.');
+				}
 
 				return view('core::UpdatesAdmin/upgrade', compact('upgrade_version', 'current_version'));
 		}

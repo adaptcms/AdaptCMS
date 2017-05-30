@@ -143,6 +143,12 @@ class Install
         }
 
         try {
+            $status = Artisan::call('module:migrate');
+        } catch(\Exception $e) {
+            abort(500, 'Unable to migrate plugin database changes.');
+        }
+
+        try {
             event(new InstallSeedEvent());
         } catch(\Exception $e) {
             abort(500, 'Unable to install SQL. Go back and ensure database credentials are accurate.');

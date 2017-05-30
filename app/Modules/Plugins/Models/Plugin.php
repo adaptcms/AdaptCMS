@@ -4,6 +4,7 @@ namespace App\Modules\Plugins\Models;
 use Storage;
 use Artisan;
 use Cache;
+use Module;
 
 class Plugin
 {
@@ -43,6 +44,12 @@ class Plugin
         self::buildJson($slug, true);
 
         try {
+            Artisan::call('module:migrate');
+        } catch(\Exception $e) {
+            abort(500, 'Unable to migrate new plugin database changes.');
+        }
+
+        try {
             $status = Artisan::call('vendor:publish');
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
@@ -53,44 +60,50 @@ class Plugin
     {
         self::init();
         self::buildJson($slug, false);
+
+        try {
+            $status = Artisan::call('vendor:publish');
+        } catch(\Exception $e) {
+            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
+        }
     }
 
     public static function buildJson($slug, $enabled = true)
     {
         // if not created yet at all, create it
-        if (!isset(self::$modules[$slug])) {
-            $plugin_json = Storage::disk('plugins')->get($slug . '/module.json');
+        $plugin_json = Storage::disk('plugins')->get($slug . '/module.json');
 
-            // file doesn't exist?
-            if (empty($plugin_json)) {
-                abort(404, 'Cannot find json file at line ' . __LINE__);
-            }
+        // file doesn't exist?
+        if (empty($plugin_json)) {
+            abort(404, 'Cannot find json file at line ' . __LINE__);
+        }
 
-            $plugin_json = json_decode($plugin_json, true);
+        $plugin_json = json_decode($plugin_json, true);
 
-            // file corrupt?
-            if (empty($plugin_json)) {
-                abort(404, 'Cannot find valid json content at line ' . __LINE__);
-            }
+        // file corrupt?
+        if (empty($plugin_json)) {
+            abort(404, 'Cannot find valid json content at line ' . __LINE__);
+        }
 
-            // at this point we have - name, slug, version (latest), description
-            // let's build the rest
-            $plugin_json['basename'] = $plugin_json['name'];
-            $plugin_json['id'] = time() + rand(1, 50);
-            $plugin_json['enabled'] = $enabled;
-            $plugin_json['order'] = 9001;
+        // at this point we have - name, slug, version (latest), description
+        // let's build the rest
+        $plugin_json['basename'] = $plugin_json['name'];
+        $plugin_json['id'] = time() + rand(1, 50);
+        $plugin_json['enabled'] = $enabled;
+        $plugin_json['order'] = 9001;
 
-            self::$modules[$slug] = $plugin_json;
+        self::$modules[$slug] = $plugin_json;
 
-            // write to module.json
-            Storage::disk('plugins')->put($slug . '/module.json', json_encode($plugins_json), 'public');
+        // write to module.json
+        Storage::disk('plugins')->put($slug . '/module.json', json_encode($plugin_json), 'public');
 
-            // write to global modules.json file
-            Storage::disk('local')->put('modules.json', json_encode(self::$modules), 'public');
+        // write to modules.json
+        Storage::disk('local')->put('modules.json', json_encode(self::$modules), 'public');
+
+        if ($enabled) {
+            Module::enable(strtolower($slug));
         } else {
-            self::$modules[$slug]['enabled'] = $enabled;
-
-            Storage::disk('local')->put('modules.json', json_encode(self::$modules), 'public');
+            Module::disable(strtolower($slug));
         }
     }
 

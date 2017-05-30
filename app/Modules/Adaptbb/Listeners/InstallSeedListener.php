@@ -68,7 +68,7 @@ class InstallSeedListener
             $model->slug = str_slug($model->name, '-');
             $model->ord = $index;
             $model->description = $forum['description'];
-            $model->meta_description = $forum['meta_description'];
+            $model->meta_description = $forum['description'];
             $model->category_id = $forum['category_id'];
 
             $model->save();

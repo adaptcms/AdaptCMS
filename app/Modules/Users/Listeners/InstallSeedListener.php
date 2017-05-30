@@ -2,7 +2,7 @@
 
 namespace App\Modules\Users\Listeners;
 
-use App\Events\InstallSeedEvent;
+use App\Modules\Core\Events\InstallSeedEvent;
 
 use App\Modules\Users\Models\Role;
 

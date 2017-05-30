@@ -46,7 +46,7 @@
         </div>
         <div class="ui buttons computer only">
             <a href="{{ route(($module->module_type == 'plugin' ? 'admin.updates.install_plugin' : 'admin.updates.install_theme'), [ 'id' => $module->id ]) }}" class="ui right labeled icon button primary">
-                  install
+                  Install
                   <i class="plus icon"></i>
             </a>
             <a href="https://www.adaptcms.com/community/forum/{{ $module->slug }}" class="ui right labeled icon button green">

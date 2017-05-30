@@ -4,7 +4,7 @@
 	<h1>AdaptCMS Marketplace</h1>
 
 	@if(!empty($module_type))
-		<h2>{{ ucfirst($module_type) }}</h>
+		<h2>{{ ucfirst($module_type) }}</h2>
 	@endif
 
 	<div class="ui center aligned red segment">

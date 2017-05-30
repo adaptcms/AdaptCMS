@@ -90,7 +90,8 @@ class Theme extends Model
         $this->slug = $slug;
         $this->custom = 1;
 
-        Artisan::call('theme:create', ['name' => $slug, '--type' => 'blade']);
+        // enable via pkg manager
+        $this->enable();
 
         $files = Storage::disk('themes')->allFiles('default');
 
@@ -147,6 +148,9 @@ class Theme extends Model
             Storage::disk('themes')->move($old_slug, $this->slug);
         }
 
+        // re-enable theme
+        $this->enable();
+
         return $this;
     }
 
@@ -166,9 +170,27 @@ class Theme extends Model
     public function getConfig($key)
     {
         // get the theme.json file
-                $file = Storage::disk('themes')->get($this->slug . '/theme.json');
+        $file = Storage::disk('themes')->get($this->slug . '/theme.json');
         $file = json_decode($file, true);
 
         return !isset($file[$key]) ? '' : $file[$key];
+    }
+
+    public function enable()
+    {
+        try {
+            $status = Artisan::call('vendor:publish');
+        } catch(\Exception $e) {
+            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
+        }
+    }
+
+    public function disable()
+    {
+        try {
+            $status = Artisan::call('vendor:publish');
+        } catch(\Exception $e) {
+            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
+        }
     }
 }

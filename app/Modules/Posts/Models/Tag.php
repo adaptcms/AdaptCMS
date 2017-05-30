@@ -48,7 +48,9 @@ class Tag extends Model
 
 		// store the contents
 		$path = Cache::get('theme', 'default') . '/views/tags/';
-        Storage::disk('themes')->copy($path . 'view.blade.php', $path . $this->slug . '.blade.php');
+		if (!Storage::disk('themes')->exists($path . $this->slug . '.blade.php')) {
+			Storage::disk('themes')->copy($path . 'view.blade.php', $path . $this->slug . '.blade.php');
+		}
 
 		return $this;
     }

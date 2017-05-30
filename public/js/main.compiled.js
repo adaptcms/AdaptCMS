@@ -866,10 +866,10 @@ $(document).ready(function() {
             data: {
                 database_connection: false,
                 filled_out: false,
-                'DB_HOST': 'localhost',
-                'DB_PORT': '3306',
+                'DB_HOST': '',
+                'DB_PORT': '',
                 'DB_DATABASE': '',
-                'DB_USERNAME': 'root',
+                'DB_USERNAME': '',
                 'DB_PASSWORD': '',
                 'sitename': '',
                 fields: [
