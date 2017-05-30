@@ -128,6 +128,9 @@ class AdminUpdatesController extends Controller
 				// enable
 				$theme->enable();
 
+				// increment install count for theme
+				$client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
+
 				// we'll return to the themes index on success
 				return redirect()->route('admin.themes.index')->with('success', $module['name'] . ' theme has been installed!');
 		}
@@ -179,7 +182,11 @@ class AdminUpdatesController extends Controller
 				// lets run the install event, if it exists
 				$this->fireEvent($slug, $slug . 'Install');
 
+				// finally, enable plugin
 				Plugin::enable($slug);
+
+				// increment install count for theme
+				$client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
 
 				// we'll return to the plugins index on success
 				return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been installed!');
@@ -314,12 +321,13 @@ class AdminUpdatesController extends Controller
 				// get the contents of the ZIP file
 				$client = new Client();
 
-				$res = $client->request('GET', $upgrade_version['download_url']);
+				$res = $client->request('GET', $upgrade_version['download_url'], [ 'http_errors' => false ]);
 
 				if ($res->getStatusCode() == 200) {
-						$zip_contents = (string) $res->getBody();
+					$zip_contents = (string) $res->getBody();
 				} else {
-						abort(404);
+					dd((string) $res->getBody());
+					abort(404);
 				}
 
 				$zip_filename = $upgrade_version['branch_slug'] . '.zip';
@@ -462,12 +470,14 @@ class AdminUpdatesController extends Controller
 				try {
 					$status = Artisan::call('migrate');
 				} catch(\Exception $e) {
+					dd($e->getMessage());
 					abort(500, 'Unable to migrate new database changes.');
 				}
 
 				try {
 					$status = Artisan::call('module:migrate');
 				} catch(\Exception $e) {
+					dd($e->getMessage());
 					abort(500, 'Unable to migrate new plugin database changes.');
 				}
 
