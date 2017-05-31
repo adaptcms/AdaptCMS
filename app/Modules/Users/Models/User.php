@@ -27,7 +27,8 @@ class User extends Authenticatable
         'email',
         'password',
 		'role_id',
-		'status'
+		'status',
+        'settings'
     ];
 
     /**
@@ -187,11 +188,12 @@ class User extends Authenticatable
 	    $this->password = bcrypt($postArray['password']);
 	    $this->email = $postArray['email'];
 	    $this->status = 1;
+        $this->settings = json_encode( (!empty($postArray['settings']) ? $postArray['settings'] : []) );
 	    $this->first_name = $postArray['first_name'];
 	    $this->last_name = $postArray['last_name'];
-	    $this->role_id = $postArray['role_id'];
+	    $this->role_id = !empty($postArray['role_id']) ? $postArray['role_id'] : 1;
 
-      $this->save();
+        $this->save();
 
 	    return $this;
     }
@@ -204,7 +206,13 @@ class User extends Authenticatable
 	    $this->last_name = $postArray['last_name'];
 	    $this->role_id = $postArray['role_id'];
 
-      $this->save();
+        if (isset($postArray['status'])) {
+            $this->status = $postArray['status'];
+        }
+
+        $this->settings = json_encode( (!empty($postArray['settings']) ? $postArray['settings'] : []) );
+
+        $this->save();
 
 	    return $this;
     }

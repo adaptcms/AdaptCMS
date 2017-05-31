@@ -55,7 +55,7 @@ class AdminUpdatesController extends Controller
 		{
 				$client = new Client();
 
-				// get the theme
+				// get the module
 				$res = $client->request('GET', $this->apiUrl . '/module/' . $id, [ 'http_errors' => false ]);
 
 				if ($res->getStatusCode() == 200) {
@@ -128,8 +128,6 @@ class AdminUpdatesController extends Controller
 				// enable
 				$theme->enable();
 
-				// increment install count for theme
-				$client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
 
 				// we'll return to the themes index on success
 				return redirect()->route('admin.themes.index')->with('success', $module['name'] . ' theme has been installed!');
@@ -185,8 +183,6 @@ class AdminUpdatesController extends Controller
 				// finally, enable plugin
 				Plugin::enable($slug);
 
-				// increment install count for theme
-				$client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
 
 				// we'll return to the plugins index on success
 				return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been installed!');

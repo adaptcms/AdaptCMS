@@ -19,12 +19,13 @@ template {
 }
 
 body.pushable {
-	margin-top: 0px!important;
+	margin-top: 0px !important;
 	background: #fff!important;
 }
 
 .pusher {
-	margin-top: 0!important;
+	margin-top: 0 !important;
+	overflow: visible!important;
 }
 
 .footer {
@@ -44,7 +45,7 @@ body.pushable {
 }
 
 .hero {
-	margin-bottom: 25px!important;
+	margin-bottom: 25px !important;
 }
 
 .clear {
@@ -52,13 +53,12 @@ body.pushable {
 }
 
 .ui.pointing.menu .item:after {
-		content: initial!important;
+	content: initial!important;
 }
 
 .ui.buttons .ui.button:not(:first-child) {
-    margin-left: 5px;
+	margin-left: 5px !important;
 }
-
 @media only screen and (max-width: 700px) {
 	.ui.fixed.menu {
 		display: none !important;
@@ -73,83 +73,78 @@ body.pushable {
 		display: block;
 	}
 }
-
 // MEDIA QUERIES
-
 // MOBILE
 @media only screen and (max-width: 700px) {
-    .mobile.only:not(table) {
-        display: block!important;
-    }
+	.mobile.only:not(table) {
+		display: block!important;
+	}
 
-		table.mobile.only {
-        display: table!important;
-    }
+	table.mobile.only {
+		display: table!important;
+	}
 
-    .tablet.only {
-        display: none!important;
-    }
+	.tablet.only {
+		display: none!important;
+	}
 
-    .computer.only {
-        display: none!important;
-    }
+	.computer.only {
+		display: none!important;
+	}
 
-		h4.mobile.clear-left {
-				clear: left!important;
-		}
+	h4.mobile.clear-left {
+		clear: left!important;
+	}
 }
-
 // TABLET
 @media only screen and (min-width: 700px) and (max-width: 1100px) {
-    .tablet.only:not(table) {
-        display: block!important;
-    }
+	.tablet.only:not(table) {
+		display: block!important;
+	}
 
-		table.tablet.only {
-        display: table!important;
-    }
+	table.tablet.only {
+		display: table!important;
+	}
 
-    .mobile.only {
-        display: none!important;
-    }
+	.mobile.only {
+		display: none!important;
+	}
 
-    .computer.only {
-        display: none!important;
-    }
+	.computer.only {
+		display: none!important;
+	}
 }
-
 // DESKTOP
 @media only screen and (min-width: 1100px) {
-    .computer.only:not(table) {
-        display: block!important;
-    }
+	.computer.only:not(table) {
+		display: block!important;
+	}
 
-		table.computer.only {
-        display: table!important;
-    }
+	table.computer.only {
+		display: table!important;
+	}
 
-    .mobile.only {
-        display: none!important;
-    }
+	.mobile.only {
+		display: none!important;
+	}
 
-    .tablet.only {
-        display: none!important;
-    }
+	.tablet.only {
+		display: none!important;
+	}
 
-		.ui.two.cards {
-		  	.card {
-						width: calc(33.33333333% - 2em);
-				}
+	.ui.two.cards {
+		.card {
+			width: calc(33.33333333% - 2em);
 		}
+	}
 }
-
 // TABLET AND DESKTOP
 @media only screen and (min-width: 700px) {
-    .computer.only.tablet.only:not(table) {
-        display: block!important;
-    }
+	.computer.only.tablet.only:not(table) {
+		display: block!important;
+	}
 
-		table.computer.only.tablet.only {
-        display: table!important;
-    }
+	table.computer.only.tablet.only {
+		display: table!important;
+	}
 }

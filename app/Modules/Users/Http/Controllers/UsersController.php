@@ -76,22 +76,11 @@ class UsersController extends Controller
             if ($request->get(env('APP_KEY') . '_token')) {
                 $request->session()->flash('error', 'Incorrect account information entered. Please try again.');
             } else {
-                $user = new User();
+                $user = new User;
 
-                $user->fill($request->except('_token'));
+                $user->add($request->except('_token'));
 
-                $user->status = 1;
-                $user->role_id = 1;
-                $user->password = bcrypt($request->get('password'));
-
-                $user->save();
-
-                $data = array(
-                    'username' => $request->get('username'),
-                    'password' => $request->get('password')
-                );
-
-                if (Auth::attempt($data)) {
+                if (Auth::loginUsingId($user->id)) {
                     // Update Last Logged In
                     $user = User::find($user->id);
                     $user->updateLastLoggedIn();
@@ -145,13 +134,11 @@ class UsersController extends Controller
             ]);
 
             if (!$validator->fails()) {
-                $model->fill($request->except([ '_token' ]));
-
                 if ($request->get('password')) {
                     $model->password = bcrypt($request->get('password'));
                 }
 
-                $model->save();
+                $model->edit($request->except([ '_token' ]));
 
                 return redirect()->route('dashboard')->with('success', 'Your profile has been saved.');
             } else {

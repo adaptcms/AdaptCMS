@@ -22,6 +22,7 @@ class Users extends Migration
             $table->string('last_name');
             $table->integer('role_id')->index();
             $table->integer('status')->default(1)->index();
+            $table->text('settings')->nullable();
             $table->datetime('last_login')->nullable();
             $table->string('profile_image')->nullable();
 

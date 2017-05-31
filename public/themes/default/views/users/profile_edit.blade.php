@@ -12,7 +12,7 @@
 		    </div>
 		@endif
 
-		{{ Form::model($model, [ 'class' => 'ui huge form' ]) }}
+		{{ Form::model($model, [ 'class' => 'ui huge form', 'files' => true ]) }}
 				<div class="required field">
 					{{ Form::label('username') }}
 					{{ Form::text('username', $model->username, [ 'autocomplete' => 'off' ]) }}
