@@ -4,6 +4,7 @@ namespace App\Modules\Themes\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use GuzzleHttp\Client;
 
 use Storage;
 use Artisan;
@@ -178,6 +179,21 @@ class Theme extends Model
 
     public function enable()
     {
+        // try to find module
+        $client = new Client;
+
+        // get the module
+        $res = $client->request('GET', $this->apiUrl . '/module/slug/theme/' . $this->slug, [ 'http_errors' => false ]);
+
+        if ($res->getStatusCode() == 200) {
+            $module = json_decode((string) $res->getBody(), true);
+
+            if (!empty($module)) {
+                // increment install count for module
+                $client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
+            }
+        }
+
         try {
             $status = Artisan::call('vendor:publish');
         } catch(\Exception $e) {

@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Modules\Plugins\Models;
+
+use GuzzleHttp\Client;
 
 use Storage;
 use Artisan;
@@ -42,6 +45,21 @@ class Plugin
     {
         self::init();
         self::buildJson($slug, true);
+
+        // try to find module
+        $client = new Client;
+
+        // get the module
+        $res = $client->request('GET', $this->apiUrl . '/module/slug/plugin/' . strtolower($slug), [ 'http_errors' => false ]);
+
+        if ($res->getStatusCode() == 200) {
+            $module = json_decode((string) $res->getBody(), true);
+
+            if (!empty($module)) {
+                // increment install count for module
+                $client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
+            }
+        }
 
         try {
             Artisan::call('module:migrate');
