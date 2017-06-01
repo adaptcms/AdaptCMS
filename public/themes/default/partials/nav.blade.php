@@ -20,17 +20,22 @@
 Albums
 </a>
 
-<div class="right menu">
+<div class="item right menu">
   @if(!Auth::check())
-    <div class="item">
-        <a href="{{ route('login') }}" class="ui basic inverted button">
-      Login
-    </a>
-    </div>
-    <div class="item">
-        <a href="{{ route('register') }}" class="ui basic inverted button">
-      Register
-    </a>
+    <div class="ui buttons tiny">
+        <a href="{{ route('login') }}" class="ui basic inverted button mobile only">
+          Login
+        </a>
+        <a href="{{ route('register') }}" class="ui basic inverted button mobile only">
+          Register
+        </a>
+        
+        <a href="{{ route('login') }}" class="ui basic button primary computer only tablet only">
+          Login
+        </a>
+        <a href="{{ route('register') }}" class="ui basic button green computer only tablet only">
+          Register
+        </a>
     </div>
   @else
       <div class="ui simple dropdown item">
