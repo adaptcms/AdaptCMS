@@ -16,7 +16,6 @@
 					</div>
 	        <div class="ui right floated right aligned eight wide column index-nav">
 							<a class="ui button primary right" href="{{ route('admin.themes.add') }}">Add Theme <i class="plus icon"></i></a>
-			        <a class="ui button green right" href="{{ route('admin.themes.build') }}">Build a Theme <i class="plus icon"></i></a>
 	        </div>
       </div>
 	@if(!$items->count())
