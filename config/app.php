@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/New_York',
 
     /*
     |--------------------------------------------------------------------------
@@ -170,6 +170,7 @@ return [
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         Offline\Settings\SettingsServiceProvider::class,
         Chumper\Zipper\ZipperServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -183,7 +184,7 @@ return [
         /*
         * AdaptCMS Providers
         */
-		    App\Modules\Core\Providers\CoreServiceProvider::class,
+	    App\Modules\Core\Providers\CoreServiceProvider::class,
 
     ],
 
