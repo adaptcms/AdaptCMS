@@ -2,5 +2,15 @@
     "name": "Files",
     "slug": "files",
     "version": "1.0",
-    "description": "This is the description for the Files module."
+    "description": "This is the description for the Files module.",
+    "permissions": {
+        "editor": {
+            "admin.files.*": 2,
+            "admin.albums.*": 2
+        },
+        "demo": {
+            "admin.files.*": 1,
+            "admin.albums.*": 1
+        }
+    }
 }

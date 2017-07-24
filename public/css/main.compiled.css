@@ -1724,6 +1724,16 @@ body.pushable {
   color: #fff !important;
 }
 
+.logo.item .ui.image {
+  width: 125px;
+}
+
+.toc.item .ui.image {
+  width: 150px;
+  text-align: center;
+  margin: 0 auto;
+}
+
 .ui.card {
   font-size: 1rem !important;
 }

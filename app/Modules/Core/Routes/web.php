@@ -11,49 +11,56 @@
 |
 */
 
-Route::group([ 'prefix' => 'install' ], function() {
-    Route::any('/', [ 'uses' => '\App\Modules\Core\Http\Controllers\InstallController@index', 'as' => 'install.index' ]);
-    Route::any('/database', [ 'uses' => '\App\Modules\Core\Http\Controllers\InstallController@database', 'as' => 'install.database' ]);
-    Route::any('/me', [ 'uses' => '\App\Modules\Core\Http\Controllers\InstallController@me', 'as' => 'install.me' ]);
-    Route::any('/acount', [ 'uses' => '\App\Modules\Core\Http\Controllers\InstallController@account', 'as' => 'install.account' ]);
-    Route::any('/finished', [ 'uses' => '\App\Modules\Core\Http\Controllers\InstallController@finished', 'as' => 'install.finished' ]);
+Route::group([ 'prefix' => 'install', 'namespace' => 'Install' ], function() {
+    Route::any('/', [ 'uses' => 'InstallController@index', 'as' => 'install.index' ]);
+    Route::any('/database', [ 'uses' => 'InstallController@database', 'as' => 'install.database' ]);
+    Route::any('/me', [ 'uses' => 'InstallController@me', 'as' => 'install.me' ]);
+    Route::any('/acount', [ 'uses' => 'InstallController@account', 'as' => 'install.account' ]);
+    Route::any('/finished', [ 'uses' => 'InstallController@finished', 'as' => 'install.finished' ]);
 });
 
 Route::group([ 'prefix' => 'api' ], function() {
-	Route::any('/{module}', [ 'uses' => '\App\Modules\Core\Http\Controllers\ApiController@index' ]);
+	Route::any('/{module}', [ 'uses' => '\App\Modules\Core\Http\Controllers\ApiController@index', 'as' => 'plugin.core.api.index' ]);
 });
 
-Route::group([ 'prefix' => 'admin', 'middleware' => 'auth.admin' ], function() {
+Route::group([ 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
 	Route::group([ 'prefix' => 'api' ], function() {
-		Route::any('/{module}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminApiController@index' ]);
-		Route::post('/{module}/post', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminApiController@post' ]);
-		Route::put('/{module}/put/{id}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminApiController@put' ]);
-		Route::delete('/{module}/delete/{id}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminApiController@delete' ]);
+		Route::any('/{module}', [ 'uses' => 'ApiController@index', 'as' => 'api.index' ]);
+		Route::post('/{module}/post', [ 'uses' => 'ApiController@post', 'as' => 'api.post' ]);
+		Route::put('/{module}/put/{id}', [ 'uses' => 'ApiController@put', 'as' => 'api.put' ]);
+		Route::delete('/{module}/delete/{id}', [ 'uses' => 'ApiController@delete', 'as' => 'api.delete' ]);
 	});
 
-	Route::group([ 'prefix' => 'updates', 'middleware' => 'auth.admin' ], function() {
-		Route::get('/browse/{module_type?}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@browse', 'as' => 'admin.updates.browse' ]);
-		Route::get('/module/view/{id}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@view', 'as' => 'admin.updates.view' ]);
+	Route::group([ 'prefix' => 'updates' ], function() {
+		Route::get('/browse/{module_type?}', [ 'uses' => 'UpdatesController@browse', 'as' => 'admin.updates.browse' ]);
+		Route::get('/module/view/{id}', [ 'uses' => 'UpdatesController@view', 'as' => 'admin.updates.view' ]);
 
-		Route::any('/install/theme/{id}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@installTheme', 'as' => 'admin.updates.install_theme' ]);
-		Route::any('/install/plugin/{id}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@installPlugin', 'as' => 'admin.updates.install_plugin' ]);
+		Route::any('/install/theme/{id}', [ 'uses' => 'UpdatesController@installTheme', 'as' => 'admin.updates.install_theme' ]);
+		Route::post('/install/themes', [ 'uses' => 'UpdatesController@installThemes', 'as' => 'admin.updates.install_themes' ]);
 
-		Route::any('/update/theme/{id}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@updateTheme', 'as' => 'admin.updates.update_theme' ]);
-		Route::any('/update/plugin/{id}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@updatePlugin', 'as' => 'admin.updates.update_plugin' ]);
+        Route::post('/install/plugins', [ 'uses' => 'UpdatesController@installPlugins', 'as' => 'admin.updates.install_plugins' ]);
+		Route::any('/install/plugin/{id}', [ 'uses' => 'UpdatesController@installPlugin', 'as' => 'admin.updates.install_plugin' ]);
 
-		Route::any('/upgrade/{type}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@upgrade', 'as' => 'admin.updates.upgrade' ]);
+		Route::post('/update/themes', [ 'uses' => 'UpdatesController@updateThemes', 'as' => 'admin.updates.update_themes' ]);
+		Route::any('/update/theme/{id}', [ 'uses' => 'UpdatesController@updateTheme', 'as' => 'admin.updates.update_theme' ]);
 
-		Route::get('/{module_type?}', [ 'uses' => '\App\Modules\Core\Http\Controllers\AdminUpdatesController@index', 'as' => 'admin.updates.index' ]);
+        Route::any('/update/plugins', [ 'uses' => 'UpdatesController@updatePlugins', 'as' => 'admin.updates.update_plugins' ]);
+        Route::any('/update/plugin/{id}', [ 'uses' => 'UpdatesController@updatePlugin', 'as' => 'admin.updates.update_plugin' ]);
+
+		Route::any('/upgrade/{type}', [ 'uses' => 'UpdatesController@upgrade', 'as' => 'admin.updates.upgrade' ]);
+
+		Route::get('/{module_type?}', [ 'uses' => 'UpdatesController@index', 'as' => 'admin.updates.index' ]);
 	});
 
-	Route::group([ 'prefix' => 'install' ], function() {
-
-	});
+    Route::group([ 'prefix' => 'marketplace' ], function() {
+        Route::get('/account', [ 'uses' => 'MarketplaceController@account', 'as' => 'admin.marketplace.account' ])->middleware('auth:api', 'scopes:account,paid-extensions');
+        Route::get('/purchase/{id}', [ 'uses' => 'MarketplaceController@purchase', 'as' => 'admin.marketplace.purchase' ])->middleware('auth:api', 'scopes:account,paid-extensions');
+    });
 
     Route::group([ 'prefix' => 'settings' ], function() {
-        Route::any('/', [ 'uses' => '\App\Modules\Core\Http\Controllers\SettingsAdminController@index', 'as' => 'admin.settings.index' ]);
-        Route::any('/add', [ 'uses' => '\App\Modules\Core\Http\Controllers\SettingsAdminController@add', 'as' => 'admin.settings.add' ]);
-        Route::any('/add/category', [ 'uses' => '\App\Modules\Core\Http\Controllers\SettingsAdminController@addCategory', 'as' => 'admin.settings.add_category' ]);
-        Route::any('/simple-save', [ 'uses' => '\App\Modules\Core\Http\Controllers\SettingsAdminController@simpleSave', 'as' => 'admin.settings.simple_save' ]);
+        Route::any('/', [ 'uses' => 'SettingsController@index', 'as' => 'admin.settings.index' ]);
+        Route::any('/add', [ 'uses' => 'SettingsController@add', 'as' => 'admin.settings.add' ]);
+        Route::any('/add/category', [ 'uses' => 'SettingsController@addCategory', 'as' => 'admin.settings.add_category' ]);
+        Route::any('/simple-save', [ 'uses' => 'SettingsController@simpleSave', 'as' => 'admin.settings.simple_save' ]);
     });
 });

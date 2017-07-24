@@ -8,6 +8,8 @@ use Storage;
 use Artisan;
 use Cache;
 use Module;
+use Zipper;
+use Core;
 
 class Plugin
 {
@@ -50,14 +52,14 @@ class Plugin
         $client = new Client;
 
         // get the module
-        $res = $client->request('GET', $this->apiUrl . '/module/slug/plugin/' . strtolower($slug), [ 'http_errors' => false ]);
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/slug/plugin/' . strtolower($slug), [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
             $module = json_decode((string) $res->getBody(), true);
 
             if (!empty($module)) {
                 // increment install count for module
-                $client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
+                $client->request('GET', Core::getMarketplaceApiUrl() . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
             }
         }
 
@@ -129,7 +131,6 @@ class Plugin
     {
         // 1 day
         $minutes = (60 * 24);
-
         return Cache::remember('core_modules', $minutes, function() {
             if (Cache::get('cms_current_version')) {
                 $current_version = json_decode(Cache::get('cms_current_version'), true);
@@ -141,5 +142,73 @@ class Plugin
 
             return $core_modules;
         });
+    }
+
+    public static function install($id)
+    {
+        $client = new Client();
+
+        // get the plugin
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/' . $id, [ 'http_errors' => false ]);
+
+        if ($res->getStatusCode() == 200) {
+            $module = json_decode($res->getBody(), true);
+        } else {
+            abort(404);
+        }
+
+        // set slug
+        $slug = ucfirst($module['slug']);
+
+        // download the latest version
+        $res = $client->request('GET', $module['latest_version']['download_url']);
+
+        if ($res->getStatusCode() == 200) {
+            $filename = $module['slug'] . '.zip';
+
+            Storage::disk('plugins')->put($filename, $res->getBody(), 'public');
+        } else {
+            abort(404);
+        }
+
+        // make the folder
+        if (!Storage::disk('plugins')->exists($slug)) {
+            Storage::disk('plugins')->makeDirectory($slug);
+        }
+
+        // then attempt to extract contents
+        $path = base_path() . '/app/Modules/' . $filename;
+        $zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
+
+        Zipper::make($path)->folder($zip_folder)->extractTo(base_path() . '/app/Modules/');
+
+        // delete the ZIP
+        if (Storage::disk('plugins')->exists($filename)) {
+            Storage::disk('plugins')->delete($filename);
+        }
+
+        // once we've gotten the files all setup
+        // lets run the upgrade event with the version #, if it exists
+        Core::fireEvent($slug, $slug . 'Update', $module['latest_version']['version']);
+
+        Plugin::enable($slug);
+
+        Cache::forever('plugin_updates', 0);
+        Cache::forget('plugins_updates_list');
+    }
+
+    public static function getConfig($slug)
+    {
+        $cache_key = 'plugins.' . $slug;
+
+        if (!Cache::has($cache_key)) {
+            $config = Storage::disk('plugins')->get($slug . '/module.json');
+
+            Cache::forever($cache_key, $config);
+        } else {
+            $config = Cache::get($cache_key);
+        }
+
+        return json_decode($config);
     }
 }

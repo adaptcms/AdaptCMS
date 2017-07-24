@@ -12,32 +12,36 @@
 */
 Auth::routes();
 
-Route::any('/login', [ 'as' => 'login', 'uses' => '\App\Modules\Users\Http\Controllers\UsersController@login' ]);
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin'], function () {
+    Route::group([ 'prefix' => 'users' ], function() {
+	    Route::get('/', [ 'uses' => 'UsersController@index', 'as' => 'admin.users.index' ]);
+	    Route::any('/add', [ 'uses' => 'UsersController@add', 'as' => 'admin.users.add' ]);
+	    Route::any('/edit/{id}', [ 'uses' => 'UsersController@edit', 'as' => 'admin.users.edit' ]);
+	    Route::get('/delete/{id}', [ 'uses' => 'UsersController@delete', 'as' => 'admin.users.delete' ]);
+	    Route::post('/simple-save', [ 'uses' => 'UsersController@simpleSave', 'as' => 'admin.users.simple_save' ]);
+	    Route::get('/login-as/{id}', [ 'uses' => 'UsersController@loginAs', 'as' => 'admin.users.login_as' ]);
+
+        Route::get('/oauth/redirect', [ 'uses' => 'OauthController@redirect', 'as' => 'admin.oauth.redirect' ]);
+        Route::post('/oauth/callback', [ 'uses' => 'OauthController@callback', 'as' => 'admin.oauth.callback' ]);
+    });
+
+	Route::group([ 'prefix' => 'roles' ], function() {
+	    Route::get('/', [ 'uses' => 'RolesController@index', 'as' => 'admin.roles.index' ]);
+	    Route::any('/add', [ 'uses' => 'RolesController@add', 'as' => 'admin.roles.add' ]);
+	    Route::any('/edit/{id}', [ 'uses' => 'RolesController@edit', 'as' => 'admin.roles.edit' ]);
+	    Route::get('/delete/{id}', [ 'uses' => 'RolesController@delete', 'as' => 'admin.roles.delete' ]);
+    });
+});
+
+Route::any('/login', [ 'as' => 'login', 'uses' => 'UsersController@login' ]);
 
 Route::group(['prefix' => 'users'], function () {
-	Route::any('/register', [ 'as' => 'register', 'uses' => '\App\Modules\Users\Http\Controllers\UsersController@register' ]);
-
-    // Route::get('/forgot-password', array('as' => 'forgot_password', 'uses' => '\App\Modules\Users\Http\Controllers\Auth\ForgotPasswordController@getRemind'));
-    // Route::post('/forgot-password/submit', array('as' => 'forgot_password_submit', 'uses' => '\App\Modules\Users\Http\Controllers\ForgotPasswordController@postRemind'));
-
-    // Route::get('/password/reset/{token}', array('as' => 'reset_password', 'uses' => '\App\Modules\Users\Http\Controllers\ForgotPasswordController@getReset'));
-    // Route::post('/password/reset/submit', array('as' => 'reset_password_submit', 'uses' => '\App\Modules\Users\Http\Controllers\ForgotPasswordController@postReset'));
+	Route::any('/register', [ 'as' => 'register', 'uses' => 'UsersController@register' ]);
 
     Route::group([ 'middleware' => 'auth' ], function() {
-	    Route::get('/profile/edit', [ 'as' => 'users.profile.edit', 'uses' => '\App\Modules\Users\Http\Controllers\UsersController@profileEdit' ]);
-		Route::get('/logout', [ 'as' => 'logout', 'uses' => '\App\Modules\Users\Http\Controllers\UsersController@logout' ]);
+	    Route::get('/profile/edit', [ 'as' => 'users.profile.edit', 'uses' => 'UsersController@profileEdit' ]);
+		Route::get('/logout', [ 'as' => 'logout', 'uses' => 'UsersController@logout' ]);
     });
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
-    Route::group([ 'prefix' => 'users' ], function() {
-    Route::get('/', [ 'uses' => '\App\Modules\Users\Http\Controllers\UsersEngineController@index', 'as' => 'admin.users.index' ]);
-    Route::any('/add', [ 'uses' => '\App\Modules\Users\Http\Controllers\UsersEngineController@add', 'as' => 'admin.users.add' ]);
-    Route::any('/edit/{id}', [ 'uses' => '\App\Modules\Users\Http\Controllers\UsersEngineController@edit', 'as' => 'admin.users.edit' ]);
-    Route::get('/delete/{id}', [ 'uses' => '\App\Modules\Users\Http\Controllers\UsersEngineController@delete', 'as' => 'admin.users.delete' ]);
-    Route::post('/simple-save', [ 'uses' => '\App\Modules\Users\Http\Controllers\UsersEngineController@simpleSave', 'as' => 'admin.users.simple_save' ]);
-    Route::get('/login-as/{id}', [ 'uses' => '\App\Modules\Users\Http\Controllers\UsersEngineController@loginAs', 'as' => 'admin.users.login_as' ]);
-    });
-});
-
-Route::get('/profile/{username}', [ 'as' => 'users.profile.view', 'uses' => '\App\Modules\Users\Http\Controllers\UsersController@profile' ]);
+Route::get('/profile/{username}', [ 'as' => 'users.profile.view', 'uses' => 'UsersController@profile' ]);

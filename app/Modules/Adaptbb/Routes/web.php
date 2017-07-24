@@ -24,7 +24,7 @@ Route::group(['prefix' => 'community'], function () {
     Route::get('/topic/{forum_slug}/{topic_slug}', [ 'uses' => '\App\Modules\Adaptbb\Http\Controllers\TopicsController@view', 'as' => 'plugin.adaptbb.topics.view' ]);
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'role:admin'], function () {
   Route::group([ 'prefix' => 'adaptbb' ], function() {
     // categories
     Route::group([ 'prefix' => 'forum_categories' ], function() {

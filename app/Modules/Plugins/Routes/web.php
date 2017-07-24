@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'role:admin'], function () {
     Route::group([ 'prefix' => 'plugins' ], function() {
         Route::get('/', [ 'uses' => '\App\Modules\Plugins\Http\Controllers\PluginsEngineController@index', 'as' => 'admin.plugins.index' ]);
         Route::any('/install/{slug}', [ 'uses' => '\App\Modules\Plugins\Http\Controllers\PluginsEngineController@install', 'as' => 'admin.plugins.install' ]);

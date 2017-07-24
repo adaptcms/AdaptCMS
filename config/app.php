@@ -171,6 +171,7 @@ return [
         Offline\Settings\SettingsServiceProvider::class,
         Chumper\Zipper\ZipperServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...

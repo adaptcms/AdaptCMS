@@ -2,5 +2,23 @@
     "name": "Users",
     "slug": "users",
     "version": "1.0",
-    "description": "This is the description for the Users module."
+    "description": "This is the description for the Users module.",
+    "route_prefixes": [
+        "roles"
+    ],
+    "permissions": {
+        "admin": {
+            "admin.users.*": 2,
+            "admin.roles.*": 2
+        },
+        "demo": {
+            "admin.users.*": 1,
+            "admin.roles.*": 1
+        },
+        "member": {
+            "users.profile.edit": 1,
+            "login": 0,
+            "register": 0
+        }
+    }
 }

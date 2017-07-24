@@ -4,6 +4,46 @@
     <h1>AdaptCMS Updates</h1>
 
     <div class="ui red padded segment">
+        <h2>Marketplace</h2>
+
+        @if(!empty($marketplace_user_data))
+            <p>hooray!</p>
+        @else
+            {{ Form::open([ 'class' => 'ui form', 'route' => 'admin.oauth.redirect' ]) }}
+                <h2 class="ui teal image header">
+                  <div class="content">
+                      <img src="/img/AdaptCMSLogoPNG_2.png" class="ui image">
+                      Login to your Marketplace Account
+                  </div>
+                </h2>
+                  <div class="ui stacked segment">
+                    <div class="field">
+                      <div class="ui left icon input full width">
+                        <i class="user icon"></i>
+
+                        {{ Form::text('username', Request::get('username'), [ 'placeholder' => 'Username' ]) }}
+                      </div>
+                    </div>
+                    <div class="field">
+                      <div class="ui left icon input full width">
+                        <i class="lock icon"></i>
+
+                        {{ Form::password('password', [ 'placeholder' => 'Password' ]) }}
+                      </div>
+                    </div>
+
+                    {{ Form::submit('Login', array('class' => 'ui fluid large blue submit button')) }}
+                  </div>
+
+                <div class="ui message">
+                  New to us? <a href="{{ $marketplace_url }}/register" target="_blank">Sign Up</a><br />
+                  <a href="{{ $marketplace_url }}/password/reset" target="_blank">Forgot your password?</a>
+                </div>
+            {{ Form::end() }}
+        @endif
+    </div>
+
+    <div class="ui red padded segment">
           <h2>CMS Core</h2>
 				<div>
                 <a
@@ -14,10 +54,7 @@
                     Bleeding Edge
                     <i class="fire icon"></i>
                 </a><br>
-              
-   
-              
-              
+
                 @if(Cache::get('bleedinge_edge_update'))
                     <?php $bleedinge_edge = json_decode(Cache::get('cms_current_version'), true); ?>
 
@@ -35,13 +72,13 @@
                     {{ Cache::has('cms_latest_version_name') ? Cache::get('cms_latest_version_name') : Core::getVersion() }} Release
                     <i class="home icon"></i>
                 </a><br>
-              
+
                 @if(Cache::has('cms_latest_version_name'))
                     <small>Upgrade Available <i class="upload icon"></i></small>
                 @else
                     <small>Up To Date <i class="checkmark icon"></i></small>
                 @endif
-              
+
 				</div>
       </div>
 
@@ -56,9 +93,9 @@
                 <a href="{{ route('admin.updates.browse', [ 'module_type' => 'plugins']) }}" class="ui right labeled icon floated primary button pull-right">
                   <i class="shopping basket icon"></i> Find More Plugins
                 </a>
-            
+
           @else
-            <table class="ui form compact celled definition table">
+            <table class="ui form compact celled definition table plugins update">
               <thead>
                 <th>Update</th>
                 <th>Name</th>
@@ -71,7 +108,7 @@
                     <tr>
                       <td class="collapsing">
                         <div class="ui fitted slider checkbox">
-                          <input type="checkbox" checked> <label></label>
+                          <input type="checkbox" class="plugin-id" v-model="module_ids[{{ $module['id'] }}]" checked> <label></label>
                         </div>
                       </td>
                       <td>{{ $module['name'] }}</td>
@@ -88,10 +125,10 @@
                     <a href="{{ route('admin.updates.browse', [ 'module_type' => 'plugin']) }}" class="ui right labeled icon floated small primary button pull-right">
                       <i class="shopping basket icon"></i> Find More Plugins
                     </a>
-                    <a href="" class="ui small button">
+                    <a href="" @click.prevent="update()" class="ui small button">
                       Update
                     </a>
-                    <a href="" class="ui small button">
+                    <a href="" @click.prevent="updateAll()" class="ui small button">
                       Update All
                     </a>
                   </th>
@@ -105,7 +142,7 @@
           <h2>Themes</h2>
 
           @if(!Core::getAddonUpdates('themes'))
-            
+
                 <p>
                   No theme updates
                 </p>
@@ -113,9 +150,9 @@
                 <a href="{{ route('admin.updates.browse', [ 'module_type' => 'themes']) }}" class="ui right labeled icon floated primary button pull-right">
                   <i class="shopping basket icon"></i> Find More Themes
                 </a>
-            
+
           @else
-            <table class="ui form compact celled definition table">
+            <table class="ui form compact celled definition table themes update">
               <thead>
                 <th>Update</th>
                 <th>Name</th>
@@ -127,9 +164,9 @@
                 @foreach(Core::getAddonUpdates('themes') as $module)
                     <tr>
                       <td class="collapsing">
-                        <div class="ui fitted slider checkbox">
-                          <input type="checkbox" checked> <label></label>
-                        </div>
+                          <div class="ui fitted slider checkbox">
+                            <input type="checkbox" class="theme-id" v-model="module_ids[{{ $module['id'] }}]" checked> <label></label>
+                          </div>
                       </td>
                       <td>{{ $module['name'] }}</td>
                       <td>{{ $module['theme']->getConfig('version') }}</td>
@@ -145,10 +182,10 @@
                     <a href="{{ route('admin.updates.browse', [ 'module_type' => 'theme']) }}" class="ui right labeled icon floated small green button pull-right">
                       <i class="shopping basket icon"></i> Find More Themes
                     </a>
-                    <a href="" class="ui small button">
+                    <a href="" @click.prevent="update()" class="ui small button">
                       Update
                     </a>
-                    <a href="" class="ui small button">
+                    <a href="" @click.prevent="updateAll()" class="ui small button">
                       Update All
                     </a>
                   </th>

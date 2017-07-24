@@ -2,19 +2,34 @@
 
 namespace App\Modules\Users\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Spatie\Permission\Models\Role as ParentRole;
+use Spatie\Permission\Traits\HasPermissions;
 
-class Role extends Model
+class Role extends ParentRole
 {
-    /**                                                                                                                                                                                                                                             
-     * The table associated with the model.                                                                                                                                                                                                         
-     *                                                                                                                                                                                                                                              
-     * @var string                                                                                                                                                                                                                                  
-     */
-    protected $table = 'roles';
-    
-    public function users()
+    use HasPermissions;
+
+    public $core_role_levels = [
+        'admin' => 4,
+        'editor' => 3,
+        'demo' => 2,
+        'member' => 1
+    ];
+
+    public $core_level_roles = [
+        1 => 'member',
+        2 => 'demo',
+        3 => 'editor',
+        4 => 'admin'
+    ];
+
+    public function scopeBySlug($query, $slug)
     {
-        return $this->hasMany('App\Modules\Users\Models\User');
+        return $query->where('core_role', '=', 1)->where('name', '=', $slug)->first();
+    }
+
+    public function scopeByLevel($query, $level)
+    {
+        return $query->where('core_role', '=', 1)->where('level', '=', $level)->first();
     }
 }

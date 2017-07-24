@@ -2,5 +2,13 @@
     "name": "Plugins",
     "slug": "plugins",
     "version": "1.0",
-    "description": "This is the description for the Plugins module."
+    "description": "This is the description for the Plugins module.",
+    "permissions": {
+        "admin": {
+            "admin.plugins.*": 2
+        },
+        "demo": {
+            "admin.plugins.index": 1
+        }
+    }
 }

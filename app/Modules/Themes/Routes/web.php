@@ -11,14 +11,8 @@
 |
 */
 
-Route::group(['prefix' => 'themes'], function () {
-    Route::get('/', function () {
-        dd('This is the Themes module index page. Build something great!');
-    });
-});
-
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
-    Route::group([ 'prefix' => 'themes' ], function() {
+Route::group(['prefix' => 'admin'], function () {
+    Route::group([ 'prefix' => 'themes', 'middleware' => 'role:admin' ], function() {
         Route::get('/', [ 'uses' => '\App\Modules\Themes\Http\Controllers\ThemesEngineController@index', 'as' => 'admin.themes.index' ]);
         Route::any('/add', [ 'uses' => '\App\Modules\Themes\Http\Controllers\ThemesEngineController@add', 'as' => 'admin.themes.add' ]);
         Route::any('/build/{step?}', [ 'uses' => '\App\Modules\Themes\Http\Controllers\ThemesEngineController@build', 'as' => 'admin.themes.build' ]);

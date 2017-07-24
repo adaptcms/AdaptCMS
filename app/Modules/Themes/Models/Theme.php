@@ -8,6 +8,9 @@ use GuzzleHttp\Client;
 
 use Storage;
 use Artisan;
+use Core;
+use Cache;
+use Zipper;
 
 class Theme extends Model
 {
@@ -208,5 +211,59 @@ class Theme extends Model
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
         }
+    }
+
+    public function install($id)
+    {
+        $client = new Client();
+
+        // get the theme
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/' . $id, [ 'http_errors' => false ]);
+
+        if ($res->getStatusCode() == 200) {
+            $module = json_decode($res->getBody(), true);
+        } else {
+            abort(404);
+        }
+
+        // set slug
+        $slug = ucfirst($module['slug']);
+
+        // download the latest version
+        $res = $client->request('GET', $module['latest_version']['download_url']);
+
+        if ($res->getStatusCode() == 200) {
+            $filename = $module['slug'] . '.zip';
+
+            Storage::disk('themes')->put($filename, $res->getBody(), 'public');
+        } else {
+            abort(404);
+        }
+
+        // make the folder
+        if (!Storage::disk('themes')->exists($module['slug'])) {
+            Storage::disk('themes')->makeDirectory($module['slug']);
+        }
+
+        // then attempt to extract contents
+        $path = public_path() . '/themes/' . $filename;
+        $zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
+
+        Zipper::make($path)->folder($zip_folder)->extractTo(public_path() . '/themes');
+
+        // delete the ZIP
+        if (Storage::disk('themes')->exists($filename)) {
+            Storage::disk('themes')->delete($filename);
+        }
+
+        // once we've gotten the files all setup
+        // lets run the upgrade event with the version #, if it exists
+        Core::fireEvent($slug, $slug . 'Update', $module['latest_version']['version']);
+
+        // enable
+        $this->enable();
+
+        Cache::forever('theme_updates', 0);
+        Cache::forget('themes_updates_list');
     }
 }

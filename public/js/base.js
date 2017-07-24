@@ -1,3 +1,7 @@
+$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+	toastr.error('Uh-oh! Got an error from the server. For the devs, it was a "' + thrownError + '" error, specifically.');
+});
+
 $(document).ready(function() {
 	if ($('.ui.dropdown:not(.cms)').length) {
 		$('.ui.dropdown:not(.cms)').dropdown({

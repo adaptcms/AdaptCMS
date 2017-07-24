@@ -1,7 +1,7 @@
 {
     "name": "Adaptbb",
     "slug": "adaptbb",
-    "version": "1.0",
+    "version": "1.1",
     "description": "This is the description for the Adaptbb module.",
     "admin_menu": [
         {
@@ -12,5 +12,24 @@
             "route": "plugin.adaptbb.admin.forums.index",
             "name": "Forums"
         }
-    ]
+    ],
+    "permissions": {
+        "editor": {
+            "plugin.adaptbb.admin.*": 2
+        },
+        "demo": {
+            "plugin.adaptbb.admin.*": 1
+        },
+        "member": {
+            "plugin.adaptbb.topics.add": 2,
+            "plugin.adaptbb.topics.reply": 2,
+            "plugin.adaptbb.topics.view": 2,
+            "plugin.adaptbb.forums.*": 2,
+            "plugin.adaptbb.categories.*": 2
+        }
+    },
+    "basename": "Adaptbb",
+    "id": 1496276649,
+    "enabled": true,
+    "order": 9001
 }

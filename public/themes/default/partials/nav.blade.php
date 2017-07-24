@@ -29,7 +29,7 @@ Albums
         <a href="{{ route('register') }}" class="ui basic inverted button mobile only">
           Register
         </a>
-        
+
         <a href="{{ route('login') }}" class="ui basic button primary computer only tablet only">
           Login
         </a>
@@ -42,7 +42,7 @@ Albums
       My Account
       <i class="dropdown icon"></i>
       <div class="menu">
-          <a href="{{ Core::getDashboardUrl() }}" class="item">
+          <a href="{{ route(Auth::user()->getRedirectTo()) }}" class="item">
       Dashboard
       </a>
           <a href="{{ route('users.profile.edit') }}" class="item">

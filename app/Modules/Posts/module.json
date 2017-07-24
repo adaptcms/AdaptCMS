@@ -2,5 +2,29 @@
     "name": "Posts",
     "slug": "posts",
     "version": "1.0",
-    "description": "This is the description for the Posts module."
+    "description": "This is the description for the Posts module.",
+    "route_prefixes": [
+        "pages",
+        "categories",
+        "tags",
+        "dashboard"
+    ],
+    "permissions": {
+        "editor": {
+            "admin.posts.*": 2,
+            "admin.pages.*": 2,
+            "admin.categories.*": 2,
+            "admin.fields.*": 2,
+            "admin.tags.*": 2,
+            "admin.dashboard": 2
+        },
+        "demo": {
+            "admin.posts.*": 1,
+            "admin.pages.*": 1,
+            "admin.categories.*": 1,
+            "admin.fields.*": 1,
+            "admin.tags.*": 1,
+            "admin.dashboard": 1
+        }
+    }
 }

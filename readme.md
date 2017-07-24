@@ -10,7 +10,7 @@ This first Alpha version is early on and we have a lot of exciting things planne
 
 ## Requirements
 
-Below you will find the requirements necessary to run AdaptCMS Alpha. Since the CMS is using modern technologies, the versions of software required are newer than normal. The good news is, outside of the ZIP PHP extension, all the requirements are based on L[**aravel**](https://laravel.com/docs/5.4#server-requirements).
+Below you will find the requirements necessary to run AdaptCMS Alpha. Since the CMS is using modern technologies, the versions of software required are newer than normal. The good news is, outside of the ZIP PHP extension, all the requirements are based on [**Laravel**](https://laravel.com/docs/5.4#server-requirements).
 
 * PHP &gt;= 5.6.4
 * OpenSSL PHP Extension
@@ -32,7 +32,7 @@ Documentation for AdaptCMS can be found [here](https://learn.adaptcms.com).
 Happy to hear you're interested! We try to make it as easy as possible, so feel free to reach out to any of the following contact methods:
 
 * [**Community Forums**](https://www.adaptcms.com/community)
-* [**Slack**](mailto:charliepage88@gmail.com?subject=Add me to AdaptCMS Slack)
+* [**Slack**](https://www.adaptcms.com/slack)
 * [**Twitter**](https://twitter.com/adaptcms)
 * [**GitHub Issues**](https://github.com/adaptcms/AdaptCMS/issues)
 * [**Facebook**](https://www.facebook.com/AdaptCMS-104913829614704/)

@@ -33,15 +33,15 @@ class UsersController extends Controller
             }
         }
 
-        if ($request->get('username')) {
-            $data = array(
+        if ($request->getMethod() == 'POST') {
+            $data = [
                 'username' => $request->get('username'),
                 'password' => $request->get('password')
-            );
+            ];
 
             if (Auth::attempt($data)) {
                 // Update Last Logged In
-                $user = User::where('id', '=', Auth::user()->id)->with('role')->first();
+                $user = User::where('id', '=', Auth::user()->id)->first();
                 $user->updateLastLoggedIn();
 
                 return redirect()->route($user->getRedirectTo())->with('success', 'You have been logged in.');

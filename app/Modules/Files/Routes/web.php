@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'role:admin'], function () {
     Route::group([ 'prefix' => 'files' ], function() {
         Route::get('/', [ 'uses' => '\App\Modules\Files\Http\Controllers\FilesEngineController@index', 'as' => 'admin.files.index' ]);
         Route::any('/add', [ 'uses' => '\App\Modules\Files\Http\Controllers\FilesEngineController@add', 'as' => 'admin.files.add' ]);

@@ -2,5 +2,26 @@
     "name": "Core",
     "slug": "core",
     "version": "1.0",
-    "description": "This is the description for the Core module."
+    "description": "This is the description for the Core module.",
+    "route_prefixes": [
+        "settings",
+        "api",
+        "updates"
+    ],
+    "permissions": {
+        "admin": {
+            "admin.updates.*": 2,
+            "admin.settings.*": 2
+        },
+        "editor": {
+            "plugin.core.api.index": 2,
+            "api.*": 2
+        },
+        "demo": {
+            "admin.updates.*": 1,
+            "admin.settings.*": 1,
+            "plugin.core.api.index": 2,
+            "api.*": 2
+        }
+    }
 }

@@ -28,8 +28,8 @@
 	</head>
 	<body class="pushable">
       <div class="ui large top pointing menu inverted main-menu">
-        <div class="header item">
-           AdaptCMS Admin
+        <div class="logo item">
+			<img src="/img/AdaptCMSLogoPNG_2.png" class="ui image">
         </div>
         @include('partials/admin-menu-top')
       </div>
@@ -47,12 +47,18 @@
 						<div class="row">
 							<div class="four wide column left-container">
 
-								<div class="ui blue large vertical inverted left pointing menu">
+								<div class="ui blue large vertical inverted left pointing menu computer only tablet only">
 									<a class="toc item">
 										<i class="sidebar icon"></i>
-										<div class="pull-right">
-											AdaptCMS {{ Core::getVersion() }}
-										</div>
+										<img src="/img/AdaptCMSLogoPNG_2.png" class="ui image">
+									</a>
+									@include('partials/admin-menu-left')
+								</div>
+
+								<div class="ui black large vertical inverted left pointing menu mobile only">
+									<a class="toc item">
+										<i class="sidebar icon"></i>
+										<img src="/img/AdaptCMSLogoPNG_2.png" class="ui image">
 									</a>
 									@include('partials/admin-menu-left')
 								</div>
@@ -97,12 +103,12 @@
 	  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 	  <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js"></script>
+	  <script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
 	  <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 	  <script src="//cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js"></script>
 
 		<!-- wysiwyg editor -->
 	  <script src="//cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.js"></script>
-		<script type="text/javascript" src="//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/codemirror.min.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/mode/php/php.min.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/mode/javascript/javascript.min.js"></script>

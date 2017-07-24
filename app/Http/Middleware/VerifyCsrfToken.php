@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
+use Illuminate\Session\TokenMismatchException;
 
 class VerifyCsrfToken extends BaseVerifier
 {
@@ -12,12 +13,17 @@ class VerifyCsrfToken extends BaseVerifier
      * @var array
      */
     protected $except = [
-        'admin/posts/simple-save',
-        'admin/pages/simple-save',
-        'admin/categories/simple-save',
-        'admin/tags/simple-save',
-        'admin/users/simple-save',
-        'admin/settings/simple-save',
-        'admin/themes/build'
+
     ];
+
+    /*
+    public function handle($request, \Closure $next)
+    {
+        if ($this->isReading($request) || $this->shouldPassThrough($request) || $this->tokensMatch($request)) {
+            return $this->addCookieToResponse($request, $next($request));
+        }
+
+        throw new TokenMismatchException;
+    }
+    */
 }

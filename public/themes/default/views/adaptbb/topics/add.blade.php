@@ -32,3 +32,5 @@
 		</div>
 	</div>
 </div>
+
+{{ Theme::asset()->add('core-script', '//ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js') }}

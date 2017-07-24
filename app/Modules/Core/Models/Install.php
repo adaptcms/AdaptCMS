@@ -139,7 +139,7 @@ class Install
         try {
             $status = Artisan::call('migrate');
         } catch(\Exception $e) {
-            abort(500, 'Unable to install SQL. Go back and ensure database credentials are accurate.');
+	    abort(500, 'Unable to install SQL. Go back and ensure database credentials are accurate.');
         }
 
         try {

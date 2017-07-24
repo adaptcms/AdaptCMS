@@ -6,7 +6,6 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-use DB;
 use Schema;
 
 class Handler extends ExceptionHandler
@@ -47,6 +46,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        // dd($exception->getMessage());
+
         // not yet installed, check
         if ($exception->getCode() == 1045 && strstr($exception->getMessage(), 'Access denied for user')) {
             return redirect()->route('install.index')->with('success', 'Hey There! Let\'s get AdaptCMS Installed!');

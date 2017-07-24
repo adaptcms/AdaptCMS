@@ -1,5 +1,5 @@
 <div class="twelve wide mobile eight wide computer column">
-  {{ Form::open(array('route' => 'login', 'class' => 'ui equal width large form')) }}
+  {!! Form::open([ 'class' => 'ui equal width large form' ]) !!}
       <h2 class="ui teal image header">
         <div class="content">
           Login to your account
@@ -28,5 +28,7 @@
         New to us? <a href="{{ route('register') }}">Sign Up</a><br />
         <a href="{{ route('password.request') }}">Forgot your password?</a>
       </div>
-  {{ Form::close() }}
+      
+      {!! csrf_field() !!}
+  {!! Form::close() !!}
 </div>

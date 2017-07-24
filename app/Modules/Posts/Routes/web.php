@@ -21,9 +21,8 @@ Route::get('/tag/{slug}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsC
 
 Route::get('/category/{slug}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesController@view', 'as' => 'categories.view' ]);
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function () {
-    Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@dashboard', 'as' => 'admin' ]);
-	Route::get('/dashboard', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@dashboard', 'as' => 'admin.dashboard' ]);
+Route::group(['prefix' => 'admin', 'middleware' => 'role:admin'], function () {
+	Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@dashboard', 'as' => 'admin.dashboard' ]);
 
 	// pages
     Route::group([ 'prefix' => 'pages' ], function() {

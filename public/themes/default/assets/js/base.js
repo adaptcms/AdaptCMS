@@ -1,3 +1,7 @@
+$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+	toastr.error('Uh-oh! Got an error from the server. For the devs, it was a "' + thrownError + '" error, specifically.');
+});
+
 $(document).ready(function() {
   var special_cards = $('.special.cards .image');
 	if (special_cards.length) {

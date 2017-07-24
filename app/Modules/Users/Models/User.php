@@ -3,17 +3,22 @@
 namespace App\Modules\Users\Models;
 
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Scout\Searchable;
+use Laravel\Passport\HasApiTokens;
 
 use App\Modules\Users\Models\Role;
 
 use Auth;
+use Route;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    use Searchable;
+    use Notifiable,
+        Searchable,
+        HasRoles,
+        HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -37,7 +42,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     protected $table = 'users';
@@ -82,6 +88,11 @@ class User extends Authenticatable
 	    return $this->hasMany('App\Modules\Files\Models\Album');
     }
 
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
+
     public function toSearchableArray()
     {
         return [
@@ -105,21 +116,18 @@ class User extends Authenticatable
 
     public function getRedirectTo()
     {
-	    switch($this->role->slug) {
-		    case 'admin':
-		    	$route = 'admin.dashboard';
-		    break;
+        $route_name = '';
+        $roles = $this->roles;
 
-		    case 'member':
-		    	$route = 'home';
-		    break;
+        if ($this->roles->count()) {
+            $role = $this->roles->sortByDesc(function($role, $key) {
+                return $role->level;
+            })->first();
 
-        case 'editor':
-          $route = 'admin.dashboard';
-        break;
-	    }
+            $route_name = $role->redirect_route_name;
+        }
 
-	    return $route;
+	return $route_name;
     }
 
     public function getName()
@@ -185,7 +193,7 @@ class User extends Authenticatable
     public function add($postArray)
     {
 	    $this->username = $postArray['username'];
-	    $this->password = bcrypt($postArray['password']);
+	    $this->password = $postArray['password'];
 	    $this->email = $postArray['email'];
 	    $this->status = 1;
         $this->settings = json_encode( (!empty($postArray['settings']) ? $postArray['settings'] : []) );
@@ -240,20 +248,20 @@ class User extends Authenticatable
 	    return $image;
     }
 
-    public function hasAccess($role = 'admin')
+    public function isAllowed($access = 1, $route_name = null)
     {
-        if (!Auth::check() || !$this->role || !$this->role->level) {
+        if (!Auth::check() || !$this->roles->count()) {
             return false;
         }
 
-        $roleLevels = [
-            'admin' => 3,
-            'editor' => 2,
-            'member' => 1
-        ];
+        if (empty($route_name)) {
+            $route_name = Route::current()->getName();
+        }
 
-        $roleLevel = $this->role->level;
+        $permission = $this->getAllPermissions()->first(function($val, $key) use ($route_name) {
+            return $val->name = $route_name;
+        });
 
-        return $roleLevel >= $roleLevels[$role];
+        return !empty($permission) && $permission->access >= $access;
     }
 }

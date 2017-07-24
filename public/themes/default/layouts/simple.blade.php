@@ -8,8 +8,23 @@
 
 	  <meta name="csrf-token" content="{{ csrf_token() }}">
 
+	  @if(Theme::get('meta_description'))
+	    <meta name="description" content="{{ Theme::get('meta_description') }}">
+	  @endif
+	  @if(Theme::get('meta_keywords'))
+	    <meta name="keywords" content="{{ Theme::get('meta_keywords') }}">
+	  @endif
+
+	  <meta name="author" content="{{ Settings::get('sitename') }}">
+
 	  <!-- Site Properties -->
-	  <title>AdaptCMS</title>
+	  <title>
+	        @if(Theme::hasTitle())
+	            {{ Theme::getTitle() }} |
+	        @endif
+	        {{ Settings::get('sitename') }}
+	  </title>
+
 	  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
 	  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 	  <link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.min.css">
@@ -48,11 +63,25 @@
 			  </div>
 	    @endif
 
-    <div class="ui container">
-        <div class="ui stackable centered middle aligned grid">
-            {!! Theme::content() !!}
-        </div>
-    </div>
+	    <div class="ui container">
+	        <div class="ui stackable centered middle aligned grid">
+	            {!! Theme::content() !!}
+	        </div>
+	    </div>
+
+		<div class="ui fixed footer segment">
+			<div class="seven wide column clear">
+				<h4 class="ui inverted header">Footer Header</h4>
+				<p class="pull-left">
+				  &copy; Copyright {{ date('Y') }} {{ Settings::get('sitename') }}
+				</p>
+				<p class="pull-right">
+				  Powered by <a href="https://www.adaptcms.com" target="_blank">
+					AdaptCMS {{ ucfirst(Core::getVersion()) }}
+				  </a>
+				</p>
+		  </div>
+		</div>
 
 	  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
