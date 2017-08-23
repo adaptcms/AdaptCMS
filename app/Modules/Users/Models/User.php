@@ -116,7 +116,7 @@ class User extends Authenticatable
 
     public function getRedirectTo()
     {
-        $route_name = '';
+        $route_name = 'home';
         $roles = $this->roles;
 
         if ($this->roles->count()) {
@@ -127,7 +127,7 @@ class User extends Authenticatable
             $route_name = $role->redirect_route_name;
         }
 
-	return $route_name;
+		return $route_name;
     }
 
     public function getName()

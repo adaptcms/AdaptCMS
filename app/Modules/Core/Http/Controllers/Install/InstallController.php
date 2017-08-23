@@ -12,6 +12,7 @@ use Storage;
 use Core;
 use Cache;
 use Settings;
+use Auth;
 
 class InstallController extends Controller
 {
@@ -90,11 +91,10 @@ class InstallController extends Controller
 
         if ($request->getMethod() == 'POST') {
             // save admin account
-            $user->fill($request->except([ '_token', 'password' ]));
-
-            $user->password = bcrypt($request->get('password'));
-            $user->role_id = 3;
+            $user->fill($request->except([ '_token' ]));
+            
             $user->status = 1;
+            $this->syncRoles([ 'admin', 'demo', 'member', 'editor' ]);
 
             $user->save();
 

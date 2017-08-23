@@ -7,6 +7,8 @@ use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 use GuzzleHttp\Client;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
@@ -21,7 +23,6 @@ use Settings;
 use Storage;
 use Module;
 use Route;
-use Schema;
 
 use Core;
 
@@ -35,7 +36,7 @@ class BaseController extends Controller
     {
         $this->apiUrl = Core::getMarketplaceApiUrl();
 
-		if (Schema::hasTable('Settings')) {
+		if (Schema::hasTable('settings')) {
 			// CMS Update Checks
 	        $this->checkForCmsUpdates();
 	        $this->checkForPluginUpdates();
@@ -215,6 +216,13 @@ class BaseController extends Controller
         // every 3 days
         $minutes = (1440 * 3);
         Cache::remember('sync_permissions', $minutes, function() {
+        	// Database check
+        	if (!Schema::hasColumn('permissions', 'access')) {
+        		Schema::table('permissions', function(Blueprint $table) {
+        			$table->integer('access')->default(0);
+        		});
+        	}
+        	
             $all_routes_list = [];
             $valid_routes_list = [];
 

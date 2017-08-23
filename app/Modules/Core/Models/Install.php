@@ -139,25 +139,33 @@ class Install
         try {
             $status = Artisan::call('migrate');
         } catch(\Exception $e) {
-	    abort(500, 'Unable to install SQL part one. Go back and ensure database credentials are accurate.');
+        	$error = '<br /><br />' . $e->getMessage();
+        	
+	    	abort(500, 'Unable to install SQL part one. Go back and ensure database credentials are accurate.' . $error);
         }
 
         try {
             $status = Artisan::call('module:migrate');
         } catch(\Exception $e) {
-            abort(500, 'Unable to migrate plugin database changes.');
+        	$error = '<br /><br />' . $e->getMessage();
+        	
+            abort(500, 'Unable to migrate plugin database changes.' . $error);
         }
 
         try {
             event(new InstallSeedEvent());
         } catch(\Exception $e) {
-            abort(500, 'Unable to install SQL part two. Go back and ensure database credentials are accurate.');
+        	$error = '<br /><br />' . $e->getMessage();
+        	
+            abort(500, 'Unable to install SQL part two. Go back and ensure database credentials are accurate.' . $error);
         }
 
         try {
             $status = Artisan::call('vendor:publish');
         } catch(\Exception $e) {
-            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
+        	$error = '<br /><br />' . $e->getMessage();
+        	
+            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.' . $error);
         }
 
         return $status;
