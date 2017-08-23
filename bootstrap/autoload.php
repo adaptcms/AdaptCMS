@@ -13,8 +13,13 @@ define('LARAVEL_START', microtime(true));
 | loading of any our classes "manually". Feels great to relax.
 |
 */
+$composer_path = __DIR__.'/../vendor/autoload.php';
 
-require __DIR__.'/../vendor/autoload.php';
+if (!file_exists($composer_path)) {
+	die('Please install/run composer. <a href="https://adaptcms.gitbooks.io/adaptcms/content/technology/composer.md" target="_blank" rel="noopener noreferrer">How to use Composer</a>');
+}
+
+require $composer_path;
 
 /*
 |--------------------------------------------------------------------------

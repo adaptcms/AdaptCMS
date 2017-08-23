@@ -2,9 +2,8 @@
 
 namespace App\Modules\Core\Http\Controllers\Install;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Routing\Controller;
 
 use App\Modules\Core\Models\Install;
 use App\Modules\Users\Models\User;
@@ -14,7 +13,7 @@ use Core;
 use Cache;
 use Settings;
 
-class InstallController extends BaseController
+class InstallController extends Controller
 {
     public function index()
     {

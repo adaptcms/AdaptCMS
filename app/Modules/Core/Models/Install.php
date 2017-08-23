@@ -139,7 +139,7 @@ class Install
         try {
             $status = Artisan::call('migrate');
         } catch(\Exception $e) {
-	    abort(500, 'Unable to install SQL. Go back and ensure database credentials are accurate.');
+	    abort(500, 'Unable to install SQL part one. Go back and ensure database credentials are accurate.');
         }
 
         try {
@@ -151,7 +151,7 @@ class Install
         try {
             event(new InstallSeedEvent());
         } catch(\Exception $e) {
-            abort(500, 'Unable to install SQL. Go back and ensure database credentials are accurate.');
+            abort(500, 'Unable to install SQL part two. Go back and ensure database credentials are accurate.');
         }
 
         try {

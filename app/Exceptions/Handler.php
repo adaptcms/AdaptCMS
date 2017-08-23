@@ -46,7 +46,12 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        // dd($exception->getMessage());
+         //dd($exception->getCode(), $exception->getMessage());
+         
+         // laravel log error check
+         if (strstr($exception->getMessage(), 'storage/logs/laravel.log" could not be opened')) {
+         	die('Please set write permissions for the <strong>storage</strong> folder. `chmod 777 -R storage` for terminal users.');
+         }
 
         // not yet installed, check
         if ($exception->getCode() == 1045 && strstr($exception->getMessage(), 'Access denied for user')) {

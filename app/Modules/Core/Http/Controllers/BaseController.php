@@ -21,6 +21,7 @@ use Settings;
 use Storage;
 use Module;
 use Route;
+use Schema;
 
 use Core;
 
@@ -34,16 +35,18 @@ class BaseController extends Controller
     {
         $this->apiUrl = Core::getMarketplaceApiUrl();
 
-        // CMS Update Checks
-        $this->checkForCmsUpdates();
-        $this->checkForPluginUpdates();
-        $this->checkForThemeUpdates();
-
-        // sync site metadata
-        $this->syncWebsite();
-
-        // sync permissions
-        $this->syncPermissions();
+		if (Schema::hasTable('Settings')) {
+			// CMS Update Checks
+	        $this->checkForCmsUpdates();
+	        $this->checkForPluginUpdates();
+	        $this->checkForThemeUpdates();
+	
+	        // sync site metadata
+	        $this->syncWebsite();
+	
+	        // sync permissions
+	        $this->syncPermissions();
+		}
     }
 
     public function checkForCmsUpdates()

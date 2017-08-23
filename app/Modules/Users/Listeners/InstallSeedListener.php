@@ -30,27 +30,33 @@ class InstallSeedListener
         $roles = [
             [
                 'name' => 'Member',
-                'user_id' => 1,
-                'level' => 1
+                'level' => 1,
+                'redirect_route_name' => 'home'
             ],
             [
                 'name' => 'Editor',
-                'user_id' => 1,
-                'level' => 2
+                'level' => 3,
+                'redirect_route_name' => 'admin.dashboard'
             ],
             [
                 'name' => 'Admin',
-                'user_id' => 1,
-                'level' => 3
+                'level' => 4,
+                'redirect_route_name' => 'admin.dashboard'
+            ],
+            [
+            	'name' => 'Demo',
+            	'level' => 2,
+            	'redirect_route_name' => 'admin.dashboard'
             ]
         ];
         foreach($roles as $role) {
             $model = new Role;
 
-            $model->name = $role['name'];
-            $model->slug = str_slug($model->name, '-');
-            $model->user_id = $role['user_id'];
+            $model->name = str_slug($role['name'], '-');
+            $model->guard_name = 'web';
             $model->level = $role['level'];
+            $model->core_role = 1;
+            $model->redirect_route_name = $role['redirect_route_name'];
 
             $model->save();
         }
