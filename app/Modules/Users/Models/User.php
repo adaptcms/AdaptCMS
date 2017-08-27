@@ -12,6 +12,7 @@ use App\Modules\Users\Models\Role;
 
 use Auth;
 use Route;
+use DB;
 
 class User extends Authenticatable
 {
@@ -31,7 +32,6 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-		'role_id',
 		'status',
         'settings'
     ];
@@ -66,11 +66,6 @@ class User extends Authenticatable
     public function tags()
     {
 	    return $this->hasMany('App\Modules\Posts\Models\Tag');
-    }
-
-    public function role()
-    {
-        return $this->belongsTo('App\Modules\Users\Models\Role');
     }
 
     public function themes()
@@ -111,7 +106,7 @@ class User extends Authenticatable
 
     public function getRolesList()
     {
-	    return Role::pluck('name', 'id');
+	    return Role::pluck('name', 'name');
     }
 
     public function getRedirectTo()
@@ -199,9 +194,19 @@ class User extends Authenticatable
         $this->settings = json_encode( (!empty($postArray['settings']) ? $postArray['settings'] : []) );
 	    $this->first_name = $postArray['first_name'];
 	    $this->last_name = $postArray['last_name'];
-	    $this->role_id = !empty($postArray['role_id']) ? $postArray['role_id'] : 1;
-
+	    
+		// save the record
         $this->save();
+        
+        // sync roles after saving
+        if (!empty($postArray['roles'])) {
+        	$this->syncRoles($postArray['roles']);
+        } else {
+        	// assign member level role
+        	$member_role = Role::byLevel(1);
+        	
+        	$this->syncRoles([ $member_role->name ]);
+        }
 
 	    return $this;
     }
@@ -212,15 +217,18 @@ class User extends Authenticatable
 	    $this->email = $postArray['email'];
 	    $this->first_name = $postArray['first_name'];
 	    $this->last_name = $postArray['last_name'];
-	    $this->role_id = $postArray['role_id'];
 
         if (isset($postArray['status'])) {
             $this->status = $postArray['status'];
         }
 
         $this->settings = json_encode( (!empty($postArray['settings']) ? $postArray['settings'] : []) );
-
+        
+        // save the record
         $this->save();
+        
+        // sync roles after saving
+        $this->syncRoles($postArray['roles']);
 
 	    return $this;
     }
@@ -263,5 +271,25 @@ class User extends Authenticatable
         });
 
         return !empty($permission) && $permission->access >= $access;
+    }
+    
+    /**
+    * Has Role User Ids
+    *
+    * Returns user ID's that have at least the
+    * specified role id
+    *
+    * @return array
+    */
+    public static function hasRoleUserIds($role_id)
+    {
+    	$model_type = 'App\Modules\Users\Models\User';
+    
+    	$user_ids = DB::table('model_has_roles')
+    		->where('role_id', '=', $role_id)
+    		->where('model_type', '=', $model_type)
+    		->pluck('model_id');
+    	
+    	return $user_ids->toArray();
     }
 }

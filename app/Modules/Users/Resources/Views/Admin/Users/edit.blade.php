@@ -46,8 +46,11 @@
 			</div>
 
 			<div class="required field">
-				{{ Form::label('role_id', 'Role') }}
-				{{ Form::select('role_id', $roles, $model->role_id, [ 'class' => 'dropdown' ]) }}
+				{{ Form::label('roles[]', 'Role') }}
+				{{ Form::select('roles[]', $roles, $model->roles->pluck('name'), [ 
+					'class' => 'ui dropdown',
+					'multiple'
+				]) }}
 			</div>
 
 			<div class="inline field">

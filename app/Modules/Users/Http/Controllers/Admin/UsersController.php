@@ -17,19 +17,32 @@ class UsersController extends Controller
 {
     public function index(Request $request)
     {
-        $items = User::orderBy('created_at', 'DESC');
+        $query = User::orderBy('created_at', 'DESC');
 
+		// status filter
         if ($request->get('status') != '') {
-            $items->where('status', '=', $request->get('status'));
+            $query->where('status', '=', $request->get('status'));
+        }
+        
+        // role filter
+        if ($role_id = $request->get('role_id')) {
+        	$user_ids = User::hasRoleUserIds($role_id);
+        
+        	if (!empty($user_ids)) {
+        		$query->whereIn('id', $user_ids);
+        	} else {
+        		// no user ID's for this role, return empty
+        		$query->where('id', '=', '-1');
+        	}
         }
 
-        $items = $items->paginate(15);
+        $items = $query->paginate(15);
 
-        $roles = Role::all();
+        $user = new User;
 
         return view('users::Admin/Users/index', [
             'items' => $items,
-            'roles' => $roles
+            'roles' => $user->getRolesList()
         ]);
     }
 
@@ -44,7 +57,8 @@ class UsersController extends Controller
                 'password' => 'required|confirmed',
                 'password_confirmation' => 'required',
                 'first_name' => 'required',
-                'last_name' => 'required'
+                'last_name' => 'required',
+                'roles' => 'required'
             ]);
 
             $data = $request->all();
@@ -73,16 +87,19 @@ class UsersController extends Controller
                 ],
                 'password' => 'confirmed',
                 'first_name' => 'required',
-                'last_name' => 'required'
+                'last_name' => 'required',
+                'roles' => 'required'
             ]);
 
-            if (!$validator->fails()) {
-                $data = $request->all();
-
+            if ($validator->fails()) {
+				$request->session()->flash('error', 'Form errors found. Please try again.');
+            } else {
+            	$data = $request->all();
+            	
                 $model->edit($data);
+                
+                return redirect()->route('admin.users.index')->with('success', 'User has been saved');
             }
-
-            return redirect()->route('admin.users.index')->with('success', 'User has been saved');
         }
 
         return view('users::Admin/Users/edit', [ 'model' => $model, 'roles' => $model->getRolesList() ]);

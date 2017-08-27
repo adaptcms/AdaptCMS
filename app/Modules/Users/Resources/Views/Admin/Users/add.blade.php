@@ -46,8 +46,11 @@
 		</div>
 		
 		<div class="required field">
-			{{ Form::label('role_id', 'Role') }}
-			{{ Form::select('role_id', $roles, null, [ 'class' => 'dropdown' ]) }}
+			{{ Form::label('roles[]', 'Role') }}
+			{{ Form::select('roles[]', $roles, null, [ 
+				'class' => 'ui dropdown', 
+				'multiple' 
+			]) }}
 		</div>
 		
 		{{ Form::submit('Save', [ 'class' => 'ui button primary' ]) }}
