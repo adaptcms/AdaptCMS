@@ -30,9 +30,22 @@
     </a>
   </div>
 </div>
-<a href="{{ route('admin.users.index') }}" class="{{ strstr(Route::currentRouteName(), 'admin.users.') ? 'active teal' : '' }} item">
-  Users
-</a>
+
+<div class="collapsible item">
+  <div class="header">
+    Users
+    <i class="caret right icon pull-right"></i>
+  </div>
+  <div class="menu hidden">
+    <a href="{{ route('admin.users.index') }}" class="{{ strstr(Route::currentRouteName(), 'admin.users..') ? 'active teal' : '' }} item">
+      Users
+    </a>
+    <a href="{{ route('admin.roles.index') }}" class="{{ strstr(Route::currentRouteName(), 'admin.roles.') ? 'active teal' : '' }} item">
+      Roles
+    </a>
+  </div>
+</div>
+
 <a href="{{ route('admin.plugins.index') }}" class="{{ strstr(Route::currentRouteName(), 'admin.plugins.') ? 'active teal' : '' }} item">
   Plugins
   <div class="ui black label">{{ count(Module::all()) }}</div>

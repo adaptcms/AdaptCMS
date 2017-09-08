@@ -25,7 +25,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
         Route::post('/oauth/callback', [ 'uses' => 'OauthController@callback', 'as' => 'admin.oauth.callback' ]);
     });
 
-	Route::group([ 'prefix' => 'roles', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
+	Route::group([ 'prefix' => 'roles' ], function() {
 	    Route::get('/', [ 'uses' => 'RolesController@index', 'as' => 'admin.roles.index' ]);
 	    Route::any('/add', [ 'uses' => 'RolesController@add', 'as' => 'admin.roles.add' ]);
 	    Route::any('/edit/{id}', [ 'uses' => 'RolesController@edit', 'as' => 'admin.roles.edit' ]);

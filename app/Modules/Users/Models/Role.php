@@ -32,4 +32,42 @@ class Role extends ParentRole
     {
         return $query->where('core_role', '=', 1)->where('level', '=', $level)->first();
     }
+    
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Role
+    */
+    public function add($postArray = [])
+    {
+    	$this->name = $postArray['name'];
+    	$this->level = $postArray['level'];
+    	$this->guard_name = 'web';
+    	$this->core_role = 0;
+    	$this->redirect_route_name = !empty($postArray['redirect_route_name']) ? $postArray['redirect_route_name'] : 'home';
+    	
+    	$this->save();
+    	
+    	return $this;
+    }
+    
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Role
+    */
+    public function edit($postArray = [])
+    {
+    	$this->name = $postArray['name'];
+    	$this->level = $postArray['level'];
+    	$this->redirect_route_name = !empty($postArray['redirect_route_name']) ? $postArray['redirect_route_name'] : 'home';
+    	
+    	$this->save();
+    	
+    	return $this;
+    }
 }
