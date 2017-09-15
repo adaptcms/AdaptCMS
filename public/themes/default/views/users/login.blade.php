@@ -29,6 +29,6 @@
         <a href="{{ route('password.request') }}">Forgot your password?</a>
       </div>
       
-      {!! csrf_field() !!}
+      <input type="hidden" name="_token" value="{!! csrf_token() !!}">
   {!! Form::close() !!}
 </div>
