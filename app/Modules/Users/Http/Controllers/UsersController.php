@@ -62,6 +62,8 @@ class UsersController extends Controller
         }
 
         $theme = Theme::uses(Cache::get('theme', 'default'))->layout('simple');
+        
+        $theme->setTitle('Login');
 
         return $theme->scope('users.login')->render();
     }
@@ -93,6 +95,8 @@ class UsersController extends Controller
         }
 
         $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        
+        $theme->setTitle('Register');
 
         return $theme->scope('users.register')->render();
     }
@@ -148,6 +152,8 @@ class UsersController extends Controller
 
 
         $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        
+        $theme->setTitle('Edit Profile');
 
         return $theme->scope('users.profile_edit', compact('model', 'errors'))->render();
     }
@@ -161,6 +167,8 @@ class UsersController extends Controller
         }
 
         $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        
+        $theme->setTitle('Profile - ' . $username);
 
         return $theme->scope('users.profile', compact('user'))->render();
     }

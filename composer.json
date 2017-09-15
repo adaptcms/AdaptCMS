@@ -1,6 +1,6 @@
 {
     "name": "adaptcms/adaptcms",
-    "description": "AdaptCMS is the modern solution to the CMS problem. Laravel, Plugins and Themes, easy and even fast.",
+    "description": "AdaptCMS is the modern solution to the CMS problem. Laravel, Plugins and Themes, easy and quite fast.",
     "keywords": ["cms", "laravel", "php cms", "laravel cms"],
     "license": "BSD-3-Clause",
     "type": "project",

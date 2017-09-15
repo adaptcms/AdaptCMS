@@ -11,6 +11,7 @@
 	  @if(Theme::get('meta_description'))
 	    <meta name="description" content="{{ Theme::get('meta_description') }}">
 	  @endif
+	  
 	  @if(Theme::get('meta_keywords'))
 	    <meta name="keywords" content="{{ Theme::get('meta_keywords') }}">
 	  @endif
@@ -71,11 +72,10 @@
 
 		<div class="ui fixed footer segment">
 			<div class="seven wide column clear">
-				<h4 class="ui inverted header">Footer Header</h4>
-				<p class="pull-left">
+				<p>
 				  &copy; Copyright {{ date('Y') }} {{ Settings::get('sitename') }}
 				</p>
-				<p class="pull-right">
+				<p>
 				  Powered by <a href="https://www.adaptcms.com" target="_blank">
 					AdaptCMS {{ ucfirst(Core::getVersion()) }}
 				  </a>

@@ -97,11 +97,16 @@ return [
   	    	'root' => app_path('Modules')
         ],
 
-    		// uploads
-    		'files' => [
-    	    	'driver' => 'local',
-    	    	'root' => public_path('uploads'),
-    	    	'path' => '/uploads'
+		// uploads
+		'files' => [
+	    	'driver' => 'local',
+	    	'root' => public_path('uploads'),
+	    	'path' => '/uploads'
         ],
+        
+        // adaptcms
+        'cdn' => [
+        	'driver' => 's3',
+        ]
     ]
 ];
