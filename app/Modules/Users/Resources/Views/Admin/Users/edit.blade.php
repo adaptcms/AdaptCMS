@@ -1,4 +1,4 @@
-@extends('layouts.engine')
+@extends('layouts.admin')
 
     @section('content')
 		{{ Form::model($model, [ 'class' => 'ui form' ]) }}

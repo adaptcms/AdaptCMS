@@ -1,4 +1,4 @@
-@extends('layouts.engine')
+@extends('layouts.admin')
 
 @section('content')
 	<h1>Fields</h1>
