@@ -37,12 +37,20 @@ class Theme extends Model
     {
         if (!empty($searchData['keyword'])) {
             $results = Theme::search($searchData['keyword'])->get();
+            
+            foreach ($results as $key => $row) {
+                $results[$key]->url = route('admin.themes.edit', [ 'id' => $row->id ]);
+            }
+        } elseif(!empty($searchData['template_path'])) {
+        	$body = Storage::disk('themes')->get($searchData['template_path']);
+        
+        	$results = [
+        		[
+        			'body' => $body
+        		]
+        	];
         } else {
             $results = [];
-        }
-
-        foreach ($results as $key => $row) {
-            $results[$key]->url = route('admin.themes.edit', [ 'id' => $row->id ]);
         }
 
         return $results;

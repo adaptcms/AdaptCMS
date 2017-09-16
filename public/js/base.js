@@ -24,19 +24,19 @@ $(document).ready(function() {
 		});
 	}
 
-      $('.activate.popup').popup({
-	      inline: true,
-	      hoverable: true,
-	      lastResort: true,
-	      position: 'right center'
-      });
+	$('.activate.popup').popup({
+		inline: true,
+		hoverable: true,
+		lastResort: true,
+		position: 'right center'
+	});
 
     $('.btn-confirm').on('click', function(e) {
-	   if (confirm('Are you sure you wish to delete?')) {
-		   return true;
-	   } else {
-		   e.preventDefault();
-	   }
+		if (confirm('Are you sure you wish to delete?')) {
+			return true;
+		} else {
+			e.preventDefault();
+		}
     });
 
     if ($('.tagsInput').length) {
@@ -53,11 +53,11 @@ $(document).ready(function() {
     }
 
     if ($('.tabs.menu').length) {
-	 			$('.tabs.menu .item').tab();
+	 	$('.tabs.menu .item').tab();
     }
 
     if ($('select.dropdown').length) {
-	    	$('select.dropdown').dropdown();
+	    $('select.dropdown').dropdown();
     }
 
     var dropdowns = $('.ui.dropdown.allowAdditions');
@@ -92,31 +92,31 @@ $(document).ready(function() {
 	var plugins_search = $('.ui.search.plugins');
 	if (plugins_search.length) {
 		plugins_search.search({
-		    apiSettings: {
-		      url: 'https://marketplace.adaptcms.com/api/search/plugin?q={query}'
-		    },
-		    fields: {
-		      results : 'items',
-		      title   : 'name',
-		      url     : 'install_url'
-		    },
-		    minCharacters : 3
-		  });
+			apiSettings: {
+				url: 'https://marketplace.adaptcms.com/api/search/plugin?q={query}'
+			},
+			fields: {
+				results : 'items',
+				title   : 'name',
+				url     : 'install_url'
+			},
+			minCharacters : 3
+		});
 	}
 
 	var themes_search = $('.ui.search.themes');
 	if (themes_search.length) {
 		themes_search.search({
-		    apiSettings: {
-		      url: 'https://marketplace.adaptcms.com/api/search/theme?q={query}'
-		    },
-		    fields: {
-		      results : 'items',
-		      title   : 'name',
-		      url     : 'install_url'
-		    },
-		    minCharacters : 3
-		  });
+			apiSettings: {
+				url: 'https://marketplace.adaptcms.com/api/search/theme?q={query}'
+			},
+			fields: {
+				results : 'items',
+				title   : 'name',
+				url     : 'install_url'
+			},
+			minCharacters : 3
+		});
 	}
 
 	var ratings = $('.ui.rating');
@@ -159,119 +159,66 @@ $(document).ready(function() {
 
 	var collapsible_items = $('.item.collapsible');
 	if (collapsible_items.length) {
-			// toggle collapsible menu
-			$('.item.collapsible .header').click(function(e) {
-					e.preventDefault();
+		// toggle collapsible menu
+		$('.item.collapsible .header').click(function(e) {
+			e.preventDefault();
 
-					var menu = $(this).parent().find('.menu');
+			var menu = $(this).parent().find('.menu');
 
-					// so it will be active
-					if (menu.hasClass('hidden')) {
-							$(this).find('.icon').removeClass('right').addClass('down');
-					} else {
-							// otherwise, inactive
-							$(this).find('.icon').removeClass('down').addClass('right');
-					}
+			// so it will be active
+			if (menu.hasClass('hidden')) {
+				$(this).find('.icon').removeClass('right').addClass('down');
+			} else {
+				// otherwise, inactive
+				$(this).find('.icon').removeClass('down').addClass('right');
+			}
 
-					menu.toggleClass('hidden');
-			});
+			menu.toggleClass('hidden');
+		});
 
-			// add active classes to menu div's
-			// if on current URL
-			$.each(collapsible_items, function() {
-					if ($(this).find('.menu .item.active').length) {
-							$(this).addClass('active');
-							$(this).find('.header').trigger('click');
-					}
-			});
+		// add active classes to menu div's
+		// if on current URL
+		$.each(collapsible_items, function() {
+			if ($(this).find('.menu .item.active').length) {
+				$(this).addClass('active');
+				$(this).find('.header').trigger('click');
+			}
+		});
 	}
 
 	if ($('.toc.item').length) {
 		$('.ui.sidebar').sidebar('attach events', '.toc.item');
 	}
 
-	$('.pusher.dimmer').click(function() {
-		console.log('clicked dimmer!');
-	});
-
-	// traditional editor
-	var wysiwyg = $('.wysiwyg:not(.code-view)');
+	// wysiwyg editors
+	var wysiwyg = $('.wysiwyg');
 	if (wysiwyg.length) {
-		// set to code view automatically and init
-		wysiwyg.summernote({
-			height: 350
-		});
-
-		// set initial data to wysiwyg
 		$.each(wysiwyg, function() {
-				$(this).summernote('code', $(this).text());
-		});
-
-		// onSubmit, sync wysiwyg/input data
-		$('.ui.form .submit').on('click', function(e) {
-				e.preventDefault();
-
-				$.each(wysiwyg, function(key, val) {
-						$(this).val($(this).summernote('code'));
-				});
-
-				$(this).toggleClass('loading');
-
-				setTimeout(function() {
-						$(this).toggleClass('loading');
-
-						wysiwyg.closest('.ui.form').trigger('submit');
-				}, 500);
-		});
-	}
-
-	// code-enabled editor
-	var wysiwyg = $('.wysiwyg.code-view');
-	if (wysiwyg.length) {
-		// set to code view automatically and init
-		wysiwyg.summernote({
-			height: 350,
-			codemirror: {
-			    theme: 'monokai'
-			},
-			callbacks: {
-					onInit: function() {
-							$('.btn-codeview').trigger('click');
-
-							jQuery('body').animate({
-					      scrollTop: $(this).offset().top
-					    }, 50);
+			if ($(this).hasClass('code-view') && $('.api-call').length) {
+				var textarea = $(this).get(0);
+				var api_url = $('.api-call').attr('data-url');
+				
+				$.get(api_url, function(response) {
+					var editor = CodeMirror.fromTextArea(textarea, {
+						mode: 'scheme',
+						lineNumbers: true
+					});
+					
+					try {
+						editor.getDoc().setValue(response.results[0].body);
+					} catch(error) {
+						// do nothing, no value present
 					}
-  			}
-		});
-
-		// set initial data to wysiwyg
-		$.each(wysiwyg, function() {
-				$(this).summernote('code', $(this).text());
-		});
-
-		// onSubmit, sync wysiwyg/input data
-		$('.ui.form .submit').on('click', function(e) {
-				e.preventDefault();
-
-				$.each(wysiwyg, function(key, val) {
-						$(this).val($(this).summernote('code'));
-				});
-
-				$(this).toggleClass('loading');
-
-				setTimeout(function() {
-						$(this).toggleClass('loading');
-
-						wysiwyg.closest('.ui.form').trigger('submit');
-				}, 500);
+				}, 'json');
+			} else {
+				CKEDITOR.replace($(this).attr('id'));
+			}
 		});
 	}
 });
 
 // Source: https://gist.github.com/mathewbyrne/1280286
-function slugify(text)
-{
+function slugify(text) {
   return text.toString().toLowerCase()
     .replace(/\s+/g, '-')           // Replace spaces with -
     .replace(/[^\w\-]+/g, '')       // Remove all non-word chars

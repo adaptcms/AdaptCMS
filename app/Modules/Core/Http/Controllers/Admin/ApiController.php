@@ -14,6 +14,7 @@ class ApiController extends Controller
 		'tags' => '\App\Modules\Posts\Models\Tag',
 		'fields' => '\App\Modules\Posts\Models\Field',
 		'categories' => '\App\Modules\Posts\Models\Category',
+		'post_data' => '\App\Modules\Posts\Models\PostData',
 
 		// files
 		'albums' => '\App\Modules\Files\Models\Album',
@@ -24,6 +25,9 @@ class ApiController extends Controller
 
         // core
         'settings' => '\App\Modules\Settings\Models\Setting',
+        
+        // themes
+        'themes' => '\App\Modules\Themes\Models\Theme',
 	];
 
 	public function index(Request $request, $module)

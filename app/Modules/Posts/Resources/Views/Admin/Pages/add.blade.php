@@ -24,7 +24,7 @@
 
 		<div class="required field">
 			{{ Form::label('body') }}
-    {!! Form::textarea('body', $model->body, [ 'class' => 'wysiwyg code-view' ]) !!}
+    		{!! Form::textarea('body', $model->body, [ 'class' => 'wysiwyg code-view' ]) !!}
 		</div>
 
         <div class="field">

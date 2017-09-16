@@ -27,7 +27,8 @@
 		<div class="required field">
 			{{ Form::label('body') }}
 
-			{!! Form::textarea('body', $model->body, [ 'class' => 'wysiwyg code-view' ]) !!}
+			{{ Form::textarea('body', '', [ 'class' => 'wysiwyg code-view' ]) }}
+			<div class="api-call" data-url="/admin/api/pages?id={{ $model->id }}"></div>
 		</div>
 
 		<div class="field">

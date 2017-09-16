@@ -1,19 +1,17 @@
 // index
 if ($('.ui.files.search').length) {
 	$(document).ready(function() {
-		$('.ui.files.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/files?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'filename',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.files.search').search({
+			apiSettings: {
+				url: '/admin/api/files?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'filename',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminFilesIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.files.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/files/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -57,5 +56,5 @@ if ($('.ui.files.search').length) {
 				}
 			}
 		}
-	})
+	});
 }

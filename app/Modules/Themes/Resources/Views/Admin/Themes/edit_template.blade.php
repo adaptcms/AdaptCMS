@@ -13,7 +13,8 @@
 		<div class="required field">
 			{{ Form::label('body') }}
 
-			{!! Form::textarea('body', $file, [ 'class' => 'wysiwyg code-view' ]) !!}
+			{!! Form::textarea('body', '', [ 'class' => 'wysiwyg code-view' ]) !!}
+			<div class="api-call" data-url="/admin/api/themes?template_path={{ $path }}"></div>
 		</div>
 
 		{{ Form::button('Save', [ 'class' => 'ui button primary submit' ]) }}

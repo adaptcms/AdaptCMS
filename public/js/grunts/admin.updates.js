@@ -19,7 +19,9 @@ _.each(moduleUpdates, function(module) {
             },
             methods: {
                 update: function() {
-                    if (confirm('Are you sure you wish to update these ' + module.slug + '(s)?')) {
+                	var message = 'Are you sure you wish to update these ' + module.slug + '(s)?';
+                	
+                    if (confirm(message)) {
                         var data = {
                             module_ids: this.module_ids,
                             _token: $('meta[name="csrf-token"]').attr('content')

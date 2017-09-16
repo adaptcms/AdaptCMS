@@ -111,8 +111,10 @@
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/php/php.min.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/javascript/javascript.min.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/sass/sass.min.js"></script>
-		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/htmlmixed/htmlmixed.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/scheme/scheme.min.js"></script>
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/css/css.min.js"></script>
+		
+		<script src="//cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
 
 	  <script src="/js/vendor/jquery.tagsinput.min.js"></script>
 	  <script src="/js/vendor/jquery-sortable.min.js"></script>

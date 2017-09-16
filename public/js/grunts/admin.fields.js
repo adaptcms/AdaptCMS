@@ -1,19 +1,17 @@
 // index
 if ($('.ui.fields.search').length) {
 	$(document).ready(function() {
-		$('.ui.fields.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/fields?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.fields.search').search({
+			apiSettings: {
+				url: '/admin/api/fields?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminFieldsIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.fields.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/fields/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -59,11 +58,12 @@ if ($('.ui.fields.search').length) {
 			toggleStatusesMany: function() {
 				var _this = this;
 				var data = {
-          type: 'toggle-statuses',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
+					type: 'toggle-statuses',
+					many: true,
+					ids: JSON.stringify(_this.items),
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+				
 				$.post('/admin/fields/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -75,7 +75,7 @@ if ($('.ui.fields.search').length) {
 				});
 			}
 		}
-	})
+	});
 }
 
 if ($('.ui.form.fields').length) {
@@ -96,23 +96,23 @@ if ($('.ui.form.fields').length) {
 
 if ($("ol.sortable.fields").length) {
 	$("ol.sortable.fields").sortable({
-		  onDrop: function($item, container, _super, event) {
-			  $item.removeClass(container.group.options.draggedClass).removeAttr("style");
-			  $("body").removeClass(container.group.options.bodyClass);
+		onDrop: function($item, container, _super, event) {
+			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
+			$("body").removeClass(container.group.options.bodyClass);
 
-			  var items = [];
-			  $.each($('ol.sortable li'), function() {
-			  		items.push($(this).attr('data-id'));
-			  });
+			var items = [];
+			$.each($('ol.sortable li'), function() {
+				items.push($(this).attr('data-id'));
+			});
 
-				var data = {
-						items: JSON.stringify(items),
-						_token: $('meta[name="csrf-token"]').attr('content')
-				};
+			var data = {
+				items: JSON.stringify(items),
+				_token: $('meta[name="csrf-token"]').attr('content')
+			};
 
-			  $.post('/admin/fields/order', data, function(response) {
-				  	toastr.succes('Order has been saved.');
-			  	}, 'json');
+			$.post('/admin/fields/order', data, function(response) {
+				toastr.succes('Order has been saved.');
+			}, 'json');
 		}
-	  });
+	});
 }

@@ -1,19 +1,17 @@
 // index
 if ($('.ui.albums.search').length) {
 	$(document).ready(function() {
-		$('.ui.albums.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/albums?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.albums.search').search({
+			apiSettings: {
+				url: '/admin/api/albums?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminAlbumsIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.albums.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/albums/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -57,5 +56,5 @@ if ($('.ui.albums.search').length) {
 				}
 			}
 		}
-	})
+	});
 }

@@ -33,9 +33,11 @@
 
 			@foreach($fields as $field)
 				@include('partials/field_types/' . $field->field_type, [
-						'value' => $post_data['post_data'][$field->slug],
-						'images' => $images,
-						'files' => $files
+					'value' => !empty($post_data['post_data'][$field->slug]) ? $post_data['post_data'][$field->slug] : null,
+					'images' => $images,
+					'files' => $files,
+					'field' => $field,
+					'model_id' => $model->id
 				])
 			@endforeach
 

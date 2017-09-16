@@ -109,7 +109,6 @@ class ThemesController extends Controller
 	    $path = base64_decode($path);
 
 	    $theme = Theme::find($id);
-	    $file = Storage::disk('themes')->get($path);
 
 	    if ($request->getMethod() == 'POST') {
 		    if ($request->get('body')) {
@@ -125,7 +124,6 @@ class ThemesController extends Controller
 
 	    return view('themes::Admin/Themes/edit_template', [
 	    	'theme' => $theme,
-	    	'file' => $file,
 	    	'path' => $path
 	    ]);
     }

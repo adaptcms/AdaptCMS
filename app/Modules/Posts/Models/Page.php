@@ -113,6 +113,8 @@ class Page extends Model
     {
         if (!empty($searchData['keyword'])) {
             $results = Page::search($searchData['keyword'])->get();
+        } elseif(!empty($searchData['id'])) {
+        	$results = [ Page::find($searchData['id']) ];
         } else {
             $results = [];
         }

@@ -23,12 +23,13 @@ if ($('table.themes').length) {
 			deleteMany: function() {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
-          var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+					var data = {
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/themes/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -42,12 +43,13 @@ if ($('table.themes').length) {
 			},
 			toggleStatusesMany: function() {
 				var _this = this;
-        var data = {
-          type: 'toggle-statuses',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
+				var data = {
+					type: 'toggle-statuses',
+					many: true,
+					ids: JSON.stringify(_this.items),
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+				
 				$.post('/admin/themes/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -59,5 +61,5 @@ if ($('table.themes').length) {
 				});
 			}
 		}
-	})
+	});
 }

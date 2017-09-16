@@ -86,9 +86,11 @@ class Post extends Model
     }
 
     public function searchLogic($searchData, $admin = false)
-    {
+    {   
         if (!empty($searchData['keyword'])) {
             $results = Post::search($searchData['keyword'])->get();
+        } elseif(!empty($searchData['id'])) {
+        	$results = [ Post::find($searchData['id']) ];
         } else {
             $results = [];
         }

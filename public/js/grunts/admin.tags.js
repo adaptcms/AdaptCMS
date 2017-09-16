@@ -1,19 +1,17 @@
 // index
 if ($('.ui.tags.search').length) {
 	$(document).ready(function() {
-		$('.ui.tags.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/tags?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.tags.search').search({
+			apiSettings: {
+				url: '/admin/api/tags?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminTagsIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.tags.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/tags/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -64,6 +63,7 @@ if ($('.ui.tags.search').length) {
 					ids: JSON.stringify(_this.items),
 					_token: $('meta[name="csrf-token"]').attr('content')
 				};
+				
 				$.post('/admin/tags/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -75,5 +75,5 @@ if ($('.ui.tags.search').length) {
 				});
 			}
 		}
-	})
+	});
 }

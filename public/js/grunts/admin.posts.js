@@ -1,19 +1,17 @@
 // index
 if ($('.ui.posts.search').length) {
 	$(document).ready(function() {
-		$('.ui.posts.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/posts?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.posts.search').search({
+			apiSettings: {
+				url: '/admin/api/posts?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminPostsIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.posts.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/posts/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -59,11 +58,12 @@ if ($('.ui.posts.search').length) {
 			toggleStatusesMany: function() {
 				var _this = this;
 				var data = {
-          type: 'toggle-statuses',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
+					type: 'toggle-statuses',
+					many: true,
+					ids: JSON.stringify(_this.items),
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+				
 				$.post('/admin/posts/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -80,25 +80,25 @@ if ($('.ui.posts.search').length) {
 
 $(document).ready(function() {
 	if ($('.ui.form.posts').length) {
-			new Vue({
-					el: '.ui.form.posts',
-					data: {
-							name: '',
-							slug: '',
-							initRan: false
-					},
-					watch: {
-							name: function(newVal) {
-									if (this.initRan) {
-											this.slug = slugify(newVal);
-									}
-
-									if (!this.initRan) {
-											this.initRan = true;
-									}
-							}
+		new Vue({
+			el: '.ui.form.posts',
+			data: {
+				name: '',
+				slug: '',
+				initRan: false
+			},
+			watch: {
+				name: function(newVal) {
+					if (this.initRan) {
+						this.slug = slugify(newVal);
 					}
-			});
+
+					if (!this.initRan) {
+						this.initRan = true;
+					}
+				}
+			}
+		});
 	}
 });
 

@@ -1,19 +1,17 @@
 // index
 if ($('.ui.albums.search').length) {
 	$(document).ready(function() {
-		$('.ui.albums.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/albums?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.albums.search').search({
+			apiSettings: {
+				url: '/admin/api/albums?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminAlbumsIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.albums.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/albums/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -57,25 +56,23 @@ if ($('.ui.albums.search').length) {
 				}
 			}
 		}
-	})
+	});
 }
 
 // index
 if ($('.ui.categories.search').length) {
 	$(document).ready(function() {
-		$('.ui.categories.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/categories?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.categories.search').search({
+			apiSettings: {
+				url: '/admin/api/categories?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminCategoriesIndex = new Vue({
@@ -102,11 +99,12 @@ if ($('.ui.categories.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/categories/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -119,48 +117,46 @@ if ($('.ui.categories.search').length) {
 				}
 			}
 		}
-	})
+	});
 }
 
 if ($("ol.sortable.categories").length) {
 	$("ol.sortable.categories").sortable({
-		  onDrop: function($item, container, _super, event) {
-			  $item.removeClass(container.group.options.draggedClass).removeAttr("style");
-			  $("body").removeClass(container.group.options.bodyClass);
+		onDrop: function($item, container, _super, event) {
+			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
+			$("body").removeClass(container.group.options.bodyClass);
 
-			  var items = [];
-			  $.each($('ol.sortable li'), function() {
-			  		items.push($(this).attr('data-id'));
-			  });
+			var items = [];
+			$.each($('ol.sortable li'), function() {
+				items.push($(this).attr('data-id'));
+			});
 
-				var data = {
-						items: JSON.stringify(items),
-						_token: $('meta[name="csrf-token"]').attr('content')
-				};
+			var data = {
+				items: JSON.stringify(items),
+				_token: $('meta[name="csrf-token"]').attr('content')
+			};
 
-			  $.post('/admin/categories/order', data, function(response) {
-				  	toastr.success('Order has been saved.');
-			  	}, 'json');
+			$.post('/admin/categories/order', data, function(response) {
+				toastr.success('Order has been saved.');
+			}, 'json');
 		}
-	  });
+	});
 }
 
 // index
 if ($('.ui.fields.search').length) {
 	$(document).ready(function() {
-		$('.ui.fields.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/fields?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.fields.search').search({
+			apiSettings: {
+				url: '/admin/api/fields?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminFieldsIndex = new Vue({
@@ -187,11 +183,12 @@ if ($('.ui.fields.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/fields/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -206,11 +203,12 @@ if ($('.ui.fields.search').length) {
 			toggleStatusesMany: function() {
 				var _this = this;
 				var data = {
-          type: 'toggle-statuses',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
+					type: 'toggle-statuses',
+					many: true,
+					ids: JSON.stringify(_this.items),
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+				
 				$.post('/admin/fields/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -222,7 +220,7 @@ if ($('.ui.fields.search').length) {
 				});
 			}
 		}
-	})
+	});
 }
 
 if ($('.ui.form.fields').length) {
@@ -243,43 +241,41 @@ if ($('.ui.form.fields').length) {
 
 if ($("ol.sortable.fields").length) {
 	$("ol.sortable.fields").sortable({
-		  onDrop: function($item, container, _super, event) {
-			  $item.removeClass(container.group.options.draggedClass).removeAttr("style");
-			  $("body").removeClass(container.group.options.bodyClass);
+		onDrop: function($item, container, _super, event) {
+			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
+			$("body").removeClass(container.group.options.bodyClass);
 
-			  var items = [];
-			  $.each($('ol.sortable li'), function() {
-			  		items.push($(this).attr('data-id'));
-			  });
+			var items = [];
+			$.each($('ol.sortable li'), function() {
+				items.push($(this).attr('data-id'));
+			});
 
-				var data = {
-						items: JSON.stringify(items),
-						_token: $('meta[name="csrf-token"]').attr('content')
-				};
+			var data = {
+				items: JSON.stringify(items),
+				_token: $('meta[name="csrf-token"]').attr('content')
+			};
 
-			  $.post('/admin/fields/order', data, function(response) {
-				  	toastr.succes('Order has been saved.');
-			  	}, 'json');
+			$.post('/admin/fields/order', data, function(response) {
+				toastr.succes('Order has been saved.');
+			}, 'json');
 		}
-	  });
+	});
 }
 
 // index
 if ($('.ui.files.search').length) {
 	$(document).ready(function() {
-		$('.ui.files.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/files?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'filename',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.files.search').search({
+			apiSettings: {
+				url: '/admin/api/files?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'filename',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminFilesIndex = new Vue({
@@ -306,11 +302,12 @@ if ($('.ui.files.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/files/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -323,25 +320,24 @@ if ($('.ui.files.search').length) {
 				}
 			}
 		}
-	})
+	});
 }
 
 // index
 if ($('.ui.pages.search').length) {
 	$(document).ready(function() {
 		$('.ui.pages.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/pages?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		.search({
+			apiSettings: {
+				url: '/admin/api/pages?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminPagesIndex = new Vue({
@@ -368,11 +364,12 @@ if ($('.ui.pages.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/pages/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -387,11 +384,12 @@ if ($('.ui.pages.search').length) {
 			toggleStatusesMany: function() {
 				var _this = this;
 				var data = {
-          type: 'toggle-statuses',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
+					type: 'toggle-statuses',
+					many: true,
+					ids: JSON.stringify(_this.items),
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+				
 				$.post('/admin/pages/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -408,67 +406,65 @@ if ($('.ui.pages.search').length) {
 
 $(document).ready(function() {
 	if ($('.ui.form.pages').length) {
-			new Vue({
-					el: '.ui.form.pages',
-					data: {
-							name: '',
-							slug: '',
-							initRan: false
-					},
-					watch: {
-							name: function(newVal) {
-									if (this.initRan) {
-											this.slug = slugify(newVal);
-									}
-
-									if (!this.initRan) {
-											this.initRan = true;
-									}
-							}
+		new Vue({
+			el: '.ui.form.pages',
+			data: {
+				name: '',
+				slug: '',
+				initRan: false
+			},
+			watch: {
+				name: function(newVal) {
+					if (this.initRan) {
+						this.slug = slugify(newVal);
 					}
-			});
+
+					if (!this.initRan) {
+						this.initRan = true;
+					}
+				}
+			}
+		});
 	}
 });
 
 if ($("ol.sortable.pages").length) {
 	$("ol.sortable.pages").sortable({
-		  onDrop: function($item, container, _super, event) {
-			  $item.removeClass(container.group.options.draggedClass).removeAttr("style");
-			  $("body").removeClass(container.group.options.bodyClass);
+		onDrop: function($item, container, _super, event) {
+			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
+			$("body").removeClass(container.group.options.bodyClass);
 
-			  var items = [];
-			  $.each($('ol.sortable li'), function() {
-			  		items.push($(this).attr('data-id'));
-			  });
+			var items = [];
+			$.each($('ol.sortable li'), function() {
+				items.push($(this).attr('data-id'));
+			});
 
-				var data = {
-						items: JSON.stringify(items),
-						_token: $('meta[name="csrf-token"]').attr('content')
-				};
+			var data = {
+				items: JSON.stringify(items),
+				_token: $('meta[name="csrf-token"]').attr('content')
+			};
 
-			  $.post('/admin/pages/order', data, function(response) {
-				  	toastr.success('Order has been saved.');
-			  	}, 'json');
+			$.post('/admin/pages/order', data, function(response) {
+				toastr.success('Order has been saved.');
+			}, 'json');
 		}
-	  });
+	});
 }
 
 // index
 if ($('.ui.posts.search').length) {
 	$(document).ready(function() {
-		$('.ui.posts.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/posts?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.posts.search').search({
+			apiSettings: {
+				url: '/admin/api/posts?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminPostsIndex = new Vue({
@@ -495,11 +491,12 @@ if ($('.ui.posts.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/posts/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -514,11 +511,12 @@ if ($('.ui.posts.search').length) {
 			toggleStatusesMany: function() {
 				var _this = this;
 				var data = {
-          type: 'toggle-statuses',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
+					type: 'toggle-statuses',
+					many: true,
+					ids: JSON.stringify(_this.items),
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+				
 				$.post('/admin/posts/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -535,25 +533,25 @@ if ($('.ui.posts.search').length) {
 
 $(document).ready(function() {
 	if ($('.ui.form.posts').length) {
-			new Vue({
-					el: '.ui.form.posts',
-					data: {
-							name: '',
-							slug: '',
-							initRan: false
-					},
-					watch: {
-							name: function(newVal) {
-									if (this.initRan) {
-											this.slug = slugify(newVal);
-									}
-
-									if (!this.initRan) {
-											this.initRan = true;
-									}
-							}
+		new Vue({
+			el: '.ui.form.posts',
+			data: {
+				name: '',
+				slug: '',
+				initRan: false
+			},
+			watch: {
+				name: function(newVal) {
+					if (this.initRan) {
+						this.slug = slugify(newVal);
 					}
-			});
+
+					if (!this.initRan) {
+						this.initRan = true;
+					}
+				}
+			}
+		});
 	}
 });
 
@@ -573,84 +571,90 @@ if ($('#AdminArticlesApp').length) {
 
 if ($('div.settings').length) {
     new Vue({
-	el: 'div.settings',
-	data: {
-	    items: []
-	},
-	ready: function() {
-	    var _this = this;
-	    $('.ui.checkbox').checkbox({
-		onChange: function() {
-		    var items = [];
-
-		    $.each($('input[type="checkbox"]:checked'), function() {
-			items.push($(this).attr('data-id'));
-		    });
-
-		    _this.items = items;
-		}
-	    });
-	},
-	methods: {
-	    saveSettings: function() {
-		var _this = this;
-		var settings = [];
-
-		$.each($('.setting'), function() {
-		    settings.push({
-			key: $(this).attr('data-key'),
-			value: $(this).val()
-		    });
-		});
-
-		$.post('/admin/settings/simple-save', { type: 'save', many: true, data: settings, _token: $('meta[name="csrf-token"]').attr('content') }, function(response) {
-		    if (response.status) {
-			toastr.success('The settings have been saved.');
-		    } else {
-			toastr.error('Could not save settings, please try again.');
-		    }
-		});
-	    },
-	    deleteMany: function() {
-		if (confirm('Are you sure you wish to delete?')) {
+		el: 'div.settings',
+		data: {
+		    items: []
+		},
+		ready: function() {
 		    var _this = this;
-        var data = {
-          type: 'delete',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
-		    $.post('/admin/settings/simple-save', data, function(response) {
-			if (response.status) {
-			    _this.items = [];
-
-			    toastr.success('The settings have been deleted.');
-			} else {
-			    toastr.error('Could not delete settings, please try again.');
-			}
+		    $('.ui.checkbox').checkbox({
+				onChange: function() {
+				    var items = [];
+		
+				    $.each($('input[type="checkbox"]:checked'), function() {
+						items.push($(this).attr('data-id'));
+				    });
+		
+				    _this.items = items;
+				}
 		    });
+		},
+		methods: {
+		    saveSettings: function() {
+				var _this = this;
+				var settings = [];
+		
+				$.each($('.setting'), function() {
+				    settings.push({
+					key: $(this).attr('data-key'),
+					value: $(this).val()
+					});
+				});
+	
+				var data = { 
+					type: 'save', 
+					many: true, 
+					data: settings, 
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+		
+				$.post('/admin/settings/simple-save', data, function(response) {
+				    if (response.status) {
+						toastr.success('The settings have been saved.');
+				    } else {
+						toastr.error('Could not save settings, please try again.');
+				    }
+				});
+		    },
+		    deleteMany: function() {
+				if (confirm('Are you sure you wish to delete?')) {
+				    var _this = this;
+					var data = {
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
+				    $.post('/admin/settings/simple-save', data, function(response) {
+						if (response.status) {
+						    _this.items = [];
+			
+						    toastr.success('The settings have been deleted.');
+						} else {
+						    toastr.error('Could not delete settings, please try again.');
+						}
+				    });
+				}
+		    }
 		}
-	    }
-	}
     });
 }
 
 // index
 if ($('.ui.tags.search').length) {
 	$(document).ready(function() {
-		$('.ui.tags.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/tags?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.tags.search').search({
+			apiSettings: {
+				url: '/admin/api/tags?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminTagsIndex = new Vue({
@@ -677,11 +681,12 @@ if ($('.ui.tags.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/tags/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -701,6 +706,7 @@ if ($('.ui.tags.search').length) {
 					ids: JSON.stringify(_this.items),
 					_token: $('meta[name="csrf-token"]').attr('content')
 				};
+				
 				$.post('/admin/tags/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -712,7 +718,7 @@ if ($('.ui.tags.search').length) {
 				});
 			}
 		}
-	})
+	});
 }
 
 // index
@@ -740,12 +746,13 @@ if ($('table.themes').length) {
 			deleteMany: function() {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
-          var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+					var data = {
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/themes/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -759,12 +766,13 @@ if ($('table.themes').length) {
 			},
 			toggleStatusesMany: function() {
 				var _this = this;
-        var data = {
-          type: 'toggle-statuses',
-          many: true,
-          ids: JSON.stringify(_this.items),
-          _token: $('meta[name="csrf-token"]').attr('content')
-        };
+				var data = {
+					type: 'toggle-statuses',
+					many: true,
+					ids: JSON.stringify(_this.items),
+					_token: $('meta[name="csrf-token"]').attr('content')
+				};
+				
 				$.post('/admin/themes/simple-save', data, function(response) {
 					if (response.status) {
 						$('input[type="checkbox"]:checked').trigger('click');
@@ -776,7 +784,7 @@ if ($('table.themes').length) {
 				});
 			}
 		}
-	})
+	});
 }
 
 var moduleUpdates = [
@@ -800,7 +808,9 @@ _.each(moduleUpdates, function(module) {
             },
             methods: {
                 update: function() {
-                    if (confirm('Are you sure you wish to update these ' + module.slug + '(s)?')) {
+                	var message = 'Are you sure you wish to update these ' + module.slug + '(s)?';
+                	
+                    if (confirm(message)) {
                         var data = {
                             module_ids: this.module_ids,
                             _token: $('meta[name="csrf-token"]').attr('content')
@@ -832,19 +842,17 @@ _.each(moduleUpdates, function(module) {
 // index
 if ($('.ui.users.search').length) {
 	$(document).ready(function() {
-		$('.ui.users.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/users?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'username',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.users.search').search({
+			apiSettings: {
+				url: '/admin/api/users?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'username',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminUsersIndex = new Vue({
@@ -871,11 +879,12 @@ if ($('.ui.users.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/users/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -906,7 +915,7 @@ if ($('.ui.users.search').length) {
 				});
 			}
 		}
-	})
+	});
 }
 
 $(document).ready(function() {
@@ -1015,19 +1024,19 @@ $(document).ready(function() {
 		});
 	}
 
-      $('.activate.popup').popup({
-	      inline: true,
-	      hoverable: true,
-	      lastResort: true,
-	      position: 'right center'
-      });
+	$('.activate.popup').popup({
+		inline: true,
+		hoverable: true,
+		lastResort: true,
+		position: 'right center'
+	});
 
     $('.btn-confirm').on('click', function(e) {
-	   if (confirm('Are you sure you wish to delete?')) {
-		   return true;
-	   } else {
-		   e.preventDefault();
-	   }
+		if (confirm('Are you sure you wish to delete?')) {
+			return true;
+		} else {
+			e.preventDefault();
+		}
     });
 
     if ($('.tagsInput').length) {
@@ -1044,11 +1053,11 @@ $(document).ready(function() {
     }
 
     if ($('.tabs.menu').length) {
-	 			$('.tabs.menu .item').tab();
+	 	$('.tabs.menu .item').tab();
     }
 
     if ($('select.dropdown').length) {
-	    	$('select.dropdown').dropdown();
+	    $('select.dropdown').dropdown();
     }
 
     var dropdowns = $('.ui.dropdown.allowAdditions');
@@ -1083,31 +1092,31 @@ $(document).ready(function() {
 	var plugins_search = $('.ui.search.plugins');
 	if (plugins_search.length) {
 		plugins_search.search({
-		    apiSettings: {
-		      url: 'https://marketplace.adaptcms.com/api/search/plugin?q={query}'
-		    },
-		    fields: {
-		      results : 'items',
-		      title   : 'name',
-		      url     : 'install_url'
-		    },
-		    minCharacters : 3
-		  });
+			apiSettings: {
+				url: 'https://marketplace.adaptcms.com/api/search/plugin?q={query}'
+			},
+			fields: {
+				results : 'items',
+				title   : 'name',
+				url     : 'install_url'
+			},
+			minCharacters : 3
+		});
 	}
 
 	var themes_search = $('.ui.search.themes');
 	if (themes_search.length) {
 		themes_search.search({
-		    apiSettings: {
-		      url: 'https://marketplace.adaptcms.com/api/search/theme?q={query}'
-		    },
-		    fields: {
-		      results : 'items',
-		      title   : 'name',
-		      url     : 'install_url'
-		    },
-		    minCharacters : 3
-		  });
+			apiSettings: {
+				url: 'https://marketplace.adaptcms.com/api/search/theme?q={query}'
+			},
+			fields: {
+				results : 'items',
+				title   : 'name',
+				url     : 'install_url'
+			},
+			minCharacters : 3
+		});
 	}
 
 	var ratings = $('.ui.rating');
@@ -1150,119 +1159,66 @@ $(document).ready(function() {
 
 	var collapsible_items = $('.item.collapsible');
 	if (collapsible_items.length) {
-			// toggle collapsible menu
-			$('.item.collapsible .header').click(function(e) {
-					e.preventDefault();
+		// toggle collapsible menu
+		$('.item.collapsible .header').click(function(e) {
+			e.preventDefault();
 
-					var menu = $(this).parent().find('.menu');
+			var menu = $(this).parent().find('.menu');
 
-					// so it will be active
-					if (menu.hasClass('hidden')) {
-							$(this).find('.icon').removeClass('right').addClass('down');
-					} else {
-							// otherwise, inactive
-							$(this).find('.icon').removeClass('down').addClass('right');
-					}
+			// so it will be active
+			if (menu.hasClass('hidden')) {
+				$(this).find('.icon').removeClass('right').addClass('down');
+			} else {
+				// otherwise, inactive
+				$(this).find('.icon').removeClass('down').addClass('right');
+			}
 
-					menu.toggleClass('hidden');
-			});
+			menu.toggleClass('hidden');
+		});
 
-			// add active classes to menu div's
-			// if on current URL
-			$.each(collapsible_items, function() {
-					if ($(this).find('.menu .item.active').length) {
-							$(this).addClass('active');
-							$(this).find('.header').trigger('click');
-					}
-			});
+		// add active classes to menu div's
+		// if on current URL
+		$.each(collapsible_items, function() {
+			if ($(this).find('.menu .item.active').length) {
+				$(this).addClass('active');
+				$(this).find('.header').trigger('click');
+			}
+		});
 	}
 
 	if ($('.toc.item').length) {
 		$('.ui.sidebar').sidebar('attach events', '.toc.item');
 	}
 
-	$('.pusher.dimmer').click(function() {
-		console.log('clicked dimmer!');
-	});
-
-	// traditional editor
-	var wysiwyg = $('.wysiwyg:not(.code-view)');
+	// wysiwyg editors
+	var wysiwyg = $('.wysiwyg');
 	if (wysiwyg.length) {
-		// set to code view automatically and init
-		wysiwyg.summernote({
-			height: 350
-		});
-
-		// set initial data to wysiwyg
 		$.each(wysiwyg, function() {
-				$(this).summernote('code', $(this).text());
-		});
-
-		// onSubmit, sync wysiwyg/input data
-		$('.ui.form .submit').on('click', function(e) {
-				e.preventDefault();
-
-				$.each(wysiwyg, function(key, val) {
-						$(this).val($(this).summernote('code'));
-				});
-
-				$(this).toggleClass('loading');
-
-				setTimeout(function() {
-						$(this).toggleClass('loading');
-
-						wysiwyg.closest('.ui.form').trigger('submit');
-				}, 500);
-		});
-	}
-
-	// code-enabled editor
-	var wysiwyg = $('.wysiwyg.code-view');
-	if (wysiwyg.length) {
-		// set to code view automatically and init
-		wysiwyg.summernote({
-			height: 350,
-			codemirror: {
-			    theme: 'monokai'
-			},
-			callbacks: {
-					onInit: function() {
-							$('.btn-codeview').trigger('click');
-
-							jQuery('body').animate({
-					      scrollTop: $(this).offset().top
-					    }, 50);
+			if ($(this).hasClass('code-view') && $('.api-call').length) {
+				var textarea = $(this).get(0);
+				var api_url = $('.api-call').attr('data-url');
+				
+				$.get(api_url, function(response) {
+					var editor = CodeMirror.fromTextArea(textarea, {
+						mode: 'scheme',
+						lineNumbers: true
+					});
+					
+					try {
+						editor.getDoc().setValue(response.results[0].body);
+					} catch(error) {
+						// do nothing, no value present
 					}
-  			}
-		});
-
-		// set initial data to wysiwyg
-		$.each(wysiwyg, function() {
-				$(this).summernote('code', $(this).text());
-		});
-
-		// onSubmit, sync wysiwyg/input data
-		$('.ui.form .submit').on('click', function(e) {
-				e.preventDefault();
-
-				$.each(wysiwyg, function(key, val) {
-						$(this).val($(this).summernote('code'));
-				});
-
-				$(this).toggleClass('loading');
-
-				setTimeout(function() {
-						$(this).toggleClass('loading');
-
-						wysiwyg.closest('.ui.form').trigger('submit');
-				}, 500);
+				}, 'json');
+			} else {
+				CKEDITOR.replace($(this).attr('id'));
+			}
 		});
 	}
 });
 
 // Source: https://gist.github.com/mathewbyrne/1280286
-function slugify(text)
-{
+function slugify(text) {
   return text.toString().toLowerCase()
     .replace(/\s+/g, '-')           // Replace spaces with -
     .replace(/[^\w\-]+/g, '')       // Remove all non-word chars

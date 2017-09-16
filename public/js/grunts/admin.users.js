@@ -1,19 +1,17 @@
 // index
 if ($('.ui.users.search').length) {
 	$(document).ready(function() {
-		$('.ui.users.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/users?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'username',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.users.search').search({
+			apiSettings: {
+				url: '/admin/api/users?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'username',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminUsersIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.users.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/users/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -75,5 +74,5 @@ if ($('.ui.users.search').length) {
 				});
 			}
 		}
-	})
+	});
 }

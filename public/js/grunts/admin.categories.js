@@ -1,19 +1,17 @@
 // index
 if ($('.ui.categories.search').length) {
 	$(document).ready(function() {
-		$('.ui.categories.search')
-	  .search({
-	    apiSettings: {
-	      url: '/admin/api/categories?keyword={query}'
-	    },
-	    fields: {
-	      results : 'results',
-	      title   : 'name',
-	      url     : 'url'
-	    },
-	    minCharacters : 3
-	  })
-	;
+		$('.ui.categories.search').search({
+			apiSettings: {
+				url: '/admin/api/categories?keyword={query}'
+			},
+			fields: {
+				results : 'results',
+				title   : 'name',
+				url     : 'url'
+			},
+			minCharacters : 3
+		});
 	});
 
 	var AdminCategoriesIndex = new Vue({
@@ -40,11 +38,12 @@ if ($('.ui.categories.search').length) {
 				if (confirm('Are you sure you wish to delete?')) {
 					var _this = this;
 					var data = {
-            type: 'delete',
-            many: true,
-            ids: JSON.stringify(_this.items),
-            _token: $('meta[name="csrf-token"]').attr('content')
-          };
+						type: 'delete',
+						many: true,
+						ids: JSON.stringify(_this.items),
+						_token: $('meta[name="csrf-token"]').attr('content')
+					};
+					
 					$.post('/admin/categories/simple-save', data, function(response) {
 						if (response.status) {
 							_this.items = [];
@@ -57,28 +56,28 @@ if ($('.ui.categories.search').length) {
 				}
 			}
 		}
-	})
+	});
 }
 
 if ($("ol.sortable.categories").length) {
 	$("ol.sortable.categories").sortable({
-		  onDrop: function($item, container, _super, event) {
-			  $item.removeClass(container.group.options.draggedClass).removeAttr("style");
-			  $("body").removeClass(container.group.options.bodyClass);
+		onDrop: function($item, container, _super, event) {
+			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
+			$("body").removeClass(container.group.options.bodyClass);
 
-			  var items = [];
-			  $.each($('ol.sortable li'), function() {
-			  		items.push($(this).attr('data-id'));
-			  });
+			var items = [];
+			$.each($('ol.sortable li'), function() {
+				items.push($(this).attr('data-id'));
+			});
 
-				var data = {
-						items: JSON.stringify(items),
-						_token: $('meta[name="csrf-token"]').attr('content')
-				};
+			var data = {
+				items: JSON.stringify(items),
+				_token: $('meta[name="csrf-token"]').attr('content')
+			};
 
-			  $.post('/admin/categories/order', data, function(response) {
-				  	toastr.success('Order has been saved.');
-			  	}, 'json');
+			$.post('/admin/categories/order', data, function(response) {
+				toastr.success('Order has been saved.');
+			}, 'json');
 		}
-	  });
+	});
 }
