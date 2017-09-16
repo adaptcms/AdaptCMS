@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Posts\Http\Controllers;
+namespace App\Modules\Posts\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -16,7 +16,7 @@ use Auth;
 use Storage;
 use Validator;
 
-class FieldsEngineController extends Controller
+class FieldsController extends Controller
 {
     public function index(Request $request)
     {
@@ -36,7 +36,7 @@ class FieldsEngineController extends Controller
 
         $categories = Category::all();
 
-        return view('posts::FieldsEngine/index', [
+        return view('posts::Admin/Fields/index', [
         	'items' => $items,
         	'field_types' => $model->field_types,
         	'categories' => $categories
@@ -67,7 +67,7 @@ class FieldsEngineController extends Controller
         $files = File::getFiles();
         $images = File::getImages();
 
-        return view('posts::FieldsEngine/add', [
+        return view('posts::Admin/Fields/add', [
         	'model' => $model,
         	'field_types' => $model->field_types,
         	'categories' => $model->getCategories(),
@@ -108,7 +108,7 @@ class FieldsEngineController extends Controller
         $files = File::getFiles();
         $images = File::getImages();
 
-        return view('posts::FieldsEngine/edit', [
+        return view('posts::Admin/Fields/edit', [
         	'model' => $model,
         	'errors' => $errors,
         	'field_types' => $model->field_types,
@@ -145,7 +145,7 @@ class FieldsEngineController extends Controller
 	        	]);
         }
 
-        return view('posts::FieldsEngine/order', [ 'items' => $items ]);
+        return view('posts::Admin/Fields/order', [ 'items' => $items ]);
     }
 
 	public function simpleSave(Request $request)

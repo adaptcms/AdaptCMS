@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Adaptbb\Http\Controllers;
+namespace App\Modules\Adaptbb\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Modules\Adaptbb\Models\Forum;
 use App\Modules\Adaptbb\Models\ForumCategory;
 
-class ForumsAdminController extends Controller
+class ForumsController extends Controller
 {
     public $categories = [];
 
@@ -25,7 +25,7 @@ class ForumsAdminController extends Controller
 
         $categories = $this->categories;
 
-        return view('adaptbb::ForumsAdmin/index', compact('items', 'categories'));
+        return view('adaptbb::Admin/Forums/index', compact('items', 'categories'));
     }
 
     public function add(Request $request)
@@ -52,7 +52,7 @@ class ForumsAdminController extends Controller
 
         $categories = $this->categories;
 
-        return view('adaptbb::ForumsAdmin/add', compact('item', 'categories'));
+        return view('adaptbb::Admin/Forums/add', compact('item', 'categories'));
     }
 
     public function edit(Request $request, $id)
@@ -81,7 +81,7 @@ class ForumsAdminController extends Controller
 
         $categories = $this->categories;
 
-        return view('adaptbb::ForumsAdmin/edit', compact('item', 'categories'));
+        return view('adaptbb::Admin/Forums/edit', compact('item', 'categories'));
     }
 
     public function delete(Request $request, $id)
@@ -121,6 +121,6 @@ class ForumsAdminController extends Controller
 
         $categories = $this->categories;
 
-        return view('adaptbb::ForumsAdmin/order', compact('items', 'categories'));
+        return view('adaptbb::Admin/Forums/order', compact('items', 'categories'));
     }
 }

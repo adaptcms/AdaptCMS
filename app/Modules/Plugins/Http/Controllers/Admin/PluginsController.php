@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Plugins\Http\Controllers;
+namespace App\Modules\Plugins\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -13,7 +13,7 @@ use Storage;
 use Module;
 use Cache;
 
-class PluginsEngineController extends Controller
+class PluginsController extends Controller
 {
     public function index()
     {
@@ -22,7 +22,7 @@ class PluginsEngineController extends Controller
 
         $core_modules = Plugin::getCoreModules();
 
-	    return view('plugins::PluginsEngine/index', compact('items', 'core_modules'));
+	    return view('plugins::Admin/Plugins/index', compact('items', 'core_modules'));
     }
 
     public function install($slug)

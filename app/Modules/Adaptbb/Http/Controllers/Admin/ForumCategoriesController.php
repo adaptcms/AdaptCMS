@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Adaptbb\Http\Controllers;
+namespace App\Modules\Adaptbb\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -9,13 +9,13 @@ use App\Http\Controllers\Controller;
 
 use App\Modules\Adaptbb\Models\ForumCategory;
 
-class ForumCategoriesAdminController extends Controller
+class ForumCategoriesController extends Controller
 {
     public function index()
     {
         $items = ForumCategory::orderBy('ord', 'ASC')->paginate(15);
 
-        return view('adaptbb::ForumCategoriesAdmin/index', compact('items'));
+        return view('adaptbb::Admin/ForumCategories/index', compact('items'));
     }
 
     public function add(Request $request)
@@ -38,7 +38,7 @@ class ForumCategoriesAdminController extends Controller
               ->with('success', 'Category has been saved');
         }
 
-        return view('adaptbb::ForumCategoriesAdmin/add', compact('item'));
+        return view('adaptbb::Admin/ForumCategories/add', compact('item'));
     }
 
     public function edit(Request $request, $id)
@@ -64,7 +64,7 @@ class ForumCategoriesAdminController extends Controller
               ->with('success', 'Category has been saved');
         }
 
-        return view('adaptbb::ForumCategoriesAdmin/edit', compact('item'));
+        return view('adaptbb::Admin/ForumCategories/edit', compact('item'));
     }
 
     public function delete(Request $request, $id)
@@ -102,6 +102,6 @@ class ForumCategoriesAdminController extends Controller
           ]);
         }
 
-        return view('adaptbb::ForumCategoriesAdmin/order', [ 'items' => $items ]);
+        return view('adaptbb::Admin/ForumCategories/order', [ 'items' => $items ]);
     }
 }

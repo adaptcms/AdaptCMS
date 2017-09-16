@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Posts\Http\Controllers;
+namespace App\Modules\Posts\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -21,7 +21,7 @@ use App\Modules\Files\Models\File;
 use Auth;
 use Validator;
 
-class PostsEngineController extends Controller
+class PostsController extends Controller
 {
     public function index(Request $request)
     {
@@ -39,7 +39,7 @@ class PostsEngineController extends Controller
 
         $categories = Category::all();
 
-        return view('posts::PostsEngine/index', [
+        return view('posts::Admin/Posts/index', [
             'items' => $items,
             'categories' => $categories
         ]);
@@ -71,7 +71,7 @@ class PostsEngineController extends Controller
         $images = $file->getImages();
         $files = $file->getFiles();
 
-        return view('posts::PostsEngine/add', compact(
+        return view('posts::Admin/Posts/add', compact(
             'model',
              'fields',
              'posts',
@@ -116,7 +116,7 @@ class PostsEngineController extends Controller
         $images = $file->getImages();
         $files = $file->getFiles();
 
-        return view('posts::PostsEngine/edit', compact(
+        return view('posts::Admin/Posts/edit', compact(
             'model',
             'fields',
             'posts',

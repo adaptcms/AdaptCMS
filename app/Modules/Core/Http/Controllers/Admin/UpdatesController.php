@@ -148,11 +148,11 @@ class UpdatesController extends Controller
             abort(404);
         }
 
-                // set slug
-                $slug = ucfirst($module['slug']);
+        // set slug
+        $slug = ucfirst($module['slug']);
 
-                // download the latest version
-                $res = $client->request('GET', $module['latest_version']['download_url'], [ 'http_errors' => false ]);
+        // download the latest version
+        $res = $client->request('GET', $module['latest_version']['download_url'], [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
             $filename = $module['slug'] . '.zip';
@@ -162,32 +162,32 @@ class UpdatesController extends Controller
             abort(404);
         }
 
-                // make the folder
-                if (!Storage::disk('plugins')->exists($slug)) {
-                    Storage::disk('plugins')->makeDirectory($slug);
-                }
+        // make the folder
+        if (!Storage::disk('plugins')->exists($slug)) {
+            Storage::disk('plugins')->makeDirectory($slug);
+        }
 
-                // then attempt to extract contents
-                $path = base_path() . '/app/Modules/' . $filename;
-        $zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
+        // then attempt to extract contents
+        $path = base_path() . '/app/Modules/' . $filename;
+		$zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
 
-        Zipper::make($path)->folder($zip_folder)->extractTo(base_path() . '/app/Modules/');
+		Zipper::make($path)->folder($zip_folder)->extractTo(base_path() . '/app/Modules/');
 
-                // delete the ZIP
-                if (Storage::disk('plugins')->exists($filename)) {
-                    Storage::disk('plugins')->delete($filename);
-                }
+        // delete the ZIP
+        if (Storage::disk('plugins')->exists($filename)) {
+            Storage::disk('plugins')->delete($filename);
+        }
 
-                // once we've gotten the files all setup
-                // lets run the install event, if it exists
-                $this->fireEvent($slug, $slug . 'Install');
+        // once we've gotten the files all setup
+        // lets run the install event, if it exists
+        $this->fireEvent($slug, $slug . 'Install');
 
-                // finally, enable plugin
-                Plugin::enable($slug);
+        // finally, enable plugin
+        Plugin::enable($slug);
 
 
-                // we'll return to the plugins index on success
-                return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been installed!');
+        // we'll return to the plugins index on success
+        return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been installed!');
     }
 
     public function updateTheme($id)
@@ -235,11 +235,11 @@ class UpdatesController extends Controller
     public function upgrade($type)
     {
         // get the current version data
-                if (!Cache::has('cms_current_version')) {
-                    Cache::forget('core_cms_updates');
+        if (!Cache::has('cms_current_version')) {
+            Cache::forget('core_cms_updates');
 
-                    $this->checkForCmsUpdates();
-                }
+            $this->checkForCmsUpdates();
+        }
 
         if ($type == 'normal') {
             $upgrade_version = json_decode(Cache::get('cms_latest_version'), true);
@@ -247,8 +247,8 @@ class UpdatesController extends Controller
             $upgrade_version = json_decode(Cache::get('cms_current_version'), true);
         }
 
-                // get the contents of the ZIP file
-                $client = new Client();
+        // get the contents of the ZIP file
+        $client = new Client();
 
         $res = $client->request('GET', $upgrade_version['download_url'], [ 'http_errors' => false ]);
 
@@ -261,19 +261,19 @@ class UpdatesController extends Controller
 
         $zip_filename = $upgrade_version['branch_slug'] . '.zip';
 
-                // create the ZIP locally
-                Storage::disk('local')->put($zip_filename, $zip_contents, 'public');
+        // create the ZIP locally
+        Storage::disk('local')->put($zip_filename, $zip_contents, 'public');
 
-                // open the ZIP file
-                $zipPath = storage_path('app') . '/' . $zip_filename;
+        // open the ZIP file
+        $zipPath = storage_path('app') . '/' . $zip_filename;
 
-                // extract zip files to storage folder
-                Zipper::make($zipPath)->extractTo(storage_path('app') . '/upgrade');
+        // extract zip files to storage folder
+        Zipper::make($zipPath)->extractTo(storage_path('app') . '/upgrade');
 
-        $folder_slug = 'charliepage7-adaptcms-' . substr($upgrade_version['commit_hash'], 0, 12);
+		$folder_slug = 'charliepage7-adaptcms-' . substr($upgrade_version['commit_hash'], 0, 12);
 
-                // first, let's delete any previous upgrade
-                $commits = Storage::disk('local')->directories('upgrade');
+        // first, let's delete any previous upgrade
+        $commits = Storage::disk('local')->directories('upgrade');
 
         foreach ($commits as $commit) {
             if ($commit != 'upgrade/' . $folder_slug) {
@@ -281,19 +281,19 @@ class UpdatesController extends Controller
             }
         }
 
-                // then get an array of files to process, from the ZIP
-                $files = Storage::disk('local')->allFiles('upgrade/' . $folder_slug);
+        // then get an array of files to process, from the ZIP
+        $files = Storage::disk('local')->allFiles('upgrade/' . $folder_slug);
         foreach ($files as $file) {
             $ignore_file = false;
 
-                        // TEMPORARY. going away before final 4.0 release
-                        // if filename ends with x variable, file gets skipped
-                        $endsWithArray = [
-                                '~',
-                                '.orig',
-                                '#',
-                                'public/files'
-                        ];
+            // TEMPORARY. going away before final 4.0 release
+            // if filename ends with x variable, file gets skipped
+            $endsWithArray = [
+                    '~',
+                    '.orig',
+                    '#',
+                    'public/files'
+            ];
 
             foreach ($endsWithArray as $endsWith) {
                 if (ends_with($file, $endsWith)) {
@@ -303,17 +303,17 @@ class UpdatesController extends Controller
                 }
             }
 
-                        // TEMPORARY. probably going away before final 4.0 release
-                        $ignorePaths = [
-                                '.env',
-                                '.gitignore',
-                                'tests/',
-                                'public/bower_components/',
-                                'config/database.php',
-                                'themes/',
-                                'Database/Seeds/',
-                                'app/Modules/Core/Http/Controllers/AdminUpdatesController.php'
-                        ];
+            // TEMPORARY. probably going away before final 4.0 release
+            $ignorePaths = [
+                    '.env',
+                    '.gitignore',
+                    'tests/',
+                    'public/bower_components/',
+                    'config/database.php',
+                    'themes/',
+                    'Database/Seeds/',
+                    'app/Modules/Core/Http/Controllers/AdminUpdatesController.php'
+            ];
 
             foreach ($ignorePaths as $ignorePath) {
                 if (strstr($file, $ignorePath)) {
@@ -323,78 +323,78 @@ class UpdatesController extends Controller
                 }
             }
 
-                        // can't do link file
-                        if (is_link($file)) {
-                            $ignore_file = true;
-                        }
+            // can't do link file
+            if (is_link($file)) {
+                $ignore_file = true;
+            }
 
-                        // if not bleeding edge, let's not sync all the modules
-                        if ($type == 'normal' && !empty($upgrade_version['core_modules'])) {
-                            foreach ($upgrade_version['core_modules'] as $module) {
-                                if (strstr($file, 'app/Modules/' . $module)) {
-                                    $ignore_file = true;
+            // if not bleeding edge, let's not sync all the modules
+            if ($type == 'normal' && !empty($upgrade_version['core_modules'])) {
+                foreach ($upgrade_version['core_modules'] as $module) {
+                    if (strstr($file, 'app/Modules/' . $module)) {
+                        $ignore_file = true;
 
-                                    break;
-                                }
-                            }
-                        }
+                        break;
+                    }
+                }
+            }
 
             if ($ignore_file) {
                 continue;
             }
 
-                        // so we're good to go on!
-                        // let's extract the relative path
-                        $relative_path = str_replace('upgrade/' . $folder_slug, '', $file);
+            // so we're good to go on!
+            // let's extract the relative path
+            $relative_path = str_replace('upgrade/' . $folder_slug, '', $file);
 
-                        // if the file doesn't exist locally,
-                        // write it
-                        if (!Storage::disk('base')->exists($relative_path)) {
-                            $contents = Storage::disk('local')->get($file);
+            // if the file doesn't exist locally,
+            // write it
+            if (!Storage::disk('base')->exists($relative_path)) {
+                $contents = Storage::disk('local')->get($file);
 
-                            Storage::disk('base')->put($relative_path, $contents, 'public');
-                        } else {
-                            // time to match file sizes
-                                $upgrade_size = Storage::disk('local')->size($file);
-                            $current_size = Storage::disk('base')->size($relative_path);
+                Storage::disk('base')->put($relative_path, $contents, 'public');
+            } else {
+                // time to match file sizes
+                    $upgrade_size = Storage::disk('local')->size($file);
+                $current_size = Storage::disk('base')->size($relative_path);
 
-                                // if any different, we update
-                                if ($upgrade_size != $current_size) {
-                                    $contents = Storage::disk('local')->get($file);
+                    // if any different, we update
+                    if ($upgrade_size != $current_size) {
+                        $contents = Storage::disk('local')->get($file);
 
-                                    Storage::disk('base')->put($relative_path, $contents, 'public');
-                                }
-                        }
+                        Storage::disk('base')->put($relative_path, $contents, 'public');
+                    }
+            }
         }
 
-                // now that we're done, let's cleanup
-                Storage::disk('local')->delete($zip_filename);
+        // now that we're done, let's cleanup
+        Storage::disk('local')->delete($zip_filename);
 
-                // and lastly, set the latest commit hash and commit version data
-                $this->setCommitHash($upgrade_version['commit_hash']);
+        // and lastly, set the latest commit hash and commit version data
+        $this->setCommitHash($upgrade_version['commit_hash']);
         Cache::forever('cms_current_version', json_encode($upgrade_version));
 
         Cache::forget('cms_latest_version');
         Cache::forget('cms_latest_version_name');
 
-                // clear the cache
-                Core::clearCache();
+        // clear the cache
+        Core::clearCache();
 
-                // reset bleeding edge
-                if ($type == 'bleeding_edge') {
-                    Cache::forever('bleedinge_edge_update', 0);
-                }
+        // reset bleeding edge
+        if ($type == 'bleeding_edge') {
+            Cache::forever('bleedinge_edge_update', 0);
+        }
 
         Cache::forever('cms_updates', 0);
 
         $current_version = $upgrade_version;
 
-                // run artisan
-                try {
-                    $status = Artisan::call('vendor:publish');
-                } catch (\Exception $e) {
-                    abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
-                }
+        // run artisan
+        try {
+            $status = Artisan::call('vendor:publish');
+        } catch (\Exception $e) {
+            abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
+        }
 
         try {
             $status = Artisan::call('migrate');

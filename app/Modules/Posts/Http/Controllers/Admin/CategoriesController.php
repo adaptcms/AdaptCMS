@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Posts\Http\Controllers;
+namespace App\Modules\Posts\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -13,13 +13,13 @@ use App\Modules\Posts\Models\Category;
 use Auth;
 use Validator;
 
-class CategoriesEngineController extends Controller
+class CategoriesController extends Controller
 {
     public function index()
     {
         $items = Category::orderBy('ord', 'ASC')->paginate(15);
 
-        return view('posts::CategoriesEngine/index', [  'items' => $items ]);
+        return view('posts::Admin/Categories/index', [  'items' => $items ]);
     }
 
     public function add(Request $request)
@@ -40,7 +40,7 @@ class CategoriesEngineController extends Controller
             return redirect()->route('admin.categories.index')->with('success', 'Category has been saved');
         }
 
-        return view('posts::CategoriesEngine/add', [ 'model' => $model ]);
+        return view('posts::Admin/Categories/add', [ 'model' => $model ]);
     }
 
     public function edit(Request $request, $id)
@@ -69,7 +69,7 @@ class CategoriesEngineController extends Controller
 	        }
         }
 
-        return view('posts::CategoriesEngine/edit', [ 'model' => $model, 'errors' => $errors ]);
+        return view('posts::Admin/Categories/edit', [ 'model' => $model, 'errors' => $errors ]);
     }
 
     public function delete($id)
@@ -99,7 +99,7 @@ class CategoriesEngineController extends Controller
 	        	]);
         }
 
-        return view('posts::CategoriesEngine/order', [ 'items' => $items ]);
+        return view('posts::Admin/Categories/order', [ 'items' => $items ]);
     }
 
     public function simpleSave(Request $request)

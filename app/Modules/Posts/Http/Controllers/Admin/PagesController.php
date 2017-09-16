@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Posts\Http\Controllers;
+namespace App\Modules\Posts\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -14,11 +14,11 @@ use Storage;
 use Auth;
 use Validator;
 
-class PagesEngineController extends Controller
+class PagesController extends Controller
 {
 	public function dashboard()
 	{
-		return view('posts::PagesEngine/dashboard');
+		return view('posts::Admin/Pages/dashboard');
 	}
 
     public function index(Request $request)
@@ -31,7 +31,7 @@ class PagesEngineController extends Controller
 
         $items = $items->paginate(15);
 
-        return view('posts::PagesEngine/index', [  'items' => $items ]);
+        return view('posts::Admin/Pages/index', [  'items' => $items ]);
     }
 
     public function add(Request $request)
@@ -54,7 +54,7 @@ class PagesEngineController extends Controller
             return redirect()->route('admin.pages.index')->with('success', 'Page has been saved');
         }
 
-        return view('posts::PagesEngine/add', [ 'model' => $model ]);
+        return view('posts::Admin/Pages/add', [ 'model' => $model ]);
     }
 
     public function edit(Request $request, $id)
@@ -89,7 +89,7 @@ class PagesEngineController extends Controller
 
 		$model->body = Storage::disk('themes')->get('default/views/pages/' . $model->slug . '.blade.php');
 
-        return view('posts::PagesEngine/edit', [ 'model' => $model, 'errors' => $errors ]);
+        return view('posts::Admin/Pages/edit', [ 'model' => $model, 'errors' => $errors ]);
     }
 
     public function delete($id)
@@ -130,7 +130,7 @@ class PagesEngineController extends Controller
 
 				$items = Page::orderBy('ord', 'ASC')->get();
 
-        return view('posts::PagesEngine/order', [ 'items' => $items ]);
+        return view('posts::Admin/Pages/order', [ 'items' => $items ]);
     }
 
     public function simpleSave(Request $request)

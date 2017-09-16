@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Posts\Http\Controllers;
+namespace App\Modules\Posts\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -13,13 +13,13 @@ use App\Modules\Posts\Models\Tag;
 use Auth;
 use Validator;
 
-class TagsEngineController extends Controller
+class TagsController extends Controller
 {
     public function index()
     {
         $items = Tag::orderBy('name', 'ASC')->paginate(15);
         
-        return view('posts::TagsEngine/index', [  'items' => $items ]);
+        return view('posts::Admin/Tags/index', [  'items' => $items ]);
     }
 
     public function add(Request $request)
@@ -40,7 +40,7 @@ class TagsEngineController extends Controller
             return redirect()->route('admin.tags.index')->with('success', 'Tag has been saved');
         }
 
-        return view('posts::TagsEngine/add', [ 'model' => $model ]);
+        return view('posts::Admin/Tags/add', [ 'model' => $model ]);
     }
 
     public function edit(Request $request, $id)
@@ -69,7 +69,7 @@ class TagsEngineController extends Controller
 	        }
         }
 
-        return view('posts::TagsEngine/edit', [ 'model' => $model, 'errors' => $errors ]);
+        return view('posts::Admin/Tags/edit', [ 'model' => $model, 'errors' => $errors ]);
     }
 
     public function delete($id)

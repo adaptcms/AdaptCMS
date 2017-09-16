@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Themes\Http\Controllers;
+namespace App\Modules\Themes\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -16,7 +16,7 @@ use Storage;
 use Auth;
 use Cache;
 
-class ThemesEngineController extends Controller
+class ThemesController extends Controller
 {
     public function index()
     {
@@ -43,7 +43,7 @@ class ThemesEngineController extends Controller
 	    	}
         }
 
-        return view('themes::ThemesEngine/index', [  'items' => $items ]);
+        return view('themes::Admin/Themes/index', [  'items' => $items ]);
     }
 
     public function add(Request $request)
@@ -64,7 +64,7 @@ class ThemesEngineController extends Controller
             return redirect()->route('admin.themes.index')->with('success', 'Theme has been saved');
         }
 
-        return view('themes::ThemesEngine/add', [ 'model' => $model ]);
+        return view('themes::Admin/Themes/add', [ 'model' => $model ]);
     }
 
     public function edit(Request $request, $id)
@@ -93,7 +93,7 @@ class ThemesEngineController extends Controller
             return redirect()->route('admin.themes.index')->with('success', 'Theme has been saved');
         }
 
-        return view('themes::ThemesEngine/edit', [ 'model' => $model, 'errors' => $errors ]);
+        return view('themes::Admin/Themes/edit', [ 'model' => $model, 'errors' => $errors ]);
     }
 
     public function edit_templates($id)
@@ -101,7 +101,7 @@ class ThemesEngineController extends Controller
 	    $theme = Theme::find($id);
 	    $files = Storage::disk('themes')->allFiles($theme->slug);
 
-	    return view('themes::ThemesEngine/edit_templates', [ 'theme' => $theme, 'files' => $files ]);
+	    return view('themes::Admin/Themes/edit_templates', [ 'theme' => $theme, 'files' => $files ]);
     }
 
     public function edit_template(Request $request, $id, $path)
@@ -123,7 +123,7 @@ class ThemesEngineController extends Controller
 		    }
 	    }
 
-	    return view('themes::ThemesEngine/edit_template', [
+	    return view('themes::Admin/Themes/edit_template', [
 	    	'theme' => $theme,
 	    	'file' => $file,
 	    	'path' => $path
@@ -205,6 +205,6 @@ class ThemesEngineController extends Controller
             ]);
         }
 
-        return view('themes::ThemesEngine/build', [ 'ignore_vuejs' => true ]);
+        return view('themes::Admin/Themes/build', [ 'ignore_vuejs' => true ]);
     }
 }

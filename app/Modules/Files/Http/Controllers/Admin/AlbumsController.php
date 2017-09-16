@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Files\Http\Controllers;
+namespace App\Modules\Files\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -13,13 +13,13 @@ use App\Modules\Files\Models\Album;
 use Auth;
 use Validator;
 
-class AlbumsEngineController extends Controller
+class AlbumsController extends Controller
 {
     public function index()
     {
         $items = Album::orderBy('created_at', 'DESC')->paginate(15);
 
-        return view('files::AlbumsEngine/index', [  'items' => $items ]);
+        return view('files::Admin/Albums/index', [  'items' => $items ]);
     }
 
     public function add(Request $request)
@@ -40,7 +40,7 @@ class AlbumsEngineController extends Controller
             return redirect()->route('admin.albums.index')->with('success', 'Album has been saved');
         }
 
-        return view('files::AlbumsEngine/add', [ 'model' => $model ]);
+        return view('files::Admin/Albums/add', [ 'model' => $model ]);
     }
 
     public function edit(Request $request, $id)
@@ -69,7 +69,7 @@ class AlbumsEngineController extends Controller
 	        }
         }
 
-        return view('files::AlbumsEngine/edit', [ 'model' => $model, 'errors' => $errors ]);
+        return view('files::Admin/Albums/edit', [ 'model' => $model, 'errors' => $errors ]);
     }
 
     public function delete($id)

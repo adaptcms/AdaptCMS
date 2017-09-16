@@ -21,56 +21,56 @@ Route::get('/tag/{slug}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsC
 
 Route::get('/category/{slug}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesController@view', 'as' => 'categories.view' ]);
 
-Route::group(['prefix' => 'admin', 'middleware' => 'role:admin'], function () {
-	Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@dashboard', 'as' => 'admin.dashboard' ]);
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin'], function () {
+	Route::get('/', [ 'uses' => 'PagesController@dashboard', 'as' => 'admin.dashboard' ]);
 
 	// pages
     Route::group([ 'prefix' => 'pages' ], function() {
-        Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@index', 'as' => 'admin.pages.index' ]);
-        Route::any('/add', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@add', 'as' => 'admin.pages.add' ]);
-        Route::any('/edit/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@edit', 'as' => 'admin.pages.edit' ]);
-        Route::get('/delete/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@delete', 'as' => 'admin.pages.delete' ]);
-        Route::any('/order', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@order', 'as' => 'admin.pages.order' ]);
-        Route::post('/simple-save', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PagesEngineController@simpleSave', 'as' => 'admin.pages.simple_save' ]);
+        Route::get('/', [ 'uses' => 'PagesController@index', 'as' => 'admin.pages.index' ]);
+        Route::any('/add', [ 'uses' => 'PagesController@add', 'as' => 'admin.pages.add' ]);
+        Route::any('/edit/{id}', [ 'uses' => 'PagesController@edit', 'as' => 'admin.pages.edit' ]);
+        Route::get('/delete/{id}', [ 'uses' => 'PagesController@delete', 'as' => 'admin.pages.delete' ]);
+        Route::any('/order', [ 'uses' => 'PagesController@order', 'as' => 'admin.pages.order' ]);
+        Route::post('/simple-save', [ 'uses' => 'PagesController@simpleSave', 'as' => 'admin.pages.simple_save' ]);
     });
 
     // tags
     Route::group([ 'prefix' => 'tags' ], function() {
-        Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsEngineController@index', 'as' => 'admin.tags.index' ]);
-        Route::any('/add', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsEngineController@add', 'as' => 'admin.tags.add' ]);
-        Route::any('/edit/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsEngineController@edit', 'as' => 'admin.tags.edit' ]);
-        Route::get('/delete/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsEngineController@delete', 'as' => 'admin.tags.delete' ]);
-        Route::post('/simple-save', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsEngineController@simpleSave', 'as' => 'admin.tags.simple_save' ]);
+        Route::get('/', [ 'uses' => 'TagsController@index', 'as' => 'admin.tags.index' ]);
+        Route::any('/add', [ 'uses' => 'TagsController@add', 'as' => 'admin.tags.add' ]);
+        Route::any('/edit/{id}', [ 'uses' => 'TagsController@edit', 'as' => 'admin.tags.edit' ]);
+        Route::get('/delete/{id}', [ 'uses' => 'TagsController@delete', 'as' => 'admin.tags.delete' ]);
+        Route::post('/simple-save', [ 'uses' => 'TagsController@simpleSave', 'as' => 'admin.tags.simple_save' ]);
     });
 
     // fields
     Route::group([ 'prefix' => 'fields' ], function() {
-	    Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\FieldsEngineController@index', 'as' => 'admin.fields.index' ]);
-	    Route::any('/add', [ 'uses' => '\App\Modules\Posts\Http\Controllers\FieldsEngineController@add', 'as' => 'admin.fields.add' ]);
-	    Route::any('/edit/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\FieldsEngineController@edit', 'as' => 'admin.fields.edit' ]);
-	    Route::get('/delete/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\FieldsEngineController@delete', 'as' => 'admin.fields.delete' ]);
-		Route::any('/order', [ 'uses' => '\App\Modules\Posts\Http\Controllers\FieldsEngineController@order', 'as' => 'admin.fields.order' ]);
-		Route::post('/simple-save', [ 'uses' => '\App\Modules\Posts\Http\Controllers\FieldsEngineController@simpleSave', 'as' => 'admin.fields.simple_save' ]);
+	    Route::get('/', [ 'uses' => 'FieldsController@index', 'as' => 'admin.fields.index' ]);
+	    Route::any('/add', [ 'uses' => 'FieldsController@add', 'as' => 'admin.fields.add' ]);
+	    Route::any('/edit/{id}', [ 'uses' => 'FieldsController@edit', 'as' => 'admin.fields.edit' ]);
+	    Route::get('/delete/{id}', [ 'uses' => 'FieldsController@delete', 'as' => 'admin.fields.delete' ]);
+		Route::any('/order', [ 'uses' => 'FieldsController@order', 'as' => 'admin.fields.order' ]);
+		Route::post('/simple-save', [ 'uses' => 'FieldsController@simpleSave', 'as' => 'admin.fields.simple_save' ]);
     });
 
     // posts
     Route::group([ 'prefix' => 'posts' ], function() {
-        Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsEngineController@index', 'as' => 'admin.posts.index' ]);
-        Route::any('/add/{category_id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsEngineController@add', 'as' => 'admin.posts.add' ]);
-        Route::any('/edit/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsEngineController@edit', 'as' => 'admin.posts.edit' ]);
-        Route::get('/delete/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsEngineController@delete', 'as' => 'admin.posts.delete' ]);
-        Route::get('/status/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsEngineController@status', 'as' => 'admin.posts.status' ]);
-        Route::get('/restore/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsEngineController@restore', 'as' => 'admin.posts.restore' ]);
-        Route::post('/simple-save', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsEngineController@simpleSave', 'as' => 'admin.posts.simple_save' ]);
+        Route::get('/', [ 'uses' => 'PostsController@index', 'as' => 'admin.posts.index' ]);
+        Route::any('/add/{category_id}', [ 'uses' => 'PostsController@add', 'as' => 'admin.posts.add' ]);
+        Route::any('/edit/{id}', [ 'uses' => 'PostsController@edit', 'as' => 'admin.posts.edit' ]);
+        Route::get('/delete/{id}', [ 'uses' => 'PostsController@delete', 'as' => 'admin.posts.delete' ]);
+        Route::get('/status/{id}', [ 'uses' => 'PostsController@status', 'as' => 'admin.posts.status' ]);
+        Route::get('/restore/{id}', [ 'uses' => 'PostsController@restore', 'as' => 'admin.posts.restore' ]);
+        Route::post('/simple-save', [ 'uses' => 'PostsController@simpleSave', 'as' => 'admin.posts.simple_save' ]);
     });
 
     // categories
     Route::group([ 'prefix' => 'categories' ], function() {
-	    Route::get('/', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesEngineController@index', 'as' => 'admin.categories.index' ]);
-	    Route::any('/add', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesEngineController@add', 'as' => 'admin.categories.add' ]);
-	    Route::any('/edit/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesEngineController@edit', 'as' => 'admin.categories.edit' ]);
-	    Route::get('/delete/{id}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesEngineController@delete', 'as' => 'admin.categories.delete' ]);
-	    Route::any('/order', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesEngineController@order', 'as' => 'admin.categories.order' ]);
-	    Route::post('/simple-save', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesEngineController@simpleSave', 'as' => 'admin.categories.simple_save' ]);
+	    Route::get('/', [ 'uses' => 'CategoriesController@index', 'as' => 'admin.categories.index' ]);
+	    Route::any('/add', [ 'uses' => 'CategoriesController@add', 'as' => 'admin.categories.add' ]);
+	    Route::any('/edit/{id}', [ 'uses' => 'CategoriesController@edit', 'as' => 'admin.categories.edit' ]);
+	    Route::get('/delete/{id}', [ 'uses' => 'CategoriesController@delete', 'as' => 'admin.categories.delete' ]);
+	    Route::any('/order', [ 'uses' => 'CategoriesController@order', 'as' => 'admin.categories.order' ]);
+	    Route::post('/simple-save', [ 'uses' => 'CategoriesController@simpleSave', 'as' => 'admin.categories.simple_save' ]);
     });
 });

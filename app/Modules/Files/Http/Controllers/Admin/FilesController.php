@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Files\Http\Controllers;
+namespace App\Modules\Files\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ use App\Modules\Files\Models\AlbumFile;
 use Auth;
 use Storage;
 
-class FilesEngineController extends Controller
+class FilesController extends Controller
 {
     public function index(Request $request)
     {
@@ -36,7 +36,7 @@ class FilesEngineController extends Controller
 
         asort($file_types);
 
-        return view('files::FilesEngine/index', [
+        return view('files::Admin/Files/index', [
         	'items' => $items,
         	'file_types' => $file_types
         ]);
@@ -64,7 +64,7 @@ class FilesEngineController extends Controller
 	        }
         }
 
-        return view('files::FilesEngine/add', [
+        return view('files::Admin/Files/add', [
         	'model' => $model,
         	'albums' => Album::pluck('name', 'id')
         ]);
@@ -87,7 +87,7 @@ class FilesEngineController extends Controller
 	        return redirect()->route('admin.files.index')->with('success', 'File has been saved');
         }
 
-        return view('files::FilesEngine/edit', [
+        return view('files::Admin/Files/edit', [
         	'model' => $model,
         	'albums' => Album::pluck('name', 'id')
         ]);
