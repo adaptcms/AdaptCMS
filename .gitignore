@@ -4,4 +4,5 @@ bootstrap/cache/*
 public/uploads/*
 public/build/node_modules/*
 public/themes/default/assets/build/node_modules*
+public/themes/blog/assets/build/node_modules*
 public/apps/theme-builder/node_modules/*

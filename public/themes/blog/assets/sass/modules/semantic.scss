@@ -1,0 +1,125 @@
+$colors: red, orange, yellow, olive, green, teal, blue, violet, purple, pink, brown, grey, black;
+
+@each $key, $value in $colors {
+      .text-color-#{$key} {
+          color: #{$key}!important;
+      }
+
+      .border-color-#{$key} {
+            border: 1px solid #{$key}!important;
+      }
+
+      @for $i from 1 through 5 {
+      	   .border-color-#{$key}-#{$i} {
+	       border: #{$i}px solid #{$key}!important;
+	   }
+      }
+}
+
+.no-border {
+	border: 0!important;
+}
+
+.no-margin {
+	margin: 0!important;
+}
+
+.no-padding {
+	padding: 0!important;
+}
+
+@for $i from 1 through 25 {
+	.margin-#{$i} {
+	    margin: #{$i}px!important;
+	}
+
+	.margin-left-#{$i} {
+	            margin-left: #{$i}px!important;
+		            }
+
+.margin-right-#{$i} {
+            margin-right: #{$i}px!important;
+	            }
+
+.margin-top-#{$i} {
+            margin-top: #{$i}px!important;
+	            }
+
+.margin-bottom-#{$i} {
+            margin-bottom: #{$i}px!important;
+	            }
+
+		    .padding-#{$i} {
+		                padding: #{$i}px!important;
+				        }
+
+        .padding-left-#{$i} {
+	                    padding-left: #{$i}px!important;
+			                                }
+
+.padding-right-#{$i} {
+            padding-right: #{$i}px!important;
+	                        }
+
+.padding-top-#{$i} {
+            padding-top: #{$i}px!important;
+	                        }
+
+.padding-bottom-#{$i} {
+            padding-bottom: #{$i}px!important;
+	                        }
+}
+
+// MEDIA QUERIES
+
+// MOBILE
+@media only screen and (max-width: 700px) {
+    .mobile.only {
+        display: block!important;
+    }
+
+    .tablet.only {
+        display: none!important;
+    }
+
+    .computer.only {
+        display: none!important;
+    }
+}
+
+// TABLET
+@media only screen and (min-width: 700px) and (max-width: 1100px) {
+    .tablet.only {
+        display: block!important;
+    }
+
+    .mobile.only {
+        display: none!important;
+    }
+
+    .computer.only {
+        display: none!important;
+    }
+}
+
+// DESKTOP
+@media only screen and (min-width: 1100px) {
+    .computer.only {
+        display: block!important;
+    }
+
+    .mobile.only {
+        display: none!important;
+    }
+
+    .tablet.only {
+        display: none!important;
+    }
+}
+
+// TABLET AND DESKTOP
+@media only screen and (min-width: 700px) {
+    .computer.only.tablet.only {
+        display: block!important;
+    }
+}

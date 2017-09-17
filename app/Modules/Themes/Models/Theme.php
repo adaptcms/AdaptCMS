@@ -65,23 +65,6 @@ class Theme extends Model
                 case 'delete':
                     Theme::whereIn('id', $data['ids'])->delete();
                 break;
-
-                case 'toggle-statuses':
-                    $active_themes = Theme::whereIn('id', $data['ids'])->where('status', '=', 1)->get();
-                    $pending_themes = Theme::whereIn('id', $data['ids'])->where('status', '=', 0)->get();
-
-                    foreach ($active_themes as $theme) {
-                        $theme->status = 0;
-
-                        $theme->save();
-                    }
-
-                    foreach ($pending_themes as $theme) {
-                        $theme->status = 1;
-
-                        $theme->save();
-                    }
-                break;
             }
         }
 
@@ -188,20 +171,25 @@ class Theme extends Model
         return !isset($file[$key]) ? '' : $file[$key];
     }
 
+	/**
+	* Enable
+	*
+	* @return void
+	*/
     public function enable()
     {
         // try to find module
         $client = new Client;
 
         // get the module
-        $res = $client->request('GET', $this->apiUrl . '/module/slug/theme/' . $this->slug, [ 'http_errors' => false ]);
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/slug/theme/' . $this->slug, [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
             $module = json_decode((string) $res->getBody(), true);
 
             if (!empty($module)) {
                 // increment install count for module
-                $client->request('GET', $this->apiUrl . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
+                $client->request('GET', Core::getMarketplaceApiUrl() . '/install/' . $module['module_type'] . '/' . $module['slug'], [ 'http_errors' => false ]);
             }
         }
 
@@ -210,8 +198,15 @@ class Theme extends Model
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
         }
+        
+        Cache::forget('theme_count');
     }
 
+	/**
+	* Disable
+	*
+	* @return void
+	*/
     public function disable()
     {
         try {
@@ -219,6 +214,8 @@ class Theme extends Model
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
         }
+        
+        Cache::forget('theme_count');
     }
 
     public function install($id)
@@ -273,5 +270,17 @@ class Theme extends Model
 
         Cache::forever('theme_updates', 0);
         Cache::forget('themes_updates_list');
+    }
+    
+    /**
+    * Get Count
+    *
+    * @return int
+    */
+    public static function getCount()
+    {
+    	return Cache::remember('theme_count', 3600, function() {
+    		return Theme::count();
+    	});
     }
 }

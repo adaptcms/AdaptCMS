@@ -30,12 +30,8 @@ class BaseController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Notifiable;
 
-    public $apiUrl;
-
     public function __construct()
     {
-        $this->apiUrl = Core::getMarketplaceApiUrl();
-
 		if (Schema::hasTable('settings')) {
 			// CMS Update Checks
 	        $this->checkForCmsUpdates();
@@ -52,7 +48,7 @@ class BaseController extends Controller
 
     public function checkForCmsUpdates()
     {
-        $apiUrl = $this->apiUrl;
+        $apiUrl = Core::getMarketplaceApiUrl();
 
         Cache::remember('core_cms_updates', Settings::get('check_for_updates_every_x_minutes', 15), function() use($apiUrl) {
             $cms_updates = 0;
@@ -123,7 +119,7 @@ class BaseController extends Controller
 
     public function checkForPluginUpdates()
     {
-        $apiUrl = $this->apiUrl;
+        $apiUrl = Core::getMarketplaceApiUrl();
 
         Cache::remember('plugin_updates', Settings::get('check_for_updates_every_x_minutes', 15), function() use($apiUrl) {
             // set the client
@@ -163,7 +159,7 @@ class BaseController extends Controller
 
     public function checkForThemeUpdates()
     {
-        $apiUrl = $this->apiUrl;
+        $apiUrl = Core::getMarketplaceApiUrl();
 
         Cache::remember('theme_updates', Settings::get('check_for_updates_every_x_minutes', 15), function() use($apiUrl) {
             // set the client

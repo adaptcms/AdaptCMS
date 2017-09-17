@@ -1,0 +1,150 @@
+body {
+	background-color: #ddd!important;
+}
+
+.hidden {
+	display: none;
+}
+
+template {
+	display: block!important;
+}
+
+.full.width {
+	width: 100%;
+}
+
+.menu.main-menu.is_admin {
+	margin-top: 52px !important;
+}
+
+body.pushable {
+	margin-top: 0px !important;
+	background: #fff!important;
+}
+
+.pusher {
+	margin-top: 0 !important;
+	overflow: visible!important;
+}
+
+.footer {
+	margin-top: 20px !important;
+}
+
+.footer.segment {
+	padding: 5em 0;
+}
+
+.secondary.pointing.menu .toc.item {
+	display: none;
+}
+
+.hidden.menu {
+	display: none!important;
+}
+
+.hero {
+	margin-bottom: 25px !important;
+}
+
+.clear {
+	clear: both!important;
+}
+
+.ui.pointing.menu .item:after {
+	content: initial!important;
+}
+
+.ui.buttons .ui.button:not(:first-child) {
+	margin-left: 5px !important;
+}
+@media only screen and (max-width: 700px) {
+	.ui.fixed.menu {
+		display: none !important;
+	}
+
+	.secondary.pointing.menu .item,
+	.secondary.pointing.menu .menu {
+		display: none;
+	}
+
+	.secondary.pointing.menu .toc.item {
+		display: block;
+	}
+}
+// MEDIA QUERIES
+// MOBILE
+@media only screen and (max-width: 700px) {
+	.mobile.only:not(table) {
+		display: block!important;
+	}
+
+	table.mobile.only {
+		display: table!important;
+	}
+
+	.tablet.only {
+		display: none!important;
+	}
+
+	.computer.only {
+		display: none!important;
+	}
+
+	h4.mobile.clear-left {
+		clear: left!important;
+	}
+}
+// TABLET
+@media only screen and (min-width: 700px) and (max-width: 1100px) {
+	.tablet.only:not(table) {
+		display: block!important;
+	}
+
+	table.tablet.only {
+		display: table!important;
+	}
+
+	.mobile.only {
+		display: none!important;
+	}
+
+	.computer.only {
+		display: none!important;
+	}
+}
+// DESKTOP
+@media only screen and (min-width: 1100px) {
+	.computer.only:not(table) {
+		display: block!important;
+	}
+
+	table.computer.only {
+		display: table!important;
+	}
+
+	.mobile.only {
+		display: none!important;
+	}
+
+	.tablet.only {
+		display: none!important;
+	}
+
+	.ui.two.cards {
+		.card {
+			width: calc(33.33333333% - 2em);
+		}
+	}
+}
+// TABLET AND DESKTOP
+@media only screen and (min-width: 700px) {
+	.computer.only.tablet.only:not(table) {
+		display: block!important;
+	}
+
+	table.computer.only.tablet.only {
+		display: table!important;
+	}
+}

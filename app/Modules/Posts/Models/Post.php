@@ -13,6 +13,8 @@ use App\Modules\Posts\Models\Field;
 use App\Modules\Posts\Models\Category;
 use App\Modules\Posts\Models\Tag;
 
+use DB;
+
 class Post extends Model
 {
     use Searchable;
@@ -371,20 +373,19 @@ class Post extends Model
 
     public function getPostData($postData)
     {
-
-				// if single, convert to multiple
+		// if single, convert to multiple
         $single = false;
         if ((is_object($postData) && !strstr(get_class($postData), 'Pagination')) || !is_object($postData)) {
             if (!is_array($postData)) {
-    						$single = true;
-    						$postData = [ $postData ];
-    				}
+				$single = true;
+				$postData = [ $postData ];
+			}
         }
 
         // first, build an array of posts containing post data values
         // also, grab the category ID's for later purposes
         $category_ids = [];
-				$posts = [];
+		$posts = [];
         foreach ($postData as $post) {
             $posts[] = [
                 'post' => $post,
@@ -430,11 +431,11 @@ class Post extends Model
                 $posts[$key]['post_data'][$field_slug] = $val->body;
             }
 
-						foreach($fields as $field) {
-								if (!isset($posts[$key]['post_data'][$field->slug])) {
-										$posts[$key]['post_data'][$field->slug] = '';
-								}
-						}
+			foreach($fields as $field) {
+				if (!isset($posts[$key]['post_data'][$field->slug])) {
+					$posts[$key]['post_data'][$field->slug] = '';
+				}
+			}
         }
 
         return $single ? $posts[0] : $posts;
@@ -516,5 +517,25 @@ class Post extends Model
     public function getFieldValue($post_data, $field)
     {
         return !empty($post_data[$field]) ? $post_data[$field] : '';
+    }
+    
+    /**
+    * Get Archive Periods
+    * Gets wordpress like grouping of month/year of posts
+    *
+    * @return array
+    */
+    public static function getArchivePeriods()
+    {
+    	$periods = DB::select('SELECT count(id) as count,
+    	      YEAR(created_at) as year,
+    	      MONTH(created_at) as month
+    	FROM `posts` 
+    	GROUP BY YEAR(created_at),
+    	        MONTH(created_at) 
+    	ORDER BY YEAR(created_at) DESC,
+    	        MONTH(created_at) DESC');
+    	        
+    	return $periods;
     }
 }

@@ -153,7 +153,7 @@ class ThemesController extends Controller
 			Cache::forever('theme', $model->slug);
 		}
 
-        return redirect()->route('admin.themes.index')->with('success', 'Theme has been saved');
+        return redirect()->route('admin.themes.index')->with('success', 'Theme has been made active.');
     }
 
 	public function activate($slug)

@@ -25,6 +25,16 @@ class SettingsSeed extends Seeder
     		'category_id' => 2
     	]);
     	$setting->add([
+    		'key' => 'tagline',
+    		'value' => 'My personal blog site',
+    		'category_id' => 2
+    	]);
+    	$setting->add([
+    		'key' => 'description',
+    		'value' => 'Welcome to my blog! I will be covering a wide range of topics on here, stay tuned.',
+    		'category_id' => 2
+    	]);
+    	$setting->add([
     		'key' => 'login_throttling_limit',
     		'value' => 3,
     		'category_id' => 1

@@ -28,7 +28,7 @@ class UpdatesController extends Controller
     {
         $client = new Client();
 
-        $res = $client->request('GET', $this->apiUrl . '/' . (!empty($module_type) ? $module_type : ''), [ 'http_errors' => false ]);
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/' . (!empty($module_type) ? $module_type : ''), [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
             $modules = json_decode($res->getBody(), true);
@@ -58,7 +58,7 @@ class UpdatesController extends Controller
         $client = new Client();
 
         // get the module
-        $res = $client->request('GET', $this->apiUrl . '/module/' . $id, [ 'http_errors' => false ]);
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/' . $id, [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
             $module = json_decode($res->getBody(), true);
@@ -74,7 +74,7 @@ class UpdatesController extends Controller
         $client = new Client();
 
         // get the theme
-        $res = $client->request('GET', $this->apiUrl . '/module/' . $id, [ 'http_errors' => false ]);
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/' . $id, [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
             $module = json_decode($res->getBody(), true);
@@ -140,7 +140,7 @@ class UpdatesController extends Controller
         $client = new Client();
 
         // get the plugin
-        $res = $client->request('GET', $this->apiUrl . '/module/' . $id, [ 'http_errors' => false ]);
+        $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/' . $id, [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
             $module = json_decode($res->getBody(), true);

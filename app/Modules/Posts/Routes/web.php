@@ -17,6 +17,8 @@ Route::group(['prefix' => 'posts'], function () {
 	Route::get('/{slug}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsController@view', 'as' => 'posts.view' ]);
 });
 
+Route::get('/archive/{year}/{month}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\PostsController@archive', 'as' => 'posts.archive' ]);
+
 Route::get('/tag/{slug}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\TagsController@view', 'as' => 'tags.view' ]);
 
 Route::get('/category/{slug}', [ 'uses' => '\App\Modules\Posts\Http\Controllers\CategoriesController@view', 'as' => 'categories.view' ]);
