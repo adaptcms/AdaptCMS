@@ -164,8 +164,15 @@ class Theme extends Model
 
     public function getConfig($key)
     {
+    	$path = $this->slug . '/theme.json';
+    
+    	// exists check
+        if (!$file = Storage::disk('themes')->exists($path)) {
+            return null;
+        }
+    
         // get the theme.json file
-        $file = Storage::disk('themes')->get($this->slug . '/theme.json');
+        $file = Storage::disk('themes')->get($path);
         $file = json_decode($file, true);
 
         return !isset($file[$key]) ? '' : $file[$key];
