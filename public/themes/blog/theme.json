@@ -1,6 +1,6 @@
 {
-    "name": "Default",
-    "slug": "default",
+    "name": "Blog",
+    "slug": "blog",
     "version": "1.0",
-    "description": "The default theme for AdaptCMS Alpha."
+    "description": "Blog theme for AdaptCMS 4"
 }

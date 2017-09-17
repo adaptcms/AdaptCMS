@@ -36,7 +36,7 @@ return array(
         'before' => function($theme)
         {
             // You can remove this line anytime.
-            $theme->setTitle('Copyright ©  2013 - Laravel.in.th');
+            $theme->setTitle('Copyright ©  ' . date('Y') . ' - AdaptCMS');
 
             // Breadcrumb template.
             // $theme->breadcrumb()->setTemplate('
