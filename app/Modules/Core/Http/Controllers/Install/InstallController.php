@@ -94,7 +94,7 @@ class InstallController extends Controller
             $user->fill($request->except([ '_token' ]));
             
             $user->status = 1;
-            $this->syncRoles([ 'admin', 'demo', 'member', 'editor' ]);
+            $user->syncRoles([ 'admin', 'demo', 'member', 'editor' ]);
 
             $user->save();
 
