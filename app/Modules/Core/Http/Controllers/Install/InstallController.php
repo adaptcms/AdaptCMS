@@ -94,9 +94,11 @@ class InstallController extends Controller
             $user->fill($request->except([ '_token' ]));
             
             $user->status = 1;
-            $user->syncRoles([ 'admin', 'demo', 'member', 'editor' ]);
 
             $user->save();
+
+            // sync user roles AFTER saving
+            $user->syncRoles([ 'admin', 'demo', 'member', 'editor' ]);
 
             return redirect()->route('install.finished')->with('success', 'Congrats!');
         }
