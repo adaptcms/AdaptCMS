@@ -14,7 +14,7 @@
 						"gulp",
 						"sass"
 			],
-			"author": "AirTight Design",
+			"author": "Charlie Page",
 			"license": "MIT",
 			"devDependencies": {
 						"es6-promise": "^4.0.5",

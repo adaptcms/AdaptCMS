@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="ui segment">
-			{!! Theme::partial('adaptbb.form_errors') !!}
+			{!! Theme::partial('form_errors') !!}
 
 			{{ Form::model($model, [ 'class' => 'ui form very padded' ]) }}
 				<div class="required field">

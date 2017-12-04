@@ -12,11 +12,13 @@ use Settings;
 class Setting extends Model
 {
     protected $table = 'settings';
+
     protected $fillable = [
         'key',
         'value',
         'category_id'
     ];
+    
     public $timestamps = false;
 
     public function category()
@@ -84,8 +86,8 @@ class Setting extends Model
             }
         }
 
-                return [
-                    'status' => true
-                ];
+        return [
+            'status' => true
+        ];
     }
 }

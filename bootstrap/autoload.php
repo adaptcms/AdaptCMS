@@ -16,7 +16,7 @@ define('LARAVEL_START', microtime(true));
 $composer_path = __DIR__.'/../vendor/autoload.php';
 
 if (!file_exists($composer_path)) {
-	die('Please install/run composer. <a href="https://adaptcms.gitbooks.io/adaptcms/content/technology/composer.md" target="_blank" rel="noopener noreferrer">How to use Composer</a>');
+	die('Please install/run composer. <a href="https://adaptcms.gitbooks.io/adaptcms/technology/composer.html" target="_blank" rel="noopener noreferrer">How to use Composer</a>');
 }
 
 require $composer_path;

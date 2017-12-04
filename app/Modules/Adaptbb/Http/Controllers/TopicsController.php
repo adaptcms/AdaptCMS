@@ -14,7 +14,6 @@ use App\Modules\Adaptbb\Models\Reply;
 use App\Modules\Core\Services\Core;
 
 use Auth;
-use Validator;
 use Theme;
 use Cache;
 
@@ -49,47 +48,38 @@ class TopicsController extends Controller
 
         $model = new Topic;
 
-        $errors = [];
         if ($request->getMethod() == 'POST') {
             $model->fill($request->except('_token'));
 
             $model->slug = str_slug($model->name, '-');
 
-            $validator = Validator::make($model->toArray(), [
-                'name' => 'required',
-                'message' => 'required',
-                'slug' => [
-                      'required',
-                      Rule::unique('plugin_adaptbb_topics')->ignore($model->id)
-                ]
+            $this->validate($request, [
+                'name' => 'required|unique:plugin_adaptbb_topics|max:255',
+                'message' => 'required'
             ]);
 
-            if (!$validator->fails()) {
-                $model->forum_id = $forum->id;
-                $model->user_id = Auth::user()->id;
-                $model->active = 1;
-                $model->topic_type = 'normal';
+            $model->forum_id = $forum->id;
+            $model->user_id = Auth::user()->id;
+            $model->active = 1;
+            $model->topic_type = 'normal';
 
-                $model->save();
+            $model->save();
 
-                // update the forum reply count
-                $topic_count = Topic::where('forum_id', '=', $forum->id)->count();
+            // update the forum reply count
+            $topic_count = Topic::where('forum_id', '=', $forum->id)->count();
 
-                $forum->topics_count = $topic_count;
+            $forum->topics_count = $topic_count;
 
-                $forum->save();
+            $forum->save();
 
-                return redirect()
-                    ->route('plugin.adaptbb.topics.view', [ 'forum_slug' => $forum->slug, 'topic_slug' => $model->slug ])
-                    ->with('success', 'Sweet! Your topic is all done.');
-            } else {
-                $errors = $validator->errors()->getMessages();
-            }
+            return redirect()
+                ->route('plugin.adaptbb.topics.view', [ 'forum_slug' => $forum->slug, 'topic_slug' => $model->slug ])
+                ->with('success', 'Sweet! Your topic is all done.');
         }
 
         $theme->setTitle('Community Forums - Post a Reply | ' . $forum->name);
 
-        return $theme->scope('adaptbb.topics.add', compact('forum', 'model', 'errors'))->render();
+        return $theme->scope('adaptbb.topics.add', compact('forum', 'model'))->render();
     }
 
     public function reply(Request $request, $id)

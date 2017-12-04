@@ -5,10 +5,11 @@ namespace App\Modules\Core\Database\Seeds;
 use Illuminate\Database\Seeder;
 
 use App\Modules\Core\Models\Setting;
+use App\Modules\Core\Models\SettingsCategory;
 
 use Settings;
 
-class SettingsSeed extends Seeder
+class CoreDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,6 +18,20 @@ class SettingsSeed extends Seeder
      */
     public function run()
     {
+        // create setting categories
+        $model = new SettingsCategory;
+        
+        $model->add([
+            'name' => 'Users'
+        ]);
+        
+        $model = new SettingsCategory;
+        
+        $model->add([
+            'name' => 'General'
+        ]);
+
+        // create settings
     	$setting = new Setting;
     	
     	$setting->add([

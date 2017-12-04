@@ -34,9 +34,9 @@ class ForumsController extends Controller
 
         if ($request->getMethod() == 'POST') {
             $this->validate($request, [
-            'name' => 'required|unique:plugin_adaptbb_forums|max:255',
-            'category_id' => 'required'
-        ]);
+                'name' => 'required|unique:plugin_adaptbb_forums|max:255',
+                'category_id' => 'required'
+            ]);
 
             $item->fill($request->except('_token'));
 

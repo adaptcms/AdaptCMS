@@ -168,6 +168,12 @@ class Install
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.' . $error);
         }
 
+        try {
+            Artisan::call('module:seed');
+        } catch(\Exception $e) {
+            // do nothing
+        }
+
         return $status;
     }
 }

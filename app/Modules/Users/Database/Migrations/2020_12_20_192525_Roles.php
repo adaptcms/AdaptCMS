@@ -14,7 +14,6 @@ class Roles extends Migration
     public function up()
     {
         Schema::table('roles', function (Blueprint $table) {
-            $table->string('guard_name');
             $table->integer('level')->index();
             $table->tinyInteger('core_role')->default(0)->index();
             $table->string('redirect_route_name')->nullable();

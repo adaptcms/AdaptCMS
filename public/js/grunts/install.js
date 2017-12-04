@@ -5,10 +5,10 @@ $(document).ready(function() {
             data: {
                 database_connection: false,
                 filled_out: false,
-                'DB_HOST': '',
-                'DB_PORT': '',
+                'DB_HOST': 'localhost',
+                'DB_PORT': '3306',
                 'DB_DATABASE': '',
-                'DB_USERNAME': '',
+                'DB_USERNAME': 'root',
                 'DB_PASSWORD': '',
                 'sitename': '',
                 fields: [
@@ -49,7 +49,7 @@ $(document).ready(function() {
 
                     var filled_out = true;
                     _.each(this.fields, function(key) {
-                        if (!_this[key].length) {
+                        if (!_this[key].length && key !== 'DB_PASSWORD') {
                             filled_out = false;
                         }
                     });
@@ -68,9 +68,6 @@ $(document).ready(function() {
                     this.isFilledOut();
                 },
                 DB_USERNAME: function(newVal) {
-                    this.isFilledOut();
-                },
-                DB_PASSWORD: function(newVal) {
                     this.isFilledOut();
                 }
             }

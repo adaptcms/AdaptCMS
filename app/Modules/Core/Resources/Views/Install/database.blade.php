@@ -12,14 +12,14 @@
 
           <div class="ui required field">
               {{ Form::label('DB_HOST', 'Host') }}
-              {{ Form::text('DB_HOST', '', [ 'v-model' => 'DB_HOST', 'v-bind:value' => 'localhost' ]) }}
+              {{ Form::text('DB_HOST', 'localhost', [ 'v-model' => 'DB_HOST' ]) }}
           </div>
         </div>
 
         <div class="ui two fields">
           <div class="ui required field">
               {{ Form::label('DB_PORT', 'Port') }}
-              {{ Form::text('DB_PORT', '', [ 'v-model' => 'DB_PORT', 'v-bind:value' => '3306' ]) }}
+              {{ Form::text('DB_PORT', '3306', [ 'v-model' => 'DB_PORT' ]) }}
           </div>
 
           <div class="ui required field">
@@ -31,10 +31,10 @@
         <div class="ui two fields">
             <div class="ui required field">
                 {{ Form::label('DB_USERNAME', 'Username') }}
-                {{ Form::text('DB_USERNAME', 'root', [ 'v-model' => 'DB_USERNAME', 'v-bind:value' => 'root' ]) }}
+                {{ Form::text('DB_USERNAME', 'root', [ 'v-model' => 'DB_USERNAME' ]) }}
             </div>
 
-            <div class="ui required field">
+            <div class="ui field">
                 {{ Form::label('DB_PASSWORD', 'Password') }}
                 {{ Form::password('DB_PASSWORD', [ 'value' => '', 'autocomplete' => 'off', 'v-model' => 'DB_PASSWORD' ]) }}
             </div>

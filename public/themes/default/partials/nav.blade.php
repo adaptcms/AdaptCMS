@@ -20,6 +20,12 @@
 Albums
 </a>
 
+@if(Module::exists('adaptbb') && Module::isEnabled('adaptbb'))
+  <a href="{{ route('plugin.adaptbb.forums.index') }}" class="{{ Request::url() == route('plugin.adaptbb.forums.index') ? 'active' : '' }} item">
+  Community
+  </a>
+@endif
+
 <div class="item right menu">
   @if(!Auth::check())
     <div class="ui buttons tiny">
