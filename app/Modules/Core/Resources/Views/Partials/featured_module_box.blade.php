@@ -1,6 +1,6 @@
 <div class="ui card">
   <div class="content">
-      <div class="right floated meta">{{ date('F j, Y', strtotime($module->updated_at)) }}</div>
+      <div class="right floated meta">{{ Core::getAdminDateLong($module->updated_at) }}</div>
 
         @if(!empty($module->user->logo))
             <img class="ui avatar image" src="{{ $module->user->logo }}">

@@ -4,13 +4,16 @@ namespace App\Modules\Posts\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 use Storage;
 use Cache;
 
 class Page extends Model
 {
-    use Searchable;
+    use Searchable,
+        HasSlug;
 
     /**
      * The table associated with the model.
@@ -35,7 +38,11 @@ class Page extends Model
     public function add($postArray)
     {
         $this->name = $postArray['name'];
-        $this->slug = $postArray['slug'];
+
+        if (!empty($postArray['slug'])) {
+            $this->slug = $postArray['slug'];
+        }
+
         $this->user_id = $postArray['user_id'];
         $this->status = $postArray['status'];
         $this->body = $postArray['body'];
@@ -51,7 +58,11 @@ class Page extends Model
     public function edit($postArray)
     {
         $this->name = $postArray['name'];
-        $this->slug = $postArray['slug'];
+
+        if (!empty($postArray['slug'])) {
+            $this->slug = $postArray['slug'];
+        }
+        
         $this->user_id = $postArray['user_id'];
         $this->status = $postArray['status'];
         $this->body = $postArray['body'];
@@ -128,5 +139,16 @@ class Page extends Model
         }
 
         return $results;
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 }

@@ -49,6 +49,8 @@ if ($('.ui.categories.search').length) {
 							_this.items = [];
 
 							toastr.success('The categories have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete categories, please try again.');
 						}
@@ -59,14 +61,14 @@ if ($('.ui.categories.search').length) {
 	});
 }
 
-if ($("ol.sortable.categories").length) {
-	$("ol.sortable.categories").sortable({
+if ($(".sortable.categories").length) {
+	$(".sortable.categories").sortable({
 		onDrop: function($item, container, _super, event) {
 			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
 			$("body").removeClass(container.group.options.bodyClass);
 
 			var items = [];
-			$.each($('ol.sortable li'), function() {
+			$.each($('.sortable li'), function() {
 				items.push($(this).attr('data-id'));
 			});
 

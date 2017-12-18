@@ -35,6 +35,8 @@ if ($('table.themes').length) {
 							_this.items = [];
 
 							toastr.success('The themes have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete themes, please try again.');
 						}
@@ -55,6 +57,8 @@ if ($('table.themes').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The themes have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save themes, please try again.');
 					}

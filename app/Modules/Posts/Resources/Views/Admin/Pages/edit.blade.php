@@ -21,7 +21,7 @@
 
 		<div class="required field">
 			{{ Form::label('slug', 'URL Slug') }}
-			{{ Form::text('slug', $model->slug, [ 'v-model' => 'slug' ]) }}
+			{{ Form::text('slug', $model->slug, [ 'v-model' => 'slug', 'required' => false ]) }}
 		</div>
 
 		<div class="required field">
@@ -49,7 +49,7 @@
 
         <div class="inline field">
             <div class="ui toggle checkbox">
-				{{ Form::checkbox('status', true, true, [ 'class' => 'hidden' ]) }}
+				{{ Form::checkbox('status', true, true) }}
                   {{ Form::label('status') }}
             </div>
         </div>

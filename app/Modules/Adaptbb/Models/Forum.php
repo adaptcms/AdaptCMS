@@ -3,6 +3,8 @@
 namespace App\Modules\Adaptbb\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 use App\Modules\Adaptbb\Models\ForumCategory;
 use App\Modules\Adaptbb\Models\Topic;
@@ -10,11 +12,12 @@ use App\Modules\Adaptbb\Models\Reply;
 
 class Forum extends Model
 {
+	use HasSlug;
+
     protected $table = 'plugin_adaptbb_forums';
 
     protected $fillable = [
         'name',
-        'slug',
         'notice',
         'locked',
         'ord',
@@ -96,5 +99,15 @@ class Forum extends Model
 	    }
 
 	    return $post;
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug');
     }
 }

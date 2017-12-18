@@ -79,17 +79,17 @@ body.pushable {
 }
 
 .ui.buttons {
-		&.center.aligned {
-				margin: 0 auto!important;
-		}
+	&.center.aligned {
+		margin: 0 auto!important;
+	}
 
-		.ui.button {
-				margin-left: 5px!important;
-		}
+	.ui.button {
+		margin-left: 5px!important;
+	}
 }
 
 .footer {
-		margin-top: 15px!important;
+	margin-top: 15px!important;
 }
 
 .ui.buttons .ui.button:not(:first-child) {
@@ -98,6 +98,24 @@ body.pushable {
 
 .center.aligned.item {
 	text-align: center!important;
+}
+
+.sortable .placeholder {
+	list-style: none;
+}
+
+.sortable .item {
+	padding: 10px!important;
+	border: 1px solid #ddd!important;
+	border-radius: .28571429rem!important;
+
+	&:hover {
+		cursor: move;
+	}
+
+	&.dragged {
+		list-style: none;
+	}
 }
 
 // MOBILE

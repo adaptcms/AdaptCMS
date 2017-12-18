@@ -4,10 +4,13 @@ namespace App\Modules\Files\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Album extends Model
 {
-	use Searchable;
+	use Searchable,
+        HasSlug;
 
     /**
      * The table associated with the model.
@@ -70,7 +73,6 @@ class Album extends Model
     public function add($postArray)
     {
 	    $this->name = $postArray['name'];
-	    $this->slug = str_slug($this->name, '-');
         $this->user_id = $postArray['user_id'];
 
         $this->save();
@@ -81,7 +83,6 @@ class Album extends Model
     public function edit($postArray)
     {
 	    $this->name = $postArray['name'];
-	    $this->slug = str_slug($this->name, '-');
         $this->user_id = $postArray['user_id'];
 
         $this->save();
@@ -94,23 +95,34 @@ class Album extends Model
 	    return AlbumFile::where('album_id', '=', $this->id)->count();
     }
 
-		public function getNewestFile()
-		{
-				return $this->albumFiles->count() ?
-					$this->albumFiles()->orderBy('created_at', 'desc')->first()->file : null;
+	public function getNewestFile()
+	{
+		return $this->albumFiles->count() ?
+			$this->albumFiles()->orderBy('created_at', 'desc')->first()->file : null;
+	}
+
+	public function getFiles($paginated = true)
+	{
+		$files = [];
+		if ($this->albumFiles->count()) {
+			if ($paginated) {
+				$files = $this->albumFiles()->paginate(15);
+			} else {
+				$files = $this->albumFiles;
+			}
 		}
 
-		public function getFiles($paginated = true)
-		{
-				$files = [];
-				if ($this->albumFiles->count()) {
-						if ($paginated) {
-								$files = $this->albumFiles()->paginate(15);
-						} else {
-								$files = $this->albumFiles;
-						}
-				}
+		return $files;
+	}
 
-				return $files;
-		}
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
+    }
 }

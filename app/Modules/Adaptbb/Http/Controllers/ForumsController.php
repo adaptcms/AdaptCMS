@@ -17,27 +17,28 @@ class ForumsController extends Controller
 {
     public function index()
     {
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
-
         $forum = new Forum;
         $forums = $forum->getIndex();
 
-        $theme->setTitle('Community Forums');
+        $this->theme->setTitle('Community Forums');
 
-        return $theme->scope('adaptbb.forums.index', compact('forums'))->render();
+        return $this->theme->scope('adaptbb.forums.index', compact('forums'))->render();
     }
 
     public function view($slug)
     {
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
-
         $forum = Forum::where('slug', '=', $slug)->first();
+
+        if (empty($forum)) {
+            abort(404, 'Cannot find forum.');
+        }
+
         $topics = Topic::where('forum_id', '=', $forum->id)->paginate(15);
 
-        $theme->set('meta_keywords', $forum->meta_keywords);
-        $theme->set('meta_description', $forum->meta_description);
-        $theme->setTitle('Community Forums - ' . $forum->name);
+        $this->theme->set('meta_keywords', $forum->meta_keywords);
+        $this->theme->set('meta_description', $forum->meta_description);
+        $this->theme->setTitle('Community Forums - ' . $forum->name);
 
-        return $theme->scope('adaptbb.forums.view', compact('forum', 'topics'))->render();
+        return $this->theme->scope('adaptbb.forums.view', compact('forum', 'topics'))->render();
     }
 }

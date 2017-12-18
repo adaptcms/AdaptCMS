@@ -9,7 +9,7 @@
 			Marketplace
 			<i class="shopping basket icon"></i>
 		</a>
-		<a href="{{ route('admin.updates.index', [ 'module_type' => 'plugins' ]) }}" class="ui right labeled icon button green">
+		<a href="{{ route('admin.updates.index') }}" class="ui right labeled icon button green">
 			Updates
 			<i class="warning icon"></i>
 		</a>

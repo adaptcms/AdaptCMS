@@ -60,12 +60,16 @@
 				@foreach($items as $item)
 					<tr>
 						<td class="collapsing">
-					        <div class="ui fitted slider checkbox">
-					          <input type="checkbox" data-id="{{ $item->id }}"> <label></label>
-					        </div>
-					      </td>
+							@if($item->slug != 'home')
+								<div class="ui fitted slider checkbox">
+									<input type="checkbox" data-id="{{ $item->id }}"> <label></label>
+								</div>
+							@endif
+						</td>
 						<td>
-							<a href="{{ route('admin.pages.edit', [ 'id' => $item->id ]) }}"><strong>{{ $item->name }}</strong></a>
+							<a href="{{ route('admin.pages.edit', [ 'id' => $item->id ]) }}">
+								<strong>{{ $item->name }}</strong>
+							</a>
 						</td>
                         <td>{{ $item->status ? 'Active' : 'Inactive' }}</td>
                         <td>
@@ -73,7 +77,7 @@
 								{{ $item->user->getName() }}
                             </a>
                         </td>
-						<td>{{ date('F j, Y', strtotime($item->created_at)) }}</td>
+						<td>{{ Core::getAdminDateLong($item->created_at) }}</td>
 					</tr>
 				@endforeach
 			</tbody>
@@ -81,14 +85,14 @@
 	            <tr>
 	              <th></th>
 	              <th colspan="5">
-									<div class="ui buttons">
-										<div class="ui small button" @click.prevent="toggleStatusesMany()">
+					<div class="ui buttons">
+						<div class="ui small button" @click.prevent="toggleStatusesMany()">
 							Flip Status
-												</div>
-										<div class="ui small button" @click.prevent="deleteMany()">
-											Delete
-										</div>
-									</div>
+						</div>
+						<div class="ui small button" @click.prevent="deleteMany()">
+							Delete
+						</div>
+					</div>
 	              </th>
 	            </tr>
                 <tr>

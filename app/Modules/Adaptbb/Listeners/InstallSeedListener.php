@@ -70,6 +70,8 @@ class InstallSeedListener
             $model->description = $forum['description'];
             $model->meta_description = $forum['description'];
             $model->category_id = $forum['category_id'];
+            $model->topics_count = 1;
+            $model->replies_count = 1;
 
             $model->save();
         }
@@ -89,6 +91,7 @@ class InstallSeedListener
         $model->active = 1;
         $model->forum_id = 1;
         $model->user_id = 1;
+        $model->replies_count = 1;
 
         $model->save();
 

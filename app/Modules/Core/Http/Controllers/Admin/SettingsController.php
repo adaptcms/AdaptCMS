@@ -3,13 +3,20 @@
 namespace App\Modules\Core\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
 use App\Modules\Core\Models\Setting;
 use App\Modules\Core\Models\SettingsCategory;
 
+use Illuminate\Http\Request;
+
 class SettingsController extends Controller
 {
+    /**
+    * Index
+    *
+    * @param Request $request
+    *
+    * @return View
+    */
 	public function index(Request $request)
 	{
         $model = new Setting;

@@ -9,27 +9,25 @@ use App\Http\Controllers\Controller;
 
 use App\Modules\Files\Models\Album;
 
-use Theme;
-use Cache;
-
 class AlbumsController extends Controller
 {
     public function index()
     {
 	    $albums = Album::paginate(10);
 
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
-
-        return $theme->scope('albums.index', [ 'albums' => $albums ])->render();
+        return $this->theme->scope('albums.index', compact('albums'))->render();
     }
 
     public function view($slug)
     {
 	    $album = Album::where('slug', '=', $slug)->first();
-      $files = $album->getFiles();
 
-	    $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        if (empty($album)) {
+            abort(404, 'Could not find album.');
+        }
 
-        return $theme->scope('albums.view', compact('album', 'files'))->render();
+        $files = $album->getFiles();
+
+        return $this->theme->scope('albums.view', compact('album', 'files'))->render();
     }
 }

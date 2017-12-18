@@ -49,6 +49,8 @@ if ($('.ui.tags.search').length) {
 							_this.items = [];
 
 							toastr.success('The tags have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete tags, please try again.');
 						}
@@ -69,6 +71,8 @@ if ($('.ui.tags.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The tags have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save tags, please try again.');
 					}

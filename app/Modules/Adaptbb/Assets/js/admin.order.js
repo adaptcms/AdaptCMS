@@ -7,7 +7,7 @@ $(document).ready(function() {
       			  $("body").removeClass(container.group.options.bodyClass);
 
       			  var items = [];
-      			  $.each($('ol.sortable li'), function() {
+      			  $.each($('.sortable li'), function() {
       			  		items.push($(this).attr('data-id'));
       			  });
 
@@ -31,7 +31,7 @@ $(document).ready(function() {
       			  $("body").removeClass(container.group.options.bodyClass);
 
       			  var items = [];
-      			  $.each($('ol.sortable li'), function() {
+      			  $.each($('.sortable li'), function() {
       			  		items.push($(this).attr('data-id'));
       			  });
 

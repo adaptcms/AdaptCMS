@@ -91,7 +91,7 @@ class InstallSeedListener
                 'caption' => 'Blog Content',
                 'user_id' => 1,
                 'category_id' => 1,
-                'field_type' => 'textarea'
+                'field_type' => 'wysiwyg'
             ]
         ];
         foreach($fields as $index => $field) {

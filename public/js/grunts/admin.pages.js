@@ -50,6 +50,8 @@ if ($('.ui.pages.search').length) {
 							_this.items = [];
 
 							toastr.success('The pages have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete pages, please try again.');
 						}
@@ -70,6 +72,8 @@ if ($('.ui.pages.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The pages have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save pages, please try again.');
 					}
@@ -103,14 +107,14 @@ $(document).ready(function() {
 	}
 });
 
-if ($("ol.sortable.pages").length) {
-	$("ol.sortable.pages").sortable({
+if ($(".sortable.pages").length) {
+	$(".sortable.pages").sortable({
 		onDrop: function($item, container, _super, event) {
 			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
 			$("body").removeClass(container.group.options.bodyClass);
 
 			var items = [];
-			$.each($('ol.sortable li'), function() {
+			$.each($('.sortable li'), function() {
 				items.push($(this).attr('data-id'));
 			});
 

@@ -93,12 +93,10 @@ class UsersController extends Controller
                 }
             }
         }
-
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
         
-        $theme->setTitle('Register');
+        $this->theme->setTitle('Register');
 
-        return $theme->scope('users.register')->render();
+        return $this->theme->scope('users.register')->render();
     }
 
     public function logout()
@@ -149,27 +147,22 @@ class UsersController extends Controller
                 $errors = $validator->errors()->getMessages();
             }
         }
-
-
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
         
-        $theme->setTitle('Edit Profile');
+        $this->theme->setTitle('Edit Profile');
 
-        return $theme->scope('users.profile_edit', compact('model', 'errors'))->render();
+        return $this->theme->scope('users.profile_edit', compact('model', 'errors'))->render();
     }
 
     public function profile(Request $request, $username)
     {
         $user = User::where('username', '=', $username)->first();
 
-        if (!$model) {
-            abort(404, 'User does not exist.');
+        if (empty($user)) {
+            abort(404, 'Cannot find user.');
         }
-
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
         
-        $theme->setTitle('Profile - ' . $username);
+        $this->theme->setTitle('Profile - ' . $username);
 
-        return $theme->scope('users.profile', compact('user'))->render();
+        return $this->theme->scope('users.profile', compact('user'))->render();
     }
 }

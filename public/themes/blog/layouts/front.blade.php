@@ -131,7 +131,6 @@
       <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
       <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
       <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-      <script src="//cdn.jsdelivr.net/ace/1.2.6/min/ace.js"></script>
       <script src="//cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js"></script>
     
       <script src="/js/vendor/jquery.tagsinput.min.js"></script>

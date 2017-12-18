@@ -4,6 +4,8 @@ namespace App\Modules\Posts\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 use Cache;
 
@@ -79,7 +81,6 @@ class Category extends Model
     public function add($postArray)
     {
 	    $this->name = $postArray['name'];
-	    $this->slug = str_slug($this->name, '-');
 	    $this->user_id = $postArray['user_id'];
 	    $this->ord = Category::count();
 		$this->meta_keywords = $postArray['meta_keywords'];
@@ -99,7 +100,6 @@ class Category extends Model
     public function edit($postArray)
     {
 	    $this->name = $postArray['name'];
-	    $this->slug = str_slug($this->name, '-');
 	    $this->user_id = $postArray['user_id'];
 		$this->meta_keywords = $postArray['meta_keywords'];
         $this->meta_description = $postArray['meta_description'];
@@ -113,5 +113,16 @@ class Category extends Model
 		}
 
 	    return $this;
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 }

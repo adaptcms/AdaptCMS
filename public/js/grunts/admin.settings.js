@@ -60,6 +60,8 @@ if ($('div.settings').length) {
 						    _this.items = [];
 			
 						    toastr.success('The settings have been deleted.');
+
+						    window.location.reload();
 						} else {
 						    toastr.error('Could not delete settings, please try again.');
 						}

@@ -50,7 +50,7 @@ class RolesController extends Controller
 
     public function edit(Request $request, $id)
     {
-        $model = User::find($id);
+        $model = Role::find($id);
 
         if ($request->getMethod() == 'POST') {
             $validator = Validator::make($request->all(), [

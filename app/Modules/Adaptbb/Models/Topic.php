@@ -3,11 +3,17 @@
 namespace App\Modules\Adaptbb\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 use App\Modules\Adaptbb\Models\Reply;
 
 class Topic extends Model
 {
+    use Searchable,
+        HasSlug;
+
     protected $table = 'plugin_adaptbb_topics';
 
     protected $fillable = [
@@ -48,5 +54,46 @@ class Topic extends Model
 	    $last_reply = Reply::where('forum_id', '=', $this->forum_id)->where('topic_id', '=', $this->id)->where('active', '=', 1)->orderBy('created_at', 'DESC')->first();
 	    
 	    return $last_reply;
+    }
+
+    public function toSearchableArray()
+    {
+        $entity = $this->toArray();
+
+        $entity['topic_slug'] = $this->slug;
+        $entity['forum_slug'] = $this->forum->slug;
+
+        return $entity;
+    }
+
+    public function searchLogic($searchData, $admin = false)
+    {   
+        if (!empty($searchData['keyword'])) {
+            $results = Topic::search($searchData['keyword'])->get();
+        } elseif(!empty($searchData['id'])) {
+            $results = [ Topic::find($searchData['id']) ];
+        } else {
+            $results = [];
+        }
+
+        foreach ($results as $key => $row) {
+            $results[$key]->url = route('plugin.adaptbb.topics.view', [ 
+                'forum_slug' => $row->forum_slug,
+                'topic_slug' => $row->topic_slug
+            ]);
+        }
+
+        return $results;
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 }

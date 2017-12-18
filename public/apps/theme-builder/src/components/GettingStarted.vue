@@ -39,13 +39,13 @@
 		      	
 		      	<div class="inline field">
 		      		<div class="ui toggle checkbox" @click.prevent="toggleHeaderEnabled()">
-				      <input type="checkbox" tabindex="0" class="hidden" value="1" :checked="header.enabled">
+				      <input type="checkbox" tabindex="0" value="1" :checked="header.enabled">
 				      <label>Enable</label>
 				    </div>
 		      	</div>
 		      	<div class="inline field">
 		      		<div class="ui toggle checkbox" @click.prevent="toggleHeaderHeroEnabled()">
-				      <input type="checkbox" tabindex="0" class="hidden" value="1" :checked="header.hero_enabled">
+				      <input type="checkbox" tabindex="0" value="1" :checked="header.hero_enabled">
 				      <label>Enable Hero</label>
 				    </div>
 		      	</div>

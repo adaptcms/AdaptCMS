@@ -49,6 +49,8 @@ if ($('.ui.users.search').length) {
 							_this.items = [];
 
 							toastr.success('The users have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete users, please try again.');
 						}
@@ -68,6 +70,8 @@ if ($('.ui.users.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The users have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save users, please try again.');
 					}

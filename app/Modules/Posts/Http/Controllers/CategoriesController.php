@@ -10,24 +10,23 @@ use App\Http\Controllers\Controller;
 use App\Modules\Posts\Models\Category;
 use App\Modules\Posts\Models\Post;
 
-use Theme;
-use Cache;
-
 class CategoriesController extends Controller
 {
     public function view($slug)
     {
 	    $category = Category::where('slug', '=', $slug)->first();
 
+        if (empty($category)) {
+            abort(404, 'Could not find category.');
+        }
+
 	    $post = new Post;
 	    $posts = $post->getAllByCategoryId($category->id);
 
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        $this->theme->set('meta_keywords', $category->meta_keywords);
+        $this->theme->set('meta_description', $category->meta_description);
+        $this->theme->setTitle($category->name);
 
-        $theme->set('meta_keywords', $category->meta_keywords);
-        $theme->set('meta_description', $category->meta_description);
-        $theme->setTitle($category->name);
-
-        return $theme->scope('categories.view', compact('posts', 'category'))->render();
+        return $this->theme->scope('categories.view', compact('posts', 'category'))->render();
     }
 }

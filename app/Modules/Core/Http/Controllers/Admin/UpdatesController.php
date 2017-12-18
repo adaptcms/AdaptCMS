@@ -17,7 +17,7 @@ use Artisan;
 
 class UpdatesController extends Controller
 {
-    public function index($module_type = null)
+    public function index()
     {
         $marketplace_user_data = Core::getMarketplaceUserData();
 

@@ -49,6 +49,8 @@ if ($('.ui.posts.search').length) {
 							_this.items = [];
 
 							toastr.success('The posts have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete posts, please try again.');
 						}
@@ -69,6 +71,8 @@ if ($('.ui.posts.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The posts have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save posts, please try again.');
 					}

@@ -19,41 +19,38 @@ class PagesController extends Controller
 {
     public function home()
     {
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        $page = Page::where('slug', '=', 'home')->first();
 
-        try {
-            $page = Page::where('slug', '=', 'home')->firstOrFail();
-
-            $page->body = Storage::disk('themes')->get('default/views/pages/' . $page->slug . '.blade.php');
-
-            $theme->set('meta_keywords', $page->meta_keywords);
-            $theme->set('meta_description', $page->meta_description);
-            $theme->setTitle('Home');
-        } catch(ModelNotFoundException $e) {
-            abort(404);
+        if (empty($page)) {
+            abort(404, 'Could not find home page.');
         }
+
+        $page->body = Storage::disk('themes')->get('default/views/pages/' . $page->slug . '.blade.php');
+
+        $this->theme->set('meta_keywords', $page->meta_keywords);
+        $this->theme->set('meta_description', $page->meta_description);
+        $this->theme->setTitle('Home');
 
 	    $post = new Post;
 	    $posts = $post->getAll();
 
-        return $theme->scope('pages.home', compact('page', 'posts'))->render();
+        return $this->theme->scope('pages.home', compact('page', 'posts'))->render();
     }
 
     public function view($slug)
     {
-	    try {
-		    $page = Page::where('slug', '=', $slug)->firstOrFail();
-            $page->body = Storage::disk('themes')->get('default/views/pages/' . $page->slug . '.blade.php');
+	    $page = Page::where('slug', '=', $slug)->first();
 
-		    $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        if (empty($page)) {
+            abort(404, 'Could not find page.');
+        }
 
-            $theme->set('meta_keywords', $page->meta_keywords);
-            $theme->set('meta_description', $page->meta_description);
-            $theme->setTitle($page->name);
+        $page->body = Storage::disk('themes')->get('default/views/pages/' . $page->slug . '.blade.php');
 
-	        return $theme->scope('pages.' . $slug, compact('page'))->render();
-	    } catch(ModelNotFoundException $e) {
-		    abort(404);
-	    }
+        $this->theme->set('meta_keywords', $page->meta_keywords);
+        $this->theme->set('meta_description', $page->meta_description);
+        $this->theme->setTitle($page->name);
+
+        return $this->theme->scope('pages.' . $slug, compact('page'))->render();
     }
 }

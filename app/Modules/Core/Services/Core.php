@@ -83,6 +83,11 @@ class Core
         return date(Settings::get('date_format_long'), strtotime($date));
     }
 
+    public function getAdminDateLong($date)
+    {
+        return date(Settings::get('admin_date_format_long'), strtotime($date));
+    }
+
     public function getVersion()
     {
         if (Cache::has('adaptcms_version')) {

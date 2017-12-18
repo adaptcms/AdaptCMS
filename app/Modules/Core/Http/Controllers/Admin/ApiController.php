@@ -30,6 +30,14 @@ class ApiController extends Controller
         'themes' => '\App\Modules\Themes\Models\Theme',
 	];
 
+	/**
+	* Index
+	*
+	* @param Request $request
+	* @param string $module
+	*
+	* @return string
+	*/
 	public function index(Request $request, $module)
 	{
 		$response = [];
@@ -52,6 +60,14 @@ class ApiController extends Controller
 		return response()->json($response);
 	}
 
+	/**
+	* Add
+	*
+	* @param Request $request
+	* @param string $module
+	*
+	* @return string
+	*/
 	public function add(Request $request, $module)
 	{
 		$response = [];
@@ -74,6 +90,15 @@ class ApiController extends Controller
 		return response()->json($response);
 	}
 
+	/**
+	* Edit
+	*
+	* @param Request $request
+	* @param string $module
+	* @param integer $id
+	*
+	* @return string
+	*/
 	public function edit(Request $request, $module, $id)
 	{
 		$response = [];
@@ -97,6 +122,14 @@ class ApiController extends Controller
 		return response()->json($response);
 	}
 
+	/**
+	* Delete
+	*
+	* @param string $module
+	* @param integer $id
+	*
+	* @return string
+	*/
 	public function delete($module, $id)
 	{
 		$response = [];

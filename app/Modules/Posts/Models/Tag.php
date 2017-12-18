@@ -4,13 +4,16 @@ namespace App\Modules\Posts\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 use Storage;
 use Cache;
 
 class Tag extends Model
 {
-	use Searchable;
+	use Searchable,
+        HasSlug;
 
     /**
      * The table associated with the model.
@@ -39,7 +42,6 @@ class Tag extends Model
     public function add($postArray)
     {
 	    $this->name = $postArray['name'];
-	    $this->slug = str_slug($this->name, '-');
 	    $this->user_id = $postArray['user_id'];
 		$this->meta_keywords = $postArray['meta_keywords'];
         $this->meta_description = $postArray['meta_description'];
@@ -58,7 +60,6 @@ class Tag extends Model
     public function edit($postArray)
     {
 	    $this->name = $postArray['name'];
-	    $this->slug = str_slug($this->name, '-');
 	    $this->user_id = $postArray['user_id'];
 		$this->meta_keywords = $postArray['meta_keywords'];
         $this->meta_description = $postArray['meta_description'];
@@ -137,5 +138,16 @@ class Tag extends Model
         }
 
         return $results;
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 }

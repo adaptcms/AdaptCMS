@@ -48,9 +48,11 @@ if ($('.ui.albums.search').length) {
 						if (response.status) {
 							_this.items = [];
 
-							toastr.success('The albums have been deleted.');
+							toastr.success('The album(s) have been deleted.');
+
+							window.location.reload();
 						} else {
-							toastr.error('Could not delete albums, please try again.');
+							toastr.error('Could not delete album(s), please try again.');
 						}
 					});
 				}

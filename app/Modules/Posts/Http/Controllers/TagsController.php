@@ -21,12 +21,10 @@ class TagsController extends Controller
 	    $posts = $post->getAllByTagSlug($slug);
         $tag = $posts['tag'];
 
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+        $this->theme->set('meta_keywords', $tag->meta_keywords);
+        $this->theme->set('meta_description', $tag->meta_description);
+        $this->theme->setTitle($tag->name);
 
-        $theme->set('meta_keywords', $tag->meta_keywords);
-        $theme->set('meta_description', $tag->meta_description);
-        $theme->setTitle($tag->name);
-
-        return $theme->scope('tags.view', compact('posts', 'tag'))->render();
+        return $this->theme->scope('tags.view', compact('posts', 'tag'))->render();
     }
 }

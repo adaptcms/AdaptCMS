@@ -30,14 +30,14 @@
         "order": 9001
     },
     "Sitemap": {
-        "basename": "Sitemap",
         "name": "Sitemap",
         "slug": "sitemap",
         "version": "1.0",
         "description": "This is the description for the Sitemap module.",
-        "id": 55671245,
-        "enabled": false,
-        "order": 9001
+        "basename": "Sitemap",
+        "id": 1513199590,
+        "order": 9001,
+        "enabled": true
     },
     "Adaptbb": {
         "basename": "Adaptbb",

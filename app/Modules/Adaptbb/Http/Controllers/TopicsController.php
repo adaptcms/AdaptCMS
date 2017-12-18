@@ -21,10 +21,18 @@ class TopicsController extends Controller
 {
     public function view($forum_slug, $topic_slug)
     {
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
-
         $forum = Forum::where('slug', '=', $forum_slug)->first();
+
+        if (empty($forum)) {
+            abort(404, 'Cannot find topic.');
+        }
+
         $topic = Topic::where('forum_id', '=', $forum->id)->where('slug', '=', $topic_slug)->first();
+
+        if (empty($topic)) {
+            abort(404, 'Cannot find topic.');
+        }
+
         $replies = Reply::where('topic_id', '=', $topic->id)->orderBy('created_at', 'ASC')->paginate(15);
 
         // increment views count
@@ -33,18 +41,20 @@ class TopicsController extends Controller
         $topic->save();
 
         // set meta
-        $theme->set('meta_keywords', $forum->meta_keywords);
-        $theme->set('meta_description', $forum->meta_description);
-        $theme->setTitle($topic->name . ' | ' . $forum->name);
+        $this->theme->set('meta_keywords', $forum->meta_keywords);
+        $this->theme->set('meta_description', $forum->meta_description);
+        $this->theme->setTitle($topic->name . ' | ' . $forum->name);
 
-        return $theme->scope('adaptbb.topics.view', compact('forum', 'topic', 'replies'))->render();
+        return $this->theme->scope('adaptbb.topics.view', compact('forum', 'topic', 'replies'))->render();
     }
 
     public function add(Request $request, $forum_slug)
     {
-        $theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
-
         $forum = Forum::where('slug', '=', $forum_slug)->first();
+
+        if (empty($forum)) {
+            abort(404, 'Cannot find forum.');
+        }
 
         $model = new Topic;
 
@@ -77,9 +87,9 @@ class TopicsController extends Controller
                 ->with('success', 'Sweet! Your topic is all done.');
         }
 
-        $theme->setTitle('Community Forums - Post a Reply | ' . $forum->name);
+        $this->theme->setTitle('Community Forums - Post a Reply | ' . $forum->name);
 
-        return $theme->scope('adaptbb.topics.add', compact('forum', 'model'))->render();
+        return $this->theme->scope('adaptbb.topics.add', compact('forum', 'model'))->render();
     }
 
     public function reply(Request $request, $id)

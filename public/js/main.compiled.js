@@ -48,9 +48,11 @@ if ($('.ui.albums.search').length) {
 						if (response.status) {
 							_this.items = [];
 
-							toastr.success('The albums have been deleted.');
+							toastr.success('The album(s) have been deleted.');
+
+							window.location.reload();
 						} else {
-							toastr.error('Could not delete albums, please try again.');
+							toastr.error('Could not delete album(s), please try again.');
 						}
 					});
 				}
@@ -110,6 +112,8 @@ if ($('.ui.categories.search').length) {
 							_this.items = [];
 
 							toastr.success('The categories have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete categories, please try again.');
 						}
@@ -120,14 +124,14 @@ if ($('.ui.categories.search').length) {
 	});
 }
 
-if ($("ol.sortable.categories").length) {
-	$("ol.sortable.categories").sortable({
+if ($(".sortable.categories").length) {
+	$(".sortable.categories").sortable({
 		onDrop: function($item, container, _super, event) {
 			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
 			$("body").removeClass(container.group.options.bodyClass);
 
 			var items = [];
-			$.each($('ol.sortable li'), function() {
+			$.each($('.sortable li'), function() {
 				items.push($(this).attr('data-id'));
 			});
 
@@ -194,6 +198,8 @@ if ($('.ui.fields.search').length) {
 							_this.items = [];
 
 							toastr.success('The fields have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete fields, please try again.');
 						}
@@ -214,6 +220,8 @@ if ($('.ui.fields.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The fields have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save fields, please try again.');
 					}
@@ -239,14 +247,14 @@ if ($('.ui.form.fields').length) {
 	});
 }
 
-if ($("ol.sortable.fields").length) {
-	$("ol.sortable.fields").sortable({
+if ($(".sortable.fields").length) {
+	$(".sortable.fields").sortable({
 		onDrop: function($item, container, _super, event) {
 			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
 			$("body").removeClass(container.group.options.bodyClass);
 
 			var items = [];
-			$.each($('ol.sortable li'), function() {
+			$.each($('.sortable li'), function() {
 				items.push($(this).attr('data-id'));
 			});
 
@@ -313,6 +321,8 @@ if ($('.ui.files.search').length) {
 							_this.items = [];
 
 							toastr.success('The files have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete files, please try again.');
 						}
@@ -375,6 +385,8 @@ if ($('.ui.pages.search').length) {
 							_this.items = [];
 
 							toastr.success('The pages have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete pages, please try again.');
 						}
@@ -395,6 +407,8 @@ if ($('.ui.pages.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The pages have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save pages, please try again.');
 					}
@@ -428,14 +442,14 @@ $(document).ready(function() {
 	}
 });
 
-if ($("ol.sortable.pages").length) {
-	$("ol.sortable.pages").sortable({
+if ($(".sortable.pages").length) {
+	$(".sortable.pages").sortable({
 		onDrop: function($item, container, _super, event) {
 			$item.removeClass(container.group.options.draggedClass).removeAttr("style");
 			$("body").removeClass(container.group.options.bodyClass);
 
 			var items = [];
-			$.each($('ol.sortable li'), function() {
+			$.each($('.sortable li'), function() {
 				items.push($(this).attr('data-id'));
 			});
 
@@ -502,6 +516,8 @@ if ($('.ui.posts.search').length) {
 							_this.items = [];
 
 							toastr.success('The posts have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete posts, please try again.');
 						}
@@ -522,6 +538,8 @@ if ($('.ui.posts.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The posts have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save posts, please try again.');
 					}
@@ -631,6 +649,8 @@ if ($('div.settings').length) {
 						    _this.items = [];
 			
 						    toastr.success('The settings have been deleted.');
+
+						    window.location.reload();
 						} else {
 						    toastr.error('Could not delete settings, please try again.');
 						}
@@ -692,6 +712,8 @@ if ($('.ui.tags.search').length) {
 							_this.items = [];
 
 							toastr.success('The tags have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete tags, please try again.');
 						}
@@ -712,6 +734,8 @@ if ($('.ui.tags.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The tags have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save tags, please try again.');
 					}
@@ -758,6 +782,8 @@ if ($('table.themes').length) {
 							_this.items = [];
 
 							toastr.success('The themes have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete themes, please try again.');
 						}
@@ -778,6 +804,8 @@ if ($('table.themes').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The themes have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save themes, please try again.');
 					}
@@ -890,6 +918,8 @@ if ($('.ui.users.search').length) {
 							_this.items = [];
 
 							toastr.success('The users have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete users, please try again.');
 						}
@@ -909,6 +939,8 @@ if ($('.ui.users.search').length) {
 						$('input[type="checkbox"]:checked').trigger('click');
 
 						toastr.success('The users have been saved.');
+
+						window.location.reload();
 					} else {
 						toastr.error('Could not save users, please try again.');
 					}

@@ -4,61 +4,57 @@
     <h1>AdaptCMS Updates</h1>
 
     <div class="ui red padded segment">
+        <h2>CMS Core</h2>
 
+        <div>
+            <a
+              href="{{ route('admin.updates.upgrade', [ 'type' => 'bleeding_edge' ]) }}"
+              class="ui right labeled icon primary big button {{ Cache::has('bleedinge_edge_update') }}"
+              onclick="return confirm('Are you sure? No turning back. Bugs may be aplenty...');"
+            >
+                Bleeding Edge <i class="fire icon"></i>
+            </a>
+            <br>
+
+            @if(Cache::get('bleedinge_edge_update'))
+                <?php $bleedinge_edge = json_decode(Cache::get('cms_current_version'), true); ?>
+
+                <small>Upgrade Available <i class="upload icon"></i></small><br />
+                <small>
+                    Last Updated:
+                    {{ Core::getAdminDateLong($bleedinge_edge['updated_at']) }}
+                </small>
+            @else
+                <small>Up To Date <i class="checkmark icon"></i></small>
+            @endif
+        </div>
+        <div>
+            <a href="{{ route('admin.updates.upgrade', [ 'type' => 'normal' ]) }}" class="ui right labeled icon green big button {{ !Cache::has('cms_latest_version') ? 'disabled' : '' }}">
+                {{ Cache::has('cms_latest_version_name') ? Cache::get('cms_latest_version_name') : Core::getVersion() }} Release
+                <i class="home icon"></i>
+            </a>
+            <br>
+
+            @if(Cache::has('cms_latest_version_name'))
+                <small>Upgrade Available <i class="upload icon"></i></small>
+            @else
+                <small>Up To Date <i class="checkmark icon"></i></small>
+            @endif
+        </div>
     </div>
 
-    <div class="ui red padded segment">
-          <h2>CMS Core</h2>
-				<div>
-                <a
-                  href="{{ route('admin.updates.upgrade', [ 'type' => 'bleeding_edge' ]) }}"
-                  class="ui right labeled icon primary big button {{ Cache::has('bleedinge_edge_update') }}"
-                  onclick="return confirm('Are you sure? No turning back. Bugs may be aplenty...');"
-                >
-                    Bleeding Edge
-                    <i class="fire icon"></i>
-                </a><br>
+    <div class="ui text container">
+        <h2>Plugins</h2>
 
-                @if(Cache::get('bleedinge_edge_update'))
-                    <?php $bleedinge_edge = json_decode(Cache::get('cms_current_version'), true); ?>
+        @if(!Core::getAddonUpdates('plugins'))
+            <p>
+              No plugin updates
+            </p>
 
-                    <small>Upgrade Available <i class="upload icon"></i></small><br />
-                    <small>
-                        Last Updated:
-                        {{ date('F j, Y @ g:i A', strtotime($bleedinge_edge['updated_at'])) }}
-                    </small>
-                @else
-                    <small>Up To Date <i class="checkmark icon"></i></small>
-                @endif
-						</div>
-						<div>
-							                <a href="{{ route('admin.updates.upgrade', [ 'type' => 'normal' ]) }}" class="ui right labeled icon green big button {{ !Cache::has('cms_latest_version') ? 'disabled' : '' }}">
-                    {{ Cache::has('cms_latest_version_name') ? Cache::get('cms_latest_version_name') : Core::getVersion() }} Release
-                    <i class="home icon"></i>
-                </a><br>
-
-                @if(Cache::has('cms_latest_version_name'))
-                    <small>Upgrade Available <i class="upload icon"></i></small>
-                @else
-                    <small>Up To Date <i class="checkmark icon"></i></small>
-                @endif
-
-				</div>
-      </div>
-
-      <div class="ui text container">
-          <h2>Plugins</h2>
-
-          @if(!Core::getAddonUpdates('plugins'))
-                <p>
-                  No plugin updates
-                </p>
-
-                <a href="{{ route('admin.updates.browse', [ 'module_type' => 'plugins']) }}" class="ui right labeled icon floated primary button pull-right">
-                  <i class="shopping basket icon"></i> Find More Plugins
-                </a>
-
-          @else
+            <a href="{{ route('admin.updates.browse', [ 'module_type' => 'plugins']) }}" class="ui right labeled icon floated primary button pull-right">
+              <i class="shopping basket icon"></i> Find More Plugins
+            </a>
+        @else
             <table class="ui form compact celled definition table plugins update">
               <thead>
                 <th>Update</th>
@@ -98,24 +94,22 @@
                   </th>
                 </tr>
               </tfoot>
-              </table>
-          @endif
-      </div>
+            </table>
+        @endif
+    </div>
 
-      <div class="ui text container">
-          <h2>Themes</h2>
+    <div class="ui text container">
+        <h2>Themes</h2>
 
-          @if(!Core::getAddonUpdates('themes'))
+        @if(!Core::getAddonUpdates('themes'))
+            <p>
+              No theme updates
+            </p>
 
-                <p>
-                  No theme updates
-                </p>
-
-                <a href="{{ route('admin.updates.browse', [ 'module_type' => 'themes']) }}" class="ui right labeled icon floated primary button pull-right">
-                  <i class="shopping basket icon"></i> Find More Themes
-                </a>
-
-          @else
+            <a href="{{ route('admin.updates.browse', [ 'module_type' => 'themes']) }}" class="ui right labeled icon floated primary button pull-right">
+              <i class="shopping basket icon"></i> Find More Themes
+            </a>
+        @else
             <table class="ui form compact celled definition table themes update">
               <thead>
                 <th>Update</th>
@@ -155,8 +149,7 @@
                   </th>
                 </tr>
               </tfoot>
-              </table>
-          @endif
-      </div>
-  </div>
+            </table>
+        @endif
+    </div>
 @stop

@@ -49,7 +49,7 @@
 								{{ $item->user->getName() }}
                             </a>
 						</td>
-						<td>{{ date('F j, Y', strtotime($item->created_at)) }}</td>
+						<td>{{ Core::getAdminDateLong($item->created_at) }}</td>
 					</tr>
 				@endforeach
 			</tbody>

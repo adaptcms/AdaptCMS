@@ -17,16 +17,19 @@ class PostsController extends Controller
 {
  	public function view($slug)
  	{
-	 	$post = new Post;
-	 	$post = $post->getBySlug($slug);
+ 		$post = Post::where('slug', '=', $slug)->first();
 
-	 	$theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
+ 		if (empty($post)) {
+ 			abort(404, 'Cannot find post.');
+ 		}
 
-        $theme->set('meta_keywords', $post['post']->meta_keywords);
-        $theme->set('meta_description', $post['post']->meta_description);
-        $theme->setTitle($post['post']->name);
+ 		$post = $post->getRelationshipData($post);
 
-		return $theme->scope('posts.view', compact('post'))->render();
+        $this->theme->set('meta_keywords', $post['post']->meta_keywords);
+        $this->theme->set('meta_description', $post['post']->meta_description);
+        $this->theme->setTitle($post['post']->name);
+
+		return $this->theme->scope('posts.view', compact('post'))->render();
  	}
  	
  	/**
@@ -48,22 +51,19 @@ class PostsController extends Controller
  		
  		$posts['posts_with_data'] = $model->getRelationshipData($paginated);
  		
- 		// get theme
- 		$theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
- 		
  		// get home page for meta data
  		$page = Page::where('slug', '=', 'home')->first();
  		
  		// set meta data if possible
  		if (!empty($page)) {
- 			$theme->set('meta_keywords', $page->meta_keywords);
- 			$theme->set('meta_description', $page->meta_description);
+ 			$this->theme->set('meta_keywords', $page->meta_keywords);
+ 			$this->theme->set('meta_description', $page->meta_description);
  		}
  		
  		$time = strtotime($year . '-' . $month . '-30');
         
-        $theme->setTitle('Posts for ' . date('F Y', $time));
+        $this->theme->setTitle('Posts for ' . date('F Y', $time));
 
-		return $theme->scope('posts.archive', compact('posts', 'time'))->render();
+		return $this->theme->scope('posts.archive', compact('posts', 'time'))->render();
  	}
 }

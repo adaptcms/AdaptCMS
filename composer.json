@@ -5,27 +5,30 @@
     "license": "BSD-3-Clause",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
-        "laravel/framework": "5.4.*",
-        "caffeinated/modules": "^4.1",
-        "laravelcollective/html": "^5.4.0",
-        "barryvdh/laravel-debugbar": "2.4.*",
-        "jeremeamia/superclosure": "dev-master",
+        "php": ">=7.0.0",
+        "laravel/framework": "5.5.*",
+        "caffeinated/modules": "^4.2",
+        "laravelcollective/html": "^5.5",
+        "barryvdh/laravel-debugbar": "^3.1",
+        "jeremeamia/superclosure": "^2.3",
         "laravel/scout": "^3.0",
-        "teamtnt/laravel-scout-tntsearch-driver": "^2.0",
+        "teamtnt/laravel-scout-tntsearch-driver": "^3.0",
         "offline/persistent-settings": "~1.0.0",
-        "guzzlehttp/guzzle": "^6.2",
+        "guzzlehttp/guzzle": "^6.3",
         "chumper/zipper": "1.0.*",
         "wikimedia/composer-merge-plugin": "^1.4",
-        "spatie/laravel-permission": "^2.1",
-        "laravel/passport": "^2.0"
+        "spatie/laravel-permission": "^2.7",
+        "laravel/passport": "^4.0",
+        "sentry/sentry-laravel": "^0.9.0@dev",
+        "spatie/laravel-sluggable": "dev-master"
     },
     "require-dev": {
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*",
+        "fzaninotto/faker": "~1.7",
+        "mockery/mockery": "~1.0",
+        "phpunit/phpunit": "~6.0",
+        "symfony/css-selector": "3.4.*",
+        "symfony/dom-crawler": "3.4.*",
+        "filp/whoops": "~2.0",
         "adaptcms/laravel-theme": "master"
     },
     "autoload": {
@@ -56,6 +59,10 @@
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize",
             "php artisan vendor:publish"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
         ]
     },
     "config": {

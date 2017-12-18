@@ -2,19 +2,22 @@
 
 namespace App\Modules\Themes\Models;
 
+use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use GuzzleHttp\Client;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
-use Storage;
 use Artisan;
-use Core;
 use Cache;
+use Core;
+use Storage;
 use Zipper;
 
 class Theme extends Model
 {
-    use Searchable;
+    use Searchable,
+        HasSlug;
 
     /**
      * The table associated with the model.
@@ -79,14 +82,12 @@ class Theme extends Model
         $this->name = $postArray['name'];
         $this->status = $postArray['status'];
         $this->user_id = $postArray['user_id'];
-
-        $slug = str_slug($this->name, '-');
-
-        $this->slug = $slug;
         $this->custom = 1;
 
         // enable via pkg manager
         $this->enable();
+
+        $slug = $this->slug;
 
         $files = Storage::disk('themes')->allFiles('default');
 
@@ -130,11 +131,6 @@ class Theme extends Model
         $old_slug = $this->slug;
 
         $this->name = $postArray['name'];
-
-        if ($this->id > 1) {
-            $this->slug = str_slug($this->name, '-');
-        }
-
         $this->user_id = $postArray['user_id'];
 
         $this->save();
@@ -151,9 +147,9 @@ class Theme extends Model
 
     public function delete()
     {
-				if ($this->id == 1) {
-						return false;
-				}
+		if ($this->id == 1) {
+			return false;
+		}
 
         if (Storage::disk('themes')->exists($this->slug)) {
             Storage::disk('themes')->deleteDirectory($this->slug);
@@ -289,5 +285,16 @@ class Theme extends Model
     	return Cache::remember('theme_count', 3600, function() {
     		return Theme::count();
     	});
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 }

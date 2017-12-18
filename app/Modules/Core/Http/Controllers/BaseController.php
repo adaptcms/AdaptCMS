@@ -13,22 +13,24 @@ use Illuminate\Database\Schema\Blueprint;
 use GuzzleHttp\Client;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 
-use App\Modules\Themes\Models\Theme;
+use App\Modules\Themes\Models\Theme as ModelTheme;
 use App\Modules\Plugins\Models\Plugin;
 use App\Modules\Users\Models\Role;
 use App\Modules\Users\Models\Permission;
 
 use Cache;
+use Core;
 use Settings;
 use Storage;
 use Module;
 use Route;
-
-use Core;
+use Theme;
 
 class BaseController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Notifiable;
+
+    public $theme;
 
     public function __construct()
     {
@@ -44,13 +46,15 @@ class BaseController extends Controller
 	        // sync permissions
 	        $this->syncPermissions();
 		}
+
+        $this->theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
     }
 
     public function checkForCmsUpdates()
     {
         $apiUrl = Core::getMarketplaceApiUrl();
 
-        Cache::remember('core_cms_updates', Settings::get('check_for_updates_every_x_minutes', 15), function() use($apiUrl) {
+        Cache::remember('core_cms_updates', Settings::get('check_for_updates_every_x_minutes', 180), function() use($apiUrl) {
             $cms_updates = 0;
 
             $client = new Client();
@@ -121,7 +125,7 @@ class BaseController extends Controller
     {
         $apiUrl = Core::getMarketplaceApiUrl();
 
-        Cache::remember('plugin_updates', Settings::get('check_for_updates_every_x_minutes', 15), function() use($apiUrl) {
+        Cache::remember('plugin_updates', Settings::get('check_for_updates_every_x_minutes', 180), function() use($apiUrl) {
             // set the client
             $client = new Client();
 
@@ -161,11 +165,11 @@ class BaseController extends Controller
     {
         $apiUrl = Core::getMarketplaceApiUrl();
 
-        Cache::remember('theme_updates', Settings::get('check_for_updates_every_x_minutes', 15), function() use($apiUrl) {
+        Cache::remember('theme_updates', Settings::get('check_for_updates_every_x_minutes', 180), function() use($apiUrl) {
             // set the client
             $client = new Client();
 
-            $themes = Theme::all();
+            $themes = ModelTheme::all();
 
             $theme_updates = 0;
             $modules_updates_list = [];

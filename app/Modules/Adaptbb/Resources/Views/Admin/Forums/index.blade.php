@@ -39,13 +39,13 @@
 					      </td>
 						<td>
 							<a href="{{ route('plugin.adaptbb.admin.forums.edit', [ 'id' => $item->id ]) }}">
-                <strong>{{ $item->name }}</strong>
-              </a>
+			                	<strong>{{ $item->name }}</strong>
+			              	</a>
 						</td>
 						<td>
 							{{ $categories[$item->category_id] }}
 						</td>
-						<td>{{ date('F j, Y', strtotime($item->created_at)) }}</td>
+						<td>{{ Core::getAdminDateLong($item->created_at) }}</td>
 					</tr>
 				@endforeach
 			</tbody>

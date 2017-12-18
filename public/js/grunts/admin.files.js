@@ -49,6 +49,8 @@ if ($('.ui.files.search').length) {
 							_this.items = [];
 
 							toastr.success('The files have been deleted.');
+
+							window.location.reload();
 						} else {
 							toastr.error('Could not delete files, please try again.');
 						}

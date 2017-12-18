@@ -49,7 +49,7 @@ Route::group([ 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'rol
 
 		Route::any('/upgrade/{type}', [ 'uses' => 'UpdatesController@upgrade', 'as' => 'admin.updates.upgrade' ]);
 
-		Route::get('/{module_type?}', [ 'uses' => 'UpdatesController@index', 'as' => 'admin.updates.index' ]);
+		Route::get('/', [ 'uses' => 'UpdatesController@index', 'as' => 'admin.updates.index' ]);
 	});
 
     Route::group([ 'prefix' => 'marketplace' ], function() {

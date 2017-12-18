@@ -28,7 +28,9 @@
 	<body class="pushable">
       <div class="ui large top pointing menu inverted main-menu">
         <div class="logo item">
-			<img src="/img/AdaptCMSLogoPNG_2.png" class="ui image">
+			<a href="{{ route('admin.dashboard') }}">
+				<img src="/img/AdaptCMSLogoPNG_2.png" class="ui image">
+			</a>
         </div>
         @include('partials/admin-menu-top')
       </div>

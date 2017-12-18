@@ -22,7 +22,7 @@
 			
 			<div class="inline field">
                 <div class="ui toggle checkbox">
-					{{ Form::checkbox('status', true, true, [ 'class' => 'hidden' ]) }}
+					{{ Form::checkbox('status', true, true) }}
                     {{ Form::label('status') }}
                 </div>
             </div>

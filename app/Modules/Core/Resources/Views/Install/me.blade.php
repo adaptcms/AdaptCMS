@@ -12,7 +12,7 @@
 
           <div class="ui field">
             <div class="ui toggle checkbox">
-              {{ Form::checkbox('cms_collect_data', true, [ 'class' => 'hidden' ]) }}
+              {{ Form::checkbox('cms_collect_data', true, true) }}
               <label>Allow Collecting of non-sensitive data?</label>
             </div>
           </div>

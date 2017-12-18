@@ -1,6 +1,1 @@
-{
-    "name": "Sitemap",
-    "slug": "sitemap",
-    "version": "1.0",
-    "description": "This is the description for the Sitemap module."
-}
+{"name":"Sitemap","slug":"sitemap","version":"1.0","description":"This is the description for the Sitemap module.","basename":"Sitemap","id":1513199590,"enabled":true,"order":9001}

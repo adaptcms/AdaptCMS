@@ -45,7 +45,7 @@
 						<td>
 							{{ $item->forums->count() }}
 						</td>
-						<td>{{ date('F j, Y', strtotime($item->created_at)) }}</td>
+						<td>{{ Core::getAdminDateLong($item->created_at) }}</td>
 					</tr>
 				@endforeach
 			</tbody>

@@ -4,6 +4,8 @@ namespace App\Modules\Posts\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 use App\Modules\Posts\Models\PostRevision;
 use App\Modules\Posts\Models\PostData;
@@ -17,7 +19,8 @@ use DB;
 
 class Post extends Model
 {
-    use Searchable;
+    use Searchable,
+        HasSlug;
 
     /**
      * The table associated with the model.
@@ -28,7 +31,6 @@ class Post extends Model
 
     protected $fillable = [
         'name',
-        'slug',
         'category_id',
         'status',
         'meta_keywords',
@@ -147,7 +149,11 @@ class Post extends Model
     {
         // save post
         $this->name = $postArray['name'];
-        $this->slug = $postArray['slug'];
+
+        if (!empty($postArray['slug'])) {
+            $this->slug = $postArray['slug'];
+        }
+
         $this->status = $postArray['status'];
         $this->user_id = $postArray['user_id'];
         $this->category_id = $postArray['category_id'];
@@ -223,7 +229,6 @@ class Post extends Model
                     $newTag = new Tag;
 
                     $newTag->name = $tag;
-                    $newTag->slug = $slug;
                     $newTag->user_id = $postArray['user_id'];
 
                     $newTag->save();
@@ -245,7 +250,11 @@ class Post extends Model
     {
         // save post
         $this->name = $postArray['name'];
-        $this->slug = $postArray['slug'];
+
+        if (!empty($postArray['slug'])) {
+            $this->slug = $postArray['slug'];
+        }
+        
         $this->status = $postArray['status'];
         $this->settings = empty($postArray['settings']) ? '[]' : json_encode($postArray['settings']);
         $this->user_id = $postArray['user_id'];
@@ -344,7 +353,6 @@ class Post extends Model
                     $newTag = new Tag;
 
                     $newTag->name = $tag;
-                    $newTag->slug = $slug;
                     $newTag->user_id = $postArray['user_id'];
 
                     $newTag->save();
@@ -537,5 +545,16 @@ class Post extends Model
     	        MONTH(created_at) DESC');
     	        
     	return $periods;
+    }
+
+    /**
+     * Get the options for generating the slug.
+     */
+    public function getSlugOptions() : SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('name')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
     }
 }

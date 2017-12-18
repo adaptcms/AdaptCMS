@@ -62,7 +62,7 @@
 							<a href="{{ route('admin.files.edit', [ 'id' => $item->id ]) }}"><strong>{{ $item->filename }}</strong></a>
 						</td>
 						<td>{{ $item->file_type }}</td>
-						<td>{{ date('F j, Y', strtotime($item->created_at)) }}</td>
+						<td>{{ Core::getAdminDateLong($item->created_at) }}</td>
 					</tr>
 				@endforeach
 			</tbody>

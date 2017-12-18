@@ -28,7 +28,7 @@
 
 			<div class="required field">
 				{{ Form::label('slug', 'URL Slug') }}
-				{{ Form::text('slug', $model->slug, [ 'v-model' => 'slug' ]) }}
+				{{ Form::text('slug', $model->slug, [ 'v-model' => 'slug', 'required' => false ]) }}
 			</div>
 
 			@foreach($fields as $field)
@@ -69,7 +69,7 @@
 
 			<div class="inline field">
 			    <div class="ui toggle checkbox">
-			      {{ Form::checkbox('status', true, true, [ 'class' => 'hidden' ]) }}
+			      {{ Form::checkbox('status', true, true) }}
 			      {{ Form::label('status') }}
 			    </div>
 			  </div>
@@ -88,9 +88,15 @@
 			<tbody>
 				@foreach($model->postRevisions as $revision)
 					<tr>
-						<td><?php echo date('F j, Y g:i A', strtotime($revision->created_at)) ?></td>
+						<td>{{ Core::getAdminDateLong($revision->created_at) }}</td>
 						<td>
-							<a href="{{ route('admin.posts.restore', [ 'id' => $revision->id ]) }}" class="ui right primary labeled icon button">Restore <i class="refresh right icon"></i></a>
+							<a 
+								href="{{ route('admin.posts.restore', [ 'id' => $revision->id ]) }}" 
+								class="ui right primary labeled icon button" 
+								onclick="return confirm('Are you sure you want to restore this revision?');"
+							>
+								Restore <i class="refresh right icon"></i>
+							</a>
 						</td>
 					</tr>
 				@endforeach

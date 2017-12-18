@@ -88,7 +88,7 @@
 						<td>{{ $item->caption }}</td>
 						<td>{{ $field_types[$item->field_type] }}</td>
 						<td>{{ $item->category->name }}</td>
-						<td>{{ date('F j, Y', strtotime($item->created_at)) }}</td>
+						<td>{{ Core::getAdminDateLong($item->created_at) }}</td>
 					</tr>
 				@endforeach
 			</tbody>

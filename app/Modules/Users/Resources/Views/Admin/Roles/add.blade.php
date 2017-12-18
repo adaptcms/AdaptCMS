@@ -19,10 +19,19 @@
 			{{ Form::label('name') }}
 			{{ Form::text('name') }}
 		</div>
+
+		<div class="required field">
+			{{ Form::label('redirect_route_name') }}
+			{{ Form::text('redirect_route_name', 'home') }}
+		</div>
 		
 		<div class="required field">
-			{{ Form::label('level') }}
-			{{ Form::email('level') }}
+			{{ Form::label('role', 'Inherit from Role(s)') }}
+			{{ Form::select('role', $roles, null, [ 
+				'placeholder' => 'Pick a Role',
+				'class' => 'ui dropdown',
+				'multiple'
+			]) }}
 		</div>
 		
 		{{ Form::submit('Save', [ 'class' => 'ui button primary' ]) }}
