@@ -1,0 +1,7 @@
+{
+    "name": "adaptcms/module-files",
+    "description": "Files module for AdaptCMS.",
+    "require": {
+      	"php": ">=7.0.0"
+    }
+}

@@ -4,8 +4,7 @@ namespace App\Modules\Posts\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 use Storage;
 use Cache;
@@ -13,7 +12,7 @@ use Cache;
 class Page extends Model
 {
     use Searchable,
-        HasSlug;
+        Sluggable;
 
     /**
      * The table associated with the model.
@@ -142,13 +141,16 @@ class Page extends Model
     }
 
     /**
-     * Get the options for generating the slug.
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
      */
-    public function getSlugOptions() : SlugOptions
+    public function sluggable()
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug')
-            ->doNotGenerateSlugsOnUpdate();
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

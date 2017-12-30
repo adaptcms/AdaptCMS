@@ -36,11 +36,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
     });
 
     Route::group([ 'prefix' => 'forums' ], function() {
-      Route::get('/', [ 'uses' => 'ForumController@index', 'as' => 'plugin.adaptbb.admin.forums.index' ]);
-      Route::any('/add', [ 'uses' => 'ForumController@add', 'as' => 'plugin.adaptbb.admin.forums.add' ]);
-      Route::any('/edit/{id}', [ 'uses' => 'ForumController@edit', 'as' => 'plugin.adaptbb.admin.forums.edit' ]);
-      Route::get('/delete/{id}', [ 'uses' => 'ForumController@delete', 'as' => 'plugin.adaptbb.admin.forums.delete' ]);
-      Route::any('/order', [ 'uses' => 'ForumController@order', 'as' => 'plugin.adaptbb.admin.forums.order' ]);
+      Route::get('/', [ 'uses' => 'ForumsController@index', 'as' => 'plugin.adaptbb.admin.forums.index' ]);
+      Route::any('/add', [ 'uses' => 'ForumsController@add', 'as' => 'plugin.adaptbb.admin.forums.add' ]);
+      Route::any('/edit/{id}', [ 'uses' => 'ForumsController@edit', 'as' => 'plugin.adaptbb.admin.forums.edit' ]);
+      Route::get('/delete/{id}', [ 'uses' => 'ForumsController@delete', 'as' => 'plugin.adaptbb.admin.forums.delete' ]);
+      Route::any('/order', [ 'uses' => 'ForumsController@order', 'as' => 'plugin.adaptbb.admin.forums.order' ]);
     });
   });
 });

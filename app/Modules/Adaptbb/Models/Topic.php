@@ -4,15 +4,14 @@ namespace App\Modules\Adaptbb\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 use App\Modules\Adaptbb\Models\Reply;
 
 class Topic extends Model
 {
     use Searchable,
-        HasSlug;
+        Sluggable;
 
     protected $table = 'plugin_adaptbb_topics';
 
@@ -87,13 +86,16 @@ class Topic extends Model
     }
 
     /**
-     * Get the options for generating the slug.
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
      */
-    public function getSlugOptions() : SlugOptions
+    public function sluggable()
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug')
-            ->doNotGenerateSlugsOnUpdate();
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

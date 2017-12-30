@@ -1,0 +1,7 @@
+{
+    "name": "adaptcms/module-plugins",
+    "description": "Plugins module for AdaptCMS.",
+    "require": {
+      	"php": ">=7.0.0"
+    }
+}

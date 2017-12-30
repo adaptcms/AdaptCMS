@@ -7,6 +7,8 @@
  * @author   Taylor Otwell <taylor@laravel.com>
  */
 
+define('LARAVEL_START', microtime(true));
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -19,7 +21,13 @@
 |
 */
 
-require __DIR__.'/../bootstrap/autoload.php';
+$composer_path = __DIR__ . '/../vendor/autoload.php';
+
+if (!file_exists($composer_path)) {
+	die('Please install/run composer. <a href="https://adaptcms.gitbooks.io/adaptcms/technology/composer.html" target="_blank" rel="noopener noreferrer">How to use Composer</a>');
+}
+
+require $composer_path;
 
 /*
 |--------------------------------------------------------------------------

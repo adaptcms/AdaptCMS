@@ -18,7 +18,6 @@ use Cache;
 use Storage;
 use Route;
 use Module;
-use Debugbar;
 
 class Core
 {
@@ -175,22 +174,22 @@ class Core
         $client = new Client();
 
         $meta_data = [
-                'posts_count' => Post::count(),
-                'users_count' => User::count(),
-                'plugins_count' => Module::count(),
-                'pages_count' => Page::count(),
-                'categories_count' => Category::count(),
-                'files_count' => File::count(),
-                'albums_count' => Album::count(),
-                'themes_count' => Theme::count(),
-                'plugins' => Module::all()->toArray()
+            'posts_count' => Post::count(),
+            'users_count' => User::count(),
+            'plugins_count' => Module::count(),
+            'pages_count' => Page::count(),
+            'categories_count' => Category::count(),
+            'files_count' => File::count(),
+            'albums_count' => Album::count(),
+            'themes_count' => Theme::count(),
+            'plugins' => Module::all()->toArray()
         ];
 
         $data = [
-                'version' => $this->getVersion(),
-                'url' => route('home'),
-                'cms_collect_data' => Cache::get('cms_collect_data', true),
-                'metadata' => $meta_data
+            'version' => $this->getVersion(),
+            'url' => route('home'),
+            'cms_collect_data' => Cache::get('cms_collect_data', true),
+            'metadata' => $meta_data
         ];
 
         if (!empty($params)) {
@@ -202,8 +201,8 @@ class Core
         $res = $client->post(
             $this->getMarketplaceApiUrl() . '/sync/website',
             [
-                    'form_params' => $data,
-                    'http_errors' => false
+                'form_params' => $data,
+                'http_errors' => false
             ]
         );
 
@@ -214,40 +213,9 @@ class Core
         }
     }
 
-    public function syncPermissions()
-    {
-		$modules = Module::all();
-		$permissions = [];
-
-		foreach($module as $module) {
-			dump($module);
-		}
-
-		$routes = Route::getRoutes();
-		foreach ($routes as $route) {
-		    dump($route->getPath());
-		}
-
-		die();
-    }
-
     public function getMarketplaceApiUrl()
     {
         return 'https://marketplace.adaptcms.com/api';
-    }
-
-    public function debugEnable()
-    {
-        if (class_exists('Debugbar')) {
-            Debugbar::enable();
-        }
-    }
-
-    public function debugDisable()
-    {
-        if (class_exists('Debugbar')) {
-            Debugbar::disable();
-        }
     }
 
     public function getAdminPluginLinks()

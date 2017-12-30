@@ -3,12 +3,11 @@
 namespace App\Modules\Adaptbb\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class ForumCategory extends Model
 {
-    use HasSlug;
+    use Sluggable;
 
     protected $table = 'plugin_adaptbb_forum_categories';
 
@@ -23,12 +22,16 @@ class ForumCategory extends Model
     }
 
     /**
-     * Get the options for generating the slug.
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
      */
-    public function getSlugOptions() : SlugOptions
+    public function sluggable()
     {
-        return SlugOptions::create()
-            ->generateSlugsFrom('name')
-            ->saveSlugsTo('slug');
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

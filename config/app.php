@@ -162,16 +162,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        Caffeinated\Modules\ModulesServiceProvider::class,
-        Collective\Html\HtmlServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
         Teepluss\Theme\ThemeServiceProvider::class,
-        Laravel\Scout\ScoutServiceProvider::class,
-        TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         Offline\Settings\SettingsServiceProvider::class,
-        Chumper\Zipper\ZipperServiceProvider::class,
-        Spatie\Permission\PermissionServiceProvider::class,
-        Laravel\Passport\PassportServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -185,8 +177,7 @@ return [
         /*
         * AdaptCMS Providers
         */
-	    App\Modules\Core\Providers\CoreServiceProvider::class,
-
+        App\Modules\Core\Providers\CoreServiceProvider::class,
     ],
 
     /*
@@ -235,15 +226,11 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        'Module' => Caffeinated\Modules\Facades\Module::class,
-        'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        // Vendor
         'Theme' => Teepluss\Theme\Facades\Theme::class,
         'Settings'  => Offline\Settings\Facades\Settings::class,
-        'Zipper' => Chumper\Zipper\Zipper::class,
 
-        // Core AdaptCMS
+        // AdaptCMS
         'Core' => App\Modules\Core\Facades\Core::class,
     ],
 
