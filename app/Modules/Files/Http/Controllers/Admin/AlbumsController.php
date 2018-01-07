@@ -15,13 +15,25 @@ use Validator;
 
 class AlbumsController extends Controller
 {
+    /**
+    * Index
+    *
+    * @return View
+    */
     public function index()
     {
         $items = Album::orderBy('created_at', 'DESC')->paginate(15);
 
-        return view('files::Admin/Albums/index', [  'items' => $items ]);
+        return view('files::Admin/Albums/index', compact('items'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
         $model = new Album();
@@ -43,9 +55,21 @@ class AlbumsController extends Controller
         return view('files::Admin/Albums/add', [ 'model' => $model ]);
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $model = Album::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
 
 		$errors = [];
         if ($request->getMethod() == 'POST') {
@@ -72,13 +96,33 @@ class AlbumsController extends Controller
         return view('files::Admin/Albums/edit', [ 'model' => $model, 'errors' => $errors ]);
     }
 
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function delete($id)
     {
-        $model = Album::find($id)->delete();
+        $model = Album::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
+
+        $model->delete();
 
         return redirect()->route('admin.albums.index')->with('success', 'Album has been saved');
     }
 
+    /**
+    * Simple Save
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function simpleSave(Request $request)
     {
         $model = new Album;

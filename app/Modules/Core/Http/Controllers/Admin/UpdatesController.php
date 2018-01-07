@@ -17,6 +17,11 @@ use Artisan;
 
 class UpdatesController extends Controller
 {
+    /**
+    * Index
+    *
+    * @return View
+    */
     public function index()
     {
         $marketplace_user_data = Core::getMarketplaceUserData();
@@ -24,6 +29,13 @@ class UpdatesController extends Controller
         return view('core::Admin/Updates/index', compact('marketplace_user_data'));
     }
 
+    /**
+    * Browse
+    *
+    * @param null|string $module_type
+    *
+    * @return View
+    */
     public function browse($module_type = null)
     {
         $client = new Client();
@@ -53,6 +65,13 @@ class UpdatesController extends Controller
         return view('core::Admin/Updates/browse', compact('modules', 'module_type'));
     }
 
+    /**
+    * View
+    *
+    * @param integer $id
+    *
+    * @return View
+    */
     public function view($id)
     {
         $client = new Client();
@@ -69,6 +88,13 @@ class UpdatesController extends Controller
         return view('core::Admin/Updates/view', compact('module'));
     }
 
+    /**
+    * Install Theme
+    *
+    * @param integer $id
+    *
+    * @return View
+    */
     public function installTheme($id)
     {
         $client = new Client();
@@ -135,6 +161,14 @@ class UpdatesController extends Controller
         return redirect()->route('admin.themes.index')->with('success', $module['name'] . ' theme has been installed!');
     }
 
+    /**
+    * Install Plugin
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return View
+    */
     public function installPlugin(Request $request, $id)
     {
         $client = new Client();
@@ -143,7 +177,7 @@ class UpdatesController extends Controller
         $res = $client->request('GET', Core::getMarketplaceApiUrl() . '/module/' . $id, [ 'http_errors' => false ]);
 
         if ($res->getStatusCode() == 200) {
-            $module = json_decode($res->getBody(), true);
+            $module = json_decode((string) $res->getBody(), true);
         } else {
             abort(404);
         }
@@ -168,10 +202,10 @@ class UpdatesController extends Controller
         }
 
         // then attempt to extract contents
-        $path = base_path() . '/app/Modules/' . $filename;
+        $path = app_path('Modules/' . $filename);
 		$zip_folder = $module['module_type'] . '-' . $module['slug'] . '-' . $module['latest_version']['version'];
 
-		Zipper::make($path)->folder($zip_folder)->extractTo(base_path() . '/app/Modules/');
+		Zipper::make($path)->folder($zip_folder)->extractTo(app_path('Modules'));
 
         // delete the ZIP
         if (Storage::disk('plugins')->exists($filename)) {
@@ -185,11 +219,17 @@ class UpdatesController extends Controller
         // finally, enable plugin
         Plugin::enable($slug);
 
-
         // we'll return to the plugins index on success
         return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been installed!');
     }
 
+    /**
+    * Update Theme
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function updateTheme($id)
     {
         $theme = new Theme;
@@ -200,6 +240,13 @@ class UpdatesController extends Controller
         return redirect()->route('admin.themes.index')->with('success', $module['name'] . ' theme has been updated!');
     }
 
+    /**
+    * Update Themes
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function updateThemes(Request $request)
     {
         $theme = new Theme;
@@ -213,6 +260,13 @@ class UpdatesController extends Controller
         return response()->json([ 'status' => true ]);
     }
 
+    /**
+    * Update Plugin
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function updatePlugin($id)
     {
         Plugin::install($id);
@@ -221,6 +275,13 @@ class UpdatesController extends Controller
         return redirect()->route('admin.plugins.index')->with('success', $module['name'] . ' plugin has been updated!');
     }
 
+    /**
+    * Update Plugins
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function updatePlugins(Request $request)
     {
         foreach ($request->get('module_ids') as $id => $value) {
@@ -232,6 +293,13 @@ class UpdatesController extends Controller
         return response()->json([ 'status' => true ]);
     }
 
+    /**
+    * Upgrade
+    *
+    * @param string $type
+    *
+    * @return View
+    */
     public function upgrade($type)
     {
         // get the current version data
@@ -242,10 +310,12 @@ class UpdatesController extends Controller
         }
 
         if ($type == 'normal') {
-            $upgrade_version = json_decode(Cache::get('cms_latest_version'), true);
+            $key = 'cms_latest_version';
         } else {
-            $upgrade_version = json_decode(Cache::get('cms_current_version'), true);
+            $key = 'cms_current_version';
         }
+
+        $upgrade_version = json_decode(Cache::get($key), true);
 
         // get the contents of the ZIP file
         $client = new Client();
@@ -255,7 +325,6 @@ class UpdatesController extends Controller
         if ($res->getStatusCode() == 200) {
             $zip_contents = (string) $res->getBody();
         } else {
-            dd((string) $res->getBody());
             abort(404);
         }
 
@@ -265,10 +334,10 @@ class UpdatesController extends Controller
         Storage::disk('local')->put($zip_filename, $zip_contents, 'public');
 
         // open the ZIP file
-        $zipPath = storage_path('app') . '/' . $zip_filename;
+        $zipPath = storage_path('app/' . $zip_filename);
 
         // extract zip files to storage folder
-        Zipper::make($zipPath)->extractTo(storage_path('app') . '/upgrade');
+        Zipper::make($zipPath)->extractTo(storage_path('app/upgrade'));
 
 		$folder_slug = 'charliepage7-adaptcms-' . substr($upgrade_version['commit_hash'], 0, 12);
 
@@ -289,10 +358,10 @@ class UpdatesController extends Controller
             // TEMPORARY. going away before final 4.0 release
             // if filename ends with x variable, file gets skipped
             $endsWithArray = [
-                    '~',
-                    '.orig',
-                    '#',
-                    'public/files'
+                '~',
+                '.orig',
+                '#',
+                'public/files'
             ];
 
             foreach ($endsWithArray as $endsWith) {
@@ -305,14 +374,14 @@ class UpdatesController extends Controller
 
             // TEMPORARY. probably going away before final 4.0 release
             $ignorePaths = [
-                    '.env',
-                    '.gitignore',
-                    'tests/',
-                    'public/bower_components/',
-                    'config/database.php',
-                    'themes/',
-                    'Database/Seeds/',
-                    'app/Modules/Core/Http/Controllers/AdminUpdatesController.php'
+                '.env',
+                '.gitignore',
+                'tests/',
+                'public/bower_components/',
+                'config/database.php',
+                'themes/',
+                'Database/Seeds/',
+                'app/Modules/Core/Http/Controllers/AdminUpdatesController.php'
             ];
 
             foreach ($ignorePaths as $ignorePath) {
@@ -355,15 +424,15 @@ class UpdatesController extends Controller
                 Storage::disk('base')->put($relative_path, $contents, 'public');
             } else {
                 // time to match file sizes
-                    $upgrade_size = Storage::disk('local')->size($file);
+                $upgrade_size = Storage::disk('local')->size($file);
                 $current_size = Storage::disk('base')->size($relative_path);
 
-                    // if any different, we update
-                    if ($upgrade_size != $current_size) {
-                        $contents = Storage::disk('local')->get($file);
+                // if any different, we update
+                if ($upgrade_size != $current_size) {
+                    $contents = Storage::disk('local')->get($file);
 
-                        Storage::disk('base')->put($relative_path, $contents, 'public');
-                    }
+                    Storage::disk('base')->put($relative_path, $contents, 'public');
+                }
             }
         }
 

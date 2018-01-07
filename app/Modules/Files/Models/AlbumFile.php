@@ -6,18 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class AlbumFile extends Model
 {
-    /**                                                                                                                                                                                                                                             
-     * The table associated with the model.                                                                                                                                                                                                         
-     *                                                                                                                                                                                                                                              
-     * @var string                                                                                                                                                                                                                                  
-     */
+    /**
+    * The table associated with the model. 
+    *
+    * @var string
+    */
     protected $table = 'album_files';
     
+    /**
+    * Album
+    *
+    * @return Album
+    */
     public function album()
     {
         return $this->belongsTo('App\Modules\Files\Models\Album');
     }
     
+    /**
+    * File
+    *
+    * @return File
+    */
     public function file()
     {
         return $this->belongsTo('App\Modules\Files\Models\File');

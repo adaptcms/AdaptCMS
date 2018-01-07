@@ -16,6 +16,13 @@ use Storage;
 
 class FilesController extends Controller
 {
+    /**
+    * Index
+    *
+    * @param Request $request
+    *
+    * @return View
+    */
     public function index(Request $request)
     {
 	 	$items = File::orderBy('filename', 'ASC');
@@ -26,25 +33,22 @@ class FilesController extends Controller
 
 	 	$items = $items->paginate(15);
 
-	 	$file_types_tmp = File::pluck('file_type')->groupBy('file_type');
-        $file_types = [];
-        foreach($file_types_tmp as $file) {
-	        foreach($file as $row) {
-		        $file_types[$row] = $row;
-	        }
-        }
+	 	$file_types = File::getFileTypes();
 
-        asort($file_types);
-
-        return view('files::Admin/Files/index', [
-        	'items' => $items,
-        	'file_types' => $file_types
-        ]);
+        return view('files::Admin/Files/index', compact('items', 'file_types'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
         $model = new File();
+        $albums = Album::pluck('name', 'id');
 
         if ($request->getMethod() == 'POST') {
 	        $this->validate($request, [
@@ -64,22 +68,27 @@ class FilesController extends Controller
 	        }
         }
 
-        return view('files::Admin/Files/add', [
-        	'model' => $model,
-        	'albums' => Album::pluck('name', 'id')
-        ]);
+
+        return view('files::Admin/Files/add', compact('model', 'albums'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $model = File::find($id);
+        $albums = Album::pluck('name', 'id');
 
         if ($request->getMethod() == 'POST') {
 	        $data = $request->all();
 
-	        $data['user_id'] = Auth::user()->id;
-
-		    $data['validFile'] = $request->file('file') && $request->file('file')->isValid();
+		    $data['validFile'] = ($request->file('file') && $request->file('file')->isValid());
 	        $data['user_id'] = Auth::user()->id;
 
 			$model->edit($data, $request->file, $request->get('albums'));
@@ -87,19 +96,36 @@ class FilesController extends Controller
 	        return redirect()->route('admin.files.index')->with('success', 'File has been saved');
         }
 
-        return view('files::Admin/Files/edit', [
-        	'model' => $model,
-        	'albums' => Album::pluck('name', 'id')
-        ]);
+        return view('files::Admin/Files/edit', compact('model', 'albums'));
     }
 
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function delete($id)
     {
-        $model = File::find($id)->delete();
+        $model = File::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
+
+        $model->delete();
 
         return redirect()->route('admin.files.index')->with('success', 'File has been saved');
     }
 
+    /**
+    * Simple Save
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function simpleSave(Request $request)
     {
         $model = new File;

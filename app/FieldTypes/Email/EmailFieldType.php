@@ -4,13 +4,22 @@ namespace App\FieldTypes\Email;
 
 class EmailFieldType
 {
-	public function beforeSave()
-	{
-
-	}
-
-	public function transform()
+	public function beforeValidate($rules, $field)
 	{
 		
+
+		return $rules;
+	}
+
+	public function beforeSave($postData, $field)
+	{
+
+		return $postData;
+	}
+
+	public function transform($postData, $field)
+	{
+		
+		return $postData;
 	}
 }

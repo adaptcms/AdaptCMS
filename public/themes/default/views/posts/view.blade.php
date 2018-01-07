@@ -1,34 +1,49 @@
-<div class="ui grid margin-bottom-10">
-	<div class="ui divided items">
-	  <div class="item">
-	    <div class="image">
-		  <?php $image = $post['post']->getFieldValue($post['post_data'], 'image') ?>
-		  
-		  @if(!empty($image))
-	      	<img src="{{ $image }}">
+<div class="columns features">
+	<?php $image = $post['post']->getFieldValue($post['post_data'], 'image') ?>
+	<div class="column is-12">
+	    <div class="card">
+	      @if(!empty($image))
+	      	<div class="card-image has-text-centered">
+	      		<img src="{{ $image }}">
+	      	</div>
 	      @endif
+	    	<div class="card-content">
+				<div class="media">
+					@if(!empty($post['user']->profile_image))
+						<div class="media-left">
+							<figure class="image is-48x48">
+								<img src="{{ $post['user']->getProfileImage('small') }}" alt="{{ $post['user']->username }} profile photo">
+							</figure>
+						</div>
+					@endif
+					<div class="media-content">
+						<p class="title is-4">
+							<a href="{{ route('users.profile.view', [ 'username' => $post['user']->username ]) }}">
+								{{ $post['user']->username }}
+							</a>
+						</p>
+						<p class="subtitle is-6">
+							<time datetime="{{ $post['post']->created_at }}">
+			          			<small>Posted: {{ Core::getDateLong($post['post']->created_at) }}</small>
+			          		</time>
+						</p>
+					</div>
+		    	</div>
+	        	<div class="content">
+	          		<h4><a href="{{ route('posts.view', [ 'slug' => $post['post']->slug ]) }}" class="header">{{ $post['post']->name }}</a></h4>
+	          		<p>{!! str_limit($post['post']->getFieldValue($post['post_data'], 'body'), 300) !!}</p>
+
+	          		@if(!empty($post['tags']))
+						@foreach($post['tags'] as $tag)
+							<span class="tag"><a href="{{ route('tags.view', [ 'slug' => $tag->slug ]) }}">{{ $tag->name }}</a></span>
+						@endforeach
+					@endif
+	        	</div>
+	      	</div>
 	    </div>
-	    <div class="content">
-	      <h1 class="header">{{ $post['post']->name }}</h1>
-	      <div class="meta">
-	        <span class="cinema"><small>Posted: {{ Core::getDateLong($post['post']->created_at) }}</small></span>
-	      </div>
-	      <div class="description text-color-black">
-	        {!! $post['post']->getFieldValue($post['post_data'], 'body') !!}
-	      </div>
-	      <div class="extra">
-	        @if(!empty($post['tags']))
-	        	@foreach($post['tags'] as $tag)
-		        	<div class="ui label"><a href="{{ route('tags.view', [ 'slug' => $tag->slug ]) }}">{{ $tag->name }}</a></div>
-		        @endforeach
-	        @endif
-	      </div>
-	    </div>
-	  </div>
 	</div>
-</div>
-	
-	
+</div>  
+
 <div id="disqus_thread"></div>
 <script>
 

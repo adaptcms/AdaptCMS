@@ -12,6 +12,11 @@ use Artisan;
 
 class Install
 {
+    /**
+    * Get Server Checks
+    *
+    * @return array
+    */
     public function getServerChecks()
     {
         // prep work
@@ -68,6 +73,11 @@ class Install
         return $checks;
     }
 
+    /**
+    * Get Connection Types
+    *
+    * @return array
+    */
     public function getConnectionTypes()
     {
         return [
@@ -75,6 +85,14 @@ class Install
         ];
     }
 
+    /**
+    * Test Database
+    *
+    * @param array $data
+    * @param bool $write_file
+    *
+    * @return bool
+    */
     public function testDatabase($data = [], $write_file = false)
     {
         if ($write_file) {
@@ -134,6 +152,11 @@ class Install
         return $status;
     }
 
+    /**
+    * Install Sql
+    *
+    * @return bool
+    */
     public function installSql()
     {
         try {

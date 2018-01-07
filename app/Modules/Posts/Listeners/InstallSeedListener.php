@@ -21,16 +21,6 @@ use Core;
 class InstallSeedListener
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct(InstallSeedEvent $event)
-    {
-
-    }
-
-    /**
      * Handle the event.
      *
      * @param  OrderShipped  $event

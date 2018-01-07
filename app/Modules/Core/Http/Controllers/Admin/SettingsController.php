@@ -23,9 +23,16 @@ class SettingsController extends Controller
 
         $items = $model->getKeyedByCategory();
 
-        return view('core::Admin/Settings/index', [ 'items' => $items ]);
+        return view('core::Admin/Settings/index', compact('items'));
 	}
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
         $model = new Setting;
@@ -46,6 +53,13 @@ class SettingsController extends Controller
         return view('core::Admin/Settings/add', compact('model', 'categories'));
     }
 
+    /**
+    * Add Category
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function addCategory(Request $request)
     {
         $model = new SettingsCategory;
@@ -63,6 +77,13 @@ class SettingsController extends Controller
         return view('core::Admin/Settings/add_category', compact('model'));
     }
 
+    /**
+    * Simple Save
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function simpleSave(Request $request)
     {
         $model = new Setting;

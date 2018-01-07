@@ -398,7 +398,8 @@ class Post extends Model
                 'post' => $post,
                 'post_data' => [],
                 'tags' => [],
-                'related_posts' => []
+                'related_posts' => [],
+                'user' => $post->user
             ];
 
             if (!in_array($post->category_id, $category_ids)) {

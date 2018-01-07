@@ -16,6 +16,11 @@ use Auth;
 
 class InstallController extends Controller
 {
+    /**
+    * Index
+    *
+    * @return View
+    */
     public function index()
     {
         $install = new Install;
@@ -28,6 +33,13 @@ class InstallController extends Controller
         return view('core::Install/index', compact('checks'));
     }
 
+    /**
+    * Database
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function database(Request $request)
     {
         $install = new Install;
@@ -61,6 +73,13 @@ class InstallController extends Controller
         return view('core::Install/database', compact('connection_types'));
     }
 
+    /**
+    * Me
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function me(Request $request)
     {
         if ($request->getMethod() == 'POST') {
@@ -85,6 +104,13 @@ class InstallController extends Controller
         return view('core::Install/me');
     }
 
+    /**
+    * Account
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function account(Request $request)
     {
         $user = new User;
@@ -111,6 +137,13 @@ class InstallController extends Controller
         return view('core::Install/account', compact('user'));
     }
 
+    /**
+    * Finished
+    *
+    * @param Request $request
+    *
+    * @return View
+    */
     public function finished(Request $request)
     {
         // let's connect to the adaptcms.com servers

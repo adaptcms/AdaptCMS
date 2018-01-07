@@ -21,11 +21,21 @@ class Setting extends Model
     
     public $timestamps = false;
 
+    /**
+    * Category
+    *
+    * @return SettingsCategory
+    */
     public function category()
     {
         return $this->belongsTo('App\Modules\Core\Models\SettingsCategory', 'category_id');
     }
 
+    /**
+    * Get Keyed By Category
+    *
+    * @return array
+    */
     public function getKeyedByCategory()
     {
         $categories = SettingsCategory::orderBy('name', 'ASC')->with('settings')->get();
@@ -42,7 +52,14 @@ class Setting extends Model
         return $settings;
     }
 
-    public function add($postArray)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Setting
+    */
+    public function add($postArray = [])
     {
         Settings::set($postArray['key'], $postArray['value']);
 
@@ -51,9 +68,18 @@ class Setting extends Model
         $item->category_id = $postArray['category_id'];
 
         $item->save();
+
+        return $item;
     }
 
-    public function edit($postArray)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Setting
+    */
+    public function edit($postArray = [])
     {
         Settings::set($postArray['key'], $postArray['value']);
 
@@ -62,26 +88,33 @@ class Setting extends Model
         $item->category_id = $postArray['category_id'];
 
         $item->save();
+
+        return $item;
     }
 
-    public function simpleSave($data)
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             switch($data['type']) {
-            case 'delete':
-                $data['ids'] = json_decode($data['ids'], true);
+                case 'delete':
+                    $data['ids'] = json_decode($data['ids'], true);
 
-                foreach($data['ids'] as $key) {
-                    Settings::forget($key);
-                }
-
+                    foreach($data['ids'] as $key) {
+                        Settings::forget($key);
+                    }
                 break;
 
-            case 'save':
-                foreach($data['data'] as $row) {
-                    Settings::set($row['key'], $row['value']);
-                }
-
+                case 'save':
+                    foreach($data['data'] as $row) {
+                        Settings::set($row['key'], $row['value']);
+                    }
                 break;
             }
         }

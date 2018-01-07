@@ -66,10 +66,8 @@ class PostsController extends Controller
             return redirect()->route('admin.posts.index')->with('success', 'Post has been saved');
         }
 
-        $file = new File;
-
-        $images = $file->getImages();
-        $files = $file->getFiles();
+        $images = File::getImages();
+        $files = File::getFiles();
 
         return view('posts::Admin/Posts/add', compact(
             'model',
@@ -111,10 +109,8 @@ class PostsController extends Controller
 
         $post_data = $model->getPostData($model);
 
-        $file = new File;
-
-        $images = $file->getImages();
-        $files = $file->getFiles();
+        $images = File::getImages();
+        $files = File::getFiles();
 
         return view('posts::Admin/Posts/edit', compact(
             'model',

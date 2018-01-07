@@ -3,5 +3,7 @@
     "slug": "email",
     "version": "1.0",
     "description": "Email address input field.",
-    "settings": {}
+    "settings": {
+    	"required": true
+    }
 }

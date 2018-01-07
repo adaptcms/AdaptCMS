@@ -8,7 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 
 class Album extends Model
 {
-	use Searchable,
+    use Searchable,
         Sluggable;
 
     /**
@@ -19,30 +19,48 @@ class Album extends Model
     protected $table = 'albums';
 
     protected $fillable = [
-	    'name'
+        'name',
+        'user_id'
     ];
 
+    /**
+    * Album Files
+    *
+    * @return Collection
+    */
     public function albumFiles()
     {
         return $this->hasMany('App\Modules\Files\Models\AlbumFile');
     }
 
+    /**
+    * User
+    *
+    * @return User
+    */
     public function user()
     {
-	    return $this->belongsTo('App\Modules\Users\Models\User');
+        return $this->belongsTo('App\Modules\Users\Models\User');
     }
 
-    public function simpleSave($data)
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             $data['ids'] = json_decode($data['ids'], true);
 
             switch($data['type']) {
-	            case 'delete':
-	                Album::whereIn('id', $data['ids'])->delete();
-	            break;
-	        }
-	    }
+                case 'delete':
+                    Album::whereIn('id', $data['ids'])->delete();
+                break;
+            }
+        }
 
         return [
             'status' => true,
@@ -50,7 +68,15 @@ class Album extends Model
         ];
     }
 
-    public function searchLogic($searchData, $admin = false)
+    /**
+    * Search Logic
+    *
+    * @param array $searchData
+    * @param bool $admin
+    *
+    * @return array
+    */
+    public function searchLogic($searchData = [], $admin = false)
     {
         if (!empty($searchData['keyword'])) {
             $results = Album::search($searchData['keyword'])->get();
@@ -69,9 +95,16 @@ class Album extends Model
         return $results;
     }
 
-    public function add($postArray)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Album
+    */
+    public function add($postArray = [])
     {
-	    $this->name = $postArray['name'];
+        $this->name = $postArray['name'];
         $this->user_id = $postArray['user_id'];
 
         $this->save();
@@ -79,9 +112,16 @@ class Album extends Model
         return $this;
     }
 
-    public function edit($postArray)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Album
+    */
+    public function edit($postArray = [])
     {
-	    $this->name = $postArray['name'];
+        $this->name = $postArray['name'];
         $this->user_id = $postArray['user_id'];
 
         $this->save();
@@ -89,30 +129,47 @@ class Album extends Model
         return $this;
     }
 
+    /**
+    * Get File Count
+    *
+    * @return integer
+    */
     public function getFileCount()
     {
-	    return AlbumFile::where('album_id', '=', $this->id)->count();
+        return AlbumFile::where('album_id', '=', $this->id)->count();
     }
 
-	public function getNewestFile()
-	{
-		return $this->albumFiles->count() ?
-			$this->albumFiles()->orderBy('created_at', 'desc')->first()->file : null;
-	}
+    /**
+    * Get Newest File
+    *
+    * @return File|null
+    */
+    public function getNewestFile()
+    {
+        return $this->albumFiles->count() ?
+            $this->albumFiles()->orderBy('created_at', 'desc')->first()->file : null;
+    }
 
-	public function getFiles($paginated = true)
-	{
-		$files = [];
-		if ($this->albumFiles->count()) {
-			if ($paginated) {
-				$files = $this->albumFiles()->paginate(15);
-			} else {
-				$files = $this->albumFiles;
-			}
-		}
+    /**
+    * Get Files
+    *
+    * @param bool $paginated
+    *
+    * @return Collection
+    */
+    public function getFiles($paginated = true)
+    {
+        $files = [];
+        if ($this->albumFiles->count()) {
+            if ($paginated) {
+                $files = $this->albumFiles()->paginate(15);
+            } else {
+                $files = $this->albumFiles;
+            }
+        }
 
-		return $files;
-	}
+        return $files;
+    }
 
     /**
      * Return the sluggable configuration array for this model.

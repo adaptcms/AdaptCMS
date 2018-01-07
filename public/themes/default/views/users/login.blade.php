@@ -1,34 +1,42 @@
-<div class="twelve wide mobile eight wide computer column">
-  {!! Form::open([ 'class' => 'ui equal width large form' ]) !!}
-      <h2 class="ui teal image header">
-        <div class="content">
-          Login to your account
-        </div>
-      </h2>
-        <div class="ui stacked segment">
-          <div class="field">
-            <div class="ui left icon input full width">
-              <i class="user icon"></i>
+<section class="hero is-login is-fullheight">
+    <div class="hero-body">
+      <div class="container has-text-centered">
+        <div class="column is-4 is-offset-4">
+          <h3 class="title has-text-grey">Login</h3>
+          <p class="subtitle has-text-grey">Please login to proceed.</p>
+          <div class="box">
+            <figure class="avatar">
+              <img src="/img/AdaptCMSLogoJPG_2.jpg">
+            </figure>
+            {!! Form::open() !!}
+              <div class="field">
+                <div class="control">
+                  {{ Form::text('username', Request::get('username'), [ 
+                    'class' => 'input is-large',
+                    'placeholder' => 'Username'
+                  ]) }}
+                </div>
+              </div>
 
-              {{ Form::text('username', Request::get('username'), [ 'placeholder' => 'Username' ]) }}
-            </div>
+              <div class="field">
+                <div class="control">
+                  {{ Form::password('password', [
+                    'class' => 'input is-large',
+                    'placeholder' => 'Your Password'
+                  ]) }}
+                </div>
+              </div>
+
+              {{ Form::submit('Login', array('class' => 'button is-block is-info is-large is-fullwidth')) }}
+
+              <input type="hidden" name="_token" value="{!! csrf_token() !!}">
+            {!! Form::close() !!}
           </div>
-          <div class="field">
-            <div class="ui left icon input full width">
-              <i class="lock icon"></i>
-
-              {{ Form::password('password', [ 'placeholder' => 'Password' ]) }}
-            </div>
-          </div>
-
-          {{ Form::submit('Login', array('class' => 'ui fluid large blue submit button')) }}
+          <p class="has-text-grey">
+            <a href="{{ route('register') }}">Sign Up</a> &nbsp;·&nbsp;
+            <a href="{{ route('password.request') }}">Forgot Password</a>
+          </p>
         </div>
-
-      <div class="ui message">
-        New to us? <a href="{{ route('register') }}">Sign Up</a><br />
-        <a href="{{ route('password.request') }}">Forgot your password?</a>
       </div>
-      
-      <input type="hidden" name="_token" value="{!! csrf_token() !!}">
-  {!! Form::close() !!}
-</div>
+    </div>
+  </section>

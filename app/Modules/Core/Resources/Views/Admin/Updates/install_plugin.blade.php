@@ -7,16 +7,16 @@
     {{ Form::model($model, [ 'class' => 'ui form' ]) }}
 
         <div class="required field">
-        {{ Form::label('key') }}
-                {{ Form::text('key') }}
+            {{ Form::label('key') }}
+            {{ Form::text('key') }}
         </div>
         <div class="required field">
-        {{ Form::label('value') }}
-        {{ Form::text('value') }}
-                    </div>
+            {{ Form::label('value') }}
+            {{ Form::text('value') }}
+        </div>
 
         <div class="field">
-        {{ Form::label('category_id', 'Category') }}
+            {{ Form::label('category_id', 'Category') }}
             {{ Form::select('category_id', $categories, '', [ 'class' => 'ui dropdown' ]) }}
         </div>
 

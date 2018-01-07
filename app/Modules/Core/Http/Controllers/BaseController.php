@@ -28,13 +28,23 @@ use Theme;
 
 class BaseController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Notifiable;
+    use AuthorizesRequests, 
+        DispatchesJobs, 
+        ValidatesRequests, 
+        Notifiable;
 
     public $theme;
 
+    /**
+    * Construct
+    *
+    * @return void
+    */
     public function __construct()
     {
-		if (Schema::hasTable('settings')) {
+        $prefix = request()->route()->getPrefix();
+
+		if ($prefix == 'admin' && Schema::hasTable('settings')) {
 			// CMS Update Checks
 	        $this->checkForCmsUpdates();
 	        $this->checkForPluginUpdates();

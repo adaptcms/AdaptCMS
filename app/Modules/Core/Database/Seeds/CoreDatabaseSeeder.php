@@ -24,9 +24,6 @@ class CoreDatabaseSeeder extends Seeder
         $model->add([
             'name' => 'General'
         ]);
-        
-        $model = new SettingsCategory;
-        
         $model->add([
             'name' => 'Users'
         ]);

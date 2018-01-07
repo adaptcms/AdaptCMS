@@ -11,5 +11,7 @@ class Core extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'core'; }
+    protected static function getFacadeAccessor() {
+    	return 'core';
+    }
 }

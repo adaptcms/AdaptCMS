@@ -32,7 +32,7 @@
       <small class="number">({{ number_format($module->total_ratings) }})</small>
     </span>
     <i class="bar chart icon"></i>
-    {{ $module->views }} view(s)
+    {{ number_format($module->views) }} view(s)
   </div>
   <div class="extra content">
       <div class="ui center aligned">

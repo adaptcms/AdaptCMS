@@ -21,6 +21,7 @@
         "sentry/sentry-laravel": "^0.9.0@dev",
         "spatie/laravel-permission": "2.7.6",
         "teamtnt/laravel-scout-tntsearch-driver": "3.0.6",
+        "tightenco/ziggy": "dev-master",
         "wikimedia/composer-merge-plugin": "1.4.1"
     },
     "require-dev": {

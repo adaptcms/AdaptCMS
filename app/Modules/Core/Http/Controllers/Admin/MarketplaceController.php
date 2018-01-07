@@ -24,6 +24,6 @@ class MarketplaceController extends Controller
 
     public function purchase($id)
     {
-        return view('core::Admin/Marketplace/purchase');
+        return view('core::Admin/Marketplace/purchase', compact('id'));
     }
 }

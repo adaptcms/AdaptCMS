@@ -4,7 +4,9 @@ namespace App\Modules\Files\Database\Seeds;
 
 use Illuminate\Database\Seeder;
 
-class Albums extends Seeder
+use App\Modules\Files\Models\Album;
+
+class FileDatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,9 +15,11 @@ class Albums extends Seeder
      */
     public function run()
     {
-        DB::table('albums')->insert([
+        // create default album
+        $album = new Album();
+
+        $album->add([
             'name' => 'Pictures',
-            'slug' => 'pictures',
             'user_id' => 1
         ]);
     }

@@ -9,7 +9,7 @@ use App\Modules\Files\Models\AlbumFile;
 
 class File extends Model
 {
-	use Searchable;
+    use Searchable;
 
     /**
      * The table associated with the model.
@@ -18,60 +18,112 @@ class File extends Model
      */
     protected $table = 'files';
 
+    /**
+    * Album Files
+    *
+    * @return Collection
+    */
     public function albumFiles()
     {
         return $this->hasMany('App\Modules\Files\Models\AlbumFile');
     }
 
+    /**
+    * User
+    *
+    * @return User
+    */
     public function user()
     {
-	    return $this->belongsTo('App\Modules\Users\Models\User');
+        return $this->belongsTo('App\Modules\Users\Models\User');
     }
 
+    /**
+    * Get Related Val
+    *
+    * @return array
+    */
     public function getRelatedVal()
     {
-	    $val = [];
-	    foreach($this->albumFiles as $row) {
-		    $val[] = $row->album_id;
-	    }
+        $albums = [];
+        foreach($this->albumFiles as $row) {
+            $albums[] = $row->album_id;
+        }
 
-	    return $val;
+        return $albums;
     }
 
+    /**
+    * Get Files
+    *
+    * @return array
+    */
     public static function getFiles()
     {
-	    return self::pluck('filename', 'id');
+        return self::pluck('filename', 'id');
     }
 
+    /**
+    * Get Images
+    *
+    * @return Query
+    */
     public static function getImages()
     {
-	    $imageTypes = [
-				'gif',
-				'jpeg',
-				'jpg',
-				'png'
-	    ];
+        $imageTypes = [
+            'gif',
+            'jpeg',
+            'jpg',
+            'png'
+        ];
 
-	    $query = File::where(function($q) use($imageTypes) {
-			    foreach($imageTypes as $type) {
-				    	$q->orWhere('file_type', '=', $type);
-			    }
-	    });
+        $query = File::where(function($q) use($imageTypes) {
+            foreach($imageTypes as $type) {
+                $q->orWhere('file_type', '=', $type);
+            }
+        });
 
-	    return $query->pluck('filename', 'id');
+        return $query->pluck('filename', 'id');
     }
 
-    public function simpleSave($data)
+    /**
+    * Get File Types
+    *
+    * @return array
+    */
+    public static function getFileTypes()
+    {
+        $file_types_tmp = File::pluck('file_type')->groupBy('file_type');
+        $file_types = [];
+        foreach($file_types_tmp as $file) {
+            foreach($file as $row) {
+                $file_types[$row] = $row;
+            }
+        }
+
+        asort($file_types);
+
+        return $file_types;
+    }
+
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             $data['ids'] = json_decode($data['ids'], true);
 
             switch($data['type']) {
-	            case 'delete':
-	                File::whereIn('id', $data['ids'])->delete();
-	            break;
-	        }
-	    }
+                case 'delete':
+                    File::whereIn('id', $data['ids'])->delete();
+                break;
+            }
+        }
 
         return [
             'status' => true,
@@ -79,7 +131,14 @@ class File extends Model
         ];
     }
 
-    public function searchLogic($searchData)
+    /**
+    * Search Logic
+    *
+    * @param array $searchData
+    *
+    * @return array
+    */
+    public function searchLogic($searchData = [])
     {
         if (!empty($searchData['keyword'])) {
             $results = File::search($searchData['keyword'])->get();
@@ -94,11 +153,20 @@ class File extends Model
         return $results;
     }
 
-    public function add($postArray, $file, $albums)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    * @param UploadedFile $file
+    * @param array $albums
+    *
+    * @return File
+    */
+    public function add($postArray = [], $file, $albums = [])
     {
-	    $filename = time() . '-' . $file->getClientOriginalName();
+        $filename = time() . '-' . $file->getClientOriginalName();
 
-	    $path = $file->store('files', 'files');
+        $path = $file->store('files', 'files');
 
         // save file
         $this->user_id = $postArray['user_id'];
@@ -109,31 +177,40 @@ class File extends Model
         $this->save();
 
         // save album files
-		if (!empty($albums)) {
-			foreach($albums as $row) {
-				$album = new AlbumFile;
+        if (!empty($albums)) {
+            foreach($albums as $row) {
+                $album = new AlbumFile;
 
-				$album->file_id = $this->id;
-				$album->album_id = $row;
+                $album->file_id = $this->id;
+                $album->album_id = $row;
 
-				$album->save();
-			}
-		}
+                $album->save();
+            }
+        }
 
         return $this;
     }
 
-    public function edit($postArray, $file, $albums)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    * @param UploadedFile $file
+    * @param array $albums
+    *
+    * @return File
+    */
+    public function edit($postArray = [], $file, $albums = [])
     {
-	    if (!empty($postArray['validFile'])) {
-			$filename = time() . '-' . $file->getClientOriginalName();
+        if (!empty($postArray['validFile'])) {
+            $filename = time() . '-' . $file->getClientOriginalName();
 
-			$path = $file->store('files', 'files');
+            $path = $file->store('files', 'files');
 
-			$this->filename = $filename;
-	        $this->file_type = $file->extension();
-	        $this->path = '/' . $path;
-	    }
+            $this->filename = $filename;
+            $this->file_type = $file->extension();
+            $this->path = '/' . $path;
+        }
 
 
         // save file
@@ -141,27 +218,32 @@ class File extends Model
 
         $this->save();
 
-	    // save album files
-		AlbumFile::where('file_id', '=', $this->id)->delete();
+        // save album files
+        AlbumFile::where('file_id', '=', $this->id)->delete();
 
-		if (!empty($albums)) {
-			foreach($albums as $row) {
-				$album = new AlbumFile;
+        if (!empty($albums)) {
+            foreach($albums as $row) {
+                $album = new AlbumFile;
 
-				$album->file_id = $this->id;
-				$album->album_id = $row;
+                $album->file_id = $this->id;
+                $album->album_id = $row;
 
-				$album->save();
-			}
-		}
+                $album->save();
+            }
+        }
 
-		return $this;
+        return $this;
     }
 
+    /**
+    * Delete
+    *
+    * @return bool
+    */
     public function delete()
     {
-	    AlbumFile::where('file_id', '=', $this->id)->delete();
+        AlbumFile::where('file_id', '=', $this->id)->delete();
 
-	    return parent::delete();
+        return parent::delete();
     }
 }

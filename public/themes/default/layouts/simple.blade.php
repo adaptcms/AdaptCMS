@@ -26,12 +26,11 @@
 	        {{ Settings::get('sitename') }}
 	  </title>
 
-	  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.css">
-	  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-	  <link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.min.css">
-	  <link rel="stylesheet" type="text/css" href="/css/semantic-ui-calendar.min.css">
-
-	  <link rel="stylesheet" type="text/css" href="/css/main.compiled.min.css">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+	  <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+	  <!-- Bulma Version 0.6.0 -->
+	  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bulma@0.6.1/css/bulma.min.css" />
+	  <link rel="stylesheet" type="text/css" href="/themes/default/assets/css/main.compiled.min.css">
 
 	  @stack('css')
 	</head>
@@ -64,24 +63,22 @@
 			  </div>
 	    @endif
 
-	    <div class="ui container">
-	        <div class="ui stackable centered middle aligned grid">
-	            {!! Theme::content() !!}
-	        </div>
-	    </div>
+        {!! Theme::content() !!}
 
-		<div class="ui fixed footer segment">
-			<div class="seven wide column clear">
-				<p>
-				  &copy; Copyright {{ date('Y') }} {{ Settings::get('sitename') }}
-				</p>
-				<p>
-				  Powered by <a href="https://www.adaptcms.com" target="_blank">
-					AdaptCMS {{ ucfirst(Core::getVersion()) }}
-				  </a>
-				</p>
-		  </div>
-		</div>
+		<footer class="footer">
+		    <div class="container">
+		      <div class="content has-text-centered">
+		        <p>
+		          &copy; Copyright {{ date('Y') }} {{ Settings::get('sitename') }}
+		        </p>
+		        <p>
+		          Powered by <a href="https://www.adaptcms.com" target="_blank">
+		            AdaptCMS {{ ucfirst(Core::getVersion()) }}
+		          </a>
+		        </p>
+		      </div>
+		    </div>
+		  </footer>
 
 	  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
