@@ -4,6 +4,7 @@ namespace App\Modules\Users\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Spatie\Permission\Traits\HasRoles;
@@ -12,7 +13,6 @@ use App\Modules\Users\Models\Role;
 
 use Auth;
 use Route;
-use DB;
 
 class User extends Authenticatable
 {

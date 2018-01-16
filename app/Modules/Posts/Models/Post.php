@@ -4,6 +4,7 @@ namespace App\Modules\Posts\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 
 use App\Modules\Posts\Models\Category;
@@ -13,8 +14,6 @@ use App\Modules\Posts\Models\PostRelated;
 use App\Modules\Posts\Models\PostRevision;
 use App\Modules\Posts\Models\PostTag;
 use App\Modules\Posts\Models\Tag;
-
-use DB;
 
 class Post extends Model
 {

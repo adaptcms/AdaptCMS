@@ -2,11 +2,12 @@
 
 namespace App\Modules\Core\Models;
 
+use Illuminate\Support\Facades\DB;
+
 use App\Modules\Core\Events\InstallSeedEvent;
 use App\Modules\Users\Models\User;
 
 use Artisan;
-use DB;
 use DotenvEditor;
 use Settings;
 use Storage;
