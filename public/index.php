@@ -29,11 +29,6 @@ if (!file_exists($composer_path)) {
 
 require $composer_path;
 
-$env_path = __DIR__ . '/../.env';
-if (!file_exists($env_path)) {
-	@copy($env_path . '.example', $env_path);
-}
-
 /*
 |--------------------------------------------------------------------------
 | Turn On The Lights
