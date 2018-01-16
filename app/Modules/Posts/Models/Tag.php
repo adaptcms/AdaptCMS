@@ -2,12 +2,12 @@
 
 namespace App\Modules\Posts\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Cviebrock\EloquentSluggable\Sluggable;
 
-use Storage;
 use Cache;
+use Storage;
 
 class Tag extends Model
 {
@@ -28,17 +28,34 @@ class Tag extends Model
         'meta_description'
     ];
 
+    /**
+    * User
+    *
+    * @return User
+    */
     public function user()
     {
 	    return $this->belongsTo('App\Modules\Users\Models\User');
     }
 
+    /**
+    * Post Tags
+    *
+    * @return Collection
+    */
     public function postTags()
     {
         return $this->hasMany('App\Modules\Posts\Models\PostTag');
     }
 
-    public function add($postArray)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Tag
+    */
+    public function add($postArray = [])
     {
 	    $this->name = $postArray['name'];
 	    $this->user_id = $postArray['user_id'];
@@ -56,7 +73,14 @@ class Tag extends Model
 		return $this;
     }
 
-    public function edit($postArray)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Tag
+    */
+    public function edit($postArray = [])
     {
 	    $this->name = $postArray['name'];
 	    $this->user_id = $postArray['user_id'];
@@ -74,7 +98,14 @@ class Tag extends Model
 		return $this;
 	}
 
-    public function simpleSave($data)
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             $data['ids'] = json_decode($data['ids'], true);
@@ -110,6 +141,11 @@ class Tag extends Model
         ];
     }
 
+    /**
+    * Delete
+    *
+    * @return bool
+    */
     public function delete()
     {
 	    $path = Cache::get('theme', 'default') . '/views/tags/' . $this->slug . '.blade.php';
@@ -120,7 +156,15 @@ class Tag extends Model
 	    return parent::delete();
     }
 
-    public function searchLogic($searchData, $admin = false)
+    /**
+    * Search Logic
+    *
+    * @param array $data
+    * @param bool $admin
+    *
+    * @return array
+    */
+    public function searchLogic($searchData = [], $admin = false)
     {
         if (!empty($searchData['keyword'])) {
             $results = Tag::search($searchData['keyword'])->get();

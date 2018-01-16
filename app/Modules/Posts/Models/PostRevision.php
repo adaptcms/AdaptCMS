@@ -6,13 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class PostRevision extends Model
 {
-    /**                                                                                                                                                                                                                                             
-     * The table associated with the model.                                                                                                                                                                                                         
-     *                                                                                                                                                                                                                                              
-     * @var string                                                                                                                                                                                                                                  
-     */
+    /**
+    * The table associated with the model.
+    *
+    * @var string
+    */
     protected $table = 'post_revisions';
     
+    /**
+    * Post
+    *
+    * @return Post
+    */
     public function post()
     {
         return $this->belongsTo('App\Modules\Posts\Models\Post');

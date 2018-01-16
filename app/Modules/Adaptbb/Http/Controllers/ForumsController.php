@@ -4,17 +4,20 @@ namespace App\Modules\Adaptbb\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Modules\Adaptbb\Models\Forum;
 use App\Modules\Adaptbb\Models\Topic;
 
-use Theme;
 use Cache;
+use Theme;
 
 class ForumsController extends Controller
 {
+    /**
+    * Index
+    *
+    * @return View
+    */
     public function index()
     {
         $forum = new Forum;
@@ -25,6 +28,13 @@ class ForumsController extends Controller
         return $this->theme->scope('adaptbb.forums.index', compact('forums'))->render();
     }
 
+    /**
+    * View
+    *
+    * @param string $slug
+    *
+    * @return View
+    */
     public function view($slug)
     {
         $forum = Forum::where('slug', '=', $slug)->first();

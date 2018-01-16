@@ -2,25 +2,14 @@
 
 namespace App\Modules\Adaptbb\Listeners;
 
-use App\Modules\Sitemap\Events\SitemapEvent;
-
 use App\Modules\Adaptbb\Models\Forum;
 use App\Modules\Adaptbb\Models\Topic;
+use App\Modules\Sitemap\Events\SitemapEvent;
 
 use Cache;
 
 class SitemapListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct(SitemapEvent $event)
-    {
-
-    }
-
     /**
      * Handle the event.
      *

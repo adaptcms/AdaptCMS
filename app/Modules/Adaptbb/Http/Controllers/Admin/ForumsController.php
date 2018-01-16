@@ -4,9 +4,7 @@ namespace App\Modules\Adaptbb\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Modules\Adaptbb\Models\Forum;
 use App\Modules\Adaptbb\Models\ForumCategory;
 
@@ -14,11 +12,21 @@ class ForumsController extends Controller
 {
     public $categories = [];
 
+    /**
+    * Construct
+    *
+    * @return void
+    */
     public function __construct()
     {
         $this->categories = ForumCategory::pluck('name', 'id');
     }
 
+    /**
+    * Index
+    *
+    * @return View
+    */
     public function index()
     {
         $items = Forum::orderBy('ord', 'ASC')->paginate(15);
@@ -28,6 +36,13 @@ class ForumsController extends Controller
         return view('adaptbb::Admin/Forums/index', compact('items', 'categories'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
         $item = new Forum;
@@ -55,6 +70,14 @@ class ForumsController extends Controller
         return view('adaptbb::Admin/Forums/add', compact('item', 'categories'));
     }
 
+    /**
+    * Edit
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $item = Forum::find($id);
@@ -84,7 +107,14 @@ class ForumsController extends Controller
         return view('adaptbb::Admin/Forums/edit', compact('item', 'categories'));
     }
 
-    public function delete(Request $request, $id)
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
+    public function delete($id)
     {
         $item = Forum::find($id);
 
@@ -99,6 +129,13 @@ class ForumsController extends Controller
           ->with('success', 'Forum has been deleted.');
     }
 
+    /**
+    * Order
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function order(Request $request)
     {
         $items = Forum::orderBy('ord', 'ASC')->get();
@@ -115,8 +152,8 @@ class ForumsController extends Controller
             }
 
             return response()->json([
-            'status' => true
-          ]);
+                'status' => true
+            ]);
         }
 
         $categories = $this->categories;

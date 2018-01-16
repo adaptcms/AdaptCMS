@@ -4,12 +4,12 @@ namespace App\Modules\Plugins\Models;
 
 use GuzzleHttp\Client;
 
-use Storage;
 use Artisan;
 use Cache;
-use Module;
-use Zipper;
 use Core;
+use Module;
+use Storage;
+use Zipper;
 
 class Plugin
 {
@@ -26,6 +26,11 @@ class Plugin
     public static $plugins_json;
     public static $modules = [];
 
+    /**
+    * Init
+    *
+    * @return void
+    */
     public static function init()
     {
         self::$plugins_json = storage_path('app') . '/modules.json';
@@ -43,6 +48,13 @@ class Plugin
         }
     }
 
+    /**
+    * Enable
+    *
+    * @param string $slug
+    *
+    * @return void
+    */
     public static function enable($slug)
     {
         self::init();
@@ -76,6 +88,13 @@ class Plugin
         }
     }
 
+    /**
+    * Disable
+    *
+    * @param string $slug
+    *
+    * @return void
+    */
     public static function disable($slug)
     {
         self::init();
@@ -88,6 +107,14 @@ class Plugin
         }
     }
 
+    /**
+    * Build Json
+    *
+    * @param string $slug
+    * @param bool $enabled
+    *
+    * @return void
+    */
     public static function buildJson($slug, $enabled = true)
     {
         // if not created yet at all, create it
@@ -127,6 +154,11 @@ class Plugin
         }
     }
 
+    /**
+    * Get Core Modules
+    *
+    * @return array
+    */
     public static function getCoreModules()
     {
         // 1 day
@@ -144,6 +176,13 @@ class Plugin
         });
     }
 
+    /**
+    * Install
+    *
+    * @param integer $id
+    *
+    * @return void
+    */
     public static function install($id)
     {
         $client = new Client();
@@ -197,6 +236,13 @@ class Plugin
         Cache::forget('plugins_updates_list');
     }
 
+    /**
+    * Get Config
+    *
+    * @param string $slug
+    *
+    * @return mixed
+    */
     public static function getConfig($slug)
     {
         $cache_key = 'plugins.' . $slug;

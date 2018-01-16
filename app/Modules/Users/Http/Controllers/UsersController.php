@@ -4,8 +4,8 @@ namespace App\Modules\Users\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Modules\Users\Models\User;
 
 use Auth;
 use Hash;
@@ -13,10 +13,15 @@ use Theme;
 use Settings;
 use Cache;
 
-use App\Modules\Users\Models\User;
-
 class UsersController extends Controller
 {
+    /**
+    * Login
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function login(Request $request)
     {
         $throttling_key = 'login_attempt-' . $request->ip();
@@ -68,6 +73,13 @@ class UsersController extends Controller
         return $theme->scope('users.login')->render();
     }
 
+    /**
+    * Register
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function register(Request $request)
     {
         if (Settings::get('enable_user_signups') == 0) {
@@ -99,6 +111,11 @@ class UsersController extends Controller
         return $this->theme->scope('users.register')->render();
     }
 
+    /**
+    * Logout
+    *
+    * @return Redirect
+    */
     public function logout()
     {
         if (Auth::check()) {
@@ -110,11 +127,23 @@ class UsersController extends Controller
         }
     }
 
+    /**
+    * Dashboard
+    *
+    * @return View
+    */
     public function dashboard()
     {
         return view('users::Users/dashboard');
     }
 
+    /**
+    * Profile Edit
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function profileEdit(Request $request)
     {
         $model = User::find(Auth::user()->id);
@@ -153,6 +182,14 @@ class UsersController extends Controller
         return $this->theme->scope('users.profile_edit', compact('model', 'errors'))->render();
     }
 
+    /**
+    * Profile
+    *
+    * @param Request $request
+    * @param string $username
+    *
+    * @return View
+    */
     public function profile(Request $request, $username)
     {
         $user = User::where('username', '=', $username)->first();

@@ -2,12 +2,12 @@
 
 namespace App\Modules\Posts\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Cviebrock\EloquentSluggable\Sluggable;
 
-use Storage;
 use Cache;
+use Storage;
 
 class Page extends Model
 {
@@ -22,19 +22,31 @@ class Page extends Model
     protected $table = 'pages';
 
     protected $fillable = [
-		'name',
-		'body',
-		'status',
+        'name',
+        'body',
+        'status',
         'meta_keywords',
         'meta_description'
     ];
 
+    /**
+    * User
+    *
+    * @return User
+    */
     public function user()
     {
-	    return $this->belongsTo('App\Modules\Users\Models\User');
+        return $this->belongsTo('App\Modules\Users\Models\User');
     }
 
-    public function add($postArray)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Page
+    */
+    public function add($postArray = [])
     {
         $this->name = $postArray['name'];
 
@@ -52,9 +64,18 @@ class Page extends Model
         $this->save();
 
         Storage::disk('themes')->put(Cache::get('theme', 'default') . '/views/pages/' . $this->slug . '.blade.php', $this->body);
+
+        return $this;
     }
 
-    public function edit($postArray)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Page
+    */
+    public function edit($postArray = [])
     {
         $this->name = $postArray['name'];
 
@@ -71,8 +92,15 @@ class Page extends Model
         $this->save();
 
         Storage::disk('themes')->put(Cache::get('theme', 'default') . '/views/pages/' . $this->slug . '.blade.php', $this->body);
+
+        return $this;
     }
 
+    /**
+    * Delete
+    *
+    * @return bool
+    */
     public function delete()
     {
         $path = Cache::get('theme', 'default') . '/views/pages/' . $this->slug . '.blade.php';
@@ -83,31 +111,38 @@ class Page extends Model
         return parent::delete();
     }
 
-    public function simpleSave($data)
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             $data['ids'] = json_decode($data['ids'], true);
 
             switch($data['type']) {
-            	case 'delete':
-                	Page::whereIn('id', $data['ids'])->delete();
+                case 'delete':
+                    Page::whereIn('id', $data['ids'])->delete();
                 break;
 
-				case 'toggle-statuses':
-	                $active_items = Page::whereIn('id', $data['ids'])->where('status', '=', 1)->get();
-	                $pending_items = Page::whereIn('id', $data['ids'])->where('status', '=', 0)->get();
+                case 'toggle-statuses':
+                    $active_items = Page::whereIn('id', $data['ids'])->where('status', '=', 1)->get();
+                    $pending_items = Page::whereIn('id', $data['ids'])->where('status', '=', 0)->get();
 
-	                foreach($active_items as $item) {
-	                    $item->status = 0;
+                    foreach($active_items as $item) {
+                        $item->status = 0;
 
-	                    $item->save();
-	                }
+                        $item->save();
+                    }
 
-	                foreach($pending_items as $item) {
-	                    $item->status = 1;
+                    foreach($pending_items as $item) {
+                        $item->status = 1;
 
-	                    $item->save();
-	                }
+                        $item->save();
+                    }
 
                 break;
             }
@@ -119,12 +154,20 @@ class Page extends Model
         ];
     }
 
-    public function searchLogic($searchData, $admin = false)
+    /**
+    * Search Logic
+    *
+    * @param array $searchData
+    * @param bool $admin
+    *
+    * @return array
+    */
+    public function searchLogic($searchData = [], $admin = false)
     {
         if (!empty($searchData['keyword'])) {
             $results = Page::search($searchData['keyword'])->get();
         } elseif(!empty($searchData['id'])) {
-        	$results = [ Page::find($searchData['id']) ];
+            $results = [ Page::find($searchData['id']) ];
         } else {
             $results = [];
         }

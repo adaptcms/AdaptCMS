@@ -5,12 +5,13 @@
     "license": "BSD-3-Clause",
     "type": "project",
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.0",
         "barryvdh/laravel-debugbar": "^3.1",
         "caffeinated/modules": "4.2.2",
         "chumper/zipper": "1.0.2",
         "cviebrock/eloquent-sluggable": "^4.3",
         "fideloper/proxy": "~3.3",
+        "flugger/laravel-responder": "dev-master",
         "guzzlehttp/guzzle": "6.3.0",
         "jeremeamia/superclosure": "^2.3",
         "laravel/framework": "5.5.*",
@@ -31,7 +32,8 @@
         "symfony/css-selector": "3.4.*",
         "symfony/dom-crawler": "3.4.*",
         "filp/whoops": "~2.0",
-        "adaptcms/laravel-theme": "master"
+        "adaptcms/laravel-theme": "master",
+        "charliepage88/dotenv-editor": "master"
     },
     "autoload": {
         "classmap": [
@@ -67,6 +69,9 @@
     "repositories": [{
         "type": "vcs",
         "url": "git@github.com:adaptcms/laravel-theme.git"
+    }, {
+        "type": "vcs",
+        "url": "git@github.com:charliepage88/Laravel-Dotenv-Editor.git"
     }],
     "minimum-stability": "dev",
     "extra": {

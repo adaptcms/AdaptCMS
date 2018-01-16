@@ -2,16 +2,19 @@
 
 namespace App\Modules\Users\Http\Controllers\Admin;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Modules\Users\Models\User;
 
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
-use App\Modules\Users\Models\User;
-
 class OauthController extends Controller
 {
+    /**
+    * Redirect
+    *
+    * @return Redirect
+    */
     public function redirect()
     {
         $query = http_build_query([
@@ -24,10 +27,15 @@ class OauthController extends Controller
         return redirect('http://server.local/oauth/authorize?' . $query);
     }
 
+    /**
+    * Callback
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function callback(Request $request)
     {
-        dd($request->all());
-
         $http = new Client;
 
         $response = $http->post('http://your-app.com/oauth/token', [

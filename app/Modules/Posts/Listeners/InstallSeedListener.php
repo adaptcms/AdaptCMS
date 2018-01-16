@@ -5,18 +5,17 @@ namespace App\Modules\Posts\Listeners;
 use GuzzleHttp\Client;
 
 use App\Modules\Core\Events\InstallSeedEvent;
-
 use App\Modules\Posts\Models\Category;
-use App\Modules\Posts\Models\Page;
 use App\Modules\Posts\Models\Field;
+use App\Modules\Posts\Models\Page;
 use App\Modules\Posts\Models\Tag;
 
 use App\Modules\Posts\Models\Post;
 use App\Modules\Posts\Models\PostData;
 use App\Modules\Posts\Models\PostTag;
 
-use Storage;
 use Core;
+use Storage;
 
 class InstallSeedListener
 {
@@ -41,7 +40,6 @@ class InstallSeedListener
             $model = new Category;
 
             $model->name = $category['name'];
-            $model->slug = str_slug($model->name, '-');
             $model->user_id = $category['user_id'];
             $model->ord = $index;
 
@@ -63,10 +61,7 @@ class InstallSeedListener
             $model = new Page;
 
             $model->name = $page['name'];
-            $model->slug = str_slug($model->name, '-');
-
             $model->body = Storage::disk('themes')->get('default/views/pages/' . $model->slug . '.blade.php');
-
             $model->user_id = $page['user_id'];
             $model->status = 1;
             $model->ord = $index;
@@ -89,7 +84,6 @@ class InstallSeedListener
 
             $model->name = $field['name'];
             $model->caption = $field['caption'];
-            $model->slug = str_slug($model->caption, '-');
             $model->user_id = $field['user_id'];
             $model->category_id = $field['category_id'];
             $model->field_type = $field['field_type'];
@@ -156,7 +150,6 @@ class InstallSeedListener
 
             $model->add([
                 'name' => $post['name'],
-                'slug' => str_slug($post['name'], '-'),
                 'user_id' => $post['user_id'],
                 'category_id' => $post['category_id'],
                 'status' => 1,

@@ -5,10 +5,11 @@ namespace App\Modules\Core\Models;
 use App\Modules\Core\Events\InstallSeedEvent;
 use App\Modules\Users\Models\User;
 
+use Artisan;
+use DB;
+use DotenvEditor;
 use Settings;
 use Storage;
-use DB;
-use Artisan;
 
 class Install
 {
@@ -96,42 +97,11 @@ class Install
     public function testDatabase($data = [], $write_file = false)
     {
         if ($write_file) {
-            // get .env file
-            $env_file = Storage::disk('base')->get('.env');
-
-            // get all the rows
-            $env_file = explode(PHP_EOL, $env_file);
-
-            // format it into key value pairs
-            $new_rows = [];
-            foreach($env_file as $row) {
-                if (empty($row)) {
-                    $new_rows[] = '';
-                } else {
-                    $row = explode('=', $row);
-
-                    $new_rows[$row[0]] = $row[1];
-                }
+            foreach($data as $key => $value) {
+                DotenvEditor::setKey($key, $value);
             }
 
-            // update the .env data
-            foreach($new_rows as $key => $val) {
-                if (!empty($data[$key])) {
-                    $new_rows[$key] = $data[$key];
-                }
-            }
-
-            // rebuild the file
-            $new_file = '';
-            foreach($new_rows as $key => $val) {
-                if (empty($val) && is_int($key)) {
-                    $new_file .= PHP_EOL;
-                } else {
-                    $new_file .= $key . '=' . $val . PHP_EOL;
-                }
-            }
-
-            $write = Storage::disk('base')->put('.env', $new_file);
+            $write = DotenvEditor::save();
 
             if (!$write) {
                 abort(500, 'Could not write to .env file. Please give write permissions');
@@ -140,7 +110,7 @@ class Install
 
         // now we test the connection
         try {
-            config([ 'database.connections.mysql.host' => $new_rows['DB_HOST'] ]);
+            config([ 'database.connections.mysql.host' => $data['DB_HOST'] ]);
 
             DB::connection()->getPdo();
 

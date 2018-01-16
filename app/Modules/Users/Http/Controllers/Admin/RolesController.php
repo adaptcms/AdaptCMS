@@ -3,29 +3,39 @@
 namespace App\Modules\Users\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
-use Validator;
-
+use App\Http\Controllers\Controller;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\Models\Role;
 
+use Validator;
+
 class RolesController extends Controller
 {
+    /**
+    * Index
+    *
+    * @param Request $request
+    *
+    * @return View
+    */
     public function index(Request $request)
     {
         $query = Role::orderBy('created_at', 'DESC');
 
         $items = $query->paginate(15);
 
-        return view('users::Admin/Roles/index', [
-            'items' => $items
-        ]);
+        return view('users::Admin/Roles/index', compact('items'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
         $model = new Role();
@@ -45,9 +55,19 @@ class RolesController extends Controller
             return redirect()->route('admin.roles.index')->with('success', 'Role has been created');
         }
 
-        return view('users::Admin/Roles/add', [ 'model' => $model, 'roles' => $model->getRolesList() ]);
+        $roles = $model->getRolesList();
+
+        return view('users::Admin/Roles/add', compact('model', 'roles'));
     }
 
+    /**
+    * Edit
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $model = Role::find($id);
@@ -64,22 +84,37 @@ class RolesController extends Controller
             ]);
 
             if ($validator->fails()) {
-				$request->session()->flash('error', 'Form errors found. Please try again.');
+                $request->session()->flash('error', 'Form errors found. Please try again.');
             } else {
-            	$data = $request->all();
-            	
+                $data = $request->all();
+                
                 $model->edit($data);
                 
                 return redirect()->route('admin.roles.index')->with('success', 'Role has been saved');
             }
         }
 
-        return view('users::Admin/Roles/edit', [ 'model' => $model, 'roles' => $model->getRolesList() ]);
+        $roles = $model->getRolesList();
+
+        return view('users::Admin/Roles/edit', compact('model', 'roles'));
     }
 
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function delete($id)
     {
-        $model = Role::find($id)->delete();
+        $model = Role::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
+
+        $model->delete();
 
         return redirect()->route('admin.roles.index')->with('success', 'Role has been deleted');
     }

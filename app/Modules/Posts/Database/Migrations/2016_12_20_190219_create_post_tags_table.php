@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ArticleRevisions extends Migration
+class CreatePostTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class ArticleRevisions extends Migration
      */
     public function up()
     {
-        Schema::create('post_revisions', function (Blueprint $table) {
+        Schema::create('post_tags', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('post_id')->index();
-            $table->integer('user_id')->index();
-            $table->text('body');
-            $table->integer('status')->index();
+            $table->integer('tag_id')->index();
 
-            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ class ArticleRevisions extends Migration
      */
     public function down()
     {
-        Schema::drop('post_revisions');
+        Schema::drop('post_tags');
     }
 }

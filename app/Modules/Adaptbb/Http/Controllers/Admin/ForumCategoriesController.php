@@ -4,13 +4,16 @@ namespace App\Modules\Adaptbb\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Modules\Adaptbb\Models\ForumCategory;
 
 class ForumCategoriesController extends Controller
 {
+    /**
+    * Index
+    *
+    * @return View
+    */
     public function index()
     {
         $items = ForumCategory::orderBy('ord', 'ASC')->paginate(15);
@@ -18,6 +21,13 @@ class ForumCategoriesController extends Controller
         return view('adaptbb::Admin/ForumCategories/index', compact('items'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
         $item = new ForumCategory;
@@ -41,6 +51,14 @@ class ForumCategoriesController extends Controller
         return view('adaptbb::Admin/ForumCategories/add', compact('item'));
     }
 
+    /**
+    * Edit
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $item = ForumCategory::find($id);
@@ -67,7 +85,14 @@ class ForumCategoriesController extends Controller
         return view('adaptbb::Admin/ForumCategories/edit', compact('item'));
     }
 
-    public function delete(Request $request, $id)
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
+    public function delete($id)
     {
         $item = ForumCategory::find($id);
 
@@ -82,6 +107,13 @@ class ForumCategoriesController extends Controller
           ->with('success', 'Category has been deleted.');
     }
 
+    /**
+    * Order
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function order(Request $request)
     {
         $items = ForumCategory::orderBy('ord', 'ASC')->get();
@@ -98,10 +130,10 @@ class ForumCategoriesController extends Controller
             }
 
             return response()->json([
-            'status' => true
-          ]);
+                'status' => true
+            ]);
         }
 
-        return view('adaptbb::Admin/ForumCategories/order', [ 'items' => $items ]);
+        return view('adaptbb::Admin/ForumCategories/order', compact('items'));
     }
 }

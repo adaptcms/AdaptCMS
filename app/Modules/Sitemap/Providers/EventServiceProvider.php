@@ -12,12 +12,9 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array
      */
-    // protected $listen = [
-    //     'App\Modules\Sitemap\Events\SitemapEvent' => [
-    //         'App\Modules\Adaptbb\Listeners\SitemapListener',
-    //         'App\Modules\Posts\Listeners\SitemapListener',
-    //     ],
-    // ];
+    protected $listen = [
+        // 
+    ];
 
     /**
      * Register any events for your application.

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ArticleTags extends Migration
+class CreatePostDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class ArticleTags extends Migration
      */
     public function up()
     {
-        Schema::create('post_tags', function (Blueprint $table) {
+        Schema::create('post_data', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('post_id')->index();
-            $table->integer('tag_id')->index();
+            $table->integer('field_id')->index();
+            $table->integer('user_id')->index();
+            $table->text('body')->nullable();
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class ArticleTags extends Migration
      */
     public function down()
     {
-        Schema::drop('post_tags');
+        Schema::drop('post_data');
     }
 }

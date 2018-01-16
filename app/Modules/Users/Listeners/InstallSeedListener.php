@@ -3,21 +3,10 @@
 namespace App\Modules\Users\Listeners;
 
 use App\Modules\Core\Events\InstallSeedEvent;
-
 use App\Modules\Users\Models\Role;
 
 class InstallSeedListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct(InstallSeedEvent $event)
-    {
-
-    }
-
     /**
      * Handle the event.
      *
@@ -44,11 +33,12 @@ class InstallSeedListener
                 'redirect_route_name' => 'admin.dashboard'
             ],
             [
-            	'name' => 'Demo',
-            	'level' => 2,
-            	'redirect_route_name' => 'admin.dashboard'
+                'name' => 'Demo',
+                'level' => 2,
+                'redirect_route_name' => 'admin.dashboard'
             ]
         ];
+        
         foreach($roles as $role) {
             $model = new Role;
 

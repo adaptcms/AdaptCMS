@@ -1,8 +1,7 @@
 @extends('layouts.admin')
 
-    @section('content')
+@section('content')
 
-    <p>tis is the admin dashboard</p>
+<p>Dashboard coming soon...</p>
 
-
-    @stop
+@stop

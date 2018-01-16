@@ -3,49 +3,59 @@
 namespace App\Modules\Users\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
-use Validator;
-
+use App\Http\Controllers\Controller;
 use App\Modules\Users\Models\User;
 use App\Modules\Users\Models\Role;
 
+use Validator;
+
 class UsersController extends Controller
 {
+    /**
+    * Index
+    *
+    * @param Request $request
+    *
+    * @return View
+    */
     public function index(Request $request)
     {
         $query = User::orderBy('created_at', 'DESC');
 
-		// status filter
+        // status filter
         if ($request->get('status') != '') {
             $query->where('status', '=', $request->get('status'));
         }
         
         // role filter
         if ($role_id = $request->get('role_id')) {
-        	$user_ids = User::hasRoleUserIds($role_id);
+            $user_ids = User::hasRoleUserIds($role_id);
         
-        	if (!empty($user_ids)) {
-        		$query->whereIn('id', $user_ids);
-        	} else {
-        		// no user ID's for this role, return empty
-        		$query->where('id', '=', '-1');
-        	}
+            if (!empty($user_ids)) {
+                $query->whereIn('id', $user_ids);
+            } else {
+                // no user ID's for this role, return empty
+                $query->where('id', '=', '-1');
+            }
         }
 
         $items = $query->paginate(15);
 
         $user = new User;
+        $roles = $user->getRolesList();
 
-        return view('users::Admin/Users/index', [
-            'items' => $items,
-            'roles' => $user->getRolesList()
-        ]);
+        return view('users::Admin/Users/index', compact('items', 'roles'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
         $model = new User();
@@ -68,9 +78,19 @@ class UsersController extends Controller
             return redirect()->route('admin.users.index')->with('success', 'User has been saved');
         }
 
-        return view('users::Admin/Users/add', [ 'model' => $model, 'roles' => $model->getRolesList() ]);
+        $roles = $model->getRolesList();
+
+        return view('users::Admin/Users/add', compact('model', 'roles'));
     }
 
+    /**
+    * Edit
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $model = User::find($id);
@@ -92,26 +112,48 @@ class UsersController extends Controller
             ]);
 
             if ($validator->fails()) {
-				$request->session()->flash('error', 'Form errors found. Please try again.');
+                $request->session()->flash('error', 'Form errors found. Please try again.');
             } else {
-            	$data = $request->all();
-            	
+                $data = $request->all();
+                
                 $model->edit($data);
                 
                 return redirect()->route('admin.users.index')->with('success', 'User has been saved');
             }
         }
 
-        return view('users::Admin/Users/edit', [ 'model' => $model, 'roles' => $model->getRolesList() ]);
+        $roles = $model->getRolesList();
+
+        return view('users::Admin/Users/edit', compact('model', 'roles'));
     }
 
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function delete($id)
     {
-        $model = User::find($id)->delete();
+        $model = User::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
+
+        $model->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'User has been saved');
     }
 
+    /**
+    * Simple Save
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function simpleSave(Request $request)
     {
         $model = new User;
@@ -121,9 +163,21 @@ class UsersController extends Controller
         return response()->json($response);
     }
 
+    /**
+    * Login As
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function loginAs(Request $request, $id)
     {
         $user = User::find($id);
+
+        if (empty($user)) {
+            abort(404);
+        }
 
         $request->session()->put('user', $user);
 

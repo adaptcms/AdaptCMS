@@ -2,6 +2,7 @@
 
 namespace App\Modules\Posts\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
@@ -9,7 +10,8 @@ use App\Modules\Posts\Models\Category;
 
 class Field extends Model
 {
-    use Searchable;
+    use Searchable,
+        Sluggable;
 
     /**
      * The table associated with the model.
@@ -42,17 +44,34 @@ class Field extends Model
         'code' => 'Code Editor'
     ];
 
+    /**
+    * Category
+    *
+    * @return Category
+    */
     public function category()
     {
         return $this->belongsTo('App\Modules\Posts\Models\Category');
     }
 
+    /**
+    * Get Categories
+    *
+    * @return array
+    */
     public function getCategories()
     {
         return Category::pluck('name', 'id');
     }
 
-    public function searchLogic($searchData)
+    /**
+    * Search Logic
+    *
+    * @param array $searchData
+    *
+    * @return array
+    */
+    public function searchLogic($searchData = [])
     {
         if (!empty($searchData['keyword'])) {
             $results = Field::search($searchData['keyword'])->get();
@@ -67,7 +86,14 @@ class Field extends Model
         return $results;
     }
 
-    public function simpleSave($data)
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             $data['ids'] = json_decode($data['ids'], true);
@@ -85,12 +111,18 @@ class Field extends Model
         ];
     }
 
-    public function add($postArray)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Field
+    */
+    public function add($postArray = [])
     {
         $this->name = $postArray['name'];
         $this->caption = $postArray['caption'];
         $this->settings = json_encode($this->settings);
-        $this->slug = str_slug($this->name, '-');
         $this->user_id = $postArray['user_id'];
         $this->field_type = $postArray['field_type'];
         $this->category_id = $postArray['category_id'];
@@ -101,12 +133,18 @@ class Field extends Model
         return $this;
     }
 
-    public function edit($postArray)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Field
+    */
+    public function edit($postArray = [])
     {
         $this->name = $postArray['name'];
         $this->caption = $postArray['caption'];
         $this->settings = json_encode($this->settings);
-        $this->slug = str_slug($this->name, '-');
         $this->user_id = $postArray['user_id'];
         $this->field_type = $postArray['field_type'];
         $this->category_id = $postArray['category_id'];
@@ -116,10 +154,31 @@ class Field extends Model
         return $this;
     }
 
+    /**
+    * Get Setting
+    *
+    * @param string $key
+    *
+    * @return mixed
+    */
     public function getSetting($key)
     {
         $settings = json_decode($this->settings, true);
 
         return isset($settings[$key]) ? $settings[$key] : '';
+    }
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
     }
 }

@@ -2,21 +2,24 @@
 
 namespace App\Modules\Posts\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Modules\Posts\Models\Page;
 use App\Modules\Posts\Models\Post;
 
-use Theme;
 use Cache;
 use Storage;
+use Theme;
 
 class PagesController extends Controller
 {
+    /**
+    * Home
+    *
+    * @return View
+    */
     public function home()
     {
         $page = Page::where('slug', '=', 'home')->first();
@@ -31,15 +34,22 @@ class PagesController extends Controller
         $this->theme->set('meta_description', $page->meta_description);
         $this->theme->setTitle('Home');
 
-	    $post = new Post;
-	    $posts = $post->getAll();
+        $post = new Post;
+        $posts = $post->getAll();
 
         return $this->theme->scope('pages.home', compact('page', 'posts'))->render();
     }
 
+    /**
+    * View
+    *
+    * @param string $slug
+    *
+    * @return View
+    */
     public function view($slug)
     {
-	    $page = Page::where('slug', '=', $slug)->first();
+        $page = Page::where('slug', '=', $slug)->first();
 
         if (empty($page)) {
             abort(404, 'Could not find page.');

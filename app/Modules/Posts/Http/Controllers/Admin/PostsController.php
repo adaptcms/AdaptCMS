@@ -3,26 +3,31 @@
 namespace App\Modules\Posts\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
-use App\Modules\Posts\Models\Post;
-use App\Modules\Posts\Models\PostRevision;
-use App\Modules\Posts\Models\PostData;
-use App\Modules\Posts\Models\PostTag;
-use App\Modules\Posts\Models\PostRelated;
-use App\Modules\Posts\Models\Field;
+use App\Http\Controllers\Controller;
 use App\Modules\Posts\Models\Category;
-use App\Modules\Posts\Models\Tag;
+use App\Modules\Posts\Models\Field;
 use App\Modules\Files\Models\File;
+use App\Modules\Posts\Models\Post;
+use App\Modules\Posts\Models\PostData;
+use App\Modules\Posts\Models\PostRelated;
+use App\Modules\Posts\Models\PostRevision;
+use App\Modules\Posts\Models\PostTag;
+use App\Modules\Posts\Models\Tag;
 
 use Auth;
 use Validator;
 
 class PostsController extends Controller
 {
+    /**
+    * Index
+    *
+    * @param Request $request
+    *
+    * @return View
+    */
     public function index(Request $request)
     {
         $items = Post::orderBy('name', 'ASC');
@@ -36,20 +41,22 @@ class PostsController extends Controller
         }
 
         $items = $items->paginate(15);
-
         $categories = Category::all();
 
-        return view('posts::Admin/Posts/index', [
-            'items' => $items,
-            'categories' => $categories
-        ]);
+        return view('posts::Admin/Posts/index', compact('items', 'categories'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    * @param integer $category_id
+    *
+    * @return mixed
+    */
     public function add(Request $request, $category_id)
     {
-        $model = new Post();
-        $fields = Field::where('category_id', '=', $category_id)->get();
-        $posts = Post::pluck('name', 'id');
+        $model = new Post;
 
         if ($request->getMethod() == 'POST') {
             $this->validate($request, [
@@ -69,20 +76,29 @@ class PostsController extends Controller
         $images = File::getImages();
         $files = File::getFiles();
 
+        $fields = Field::where('category_id', '=', $category_id)->get();
+        $posts = Post::pluck('name', 'id');
+
         return view('posts::Admin/Posts/add', compact(
             'model',
-             'fields',
-             'posts',
-             'images',
-             'files'
+            'fields',
+            'posts',
+            'images',
+            'files'
         ));
     }
 
+    /**
+    * Edit
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $model = Post::find($id);
-        $fields = Field::where('category_id', '=', $model->category_id)->get();
-        $posts = Post::where('id', '!=', $id)->pluck('name', 'id');
 
         $errors = [];
         if ($request->getMethod() == 'POST') {
@@ -112,6 +128,9 @@ class PostsController extends Controller
         $images = File::getImages();
         $files = File::getFiles();
 
+        $fields = Field::where('category_id', '=', $model->category_id)->get();
+        $posts = Post::where('id', '!=', $id)->pluck('name', 'id');
+
         return view('posts::Admin/Posts/edit', compact(
             'model',
             'fields',
@@ -124,16 +143,40 @@ class PostsController extends Controller
         ));
     }
 
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function delete($id)
     {
-        $model = Post::find($id)->delete();
+        $model = Post::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
+
+        $model->delete();
 
         return redirect()->route('admin.posts.index')->with('success', 'Post has been saved');
     }
 
+    /**
+    * Status
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function status($id)
     {
         $model = Post::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
 
         $model->status = !$model->status;
 
@@ -142,6 +185,13 @@ class PostsController extends Controller
         return redirect()->route('admin.posts.index')->with('success', 'Post has been saved');
     }
 
+    /**
+    * Restore
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function restore($id)
     {
         // find revision and post, json_decode body data
@@ -156,7 +206,7 @@ class PostsController extends Controller
         $post->save();
 
         // save related posts
-            $related_posts = $revision['relatedPosts'];
+        $related_posts = $revision['relatedPosts'];
 
         PostRelated::where('from_post_id', '=', $post->id)->delete();
 
@@ -203,6 +253,13 @@ class PostsController extends Controller
         return redirect()->route('admin.posts.index')->with('success', 'Post revision has been restored');
     }
 
+    /**
+    * Simple Save
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function simpleSave(Request $request)
     {
         $post = new Post;

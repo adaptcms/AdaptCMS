@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ArticleRelated extends Migration
+class CreatePostRevisionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class ArticleRelated extends Migration
      */
     public function up()
     {
-        Schema::create('post_related', function (Blueprint $table) {
+        Schema::create('post_revisions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('to_post_id')->index();
-            $table->integer('from_post_id')->index();
+            $table->integer('post_id')->index();
+            $table->integer('user_id')->index();
+            $table->text('body');
+            $table->integer('status')->index();
 
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ class ArticleRelated extends Migration
      */
     public function down()
     {
-        Schema::drop('post_related');
+        Schema::drop('post_revisions');
     }
 }

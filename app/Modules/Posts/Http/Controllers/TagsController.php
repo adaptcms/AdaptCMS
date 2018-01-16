@@ -4,21 +4,26 @@ namespace App\Modules\Posts\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Modules\Posts\Models\Post;
 use App\Modules\Posts\Models\Tag;
 
-use Theme;
 use Cache;
+use Theme;
 
 class TagsController extends Controller
 {
+    /**
+    * View
+    *
+    * @param string $slug
+    *
+    * @return View
+    */
     public function view($slug)
     {
         $post = new Post;
-	    $posts = $post->getAllByTagSlug($slug);
+        $posts = $post->getAllByTagSlug($slug);
         $tag = $posts['tag'];
 
         $this->theme->set('meta_keywords', $tag->meta_keywords);

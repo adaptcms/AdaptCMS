@@ -9,16 +9,6 @@ use App\Modules\Themes\Models\Theme;
 class InstallSeedListener
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct(InstallSeedEvent $event)
-    {
-
-    }
-
-    /**
      * Handle the event.
      *
      * @param  OrderShipped  $event
@@ -29,7 +19,6 @@ class InstallSeedListener
         $theme = new Theme;
 
         $theme->name = 'Default';
-        $theme->slug = str_slug($theme->name, '-');
         $theme->user_id = 1;
         $theme->status = 1;
         $theme->custom = 0;

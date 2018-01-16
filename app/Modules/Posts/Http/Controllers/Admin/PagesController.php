@@ -3,47 +3,64 @@
 namespace App\Modules\Posts\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
+use App\Http\Controllers\Controller;
 use App\Modules\Posts\Models\Page;
 
-use Storage;
 use Auth;
+use Storage;
 use Validator;
 
 class PagesController extends Controller
 {
-	public function dashboard()
-	{
-		return view('posts::Admin/Pages/dashboard');
-	}
+    /**
+    * Dashboard
+    *
+    * @return View
+    */
+    public function dashboard()
+    {
+        return view('posts::Admin/Pages/dashboard');
+    }
 
+    /**
+    * Index
+    *
+    * @param Request $request
+    *
+    * @return View
+    */
     public function index(Request $request)
     {
         $items = Page::orderBy('name', 'ASC');
 
         if ($request->get('status') != '') {
-		 	$items->where('status', '=', $request->get('status'));
-	 	}
+            $items->where('status', '=', $request->get('status'));
+        }
 
         $items = $items->paginate(15);
 
-        return view('posts::Admin/Pages/index', [  'items' => $items ]);
+        return view('posts::Admin/Pages/index', compact('items'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function add(Request $request)
     {
-        $model = new Page();
+        $model = new Page;
 
         if ($request->getMethod() == 'POST') {
-	        $this->validate($request, [
-		        'name' => 'required|unique:pages|max:255',
-		        'body' => 'required',
-		        'slug' => 'unique:pages'
-		    ]);
+            $this->validate($request, [
+                'name' => 'required|unique:pages|max:255',
+                'body' => 'required',
+                'slug' => 'unique:pages'
+            ]);
 
             $data = $request->all();
 
@@ -54,54 +71,90 @@ class PagesController extends Controller
             return redirect()->route('admin.pages.index')->with('success', 'Page has been saved');
         }
 
-        return view('posts::Admin/Pages/add', [ 'model' => $model ]);
+        return view('posts::Admin/Pages/add', compact('model'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return mixed
+    */
     public function edit(Request $request, $id)
     {
         $model = Page::find($id);
 
-		$errors = [];
-        if ($request->getMethod() == 'POST') {
-		    $validator = Validator::make($request->all(), [
-		        'name' => [
-			      	'required',
-			      	Rule::unique('pages')->ignore($model->id)
-		        ],
-		        'slug' => [
-			      	Rule::unique('pages')->ignore($model->id)
-		        ],
-		        'body' => 'required'
-		    ]);
+        if (empty($model)) {
+            abort(404);
+        }
 
-		    if (!$validator->fails()) {
+        $errors = [];
+        if ($request->getMethod() == 'POST') {
+            $validator = Validator::make($request->all(), [
+                'name' => [
+                    'required',
+                    Rule::unique('pages')->ignore($model->id)
+                ],
+                'slug' => [
+                    Rule::unique('pages')->ignore($model->id)
+                ],
+                'body' => 'required'
+            ]);
+
+            if (!$validator->fails()) {
                 $data = $request->all();
 
                 $data['user_id'] = Auth::user()->id;
 
                 $model->edit($data);
 
-	            return redirect()->route('admin.pages.index')->with('success', 'Page has been saved');
-	        } else {
-		        $errors = $validator->errors()->getMessages();
-	        }
+                return redirect()->route('admin.pages.index')->with('success', 'Page has been saved');
+            } else {
+                $errors = $validator->errors()->getMessages();
+            }
         }
 
-		$model->body = Storage::disk('themes')->get('default/views/pages/' . $model->slug . '.blade.php');
+        $model->body = Storage::disk('themes')->get('default/views/pages/' . $model->slug . '.blade.php');
 
-        return view('posts::Admin/Pages/edit', [ 'model' => $model, 'errors' => $errors ]);
+        return view('posts::Admin/Pages/edit', compact('model', 'errors'));
     }
 
+    /**
+    * Delete
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function delete($id)
     {
-        $model = Page::find($id)->delete();
+        $model = Page::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
+
+        $model->delete();
 
         return redirect()->route('admin.pages.index')->with('success', 'Page has been saved');
     }
 
+    /**
+    * Status
+    *
+    * @param integer $id
+    *
+    * @return Redirect
+    */
     public function status($id)
     {
         $model = Page::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
 
         $model->status = !$model->status;
 
@@ -110,35 +163,47 @@ class PagesController extends Controller
         return redirect()->route('admin.pages.index')->with('success', 'Page has been saved');
     }
 
+    /**
+    * Order
+    *
+    * @param Request $request
+    *
+    * @return mixed
+    */
     public function order(Request $request)
     {
-	    	if ($request->getMethod() == 'POST') {
-						$items = json_decode($request->get('items'), true);
+        if ($request->getMethod() == 'POST') {
+            $items = json_decode($request->get('items'), true);
 
-	        	foreach($items as $index => $id) {
-			        	$item = Page::find($id);
+            foreach($items as $index => $id) {
+                $item = Page::find($id);
 
-			        	$item->ord = $index;
+                $item->ord = $index;
 
-			        	$item->save();
-	        	}
+                $item->save();
+            }
 
-	        	return response()->json([
-		        	'status' => true
-	        	]);
+            return responder()->success()->respond();
         }
 
-				$items = Page::orderBy('ord', 'ASC')->get();
+        $items = Page::orderBy('ord', 'ASC')->get();
 
-        return view('posts::Admin/Pages/order', [ 'items' => $items ]);
+        return view('posts::Admin/Pages/order', compact('items'));
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    *
+    * @return string
+    */
     public function simpleSave(Request $request)
     {
         $model = new Page;
 
         $response = $model->simpleSave($request->all());
 
-        return response()->json($response);
+        return responder()->success($response)->respond();
     }
 }

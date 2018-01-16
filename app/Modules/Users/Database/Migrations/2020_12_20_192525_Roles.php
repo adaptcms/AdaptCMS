@@ -29,9 +29,9 @@ class Roles extends Migration
      */
     public function down()
     {
-    	// vendor package will drop this table for us, should at least
-    	if (!Schema::hasTable('roles')) {
-    		Schema::drop('roles');
-    	}
+        // vendor package will drop this table for us, should at least
+        if (!Schema::hasTable('roles')) {
+            Schema::drop('roles');
+        }
     }
 }

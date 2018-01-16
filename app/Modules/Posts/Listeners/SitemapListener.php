@@ -2,26 +2,16 @@
 
 namespace App\Modules\Posts\Listeners;
 
-use App\Modules\Sitemap\Events\SitemapEvent;
-
-use App\Modules\Posts\Models\Post;
-use App\Modules\Posts\Models\Page;
 use App\Modules\Posts\Models\Category;
+use App\Modules\Posts\Models\Page;
+use App\Modules\Posts\Models\Post;
 use App\Modules\Posts\Models\Tag;
+use App\Modules\Sitemap\Events\SitemapEvent;
 
 use Cache;
 
 class SitemapListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct(SitemapEvent $event)
-    {
-
-    }
 
     /**
      * Handle the event.

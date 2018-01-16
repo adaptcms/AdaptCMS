@@ -2,17 +2,24 @@
 
 namespace App\Modules\Sitemap\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Controller;
 use App\Modules\Sitemap\Events\SitemapEvent;
 
-use Sitemap;
 use Cache;
 use Core;
+use Sitemap;
 
 class SitemapController extends Controller
 {
+    /**
+    * Index
+    *
+    * @param string|null $module
+    *
+    * @return string
+    */
     public function index($module = null)
     {
         Core::debugDisable();
@@ -32,6 +39,11 @@ class SitemapController extends Controller
         return Sitemap::render();
     }
 
+    /**
+    * Url List
+    *
+    * @return string
+    */
     public function urlList()
     {
         Core::debugDisable();

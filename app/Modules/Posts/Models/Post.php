@@ -2,16 +2,16 @@
 
 namespace App\Modules\Posts\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Cviebrock\EloquentSluggable\Sluggable;
 
-use App\Modules\Posts\Models\PostRevision;
-use App\Modules\Posts\Models\PostData;
-use App\Modules\Posts\Models\PostTag;
-use App\Modules\Posts\Models\PostRelated;
-use App\Modules\Posts\Models\Field;
 use App\Modules\Posts\Models\Category;
+use App\Modules\Posts\Models\Field;
+use App\Modules\Posts\Models\PostData;
+use App\Modules\Posts\Models\PostRelated;
+use App\Modules\Posts\Models\PostRevision;
+use App\Modules\Posts\Models\PostTag;
 use App\Modules\Posts\Models\Tag;
 
 use DB;
@@ -36,36 +36,71 @@ class Post extends Model
         'meta_description'
     ];
 
+    /**
+    * Post Data
+    *
+    * @return Collection
+    */
     public function postData()
     {
         return $this->hasMany('App\Modules\Posts\Models\PostData');
     }
 
+    /**
+    * Post Tags
+    *
+    * @return Collection
+    */
     public function postTags()
     {
         return $this->hasMany('App\Modules\Posts\Models\PostTag');
     }
 
+    /**
+    * Post Revisions
+    *
+    * @return Collection
+    */
     public function postRevisions()
     {
         return $this->hasMany('App\Modules\Posts\Models\PostRevision');
     }
 
+    /**
+    * Related Posts
+    *
+    * @return Collection
+    */
     public function relatedPosts()
     {
         return $this->hasMany('App\Modules\Posts\Models\PostRelated', 'from_post_id');
     }
 
+    /**
+    * Category
+    *
+    * @return Category
+    */
     public function category()
     {
         return $this->belongsTo('App\Modules\Posts\Models\Category');
     }
 
+    /**
+    * User
+    *
+    * @return User
+    */
     public function user()
     {
         return $this->belongsTo('App\Modules\Users\Models\User');
     }
 
+    /**
+    * Get String Tags
+    *
+    * @return string
+    */
     public function getStringTags()
     {
         $postTags = $this->postTags;
@@ -78,6 +113,11 @@ class Post extends Model
         return implode(',', $text);
     }
 
+    /**
+    * Get Related Val
+    *
+    * @return array
+    */
     public function getRelatedVal()
     {
         $val = [];
@@ -88,12 +128,20 @@ class Post extends Model
         return $val;
     }
 
-    public function searchLogic($searchData, $admin = false)
+    /**
+    * Search Logic
+    *
+    * @param array $searchData
+    * @param bool $admin
+    *
+    * @return array
+    */
+    public function searchLogic($searchData = [], $admin = false)
     {   
         if (!empty($searchData['keyword'])) {
             $results = Post::search($searchData['keyword'])->get();
         } elseif(!empty($searchData['id'])) {
-        	$results = [ Post::find($searchData['id']) ];
+            $results = [ Post::find($searchData['id']) ];
         } else {
             $results = [];
         }
@@ -109,7 +157,14 @@ class Post extends Model
         return $results;
     }
 
-    public function simpleSave($data)
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             $data['ids'] = json_decode($data['ids'], true);
@@ -144,7 +199,14 @@ class Post extends Model
         ];
     }
 
-    public function add($postArray)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Post
+    */
+    public function add($postArray = [])
     {
         // save post
         $this->name = $postArray['name'];
@@ -245,7 +307,14 @@ class Post extends Model
         return $this;
     }
 
-    public function edit($postArray)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Post
+    */
+    public function edit($postArray = [])
     {
         // save post
         $this->name = $postArray['name'];
@@ -369,6 +438,11 @@ class Post extends Model
         return $this;
     }
 
+    /**
+    * Delete
+    *
+    * @return bool
+    */
     public function delete()
     {
         foreach ($this->postData as $row) {
@@ -378,21 +452,28 @@ class Post extends Model
         return parent::delete();
     }
 
+    /**
+    * Get Post Data
+    *
+    * @param array $postData
+    *
+    * @return mixed
+    */
     public function getPostData($postData)
     {
-		// if single, convert to multiple
+        // if single, convert to multiple
         $single = false;
         if ((is_object($postData) && !strstr(get_class($postData), 'Pagination')) || !is_object($postData)) {
             if (!is_array($postData)) {
-				$single = true;
-				$postData = [ $postData ];
-			}
+                $single = true;
+                $postData = [ $postData ];
+            }
         }
 
         // first, build an array of posts containing post data values
         // also, grab the category ID's for later purposes
         $category_ids = [];
-		$posts = [];
+        $posts = [];
         foreach ($postData as $post) {
             $posts[] = [
                 'post' => $post,
@@ -439,16 +520,23 @@ class Post extends Model
                 $posts[$key]['post_data'][$field_slug] = $val->body;
             }
 
-			foreach($fields as $field) {
-				if (!isset($posts[$key]['post_data'][$field->slug])) {
-					$posts[$key]['post_data'][$field->slug] = '';
-				}
-			}
+            foreach($fields as $field) {
+                if (!isset($posts[$key]['post_data'][$field->slug])) {
+                    $posts[$key]['post_data'][$field->slug] = '';
+                }
+            }
         }
 
         return $single ? $posts[0] : $posts;
     }
 
+    /**
+    * Get Relationship Data
+    *
+    * @param collection $posts
+    *
+    * @return mixed
+    */
     public function getRelationshipData($posts)
     {
         // get post data first
@@ -478,6 +566,13 @@ class Post extends Model
         return $single ? $data[0] : $data;
     }
 
+    /**
+    * Get All By Category Id
+    *
+    * @param integer $category_id
+    *
+    * @return array
+    */
     public function getAllByCategoryId($category_id)
     {
         $posts = Post::where('category_id', '=', $category_id)->where('status', '=', 1)->paginate(10);
@@ -486,6 +581,11 @@ class Post extends Model
         return compact('posts', 'posts_with_data');
     }
 
+    /**
+    * Get All
+    *
+    * @return array
+    */
     public function getAll()
     {
         $posts = Post::where('status', '=', 1)->paginate(10);
@@ -494,6 +594,13 @@ class Post extends Model
         return compact('posts', 'posts_with_data');
     }
 
+    /**
+    * Get All By Tag Slug
+    *
+    * @param string $tag_slug
+    *
+    * @return array
+    */
     public function getAllByTagSlug($tag_slug)
     {
         // first, translate the tag slug to a tag object
@@ -511,6 +618,13 @@ class Post extends Model
         return compact('posts', 'posts_with_data', 'tag');
     }
 
+    /**
+    * Get By Slug
+    *
+    * @param string $slug
+    *
+    * @return Post
+    */
     public function getBySlug($slug)
     {
         // get the initial post object
@@ -522,6 +636,14 @@ class Post extends Model
         return $post;
     }
 
+    /**
+    * Get Field Value
+    *
+    * @param array $post_data
+    * @param string $field
+    *
+    * @return string
+    */
     public function getFieldValue($post_data, $field)
     {
         return !empty($post_data[$field]) ? $post_data[$field] : '';
@@ -535,16 +657,16 @@ class Post extends Model
     */
     public static function getArchivePeriods()
     {
-    	$periods = DB::select('SELECT count(id) as count,
-    	      YEAR(created_at) as year,
-    	      MONTH(created_at) as month
-    	FROM `posts` 
-    	GROUP BY YEAR(created_at),
-    	        MONTH(created_at) 
-    	ORDER BY YEAR(created_at) DESC,
-    	        MONTH(created_at) DESC');
-    	        
-    	return $periods;
+        $periods = DB::select('SELECT count(id) as count,
+              YEAR(created_at) as year,
+              MONTH(created_at) as month
+        FROM `posts` 
+        GROUP BY YEAR(created_at),
+                MONTH(created_at) 
+        ORDER BY YEAR(created_at) DESC,
+                MONTH(created_at) DESC');
+                
+        return $periods;
     }
 
     /**

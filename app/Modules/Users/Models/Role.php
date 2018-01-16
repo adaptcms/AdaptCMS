@@ -23,11 +23,27 @@ class Role extends ParentRole
         4 => 'admin'
     ];
 
+    /**
+    * Scope By Slug
+    *
+    * @param object $query
+    * @param string $slug
+    *
+    * @return object
+    */
     public function scopeBySlug($query, $slug)
     {
         return $query->where('core_role', '=', 1)->where('name', '=', $slug)->first();
     }
 
+    /**
+    * Scope By Level
+    *
+    * @param object $query
+    * @param integer $level
+    *
+    * @return object
+    */
     public function scopeByLevel($query, $level)
     {
         return $query->where('core_role', '=', 1)->where('level', '=', $level)->first();
@@ -42,15 +58,15 @@ class Role extends ParentRole
     */
     public function add($postArray = [])
     {
-    	$this->name = $postArray['name'];
-    	$this->level = $postArray['level'];
-    	$this->guard_name = 'web';
-    	$this->core_role = 0;
-    	$this->redirect_route_name = !empty($postArray['redirect_route_name']) ? $postArray['redirect_route_name'] : 'home';
-    	
-    	$this->save();
-    	
-    	return $this;
+        $this->name = $postArray['name'];
+        $this->level = $postArray['level'];
+        $this->guard_name = 'web';
+        $this->core_role = 0;
+        $this->redirect_route_name = !empty($postArray['redirect_route_name']) ? $postArray['redirect_route_name'] : 'home';
+        
+        $this->save();
+        
+        return $this;
     }
     
     /**
@@ -62,15 +78,20 @@ class Role extends ParentRole
     */
     public function edit($postArray = [])
     {
-    	$this->name = $postArray['name'];
-    	$this->level = $postArray['level'];
-    	$this->redirect_route_name = !empty($postArray['redirect_route_name']) ? $postArray['redirect_route_name'] : 'home';
-    	
-    	$this->save();
-    	
-    	return $this;
+        $this->name = $postArray['name'];
+        $this->level = $postArray['level'];
+        $this->redirect_route_name = !empty($postArray['redirect_route_name']) ? $postArray['redirect_route_name'] : 'home';
+        
+        $this->save();
+        
+        return $this;
     }
 
+    /**
+    * Get Roles List
+    *
+    * @return array
+    */
     public function getRolesList()
     {
         return Role::pluck('name', 'id');

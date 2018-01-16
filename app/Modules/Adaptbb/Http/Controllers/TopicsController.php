@@ -5,20 +5,26 @@ namespace App\Modules\Adaptbb\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Modules\Adaptbb\Models\Forum;
-use App\Modules\Adaptbb\Models\Topic;
 use App\Modules\Adaptbb\Models\Reply;
-use App\Modules\Core\Services\Core;
+use App\Modules\Adaptbb\Models\Topic;
 
 use Auth;
-use Theme;
 use Cache;
+use Core;
+use Theme;
 
 class TopicsController extends Controller
 {
+    /**
+    * View
+    *
+    * @param string $forum_slug
+    * @param string $topic_slug
+    *
+    * @return View
+    */
     public function view($forum_slug, $topic_slug)
     {
         $forum = Forum::where('slug', '=', $forum_slug)->first();
@@ -48,6 +54,14 @@ class TopicsController extends Controller
         return $this->theme->scope('adaptbb.topics.view', compact('forum', 'topic', 'replies'))->render();
     }
 
+    /**
+    * Add
+    *
+    * @param Request $request
+    * @param string $forum_slug
+    *
+    * @return mixed
+    */
     public function add(Request $request, $forum_slug)
     {
         $forum = Forum::where('slug', '=', $forum_slug)->first();
@@ -92,6 +106,14 @@ class TopicsController extends Controller
         return $this->theme->scope('adaptbb.topics.add', compact('forum', 'model'))->render();
     }
 
+    /**
+    * Reply
+    *
+    * @param Request $request
+    * @param integer $id
+    *
+    * @return string
+    */
     public function reply(Request $request, $id)
     {
         // grab the topic
@@ -124,15 +146,13 @@ class TopicsController extends Controller
 
         $topic->forum->save();
 
-        $core = new Core;
-
         return response()->json([
             'status' => true,
             'reply' => [
                 'id' => $model->id,
                 'name' => $model->name,
                 'message' => nl2br($model->message),
-                'date' => $core->getDateShort($model->created_at),
+                'date' => Core::getDateShort($model->created_at),
                 'profile_image' => $model->user->getProfileImage('small'),
                 'profile_url' => route('users.profile.view', [ 'username' => $model->user->username ]),
                 'profile_username' => $model->user->username

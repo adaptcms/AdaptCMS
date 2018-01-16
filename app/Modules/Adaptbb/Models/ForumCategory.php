@@ -2,8 +2,8 @@
 
 namespace App\Modules\Adaptbb\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Model;
 
 class ForumCategory extends Model
 {
@@ -16,16 +16,22 @@ class ForumCategory extends Model
         'ord'
     ];
 
+    /**
+    * Forums
+    *
+    * @return Collection
+    */
     public function forums()
     {
         return $this->hasMany('App\Modules\Adaptbb\Models\Forum', 'category_id');
     }
 
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
+    * Sluggable
+    * Return the sluggable configuration array for this model.
+    *
+    * @return array
+    */
     public function sluggable()
     {
         return [

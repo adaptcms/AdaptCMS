@@ -2,10 +2,10 @@
 
 namespace App\Modules\Themes\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Cviebrock\EloquentSluggable\Sluggable;
 
 use Artisan;
 use Cache;
@@ -30,12 +30,24 @@ class Theme extends Model
         'status'
     ];
 
+    /**
+    * User
+    *
+    * @return User
+    */
     public function user()
     {
         return $this->belongsTo('App\Modules\Users\Models\User');
     }
-
-    public function searchLogic($searchData)
+    
+    /**
+    * Search Logic
+    *
+    * @param array $searchData
+    *
+    * @return array
+    */
+    public function searchLogic($searchData = [])
     {
         if (!empty($searchData['keyword'])) {
             $results = Theme::search($searchData['keyword'])->get();
@@ -44,13 +56,13 @@ class Theme extends Model
                 $results[$key]->url = route('admin.themes.edit', [ 'id' => $row->id ]);
             }
         } elseif(!empty($searchData['template_path'])) {
-        	$body = Storage::disk('themes')->get($searchData['template_path']);
+            $body = Storage::disk('themes')->get($searchData['template_path']);
         
-        	$results = [
-        		[
-        			'body' => $body
-        		]
-        	];
+            $results = [
+                [
+                    'body' => $body
+                ]
+            ];
         } else {
             $results = [];
         }
@@ -58,7 +70,14 @@ class Theme extends Model
         return $results;
     }
 
-    public function simpleSave($data)
+    /**
+    * Simple Save
+    *
+    * @param array $data
+    *
+    * @return array
+    */
+    public function simpleSave($data = [])
     {
         if (!empty($data['many'])) {
             $data['ids'] = json_decode($data['ids'], true);
@@ -76,7 +95,14 @@ class Theme extends Model
         ];
     }
 
-    public function add($postArray)
+    /**
+    * Add
+    *
+    * @param array $postArray
+    *
+    * @return Theme
+    */
+    public function add($postArray = [])
     {
         $this->name = $postArray['name'];
         $this->status = $postArray['status'];
@@ -125,7 +151,14 @@ class Theme extends Model
         return $this;
     }
 
-    public function edit($postArray)
+    /**
+    * Edit
+    *
+    * @param array $postArray
+    *
+    * @return Theme
+    */
+    public function edit($postArray = [])
     {
         $old_slug = $this->slug;
 
@@ -144,11 +177,16 @@ class Theme extends Model
         return $this;
     }
 
+    /**
+    * Delete
+    *
+    * @return bool
+    */
     public function delete()
     {
-		if ($this->id == 1) {
-			return false;
-		}
+        if ($this->id == 1) {
+            return false;
+        }
 
         if (Storage::disk('themes')->exists($this->slug)) {
             Storage::disk('themes')->deleteDirectory($this->slug);
@@ -157,11 +195,18 @@ class Theme extends Model
         return parent::delete();
     }
 
+    /**
+    * Get Config
+    *
+    * @param string $key
+    *
+    * @return string
+    */
     public function getConfig($key)
     {
-    	$path = $this->slug . '/theme.json';
+        $path = $this->slug . '/theme.json';
     
-    	// exists check
+        // exists check
         if (!$file = Storage::disk('themes')->exists($path)) {
             return null;
         }
@@ -173,11 +218,11 @@ class Theme extends Model
         return !isset($file[$key]) ? '' : $file[$key];
     }
 
-	/**
-	* Enable
-	*
-	* @return void
-	*/
+    /**
+    * Enable
+    *
+    * @return Theme
+    */
     public function enable()
     {
         // try to find module
@@ -202,13 +247,15 @@ class Theme extends Model
         }
         
         Cache::forget('theme_count');
+
+        return $this;
     }
 
-	/**
-	* Disable
-	*
-	* @return void
-	*/
+    /**
+    * Disable
+    *
+    * @return Theme
+    */
     public function disable()
     {
         try {
@@ -218,8 +265,17 @@ class Theme extends Model
         }
         
         Cache::forget('theme_count');
+
+        return $this;
     }
 
+    /**
+    * Install
+    *
+    * @param integer $id
+    *
+    * @return Theme
+    */
     public function install($id)
     {
         $client = new Client();
@@ -272,25 +328,28 @@ class Theme extends Model
 
         Cache::forever('theme_updates', 0);
         Cache::forget('themes_updates_list');
+
+        return $this;
     }
     
     /**
     * Get Count
     *
-    * @return int
+    * @return integer
     */
     public static function getCount()
     {
-    	return Cache::remember('theme_count', 3600, function() {
-    		return Theme::count();
-    	});
+        return Cache::remember('theme_count', 3600, function() {
+            return Theme::count();
+        });
     }
 
     /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
+    * Sluggable
+    * Return the sluggable configuration array for this model.
+    *
+    * @return array
+    */
     public function sluggable()
     {
         return [

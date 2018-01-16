@@ -6,20 +6,11 @@ use App\Modules\Core\Events\InstallSeedEvent;
 
 use App\Modules\Adaptbb\Models\Forum;
 use App\Modules\Adaptbb\Models\ForumCategory;
-use App\Modules\Adaptbb\Models\Topic;
 use App\Modules\Adaptbb\Models\Reply;
+use App\Modules\Adaptbb\Models\Topic;
 
 class InstallSeedListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct(InstallSeedEvent $event)
-    {
-
-    }
 
     /**
      * Handle the event.

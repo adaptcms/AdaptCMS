@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Articles extends Migration
+class CreateCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class Articles extends Migration
      */
     public function up()
     {
-        Schema::create('posts', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('slug')->index();
             $table->integer('user_id')->index();
-            $table->integer('category_id')->index();
-            $table->integer('status')->index();
-            $table->text('settings')->nullable();
+            $table->integer('ord')->default(0)->index();
             $table->string('meta_keywords')->nullable();
             $table->text('meta_description')->nullable();
 
@@ -36,6 +34,6 @@ class Articles extends Migration
      */
     public function down()
     {
-        Schema::drop('posts');
+        Schema::drop('categories');
     }
 }
