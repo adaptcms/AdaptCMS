@@ -165,7 +165,9 @@ class Install
         try {
             Artisan::call('module:seed');
         } catch(\Exception $e) {
-            // do nothing
+            $error = '<br /><br />' . $e->getMessage();
+
+            abort(500, 'Cannot seed database with default data.' . $error);
         }
 
         return $status;

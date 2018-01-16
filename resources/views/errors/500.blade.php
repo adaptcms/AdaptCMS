@@ -1,5 +1,8 @@
 <div class="content">
     <div class="title">Something went wrong.</div>
+    <div>
+        {{ $exception->getMessage() }}
+    </div>
 
     @if(app()->bound('sentry') && !empty(Sentry::getLastEventID()))
         <div class="subtitle">Error ID: {{ Sentry::getLastEventID() }}</div>

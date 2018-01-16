@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Schema;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 use Exception;
 
@@ -67,6 +68,13 @@ class Handler extends ExceptionHandler
 
         if (!Schema::hasTable('users')) {
             return redirect()->route('install.index')->with('success', 'Hey There! Let\'s get AdaptCMS Installed!');
+        }
+
+        // Convert all non-http exceptions to a proper 500 http exception
+        // if we don't do this exceptions are shown as a default template
+        // instead of our own view in resources/views/errors/500.blade.php
+        if ($this->shouldReport($exception) && !$this->isHttpException($exception) && !config('app.debug')) {
+            $exception = new HttpException(500, 'Whoops!');
         }
 
         return parent::render($request, $exception);
