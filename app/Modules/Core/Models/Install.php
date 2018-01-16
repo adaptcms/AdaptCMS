@@ -155,7 +155,9 @@ class Install
         }
 
         try {
-            $status = Artisan::call('vendor:publish');
+            $status = Artisan::call('vendor:publish', [
+                '--all' => true
+            ]);
         } catch(\Exception $e) {
         	$error = '<br /><br />' . $e->getMessage();
         	

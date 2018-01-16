@@ -82,7 +82,9 @@ class Plugin
         }
 
         try {
-            $status = Artisan::call('vendor:publish');
+            $status = Artisan::call('vendor:publish', [
+                '--all' => true
+            ]);
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
         }
@@ -101,7 +103,9 @@ class Plugin
         self::buildJson($slug, false);
 
         try {
-            $status = Artisan::call('vendor:publish');
+            $status = Artisan::call('vendor:publish', [
+                '--all' => true
+            ]);
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
         }

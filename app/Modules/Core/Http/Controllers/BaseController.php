@@ -44,18 +44,20 @@ class BaseController extends Controller
     {
         $prefix = request()->route()->getPrefix();
 
-		if ($prefix == 'admin' && Schema::hasTable('settings')) {
-			// CMS Update Checks
-	        $this->checkForCmsUpdates();
-	        $this->checkForPluginUpdates();
-	        $this->checkForThemeUpdates();
-	
-	        // sync site metadata
-	        $this->syncWebsite();
-	
-	        // sync permissions
-	        $this->syncPermissions();
-		}
+        if (Schema::hasTable('settings')) {
+            if ($prefix == 'admin') {
+                // CMS Update Checks
+                $this->checkForCmsUpdates();
+                $this->checkForPluginUpdates();
+                $this->checkForThemeUpdates();
+        
+                // sync site metadata
+                $this->syncWebsite();
+            }
+
+            // sync permissions
+            $this->syncPermissions();
+        }
 
         $this->theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
     }

@@ -241,7 +241,9 @@ class Theme extends Model
         }
 
         try {
-            $status = Artisan::call('vendor:publish');
+            $status = Artisan::call('vendor:publish', [
+                '--all' => true
+            ]);
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
         }
@@ -259,7 +261,9 @@ class Theme extends Model
     public function disable()
     {
         try {
-            $status = Artisan::call('vendor:publish');
+            $status = Artisan::call('vendor:publish', [
+                '--all' => true
+            ]);
         } catch(\Exception $e) {
             abort(500, 'Cannot publish module assets. Try chmodding the /public/assets/modules/ folder to 755 recursively.');
         }

@@ -17,6 +17,7 @@
         "laravel/framework": "5.5.*",
         "laravel/passport": "4.0.3",
         "laravel/scout": "3.0.12",
+        "laravel/tinker": "^1.0@dev",
         "laravelcollective/html": "5.5.*",
         "offline/persistent-settings": "1.0.3",
         "sentry/sentry-laravel": "^0.9.0@dev",
