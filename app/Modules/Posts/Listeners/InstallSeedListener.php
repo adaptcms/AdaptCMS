@@ -7,6 +7,7 @@ use GuzzleHttp\Client;
 use App\Modules\Core\Events\InstallSeedEvent;
 use App\Modules\Posts\Models\Category;
 use App\Modules\Posts\Models\Field;
+use App\Modules\Posts\Models\FieldType;
 use App\Modules\Posts\Models\Page;
 use App\Modules\Posts\Models\Tag;
 
@@ -15,6 +16,7 @@ use App\Modules\Posts\Models\PostData;
 use App\Modules\Posts\Models\PostTag;
 
 use Core;
+use CustomFieldType;
 use Storage;
 
 class InstallSeedListener
@@ -29,6 +31,11 @@ class InstallSeedListener
     {
         $version = Core::getVersion();
 
+        // sync field types
+        CustomFieldType::sync();
+
+        $fieldTypes = FieldType::get()->groupBy('slug');
+
         // create categories
         $categories = [
             [
@@ -36,7 +43,8 @@ class InstallSeedListener
                 'user_id' => 1
             ]
         ];
-        foreach($categories as $index => $category) {
+
+        foreach ($categories as $index => $category) {
             $model = new Category;
 
             $model->name = $category['name'];
@@ -57,7 +65,8 @@ class InstallSeedListener
                 'user_id' => 1
             ]
         ];
-        foreach($pages as $index => $page) {
+
+        foreach ($pages as $index => $page) {
             $model = new Page;
 
             $model->name = $page['name'];
@@ -76,17 +85,18 @@ class InstallSeedListener
                 'caption' => 'Blog Content',
                 'user_id' => 1,
                 'category_id' => 1,
-                'field_type' => 'wysiwyg'
+                'field_type' => 'Wysiwyg'
             ]
         ];
-        foreach($fields as $index => $field) {
+        
+        foreach ($fields as $index => $field) {
             $model = new Field;
 
             $model->name = $field['name'];
             $model->caption = $field['caption'];
             $model->user_id = $field['user_id'];
             $model->category_id = $field['category_id'];
-            $model->field_type = $field['field_type'];
+            $model->field_type_id = $fieldTypes[$field['field_type']]->id;
             $model->ord = $index;
             $model->settings = json_encode([]);
 
@@ -104,7 +114,8 @@ class InstallSeedListener
                 'user_id' => 1
             ]
         ];
-        foreach($tags as $index => $tag) {
+
+        foreach ($tags as $index => $tag) {
             $model = new Tag;
 
             $model->add([
@@ -119,7 +130,9 @@ class InstallSeedListener
         // as well as post tags and post data
         $client = new Client();
 
-        $res = $client->request('GET', 'https://marketplace.adaptcms.com/adaptcms/post_' . $version . '.html', [ 'http_errors' => false ]);
+        $res = $client->request('GET', 'https://marketplace.adaptcms.com/adaptcms/post_' . $version . '.html', [ 
+            'http_errors' => false
+        ]);
 
         if ($res->getStatusCode() == 200) {
             $post_body = (string) $res->getBody();
@@ -139,12 +152,13 @@ class InstallSeedListener
                 ]
             ]
         ];
-        foreach($posts as $post) {
+
+        foreach ($posts as $post) {
             $model = new Post;
 
             // add all the tags to the post
             $tagsArray = [];
-            foreach($tags as $tag) {
+            foreach ($tags as $tag) {
                 $tagsArray[] = $tag['name'];
             }
 

@@ -2,6 +2,7 @@
 
 namespace App\Modules\Core\Http\Controllers;
 
+use GuzzleHttp\Client;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -9,8 +10,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-
-use GuzzleHttp\Client;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 
 use App\Modules\Themes\Models\Theme as ModelTheme;
@@ -34,6 +33,7 @@ class BaseController extends Controller
         Notifiable;
 
     public $theme;
+    public $prefix;
 
     /**
     * Construct
@@ -42,10 +42,10 @@ class BaseController extends Controller
     */
     public function __construct()
     {
-        $prefix = request()->route()->getPrefix();
+        $this->prefix = request()->route()->getPrefix();
 
         if (Schema::hasTable('settings')) {
-            if ($prefix == 'admin') {
+            if ($this->prefix == 'admin') {
                 // CMS Update Checks
                 $this->checkForCmsUpdates();
                 $this->checkForPluginUpdates();
@@ -64,9 +64,14 @@ class BaseController extends Controller
 
     public function checkForCmsUpdates()
     {
+        // don't proceed unless in admin
+        if ($this->prefix != 'admin') {
+            return;
+        }
+
         $apiUrl = Core::getMarketplaceApiUrl();
 
-        Cache::remember('core_cms_updates', Settings::get('check_for_updates_every_x_minutes', 180), function() use($apiUrl) {
+        Cache::remember('core_cms_updates', Settings::get('check_for_updates_every_x_minutes', 180), function () use($apiUrl) {
             $cms_updates = 0;
 
             $client = new Client();
@@ -81,8 +86,8 @@ class BaseController extends Controller
             }
 
             // try to get the installed version
-    				// from the API and the latest
-            $current_version = array_where($versions, function($val, $key) {
+            // from the API and the latest
+            $current_version = array_where($versions, function ($val, $key) {
                 return $val['branch_slug'] == Core::getVersion() ? $val : false;
             });
             $current_version = reset($current_version);
@@ -90,15 +95,15 @@ class BaseController extends Controller
             // sort the versions by ID ASC
             // flip it to DESC order
             // grab the latest one
-            $latest_version = array_reverse(array_sort($versions, function($value) {
+            $latest_version = array_reverse(array_sort($versions, function ($value) {
                 return $value['id'];
             }));
             $latest_version = reset($latest_version);
 
-			// if empty somehow, 404
-			if (empty($current_version) || empty($latest_version)) {
-					return false;
-			}
+            // if empty somehow, 404
+            if (empty($current_version) || empty($latest_version)) {
+                return false;
+            }
 
             Cache::forever('bleedinge_edge_update', 0);
 
@@ -135,9 +140,14 @@ class BaseController extends Controller
 
     public function checkForPluginUpdates()
     {
+        // don't proceed unless in admin
+        if ($this->prefix != 'admin') {
+            return;
+        }
+
         $apiUrl = Core::getMarketplaceApiUrl();
 
-        Cache::remember('plugin_updates', Settings::get('check_for_updates_every_x_minutes', 180), function() use($apiUrl) {
+        Cache::remember('plugin_updates', Settings::get('check_for_updates_every_x_minutes', 180), function () use($apiUrl) {
             // set the client
             $client = new Client();
 
@@ -147,7 +157,7 @@ class BaseController extends Controller
 
             // empty out module updates data
             $modules_updates_list = [];
-            foreach($plugins as $plugin) {
+            foreach ($plugins as $plugin) {
                 // get the module
                 $res = $client->request('GET', $apiUrl . '/module/slug/plugin/' . $plugin['slug'], [ 'http_errors' => false ]);
 
@@ -175,9 +185,14 @@ class BaseController extends Controller
 
     public function checkForThemeUpdates()
     {
+        // don't proceed unless in admin
+        if ($this->prefix != 'admin') {
+            return;
+        }
+
         $apiUrl = Core::getMarketplaceApiUrl();
 
-        Cache::remember('theme_updates', Settings::get('check_for_updates_every_x_minutes', 180), function() use($apiUrl) {
+        Cache::remember('theme_updates', Settings::get('check_for_updates_every_x_minutes', 180), function () use($apiUrl) {
             // set the client
             $client = new Client();
 
@@ -185,7 +200,7 @@ class BaseController extends Controller
 
             $theme_updates = 0;
             $modules_updates_list = [];
-            foreach($themes as $theme) {
+            foreach ($themes as $theme) {
                 // get the module
                 $res = $client->request('GET', $apiUrl . '/module/slug/theme/' . $theme['slug'], [ 'http_errors' => false ]);
 
@@ -214,34 +229,39 @@ class BaseController extends Controller
 
     public function syncWebsite()
     {
-          // every 3 days
-          $minutes = (1440 * 3);
-          Cache::remember('sync_website', $minutes, function() {
-              Core::syncWebsite();
+        // don't proceed unless in admin
+        if ($this->prefix != 'admin') {
+            return;
+        }
 
-              return true;
-          });
+        // every 3 days
+        $minutes = (1440 * 3);
+        Cache::remember('sync_website', $minutes, function () {
+            Core::syncWebsite();
+
+            return true;
+        });
     }
 
     public function syncPermissions()
     {
         // every 3 days
         $minutes = (1440 * 3);
-        Cache::remember('sync_permissions', $minutes, function() {
-        	// Database check
-        	if (!Schema::hasColumn('permissions', 'access')) {
-        		Schema::table('permissions', function(Blueprint $table) {
-        			$table->integer('access')->default(0);
-        		});
-        	}
-        	
+        Cache::remember('sync_permissions', $minutes, function () {
+            // Database check
+            if (!Schema::hasColumn('permissions', 'access')) {
+                Schema::table('permissions', function (Blueprint $table) {
+                    $table->integer('access')->default(0);
+                });
+            }
+
             $all_routes_list = [];
             $valid_routes_list = [];
 
             $routes = [];
             $modules = [];
             $permissions = [];
-            foreach(Module::all() as $module) {
+            foreach (Module::all() as $module) {
                 $modules[$module['slug']] = Plugin::getConfig($module['basename']);
 
                 if (!empty($modules[$module['slug']]->permissions)) {
@@ -255,7 +275,7 @@ class BaseController extends Controller
             $new_permissions = [];
             $roles_by_level = [];
             $core_role_levels = $roles[0]->core_role_levels;
-            foreach($roles as $role) {
+            foreach ($roles as $role) {
                 $new_permissions[$role->name] = [];
 
                 if ($role->core_role) {
@@ -265,7 +285,7 @@ class BaseController extends Controller
 
             $routes_list = Route::getRoutes();
             $orig_routes_list = (array) $routes_list;
-            foreach($modules as $module) {
+            foreach ($modules as $module) {
                 // get a list of route prefixes to match for
                 $route_prefixes = [
                     'plugin.' . $module->slug,
@@ -275,21 +295,21 @@ class BaseController extends Controller
                 $route_prefixes_orig = $route_prefixes;
 
                 if (!empty($module->route_prefixes)) {
-                    foreach($module->route_prefixes as $custom_prefix) {
+                    foreach ($module->route_prefixes as $custom_prefix) {
                         $prefix = $route_prefixes_orig;
 
-                        foreach($prefix as $val) {
+                        foreach ($prefix as $val) {
                             $route_prefixes[] = str_replace($module->slug, $custom_prefix, $val);
                         }
                     }
                 }
 
                 // build the list of routes
-                foreach($routes_list as $key => $route) {
+                foreach ($routes_list as $key => $route) {
                     $name = $route->getName();
 
                     if (!empty($name)) {
-                        foreach($route_prefixes as $prefix) {
+                        foreach ($route_prefixes as $prefix) {
                             if (strstr($name, $prefix)) {
                                 $routes[$module->slug][] = $name;
                             }
@@ -301,7 +321,7 @@ class BaseController extends Controller
             // now we have a list of permissions for each module and
             // a list of routes by module
             $tmp_permissions = [];
-            foreach($routes as $module_slug => $route_list) {
+            foreach ($routes as $module_slug => $route_list) {
                 // no module permissions
                 if (!isset($permissions[$module_slug])) {
                     continue;
@@ -311,13 +331,13 @@ class BaseController extends Controller
                 $module = $modules[$module_slug];
 
                 // loop through module routes
-                foreach($route_list as $route_name) {
+                foreach ($route_list as $route_name) {
                     $all_routes_list[] = $route_name;
 
                     // and loop through roles from permissions
-                    foreach($permission_list as $role_slug => $module_permissions) {
+                    foreach ($permission_list as $role_slug => $module_permissions) {
 
-                        foreach($module_permissions as $path => $access) {
+                        foreach ($module_permissions as $path => $access) {
                             $path_clean = str_replace('*', '', $path);
 
                             if ($route_name == $path || starts_with($route_name, $path_clean)) {
@@ -356,7 +376,7 @@ class BaseController extends Controller
             // if the route name has 'admin', then we require admin access.
             // otherwise, base guest access
             $missing_routes = array_diff($all_routes_list, $valid_routes_list);
-            foreach($missing_routes as $route_name) {
+            foreach ($missing_routes as $route_name) {
                 if (str_contains($route_name, 'admin.')) {
                     $permission_values = [
                         'name' => $route_name,
@@ -392,10 +412,10 @@ class BaseController extends Controller
             // we use sync to delete old relationships
             // and add the new valid ones
             $invalid_access_permissions = [];
-            foreach($roles as $role) {
+            foreach ($roles as $role) {
                 $valid_access_permissions = [];
 
-                foreach($new_permissions[$role->name] as $permission) {
+                foreach ($new_permissions[$role->name] as $permission) {
                     if ($permission->access > 0) {
                         $valid_access_permissions[] = $permission->id;
                     } else {

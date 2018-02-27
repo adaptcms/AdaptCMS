@@ -1,0 +1,8 @@
+{
+    "name": "Image",
+    "version": "1.0",
+    "description": "Image selector field.",
+    "settings": {
+    	"required": "bool"
+    }
+}

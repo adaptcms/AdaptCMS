@@ -5,36 +5,37 @@
     "license": "BSD-3-Clause",
     "type": "project",
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1.3",
         "barryvdh/laravel-debugbar": "^3.1",
-        "caffeinated/modules": "4.2.2",
         "chumper/zipper": "1.0.2",
-        "cviebrock/eloquent-sluggable": "^4.3",
-        "fideloper/proxy": "~3.3",
+        "cviebrock/eloquent-sluggable": "^4.5",
+        "fideloper/proxy": "^4.0",
         "flugger/laravel-responder": "dev-master",
         "guzzlehttp/guzzle": "6.3.0",
         "jeremeamia/superclosure": "^2.3",
-        "laravel/framework": "5.5.*",
-        "laravel/passport": "4.0.3",
-        "laravel/scout": "3.0.12",
+        "laravel/framework": "5.6.*",
+        "laravel/passport": "~5.0",
+        "laravel/scout": "~4.0",
         "laravel/tinker": "^1.0@dev",
-        "laravelcollective/html": "5.5.*",
-        "offline/persistent-settings": "1.0.3",
+        "laravelcollective/html": "5.6.*",
         "sentry/sentry-laravel": "^0.9.0@dev",
-        "spatie/laravel-permission": "2.7.6",
+        "spatie/laravel-permission": "2.9.0",
         "teamtnt/laravel-scout-tntsearch-driver": "3.0.6",
         "tightenco/ziggy": "dev-master",
-        "wikimedia/composer-merge-plugin": "1.4.1"
+        "wikimedia/composer-merge-plugin": "1.4.1",
+        "adaptcms/laravel-theme": "1.1",
+        "charliepage88/dotenv-editor": "1.1",
+        "adaptcms/modules": "1.0",
+        "adaptcms/settings": "2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.7",
         "mockery/mockery": "~1.0",
-        "phpunit/phpunit": "~6.0",
-        "symfony/css-selector": "3.4.*",
-        "symfony/dom-crawler": "3.4.*",
-        "filp/whoops": "~2.0",
-        "adaptcms/laravel-theme": "master",
-        "charliepage88/dotenv-editor": "master"
+        "nunomaduro/collision": "~2.0",
+        "phpunit/phpunit": "~7.0",
+        "symfony/css-selector": "~4.0",
+        "symfony/dom-crawler": "~4.0",
+        "filp/whoops": "~2.0"
     },
     "autoload": {
         "classmap": [
@@ -75,8 +76,15 @@
     }, {
         "type": "vcs",
         "url": "git@github.com:charliepage88/Laravel-Dotenv-Editor.git"
+    }, {
+        "type": "vcs",
+        "url": "git@github.com:adaptcms/modules.git"
+    }, {
+        "type": "vcs",
+        "url": "git@github.com:adaptcms/settings.git"
     }],
     "minimum-stability": "dev",
+    "prefer-stable": true,
     "extra": {
         "merge-plugin": {
             "include": [

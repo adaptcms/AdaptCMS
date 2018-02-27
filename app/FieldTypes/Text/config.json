@@ -1,0 +1,8 @@
+{
+    "name": "Text Input",
+    "version": "1.0",
+    "description": "Text input field.",
+    "settings": {
+    	"required": "bool"
+    }
+}

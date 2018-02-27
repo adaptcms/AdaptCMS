@@ -6,3 +6,4 @@
 		<div class="api-call" data-url="/admin/api/post_data?post_id={{ $model->id }}&field_id={{ $field->id }}"></div>
 	@endif
 </div>
+

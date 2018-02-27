@@ -4,6 +4,8 @@ namespace App\Modules\Posts\Providers;
 
 use Caffeinated\Modules\Support\ServiceProvider;
 
+use CustomFieldType;
+
 class ModuleServiceProvider extends ServiceProvider
 {
     /**
@@ -16,6 +18,9 @@ class ModuleServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../Resources/Lang', 'posts');
         $this->loadViewsFrom(__DIR__.'/../Resources/Views', 'posts');
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations', 'posts');
+
+        // load in field types
+        CustomFieldType::sync();
     }
 
     /**

@@ -2,6 +2,6 @@
     "name": "adaptcms/plugin-adaptbb",
     "description": "AdaptBB forum software for AdaptCMS system.",
     "require": {
-    	"php": ">=7.0.0"
+    	"php": ">=7.1.3"
     }
 }

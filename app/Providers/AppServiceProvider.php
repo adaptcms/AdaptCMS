@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 
+use Storage;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // sync field types data
+        
     }
 }

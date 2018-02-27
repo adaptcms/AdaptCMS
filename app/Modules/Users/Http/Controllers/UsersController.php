@@ -165,8 +165,8 @@ class UsersController extends Controller
             ]);
 
             if (!$validator->fails()) {
-                if ($request->get('password')) {
-                    $model->password = bcrypt($request->get('password'));
+                if (!$request->get('password')) {
+                    unset($model->password);
                 }
 
                 $model->edit($request->except([ '_token' ]));

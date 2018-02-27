@@ -80,6 +80,7 @@ return [
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
+            'url' => env('AWS_URL')
         ],
 
         'app' => [
@@ -87,26 +88,30 @@ return [
             'root' => app_path(),
         ],
 
-        // themes & plugins
+        // addons
         'themes' => [
-	         'driver' => 'local',
-	         'root' => public_path('themes')
+            'driver' => 'local',
+            'root' => public_path('themes')
         ],
         'plugins' => [
-  	    	'driver' => 'local',
-  	    	'root' => app_path('Modules')
+            'driver' => 'local',
+            'root' => app_path('Modules')
+        ],
+        'field_types' => [
+            'driver' => 'local',
+            'root' => app_path('FieldTypes')
         ],
 
-		// uploads
-		'files' => [
-	    	'driver' => 'local',
-	    	'root' => public_path('uploads'),
-	    	'path' => '/uploads'
+        // uploads
+        'files' => [
+            'driver' => 'local',
+            'root' => public_path('uploads'),
+            'path' => '/uploads'
         ],
         
         // adaptcms
         'cdn' => [
-        	'driver' => 's3',
+            'driver' => 's3',
         ]
     ]
 ];

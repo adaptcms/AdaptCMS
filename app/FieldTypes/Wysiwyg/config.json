@@ -1,0 +1,8 @@
+{
+    "name": "Wysiwyg",
+    "version": "1.0",
+    "description": "Wysiwyg input field.",
+    "settings": {
+    	"required": "bool"
+    }
+}

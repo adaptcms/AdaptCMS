@@ -22,4 +22,14 @@ class EmailFieldType
 		
 		return $postData;
 	}
+
+	public function onEnable()
+	{
+		// fire off init setup
+	}
+
+	public function onDisable()
+	{
+		// fire off destroy setup
+	}
 }

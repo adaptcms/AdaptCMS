@@ -109,23 +109,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Logging Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure the log settings for your application. Out of
-    | the box, Laravel uses the Monolog PHP logging library. This gives
-    | you a variety of powerful log handlers / formatters to utilize.
-    |
-    | Available Settings: "single", "daily", "syslog", "errorlog"
-    |
-    */
-
-    'log' => env('APP_LOG', 'single'),
-
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Autoloaded Service Providers
     |--------------------------------------------------------------------------
     |
@@ -162,9 +145,6 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
-        Teepluss\Theme\ThemeServiceProvider::class,
-        Offline\Settings\SettingsServiceProvider::class,
-
         /*
          * Application Service Providers...
          */
@@ -178,6 +158,7 @@ return [
         * AdaptCMS Providers
         */
         App\Modules\Core\Providers\CoreServiceProvider::class,
+        App\Modules\Posts\Providers\CustomFieldTypeServiceProvider::class,
     ],
 
     /*
@@ -226,12 +207,9 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
-        // Vendor
-        'Theme' => Teepluss\Theme\Facades\Theme::class,
-        'Settings'  => Offline\Settings\Facades\Settings::class,
-
         // AdaptCMS
         'Core' => App\Modules\Core\Facades\Core::class,
+        'CustomFieldType' => App\Modules\Posts\Facades\CustomFieldType::class,
     ],
 
 ];

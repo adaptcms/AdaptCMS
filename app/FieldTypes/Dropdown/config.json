@@ -1,0 +1,8 @@
+{
+    "name": "Dropdown",
+    "version": "1.0",
+    "description": "Dropdown selector field.",
+    "settings": {
+    	"required": "bool"
+    }
+}

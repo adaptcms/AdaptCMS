@@ -1,0 +1,8 @@
+{
+    "name": "Date",
+    "version": "1.0",
+    "description": "Date input field.",
+    "settings": {
+    	"required": "bool"
+    }
+}

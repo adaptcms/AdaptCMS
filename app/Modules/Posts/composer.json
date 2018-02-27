@@ -2,6 +2,16 @@
     "name": "adaptcms/module-posts",
     "description": "Posts module for AdaptCMS.",
     "require": {
-      	"php": ">=7.0.0"
-    }
+      	"php": ">=7.1.3"
+    },
+    "extra": {
+	    "laravel": {
+	        "providers": [
+	            "App\\Modules\\Posts\\Providers\\CustomFieldTypeServiceProvider"
+	        ],
+	        "aliases": {
+	            "CustomFieldType": "App\\Modules\\Posts\\Facades\\CustomFieldType"
+	        }
+	    }
+	}
 }

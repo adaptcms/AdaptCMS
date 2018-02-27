@@ -1,0 +1,8 @@
+{
+    "name": "Code",
+    "version": "1.0",
+    "description": "Edit code field.",
+    "settings": {
+    	"required": "bool"
+    }
+}

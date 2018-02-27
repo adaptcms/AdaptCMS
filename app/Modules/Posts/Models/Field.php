@@ -27,23 +27,6 @@ class Field extends Model
         'category_id'
     ];
 
-    public $field_types = [
-        'text' => 'Text',
-        'textarea' => 'Text Area',
-        'dropdown' => 'Dropdown Select',
-        // 'multiple_dropdown' => 'Multi-Dropdown Select',
-        // 'checkbox' => 'Check Box',
-        'date' => 'Date Picker',
-        // 'time' => 'Time Picker',
-        // 'datetime' => 'Date & Time Picker',
-        // 'file' => 'File Attachment',
-        'image' => 'Image',
-        // 'radio' => 'Radio',
-        'email' => 'E-Mail Address',
-        'wysiwyg' => 'WYSIWYG Editor',
-        'code' => 'Code Editor'
-    ];
-
     /**
     * Category
     *
@@ -52,6 +35,16 @@ class Field extends Model
     public function category()
     {
         return $this->belongsTo('App\Modules\Posts\Models\Category');
+    }
+
+    /**
+    * Field Type
+    *
+    * @return FieldType
+    */
+    public function fieldType()
+    {
+        return $this->belongsTo('App\Modules\Posts\Models\FieldType');
     }
 
     /**

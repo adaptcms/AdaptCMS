@@ -10,6 +10,9 @@
         "dashboard"
     ],
     "permissions": {
+        "admin": {
+            "admin.field_types.*": 2
+        },
         "editor": {
             "admin.posts.*": 2,
             "admin.pages.*": 2,

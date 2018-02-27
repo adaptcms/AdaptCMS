@@ -1,0 +1,1 @@
+{{ $post['post']->getFieldValue($post['post_data'], $field->slug)  }}

@@ -57,8 +57,8 @@ class Install
         }
 
         // permissions
-        foreach($checks['permissions_list'] as $path) {
-            $status = is_writable(base_path() . '/' . $path);
+        foreach ($checks['permissions_list'] as $path) {
+            $status = is_writable(base_path($path));
 
             if (!$status) {
                 $checks['permissions_status'] = false;
@@ -98,7 +98,7 @@ class Install
     public function testDatabase($data = [], $write_file = false)
     {
         if ($write_file) {
-            foreach($data as $key => $value) {
+            foreach ($data as $key => $value) {
                 DotenvEditor::setKey($key, $value);
             }
 

@@ -75,4 +75,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role
 	    Route::any('/order', [ 'uses' => 'CategoriesController@order', 'as' => 'admin.categories.order' ]);
 	    Route::post('/simple-save', [ 'uses' => 'CategoriesController@simpleSave', 'as' => 'admin.categories.simple_save' ]);
     });
+
+    // field types
+    Route::group([ 'prefix' => 'field-types' ], function () {
+        Route::get('/', [ 'uses' => 'FieldTypesController@index', 'as' => 'admin.field_types.index' ]);
+        Route::get('/enable/{slug}', [ 'uses' => 'FieldTypesController@enable', 'as' => 'admin.field_types.enable' ]);
+        Route::get('/disable/{slug}', [ 'uses' => 'FieldTypesController@disable', 'as' => 'admin.field_types.disable' ]);
+    });
 });

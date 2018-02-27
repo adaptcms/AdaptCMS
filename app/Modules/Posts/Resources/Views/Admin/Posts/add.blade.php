@@ -24,10 +24,10 @@
         </div>
 
         @foreach($fields as $key => $field)
-            @include('partials/field_types/' . $field->field_type, [
-                    'value' => '',
-                    'images' => $images,
-                    'files' => $files
+            @include(app_path() . '/FieldTypes/' . ucfirst($field->field_type->slug) . '/Views/admin', [
+                'value' => '',
+                'images' => $images,
+                'files' => $files
             ])
         @endforeach
 
