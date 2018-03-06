@@ -9,9 +9,10 @@ use App\Modules\Adaptbb\Models\ForumCategory;
 use App\Modules\Adaptbb\Models\Reply;
 use App\Modules\Adaptbb\Models\Topic;
 
-class Forum extends Model
+class Forum extends Model implements Sortable
 {
-    use Sluggable;
+    use Sluggable,
+        SortableTrait;
 
     protected $table = 'plugin_adaptbb_forums';
 
@@ -28,6 +29,11 @@ class Forum extends Model
         'category_id',
         'meta_keywords',
         'meta_description'
+    ];
+
+    public $sortable = [
+        'order_column_name' => 'ord',
+        'sort_when_creating' => true,
     ];
 
     /**

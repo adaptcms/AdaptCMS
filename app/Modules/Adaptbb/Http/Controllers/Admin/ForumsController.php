@@ -55,9 +55,6 @@ class ForumsController extends Controller
 
             $item->fill($request->except('_token'));
 
-            $item->slug = str_slug($item->name, '-');
-            $item->ord = (Forum::count());
-
             $item->save();
 
             return redirect()
@@ -93,8 +90,6 @@ class ForumsController extends Controller
 
             $item->fill($request->except('_token'));
             
-            $item->slug = str_slug($item->name, '-');
-
             $item->save();
 
             return redirect()
@@ -143,13 +138,7 @@ class ForumsController extends Controller
         if ($request->getMethod() == 'POST') {
             $items = json_decode($request->get('items'), true);
 
-            foreach ($items as $index => $id) {
-                $item = Forum::find($id);
-
-                $item->ord = $index;
-
-                $item->save();
-            }
+            Forum::setNewOrder($items);
 
             return response()->json([
                 'status' => true

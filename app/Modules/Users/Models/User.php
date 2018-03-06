@@ -2,6 +2,7 @@
 
 namespace App\Modules\Users\Models;
 
+use EloquentFilter\Filterable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,8 @@ class User extends Authenticatable
     use Notifiable,
         Searchable,
         HasRoles,
-        HasApiTokens;
+        HasApiTokens,
+        Filterable;
 
     /**
      * The attributes that are mass assignable.
@@ -404,5 +406,10 @@ class User extends Authenticatable
             ->pluck('model_id');
         
         return $user_ids->toArray();
+    }
+
+    public function modelFilter()
+    {
+        return $this->provideFilter(App\Modules\Users\ModelFilters\UserFilter::class);
     }
 }

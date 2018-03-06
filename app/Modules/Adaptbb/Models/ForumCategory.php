@@ -4,16 +4,24 @@ namespace App\Modules\Adaptbb\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class ForumCategory extends Model
+class ForumCategory extends Model implements Sortable
 {
-    use Sluggable;
+    use Sluggable,
+        SortableTrait;
 
     protected $table = 'plugin_adaptbb_forum_categories';
 
     protected $fillable = [
         'name',
         'ord'
+    ];
+
+    public $sortable = [
+        'order_column_name' => 'ord',
+        'sort_when_creating' => true,
     ];
 
     /**

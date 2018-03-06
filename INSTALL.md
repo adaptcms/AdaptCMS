@@ -65,7 +65,7 @@ find . -type f -exec chmod 644 {} \;  # Change file permissions
 Now, if you installed through [**Github**](https://github.com/adaptcms/adaptcms) or [**BitBucket**](https://bitbucket.org/charliepage7/adaptcms), you'll want to run this command so that pull requests are still tied to the main user account on the server:
 
 ```
-chown root:root  -R . # Let the web server be the owner
+chown yourusername:www-data  -R . # Let the web server be the owner
 ```
 
 If your account is something different, such as ubuntu if you're on AWS, replace that with root. You should see the username in the path, but if you're unsure just run this:

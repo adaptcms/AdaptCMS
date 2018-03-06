@@ -30,17 +30,7 @@ class PostsController extends Controller
     */
     public function index(Request $request)
     {
-        $items = Post::orderBy('name', 'ASC');
-
-        if ($request->get('category_id')) {
-            $items->where('category_id', '=', $request->get('category_id'));
-        }
-
-        if ($request->get('status', 1) != '') {
-            $items->where('status', '=', $request->get('status', 1));
-        }
-
-        $items = $items->paginate(15);
+        $items = Post::filter($request->all())->filterPaginate(15);
         $categories = Category::all();
 
         return view('posts::Admin/Posts/index', compact('items', 'categories'));

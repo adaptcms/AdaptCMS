@@ -38,8 +38,6 @@ class ForumCategoriesController extends Controller
         ]);
 
             $item->name = $request->get('name');
-            $item->slug = str_slug($item->name, '-');
-            $item->ord = (ForumCategory::count());
 
             $item->save();
 
@@ -73,7 +71,6 @@ class ForumCategoriesController extends Controller
         ]);
 
             $item->name = $request->get('name');
-            $item->slug = str_slug($item->name, '-');
 
             $item->save();
 
@@ -121,13 +118,7 @@ class ForumCategoriesController extends Controller
         if ($request->getMethod() == 'POST') {
             $items = json_decode($request->get('items'), true);
 
-            foreach ($items as $index => $id) {
-                $item = ForumCategory::find($id);
-
-                $item->ord = $index;
-
-                $item->save();
-            }
+            ForumCategory::setNewOrder($items);
 
             return response()->json([
                 'status' => true

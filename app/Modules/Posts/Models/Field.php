@@ -5,13 +5,16 @@ namespace App\Modules\Posts\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 use App\Modules\Posts\Models\Category;
 
-class Field extends Model
+class Field extends Model implements Sortable
 {
     use Searchable,
-        Sluggable;
+        Sluggable,
+        SortableTrait;
 
     /**
      * The table associated with the model.
@@ -25,6 +28,11 @@ class Field extends Model
         'caption',
         'field_type',
         'category_id'
+    ];
+
+    public $sortable = [
+        'order_column_name' => 'ord',
+        'sort_when_creating' => true,
     ];
 
     /**
@@ -119,7 +127,6 @@ class Field extends Model
         $this->user_id = $postArray['user_id'];
         $this->field_type = $postArray['field_type'];
         $this->category_id = $postArray['category_id'];
-        $this->ord = Field::count();
 
         $this->save();
 

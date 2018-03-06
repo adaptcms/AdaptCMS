@@ -26,6 +26,9 @@ class CoreDatabaseSeeder extends Seeder
         ]);
         $model->add([
             'name' => 'Users'
+		]);
+		$model->add([
+            'name' => 'API'
         ]);
 
         // create settings

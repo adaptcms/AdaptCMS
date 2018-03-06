@@ -128,13 +128,7 @@ class CategoriesController extends Controller
         if ($request->getMethod() == 'POST') {
             $items = json_decode($request->get('items'), true);
 
-            foreach($items as $index => $id) {
-                $item = Category::find($id);
-
-                $item->ord = $index;
-
-                $item->save();
-            }
+            Category::setNewOrder($items);
 
             return response()->json([
                 'status' => true

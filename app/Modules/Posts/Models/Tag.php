@@ -39,11 +39,11 @@ class Tag extends Model
     }
 
     /**
-    * Post Tags
+    * Posts
     *
     * @return Collection
     */
-    public function postTags()
+    public function posts()
     {
         return $this->hasMany('App\Modules\Posts\Models\PostTag');
     }

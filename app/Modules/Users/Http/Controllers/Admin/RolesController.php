@@ -72,6 +72,10 @@ class RolesController extends Controller
     {
         $model = Role::find($id);
 
+        if (empty($model)) {
+            abort(404);
+        }
+
         if ($request->getMethod() == 'POST') {
             $validator = Validator::make($request->all(), [
                 'name' => [

@@ -3,6 +3,7 @@
 namespace App\Modules\Posts\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
+use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
@@ -18,7 +19,8 @@ use App\Modules\Posts\Models\Tag;
 class Post extends Model
 {
     use Searchable,
-        Sluggable;
+        Sluggable,
+        Filterable;
 
     /**
      * The table associated with the model.
@@ -46,11 +48,11 @@ class Post extends Model
     }
 
     /**
-    * Post Tags
+    * Tags
     *
     * @return Collection
     */
-    public function postTags()
+    public function tags()
     {
         return $this->hasMany('App\Modules\Posts\Models\PostTag');
     }
@@ -680,5 +682,10 @@ class Post extends Model
                 'source' => 'name'
             ]
         ];
+    }
+
+    public function modelFilter()
+    {
+        return $this->provideFilter(App\Modules\Posts\ModelFilters\PostFilter::class);
     }
 }

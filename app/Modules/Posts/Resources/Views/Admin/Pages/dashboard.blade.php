@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    Dashboard
+    @foreach($data as $row)
+        @include($row['viewPath'], [ 'data' => $row ])
+    @endforeach
 @stop

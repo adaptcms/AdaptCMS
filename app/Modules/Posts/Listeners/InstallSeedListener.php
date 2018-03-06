@@ -49,7 +49,6 @@ class InstallSeedListener
 
             $model->name = $category['name'];
             $model->user_id = $category['user_id'];
-            $model->ord = $index;
 
             $model->save();
         }
@@ -73,7 +72,6 @@ class InstallSeedListener
             $model->body = Storage::disk('themes')->get('default/views/pages/' . str_slug($model->name, '-') . '.blade.php');
             $model->user_id = $page['user_id'];
             $model->status = 1;
-            $model->ord = $index;
 
             $model->save();
         }
@@ -97,7 +95,6 @@ class InstallSeedListener
             $model->user_id = $field['user_id'];
             $model->category_id = $field['category_id'];
             $model->field_type_id = $fieldTypes[$field['field_type']]->id;
-            $model->ord = $index;
             $model->settings = json_encode([]);
 
             $model->save();

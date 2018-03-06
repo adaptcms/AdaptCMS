@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Posts\Events\AdminDashboardEvent;
 use App\Modules\Posts\Models\Page;
 
 use Auth;
+use Cache;
+use Core;
 use Storage;
 use Validator;
 
@@ -21,7 +24,23 @@ class PagesController extends Controller
     */
     public function dashboard()
     {
-        return view('posts::Admin/Pages/dashboard');
+        $data = Cache::get('admin_dashboard_data');
+
+        if (!empty($data)) {
+            $data = json_decode($data, true);
+        } else {
+            Core::debugDisable();
+
+            Cache::put('admin_dashboard_data', json_encode([]), 15);
+
+            event(new AdminDashboardEvent());
+
+            $data = json_decode(Cache::get('admin_dashboard_data'), true);
+
+            Cache::forget('admin_dashboard_data');
+        }
+
+        return view('posts::Admin/Pages/dashboard', compact('data'));
     }
 
     /**
@@ -175,13 +194,7 @@ class PagesController extends Controller
         if ($request->getMethod() == 'POST') {
             $items = json_decode($request->get('items'), true);
 
-            foreach($items as $index => $id) {
-                $item = Page::find($id);
-
-                $item->ord = $index;
-
-                $item->save();
-            }
+            Page::setNewOrder($items);
 
             return responder()->success()->respond();
         }

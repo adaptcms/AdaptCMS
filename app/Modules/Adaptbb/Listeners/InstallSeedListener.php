@@ -33,8 +33,6 @@ class InstallSeedListener
             $model = new ForumCategory;
 
             $model->name = $category['name'];
-            $model->slug = str_slug($model->name, '-');
-            $model->ord = $index;
 
             $model->save();
         }
@@ -56,8 +54,6 @@ class InstallSeedListener
             $model = new Forum;
 
             $model->name = $forum['name'];
-            $model->slug = str_slug($model->name, '-');
-            $model->ord = $index;
             $model->description = $forum['description'];
             $model->meta_description = $forum['description'];
             $model->category_id = $forum['category_id'];
@@ -76,7 +72,6 @@ class InstallSeedListener
         $model = new Topic;
 
         $model->name = $topic['name'];
-        $model->slug = str_slug($model->name, '-');
         $model->message = $topic['message'];
         $model->topic_type = 'normal';
         $model->active = 1;

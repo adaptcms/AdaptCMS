@@ -22,29 +22,8 @@ class UsersController extends Controller
     */
     public function index(Request $request)
     {
-        $query = User::orderBy('created_at', 'DESC');
-
-        // status filter
-        if ($request->get('status') != '') {
-            $query->where('status', '=', $request->get('status'));
-        }
-        
-        // role filter
-        if ($role_id = $request->get('role_id')) {
-            $user_ids = User::hasRoleUserIds($role_id);
-        
-            if (!empty($user_ids)) {
-                $query->whereIn('id', $user_ids);
-            } else {
-                // no user ID's for this role, return empty
-                $query->where('id', '=', '-1');
-            }
-        }
-
-        $items = $query->paginate(15);
-
-        $user = new User;
-        $roles = $user->getRolesList();
+        $items = User::filter($request->all())->paginateFilter(15);
+        $roles = (new User)->getRolesList();
 
         return view('users::Admin/Users/index', compact('items', 'roles'));
     }
@@ -94,6 +73,10 @@ class UsersController extends Controller
     public function edit(Request $request, $id)
     {
         $model = User::find($id);
+
+        if (empty($model)) {
+            abort(404);
+        }
 
         if ($request->getMethod() == 'POST') {
             $validator = Validator::make($request->all(), [

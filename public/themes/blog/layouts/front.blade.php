@@ -24,7 +24,7 @@
     </title>
 
     <!-- Bootstrap core CSS -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
       <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     
       <link rel="stylesheet" type="text/css" href="/themes/blog/assets/css/main.compiled.min.css">
@@ -126,35 +126,35 @@
     </footer>
 
 
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js"></script>
-    
-      <script src="/js/vendor/jquery.tagsinput.min.js"></script>
-      <script src="/js/vendor/jquery-sortable.min.js"></script>
-    
-      <script src="/js/vendor/vue.min.js"></script>
-      <script src="/js/vendor/vue-router.min.js"></script>
-    
-      @stack('js')
-    
-      {!! Theme::asset()->styles() !!}
-      {!! Theme::asset()->scripts() !!}
-    
-      <script src="/themes/default/assets/js/main.compiled.min.js"></script>
-    
-      <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    
-          ga('create', 'UA-99970500-1', 'auto');
-          ga('send', 'pageview');
-    
-        </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js"></script>
+  
+    <script src="/js/vendor/jquery.tagsinput.min.js"></script>
+    <script src="/js/vendor/jquery-sortable.min.js"></script>
+  
+    <script src="/js/vendor/vue.min.js"></script>
+    <script src="/js/vendor/vue-router.min.js"></script>
+  
+    @stack('js')
+  
+    {!! Theme::asset()->styles() !!}
+    {!! Theme::asset()->scripts() !!}
+  
+    <script src="/themes/default/assets/js/main.compiled.min.js"></script>
+  
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  
+        ga('create', 'UA-99970500-1', 'auto');
+        ga('send', 'pageview');
+  
+      </script>
   </body>
 </html>

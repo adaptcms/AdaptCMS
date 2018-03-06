@@ -11,15 +11,15 @@
         <!-- Site Properties -->
         <title>AdaptCMS {{ Core::getVersion() }} Admin</title>
 
-        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.css">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
         <link rel="stylesheet" type="text/css" href="/css/jquery.tagsinput.min.css">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.css">
 
         <!-- code mirror -->
-        <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/codemirror.min.css" rel="stylesheet" />
-        <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/theme/monokai.min.css" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.min.css" rel="stylesheet" />
+        <link href="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/theme/monokai.min.css" rel="stylesheet" />
 
         <link rel="stylesheet" type="text/css" href="/css/main.compiled.min.css">
 
@@ -103,22 +103,22 @@
             </div>
         </div>
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js"></script>
 
         <!-- wysiwyg editors -->
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/codemirror.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/php/php.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/javascript/javascript.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/sass/sass.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/scheme/scheme.min.js"></script>
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/mode/css/css.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/codemirror.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/php/php.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/javascript/javascript.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/sass/sass.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/scheme/scheme.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/codemirror/5.35.0/mode/css/css.min.js"></script>
 
-        <script src="//cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
+        <script src="//cdn.ckeditor.com/4.8.0/standard/ckeditor.js"></script>
 
         <script src="/js/vendor/jquery.tagsinput.min.js"></script>
         <script src="/js/vendor/jquery-sortable.min.js"></script>

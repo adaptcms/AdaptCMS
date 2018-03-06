@@ -46,7 +46,7 @@ class UsersController extends Controller
 
             if (Auth::attempt($data)) {
                 // Update Last Logged In
-                $user = User::where('id', '=', Auth::user()->id)->first();
+                $user = User::find(Auth::user()->id);
                 $user->updateLastLoggedIn();
 
                 return redirect()->route($user->getRedirectTo())->with('success', 'You have been logged in.');
@@ -192,7 +192,7 @@ class UsersController extends Controller
     */
     public function profile(Request $request, $username)
     {
-        $user = User::where('username', '=', $username)->first();
+        $user = User::whereUsername($username)->first();
 
         if (empty($user)) {
             abort(404, 'Cannot find user.');

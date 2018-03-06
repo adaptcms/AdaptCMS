@@ -5,13 +5,16 @@ namespace App\Modules\Posts\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 use Cache;
 
-class Category extends Model
+class Category extends Model implements Sortable
 {
     use Searchable,
-        Sluggable;
+        Sluggable,
+        SortableTrait;
 
     /**
      * The table associated with the model.
@@ -24,6 +27,11 @@ class Category extends Model
         'name',
         'meta_keywords',
         'meta_description'
+    ];
+
+    public $sortable = [
+        'order_column_name' => 'ord',
+        'sort_when_creating' => true,
     ];
 
     /**
@@ -119,7 +127,6 @@ class Category extends Model
     {
         $this->name = $postArray['name'];
         $this->user_id = $postArray['user_id'];
-        $this->ord = Category::count();
         $this->meta_keywords = $postArray['meta_keywords'];
         $this->meta_description = $postArray['meta_description'];
 

@@ -175,15 +175,9 @@ class FieldsController extends Controller
         $items = Field::orderBy('ord', 'ASC')->get();
 
         if ($request->getMethod() == 'POST') {
-          $items = json_decode($request->get('items'), true);
+            $items = json_decode($request->get('items'), true);
 
-            foreach($items as $index => $id) {
-                $item = Field::find($id);
-
-                $item->ord = $index;
-
-                $item->save();
-            }
+            Field::setNewOrder($items);
 
             return response()->json([
                'status' => true
