@@ -86,12 +86,12 @@ class UsersController extends Controller
             return redirect()->route('home')->with('error', 'Sorry, users cannot sign up at this time.');
         }
 
+        $user = new User;
+
         if ($request->getMethod() == 'POST') {
             if ($request->get(env('APP_KEY') . '_token')) {
                 $request->session()->flash('error', 'Incorrect account information entered. Please try again.');
             } else {
-                $user = new User;
-
                 $user->add($request->except('_token'));
 
                 if (Auth::loginUsingId($user->id)) {
@@ -105,10 +105,12 @@ class UsersController extends Controller
                 }
             }
         }
+
+        $timezones = $user->getTimeZones();
         
         $this->theme->setTitle('Register');
 
-        return $this->theme->scope('users.register')->render();
+        return $this->theme->scope('users.register', compact('user', 'timezones'))->render();
     }
 
     /**
@@ -176,10 +178,12 @@ class UsersController extends Controller
                 $errors = $validator->errors()->getMessages();
             }
         }
+
+        $timezones = $model->getTimeZones();
         
         $this->theme->setTitle('Edit Profile');
 
-        return $this->theme->scope('users.profile_edit', compact('model', 'errors'))->render();
+        return $this->theme->scope('users.profile_edit', compact('model', 'errors', 'timezones'))->render();
     }
 
     /**
@@ -197,9 +201,11 @@ class UsersController extends Controller
         if (empty($user)) {
             abort(404, 'Cannot find user.');
         }
+
+        $timezones = $model->getTimeZones();
         
         $this->theme->setTitle('Profile - ' . $username);
 
-        return $this->theme->scope('users.profile', compact('user'))->render();
+        return $this->theme->scope('users.profile', compact('user', 'timezones'))->render();
     }
 }

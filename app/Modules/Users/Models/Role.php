@@ -4,10 +4,12 @@ namespace App\Modules\Users\Models;
 
 use Spatie\Permission\Models\Role as ParentRole;
 use Spatie\Permission\Traits\HasPermissions;
+use Spatie\Permission\Traits\RefreshesPermissionCache;
 
 class Role extends ParentRole
 {
-    use HasPermissions;
+    use HasPermissions,
+        RefreshesPermissionCache;
 
     public $core_role_levels = [
         'admin' => 4,

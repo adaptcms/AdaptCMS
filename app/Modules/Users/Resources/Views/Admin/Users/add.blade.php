@@ -52,6 +52,13 @@
                 'multiple' 
             ]) }}
         </div>
+
+        <div class="field">
+            {{ Form::label('timezone', 'Timezone') }}
+            {{ Form::select('timezone', $timezones, null, [ 
+                'class' => 'ui dropdown'
+            ]) }}
+        </div>
         
         {{ Form::submit('Save', [ 'class' => 'ui button primary' ]) }}
     

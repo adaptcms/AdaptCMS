@@ -23,6 +23,7 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $items = User::filter($request->all())->paginateFilter(15);
+        
         $roles = (new User)->getRolesList();
 
         return view('users::Admin/Users/index', compact('items', 'roles'));
@@ -58,8 +59,9 @@ class UsersController extends Controller
         }
 
         $roles = $model->getRolesList();
+        $timezones = $model->getTimeZones();
 
-        return view('users::Admin/Users/add', compact('model', 'roles'));
+        return view('users::Admin/Users/add', compact('model', 'roles', 'timezones'));
     }
 
     /**
@@ -106,8 +108,9 @@ class UsersController extends Controller
         }
 
         $roles = $model->getRolesList();
+        $timezones = $model->getTimeZones();
 
-        return view('users::Admin/Users/edit', compact('model', 'roles'));
+        return view('users::Admin/Users/edit', compact('model', 'roles', 'timezones'));
     }
 
     /**

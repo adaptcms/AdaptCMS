@@ -21,7 +21,7 @@ class Users extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->integer('status')->default(1)->index();
-            $table->text('settings')->nullable();
+            $table->json('settings')->nullable();
             $table->datetime('last_login')->nullable();
             $table->string('profile_image')->nullable();
 

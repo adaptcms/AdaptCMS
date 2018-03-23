@@ -4,12 +4,14 @@ namespace App\Modules\Files\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use RyanWeber\Mutators\Timezoned;
 
 use App\Modules\Files\Models\AlbumFile;
 
 class File extends Model
 {
-    use Searchable;
+    use Searchable,
+        Timezoned;
 
     /**
      * The table associated with the model.

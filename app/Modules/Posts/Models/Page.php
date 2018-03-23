@@ -5,6 +5,7 @@ namespace App\Modules\Posts\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use RyanWeber\Mutators\Timezoned;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -15,7 +16,8 @@ class Page extends Model implements Sortable
 {
     use Searchable,
         Sluggable,
-        SortableTrait;
+        SortableTrait,
+        Timezoned;
 
     /**
      * The table associated with the model.

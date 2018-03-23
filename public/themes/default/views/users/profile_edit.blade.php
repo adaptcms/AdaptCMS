@@ -44,6 +44,13 @@
 				</div>
 
 				<div class="field">
+            {{ Form::label('timezone', 'Timezone') }}
+            {{ Form::select('timezone', $timezones, null, [ 
+                'class' => 'ui dropdown'
+            ]) }}
+        </div>
+
+				<div class="field">
 					<button type="submit" class="ui right labeled icon button primary pull-right">
 						Save
 						<i class="save icon"></i>
@@ -53,3 +60,5 @@
 			{{ Form::close() }}
 		</div>
 </div>
+
+{{ Theme::asset()->add('core-script', '//cdn.jsdelivr.net/npm/moment-timezone@0.5.14/moment-timezone.js') }}

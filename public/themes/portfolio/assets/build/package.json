@@ -20,7 +20,7 @@
 	"es6-promise": "^4.2.4",
 	"gulp": "^3.9.1",
 	"gulp-autoprefixer": "^5.0.0",
-	"gulp-clean-css": "^3.9.2",
+	"gulp-clean-css": "^3.9.3",
 	"gulp-concat": "^2.6.1",
 	"gulp-jshint": "^2.1.0",
 	"gulp-livereload": "^3.8.1",

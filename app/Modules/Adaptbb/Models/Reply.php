@@ -3,9 +3,12 @@
 namespace App\Modules\Adaptbb\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use RyanWeber\Mutators\Timezoned;
 
 class Reply extends Model
 {
+    use Timezoned;
+
     protected $table = 'plugin_adaptbb_replies';
 
     protected $fillable = [

@@ -5,11 +5,13 @@ namespace App\Modules\Files\Models;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 use Cviebrock\EloquentSluggable\Sluggable;
+use RyanWeber\Mutators\Timezoned;
 
 class Album extends Model
 {
     use Searchable,
-        Sluggable;
+        Sluggable,
+        Timezoned;
 
     /**
      * The table associated with the model.

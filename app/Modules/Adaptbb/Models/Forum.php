@@ -4,6 +4,7 @@ namespace App\Modules\Adaptbb\Models;
 
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
+use RyanWeber\Mutators\Timezoned;
 
 use App\Modules\Adaptbb\Models\ForumCategory;
 use App\Modules\Adaptbb\Models\Reply;
@@ -12,7 +13,8 @@ use App\Modules\Adaptbb\Models\Topic;
 class Forum extends Model implements Sortable
 {
     use Sluggable,
-        SortableTrait;
+        SortableTrait,
+        Timezoned;
 
     protected $table = 'plugin_adaptbb_forums';
 

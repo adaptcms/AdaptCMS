@@ -5,13 +5,15 @@ namespace App\Modules\Adaptbb\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
+use RyanWeber\Mutators\Timezoned;
 
 use App\Modules\Adaptbb\Models\Reply;
 
 class Topic extends Model
 {
     use Searchable,
-        Sluggable;
+        Sluggable,
+        Timezoned;
 
     protected $table = 'plugin_adaptbb_topics';
 

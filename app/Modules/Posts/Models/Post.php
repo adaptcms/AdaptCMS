@@ -7,6 +7,7 @@ use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
+use RyanWeber\Mutators\Timezoned;
 
 use App\Modules\Posts\Models\Category;
 use App\Modules\Posts\Models\Field;
@@ -20,7 +21,8 @@ class Post extends Model
 {
     use Searchable,
         Sluggable,
-        Filterable;
+        Filterable,
+        Timezoned;
 
     /**
      * The table associated with the model.

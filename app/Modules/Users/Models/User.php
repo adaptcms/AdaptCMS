@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Scout\Searchable;
+use RyanWeber\Mutators\Timezoned;
 use Spatie\Permission\Traits\HasRoles;
 
 use App\Modules\Users\Models\Role;
@@ -22,7 +23,8 @@ class User extends Authenticatable
         Searchable,
         HasRoles,
         HasApiTokens,
-        Filterable;
+        Filterable,
+        Timezoned;
 
     /**
      * The attributes that are mass assignable.
@@ -47,6 +49,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $casts = [
+        'json' => 'array'
     ];
 
     protected $table = 'users';
@@ -411,5 +417,10 @@ class User extends Authenticatable
     public function modelFilter()
     {
         return $this->provideFilter(App\Modules\Users\ModelFilters\UserFilter::class);
+    }
+
+    public function getTimeZones()
+    {
+        return \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
     }
 }

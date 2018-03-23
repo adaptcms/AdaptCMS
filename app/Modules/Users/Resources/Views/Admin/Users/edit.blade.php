@@ -53,6 +53,13 @@
             ]) }}
         </div>
 
+        <div class="field">
+            {{ Form::label('timezone', 'Timezone') }}
+            {{ Form::select('timezone', $timezones, $model->timezone, [ 
+                'class' => 'ui dropdown'
+            ]) }}
+        </div>
+
         <div class="inline field">
             <div class="ui toggle checkbox">
                 {{ Form::checkbox('status', true, true) }}
