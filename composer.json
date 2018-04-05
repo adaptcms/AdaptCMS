@@ -11,6 +11,7 @@
         "adaptcms/settings": "^2.0",
         "barryvdh/laravel-debugbar": "^3.1",
         "charliepage88/dotenv-editor": "^1.1",
+        "charliepage88/timezoned": "dev-master",
         "chumper/zipper": "^1.0",
         "cviebrock/eloquent-sluggable": "^4.5",
         "fideloper/proxy": "^4.0",
@@ -19,10 +20,9 @@
         "jeremeamia/superclosure": "^2.3",
         "laravel/framework": "^5.6",
         "laravel/passport": "~5.0",
-        "laravel/scout": "4.0.2",
+        "laravel/scout": "~4.0",
         "laravel/tinker": "^1.0@dev",
         "laravelcollective/html": "5.6.*",
-        "rweber7912/timezoned": "dev-master",
         "sentry/sentry-laravel": "^0.9.0@dev",
         "spatie/eloquent-sortable": "^3.4",
         "spatie/laravel-permission": "2.9.1",
@@ -73,19 +73,28 @@
         "sort-packages": true,
         "optimize-autoloader": true
     },
-    "repositories": [{
-        "type": "vcs",
-        "url": "git@github.com:adaptcms/laravel-theme.git"
-    }, {
-        "type": "vcs",
-        "url": "git@github.com:charliepage88/Laravel-Dotenv-Editor.git"
-    }, {
-        "type": "vcs",
-        "url": "git@github.com:adaptcms/modules.git"
-    }, {
-        "type": "vcs",
-        "url": "git@github.com:adaptcms/settings.git"
-    }],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:adaptcms/laravel-theme.git"
+        }, 
+        {
+            "type": "vcs",
+            "url": "git@github.com:charliepage88/Laravel-Dotenv-Editor.git"
+        }, 
+        {
+            "type": "vcs",
+            "url": "git@github.com:adaptcms/modules.git"
+        }, 
+        {
+            "type": "vcs",
+            "url": "git@github.com:adaptcms/settings.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@github.com:charliepage88/timezoned.git"
+        }
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
