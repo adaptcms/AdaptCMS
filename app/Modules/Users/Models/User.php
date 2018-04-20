@@ -179,6 +179,16 @@ class User extends Authenticatable
     }
 
     /**
+    * Get Roles List By Id
+    *
+    * @return array
+    */
+    public function getRolesListById()
+    {
+        return Role::pluck('name', 'id');
+    }
+
+    /**
     * Get Redirect To
     *
     * @return string

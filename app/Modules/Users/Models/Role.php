@@ -2,14 +2,14 @@
 
 namespace App\Modules\Users\Models;
 
+use Spatie\Permission\Contracts\Role as RoleContract;
 use Spatie\Permission\Models\Role as ParentRole;
 use Spatie\Permission\Traits\HasPermissions;
 use Spatie\Permission\Traits\RefreshesPermissionCache;
 
-class Role extends ParentRole
+class Role extends ParentRole implements RoleContract
 {
-    use HasPermissions,
-        RefreshesPermissionCache;
+    use RefreshesPermissionCache;
 
     public $core_role_levels = [
         'admin' => 4,
@@ -87,15 +87,5 @@ class Role extends ParentRole
         $this->save();
         
         return $this;
-    }
-
-    /**
-    * Get Roles List
-    *
-    * @return array
-    */
-    public function getRolesList()
-    {
-        return Role::pluck('name', 'id');
     }
 }

@@ -55,7 +55,7 @@ class RolesController extends Controller
             return redirect()->route('admin.roles.index')->with('success', 'Role has been created');
         }
 
-        $roles = $model->getRolesList();
+        $roles = (new User)->getRolesListById();
 
         return view('users::Admin/Roles/add', compact('model', 'roles'));
     }
@@ -98,7 +98,7 @@ class RolesController extends Controller
             }
         }
 
-        $roles = $model->getRolesList();
+        $roles = (new User)->getRolesListById();
 
         return view('users::Admin/Roles/edit', compact('model', 'roles'));
     }
