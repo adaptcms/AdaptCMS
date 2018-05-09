@@ -42,24 +42,26 @@ class BaseController extends Controller
     */
     public function __construct()
     {
-        $this->prefix = request()->route()->getPrefix();
+        if (request()->route()) {
+            $this->prefix = request()->route()->getPrefix();
 
-        if (Schema::hasTable('settings')) {
-            if ($this->prefix == 'admin') {
-                // CMS Update Checks
-                $this->checkForCmsUpdates();
-                $this->checkForPluginUpdates();
-                $this->checkForThemeUpdates();
-        
-                // sync site metadata
-                $this->syncWebsite();
+            if (Schema::hasTable('settings')) {
+                if ($this->prefix == 'admin') {
+                    // CMS Update Checks
+                    $this->checkForCmsUpdates();
+                    $this->checkForPluginUpdates();
+                    $this->checkForThemeUpdates();
+            
+                    // sync site metadata
+                    $this->syncWebsite();
+                }
+
+                // sync permissions
+                $this->syncPermissions();
             }
 
-            // sync permissions
-            $this->syncPermissions();
+            $this->theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
         }
-
-        $this->theme = Theme::uses(Cache::get('theme', 'default'))->layout('front');
     }
 
     public function checkForCmsUpdates()

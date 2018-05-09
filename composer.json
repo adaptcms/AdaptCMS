@@ -7,9 +7,9 @@
     "require": {
         "php": ">=7.1.3",
         "adaptcms/laravel-theme": "^3.0",
-        "adaptcms/modules": "^1.0",
         "adaptcms/settings": "^2.0",
         "barryvdh/laravel-debugbar": "^3.1",
+        "caffeinated/modules": "^4.3",
         "charliepage88/dotenv-editor": "^1.1",
         "charliepage88/timezoned": "dev-master",
         "chumper/zipper": "^1.0",
@@ -22,10 +22,10 @@
         "laravel/passport": "^6.0",
         "laravel/scout": "~4.0",
         "laravel/tinker": "^1.0@dev",
-        "laravelcollective/html": "5.6.*",
+        "laravelcollective/html": "^5.6",
         "sentry/sentry-laravel": "^0.9.0@dev",
         "spatie/eloquent-sortable": "^3.4",
-        "spatie/laravel-permission": "~2.11.0",
+        "spatie/laravel-permission": "~2.12.1",
         "teamtnt/laravel-scout-tntsearch-driver": "^3.0",
         "tightenco/ziggy": "dev-master",
         "tucker-eric/eloquentfilter": "^1.2",
@@ -81,10 +81,6 @@
         {
             "type": "vcs",
             "url": "git@github.com:charliepage88/Laravel-Dotenv-Editor.git"
-        }, 
-        {
-            "type": "vcs",
-            "url": "git@github.com:adaptcms/modules.git"
         }, 
         {
             "type": "vcs",

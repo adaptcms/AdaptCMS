@@ -3,7 +3,7 @@
     "description": "Sitemap generator plugin for AdaptCMS.",
     "require": {
       	"php": ">=7.1.3",
-        "watson/sitemap": "^2.0.20"
+        "watson/sitemap": "^2.0.21"
     },
     "extra": {
 	    "laravel": {

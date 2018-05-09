@@ -20,7 +20,7 @@ Route::group([ 'prefix' => 'install', 'namespace' => 'Install' ], function() {
 });
 
 Route::group([ 'prefix' => 'api' ], function() {
-	Route::any('/{module}', [ 'uses' => '\App\Modules\Core\Http\Controllers\ApiController@index', 'as' => 'plugin.core.api.index' ]);
+	Route::any('/{module}', [ 'uses' => '\App\Modules\Core\Http\Controllers\Admin\ApiController@index', 'as' => 'plugin.core.api.index' ]);
 });
 
 Route::group([ 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'role:admin' ], function() {
