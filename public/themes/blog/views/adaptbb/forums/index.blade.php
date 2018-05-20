@@ -44,7 +44,7 @@
 							        {{ Core::getDateShort($last_post->created_at) }}
 							      </div>
 							      <div class="summary">
-							         {{ $last_post->user->getName() }} posted <a href="{{ $last_post->getUrl() }}">{{ $last_post->name }}</a>
+							         {{ $last_post->user->getName() }} posted <a href="{{ $last_post->url }}">{{ $last_post->name }}</a>
 							      </div>
 							    </div>
 							  </div>

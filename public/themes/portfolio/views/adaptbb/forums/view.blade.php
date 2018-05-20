@@ -53,7 +53,7 @@
 							        {{ Core::getDateShort($last_reply->created_at) }}
 							      </div>
 							      <div class="summary">
-							         {{ $last_reply->user->getName() }} posted <a href="{{ $last_reply->getUrl() }}">{{ $last_reply->name }}</a>
+							         {{ $last_reply->user->getName() }} posted <a href="{{ $last_reply->url }}">{{ $last_reply->name }}</a>
 							      </div>
 							    </div>
 							  </div>

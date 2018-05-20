@@ -15,7 +15,7 @@ class CustomFieldType
         $directories = Storage::disk('field_types')->directories();
         $key = implode('|', $directories);
 
-        if (!Cache::get('field_types_sync') == $key) {
+        if (Cache::get('field_types_sync') != $key) {
             $fieldTypes = collect([]);
 
             foreach ($directories as $directory) {
@@ -23,7 +23,7 @@ class CustomFieldType
 
                 // check that config for field type exists
                 if (Storage::disk('field_types')->exists($config)) {
-                    $json = Storage::disk('field_types')->get($config);
+                    $json = json_decode(Storage::disk('field_types')->get($config));
 
                     // ensure basic info exists
                     if (!empty($json->name) && !empty($json->version)) {
@@ -48,9 +48,9 @@ class CustomFieldType
                         ]
                     );
                 }
-            }
 
-            Cache::put('field_types_sync', $key);
+                Cache::put('field_types_sync', $key);
+            }
         }
     }
 

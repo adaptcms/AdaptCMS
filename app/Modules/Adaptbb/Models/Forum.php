@@ -5,6 +5,8 @@ namespace App\Modules\Adaptbb\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use RyanWeber\Mutators\Timezoned;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
 use App\Modules\Adaptbb\Models\ForumCategory;
 use App\Modules\Adaptbb\Models\Reply;
@@ -146,5 +148,15 @@ class Forum extends Model implements Sortable
                 'source' => 'name'
             ]
         ];
+    }
+
+    /**
+    * Get Url Attribute
+    *
+    * @return string
+    */
+    public function getUrlAttribute()
+    {
+        return route('plugin.adaptbb.forums.view', [ 'slug' => $this->slug ]);
     }
 }

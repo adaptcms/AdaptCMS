@@ -16,6 +16,9 @@ class ModuleServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__.'/../Resources/Lang', 'users');
         $this->loadViewsFrom(__DIR__.'/../Resources/Views', 'users');
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations', 'users');
+        $this->publishes([
+            __DIR__.'/../Assets' => public_path('assets/modules/users'),
+        ], 'modules');
     }
 
     /**

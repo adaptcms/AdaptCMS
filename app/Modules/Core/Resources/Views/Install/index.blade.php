@@ -31,7 +31,7 @@ find . -type d -exec chmod 755 {} \;
 find . -type f -exec chmod 644 {} \;</code>
 </pre>
 
-                    <a href="" target="_blank" class="ui right labeled icon primary button">
+                    <a href="https://adaptcms.gitbooks.io/adaptcms/content/Getting-Started/installation.html" target="_blank" class="ui right labeled icon primary button">
                         Docs
                         <i class="file text icon"></i>
                     </a>
@@ -46,7 +46,7 @@ find . -type f -exec chmod 644 {} \;</code>
                         This is the tougher one unfortunately. But we have help on the way, checkout the link below:
                     </p>
 
-                    <a href="" target="_blank" class="ui right labeled icon primary button">
+                    <a href="https://adaptcms.gitbooks.io/adaptcms/content/Getting-Started/installation.html" target="_blank" class="ui right labeled icon primary button">
                         Docs
                         <i class="file text icon"></i>
                     </a>

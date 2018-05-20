@@ -9,3 +9,4 @@ public/themes/blog/assets/build/node_modules*
 public/apps/theme-builder/node_modules/*
 ._*
 .DS_STORE
+node_modules/*

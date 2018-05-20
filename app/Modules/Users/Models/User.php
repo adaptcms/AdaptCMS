@@ -433,4 +433,9 @@ class User extends Authenticatable
     {
         return \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
     }
+
+    public function getUrlAttribute()
+    {
+        return route('users.profile.view', [ 'username' => $this->username ]);
+    }
 }

@@ -34,7 +34,7 @@ class InstallSeedListener
         // sync field types
         CustomFieldType::sync();
 
-        $fieldTypes = FieldType::get()->groupBy('slug');
+        $fieldTypes = FieldType::get();
 
         // create categories
         $categories = [
@@ -94,7 +94,7 @@ class InstallSeedListener
             $model->caption = $field['caption'];
             $model->user_id = $field['user_id'];
             $model->category_id = $field['category_id'];
-            $model->field_type_id = $fieldTypes[$field['field_type']]->id;
+            $model->field_type_id = $fieldTypes->where('slug', $field['field_type'])->first()->id;
             $model->settings = json_encode([]);
 
             $model->save();

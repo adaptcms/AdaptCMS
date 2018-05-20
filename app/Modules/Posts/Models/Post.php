@@ -690,4 +690,9 @@ class Post extends Model
     {
         return $this->provideFilter(App\Modules\Posts\ModelFilters\PostFilter::class);
     }
+
+    public function getUrlAttribute()
+    {
+        return route('posts.view', [ 'slug' => $this->slug ]);
+    }
 }

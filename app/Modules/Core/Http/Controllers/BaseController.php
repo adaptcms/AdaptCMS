@@ -43,10 +43,10 @@ class BaseController extends Controller
     public function __construct()
     {
         if (request()->route()) {
-            $this->prefix = request()->route()->getPrefix();
+            $this->prefix = strtolower(request()->route()->getPrefix());
 
             if (Schema::hasTable('settings')) {
-                if ($this->prefix == 'admin') {
+                if ($this->prefix === 'admin') {
                     // CMS Update Checks
                     $this->checkForCmsUpdates();
                     $this->checkForPluginUpdates();

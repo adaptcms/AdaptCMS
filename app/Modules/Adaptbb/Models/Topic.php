@@ -58,11 +58,11 @@ class Topic extends Model
     }
     
     /**
-    * Get Url
+    * Get Url Attribute
     *
     * @return string
     */
-    public function getUrl()
+    public function getUrlAttribute()
     {
         $forum_slug = Forum::where('id', '=', $this->forum_id)->pluck('slug')->first();
         $topic_slug = $this->slug;

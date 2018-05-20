@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
   <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
   <!-- Bulma Version 0.6.0 -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bulma@0.6.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bulma@0.7.1/css/bulma.min.css" />
   <link rel="stylesheet" type="text/css" href="/themes/default/assets/css/main.compiled.min.css">
 
   @stack('css')
@@ -83,7 +83,7 @@
   </div>
 
   <section class="container">
-      @include('partials/flash')
+      @include('partials/flash_bulma')
       @yield('content')
       {!! Theme::content() !!}
   </section>
@@ -104,9 +104,7 @@
   </footer>
   
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.0/semantic.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.0/underscore-min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/string.js/3.3.3/string.min.js"></script>
 

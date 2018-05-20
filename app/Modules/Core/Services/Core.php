@@ -2,6 +2,7 @@
 
 namespace App\Modules\Core\Services;
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 
 use App\Modules\Users\Models\User;
@@ -85,6 +86,11 @@ class Core
     public function getAdminDateLong($date)
     {
         return date(Settings::get('admin_date_format_long'), strtotime($date));
+    }
+
+    public function getDateAgo($date)
+    {
+        return Carbon::parse($date)->diffForHumans();
     }
 
     public function getVersion()
@@ -261,5 +267,10 @@ class Core
     public function getMarketplaceUserData()
     {
 
+    }
+
+    public function debugDisable()
+    {
+        env('APP_DEBUG', false);
     }
 }

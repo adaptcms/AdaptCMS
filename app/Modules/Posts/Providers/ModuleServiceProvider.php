@@ -3,6 +3,7 @@
 namespace App\Modules\Posts\Providers;
 
 use Caffeinated\Modules\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 use CustomFieldType;
 
@@ -20,7 +21,9 @@ class ModuleServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations', 'posts');
 
         // load in field types
-        CustomFieldType::sync();
+        if (Schema::hasTable('field_types')) {
+            CustomFieldType::sync();
+        }
     }
 
     /**

@@ -172,6 +172,7 @@ class Install
             abort(500, 'Cannot seed database with default data.' . $error);
         }
 
+        /*
         try {
             Artisan::call('passport:install');
         } catch(\Exception $e) {
@@ -179,6 +180,7 @@ class Install
 
             abort(500, 'Cannot run passport install.' . $error);
         }
+        */
 
         return $status;
     }

@@ -68,7 +68,7 @@
     <div class="container">
     	<div class="row">
     		<div class="col-sm-8 blog-main">
-				@include('partials/flash')
+				@include('partials/flash_bulma')
 				@yield('content')
 				{!! Theme::content() !!}
 			</div>
