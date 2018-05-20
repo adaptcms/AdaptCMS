@@ -554,8 +554,10 @@ class Post extends Model
 
         // now onto tags
         foreach ($data as $key => $row) {
-            foreach ($row['post']->postTags as $postTag) {
-                $data[$key]['tags'][] = $postTag->tag;
+            if (!empty($row['post']->postTags)) {
+                foreach ($row['post']->postTags as $postTag) {
+                    $data[$key]['tags'][] = $postTag->tag;
+                }
             }
         }
 
