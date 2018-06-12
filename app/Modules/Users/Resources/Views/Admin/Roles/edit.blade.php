@@ -33,6 +33,8 @@
                 'multiple'
             ]) }}
         </div>
+
+        <permissions-component :role="{{ $model }}"></permissions-component>
         
         {{ Form::submit('Save', [ 'class' => 'ui button primary' ]) }}
     

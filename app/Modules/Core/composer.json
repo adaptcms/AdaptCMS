@@ -1,17 +1,17 @@
 {
-    "name": "adaptcms/module-core",
-    "description": "Core module for AdaptCMS.",
-    "require": {
-      	"php": ">=7.1.3"
-    },
-    "extra": {
-	    "laravel": {
-	        "providers": [
-	            "App\\Modules\\Core\\Providers\\CoreServiceProvider"
-	        ],
-	        "aliases": {
-	            "Core": "App\\Modules\\Core\\Facades\\Core"
-	        }
-	    }
-	}
+  "name": "adaptcms/module-core",
+  "description": "Core module for AdaptCMS.",
+  "require": {
+      "php": ">=7.1.3"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+          "App\\Modules\\Core\\Providers\\CoreServiceProvider"
+      ],
+      "aliases": {
+          "Core": "App\\Modules\\Core\\Facades\\Core"
+      }
+    }
+  }
 }
