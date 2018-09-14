@@ -9,7 +9,7 @@
         "adaptcms/laravel-theme": "^3.0",
         "adaptcms/settings": "^2.0",
         "barryvdh/laravel-debugbar": "^3.1",
-        "caffeinated/modules": "^4.3",
+        "caffeinated/modules": "^1.0",
         "charliepage88/dotenv-editor": "^1.1",
         "charliepage88/timezoned": "dev-master",
         "chumper/zipper": "^1.0",
@@ -18,15 +18,15 @@
         "flugger/laravel-responder": "dev-master",
         "guzzlehttp/guzzle": "^6.3",
         "jeremeamia/superclosure": "^2.3",
-        "laravel/framework": "^5.6",
-        "laravel/passport": "^6.0",
-        "laravel/scout": "~4.0",
+        "laravel/framework": "5.7.*",
+        "laravel/passport": "^7.0",
+        "laravel/scout": "~5.0",
         "laravel/tinker": "^1.0@dev",
-        "laravelcollective/html": "^5.6",
+        "laravelcollective/html": "^5.7",
         "sentry/sentry-laravel": "^0.9.0@dev",
         "spatie/eloquent-sortable": "^3.4",
-        "spatie/laravel-permission": "~2.12.1",
-        "teamtnt/laravel-scout-tntsearch-driver": "^3.0",
+        "spatie/laravel-permission": "^2.13",
+        "teamtnt/laravel-scout-tntsearch-driver": "^3.1",
         "tightenco/ziggy": "dev-master",
         "tucker-eric/eloquentfilter": "^1.3",
         "wikimedia/composer-merge-plugin": "^1.4"
@@ -95,6 +95,7 @@
         }
     ],
     "prefer-stable": true,
+    "minimum-stability": "dev",
     "extra": {
         "merge-plugin": {
             "include": [

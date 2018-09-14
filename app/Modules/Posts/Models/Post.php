@@ -690,7 +690,7 @@ class Post extends Model
 
     public function modelFilter()
     {
-        return $this->provideFilter(App\Modules\Posts\ModelFilters\PostFilter::class);
+        return $this->provideFilter(\App\Modules\Posts\ModelFilters\PostFilter::class);
     }
 
     public function getUrlAttribute()
