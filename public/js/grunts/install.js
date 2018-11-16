@@ -30,19 +30,20 @@ $(document).ready(function() {
 
                     data._token = $('meta[name="csrf-token"]').attr('content');
 
+                    console.log('hello ugly js')
+
                     // TEMPORARY
                     // gotta write it and try it on the second attempt
-                    $.post('/install/database', data, function() {
-                        $.post('/install/database', data, function(response) {
-                            if (response.status) {
-                                toastr.success('Database connection is a-go!');
-                            } else {
-                                toastr.error('No dice! Try again please.');
-                            }
+                    $.post('/install/database', data, function(response) {
+                        console.log(response)
+                        if (response.status) {
+                            toastr.success('Database connection is a-go!');
+                        } else {
+                            toastr.error('No dice! Try again please.');
+                        }
 
-                            _this.database_connection = response.status;
-                        }, 'json');
-                    });
+                        _this.database_connection = response.status;
+                    }, 'json');
                 },
                 isFilledOut: function() {
                     var _this = this;
